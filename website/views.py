@@ -1,6 +1,11 @@
 # Create your views here.
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import hashlib,urllib #para gravatar
+
+
+#-- TOCA CALCULAR LA IMAGEN DE GRAVATAR UNA SOLA VEZ Y AGRAGARLA A LA SESION DE USUARIO
+#--
 
 def home(request):
     if request.user.is_authenticated():
@@ -14,3 +19,7 @@ def home(request):
     else:
         ctx = {'TITLE':"Actarium"}
     return render_to_response('website/index.html', ctx, context_instance = RequestContext(request))
+
+
+def about(request):
+    return render_to_response('website/index.html', {}, context_instance = RequestContext(request))

@@ -33,34 +33,17 @@
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="#">ACTARIUM</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="#Registro">Sing Up</a></li>
-                            <li><a href="#Ingreso">Log In</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                </div>
-            </div>
-        </div>
-
+		<header class="navbar navbar-fixed-top">
+			{% include "website/topBar.html" %}
+		</header>
         <div id="body_container"  class="container">
             {%block body%}
             {% endblock%}
         </div> <!-- /container -->
         
         <footer>
-            <a href="http://www.twitter.com/daiech">@Daiech</a><br/>
-            <a href="http://www.daiech.com">www.daiech.com</a>
+            <a href="http://www.twitter.com/daiech" target="_blank">@Daiech</a><br/>
+            <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
         </footer>
 
         <!--        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>-->

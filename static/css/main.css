@@ -97,10 +97,13 @@ textarea {
 article{
     background-color: #EEE;
     border-radius: 10px;
-    margin: 100px auto;
+    margin: 20px auto;
     padding: 40px;
     padding-top: 20px;
     width: 50%;
+}
+#body_container{
+    min-height: 400px;
 }
 .but{
     background-color:  #999;
@@ -119,12 +122,94 @@ footer{
     text-align: center;
     padding: 20px;
 }
+article ul li a{
+    border-bottom: solid thin white;
+    opacity: 0.7; 
+}
+article ul a img{
+    margin:10px;
+}
+article ul li a:hover{
+    opacity: 1;
+}
+.helptext{
+	color:gray;
+	font-size:12px;
+	margin-top:-100px;
+}
+
+form table th{
+/*	border:solid thin gray;*/
+	vertical-align:top;
+	text-align:right;
+/*	padding:20px;*/
+	padding-top:10px;
+}
+form table td input{
+	margin:5px 0;
+	padding:10px;
+}
 
 
+.content-box{
+    line-height: 14px;
+    margin-left: 38px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+.content-box p{
+    margin: 0px;
+}
+.content-box .avatar{
+    position: absolute;
+    top:7px;
+    left: 14px;
+}
+.content-box *{
+    display: inline-block;
+}
+.metadata{
+    color: #999;
+    display: block;
+    font-size: 11px;
+}
+.content-box:hover, .content-box >:hover{
+    color: #fff;
+}
+.fullname{
+    color: #333;
+    font-weight: bold;
+    margin-left: 0px;
+}
+.disblock{
+    display: block;
+}
+.size32{
+    width: 32px;
+    height: 32px;
+}
+.color-fff{
+    color:#fff;
+}
 
+.input-small{
+    margin: 2px auto;
+    width: 80%;
+}
 
-
-
+#btn-login{
+    margin-right: 10px;
+}
+.dropdown-menu li .next-li, .dropdown-menu li p{
+    margin: 3px 12px;
+}
+.errorlist{
+	color:red;
+	font-size:12px;
+	list-style:none;
+	margin:0px 10px;
+	margin-bottom:-5px;
+}
 
 
 
