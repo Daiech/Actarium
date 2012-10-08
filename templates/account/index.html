@@ -3,12 +3,7 @@
 <div class="centrar60">
 	<article>
         <h1>Tus Organizaciones</h1>
-        <ul class="nav">
-            <li><a href="#"><img src="{{ STATIC_PREFIX }}img/org.png"/>Organizaci&oacute;n</a><li> 
-            <li><a href="#"><img src="{{ STATIC_PREFIX }}img/org.png"/>Organizaci&oacute;n</a><li> 
-            <li><a href="#"><img src="{{ STATIC_PREFIX }}img/org.png"/>Organizaci&oacute;n</a><li> 
-            
-        </ul>
+       
         <img src="{{ gravatar_url }}" width="30px" /> <strong>Hola <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">{{ user.first_name|upper }}</a></strong>
 		<p>Ultimo logueo: {{ user.last_login}}.</p>
 		<p>Eres miembro desde el {{ user.date_joined }} </p>

@@ -134,7 +134,7 @@ article ul li a:hover{
     opacity: 0.5;
     color: black;
 }
-article ul li:hover{
+article ul.onOver li:hover{
     background-color: grey;
     font-weight: bold;
     opacity: 1;
