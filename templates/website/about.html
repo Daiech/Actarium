@@ -1,0 +1,13 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Acerca{% endblock %}
+
+{%block body%}
+<article>
+    <h1>Actarium</h1>
+    {% if user.is_authenticated %}
+    <p>Usted esta registrado y esta viendo esto</p>
+    {% else %}
+    <p>Si esta viendo esto NO esta registrado</p>
+    {% endif %}
+</article>
+{%endblock%}

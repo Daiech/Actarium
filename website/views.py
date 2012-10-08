@@ -22,4 +22,4 @@ def home(request):
 
 
 def about(request):
-    return render_to_response('website/index.html', {}, context_instance = RequestContext(request))
+    return render_to_response('website/about.html', {}, context_instance = RequestContext(request))
