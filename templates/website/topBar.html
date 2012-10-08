@@ -9,11 +9,10 @@
                     <div class="nav-collapse">
                         <ul class="nav">
                         	{% if user.is_authenticated %}
-                            <li class="active"><a href="/account">Organizaciones</a></li>
-                        	{% else %}
-<!--                            <li><a href="/account/new">Registrarse</a></li>-->
+                            <li id="menu-organizations"><a href="/organizations">Organizaciones</a></li>
+                            <li id="menu-account"><a href="/account">Cuenta</a></li>
                             {% endif %}
-                            <li><a href="/about">Acerca</a></li>
+                            <li id="menu-about" ><a href="/about">Acerca</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                     

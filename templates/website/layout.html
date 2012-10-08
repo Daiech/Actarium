@@ -22,7 +22,7 @@
         </style>
 
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/main.css">
-
+		{%block style%}{%endblock%}
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap-responsive.css">
 
 
@@ -51,7 +51,8 @@
         <script src="{{ STATIC_PREFIX }}js/plugins.js"></script>
         <script src="{{ STATIC_PREFIX }}js/main.js"></script>
         <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
-
+		{% block js %}
+		{% endblock%}
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
