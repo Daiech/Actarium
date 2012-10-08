@@ -25,3 +25,9 @@ def new(request):
     '''
     return render_to_response('organization/new.html',{}, context_instance = RequestContext(request))
 
+@login_required(login_url='/account/login')
+def listMinutes(request):
+    '''
+    crea una nueva organizacion 
+    '''
+    return render_to_response('organization/listAct.html',{}, context_instance = RequestContext(request))

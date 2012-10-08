@@ -1,0 +1,39 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Actas{% endblock %}
+
+{%block body%}
+<article>
+    {% if user.is_authenticated %}
+    
+    <img src="{{ STATIC_PREFIX }}img/org.png"/>
+    ORGANIZACION
+    <p><a href="#">Eliminar Organizaci&oacute;n</a></p>
+
+
+        <h3>Actas</h3>
+        <ul class="nav">
+            <li><a href="#">Acta #1 - Reuni&oacute;n ordinaria</a></li> 
+            <li><a href="#">Acta #2 - Reuni&oacute;n ordinaria</a></li> 
+        </ul>
+        <h3>Miembros</h3>
+        <ul class="nav">
+            <li>Miembro del Equipo (Admin)<a href="#">Ver perfil</a></li> 
+            <li>Otro Miembro del Equipo (Admin)<a href="#">Ver perfil</a></li> 
+            <li>Miembro del Equipo<a href="#">Ver perfil</a></li> 
+        </ul>
+        <div class="sing">
+            <a href="#" class="btn btn-info btn-large">Agregar miembro</a>
+            <a href="#" class="btn btn-info btn-large">Crear acta</a>
+        </div>
+        {% else %}
+        <div class="sing">
+            <p>Usted no se encuentra logueado o registrado.</p>
+            <p>Porfavor registrese o ingrese para poder crear actas.</p>
+            <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
+            <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
+        </div>
+
+        {% endif %}
+
+</article>
+{%endblock%}
