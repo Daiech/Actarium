@@ -12,7 +12,7 @@ def list(request):
     lista las organizaciones del usuario registrado
     '''
     if request.user.is_authenticated():
-        org = organizations.objects()
+        org = organizations.objects.order_by("id")
         ctx = {'TITLE':"Actarium","org":org}
     else:
         ctx = {'TITLE':"Actarium"}
