@@ -3,19 +3,24 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import hashlib,urllib #para gravatar
 
-
-#-- TOCA CALCULAR LA IMAGEN DE GRAVATAR UNA SOLA VEZ Y AGRAGARLA A LA SESION DE USUARIO
-#--
+#from groups.models import *
 
 def home(request):
     if request.user.is_authenticated():
+        
+        #-----------------<GRAVATAR>-----------------
         size = 100
         email = request.user.email
         default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
         gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-        ctx = {'TITLE':"Actarium",
-               'gravatar_url': gravatar_url}
+        #-----------------</GRAVATAR>-----------------
+        
+        #-----------------</GRUPOS>-----------------
+        #gr = groups.objects()
+        #-----------------</GRUPOS>-----------------
+        
+        ctx = {'TITLE':"Actarium",'gravatar_url': gravatar_url}
     else:
         ctx = {'TITLE':"Actarium"}
     return render_to_response('website/index.html', ctx, context_instance = RequestContext(request))

@@ -1,6 +1,6 @@
 from django.conf.urls import patterns #, url
 groups_urls = patterns('',
-    (r'^$', 'groups.views.list'),
-    (r'^new', 'groups.views.new'),
-    (r'^minutes', 'groups.views.listMinutes'),
+    (r'^$', 'groups.views.groupsList'),
+    (r'^new', 'groups.views.newGroup'),
+    (r'^minutes', 'groups.views.minutesList'),
 )

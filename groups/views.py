@@ -7,9 +7,9 @@ from django.contrib.auth.decorators import login_required
 #from groups.models import groups
 
 @login_required(login_url='/account/login')
-def list(request):
+def groupsList(request):
     '''
-    lista las organizaciones del usuario registrado
+    lista los grupos del usuario registrado
     '''
     if request.user.is_authenticated():
         #org = groups.objects.order_by("id")
@@ -21,14 +21,14 @@ def list(request):
     return render_to_response('groups/list.html',{}, context_instance = RequestContext(request))
 
 @login_required(login_url='/account/login')
-def new(request):
+def newGroup(request):
     '''
     crea una nueva organizacion 
     '''
     return render_to_response('groups/new.html',{}, context_instance = RequestContext(request))
 
 @login_required(login_url='/account/login')
-def listMinutes(request):
+def minutesList(request):
     '''
     crea una nueva organizacion 
     '''
