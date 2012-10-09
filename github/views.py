@@ -11,4 +11,4 @@ def update(solicitud):
 
     gitpull = commands.getstatusoutput('git pull origin master')[1]
 
-    return HttpResponse(gitpull)
+    return HttpResponse("<pre>"+gitpull+"</pre>")
