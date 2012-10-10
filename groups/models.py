@@ -2,7 +2,84 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Groups(models.Model):
+class groups(models.Model):
+    name = models.CharField(max_length = 150, verbose_name="name")
+    id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
+    date_joined = models.DateTimeField()
+    is_active = models.BooleanField()
+    description = models.TextField(blank = True)
+    is_active = models.BooleanField()
     
     def __unicode__(self):
-        return self.fb_uid
+        return "%s "%(self.name)
+    
+class invitations(models.Model):
+    id_user_from = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user_from')
+    id_user_to = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user_to')
+    id_group = models.ForeignKey(groups)
+    date_invited = models.DateTimeField()
+    is_active = models.BooleanField()
+    
+    
+class rel_user_group(models.Model):
+    id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
+    id_group = models.ForeignKey(groups)
+    is_active = models.BooleanField()
+    date_joined = models.DateTimeField()
+    
+class admin_group(models.Model):
+    id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
+    id_group = models.ForeignKey(groups,  null=True, related_name='%(class)s_id_group')
+    date_assigned = models.DateTimeField()
+    
+class minutes_type_1(models.Model):
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    location = models.TextField(blank = True)
+    agenda =  models.TextField(blank = True)
+    agreement = models.TextField(blank = True)
+    
+class minutes_type(models.Model):
+    name = models.CharField(max_length = 150 , verbose_name = "name")
+    descritpion = models.TextField(blank = True)
+    date_added = models.DateTimeField()
+    id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
+    is_public = models.BooleanField()
+    is_customized = models.BooleanField()
+    
+    def __unicode__(self):
+        return "%s "%(self.name)
+    
+class minutes(models.Model):
+    id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')    
+    date_created = models.DateTimeField()
+    id_group = models.ForeignKey(groups,  null=True, related_name='%(class)s_id_group')
+    id_extra_minutes = models.ForeignKey(minutes_type_1,  null=True, related_name='%(class)s_id_extra_minutes')
+    id_type = models.ForeignKey(minutes_type,  null=True, related_name='id_minutes_type')
+    is_public = models.BooleanField()
+    is_full_signed = models.BooleanField()
+    code = models.IntegerField()
+    
+    
+class feddback(models.Model):
+    id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
+    title = models.CharField(max_length = 150, verbose_name="title")
+    comment = models.TextField(blank = True)
+    date = models.DateTimeField()
+    
+    def __unicode__(self):
+        return "%s "%(self.title)
+    
+class action(models.Model):
+    name = models.CharField(max_length = 150, verbose_name = "name")
+    description = models.TextField(blank = True)
+    date_created = models.DateTimeField()
+    
+    def __unicode__(self):
+        return "%s "%(self.name)
+    
+class rel_user_action(models.Model):
+    id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
+    id_action = models.ForeignKey(action,  null=True, related_name='%(class)s_id_action')
+    date_done = models.DateTimeField()
+    
