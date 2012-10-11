@@ -131,11 +131,11 @@ article ul a img{
     margin:10px;
 }
 article ul li a:hover{
-    opacity: 0.5;
+    
     color: black;
 }
 article ul.onOver li:hover{
-    background-color: grey;
+    background-color:  gray;
     font-weight: bold;
     opacity: 1;
 }
