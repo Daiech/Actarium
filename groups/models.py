@@ -2,13 +2,24 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class group_type(models.Model):
+    name = models.CharField(max_length = 150, verbose_name="name")
+    description = models.TextField(blank = True)
+    date_added = models.DateTimeField()
+    
+    def __unicode__(self):
+        return "%s "%(self.name)
+
 class groups(models.Model):
     name = models.CharField(max_length = 150, verbose_name="name")
+    organization = models.CharField(max_length = 150, verbose_name="organization")
+    img_group = models.CharField(max_length = 150, verbose_name="image")
     id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
     date_joined = models.DateTimeField()
     is_active = models.BooleanField()
     description = models.TextField(blank = True)
     is_active = models.BooleanField()
+    id_group_type = models.ForeignKey(group_type, null=True, related_name = '%(class)s_id_group_type')
     
     def __unicode__(self):
         return "%s "%(self.name)
