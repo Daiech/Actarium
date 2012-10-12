@@ -1,0 +1,28 @@
+{% extends "website/layout.html" %}
+{%block body%}
+<div class="centrar60">
+    <article>
+        <img src="{{ gravatar_url }}" width="30px" /> <strong>Hola <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">{{ user.first_name|upper }}</a></strong>
+
+    </article>
+    <p>Eres miembro desde el {{ user.date_joined }} </p>
+
+    <p>Ultimo logueo: {{ user.last_login}}.</p>
+</div>
+{% endblock%}
+
+
+
+{% block style %}
+<style>
+    .centrar60 p{
+        margin: auto;
+        text-align: center;
+        width: 500px;
+    }
+</style>
+{% endblock %}
+
+{% block js %}
+<script>$("#menu-account").addClass("active")</script>
+{% endblock %}

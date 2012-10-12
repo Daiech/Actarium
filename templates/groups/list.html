@@ -1,0 +1,24 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Mis Grupos{% endblock %}
+
+{%block body%}
+<article>
+    <h2>Tus Grupos</h2>
+    <ul class="nav onOver">
+		{% for group in groups %}
+			<li class="img-rounded">
+				<a href="/groups/{{group.slug}}">
+					<img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
+					{{group.name}}
+				</a>
+			</li>
+         {% endfor %}
+    </ul>
+
+    <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
+
+</article>
+{%endblock%}
+{% block js %}
+<script>$("#menu-organizations").addClass("active")</script>
+{% endblock %}

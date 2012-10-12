@@ -1,0 +1,40 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - home{% endblock %}
+
+{%block body%}
+<article>
+    <h1>Bienvenido</h1>
+    <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
+    {% if user.is_authenticated %}
+    <div class="columnaI">
+        <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
+    </div>
+    <div class="columnaD">
+        <ul class="nav onOver">
+        	{% for group in groups %}
+	            <li class="img-rounded">
+		            <a href="/groups/{{group.slug}}">
+		            	<img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
+		            	{{group.name}}
+		            </a>
+	            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% else %}
+    <div class="sing">
+        <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
+        <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
+
+    </div>
+    {% endif %}
+</article>
+{%endblock%}
+
+
+{% block js %}
+<script>
+    //$("#menu-account").addClass("active")
+</script>
+{% endblock %}

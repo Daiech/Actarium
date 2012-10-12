@@ -1,0 +1,5 @@
+*.pyc
+Actarium/settings.py
+.project
+.pydevproject
+.settings/
