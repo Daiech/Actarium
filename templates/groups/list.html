@@ -8,10 +8,10 @@
 		{% for group in groups %}
 			<li class="img-rounded">
 				<a href="/groups/{{group.slug}}">
-					<img src="{{group.img_group}}" alt="{{group.name}}" />
+					<img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
 					{{group.name}}
 				</a>
-			</li> 
+			</li>
          {% endfor %}
     </ul>
 

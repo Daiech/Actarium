@@ -7,14 +7,20 @@
     <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
     {% if user.is_authenticated %}
     <div class="columnaI">
-        <a href="#" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
+        <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
     </div>
     <div class="columnaD">
         <ul class="nav onOver">
-            <li class="img-rounded"><a href="/groups/minutes"><img src="{{ STATIC_PREFIX }}img/org.png"/>Grupo</a></li> 
-            <li class="img-rounded"><a href="/groups/minutes"><img src="{{ STATIC_PREFIX }}img/org.png"/>Otro grupo</a></li> 
-            <li class="img-rounded"><a href="/groups/minutes"><img src="{{ STATIC_PREFIX }}img/org.png"/>Un grupo m&aacute;s</a></li> 
-        </ul>    </div>
+        	{% for group in groups %}
+	            <li class="img-rounded">
+		            <a href="/groups/{{group.slug}}">
+		            	<img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
+		            	{{group.name}}
+		            </a>
+	            </li>
+            {% endfor %}
+        </ul>
+    </div>
 
     {% else %}
     <div class="sing">

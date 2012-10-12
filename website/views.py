@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import hashlib,urllib #para gravatar
 
-#from groups.models import *
+from groups.models import groups
 
 def home(request):
     if request.user.is_authenticated():
@@ -17,10 +17,10 @@ def home(request):
         #-----------------</GRAVATAR>-----------------
         
         #-----------------</GRUPOS>-----------------
-        #gr = groups.objects()
+        gr = groups.objects.filter(id_creator=request.user.id)
         #-----------------</GRUPOS>-----------------
         
-        ctx = {'TITLE':"Actarium",'gravatar_url': gravatar_url}
+        ctx = {'TITLE':"Actarium",'gravatar_url': gravatar_url,"groups":gr}
     else:
         ctx = {'TITLE':"Actarium"}
     return render_to_response('website/index.html', ctx, context_instance = RequestContext(request))

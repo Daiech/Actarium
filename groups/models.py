@@ -14,7 +14,7 @@ class group_type(models.Model):
 class groups(models.Model):
     name = models.CharField(max_length = 150, verbose_name="name")
     organization = models.CharField(max_length = 150, verbose_name="organization")
-    img_group = models.CharField(max_length = 150, verbose_name="image",default="/static/img/groups/default.jpg")
+    img_group = models.CharField(max_length = 150, verbose_name="image",default="img/groups/default.jpg")
     id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
     date_joined = models.DateTimeField()
     description = models.TextField(blank = True)

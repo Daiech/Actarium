@@ -4,7 +4,18 @@
 {%block body%}
 <article>
 	<h2>Crear nuevo grupo</h2>
-	<pre>Temporalmente fuera de servicio - Mantenimiento</pre>
+	 <form class="form-horizontal" method="POST">
+	 	{% csrf_token %}
+    	<table>{{newGroupForm}}</table>
+    	<div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+<!--	             <input type="checkbox"> Acepto los <a href="#">t&eacute;rminos de uso</a>-->
+                </label>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>
 </article>
 {%endblock%}
 {% block js %}
