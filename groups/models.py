@@ -16,7 +16,7 @@ class groups(models.Model):
     organization = models.CharField(max_length = 150, verbose_name="organization")
     img_group = models.CharField(max_length = 150, verbose_name="image",default="img/groups/default.jpg")
     id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
-    date_joined = models.DateTimeField()
+    date_joined = models.DateTimeField(auto_now=True)
     description = models.TextField(blank = True)
     is_active = models.BooleanField(default=True)
     id_group_type = models.ForeignKey(group_type, null=True, related_name = '%(class)s_id_group_type')
