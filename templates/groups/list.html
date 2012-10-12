@@ -1,26 +1,21 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - Mis organizaciones{% endblock %}
+{% block TITLE %}Actarium - Mis Grupos{% endblock %}
 
 {%block body%}
 <article>
-    {% if user.is_authenticated %}
     <h2>Tus Grupos</h2>
     <ul class="nav onOver">
-        <li class="img-rounded"><a href="/groups/minutes"><img src="{{ STATIC_PREFIX }}img/org.png"/>Grupo</a></li> 
-        <li class="img-rounded"><a href="/groups/minutes"><img src="{{ STATIC_PREFIX }}img/org.png"/>Otro grupo</a></li> 
-        <li class="img-rounded"><a href="/groups/minutes"><img src="{{ STATIC_PREFIX }}img/org.png"/>Un grupo m&aacute;s</a></li> 
+		{% for group in groups %}
+			<li class="img-rounded">
+				<a href="/groups/{{group.slug}}">
+					<img src="{{group.img_group}}" alt="{{group.name}}" />
+					{{group.name}}
+				</a>
+			</li> 
+         {% endfor %}
     </ul>
 
-    <a href="#" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
-
-    {% else %}
-    <div class="sing">
-        <p>Debe ingresar para poder ver sus organizaciones</p>
-        <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
-        <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
-    </div>
-
-    {% endif %}
+    <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
 
 </article>
 {%endblock%}

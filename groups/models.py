@@ -1,6 +1,7 @@
 #encoding:utf-8
 from django.db import models
 from django.contrib.auth.models import User
+from django.template import defaultfilters
 
 class group_type(models.Model):
     name = models.CharField(max_length = 150, verbose_name="name")
@@ -13,16 +14,22 @@ class group_type(models.Model):
 class groups(models.Model):
     name = models.CharField(max_length = 150, verbose_name="name")
     organization = models.CharField(max_length = 150, verbose_name="organization")
-    img_group = models.CharField(max_length = 150, verbose_name="image")
+    img_group = models.CharField(max_length = 150, verbose_name="image",default="/static/img/groups/default.jpg")
     id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
     date_joined = models.DateTimeField()
-    is_active = models.BooleanField()
     description = models.TextField(blank = True)
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
     id_group_type = models.ForeignKey(group_type, null=True, related_name = '%(class)s_id_group_type')
+    slug = models.SlugField(max_length=150,unique=True)
     
     def __unicode__(self):
         return "%s "%(self.name)
+    
+    def save(self,*args,**kwargs):
+        self.slug = "reemplazame"
+        super(groups,self).save(*args,**kwargs)
+        self.slug = defaultfilters.slugify(self.name)+"-"+defaultfilters.slugify(self.pk)
+        super(groups,self).save(*args,**kwargs)#reemplazado
     
 class invitations(models.Model):
     id_user_from = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user_from')
