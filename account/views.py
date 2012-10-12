@@ -25,7 +25,8 @@ def newUser(request):
         formulario = RegisterForm(request.POST)
         if formulario.is_valid():
             formulario.save()
-            return HttpResponseRedirect('/')
+            return userLogin(request,formulario['username'].data,formulario['password1'].data)
+            
     else:
         formulario = RegisterForm()
     ctx = {'formNewUser': formulario}
@@ -66,7 +67,7 @@ def userLogin(request,user_name,password):
     if acceso is not None:
         if acceso.is_active:
             login(request, acceso)
-            return HttpResponseRedirect('/account/#login')
+            return HttpResponseRedirect('/#login')
         else:
             return render_to_response('account/status.html', context_instance = RequestContext(request))
     else:
@@ -85,15 +86,20 @@ def myAccount(request):
     '''
     usuario = request.user
     if request.user.is_authenticated():
+        #-----------------<GRAVATAR>-----------------
+        size = 100
         email = request.user.email
         default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
-        size = 100
-        # construct the url
         gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+        #-----------------</GRAVATAR>-----------------
     else:
         gravatar_url = "/static/website/img/user_default.png"
     ctx = {'user':usuario, 'gravatar_url': gravatar_url}
     return render_to_response('account/index.html',ctx, context_instance = RequestContext(request))
 
 # --------------------------------</Cuenta de Usuario>----------------------
+
+
+
+
