@@ -3,3 +3,4 @@ Actarium/settings.py
 .project
 .pydevproject
 .settings/
+static/js/vendor/tiny_mce/
