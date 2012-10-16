@@ -42,8 +42,8 @@ class invitations(models.Model):
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
     id_group = models.ForeignKey(groups)
-    is_active = models.BooleanField()
-    date_joined = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now=True)
     
 class admin_group(models.Model):
     id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')

@@ -9,7 +9,7 @@ from django.db import models
 class newGroupForm(forms.Form):
     name = forms.CharField(label = "Nombre",widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo'}))
     description = forms.CharField(label = "Descripción",widget=forms.Textarea(attrs={'placeholder': 'Descripción'}))
-    id_group_type = forms.ModelChoiceField(queryset=group_type.objects.all())
+    id_group_type = forms.ModelChoiceField(label = "Tipo de Grupo",queryset=group_type.objects.all())
     
 #    class Meta:
 #        model = groups

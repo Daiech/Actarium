@@ -28,8 +28,7 @@ function main(){
            // $("ul.dropdown-menu").removeClass("disblock")
         });
     //------ </No cierra el Menú de login al dar click>--------------/
-    
-    
+
     //------ <On Login Submit >--------------/
     $("#close-login-menu").on("click",function(e){
         e.preventDefault();
@@ -37,6 +36,13 @@ function main(){
     });
     //------ </On Login Submit >--------------/
     
+    $("#add-member").one('click focus', function(e) {
+        $(this).next(".dropdown-menu").addClass("disblock")
+        $("#newmember").focus()
+    });
+
+
+
 }
 
 $(document).on("ready",main);

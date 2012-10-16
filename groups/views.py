@@ -4,65 +4,62 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from groups.models import groups,group_type
+from groups.models import groups, group_type, rel_user_group, minutes
 from groups.forms import newGroupForm
-import datetime
+
 
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
     lista los grupos del usuario registrado
     '''
-    if request.user.is_authenticated():
-        mygroups = groups.objects.all()
-        try:
-            mygroups = groups.objects.filter(id_creator=request.user.id)
-        except ObjectDoesNotExist:
-            print("Either the entry or blog doesn't exist.")
-            mygroups = "Either the entry or blog doesn't exist."
-        
-        ctx = {'TITLE':"Actarium",
-               "groups":mygroups,
-               }
-    else:
-        ctx = {'TITLE':"Actarium"}
-    return render_to_response('groups/list.html',ctx, context_instance = RequestContext(request))
+    try:
+        mygroups = groups.objects.filter(rel_user_group__id_user=request.user, rel_user_group__is_active=True)
+    except ObjectDoesNotExist:
+        mygroups = "Either the entry or blog doesn't exist."
+
+    ctx = {'TITLE': "Actarium", "groups": mygroups}
+    return render_to_response('groups/list.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/account/login')
 def newGroup(request):
     '''
-    crea una nueva organizacion 
+        crea una nuevo grupo
     '''
+
     if request.method == "POST":
         form = newGroupForm(request.POST)
         if form.is_valid():
             df = {
                 'name': form.cleaned_data['name'],
                 'description': form.cleaned_data['description'],
-                'id_creator' : request.user
+                'id_creator': request.user
             }
-            query = groups(name= df['name'],
-                           description= df['description'],
-                           id_creator = df['id_creator'],
-                           id_group_type = group_type.objects.get(pk=1),
+            myNewGroup = groups(name=df['name'],
+                           description=df['description'],
+                           id_creator=df['id_creator'],
+                           id_group_type=group_type.objects.get(pk=1),
                          )
-            query.save()
-            return HttpResponseRedirect("/groups/"+str(query.slug))
+            myNewGroup.save()
+            rel_user_group(id_user=request.user, id_group=myNewGroup).save()
+            return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
     else:
         form = newGroupForm()
-        
-    ctx = {'TITLE':"Actarium",
-           "newGroupForm":form,
+
+    ctx = {'TITLE': "Actarium",
+           "newGroupForm": form,
            }
-    return render_to_response('groups/new.html',ctx, context_instance = RequestContext(request))
+    return render_to_response('groups/new.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/account/login')
 def showGroup(request, slug):
     '''
-    crea una nueva organizacion 
+        Muestra la informacion de un grupo
     '''
-    
     q = groups.objects.get(slug=slug)
-    #
-    ctx = {"group": q}
-    return render_to_response('groups/listAct.html', ctx, context_instance = RequestContext(request))
+    mem = rel_user_group.objects.filter(id_group=q.id, is_active=True)
+    min = minutes.objects.filter(id_group=q.id)
+    ctx = {'TITLE': q.name, "group": q, "members": mem, "minutes": min}
+    return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
