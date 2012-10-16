@@ -1,3 +1,4 @@
+{% load gravatartag %}
 			<div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -26,7 +27,7 @@
                             <li class="current-user">
                                 <a href="/account">
                                     <div class="content-box">
-                                        <img class="size32 avatar" src="{% if gravatar_url %}{{ gravatar_url }}{% else %}{{ STATIC_PREFIX }}img/user_default.png{% endif %}" alt="{{user.first_name}}" />
+                                        <img class="size32 avatar" src="{{ user.mail|showgravatar:'32'}}" alt="{{user.first_name}}" />
                                         <span class="fullname">Mi Cuenta</span>
                                         <small class="metadata">Editar configuraci&oacute;n</small>
                                     </div>
