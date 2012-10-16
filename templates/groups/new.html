@@ -3,21 +3,38 @@
 
 {%block body%}
 <article>
-	<h2>Crear nuevo grupo</h2>
-	 <form class="form-horizontal" method="POST">
-	 	{% csrf_token %}
-    	<table>{{newGroupForm}}</table>
-    	<div class="control-group">
-            <div class="controls">
-                <label class="checkbox">
-<!--	             <input type="checkbox"> Acepto los <a href="#">t&eacute;rminos de uso</a>-->
-                </label>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </div>
+    <h2>Crear nuevo grupo</h2>
+    <p>Pon un nombre y una descripci&oacute;n a tu grupo y empieza a disfrutar de los
+        beneficios de <strong>ACTARIUM</strong></p>
+    <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <table>{{newGroupForm}} 
+
+            <tr><td></td><td><button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="/groups" class="btn btn-link">Mis Grupos</a></td></tr>
+        </table>
+
+
     </form>
 </article>
 {%endblock%}
+{%block style%}
+<style>
+    .form-horizontal table{
+        margin: auto;
+        width: auto;
+    }
+
+    table td .btn{
+        margin-top:10px;
+    }
+</style>
+{%endblock%}
+
 {% block js %}
 <script>$("#menu-organizations").addClass("active")</script>
+<script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
+<script src="{{STATIC_PREFIX}}js/textareas.js"></script>
+
+
 {% endblock %}
