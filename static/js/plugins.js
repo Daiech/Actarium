@@ -39,27 +39,6 @@ function main(){
         $("ul.dropdown-menu").removeClass("disblock");
     });
     //------ </On Login Submit >--------------/
-    
-    $("#add-member").on('click focus', function(e) {
-        $(this).next(".dropdown-menu").addClass("disblock")
-        $("#newmember").focus()
-    });
-
-    $("#close-add-member").on("click",function(e){
-        $(this).parent().parent().removeClass("disblock")
-    });
-    $("#newmember").on("keyup",function(e){
-        if(e.keyCode==13){
-            var user=$("#newmember").val()
-            //go to the server:users
-            
-                $("#search-result").html("<li><a href='#' class='btn btn-link'>"+user+"</a></li>")          
-            setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-            $(this).val("")
-
-            }
-    })
-
 }
 
 function setAlert(tittle, message){
@@ -67,6 +46,13 @@ function setAlert(tittle, message){
     $("#alert-message p").text(message)
     $("#alert-message").fadeIn().delay(5000).fadeOut(1500)
     
+}
+
+function sendAjax(url,data,destiny){
+    $.get(url, data, function(data) {
+            $(""+destiny).text(data);
+        }
+    );
 }
 
 $(document).on("ready",main);

@@ -58,6 +58,7 @@
                     Miembros <div id="close-add-member" class="close pull-right">×</div>
                 </li>
                 <li>
+                	<input type="hidden" id="group_id" value="{{group.id}}">
                     <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
                 </li>
                 <li>
@@ -69,13 +70,36 @@
                     </ul>
                 </li>
             </ul>
-
+            
         </div>
-
+        <div id="my-ajax-result"></div>
 
     </section>
 </article>
 {%endblock%}
+{% block js %}
+<script>
+	$("#add-member").on('click focus', function(e) {
+        $(this).next(".dropdown-menu").addClass("disblock")
+        $("#newmember").focus()
+    });
+
+    $("#close-add-member").on("click",function(e){
+        $(this).parent().parent().removeClass("disblock")
+    });
+    $("#newmember").on("keyup",function(e){
+        if(e.keyCode==13){
+            var user=$("#newmember").val()
+            var group_id = $("#group_id").val()
+            //go to the server:users
+            sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result")
+            $("#search-result").html("<li><a href='#' class='btn btn-link'>"+user+"</a></li>")          
+            setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
+            $(this).val("")
+        }
+    })
+</script>
+{% endblock %}
 {%block style%}
 <style>
     .taling{

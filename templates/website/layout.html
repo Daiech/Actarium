@@ -51,9 +51,10 @@
         <script>window.jQuery || document.write('<script src="{{ STATIC_PREFIX }}js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
         <script src="{{ STATIC_PREFIX }}js/plugins.js"></script>
         <script src="{{ STATIC_PREFIX }}js/main.js"></script>
+        {% block js %}
+        {% endblock%}
         <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
-		{% block js %}
-		{% endblock%}
+		
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
