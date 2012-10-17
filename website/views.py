@@ -1,26 +1,22 @@
 # Create your views here.
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-import hashlib, urllib  # para gravatar
 
-from groups.models import groups
+from groups.models import groups, invitations
 
 
 def home(request):
     if request.user.is_authenticated():
-        #-----------------<GRAVATAR>-----------------
-        size = 100
-        email = request.user.email
-        default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
-        #-----------------</GRAVATAR>-----------------
 
         #-----------------</GRUPOS>-----------------
         gr = groups.objects.filter(rel_user_group__id_user=request.user)
         #-----------------</GRUPOS>-----------------
 
-        ctx = {'TITLE': "Actarium", 'gravatar_url': gravatar_url, "groups": gr}
+        #-----------------<INVITACIONES>-----------------
+        my_inv = invitations.objects.filter(email_invited=request.user.email, is_active=True)
+        #-----------------</INVITACIONES>-----------------
+
+        ctx = {'TITLE': "Actarium", "groups": gr, "invitations": my_inv}
     else:
         ctx = {'TITLE': "Actarium"}
 
