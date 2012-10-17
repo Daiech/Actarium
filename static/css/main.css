@@ -94,7 +94,15 @@ textarea {
    @JonathanMG7
    ========================================================================== */
 
-
+.alert-block {
+    margin-left: auto;
+    margin-right: auto;
+    left:0;
+    right:0;
+    font-size: 14px;
+    position: absolute;
+    width:30%;
+}
 article{
     background-color: #EEE;
     border-radius: 10px;
@@ -131,7 +139,7 @@ article ul a img{
     margin:10px;
 }
 article ul li a:hover{
-    
+
     color: black;
 }
 article ul.onOver li:hover{
@@ -354,7 +362,7 @@ only screen and (min-resolution: 144dpi) {
     .container{
         margin: 0;
     }
-    
+
     article{
         margin-left: 5px;
         margin-right: 5px;
