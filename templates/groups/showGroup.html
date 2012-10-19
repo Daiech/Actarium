@@ -2,11 +2,6 @@
 {% block TITLE %}Actarium - {{TITLE}}{% endblock %}
 
 {%block body%}
-<div id="alert-message" class="alert alert-block" style="display: none">
-<!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
-  <h4></h4>
-  <p></p>
-</div>
 <article>
     <header>
         <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
@@ -68,12 +63,11 @@
                     <ul id="search-result">
                         
                     </ul>
+                    <div id="my-ajax-result"></div>
                 </li>
             </ul>
             
         </div>
-        <div id="my-ajax-result"></div>
-
     </section>
 </article>
 {%endblock%}
@@ -92,8 +86,8 @@
             var user=$("#newmember").val()
             var group_id = $("#group_id").val()
             //go to the server:users
-            sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result")
-            $("#search-result").html("<li><a href='#' class='btn btn-link'>"+user+"</a></li>")          
+            //sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result")
+            $("#search-result").html("<li style='list-style:none'><a href='#'>"+user+"</a></li>")          
             setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
             $(this).val("")
         }
@@ -102,6 +96,9 @@
 {% endblock %}
 {%block style%}
 <style>
+    ul#search-result{
+        margin-left: 0;
+    }
     .taling{
         text-align: center;
     }
@@ -142,7 +139,7 @@
         text-decoration: none;
         margin: 5px 20px;
     }
-    .dropdownmenu ul li{
+    .dropdownmenu  * li{
         list-style:none;
         text-decoration: none;
     }

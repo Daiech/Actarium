@@ -42,9 +42,16 @@ function main(){
 }
 
 function setAlert(tittle, message){
-    $("#alert-message h4").text(tittle)
-    $("#alert-message p").text(message)
-    $("#alert-message").fadeIn().delay(5000).fadeOut(1500)
+    var l = message.length;
+    var t=0;
+    if (l===0) t=0;
+    else if (l<=50)  t=2000;
+    else if (l<=100) t=3000;
+    else if (l<=200) t=5000;
+    else if (l> 200) t=7000;
+    $("#alert-message h4").text(tittle);
+    $("#alert-message p").text(message);
+    $("#alert-message").fadeIn().delay(t).fadeOut(1500);
     
 }
 

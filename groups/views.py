@@ -53,7 +53,7 @@ def newGroup(request):
     ctx = {'TITLE': "Actarium",
            "newGroupForm": form,
            }
-    return render_to_response('groups/new.html', ctx, context_instance=RequestContext(request))
+    return render_to_response('groups/newGroup.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')

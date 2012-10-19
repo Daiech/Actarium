@@ -38,6 +38,11 @@
 			{% include "website/topBar.html" %}
 		</header>
         <div id="body_container"  class="container">
+            <div id="alert-message" class="alert alert-block" style="display: none">
+            <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
+              <h4></h4>
+              <p></p>
+            </div>
             {%block body%}
             {% endblock%}
         </div> <!-- /container -->

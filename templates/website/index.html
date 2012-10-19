@@ -30,11 +30,21 @@
     </div>
     {% endif %}
 </article>
-<ul class="">
+
+<ul>
+    <!-- 
+        El sigueinte ciclo recorre todas las invitaciones de un usuario
+        cada fila de datos contiene:
+            nombre del invitador: {{invitation.id_user_from.first_name}}
+            fecha de la invitacion: {{invitation.date_invited|date:"d F"}}
+            nombre de grupo : {{invitation.id_group.name}}
+            url del grupo : /groups/{{invitation.id_group.slug}}
+     -->
     {% for invitation in invitations %}
         <li>
             {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
             al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
+            <a href="#" class="btn btn-small">Aceptar</a> <a href="#" class="btn btn-danger btn-small">Cancelar</a>
         </li>
     {% endfor %}
 </ul>
