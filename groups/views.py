@@ -61,16 +61,15 @@ def showGroup(request, slug):
     '''
         Muestra la informacion de un grupo
     '''
-    q = groups.objects.get(slug=slug)
+    q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
-        mem = rel_user_group.objects.filter(id_group=q.id, is_active=True)
+        members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
         minutes_group = minutes.objects.filter(id_group=q.id)
-        #inv = newInvitationUser("maizaga@daiech.com", request.user, q)
-        ctx = {'TITLE': q.name, "group": q, "members": mem, "minutes": minutes_group}
+        ctx = {'TITLE': q.name, "group": q, "members": members, "minutes": minutes_group}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect('/#error-view-group')
+        return HttpResponseRedirect('/groups/#error-view-group')
 
 
 def validateEmail(email):
@@ -95,7 +94,7 @@ def sendInvitationUser(email, user, group):
         return False
 
 
-#@requires_csrf_token #pilas con esto, es para poder enviar los datos via POST 
+#@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 def newInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -108,6 +107,7 @@ def newInvitation(request):
     else:
         message = "Error"
     return HttpResponse(message)
+
 
 def newMinutes(request):
     form = newMinutesForm()

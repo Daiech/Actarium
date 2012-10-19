@@ -19,21 +19,19 @@ class groups(models.Model):
     img_group = models.CharField(max_length=150, verbose_name="image", default="img/groups/default.jpg")
     id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
     date_joined = models.DateTimeField(auto_now=True)
-    description = models.TextField(blank = True)
+    description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
-    id_group_type = models.ForeignKey(group_type, null=True, related_name = '%(class)s_id_group_type')
-    slug = models.SlugField(max_length=150,unique=True)
-
+    id_group_type = models.ForeignKey(group_type, null=True, related_name='%(class)s_id_group_type')
+    slug = models.SlugField(max_length=150, unique=True)
 
     def __unicode__(self):
-        return "%s "%(self.name)
+        return "%s " % (self.name)
 
-  
-    def save(self,*args,**kwargs):
+    def save(self, *args, **kwargs):
         self.slug = "reemplazame"
-        super(groups,self).save(*args,**kwargs)
-        self.slug = defaultfilters.slugify(self.name)+"-"+defaultfilters.slugify(self.pk)
-        super(groups,self).save(*args,**kwargs)#reemplazado
+        super(groups, self).save(*args, **kwargs)
+        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
+        super(groups, self).save(*args, **kwargs)  # reemplazado
 
 
 class invitations(models.Model):
@@ -60,39 +58,41 @@ class admin_group(models.Model):
 class minutes_type_1(models.Model):
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
-    location = models.TextField(blank = True)
-    agreement = models.TextField(blank = True)
+    location = models.TextField(blank=True)
+    agreement = models.TextField(blank=True)
 
 
 class minutes_type(models.Model):
-    name = models.CharField(max_length = 150 , verbose_name = "name")
-    descritpion = models.TextField(blank = True)
-    date_added = models.DateTimeField()
+    name = models.CharField(max_length=150, verbose_name="name")
+    descritpion = models.TextField(blank=True)
+    date_added = models.DateTimeField(auto_now=True)
     id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')
     is_public = models.BooleanField()
     is_customized = models.BooleanField()
-    
+
     def __unicode__(self):
-        return "%s "%(self.name)
+        return "%s " % (self.name)
 
 
-class minutes(models.Model):  
-    id_reunion = models.ForeignKey(User,  null=True, related_name='%(class)s_id_reunion') 
-    date_created = models.DateTimeField()
+class minutes(models.Model):
+    id_reunion = models.ForeignKey(User, null=True, related_name='%(class)s_id_reunion')
+    id_group = models.ForeignKey(groups, null=True, related_name='%(class)s_id_group')
+    date_created = models.DateTimeField(auto_now=True)
     id_extra_minutes = models.ForeignKey(minutes_type_1,  null=True, related_name='%(class)s_id_extra_minutes')
     id_type = models.ForeignKey(minutes_type,  null=True, related_name='id_minutes_type')
-    is_valid = models.BooleanField()
-    is_full_signed = models.BooleanField()
+    is_valid = models.BooleanField(default=True)
+    is_full_signed = models.BooleanField(default=False)
     code = models.IntegerField()
 
 
 class reunions(models.Model):
-    id_convener = models.ForeignKey(User,  null=True, related_name='%(class)s_id_convener')  
+    id_convener = models.ForeignKey(User, null=True, related_name='%(class)s_id_convener')
     date_convened = models.DateTimeField()
     date_reunion = models.DateTimeField()
     id_group = models.ForeignKey(groups,  null=True, related_name='%(class)s_id_group')
-    agenda =  models.TextField(blank = True)
-    is_done = models.BooleanField()
+    agenda = models.TextField(blank=True)
+    is_done = models.BooleanField(default=False)
+
 
 class feddback(models.Model):
     id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')

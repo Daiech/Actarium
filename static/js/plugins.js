@@ -17,17 +17,17 @@ function main(){
     //-------------------<letra blanca del perfil on hover>-------------------------//
     $("ul.dropdown-menu li.current-user").hover(
     function(e){
-        $(".content-box *").addClass("color-fff")
+        $(".content-box *").addClass("color-fff");
     },
     function(e){
-        $(".content-box *").removeClass("color-fff")
+        $(".content-box *").removeClass("color-fff");
     }
 );
     //-------------------</letra blanca del perfil on hover>-------------------------//
     
     //------<No cierra el Menú de login al dar click>---------------/
     $(".next-li").focus(function(e){
-        $("ul.dropdown-menu").addClass("disblock")
+        $("ul.dropdown-menu").addClass("disblock");
     }).blur(function(e){
         // $("ul.dropdown-menu").removeClass("disblock")
     });
@@ -55,9 +55,9 @@ function setAlert(tittle, message){
     
 }
 
-function sendAjax(url,data,destiny){
-    $.get(url, data, function(data) {
-            $(""+destiny).text(data);
+function sendAjax(url, params, destiny, myCallback){
+    $.get(url, params, function(data) {
+            myCallback(data);
         }
     );
 }

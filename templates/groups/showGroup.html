@@ -34,10 +34,9 @@
             <li>
                 <i class="icon-user"></i>
                 {{member.id_user.first_name}} {{member.id_user.last_name}}
-                {%if member.id_user != user%}
-                <a href="#" title="Eliminar a {{member.id_user.first_name}} de este grupo"><i class="icon-remove"></i></a>
-                {%else%}
-                <a href="#" title="Administrador de &eacute;ste grupo" ><i class="icon-star"></i></a>
+                {%if member.id_user == user%}
+                (yo)
+                <a class="pull-right" href="#" title="Eliminar a {{member.id_user.first_name}} de este grupo"><i class="icon-star"></i></a>
                 {%endif%}
             </li>
             {%endfor%} 
@@ -61,7 +60,6 @@
                 </li>
                 <li>
                     <ul id="search-result">
-                        
                     </ul>
                     <div id="my-ajax-result"></div>
                 </li>
@@ -86,12 +84,13 @@
             var user=$("#newmember").val()
             var group_id = $("#group_id").val()
             //go to the server:users
-            //sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result")
-            $("#search-result").html("<li style='list-style:none'><a href='#'>"+user+"</a></li>")          
-            setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-            $(this).val("")
+            sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result",function(data){
+                $("#search-result").html("<li style='list-style:none'><a href='#'>"+user+" invitado</a></li>")
+                setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
+                $("#newmember").val("")
+            })
         }
-    })
+    });
 </script>
 {% endblock %}
 {%block style%}
@@ -125,15 +124,18 @@
         float:left;
     }
     .columnaD{
-        margin-left: 400px;    
+        margin-left: 380px;    
     }
     article header h3{
         margin:0;
         margin-left:35px;
     }
     #add-member{
-    
         position: static;
+    }
+    #newmember{
+        margin: 3px 10px;
+        width: 84%;
     }
     .dropdown.dropdown-menu{
         text-decoration: none;
