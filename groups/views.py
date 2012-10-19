@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from groups.models import groups, group_type, rel_user_group, minutes, invitations
-from groups.forms import newGroupForm
+from groups.forms import newGroupForm, newMinutesForm
 #from django.core.mail import EmailMessage
 import re
 
@@ -108,3 +108,10 @@ def newInvitation(request):
     else:
         message = "Error"
     return HttpResponse(message)
+
+def newMinutes(request):
+    form = newMinutesForm()
+    ctx = {'TITLE': "Actarium",
+           "newMinutesForm": form,
+           }
+    return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))

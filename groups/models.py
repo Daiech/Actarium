@@ -61,7 +61,6 @@ class minutes_type_1(models.Model):
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
     location = models.TextField(blank = True)
-    agenda =  models.TextField(blank = True)
     agreement = models.TextField(blank = True)
 
 
@@ -77,16 +76,23 @@ class minutes_type(models.Model):
         return "%s "%(self.name)
 
 
-class minutes(models.Model):
-    id_creator = models.ForeignKey(User,  null=True, related_name='%(class)s_id_creator')    
+class minutes(models.Model):  
+    id_reunion = models.ForeignKey(User,  null=True, related_name='%(class)s_id_reunion') 
     date_created = models.DateTimeField()
-    id_group = models.ForeignKey(groups,  null=True, related_name='%(class)s_id_group')
     id_extra_minutes = models.ForeignKey(minutes_type_1,  null=True, related_name='%(class)s_id_extra_minutes')
     id_type = models.ForeignKey(minutes_type,  null=True, related_name='id_minutes_type')
-    is_public = models.BooleanField()
+    is_valid = models.BooleanField()
     is_full_signed = models.BooleanField()
     code = models.IntegerField()
 
+
+class reunions(models.Model):
+    id_convener = models.ForeignKey(User,  null=True, related_name='%(class)s_id_convener')  
+    date_convened = models.DateTimeField()
+    date_reunion = models.DateTimeField()
+    id_group = models.ForeignKey(groups,  null=True, related_name='%(class)s_id_group')
+    agenda =  models.TextField(blank = True)
+    is_done = models.BooleanField()
 
 class feddback(models.Model):
     id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
