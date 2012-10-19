@@ -18,3 +18,7 @@ class newGroupForm(forms.Form):
 #        super(groups, self).save(*args, **kwargs)
 #        return True
     
+class newMinutesForm(forms.Form):
+    name = forms.CharField(label = "Nombre",widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo'}))
+    description = forms.CharField(label = "Descripción",widget=forms.Textarea(attrs={'placeholder': 'Descripción'}))
+    id_group_type = forms.ModelChoiceField(label = "Tipo de Grupo",queryset=group_type.objects.all())

@@ -1,0 +1,39 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Actas{% endblock %}
+
+{%block body%}
+<article>
+    <h2>Crear nueva acta</h2>
+    <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
+    <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <table>{{ newMinutesForm }} 
+
+            <tr><td></td><td><button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="/groups" class="btn btn-link">Mis actas</a></td></tr>
+        </table>
+
+
+    </form>
+</article>
+{%endblock%}
+{%block style%}
+<style>
+    .form-horizontal table{
+        margin: auto;
+        width: auto;
+    }
+
+    table td .btn{
+        margin-top:10px;
+    }
+</style>
+{%endblock%}
+
+{% block js %}
+<script>$("#menu-organizations").addClass("active")</script>
+<script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
+<script src="{{STATIC_PREFIX}}js/textareas.js"></script>
+
+
+{% endblock %}
