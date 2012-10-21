@@ -9,9 +9,8 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>{% block TITLE %}{%endblock%}</title>
-        <meta name="description" content="">
+        <meta name="description" content="La solucic&oacute;n para el resgistro de actas">
         <meta name="viewport" content="width=device-width">
-
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link rel="icon" type="image/x-icon" href="{{ STATIC_PREFIX }}favicon.ico">  
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/normalize.css">
@@ -21,19 +20,15 @@
                 padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
             }
         </style>
-
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/main.css">
-		{%block style%}{%endblock%}
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap-responsive.css">
-
-
+        {%block style%}{%endblock%}
         <script src="{{ STATIC_PREFIX }}js/vendor/modernizr-2.6.1.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
-
 		<header class="navbar navbar-fixed-top">
 			{% include "website/topBar.html" %}
 		</header>
@@ -43,29 +38,29 @@
               <h4></h4>
               <p></p>
             </div>
-            {%block body%}
-            {% endblock%}
+            <div>
+                {%block body%}
+                {% endblock%}
+            </div>
         </div> <!-- /container -->
-        
         <footer>
             <a href="http://www.twitter.com/daiech" target="_blank">@Daiech</a><br/>
             <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
         </footer>
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>-->
         <script>window.jQuery || document.write('<script src="{{ STATIC_PREFIX }}js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
         <script src="{{ STATIC_PREFIX }}js/plugins.js"></script>
         <script src="{{ STATIC_PREFIX }}js/main.js"></script>
+        <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
         {% block js %}
         {% endblock%}
-        <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
 		
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
-            var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
+        //     var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
+        //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        //     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        //     s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
     </body>
 </html>

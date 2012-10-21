@@ -10,7 +10,7 @@
         <a href="#" class="btn btn-link">Eliminar</a>
     </header>
     <hr/>
-    <section class="columnaI">
+    <section class="columnaI ">
         <h4>Actas</h4>
         <ul class="nav">
             {%for minute in minutes%}
@@ -27,7 +27,7 @@
         </ul>
         <a href="#" class="btn btn-info btn-small">Crear acta</a>
     </section>
-    <section class="columnaD">
+    <section class="columnaD ">
         <h4>Miembros</h4>
         <ul class="nav">
             {%for member in members%}
@@ -61,7 +61,6 @@
                 <li>
                     <ul id="search-result">
                     </ul>
-                    <div id="my-ajax-result"></div>
                 </li>
             </ul>
             
@@ -112,20 +111,13 @@
     article{
         min-height: 400px;
     }
-    #group-members ul li {
-        border-bottom:solid thin white;
-        padding:5px;
-    }
-    #group-members ul.nav li a{
-        border:none;
-    }
     article header img{
         margin-top:4px;
         float:left;
     }
-    .columnaD{
+    /*.columnaD{
         margin-left: 380px;    
-    }
+    }*/
     article header h3{
         margin:0;
         margin-left:35px;
@@ -145,9 +137,6 @@
         list-style:none;
         text-decoration: none;
     }
-    #group-members{
-        float:right;
-        width:35%;
-    }
+
 </style>
 {%endblock%}
