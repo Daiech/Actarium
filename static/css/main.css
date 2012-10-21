@@ -384,6 +384,9 @@ only screen and (min-resolution: 144dpi) {
         /*border: solid thin yellow;*/
     }
 
+    .columnaD{
+        width: 45%;
+    }
 }
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -391,7 +394,9 @@ only screen and (min-resolution: 144dpi) {
         width: auto;
         /*border: solid thin blue;*/
     }
-
+    .columnaD{
+        width: 40%;
+    }
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
