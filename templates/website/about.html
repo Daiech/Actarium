@@ -2,13 +2,24 @@
 {% block TITLE %}Actarium - Acerca{% endblock %}
 
 {%block body%}
-<article>
-    <h1>Actarium</h1>
-    {% if user.is_authenticated %}
-    <p>Usted esta registrado y esta viendo esto</p>
-    {% else %}
-    <p>Si esta viendo esto NO esta registrado</p>
-    {% endif %}
+<article class="row-fluid">
+	<header class="span12 b">
+		<h1>Actarium</h1>
+	    {% if user.is_authenticated %}
+	    <p>Usted esta registrado y esta viendo esto</p>
+	    {% else %}
+	    <p>Si esta viendo esto NO esta registrado</p>
+	    {% endif %}
+	</header>
+	<div class="row-fluid">
+	    <section class="span6 b">
+	    	Ayuda
+	    </section>
+	    <section class="span6 b">
+	    	Feed Back
+	    </section>
+	</div>
+
 </article>
 {%endblock%}
 
