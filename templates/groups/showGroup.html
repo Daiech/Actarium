@@ -54,6 +54,7 @@
                 <li>
                 	<input type="hidden" id="group_id" value="{{group.id}}">
                     <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+                    <span id="load-member"></span>
                 </li>
                 <li>
                     <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
@@ -82,12 +83,23 @@
         if(e.keyCode==13){
             var user=$("#newmember").val()
             var group_id = $("#group_id").val()
-            //go to the server:users
-            sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result",function(data){
-                $("#search-result").html("<li style='list-style:none'><a href='#'>"+user+" invitado</a></li>")
-                setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-                $("#newmember").val("")
-            })
+            sendAjax(
+                "/groups/invitation",
+                {pk:group_id,search:user},
+                "#my-ajax-result",
+                "#load-member",
+                function(data){
+                    $("#search-result").html(
+                        "<li style='list-style:none'>"+
+                            "<a href='#'>"+
+                                user+" invitado"+
+                            "</a>"+
+                        "</li>"
+                        )
+                    setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
+                    //$("#newmember").val("")
+                }
+            )
         }
     });
 </script>
@@ -109,7 +121,6 @@
         line-height:  1;
     }
     article{
-        min-height: 200px;
         overflow: hidden;
     }
     article header img{

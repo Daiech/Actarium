@@ -16,13 +16,13 @@ if (!(window.console && console.log)) {
 function main(){
     //-------------------<letra blanca del perfil on hover>-------------------------//
     $("ul.dropdown-menu li.current-user").hover(
-    function(e){
-        $(".content-box *").addClass("color-fff");
-    },
-    function(e){
-        $(".content-box *").removeClass("color-fff");
-    }
-);
+        function(e){
+            $(".content-box *").addClass("color-fff");
+        },
+        function(e){
+            $(".content-box *").removeClass("color-fff");
+        }
+    );
     //-------------------</letra blanca del perfil on hover>-------------------------//
     
     //------<No cierra el Menú de login al dar click>---------------/
@@ -55,11 +55,12 @@ function setAlert(tittle, message){
     
 }
 
-function sendAjax(url, params, destiny, myCallback){
+function sendAjax(url, params, destiny, load_elem, myCallback){
+    $(load_elem).html('<img src="/static/img/load16.gif" />');
     $.get(url, params, function(data) {
             myCallback(data);
+            $(load_elem).hide();
         }
     );
 }
-
 $(document).on("ready",main);
