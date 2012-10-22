@@ -49,7 +49,7 @@
             </div>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                 <li class="taling">
-                    Miembros <div id="close-add-member" class="close pull-right">×</div>
+                    Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
                 </li>
                 <li>
                 	<input type="hidden" id="group_id" value="{{group.id}}">
@@ -85,7 +85,7 @@
             //go to the server:users
             sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result",function(data){
                 $("#search-result").html("<li style='list-style:none'><a href='#'>"+user+" invitado</a></li>")
-                setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
+                setAlert("Enviado","La invitaciÃ³n a unirse al grupo ha sido enviada a "+ user)
                 $("#newmember").val("")
             })
         }
@@ -94,6 +94,9 @@
 {% endblock %}
 {%block style%}
 <style>
+    .icon-remove{
+        margin: 5px;
+    }
     ul#search-result{
         margin-left: 0;
     }
@@ -125,11 +128,14 @@
     }
     #newmember{
         margin: 3px 10px;
-        width: 84%;
     }
     .dropdown.dropdown-menu{
         text-decoration: none;
         margin: 5px 20px;
+      
+    }
+    .dropdown-menu{
+          width:280px;
     }
     .dropdownmenu  * li{
         list-style:none;

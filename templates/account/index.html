@@ -2,60 +2,69 @@
 {% block TITLE %}Actarium - Cuenta de Usuario{% endblock %}
 {% load gravatartag %}
 {% block body %}
-    <article>
-        <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
-        Hola
-        <strong>
-            <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
-                {{ user.first_name }} ({{user.username}})
-            </a>
-        </strong>
-        <hr>
-        <form method="POST"  action="/account/">
-            {% csrf_token %}
-            <table class="">
-                <tr>
-                    <th colspan="2" class="title">Tus datos</th>
-                </tr>
-                {{formUser}}
-                <tr>
-                    <td></td>
-                    <td>
-                        <button type="submit" class="btn btn-success btn-large">
-                            Actualizar Datos
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <!-- <td>
-                        <button id="new-pass" class="btn pull-right"><i class="icon-wrench"></i> Cambiar contrase&ntilde;a</button>
-                    </td> -->
-                </tr>
-            </table>
-        </form>
-        <hr>
-        <form method="POST" action="/account/PasswordChange">
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <th colspan="2" class="title">Cambiar Contrase&ntilde;a</th>
-                </tr>
-                {{passForm}}
-                <tr>
-                    <td></td>
-                    <td>
-                        <button type="submit" class="btn btn-warning btn-large">
-                            <i class="icon-wrench icon-white"></i> Actualizar Contrase&ntilde;a
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <hr>
-        <p>Eres miembro desde el {{ user.date_joined }} </p>
-        <p>Ultimo logueo: {{ user.last_login}}.</p>
-    </article>
+<article>
+    <div class="uTop">
+    <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+    Hola
+    <strong>
+        <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
+            {{ user.first_name }} ({{user.username}})
+        </a>
+    </strong>
+    </div>
+    <hr>
+    <form method="POST"  action="/account/">
+        {% csrf_token %}
+        <table class="">
+            <tr>
+                <th colspan="2" class="title">Tus datos</th>
+            </tr>
+            {{formUser}}
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="btn btn-success btn-large">
+                        Actualizar Datos
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+
+                <!-- <td>
+                    <button id="new-pass" class="btn pull-right"><i class="icon-wrench"></i> Cambiar contrase&ntilde;a</button>
+                </td> -->
+            </tr>
+
+        </table>
+
+    </form>
+        <p>Los datos con * son de caracter obligatorio.</p>
+
+    <hr>
+    <form method="POST" action="/account/PasswordChange">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th colspan="2" class="title">Cambiar Contrase&ntilde;a</th>
+            </tr>
+            {{passForm}}
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="btn btn-warning btn-large">
+                        <i class="icon-wrench icon-white"></i> Actualizar Contrase&ntilde;a
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <hr>
+
+    <p>Eres miembro desde el {{ user.date_joined }} </p>
+    <p>Ultimo logueo: {{ user.last_login}}.</p>
+</article>
 
 {% endblock%}
 
@@ -63,10 +72,19 @@
 
 {% block style %}
 <style>
+    .uTop{
+        padding:10px;
+    }
     article p{
         font-size: 12px;
         line-height: 1;
-        margin: 0;
+        margin: 5px;
+    }
+    hr{
+        margin:10px;
+    }
+    li hr{
+        margin:20px;
     }
     article form table tr th{
         width: 40%;
@@ -96,14 +114,14 @@
 
 {% block js %}
 <script>
-$("#menu-account").addClass("active");
+    $("#menu-account").addClass("active");
 
-{% if dataUpdate %}
+    {% if dataUpdate %}
     setAlert("Datos Actualizados","Tus datos fueron actualizados correctamente")
-{% endif %}
-{% if passwordUpdate %}
+    {% endif %}
+    {% if passwordUpdate %}
     setAlert("Constraseña Actualizada","Tu constraseña fue actualizada correctamente")
-{% endif %}
+    {% endif %}
 
 </script>
 {% endblock %}

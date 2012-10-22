@@ -112,8 +112,14 @@ article{
     border-bottom-left-radius: 5px;
     margin: 0 auto;
     margin-bottom: 10px;
-    padding: 20px;
+    min-height: 400px;
     width: 100%;
+}
+article > header{
+    margin: 20px;
+}
+.row-fluid{
+    width:auto;
 }
 #body_container{
     /*border:solid thin gray;*/
@@ -137,22 +143,24 @@ footer{
     text-align: center;
     padding: 20px;
 }
-article ul li a{
-    border-bottom: solid thin white;
-    opacity: 0.9;  
-}
+
 article ul a img{
     margin:10px;
 }
-article ul li a:hover{
+/*article ul li a:hover{
 
-    color: black;
+    color: red;
+}*/
+article ul.onOver li{
+    border:  solid thin  #eee;
+    margin:5px;
 }
 article ul.onOver li:hover{
-    background-color:  gray;
-    font-weight: bold;
-    opacity: 1;
+    border:  solid thin  #dadada;
+    border-top:  solid thin  #dadada;
+    box-shadow: 1px 1px 1px rgba(255,255,255,0.5);
 }
+
 
 
 /*==================================
@@ -384,12 +392,16 @@ only screen and (min-resolution: 144dpi) {
 @media (min-width: 980px) and (max-width: 1280px) {
     article{
         width: 80%;
-        /*border: solid thin yellow;*/
+/*        border: solid thin yellow;*/
     }
     .columnaD{
         width: 48%;
     }
+    .notifications span{
+        display: inline;
+    }
 }
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     article{
@@ -399,6 +411,9 @@ only screen and (min-resolution: 144dpi) {
     .columnaD{
         width: 40%;
     }
+}
+.notifications span{
+    display: inline;
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
