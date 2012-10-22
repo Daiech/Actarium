@@ -383,9 +383,8 @@ only screen and (min-resolution: 144dpi) {
         width: 80%;
         /*border: solid thin yellow;*/
     }
-
     .columnaD{
-        width: 45%;
+        width: 48%;
     }
 }
 /* Portrait tablet to landscape and desktop */

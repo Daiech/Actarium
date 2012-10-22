@@ -95,10 +95,10 @@ class reunions(models.Model):
 
 
 class feddback(models.Model):
-    id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
-    title = models.CharField(max_length = 150, verbose_name="title")
-    comment = models.TextField(blank = True)
-    date = models.DateTimeField()
+    id_user = models.ForeignKey(User, null=True, related_name='%(class)s_id_user')
+    title = models.CharField(max_length=150, verbose_name="title")
+    comment = models.TextField(blank=True)
+    date = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
         return "%s "%(self.title)
@@ -107,7 +107,7 @@ class feddback(models.Model):
 class action(models.Model):
     name = models.CharField(max_length = 150, verbose_name = "name")
     description = models.TextField(blank = True)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
         return "%s "%(self.name)

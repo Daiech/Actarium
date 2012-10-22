@@ -3,30 +3,34 @@
 
 {%block body%}
 <article>
-    <h1>Bienvenido</h1>
-    <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
+    <header>
+        <h1>Actarium</h1>
+        <a href="#" class="pull-right btn">Feed-back <i class="icon-bullhorn"></i></a>
+    </header>
     {% if user.is_authenticated %}
-    <div class="columnaI">
-        <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
-        <ul>
-            <!-- 
-                El sigueinte ciclo recorre todas las invitaciones de un usuario
-                cada fila de datos contiene:
-                    nombre del invitador: {{invitation.id_user_from.first_name}}
-                    fecha de la invitacion: {{invitation.date_invited|date:"d F"}}
-                    nombre de grupo : {{invitation.id_group.name}}
-                    url del grupo : /groups/{{invitation.id_group.slug}}
-             -->
-            {% for invitation in invitations %}
-                <li>
-                    {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
-                    al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
-                    <a href="#" class="btn btn-small">Aceptar</a> <a href="#" class="btn btn-danger btn-small">Cancelar</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="columnaD">
+    <hr>
+    <section class="columnaI ">
+        <header>
+            <h4>Actividad Reciente</h4>
+        </header>
+        <div class="notifications b">
+            <div>Tienes {{invitations|length}} invitaciones a grupos</div>
+            <ul class="">
+                {% for invitation in invitations %}
+                    <li>
+                        {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
+                        al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
+                        <a href="#" class="btn btn-small">Aceptar</a> <a href="#" class="btn btn-danger btn-small">Cancelar</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div><!--cierra notifications-->
+    </section>
+    <section class="columnaD">
+        <header>
+            <h4>Tus grupos</h4>
+        </header>
+        <a href="/groups/new" class="btn btn-small"><i class="icon-book"></i>Crear Grupo</a>
         <ul class="nav onOver">
         	{% for group in groups %}
 	            <li class="img-rounded">
@@ -37,9 +41,10 @@
 	            </li>
             {% endfor %}
         </ul>
-    </div>
+    </section>
 
     {% else %}
+    <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
     <div class="sing">
         <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
         <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
@@ -53,6 +58,12 @@
     article{
         min-height: 200px;
         overflow: hidden;
+    }
+    article header{
+        margin-top: 15px;
+    }
+    article header h1{
+        display: inline;
     }
 </style>
 {%endblock%}
