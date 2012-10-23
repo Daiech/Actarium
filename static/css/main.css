@@ -261,7 +261,17 @@ form table td input{
     width: auto;
 }
 
-
+.span6{
+    border-right: solid thin #dadada;
+    padding: 0 20px;
+}
+.title-activity{
+    border-bottom: solid thin #dadada;
+    padding:5px;
+}
+.close-activity{
+    padding:0 5px;
+}
 
 
 /* ==========================================================================
@@ -434,7 +444,7 @@ only screen and (min-resolution: 144dpi) {
         width: 100%;
     }
     .fix_btn{
-        padding:20px;
+        padding:0 20px;
     }
 
 }
@@ -445,7 +455,7 @@ only screen and (min-resolution: 144dpi) {
 /*        border: solid thin gray;*/
     }
     .fix_btn{
-        padding:20px;
+        padding: 0 20px;
     }
     .btn_block{
         display:none;

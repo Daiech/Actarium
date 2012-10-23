@@ -39,6 +39,23 @@ function main(){
         $("ul.dropdown-menu").removeClass("disblock");
     });
     //------ </On Login Submit >--------------/
+
+
+    //------ <On close activity >--------------/
+    $(".title-activity a.close-activity").on("click",function(e){
+        e.preventDefault();
+        $(this).parent().next().slideToggle();
+        if($(this).children("i").hasClass("icon-chevron-up")){
+            $(this).children("i").removeClass("icon-chevron-up").addClass("icon-chevron-right")
+        }
+        else{
+            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up")
+        }
+        
+    });
+    //------ </On close activity>--------------/
+
+
 }
 
 function setAlert(tittle, message){

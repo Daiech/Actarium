@@ -13,7 +13,7 @@
     </header>
     <hr/>
     <div class="row-fluid">
-        <section class="span6 ">
+        <section class="span6">
             <h4>Actas</h4>
             <ul class="nav">
                 {%for minute in minutes%}
@@ -30,7 +30,7 @@
             </ul>
             <a href="#" class="btn btn-info btn-small">Crear acta</a>
         </section>
-        <section class="span6 ">
+        <section class="span5 fix_btn">
             <h4>Miembros</h4>
             <ul class="nav">
                 {%for member in members%}
@@ -157,6 +157,5 @@
         list-style:none;
         text-decoration: none;
     }
-
 </style>
 {%endblock%}
