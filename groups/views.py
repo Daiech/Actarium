@@ -5,10 +5,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from groups.models import groups, group_type, rel_user_group, minutes, invitations
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type
 from groups.forms import newGroupForm, newMinutesForm
 #from django.core.mail import EmailMessage
 import re
+import datetime
 
 
 @login_required(login_url='/account/login')
@@ -109,9 +110,43 @@ def newInvitation(request):
     return HttpResponse(message)
 
 
-def newMinutes(request):
-    form = newMinutesForm()
-    ctx = {'TITLE': "Actarium",
-           "newMinutesForm": form,
-           }
-    return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
+def newMinutes(request,slug):
+    q = groups.objects.get(slug=slug, is_active=True)
+    is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
+    if is_member:
+        if request.method == "POST":
+            form = newMinutesForm(request.POST)
+            if form.is_valid():
+                df = {
+                'code': form.cleaned_data['code'],
+                'date_start': form.cleaned_data['date_start'],
+                'date_end': form.cleaned_data['date_end'],
+                'location': form.cleaned_data['location'],
+                'agenda': form.cleaned_data['agenda'],
+                'agreement': form.cleaned_data['agreement'],
+                }
+                myNewMinutes_type_1 = minutes_type_1(
+                               date_start=datetime.datetime.strptime(str(datetime.date.today()) + " "+str(df['date_start']),'%Y-%m-%d %H:%M:%S'),
+                               date_end=datetime.datetime.strptime(str(datetime.date.today()) + " "+str(df['date_end']),'%Y-%m-%d %H:%M:%S'),
+                               location=df['location'],
+                               agenda=df['agenda'],
+                               agreement = df['agreement'],
+                             )
+                myNewMinutes_type_1.save()
+                myNewMinutes = minutes(
+                                code = df['code'],
+                                id_extra_minutes = myNewMinutes_type_1,
+                                id_group = q,
+                                id_type = minutes_type.objects.get(pk=1),
+                            )
+                myNewMinutes.save()
+                return HttpResponseRedirect("/groups/" + str(q.slug))
+        else:
+            form = newMinutesForm()
+        ctx = {'TITLE': "Actarium",
+               "newMinutesForm": form,
+               }
+        return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/#error-view-group')
+    
