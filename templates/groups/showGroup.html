@@ -6,8 +6,10 @@
     <header>
         <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
         <h3>{{group.name}}</h3>
+
         <a href="#" class="btn btn-link">Editar</a>
         <a href="#" class="btn btn-link">Eliminar</a>
+
     </header>
     <hr/>
     <div class="row-fluid">
@@ -53,7 +55,7 @@
                         Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
                     </li>
                     <li>
-                    	<input type="hidden" id="group_id" value="{{group.id}}">
+                        <input type="hidden" id="group_id" value="{{group.id}}">
                         <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
                         <span id="load-member"></span>
                     </li>
@@ -65,7 +67,7 @@
                         </ul>
                     </li>
                 </ul>
-                
+
             </div>
         </section>
     </div>
@@ -73,7 +75,7 @@
 {%endblock%}
 {% block js %}
 <script>
-	$("#add-member").on('click focus', function(e) {
+    $("#add-member").on('click focus', function(e) {
         $(this).next(".dropdown-menu").addClass("disblock")
         $("#newmember").focus()
     });
@@ -86,22 +88,22 @@
             var user=$("#newmember").val()
             var group_id = $("#group_id").val()
             sendAjax(
-                "/groups/invitation",
-                {pk:group_id,search:user},
-                "#my-ajax-result",
-                "#load-member",
-                function(data){
-                    $("#search-result").html(
-                        "<li style='list-style:none'>"+
-                            "<a href='#'>"+
-                                user+" invitado"+
-                            "</a>"+
-                        "</li>"
-                        )
-                    setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-                    //$("#newmember").val("")
-                }
+            "/groups/invitation",
+            {pk:group_id,search:user},
+            "#my-ajax-result",
+            "#load-member",
+            function(data){
+                $("#search-result").html(
+                "<li style='list-style:none'>"+
+                    "<a href='#'>"+
+                    user+" invitado"+
+                    "</a>"+
+                    "</li>"
             )
+                setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
+                //$("#newmember").val("")
+            }
+        )
         }
     });
 </script>
@@ -146,10 +148,10 @@
     .dropdown.dropdown-menu{
         text-decoration: none;
         margin: 5px 20px;
-      
+
     }
     .dropdown-menu{
-          width:280px;
+        width:280px;
     }
     .dropdownmenu  * li{
         list-style:none;

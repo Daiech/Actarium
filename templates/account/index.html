@@ -3,6 +3,7 @@
 {% load gravatartag %}
 {% block body %}
 <article>
+    <h2>Cuenta</h2>
     <div class="uTop">
     <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
     Hola
@@ -72,6 +73,9 @@
 
 {% block style %}
 <style>
+    h2{
+        margin-left: 10px;
+    }
     .uTop{
         padding:10px;
     }

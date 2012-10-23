@@ -4,6 +4,7 @@
 {%block body%}
 <article>
     <h2>Tus Grupos</h2>
+    <hr>
     <section class="row-fluid">
         <ul class="nav onOver span12">
             {% for group in groups %}
@@ -15,8 +16,8 @@
                     </a>
                     <span>{{group.description}}</span>
                     <div class="pull-right button">
-                        <a href="#" class="btn btn-mini"><i class="icon-pencil"></i></a>
-                        <a href="#" class="btn btn-mini"><i class="icon-remove"></i></a>
+                        <a href="#" class="btn btn-mini btn_block"><i class="icon-pencil"></i></a>
+                        <a href="#" class="btn btn-mini btn_block"><i class="icon-remove"></i></a>
 
                     </div>
                 </div>

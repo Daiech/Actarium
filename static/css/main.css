@@ -139,6 +139,11 @@ a ,a:visited ,a:link,a:hover{
 .sing{
     alignment-adjust: central;
 }
+hr{
+        border-bottom: solid thin white;
+        height: 0.01px;
+        margin-bottom: 30px;
+    }
 footer{
     border-top: solid thin #dadada;
     text-align: center;
@@ -383,7 +388,7 @@ only screen and (min-resolution: 144dpi) {
 @media (min-width: 1200px) {
     article{
         width: 80%;
-        /*border: solid thin green;*/
+/*        border: solid thin green;*/
     }
     .columnaD{
         width: 48%;
@@ -401,13 +406,14 @@ only screen and (min-resolution: 144dpi) {
     .notifications span{
         display: inline;
     }
+    
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     article{
         width: auto;
-        /*border: solid thin blue;*/
+/*        border: solid thin blue;*/
     }
     .columnaD{
         width: 40%;
@@ -420,12 +426,15 @@ only screen and (min-resolution: 144dpi) {
 @media (max-width: 767px) {
     article{
         width: auto;
-        /*border: solid thin red;*/
+/*        border: solid thin red;*/
     }
     .columnaI{
         width: 100%;
     }.columnaD{
         width: 100%;
+    }
+    .fix_btn{
+        padding:10px;
     }
 
 }
@@ -433,8 +442,16 @@ only screen and (min-resolution: 144dpi) {
 @media (max-width: 480px) {
     article{
         width: auto;
-        /*border: solid thin gray;*/
+        border: solid thin gray;
     }
+    .fix_btn{
+        padding:10px;
+    }
+    .btn_block{
+        box-shadow: 5px 10px 7px rgba(0,0,0,0.5);
+        display:block;
+    }
+    
 
 }
 /*==================================================*/
