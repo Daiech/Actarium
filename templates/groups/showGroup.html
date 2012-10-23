@@ -6,71 +6,76 @@
     <header>
         <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
         <h3>{{group.name}}</h3>
+
         <a href="#" class="btn btn-link">Editar</a>
         <a href="#" class="btn btn-link">Eliminar</a>
+
     </header>
     <hr/>
-    <section class="columnaI ">
-        <h4>Actas</h4>
-        <ul class="nav">
-            {%for minute in minutes%}
-            <li>
-                <a href="#">
-                    Acta #{{minute.code}}
-                    <span>{{minute.date_created|date}}</span>
-                </a>
-            </li>
-            {%endfor%}
-            {%if not minutes%}
-            <li>Este grupo no tiene actas</li>
-            {%endif%}
-        </ul>
-        <a href="#" class="btn btn-info btn-small">Crear acta</a>
-    </section>
-    <section class="columnaD ">
-        <h4>Miembros</h4>
-        <ul class="nav">
-            {%for member in members%}
-            <li>
-                <i class="icon-user"></i>
-                {{member.id_user.first_name}} {{member.id_user.last_name}}
-                {%if member.id_user == user%}
-                (yo)
-                <a class="pull-right" href="#" title="Eliminar a {{member.id_user.first_name}} de este grupo"><i class="icon-star"></i></a>
+    <div class="row-fluid">
+        <section class="span6">
+            <h4>Actas</h4>
+            <ul class="nav">
+                {%for minute in minutes%}
+                <li>
+                    <a href="#">
+                        Acta #{{minute.code}}
+                        <span>{{minute.date_created|date}}</span>
+                    </a>
+                </li>
+                {%endfor%}
+                {%if not minutes%}
+                <li>Este grupo no tiene actas</li>
                 {%endif%}
-            </li>
-            {%endfor%} 
-        </ul>
-
-        <div class="dropdown">
-            <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
-                Agregar miembro
-                <span class="caret"></span>
-            </div>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li class="taling">
-                    Miembros <div id="close-add-member" class="close pull-right">×</div>
-                </li>
-                <li>
-                	<input type="hidden" id="group_id" value="{{group.id}}">
-                    <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-                </li>
-                <li>
-                    <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
-                </li>
-                <li>
-                    <ul id="search-result">
-                    </ul>
-                </li>
             </ul>
-            
-        </div>
-    </section>
+            <a href="#" class="btn btn-info btn-small">Crear acta</a>
+        </section>
+        <section class="span5 fix_btn">
+            <h4>Miembros</h4>
+            <ul class="nav">
+                {%for member in members%}
+                <li>
+                    <i class="icon-user"></i>
+                    {{member.id_user.first_name}} {{member.id_user.last_name}}
+                    {%if member.id_user == user%}
+                    (yo)
+                    <a class="pull-right" href="#" title="Eliminar a {{member.id_user.first_name}} de este grupo"><i class="icon-star"></i></a>
+                    {%endif%}
+                </li>
+                {%endfor%} 
+            </ul>
+
+            <div class="dropdown">
+                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
+                    Agregar miembro
+                    <span class="caret"></span>
+                </div>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li class="taling">
+                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
+                    </li>
+                    <li>
+                        <input type="hidden" id="group_id" value="{{group.id}}">
+                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+                        <span id="load-member"></span>
+                    </li>
+                    <li>
+                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
+                    </li>
+                    <li>
+                        <ul id="search-result">
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </section>
+    </div>
 </article>
 {%endblock%}
 {% block js %}
 <script>
-	$("#add-member").on('click focus', function(e) {
+    $("#add-member").on('click focus', function(e) {
         $(this).next(".dropdown-menu").addClass("disblock")
         $("#newmember").focus()
     });
@@ -82,18 +87,32 @@
         if(e.keyCode==13){
             var user=$("#newmember").val()
             var group_id = $("#group_id").val()
-            //go to the server:users
-            sendAjax("/groups/invitation",{pk:group_id,search:user},"#my-ajax-result",function(data){
-                $("#search-result").html("<li style='list-style:none'><a href='#'>"+user+" invitado</a></li>")
+            sendAjax(
+            "/groups/invitation",
+            {pk:group_id,search:user},
+            "#my-ajax-result",
+            "#load-member",
+            function(data){
+                $("#search-result").html(
+                "<li style='list-style:none'>"+
+                    "<a href='#'>"+
+                    user+" invitado"+
+                    "</a>"+
+                    "</li>"
+            )
                 setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-                $("#newmember").val("")
-            })
+                //$("#newmember").val("")
+            }
+        )
         }
     });
 </script>
 {% endblock %}
 {%block style%}
 <style>
+    .icon-remove{
+        margin: 5px;
+    }
     ul#search-result{
         margin-left: 0;
     }
@@ -109,16 +128,13 @@
         line-height:  1;
     }
     article{
-        min-height: 200px;
+        min-height: 400px;
         overflow: hidden;
     }
     article header img{
         margin-top:4px;
         float:left;
     }
-    /*.columnaD{
-        margin-left: 380px;    
-    }*/
     article header h3{
         margin:0;
         margin-left:35px;
@@ -128,16 +144,18 @@
     }
     #newmember{
         margin: 3px 10px;
-        width: 84%;
     }
     .dropdown.dropdown-menu{
         text-decoration: none;
         margin: 5px 20px;
+
+    }
+    .dropdown-menu{
+        width:280px;
     }
     .dropdownmenu  * li{
         list-style:none;
         text-decoration: none;
     }
-
 </style>
 {%endblock%}

@@ -16,13 +16,13 @@ if (!(window.console && console.log)) {
 function main(){
     //-------------------<letra blanca del perfil on hover>-------------------------//
     $("ul.dropdown-menu li.current-user").hover(
-    function(e){
-        $(".content-box *").addClass("color-fff");
-    },
-    function(e){
-        $(".content-box *").removeClass("color-fff");
-    }
-);
+        function(e){
+            $(".content-box *").addClass("color-fff");
+        },
+        function(e){
+            $(".content-box *").removeClass("color-fff");
+        }
+    );
     //-------------------</letra blanca del perfil on hover>-------------------------//
     
     //------<No cierra el Menú de login al dar click>---------------/
@@ -39,6 +39,23 @@ function main(){
         $("ul.dropdown-menu").removeClass("disblock");
     });
     //------ </On Login Submit >--------------/
+
+
+    //------ <On close activity >--------------/
+    $(".title-activity a.close-activity").on("click",function(e){
+        e.preventDefault();
+        $(this).parent().next().slideToggle();
+        if($(this).children("i").hasClass("icon-chevron-up")){
+            $(this).children("i").removeClass("icon-chevron-up").addClass("icon-chevron-right")
+        }
+        else{
+            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up")
+        }
+        
+    });
+    //------ </On close activity>--------------/
+
+
 }
 
 function setAlert(tittle, message){
@@ -55,11 +72,12 @@ function setAlert(tittle, message){
     
 }
 
-function sendAjax(url, params, destiny, myCallback){
+function sendAjax(url, params, destiny, load_elem, myCallback){
+    $(load_elem).html('<img src="/static/img/load16.gif" />');
     $.get(url, params, function(data) {
             myCallback(data);
+            $(load_elem).hide();
         }
     );
 }
-
 $(document).on("ready",main);

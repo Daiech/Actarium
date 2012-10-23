@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template import defaultfilters
-import datetime
 
 
 class group_type(models.Model):
@@ -94,9 +93,11 @@ class reunions(models.Model):
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)
 
+
 class rel_reunion_minutes(models.Model):
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
     id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
+    
     
 class assistance(models.Model):
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
@@ -104,12 +105,13 @@ class assistance(models.Model):
     is_comfirmed = models.BooleanField(default=False)
     date_comfirmed = models.DateTimeField(auto_now = True)
 
+
 class feddback(models.Model):
-    id_user = models.ForeignKey(User,  null=True, related_name='%(class)s_id_user')
-    title = models.CharField(max_length = 150, verbose_name="title")
-    comment = models.TextField(blank = True)
-    date = models.DateTimeField(auto_now = True)
-    
+    id_user = models.ForeignKey(User, null=True, related_name='%(class)s_id_user')
+    title = models.CharField(max_length=150, verbose_name="title")
+    comment = models.TextField(blank=True)
+    date = models.DateTimeField(auto_now=True)
+        
     def __unicode__(self):
         return "%s "%(self.title)
 
@@ -117,7 +119,7 @@ class feddback(models.Model):
 class action(models.Model):
     name = models.CharField(max_length = 150, verbose_name = "name")
     description = models.TextField(blank = True)
-    date_created = models.DateTimeField(auto_now = True)
+    date_created = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
         return "%s "%(self.name)
