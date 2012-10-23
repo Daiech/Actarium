@@ -35,3 +35,8 @@ class newMinutesForm(forms.Form):
     agenda = forms.CharField(label = "Orden del día",widget=forms.Textarea(attrs={'placeholder': 'Orden del día'}))
     agreement = forms.CharField(label = "Acuerdos",widget=forms.Textarea(attrs={'placeholder': 'Acuerdos'}))
     
+class newReunionForm(forms.Form):
+    #formulario para agregar una nueva reunion
+    date_reunion = forms.DateTimeField(label = "Fecha", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    agenda = forms.CharField(label = "Objetivos",widget=forms.Textarea(attrs={'placeholder': 'Objetivos de la reunion'}))
+                        

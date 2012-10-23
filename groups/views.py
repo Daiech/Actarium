@@ -5,8 +5,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type
-from groups.forms import newGroupForm, newMinutesForm
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions
+from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 #from django.core.mail import EmailMessage
 import re
 import datetime
@@ -149,4 +149,37 @@ def newMinutes(request,slug):
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
-    
+
+def newReunion(request,slug):
+    q = groups.objects.get(slug=slug, is_active=True)
+    is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
+    if is_member:
+        if request.method == "POST":
+            form = newReunionForm(request.POST)
+            if form.is_valid():
+                df = {
+                    'date_reunion': form.cleaned_data['date_reunion'],
+                    'agenda': form.cleaned_data['agenda'],
+                }
+                myNewReunion = reunions(
+                               id_convener = request.user,
+                               date_reunion=df['date_reunion'],
+                               id_group = q,
+                               agenda=df['agenda'],
+                             )
+                myNewReunion.save()
+                return HttpResponseRedirect("/groups/" + str(q.slug))
+#                ctx = {'TITLE': "Actarium",
+#                       "newReunionForm": form,
+#                       "date_reunion":df['date_reunion'],
+#                       "agenda":df['agenda'],
+#                }
+#                return render_to_response('groups/newReunion.html', ctx, context_instance=RequestContext(request))
+        else:
+            form = newReunionForm()
+        ctx = {'TITLE': "Actarium",
+               "newReunionForm": form,
+               }
+        return render_to_response('groups/newReunion.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/#error-view-group')
