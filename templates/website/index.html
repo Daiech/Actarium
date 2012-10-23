@@ -2,47 +2,57 @@
 {% block TITLE %}Actarium - home{% endblock %}
 
 {%block body%}
-<article>
-    <header>
-        <h1>Actarium</h1>
-        <a href="#" class="pull-right btn">Feed-back <i class="icon-bullhorn"></i></a>
+<article >
+    <header class="row-fluid">
+        <h1 class="span5">Actarium</h1>
+        <div class="span2 pull-right"><a href="#" class="btn">Feed-back <i class="icon-bullhorn"></i></a></div>
     </header>
+
     {% if user.is_authenticated %}
     <hr>
-    <section class="columnaI ">
-        <header>
-            <h4>Actividad Reciente</h4>
-        </header>
-        <div class="notifications b">
-            <div>Tienes {{invitations|length}} invitaciones a grupos</div>
-            <ul class="">
-                {% for invitation in invitations %}
+    <div class="row-fluid">
+        <section class="span6">
+            <header>
+                <h4>Actividad Reciente</h4>
+            </header>
+            <div class="notifications">
+                <div>Tienes {{invitations|length}} invitaciones a grupos</div>
+                <ul>
+                    {% for invitation in invitations %}
                     <li>
+                        <span>
                         {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
                         al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
-                        <a href="#" class="btn btn-small">Aceptar</a> <a href="#" class="btn btn-danger btn-small">Cancelar</a>
+                        </span>
+                        <a href="#" class="btn btn-small btn-info">Aceptar</a> <a href="#" class="btn btn-link btn-small">Cancelar</a>
+                        <hr>
+
                     </li>
+                    {% endfor %}
+                </ul>
+            </div><!--cierra notifications-->
+        </section>
+        <section class="span5">
+
+            <header class="row-fluid">
+                <h4 class="span7">Tus grupos</h4>
+
+                <div class="span4"><a href="/groups/new" class="btn btn-small"><i class="icon-book"></i>Crear Grupo</a></div>
+            </header>
+            <hr>    
+            <ul class="nav onOver">
+                {% for group in groups %}
+                <li class="img-rounded">
+                    <a href="/groups/{{group.slug}}">
+                        <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
+                        {{group.name}}
+                    </a>
+                </li>
                 {% endfor %}
             </ul>
-        </div><!--cierra notifications-->
-    </section>
-    <section class="columnaD">
-        <header>
-            <h4>Tus grupos</h4>
-        </header>
-        <a href="/groups/new" class="btn btn-small"><i class="icon-book"></i>Crear Grupo</a>
-        <ul class="nav onOver">
-        	{% for group in groups %}
-	            <li class="img-rounded">
-		            <a href="/groups/{{group.slug}}">
-		            	<img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
-		            	{{group.name}}
-		            </a>
-	            </li>
-            {% endfor %}
-        </ul>
-    </section>
 
+        </section>
+    </div>
     {% else %}
     <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
     <div class="sing">
@@ -55,15 +65,39 @@
 {%endblock%}
 {% block style%}
 <style>
-    article{
-        min-height: 200px;
-        overflow: hidden;
+    .span6 h4{
+        margin-bottom:20px;
     }
-    article header{
-        margin-top: 15px;
+    .notifications span{
+        display: block;
     }
-    article header h1{
-        display: inline;
+    h4{
+        margin:0;
+        padding:0;
+    }
+    header h1{
+        margin: 0;
+    }
+    .span2{
+        margin-right: 20px;
+    }
+    .span6{
+        border-right: solid thin #dadada;
+        padding: 0 20px;
+    }
+    section div ul li{
+        list-style-type: none;
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+    li hr{
+        margin:20;
+    }
+    section div ul{
+        margin-top: 10px;
+    }
+    ul{
+        margin:0;
     }
 </style>
 {%endblock%}
