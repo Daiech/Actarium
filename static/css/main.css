@@ -434,7 +434,7 @@ only screen and (min-resolution: 144dpi) {
         width: 100%;
     }
     .fix_btn{
-        padding:10px;
+        padding:20px;
     }
 
 }
@@ -442,14 +442,14 @@ only screen and (min-resolution: 144dpi) {
 @media (max-width: 480px) {
     article{
         width: auto;
-        border: solid thin gray;
+/*        border: solid thin gray;*/
     }
     .fix_btn{
-        padding:10px;
+        padding:20px;
     }
     .btn_block{
-        box-shadow: 5px 10px 7px rgba(0,0,0,0.5);
-        display:block;
+        display:none;
+        
     }
     
 
