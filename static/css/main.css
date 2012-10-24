@@ -429,9 +429,6 @@ only screen and (min-resolution: 144dpi) {
         width: 40%;
     }
 }
-.notifications span{
-    display: inline;
-}
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     article{
@@ -445,6 +442,9 @@ only screen and (min-resolution: 144dpi) {
     }
     .fix_btn{
         padding:0 20px;
+    }
+    .margint30{
+        margin-top: 30px;
     }
 
 }

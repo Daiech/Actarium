@@ -15,37 +15,63 @@
             <header>
                 <h4>Actividad Reciente</h4>
             </header>
-            <div class="notifications">
-                <div class="title-activity">
-                    Tienes <span class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
-                    <a href="#" class="close-activity pull-right">
-                        <i class="icon-chevron-up"></i>
-                    </a>
+            <div class="accordion " id="accordion">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
+                            Tienes <span class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
+                        </a>
+                    </div>
+                    <div  id="Invitations" class="accordion-body collapse in">
+                        <ul class="accordion-inner">
+                            {% for invitation in invitations %}
+                            <li>
+                                <span class="notification-text">
+                                {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
+                                al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
+                                </span>
+                                <a href="#" class="btn btn-small btn-info">Aceptar</a> <a href="#" class="btn btn-small">Cancelar</a>
+                                <hr>
+
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
-                <ul >
-                    {% for invitation in invitations %}
-                    <li>
-                        <span class="notification-text">
-                        {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
-                        al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
-                        </span>
-                        <a href="#" class="btn btn-small btn-info">Aceptar</a> <a href="#" class="btn btn-small">Cancelar</a>
-                        <hr>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
+                            Tienes <span class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
+                        </a>
+                    </div>
+                    <div  id="Reunions" class="accordion-body collapse in">
+                        <ul class="accordion-inner">
+                            {% for reunion in reunions %}
+                            <li>
+                                <span class="notification-text">
+                                {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
+                                </span>
+                                <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
+                                <a href="#" class="btn btn-small">No Asistir&eacute;</a>
+                                <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a>
+                                <hr>
 
-                    </li>
-                    {% endfor %}
-                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div><!--cierra notifications-->
-            <!-- <div class="">
-                otra actividad
-            </div> -->
         </section>
-        <section class="span5">
-
+        <section class="span5 margint30">
             <header class="row-fluid fix_btn">
                 <h4 class="span7">Tus grupos</h4>
 
-                <div class="span4"><a href="/groups/new" class="btn btn-small"><i class="icon-book"></i>Crear Grupo</a></div>
+                <div class="span4">
+                    <a href="/groups/new" class="btn btn-small">
+                        <i class="icon-book"></i> Crear Grupo
+                    </a>
+                </div>
             </header>
             <hr>
             <ul class="nav onOver">
@@ -76,7 +102,7 @@
     .span6 h4{
         margin-bottom:20px;
     }
-    .notifications span.notification-text{
+    span.notification-text{
         display: block;
     }
     h4{
@@ -112,5 +138,8 @@
 {% block js %}
 <script>
     //$("#menu-account").addClass("active")
+    $(".collapse").collapse({
+  //toggle: false
+})
 </script>
 {% endblock %}
