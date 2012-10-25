@@ -2,7 +2,7 @@
 {% block TITLE %}Actarium - home{% endblock %}
 
 {%block body%}
-<article >
+<article>
     <header class="row-fluid">
         <h1 class="span5">Actarium</h1>
         <div class="span2 pull-right fix_btn"><a href="#" class="btn">Feed-back <i class="icon-bullhorn"></i></a></div>
@@ -27,8 +27,8 @@
                             {% for invitation in invitations %}
                             <li>
                                 <span class="notification-text">
-                                {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
-                                al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
+                                    {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
+                                    al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
                                 </span>
                                 <a href="#" class="btn btn-small btn-info">Aceptar</a> <a href="#" class="btn btn-small">Cancelar</a>
                                 <hr>
@@ -49,7 +49,7 @@
                             {% for reunion in reunions %}
                             <li>
                                 <span class="notification-text">
-                                {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
+                                    {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
                                 </span>
                                 <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
                                 <a href="#" class="btn btn-small">No Asistir&eacute;</a>
@@ -88,11 +88,13 @@
         </section>
     </div>
     {% else %}
-    <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
-    <div class="sing">
-        <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
-        <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
+    <div class="containterMargin">
+        <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
+        <div class="sing">
+            <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
+            <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
 
+        </div>
     </div>
     {% endif %}
 </article>
@@ -133,13 +135,16 @@
     ul{
         margin:0;
     }
+    .containterMargin{
+        margin:20px;
+    }
 </style>
 {%endblock%}
 {% block js %}
 <script>
     //$("#menu-account").addClass("active")
     $(".collapse").collapse({
-  //toggle: false
-})
+        //toggle: false
+    })
 </script>
 {% endblock %}

@@ -2,25 +2,31 @@
 {% block TITLE %}Actarium - Acerca{% endblock %}
 
 {%block body%}
-<article class="row-fluid">
-	<header class="row-fluid b">
-		<h1 class="span6">Actarium</h1>
-	</header>
-	<div class="row-fluid">
-	    <section class="span6 b">
-	    	Ayuda
-	    </section>
-	    <section class="span6 b">
-	    	Feed Back
-	    </section>
-	</div>
-
+<article>
+    <div class="row-fluid containterMargin">
+        <h2>About us</h2>
+        <hr>
+        <header class="row-fluid b">
+            <h1 class="span6">Actarium</h1>
+        </header>
+        <div class="row-fluid">
+            <section class="span6 b">
+                <p><b>Actarium</b> es un producto <b>Daiech</b>, de distribuci&oacute;n gratuita
+                y software libre, para el registro actas y seguimiento de reuniones
+                empresariales.</p>
+            </section>
+            <section class="span6 b">
+                <p>Env&iacute;enos sus comentarios y sugerencias a 
+                contacto@daiech.com</p>
+            </section>
+        </div>
+    </div>
 </article>
 {%endblock%}
 
 
 {% block js %}
 <script>
-$("#menu-about").addClass("active")
+    $("#menu-about").addClass("active")
 </script>
 {% endblock %}

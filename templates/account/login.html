@@ -2,20 +2,22 @@
 {% block TITLE %}Login - Actarium{% endblock %}
 
 {%block body%}
-    <article>
-    	<h1>Iniciar Sesi&oacute;n</h1>
-    	<form name="" action="" method="POST" id="" class="form-horizontal">
-		    	{% csrf_token %}
-		    	<table>{{ formulario }}</table>
-	            <div class="control-group">
-	                <div class="controls">
-	                	<label class="checkbox">
-<!--	                        <input type="checkbox">Recordarme</a>-->
-	                    </label>
-		    			 <button type="submit" name="submit" id="id_submit" class="btn btn-primary">Log In</button>
-	                    <a href="/account/new" class="btn btn-link">Registrarse</a>
-	                </div>
-	            </div>
-	    	</form>
-    </article>
+<article>
+    <div class="containterMargin">
+        <h1>Iniciar Sesi&oacute;n</h1>
+        <form name="" action="" method="POST" id="" class="form-horizontal">
+            {% csrf_token %}
+            <table>{{ formulario }}</table>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        <!--	                        <input type="checkbox">Recordarme</a>-->
+                    </label>
+                    <button type="submit" name="submit" id="id_submit" class="btn btn-primary">Log In</button>
+                    <a href="/account/new" class="btn btn-link">Registrarse</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</article>
 {%endblock%}
