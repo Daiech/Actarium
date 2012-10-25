@@ -3,18 +3,27 @@
 
 {%block body%}
 <article>
-    <header>
-        <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-        <h3>{{group.name}}</h3>
+    <header >
+        <div class="row-fluid">
+            <div class="span8">
+                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
+                <h3>{{group.name}}</h3>
+                <a href="#" class="btn btn-link">Editar grupo</a>
+            </div>
+            <div class="span4 btnSup">
+                <a href="/groups/newMinutes/{{ group.slug}}" class="btn btn-info btn-small">Crear acta</a>
+                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
+            </div>
+        </div>
 
-        <a href="#" class="btn btn-link">Editar</a>
-        <a href="#" class="btn btn-link">Eliminar</a>
+
 
     </header>
     <hr/>
     <div class="row-fluid">
         <section class="span6">
-            <h4>Actas</h4>
+            <h4>Actas</h4> 
+            <ul>
                 {%for minute in minutes%}
                 <li>
                     <a href="#">
@@ -27,8 +36,6 @@
                 <li>Este grupo no tiene actas</li>
                 {%endif%}
             </ul>
-            <a href="/groups/newMinutes/{{ group.slug}}" class="btn btn-info btn-small">Crear acta</a>
-            <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
         </section>
         <section class="span5 fix_btn">
             <h4>Miembros</h4>
@@ -110,6 +117,9 @@
 {% endblock %}
 {%block style%}
 <style>
+    section ul li{
+        margin-bottom: 10px;
+    }
     .icon-remove{
         margin: 5px;
     }
@@ -156,6 +166,9 @@
     .dropdownmenu  * li{
         list-style:none;
         text-decoration: none;
+    }
+    .btnSup{
+        margin-top: 8px;
     }
 </style>
 {%endblock%}
