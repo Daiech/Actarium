@@ -170,6 +170,15 @@ article ul.onOver li:hover{
     margin:20px;
 }
 
+table tr th label{
+    font-size: 16px;
+    margin-top: 5px;
+}
+table tr td input[type=password],table tr td input[type=text]{
+    /*height: 30px;*/
+    padding: 10px;
+    font-size: 16px;
+}
 
 /*==================================
     CSS Barra de Ingreso (Formulario
