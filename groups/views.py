@@ -7,9 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
+from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
 import re
 import datetime
+from django.utils import simplejson as json
+from account.templatetags.gravatartag import showgravatar
 
 
 @login_required(login_url='/account/login')
@@ -95,6 +98,46 @@ def sendInvitationUser(email, user, group):
         return False
 
 
+def getMembers(request):
+    if request.is_ajax():
+        if request.method == "GET":
+            try:
+                search = str(request.GET['search'])
+                if validateEmail(search):
+                    try:
+                        ans = User.objects.get(email=search)
+                    except User.DoesNotExist:
+                        ans = 1  # email valido, pero no es usuario
+                else:
+                    try:
+                        ans = User.objects.get(username=search)
+                    except User.DoesNotExist:
+                        ans = 2  # no existe el usuario
+                if ans != 1 and ans != 2:
+                    message = {
+                        "mail_is_valid": True,
+                        "username": ans.username,
+                        "mail": ans.email,
+                        "gravatar": showgravatar(ans.email, 30)}
+                else:
+                    if ans == 1:
+                        message = {"mail_is_valid": True, "mail": search, "username": False}
+                    else:
+                        if ans == 2:
+                            message = {"mail_is_valid": False}
+                        else:
+                            message = False
+            except Exception:
+                message = False
+            return HttpResponse(json.dumps(message), mimetype="application/json")
+        else:
+            message = False
+        return HttpResponse(message)
+    else:
+        message = False
+        return HttpResponse(message)
+
+
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 def newInvitation(request):
     if request.is_ajax():
@@ -102,15 +145,15 @@ def newInvitation(request):
             q = groups.objects.get(pk=request.GET['pk'])
             mail = str(request.GET['search'])
             if sendInvitationUser(mail, request.user, q):
-                message = "Se ha enviado la invitación a " + str(mail)
+                message = "Se ha enviado la invitación a " + str(mail) + " "
             else:
-                message = "Error en el correo"
+                message = False
     else:
         message = "Error"
     return HttpResponse(message)
 
 
-def newMinutes(request,slug):
+def newMinutes(request, slug):
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
@@ -150,7 +193,8 @@ def newMinutes(request,slug):
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
-def newReunion(request,slug):
+
+def newReunion(request, slug):
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:

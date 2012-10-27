@@ -72,10 +72,10 @@ function setAlert(tittle, message){
     
 }
 
-function sendAjax(url, params, destiny, load_elem, myCallback){
-    $(load_elem).html('<img src="/static/img/load16.gif" />');
-    $.get(url, params, function(data) {
-            myCallback(data);
+function sendAjax(url, params, load_elem, myCallback){
+    $(load_elem).show().html('<img src="/static/img/load16.gif" />');
+    $.get(url, params, function(data,error) {
+            myCallback(data,error);
             $(load_elem).hide();
         }
     );

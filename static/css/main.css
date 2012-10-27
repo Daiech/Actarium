@@ -96,6 +96,9 @@ textarea {
 .b{
     border: solid thin #dadada;
 }
+.margin5{
+    margin: 10px;
+}
 .alert-block {
     margin-left: auto;
     margin-right: auto;
@@ -126,6 +129,7 @@ article > header{
     /*border:solid thin gray;*/
     margin-top:-20px;
     min-height: 400px;
+    color: #555;
 }
 .but{
     background-color:  #999;
@@ -142,7 +146,7 @@ a ,a:visited ,a:link,a:hover{
 hr{
     border-bottom: solid thin white;
     height: 0.01px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 footer{
     border-top: solid thin #dadada;
@@ -283,8 +287,36 @@ form table td input{
 .close-activity{
     padding:0 5px;
 }
-
-
+.user-li{
+    list-style:none;
+    height: 36px;
+    margin-bottom: 3px;
+}
+.user-li > a{
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.user-li > a > img{
+    padding: 0;
+    margin: 3px;
+    margin-left: 12px;
+}
+.user-li > a:hover{
+    color: red;
+}
+.icon-accept{
+    position: relative;
+    right: 5px;
+    top: 8px;
+}
+.img30{
+    height: 30px;
+    width: 30px;
+}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
