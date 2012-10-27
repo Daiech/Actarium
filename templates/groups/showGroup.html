@@ -15,9 +15,6 @@
                 <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
             </div>
         </div>
-
-
-
     </header>
     <hr/>
     <div class="row-fluid">
@@ -62,6 +59,7 @@
                         Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
                     </li>
                     <li>
+                        <input type="hidden" id="group_name" value="{{group.name}}">
                         <input type="hidden" id="group_id" value="{{group.id}}">
                         <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
                         <span id="load-member"></span>
@@ -74,8 +72,7 @@
                         </ul>
                     </li>
                 </ul>
-
-            </div>
+            </div><!-- dropdown -->
         </section>
     </div>
 </article>
@@ -92,25 +89,85 @@
     });
     $("#newmember").on("keyup",function(e){
         if(e.keyCode==13){
+            p="";
             var user=$("#newmember").val()
-            var group_id = $("#group_id").val()
             sendAjax(
-            "/groups/invitation",
-            {pk:group_id,search:user},
-            "#my-ajax-result",
-            "#load-member",
-            function(data){
-                $("#search-result").html(
-                "<li style='list-style:none'>"+
-                    "<a href='#'>"+
-                    user+" invitado"+
-                    "</a>"+
-                    "</li>"
-            )
-                setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-                //$("#newmember").val("")
-            }
-        )
+                "/groups/getMembers",
+                {search:user},
+                "#load-member",
+                function(data){
+                    console.log(data)
+                    if(data){
+                        if(data["mail_is_valid"]){
+                            if(data["username"]){
+                                user_to_invite = data['mail']+" ("+data['username']+")";
+                                if(user_to_invite.length > 27)
+                                    p="..."
+                                $("#search-result").html(
+                                    "<li class='user-li'>"+
+                                        "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+                                            "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                                            user_to_invite.substring(0,27)+p+
+                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                                        "</a>"+
+                                    "</li>"
+                                    )
+                            }
+                            else{
+                                if(data['mail'].length > 27)
+                                    p="..."
+                                $("#search-result").html(
+                                    "<li class='user-li'>"+
+                                        "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
+                                            "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                                            data['mail'].substring(0,27)+p+
+                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                                        "</a>"+
+                                    "</li>"
+                                )
+                            }
+
+                        }
+                        else{
+                            //no result
+                            $("#search-result").html(
+                                "<li style='list-style:none'>"+
+                                    "<a href='#'>"+
+                                        ("No hay resultados").substring(0,27)+
+                                    "</a>"+
+                                "</li>"
+                            )
+                        }
+                    }else{
+                        //error en el server
+                    }
+                    $(".user-li > a").on("click",function(e){
+                        e.preventDefault();
+                        var mail = $(this).attr("data-email")
+                        var uname = $(this).attr("data-username")
+                        var group_id = $("#group_id").val()
+                        var group_name = $("#group_name").val()
+                        sendAjax(
+                            "/groups/setInvitation",
+                            {"pk":group_id, "search": mail},
+                            "#load-member",
+                            function(data){
+                                if(data){
+                                    setAlert("Invitado",data+" al grupo "+group_name)
+                                }else{
+                                    setAlert("Error","Se ha producido un error, recarga la pagina e intenta de nuevo")
+                                }
+                            }
+                            )
+                    })
+                    $(".user-li").hover(function(){
+                            $(this).find("i").removeClass("hidden")
+                        },
+                        function(){
+                            $(this).find("i").addClass("hidden")
+                    })
+                }
+            )//sendAjax
         }
     });
 </script>
@@ -118,7 +175,7 @@
 {%block style%}
 <style>
     section ul li{
-        margin-bottom: 10px;
+        /*margin-bottom: 10px;*/
     }
     .icon-remove{
         margin: 5px;
@@ -138,7 +195,7 @@
         line-height:  1;
     }
     article{
-        min-height: 400px;
+        min-height: 500px;
         overflow: hidden;
     }
     article header img{
