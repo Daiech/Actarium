@@ -36,16 +36,21 @@
         </section>
         <section class="span5 fix_btn">
             <h4>Miembros</h4>
-            <ul class="nav">
+            <ul class="nav list-members">
                 {%for member in members%}
-                <li>
-                    <i class="icon-user"></i>
-                    {{member.id_user.first_name}} {{member.id_user.last_name}}
-                    {%if member.id_user == user%}
-                    (yo)
-                    <a class="pull-right" href="#" title="Eliminar a {{member.id_user.first_name}} de este grupo"><i class="icon-star"></i></a>
-                    {%endif%}
-                </li>
+                    <li>
+                        <i class="icon-user"></i>
+                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                        {%if member.id_user == user%}
+                        (yo)
+                        {%endif%}
+                    </li>
+                {%endfor%}
+                {%for member in members_pend%}
+                    <li><!--Usuarios pendientes-->
+                        <i class="icon-user"></i>
+                        <span>{{member.email_invited}}</span> (pendiente)
+                    </li>
                 {%endfor%} 
             </ul>
 
@@ -152,13 +157,19 @@
                             {"pk":group_id, "search": mail},
                             "#load-member",
                             function(data){
-                                if(data){
-                                    setAlert("Invitado",data+" al grupo "+group_name)
-                                }else{
-                                    setAlert("Error","Se ha producido un error, recarga la pagina e intenta de nuevo")
+                                if(data['invited']){//USUARIO INVITADO
+                                    setAlert("Invitado",data['message']+" al grupo "+group_name)
+                                    $(".list-members").append(
+                                        "<li style='list-style:none'>"+
+                                            "<i class='icon-user'></i> "+
+                                            "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
+                                        "</li>"
+                                    )
+                                }else{//EL USUARIO YA ESTA INVITADO
+                                    setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
                                 }
                             }
-                            )
+                        )
                     })
                     $(".user-li").hover(function(){
                             $(this).find("i").removeClass("hidden")
@@ -174,8 +185,8 @@
 {% endblock %}
 {%block style%}
 <style>
-    section ul li{
-        /*margin-bottom: 10px;*/
+    ul.dropdown-menu li{
+        margin-bottom: 10px;
     }
     .icon-remove{
         margin: 5px;
@@ -183,8 +194,16 @@
     ul#search-result{
         margin-left: 0;
     }
+    ul#search-result li span{
+        font-size: 13px;
+        margin-left: 13px;
+        color: gray;
+    }
     .taling{
         text-align: center;
+    }
+    .list-members span{
+        color: gray;
     }
     li a span{
         color:black;

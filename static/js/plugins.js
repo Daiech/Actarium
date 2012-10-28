@@ -66,8 +66,8 @@ function setAlert(tittle, message){
     else if (l<=100) t=3000;
     else if (l<=200) t=5000;
     else if (l> 200) t=7000;
-    $("#alert-message h4").text(tittle);
-    $("#alert-message p").text(message);
+    $("#alert-message h4").html(tittle);
+    $("#alert-message p").html(message);
     $("#alert-message").fadeIn().delay(t).fadeOut(1500);
     
 }
