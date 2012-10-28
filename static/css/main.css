@@ -102,10 +102,11 @@ textarea {
 .alert-block {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 5px;
     left:0;
     right:0;
     font-size: 14px;
-    position: absolute;
+    position: fixed;
     width:30%;
 }
 article{
@@ -489,7 +490,9 @@ only screen and (min-resolution: 144dpi) {
     .margint30{
         margin-top: 30px;
     }
-
+    .alert-block{
+        width: 50%;
+    }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -504,8 +507,9 @@ only screen and (min-resolution: 144dpi) {
         display:none;
 
     }
-
-
+    .alert-block{
+        width: 60%;
+    }
 }
 /*==================================================*/
 /*                  Cierra Responsive               */                    
