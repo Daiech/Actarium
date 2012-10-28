@@ -52,7 +52,7 @@ class rel_user_group(models.Model):
 class admin_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
-    date_assigned = models.DateTimeField()
+    date_assigned = models.DateTimeField(auto_now=True)
 
 
 class minutes_type_1(models.Model):
