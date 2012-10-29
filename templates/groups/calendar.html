@@ -1,0 +1,78 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Actas{% endblock %}
+
+{%block body%}
+<article>
+    <section id="calendar" >
+    	<div id="datepicker"></div>
+    </section>
+    <section id="reunions" >
+			{% for reunion in reunions_day %}
+			<li>
+			    <span class="notification-text">
+			    Grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> Hora: {{reunion.date_reunion|date:"h:i A"}}
+			    </span>
+			    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
+			    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
+			    <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a>
+			    <hr>
+			</li>
+			{% endfor %}
+   </section>
+</article>
+{%endblock%}
+{%block style%}
+<style>
+    .form-horizontal table{
+        margin: auto;
+        width: auto;
+    }
+
+    table td .btn{
+        margin-top:10px;
+    }
+	#calendar {
+		padding-left: 30px;
+		padding-top: 50px;	
+		float:left;	
+	}
+	#reunions {
+		padding-top: 50px;	
+		width: 490px;
+		margin-left: 40px;
+		float:left;
+	}
+</style>
+<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+{%endblock%}
+
+{% block js %}
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script>$("#menu-reunions").addClass("active")</script>
+
+<script type="text/javascript" >
+$(function() {
+	var events = [
+		{% for reunion in reunions %}
+			"{{reunion.date_reunion|date:'Y-m-d'}}",
+		{% endfor %}                            
+	];
+    var dp = $( "#datepicker" ).datepicker({ 
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+    	dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+    	nextText: 'Siguiente',
+    	prevText: 'Anterior',
+    	dateFormat: 'yy-mm-dd',
+    	beforeShowDay: function(date) {
+	    	var current = $.datepicker.formatDate('yy-mm-dd', date);
+	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
+    	},
+	    onSelect: function(dateText, inst) {  //alert("new date: " + dateText); //+ " " + $(this).datepicker('getDate'));
+	    	top.location="/groups/calendar/"+dateText;
+	    	//setAlert("Fecha",dateText);
+    	}
+	});    
+});
+</script>
+{% endblock %}

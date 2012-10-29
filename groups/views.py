@@ -11,9 +11,9 @@ from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
 import re
 import datetime
+from django.utils.timezone import make_aware, get_default_timezone
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
-
 
 @login_required(login_url='/account/login')
 def groupsList(request):
@@ -259,3 +259,26 @@ def newReunion(request, slug):
         return render_to_response('groups/newReunion.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
+
+def calendar(request):
+    gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
+    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
+    ctx = {'TITLE': "Actarium",
+       "reunions_day": my_reu,
+       "reunions": my_reu,
+           }
+    return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
+
+def calendarDate(request, slug=None):
+    gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
+    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
+
+    dateslug_min = str(make_aware(datetime.datetime.strptime(slug+" 00:00:00",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
+    dateslug_max = str(make_aware(datetime.datetime.strptime(slug+" 23:59:59",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
+    my_reu_day = reunions.objects.filter(id_group__in=gr,date_reunion__range = [dateslug_min,dateslug_max]) #reuniones para un dia
+    ctx = {'TITLE': "Actarium",
+       "reunions_day": my_reu_day,
+       "reunions": my_reu,}
+
+    
+    return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
