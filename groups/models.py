@@ -92,7 +92,9 @@ class reunions(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)
-
+    
+    def __unicode__(self):
+        return "%s : %s"%(self.date_reunion,self.id_group)
 
 class rel_reunion_minutes(models.Model):
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
