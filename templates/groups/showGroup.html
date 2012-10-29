@@ -65,7 +65,7 @@
                     </li>
                     <li>
                         <input type="hidden" id="group_name" value="{{group.name}}">
-                        <input type="hidden" id="group_id" value="{{group.id}}">
+                        <input type="text" id="group_id" value="{{group.id}}">
                         <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
                         <span id="load-member"></span>
                     </li>
@@ -167,7 +167,12 @@
                                     )
                                     $("#newmember").val("")
                                 }else{//EL USUARIO YA ESTA INVITADO
-                                    setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
+                                    if(data["message"]){
+                                        setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
+                                    }
+                                    else{
+                                        setAlert("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+                                    }
                                 }
                             }
                         )

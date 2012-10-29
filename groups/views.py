@@ -15,6 +15,7 @@ from django.utils.timezone import make_aware, get_default_timezone
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 
+
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
@@ -143,6 +144,16 @@ def sendInvitationUser(email, user, group):
         return False
 
 
+def isMemberOfGroup(id_user, id_group):
+    try:
+        is_member = rel_user_group.objects.filter(id_user=id_user, id_group=id_group)
+        if is_member:
+            return True
+    except User.DoesNotExist, e:
+        print e
+        return False
+
+
 def isMemberOfGroupByEmail(email, id_group):
     if validateEmail(email):
         try:
@@ -151,13 +162,7 @@ def isMemberOfGroupByEmail(email, id_group):
             print e
             return False
         if ans:
-            try:
-                is_member = rel_user_group.objects.filter(id_user=ans, id_group=id_group)
-                if is_member:
-                    return True
-            except User.DoesNotExist, e:
-                print e
-                return False
+            return isMemberOfGroup(ans, id_group)
     else:
         return False
 
@@ -167,7 +172,13 @@ def isMemberOfGroupByEmail(email, id_group):
 def newInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
-            q = groups.objects.get(pk=request.GET['pk'])  # try
+            try:
+                q = groups.objects.get(pk=request.GET['pk'])
+                if not isMemberOfGroup(request.user, q):
+                    return HttpResponse(q)
+            except groups.DoesNotExist:
+                q = False
+                return HttpResponse(q)
             mail = str(request.GET['search'])
             if isMemberOfGroupByEmail(mail, q):
                 invited = False
