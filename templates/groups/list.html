@@ -8,20 +8,25 @@
     <section class="row-fluid">
         <ul class="nav onOver span12">
             {% for group in groups %}
+
             <li class="img-rounded">
-                <div>
-                    <a href="/groups/{{group.slug}}">
+
+                <a href="/groups/{{group.slug}}">
+                    <div class="">
                         <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
                         {{group.name}}
-                    </a>
-                    <span>{{group.description}}</span>
-                    <div class="pull-right button">
-                        <a href="#" class="btn btn-mini btn_block"><i class="icon-pencil"></i></a>
-                        <a href="#" class="btn btn-mini btn_block"><i class="icon-remove"></i></a>
 
+                        <span>{{group.description}}</span>
+                        <div class="pull-right button">
+                            <button data-action="editar" class=""><i class="icon-pencil"></i></button>
+                            <button data-action="eliminar" class=""><i class="icon-remove"></i></button>
+                        </div>
                     </div>
-                </div>
+                </a>   
+
+
             </li>
+
             {% endfor %}
         </ul>
     </section>
@@ -32,16 +37,36 @@
 
 {%block style%}
 <style>
+    section > ul li a{
+        display: block;
+    }
+    section > ul li{
+        overflow: hidden;
+    }
     article{
         padding:20px;
     }
     .button{
-        margin-top:15px;
-        margin-right:15px;
+        margin-top:10px;
+        margin-right:10px;
+
     }
 </style>
 {% endblock %}
 
 {% block js %}
-<script>$("#menu-organizations").addClass("active")</script>
+<script>
+    $("#menu-organizations").addClass("active")
+    $(".button button").click(function(e){
+        e.preventDefault()
+        if($(this).attr("data-action")!="editar")
+            if(confirm("Seguro que quieres elimiar el grupo?")){
+                $(this).parent().parent().parent().parent().fadeOut(1600)
+                setAlert("Grupo eliminado","" )
+            }
+        
+    }
+)
+
+</script>
 {% endblock %}
