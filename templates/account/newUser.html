@@ -1,20 +1,22 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Sing Up - Actarium{% endblock %}
 {%block body%}
-    <article>
+<article>
+    <div class="containterMargin">
         <h1>Registro de Usuario</h1>
         <form class="form-horizontal" method="POST">
             {% csrf_token %}
-		    	<table>{{ formNewUser }}</table>
-	            <div class="control-group">
-	                <div class="controls">
-	                    <label class="checkbox">
-<!--	                        <input type="checkbox"> Acepto los <a href="#">t&eacute;rminos de uso</a>-->
-	                    </label>
-	                    <button type="submit" class="btn btn-primary">Registrarse</button>
-	                    <a href="/account/login" class="btn btn-link">Iniciar Sesi&oacute;n</a>
-	                </div>
-	            </div>
+            <table>{{ formNewUser }}</table>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        <!--	                        <input type="checkbox"> Acepto los <a href="#">t&eacute;rminos de uso</a>-->
+                    </label>
+                    <button type="submit" class="btn btn-success">Registrarse</button>
+                    <a href="/account/login" class="btn btn-link">Iniciar Sesi&oacute;n</a>
+                </div>
+            </div>
         </form>
-    </article>
+    </div>
+</article>
 {%endblock%}

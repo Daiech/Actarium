@@ -96,13 +96,17 @@ textarea {
 .b{
     border: solid thin #dadada;
 }
+.margin5{
+    margin: 10px;
+}
 .alert-block {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 5px;
     left:0;
     right:0;
     font-size: 14px;
-    position: absolute;
+    position: fixed;
     width:30%;
 }
 article{
@@ -126,6 +130,7 @@ article > header{
     /*border:solid thin gray;*/
     margin-top:-20px;
     min-height: 400px;
+    color: #555;
 }
 .but{
     background-color:  #999;
@@ -140,10 +145,10 @@ a ,a:visited ,a:link,a:hover{
     alignment-adjust: central;
 }
 hr{
-        border-bottom: solid thin white;
-        height: 0.01px;
-        margin-bottom: 30px;
-    }
+    border-bottom: solid thin white;
+    height: 0.01px;
+    margin-bottom: 20px;
+}
 footer{
     border-top: solid thin #dadada;
     text-align: center;
@@ -166,8 +171,19 @@ article ul.onOver li:hover{
     border-top:  solid thin  #dadada;
     box-shadow: 1px 1px 1px rgba(255,255,255,0.5);
 }
+.containterMargin{
+    margin:20px;
+}
 
-
+table tr th label{
+    font-size: 16px;
+    margin-top: 5px;
+}
+table tr td input[type=password],table tr td input[type=text]{
+    /*height: 30px;*/
+    padding: 10px;
+    font-size: 16px;
+}
 
 /*==================================
     CSS Barra de Ingreso (Formulario
@@ -272,8 +288,36 @@ form table td input{
 .close-activity{
     padding:0 5px;
 }
-
-
+.user-li{
+    list-style:none;
+    height: 36px;
+    margin-bottom: 3px;
+}
+.user-li > a{
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.user-li > a > img{
+    padding: 0;
+    margin: 3px;
+    margin-left: 12px;
+}
+.user-li > a:hover{
+    color: red;
+}
+.icon-accept{
+    position: relative;
+    right: 5px;
+    top: 8px;
+}
+.img30{
+    height: 30px;
+    width: 30px;
+}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -398,7 +442,7 @@ only screen and (min-resolution: 144dpi) {
 @media (min-width: 1200px) {
     article{
         width: 80%;
-/*        border: solid thin green;*/
+        /*        border: solid thin green;*/
     }
     .columnaD{
         width: 48%;
@@ -408,7 +452,7 @@ only screen and (min-resolution: 144dpi) {
 @media (min-width: 980px) and (max-width: 1280px) {
     article{
         width: 80%;
-/*        border: solid thin yellow;*/
+        /*        border: solid thin yellow;*/
     }
     .columnaD{
         width: 48%;
@@ -416,14 +460,14 @@ only screen and (min-resolution: 144dpi) {
     .notifications span{
         display: inline;
     }
-    
+
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     article{
         width: auto;
-/*        border: solid thin blue;*/
+        /*        border: solid thin blue;*/
     }
     .columnaD{
         width: 40%;
@@ -433,7 +477,7 @@ only screen and (min-resolution: 144dpi) {
 @media (max-width: 767px) {
     article{
         width: auto;
-/*        border: solid thin red;*/
+        /*        border: solid thin red;*/
     }
     .columnaI{
         width: 100%;
@@ -446,23 +490,26 @@ only screen and (min-resolution: 144dpi) {
     .margint30{
         margin-top: 30px;
     }
-
+    .alert-block{
+        width: 50%;
+    }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     article{
         width: auto;
-/*        border: solid thin gray;*/
+        /*        border: solid thin gray;*/
     }
     .fix_btn{
         padding: 0 20px;
     }
     .btn_block{
         display:none;
-        
-    }
-    
 
+    }
+    .alert-block{
+        width: 60%;
+    }
 }
 /*==================================================*/
 /*                  Cierra Responsive               */                    

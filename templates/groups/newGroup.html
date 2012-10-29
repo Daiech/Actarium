@@ -3,19 +3,21 @@
 
 {%block body%}
 <article>
-    <h2>Crear nuevo grupo</h2>
-    <p>Pon un nombre y una descripci&oacute;n a tu grupo y empieza a disfrutar de los
-        beneficios de <strong>ACTARIUM</strong></p>
-    <form class="form-horizontal" enctype="multipart/form-data" method="POST">
-        {% csrf_token %}
-        <table>{{newGroupForm}} 
+    <div class="containterMargin">
+        <h2>Crear nuevo grupo</h2>
+        <p>Pon un nombre y una descripci&oacute;n a tu grupo y empieza a disfrutar de los
+            beneficios de <strong>ACTARIUM</strong></p>
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <table>{{newGroupForm}} 
 
-            <tr><td></td><td><button type="submit" class="btn btn-primary">Guardar</button>
-                    <a href="/groups" class="btn btn-link">Mis Grupos</a></td></tr>
-        </table>
+                <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
+                        <a href="/groups" class="btn btn-link">Mis Grupos</a></td></tr>
+            </table>
 
 
-    </form>
+        </form>
+    </div>
 </article>
 {%endblock%}
 {%block style%}

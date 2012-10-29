@@ -2,7 +2,7 @@
 {% block TITLE %}Actarium - home{% endblock %}
 
 {%block body%}
-<article >
+<article>
     <header class="row-fluid">
         <h1 class="span5">Actarium</h1>
         <div class="span2 pull-right fix_btn"><a href="#" class="btn">Feed-back <i class="icon-bullhorn"></i></a></div>
@@ -26,9 +26,10 @@
                         <ul class="accordion-inner">
                             {% for invitation in invitations %}
                             <li>
-                                <span class="notification-text">
-                                {{invitation.id_user_from.first_name}} te invit&oacute; el {{invitation.date_invited|date:"d F"}}
-                                al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
+                                <span class="notification-text alpha60">
+                                    <strong>{{invitation.id_user_from.first_name}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
+                                    <br />
+                                    <p>en {{invitation.date_invited|date:"F d Y"}}</p>
                                 </span>
                                 <a href="#" class="btn btn-small btn-info">Aceptar</a> <a href="#" class="btn btn-small">Cancelar</a>
                                 <hr>
@@ -49,7 +50,7 @@
                             {% for reunion in reunions %}
                             <li>
                                 <span class="notification-text">
-                                {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
+                                    {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
                                 </span>
                                 <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
                                 <a href="#" class="btn btn-small">No Asistir&eacute;</a>
@@ -88,17 +89,35 @@
         </section>
     </div>
     {% else %}
-    <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
-    <div class="sing">
-        <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
-        <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
+    <div class="containterMargin">
+        <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
+        <div class="sing">
+            <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
+            <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
 
+        </div>
     </div>
     {% endif %}
 </article>
 {%endblock%}
 {% block style%}
 <style>
+    .accordion-heading{
+        /*background-image: -webkit-linear-gradient(top, #62C462, #51A351);*/
+
+        background-image: -webkit-linear-gradient(top, white, #E6E6E6);
+        border-radius:5px;
+    }
+
+    .accordion-inner{
+        /*background-color: gainsboro;*/
+        /* Fallback for web browsers that doesn't support RGBa */
+        background: rgb(255, 255, 255) transparent;
+        /* RGBa with 0.6 opacity */
+        background: rgba(255, 255, 255, 0.6);
+        /* For IE 8*/
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000,endColorstr=#99000000)";
+    }
     .span6 h4{
         margin-bottom:20px;
     }
@@ -127,11 +146,11 @@
     li hr{
         margin:20;
     }
-    section div ul{
-        margin-top: 10px;
-    }
     ul{
         margin:0;
+    }
+    .containterMargin{
+        margin:20px;
     }
 </style>
 {%endblock%}
@@ -139,7 +158,7 @@
 <script>
     //$("#menu-account").addClass("active")
     $(".collapse").collapse({
-  //toggle: false
-})
+        //toggle: false
+    })
 </script>
 {% endblock %}

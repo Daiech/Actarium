@@ -66,16 +66,16 @@ function setAlert(tittle, message){
     else if (l<=100) t=3000;
     else if (l<=200) t=5000;
     else if (l> 200) t=7000;
-    $("#alert-message h4").text(tittle);
-    $("#alert-message p").text(message);
+    $("#alert-message h4").html(tittle);
+    $("#alert-message p").html(message);
     $("#alert-message").fadeIn().delay(t).fadeOut(1500);
     
 }
 
-function sendAjax(url, params, destiny, load_elem, myCallback){
-    $(load_elem).html('<img src="/static/img/load16.gif" />');
-    $.get(url, params, function(data) {
-            myCallback(data);
+function sendAjax(url, params, load_elem, myCallback){
+    $(load_elem).show().html('<img src="/static/img/load16.gif" />');
+    $.get(url, params, function(data,error) {
+            myCallback(data,error);
             $(load_elem).hide();
         }
     );

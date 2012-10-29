@@ -5,18 +5,20 @@
 
 {%block body%}
 <article>
-    <h2>Crear nueva acta </h2>
-    <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
-    <form class="form-horizontal" enctype="multipart/form-data" method="POST">
-        {% csrf_token %}
-        <table>{{ newMinutesForm }} 
+    <div class="containterMargin">
+        <h2>Crear nueva acta </h2>
+        <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <table>{{ newMinutesForm }} 
 
-            <tr><td></td><td><button type="submit" class="btn btn-primary">Guardar</button>
-                    <a href="/groups" class="btn btn-link">Mis actas</a></td></tr>
-        </table>
+                <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
+                        <a href="/groups" class="btn btn-link">Mis actas</a></td></tr>
+            </table>
 
 
-    </form>
+        </form>
+    </div>
 </article>
 {%endblock%}
 {%block style%}
@@ -33,17 +35,17 @@
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
-	/*datetimepicker*/
-	.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-	.ui-timepicker-div dl { text-align: left; }
-	.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-	.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
-	.ui-timepicker-div td { font-size: 90%; }
-	.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-	
-	.ui-timepicker-rtl{ direction: rtl; }
-	.ui-timepicker-rtl dl { text-align: right; }
-	.ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+    /*datetimepicker*/
+    .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+    .ui-timepicker-div dl { text-align: left; }
+    .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+    .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+    .ui-timepicker-div td { font-size: 90%; }
+    .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+    .ui-timepicker-rtl{ direction: rtl; }
+    .ui-timepicker-rtl dl { text-align: right; }
+    .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
 </style>
 
 {%endblock%}
@@ -57,10 +59,10 @@
 <script src="{{STATIC_PREFIX}}js/textareas.js"></script>
 
 <script type="text/javascript" >
-	$('.time-pick').timepicker({
-		ampm: true,
-		hourMin: 0,
-		hourMax: 24
-	});
+    $('.time-pick').timepicker({
+        ampm: true,
+        hourMin: 0,
+        hourMax: 24
+    });
 </script>
 {% endblock %}

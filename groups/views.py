@@ -5,12 +5,15 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
+from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
 import re
 import datetime
 from django.utils.timezone import make_aware, get_default_timezone
+from django.utils import simplejson as json
+from account.templatetags.gravatartag import showgravatar
 
 @login_required(login_url='/account/login')
 def groupsList(request):
@@ -31,7 +34,6 @@ def newGroup(request):
     '''
         crea una nuevo grupo
     '''
-
     if request.method == "POST":
         form = newGroupForm(request.POST)
         if form.is_valid():
@@ -47,6 +49,7 @@ def newGroup(request):
                          )
             myNewGroup.save()
             rel_user_group(id_user=request.user, id_group=myNewGroup).save()
+            admin_group(id_user=request.user, id_group=myNewGroup).save()
             return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
     else:
         form = newGroupForm()
@@ -66,8 +69,9 @@ def showGroup(request, slug):
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
+        members_pend = invitations.objects.filter(id_group=q.id)
         minutes_group = minutes.objects.filter(id_group=q.id)
-        ctx = {'TITLE': q.name, "group": q, "members": members, "minutes": minutes_group}
+        ctx = {'TITLE': q.name, "group": q, "members": members, "minutes": minutes_group, "members_pend": members_pend}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
@@ -83,34 +87,105 @@ def validateEmail(email):
         return False
 
 
+@login_required(login_url='/account/login')
+def getMembers(request):
+    if request.is_ajax():
+        if request.method == "GET":
+            try:
+                search = str(request.GET['search'])
+                if validateEmail(search):
+                    try:
+                        ans = User.objects.get(email=search)
+                    except User.DoesNotExist:
+                        ans = 1  # email valido, pero no es usuario
+                else:
+                    try:
+                        ans = User.objects.get(username=search)
+                    except User.DoesNotExist:
+                        ans = 2  # no existe el usuario
+                if ans != 1 and ans != 2:
+                    message = {
+                        "mail_is_valid": True,
+                        "username": ans.username,
+                        "mail": ans.email,
+                        "gravatar": showgravatar(ans.email, 30)}
+                else:
+                    if ans == 1:
+                        message = {"mail_is_valid": True, "mail": search, "username": False}
+                    else:
+                        if ans == 2:
+                            message = {"mail_is_valid": False}
+                        else:
+                            message = False
+            except Exception:
+                message = False
+            return HttpResponse(json.dumps(message), mimetype="application/json")
+        else:
+            message = False
+        return HttpResponse(message)
+    else:
+        message = False
+        return HttpResponse(message)
+
+
 def sendInvitationUser(email, user, group):
     '''
         Enviar una invitacion a un usuario via email
     '''
     if validateEmail(email):
-        invitation = invitations(email_invited=email, id_user_from=user, id_group=group)
-        invitation.save()
-        return True
+        invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group)
+        if created:
+            #  send email here
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def isMemberOfGroupByEmail(email, id_group):
+    if validateEmail(email):
+        try:
+            ans = User.objects.get(email=email)
+        except User.DoesNotExist, e:
+            print e
+            return False
+        if ans:
+            try:
+                is_member = rel_user_group.objects.filter(id_user=ans, id_group=id_group)
+                if is_member:
+                    return True
+            except User.DoesNotExist, e:
+                print e
+                return False
     else:
         return False
 
 
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
+@login_required(login_url='/account/login')
 def newInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
-            q = groups.objects.get(pk=request.GET['pk'])
+            q = groups.objects.get(pk=request.GET['pk'])  # try
             mail = str(request.GET['search'])
-            if sendInvitationUser(mail, request.user, q):
-                message = "Se ha enviado la invitación a " + str(mail)
+            if isMemberOfGroupByEmail(mail, q):
+                invited = False
+                message = "El usuario ya es miembro del grupo"
             else:
-                message = "Error en el correo"
+                if sendInvitationUser(mail, request.user, q):
+                    invited = True
+                    message = "Se ha enviado la invitación a " + str(mail) + " "
+                else:
+                    invited = False
+                    message = "El usuario tiene la invitacion pendiente"
+            response = {"invited": invited, "message": message}
     else:
-        message = "Error"
-    return HttpResponse(message)
+        response = "Error invitacion"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
-def newMinutes(request,slug):
+def newMinutes(request, slug):
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
@@ -150,7 +225,8 @@ def newMinutes(request,slug):
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
-def newReunion(request,slug):
+
+def newReunion(request, slug):
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:

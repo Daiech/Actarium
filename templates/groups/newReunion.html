@@ -5,6 +5,7 @@
 
 {%block body%}
 <article>
+    <div class="containterMargin">
     <h2>Crear nueva acta </h2>
     {{ date_reunion }}  -  {{ agenda }}
     <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
@@ -12,12 +13,13 @@
         {% csrf_token %}
         <table>{{ newReunionForm }} 
 
-            <tr><td></td><td><button type="submit" class="btn btn-primary">Guardar</button>
+            <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
                     <a href="/groups" class="btn btn-link">Mis actas</a></td></tr>
         </table>
 
 
     </form>
+    </div>
 </article>
 {%endblock%}
 {%block style%}

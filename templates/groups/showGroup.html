@@ -3,18 +3,24 @@
 
 {%block body%}
 <article>
-    <header>
-        <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-        <h3>{{group.name}}</h3>
-
-        <a href="#" class="btn btn-link">Editar</a>
-        <a href="#" class="btn btn-link">Eliminar</a>
-
+    <header >
+        <div class="row-fluid">
+            <div class="span8">
+                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
+                <h3>{{group.name}}</h3>
+                <a href="#" class="btn btn-link">Editar grupo</a>
+            </div>
+            <div class="span4 btnSup">
+                <a href="/groups/newMinutes/{{ group.slug}}" class="btn btn-info btn-small">Crear acta</a>
+                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
+            </div>
+        </div>
     </header>
     <hr/>
     <div class="row-fluid">
         <section class="span6">
-            <h4>Actas</h4>
+            <h4>Actas</h4> 
+            <ul>
                 {%for minute in minutes%}
                 <li>
                     <a href="#">
@@ -27,21 +33,24 @@
                 <li>Este grupo no tiene actas</li>
                 {%endif%}
             </ul>
-            <a href="/groups/newMinutes/{{ group.slug}}" class="btn btn-info btn-small">Crear acta</a>
-            <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
         </section>
         <section class="span5 fix_btn">
             <h4>Miembros</h4>
-            <ul class="nav">
+            <ul class="nav list-members">
                 {%for member in members%}
-                <li>
-                    <i class="icon-user"></i>
-                    {{member.id_user.first_name}} {{member.id_user.last_name}}
-                    {%if member.id_user == user%}
-                    (yo)
-                    <a class="pull-right" href="#" title="Eliminar a {{member.id_user.first_name}} de este grupo"><i class="icon-star"></i></a>
-                    {%endif%}
-                </li>
+                    <li>
+                        <i class="icon-user"></i>
+                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                        {%if member.id_user == user%}
+                        (yo)
+                        {%endif%}
+                    </li>
+                {%endfor%}
+                {%for member in members_pend%}
+                    <li><!--Usuarios pendientes-->
+                        <i class="icon-user"></i>
+                        <span>{{member.email_invited}}</span> (pendiente)
+                    </li>
                 {%endfor%} 
             </ul>
 
@@ -55,6 +64,7 @@
                         Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
                     </li>
                     <li>
+                        <input type="hidden" id="group_name" value="{{group.name}}">
                         <input type="hidden" id="group_id" value="{{group.id}}">
                         <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
                         <span id="load-member"></span>
@@ -67,8 +77,7 @@
                         </ul>
                     </li>
                 </ul>
-
-            </div>
+            </div><!-- dropdown -->
         </section>
     </div>
 </article>
@@ -85,39 +94,117 @@
     });
     $("#newmember").on("keyup",function(e){
         if(e.keyCode==13){
+            p="";
             var user=$("#newmember").val()
-            var group_id = $("#group_id").val()
             sendAjax(
-            "/groups/invitation",
-            {pk:group_id,search:user},
-            "#my-ajax-result",
-            "#load-member",
-            function(data){
-                $("#search-result").html(
-                "<li style='list-style:none'>"+
-                    "<a href='#'>"+
-                    user+" invitado"+
-                    "</a>"+
-                    "</li>"
-            )
-                setAlert("Enviado","La invitación a unirse al grupo ha sido enviada a "+ user)
-                //$("#newmember").val("")
-            }
-        )
+                "/groups/getMembers",
+                {search:user},
+                "#load-member",
+                function(data){
+                    console.log(data)
+                    if(data){
+                        if(data["mail_is_valid"]){
+                            if(data["username"]){
+                                user_to_invite = data['mail']+" ("+data['username']+")";
+                                if(user_to_invite.length > 27)
+                                    p="..."
+                                $("#search-result").html(
+                                    "<li class='user-li'>"+
+                                        "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+                                            "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                                            user_to_invite.substring(0,27)+p+
+                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                                        "</a>"+
+                                    "</li>"
+                                    )
+                            }
+                            else{
+                                if(data['mail'].length > 27)
+                                    p="..."
+                                $("#search-result").html(
+                                    "<li class='user-li'>"+
+                                        "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
+                                            "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                                            data['mail'].substring(0,27)+p+
+                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                                        "</a>"+
+                                    "</li>"
+                                )
+                            }
+
+                        }
+                        else{
+                            //no result
+                            $("#search-result").html(
+                                "<li style='list-style:none'>"+
+                                    "<a href='#'>"+
+                                        ("No hay resultados").substring(0,27)+
+                                    "</a>"+
+                                "</li>"
+                            )
+                        }
+                    }else{
+                        //error en el server
+                    }
+                    $(".user-li > a").on("click",function(e){
+                        e.preventDefault();
+                        var mail = $(this).attr("data-email")
+                        var uname = $(this).attr("data-username")
+                        var group_id = $("#group_id").val()
+                        var group_name = $("#group_name").val()
+                        sendAjax(
+                            "/groups/setInvitation",
+                            {"pk":group_id, "search": mail},
+                            "#load-member",
+                            function(data){
+                                if(data['invited']){//USUARIO INVITADO
+                                    setAlert("Invitado",data['message']+" al grupo "+group_name)
+                                    $(".list-members").append(
+                                        "<li style='list-style:none'>"+
+                                            "<i class='icon-user'></i> "+
+                                            "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
+                                        "</li>"
+                                    )
+                                    $("#newmember").val("")
+                                }else{//EL USUARIO YA ESTA INVITADO
+                                    setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
+                                }
+                            }
+                        )
+                    })
+                    $(".user-li").hover(function(){
+                            $(this).find("i").removeClass("hidden")
+                        },
+                        function(){
+                            $(this).find("i").addClass("hidden")
+                    })
+                }
+            )//sendAjax
         }
     });
 </script>
 {% endblock %}
 {%block style%}
 <style>
+    ul.dropdown-menu li{
+        margin-bottom: 10px;
+    }
     .icon-remove{
         margin: 5px;
     }
     ul#search-result{
         margin-left: 0;
     }
+    ul#search-result li span{
+        font-size: 13px;
+        margin-left: 13px;
+        color: gray;
+    }
     .taling{
         text-align: center;
+    }
+    .list-members span{
+        color: gray;
     }
     li a span{
         color:black;
@@ -128,7 +215,7 @@
         line-height:  1;
     }
     article{
-        min-height: 400px;
+        min-height: 500px;
         overflow: hidden;
     }
     article header img{
@@ -156,6 +243,9 @@
     .dropdownmenu  * li{
         list-style:none;
         text-decoration: none;
+    }
+    .btnSup{
+        margin-top: 8px;
     }
 </style>
 {%endblock%}
