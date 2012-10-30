@@ -170,9 +170,7 @@
             {"i_id":accept},
             $(this).find("div.load"),
             function(data){
-                //callback
-                setAlert("invitations","invitacion enviada")
-                if (data){
+                if (data['accepted']){
                     setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
                 }
                 else{
@@ -180,7 +178,6 @@
                 }
             }
             )
-        }
     })
 </script>
 {% endblock %}
