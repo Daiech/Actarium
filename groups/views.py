@@ -134,7 +134,7 @@ def sendInvitationUser(email, user, group):
         Enviar una invitacion a un usuario via email
     '''
     if validateEmail(email):
-        invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group)
+        invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
             #  send email here
             return True
