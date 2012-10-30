@@ -4,7 +4,7 @@
 {%block body%}
 <article>
     <header class="row-fluid">
-        <h1 class="span5">Actarium</h1>
+        <h1 class="span10">Actarium</h1>
         <div class="fix_btn"><a href="#" class="btn">Feed-back <i class="icon-bullhorn"></i></a></div>
     </header>
 
@@ -19,7 +19,7 @@
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
-                            Tienes <span class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
+                            Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
                         </a>
                     </div>
                     <div  id="Invitations" class="accordion-body collapse in">
@@ -31,9 +31,11 @@
                                     <br />
                                     <time>{{invitation.date_invited|date:"F d Y"}}</time>
                                 </span>
+                                <div class="buttons">
                                 <a href="#" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">Aceptar</a>
                                 <a href="#" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">Cancelar</a>
                                 <div class="pull-right load"></div>
+                                </div>
                                 <hr>
 
                             </li>
@@ -52,11 +54,14 @@
                             {% for reunion in reunions %}
                             <li>
                                 <span class="notification-text">
-                                    {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
+                                    <strong>{{reunion.id_convener.first_name}}</strong> te convoc&oacute; a una reuni&oacute;n del grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a><br />
+                                    el {{reunion.date_convened|date:"d F"}}
                                 </span>
+                                <div class="buttons">
                                 <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
                                 <a href="#" class="btn btn-small">No Asistir&eacute;</a>
-                                <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a>
+                                <a class="btn btn-link" href="#">Ver m&aacute;s</a>
+                                </div>
                                 <hr>
 
                             </li>
@@ -77,7 +82,7 @@
                 </div>
             </header>
             <hr>
-            <ul class="nav onOver">
+            <ul id="group-list" class="nav onOver">
                 {% for group in groups %}
                 <li class="img-rounded">
                     <a href="/groups/{{group.slug}}">
@@ -154,6 +159,9 @@
     .containterMargin{
         margin:20px;
     }
+    .buttons{
+        margin-top:10px;
+    }
 </style>
 {%endblock%}
 {% block js %}
@@ -166,21 +174,43 @@
         e.preventDefault();
         var accept = $(this).attr("data-invitation")
         sendAjax(
-            "/groups/acceptInvitation",
-            {"i_id":accept},
-            $(this).find("div.load"),
-            function(data){
-                //callback
-                setAlert("invitations","invitacion enviada")
-                if (data){
-                    setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
-                }
-                else{
-                    setAlert("invitation","No Aceptar la invitacion "+accept.substr(1))
-                }
+        "/groups/acceptInvitation",
+        {"i_id":accept},
+        $(this).find("div.load"),
+        function(data){
+            if (data["accepted"]){
+                setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
+                {
+        var actual = parseInt($("#inv-count").text())
+        actual--
+        $("#inv-count").text(""+actual)
+        $("#group-list").append(
+            "<li class='img-rounded'>"+
+                    "<a href='/groups/'>"+
+                        "<img src='/static/img/org.png' alt=''/>"+
+                        "Nombre Grupo"+
+                    "</a>"+
+                "</li>")
+    }
+                
             }
-            )
+            else{
+                setAlert("invitation","No Aceptar la invitacion "+accept.substr(1))
+            }
         }
+    )
+    })
+    $(".restar").on("click",function(){
+        var actual = parseInt($("#inv-count").text())
+        actual--
+        $("#inv-count").text(""+actual)
+        $("#group-list").append(
+            "<li class='img-rounded'>"+
+                    "<a href='/groups/'>"+
+                        "<img src='/static/img/org.png' alt=''/>"+
+                        "Nombre Grupo"+
+                    "</a>"+
+                "</li>")
     })
 </script>
 {% endblock %}
