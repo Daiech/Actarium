@@ -99,7 +99,7 @@ textarea {
 .margin5{
     margin: 10px;
 }
-.alert-block {
+#alert-message, #alert-error {
     margin-left: auto;
     margin-right: auto;
     margin-top: 5px;

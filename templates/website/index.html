@@ -195,7 +195,7 @@
                     ).fadeIn()
                     }
                 )
-                setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
+                setAlertMessage("invitation","Aceptar la invitacion "+accept.substr(1))
             }
             else{
                 
@@ -212,7 +212,7 @@
                 var actual2 = parseInt($("#inv-count").text())
                 actual2--
                  $("#inv-count").text(""+actual2)
-                setAlert("invitation","No Aceptar la invitacion "+accept.substr(1))
+                setAlertMessage("invitation","No Aceptar la invitacion "+accept.substr(1))
             }
         })
     }

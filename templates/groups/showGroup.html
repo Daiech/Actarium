@@ -158,7 +158,7 @@
                             "#load-member",
                             function(data){
                                 if(data['invited']){//USUARIO INVITADO
-                                    setAlert("Invitado",data['message']+" al grupo "+group_name)
+                                    setAlertMessage("Invitado",data['message']+" al grupo "+group_name)
                                     $(".list-members").append(
                                         "<li style='list-style:none'>"+
                                             "<i class='icon-user'></i> "+
@@ -168,10 +168,10 @@
                                     $("#newmember").val("")
                                 }else{//EL USUARIO YA ESTA INVITADO
                                     if(data["message"]){
-                                        setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
+                                        setAlertError("Informaci&oacute;n","("+mail+") "+data['message'])
                                     }
                                     else{
-                                        setAlert("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+                                        setAlertMessage("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
                                     }
                                 }
                             }
