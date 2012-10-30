@@ -15,6 +15,7 @@ from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 
+
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
@@ -69,7 +70,7 @@ def showGroup(request, slug):
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
-        members_pend = invitations.objects.filter(id_group=q.id)
+        members_pend = invitations.objects.filter(id_group=q.id, is_active=True)
         minutes_group = minutes.objects.filter(id_group=q.id)
         ctx = {'TITLE': q.name, "group": q, "members": members, "minutes": minutes_group, "members_pend": members_pend}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
@@ -143,6 +144,16 @@ def sendInvitationUser(email, user, group):
         return False
 
 
+def isMemberOfGroup(id_user, id_group):
+    try:
+        is_member = rel_user_group.objects.filter(id_user=id_user, id_group=id_group)
+        if is_member:
+            return True
+    except User.DoesNotExist, e:
+        print e
+        return False
+
+
 def isMemberOfGroupByEmail(email, id_group):
     if validateEmail(email):
         try:
@@ -151,13 +162,7 @@ def isMemberOfGroupByEmail(email, id_group):
             print e
             return False
         if ans:
-            try:
-                is_member = rel_user_group.objects.filter(id_user=ans, id_group=id_group)
-                if is_member:
-                    return True
-            except User.DoesNotExist, e:
-                print e
-                return False
+            return isMemberOfGroup(ans, id_group)
     else:
         return False
 
@@ -167,7 +172,13 @@ def isMemberOfGroupByEmail(email, id_group):
 def newInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
-            q = groups.objects.get(pk=request.GET['pk'])  # try
+            try:
+                q = groups.objects.get(pk=request.GET['pk'])
+                if not isMemberOfGroup(request.user, q):
+                    return HttpResponse(q)
+            except groups.DoesNotExist:
+                q = False
+                return HttpResponse(q)
             mail = str(request.GET['search'])
             if isMemberOfGroupByEmail(mail, q):
                 invited = False
@@ -185,6 +196,43 @@ def newInvitation(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+def acceptInvitation(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                if request.GET['i_id'][0] == 's':
+                    accept = True
+                else:
+                    if request.GET['i_id'][0] == 'n':
+                        accept = False
+                iid = request.GET['i_id'][1:]
+                try:
+                    inv = invitations.objects.get(id=iid)
+                    is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)
+                except invitations.DoesNotExist:
+                    inv = False
+                if accept and is_member and inv:  # aprobar la invitacion
+                    rel_user_group(id_user=request.user, id_group=inv.id_group).save()
+                    inv.is_active = False
+                    inv.save()
+                    accepted = True
+                    message = "Aceptar la solicitud"
+                else:  # no aprobar la invitacion
+                    if inv and not accept:
+                        inv.is_active = False
+                        inv.save()
+                        accepted = False
+                        message = "NO Aceptar la solicitud"
+                    else:
+                        return HttpResponse(inv)
+            except Exception:
+                return HttpResponse(False)
+            response = {"accepted": accepted, "message": message}
+    else:
+        response = "Error invitacion"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+@login_required(login_url='/account/login')
 def newMinutes(request, slug):
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
@@ -225,7 +273,7 @@ def newMinutes(request, slug):
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
-
+@login_required(login_url='/account/login')
 def newReunion(request, slug):
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
@@ -245,12 +293,6 @@ def newReunion(request, slug):
                              )
                 myNewReunion.save()
                 return HttpResponseRedirect("/groups/" + str(q.slug))
-#                ctx = {'TITLE': "Actarium",
-#                       "newReunionForm": form,
-#                       "date_reunion":df['date_reunion'],
-#                       "agenda":df['agenda'],
-#                }
-#                return render_to_response('groups/newReunion.html', ctx, context_instance=RequestContext(request))
         else:
             form = newReunionForm()
         ctx = {'TITLE': "Actarium",
@@ -260,6 +302,7 @@ def newReunion(request, slug):
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
+@login_required(login_url='/account/login')
 def calendar(request):
     gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
@@ -269,6 +312,7 @@ def calendar(request):
            }
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
+@login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
     gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
@@ -283,15 +327,12 @@ def calendarDate(request, slug=None):
     
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
+@login_required(login_url='/account/login')
 def getReunions(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        date = str(request.GET['date'])
-        gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
-        is_member = True #rel_user_group.objects.filter(id_group=gr, id_user=request.user)
-        if is_member:
-#                my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
-#            
+    if request.is_ajax():
+        if request.method == 'GET':
+            date = str(request.GET['date'])
+            gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos         
             dateslug_min = str(make_aware(datetime.datetime.strptime(date+" 00:00:00",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
             dateslug_max = str(make_aware(datetime.datetime.strptime(date+" 23:59:59",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
             my_reu_day = reunions.objects.filter(id_group__in=gr,date_reunion__range = [dateslug_min,dateslug_max]) #reuniones para un dia
@@ -301,9 +342,7 @@ def getReunions(request):
             for reunion in my_reu_day:
                 json_array[i] = {"group_name": reunion.id_group.name, "date":(datetime.datetime.strftime( make_naive(reunion.date_reunion,get_default_timezone()), "%I:%M %p"))}
                 i= i+1
-            response = json_array   #str(reu_json)    #{"reunions_day": "si entra: "+date+" "+str(reu_json)}  {'0': 'HOLAZERO','1':"HOLADOS"}
-        else:
-            return HttpResponseRedirect('/reunions/#error-view-group')
-#    else:
-#        response = "Error Calendar"
+            response = json_array   
+    else:
+        response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")

@@ -109,6 +109,9 @@ textarea {
     position: fixed;
     width:30%;
 }
+.box{
+    overflow:hidden;
+}
 article{
     background-color: #EEE;
     /*border-radius: 10px;*/
@@ -317,6 +320,12 @@ form table td input{
 .img30{
     height: 30px;
     width: 30px;
+}
+
+.btn-right{
+    position: relative;
+    right:0;
+    top:0;
 }
 /* ==========================================================================
    Helper classes

@@ -1,4 +1,4 @@
-from django.conf.urls import patterns #url
+from django.conf.urls import patterns  # url
 groups_urls = patterns('',
     (r'^new$', 'groups.views.newGroup'),
     (r'^newMinutes/(?P<slug>[-\w]+)', 'groups.views.newMinutes'),
@@ -8,6 +8,7 @@ groups_urls = patterns('',
     (r'^getMembers$', 'groups.views.getMembers'),
     (r'^setInvitation$', 'groups.views.newInvitation'),
     (r'^getReunions$', 'groups.views.getReunions'),
+    (r'^acceptInvitation$', 'groups.views.acceptInvitation'),
     (r'^(?P<slug>[-\w]+)', 'groups.views.showGroup'),
     (r'^$', 'groups.views.groupsList'),
     

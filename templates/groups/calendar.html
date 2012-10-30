@@ -3,28 +3,48 @@
 
 {%block body%}
 <article>
+    <h2>Pr&oacute;ximas reuniones</h2>
+    <hr>
     <section id="calendar" >
-    	<div id="datepicker"></div>
-    	
+
+        <div id="datepicker">Cargando calendario...
+            <img src="/static/img/load16.gif" alt="cargando calendario"/>
+        </div>
+        <div class="center">
+            <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a>
+        </div>
     </section>
     <section id="reunions" >
-    		<div id="load_reunions"></div>
-			{% for reunion in reunions_day %}
-			<li>
-			    <span class="notification-text">
-			    Grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> Hora: {{reunion.date_reunion|date:"h:i A"}} 
-			    </span>
-			    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
-			    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
-			    <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a>
-			    <hr>
-			</li>
-			{% endfor %}
-   </section>
+        <h3>Listado de reuniones DD/MM</h3>
+        <ul>
+            {% for reunion in reunions_day %}
+            <li>
+                <span class="">
+                    <strong>Usuario</strong> te invit&oacute; a una reuni&oacute;n del grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> 
+                    <br />
+                    El d&iacute;a DD a las: <time>{{reunion.date_reunion|date:"h:i A"}}</time>
+                </span>
+                <div class="botonera">
+                    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
+                    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
+                    <a class="btn btn-link" href="#">Ver m&aacute;s</a>
+                </div>
+                <hr>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+
 </article>
 {%endblock%}
 {%block style%}
 <style>
+    h2{
+        margin-left: 20px;
+    }
+    h3{
+        margin-bottom: 20px;
+    }
     .form-horizontal table{
         margin: auto;
         width: auto;
@@ -33,17 +53,35 @@
     table td .btn{
         margin-top:10px;
     }
-	#calendar {
-		padding-left: 30px;
-		padding-top: 50px;	
-		float:left;	
-	}
-	#reunions {
-		padding-top: 50px;	
-		width: 490px;
-		margin-left: 40px;
-		float:left;
-	}
+    #calendar {
+        padding-left: 30px;
+        padding-top: 10px;
+        float:left;
+    }
+    #reunions {
+        width: 490px;
+        margin-left: 40px;
+        float:left;
+    }
+    #reunions > ul li{
+        font-size: 14px;
+        list-style: none;
+    }
+    #reunions > ul{
+
+        margin-left: 0;
+    }
+    .btn-link{
+        padding-left: 0;
+    }
+    .botonera{
+        display:block;
+        margin-top:10px;
+    }
+    .center{
+        margin: 10px auto;
+        width: 180px;
+    }
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui.css" />
 {%endblock%}
@@ -53,13 +91,14 @@
 <script>$("#menu-reunions").addClass("active")</script>
 
 <script type="text/javascript" >
-$(function() {
+//<<<<<<< HEAD
+$(document).on("ready", function() {
 	var events = [
 		{% for reunion in reunions %}
 			"{{reunion.date_reunion|date:'Y-m-d'}}",
 		{% endfor %}                            
 	];
-	
+	$( "#datepicker" ).text("")
     var dp = $( "#datepicker" ).datepicker({ 
         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
     	dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
@@ -70,13 +109,11 @@ $(function() {
 	    	var current = $.datepicker.formatDate('yy-mm-dd', date);
 	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
     	},
-	    onSelect: function(dateText, inst) {  //alert("new date: " + dateText); //+ " " + $(this).datepicker('getDate'));
-	    	//top.location="/groups/calendar/"+dateText;
+	    onSelect: function(dateText, inst) {  
 	    	sendAjax("/groups/getReunions",
 	    			{date:dateText},
 	    			"#load_reunions",
 	    			function(data){
-		    			//console.log(data)
 		    			var v="";
 		    			$.each(data, function() { 
 			    			   v = v + ' <li><span class="notification-text"> '+
@@ -91,33 +128,48 @@ $(function() {
 		    			$("#reunions").html(v);
 		    			url = location.pathname;
 		    			url2 = "/groups/calendar";
-		    			//alert(url+" "+url2);
 		    			if (url == url2){
-			    			//setAlert("SI",url+" "+url2);
 			    			html5url = "calendar/"+dateText;
 		    			}
 		    			else{     
-		    				//setAlert("NO",url+" "+url2);
 			    			html5url = dateText;
 		    			}
 		    			window.history.pushState(data, dateText, html5url);
-		    			//console.log("JSON"+v);
-		    			/*for(i in data){
-			    			console.log(data[i].date)
-		    			}*/
-
 	    		}
 	    	)
     	}
 	});
     url = location.pathname;
 	url2 = "/groups/calendar";
-	//alert(url+" "+url2);
 	if (url != url2){
 		dp.datepicker("setDate", (url).substring(17,27));  
 	}
-
-	
 });
+	/*=======
+	    $(document).on("ready", function()
+	    {
+	        var events = [
+	            {% for reunion in reunions %}
+	            "{{reunion.date_reunion|date:'Y-m-d'}}",
+	            {% endfor %}                            
+	        ];
+	        $( "#datepicker" ).text("")
+	        var dp = $( "#datepicker" ).datepicker({ 
+	            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+	            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+	            nextText: 'Siguiente',
+	            prevText: 'Anterior',
+	            dateFormat: 'yy-mm-dd',
+	            beforeShowDay: function(date) {
+	                var current = $.datepicker.formatDate('yy-mm-dd', date);
+	                return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
+	            },
+	            onSelect: function(dateText, inst) {  //alert("new date: " + dateText); //+ " " + $(this).datepicker('getDate'));
+	                top.location="/groups/calendar/"+dateText;
+	                //setAlert("Fecha",dateText);
+	            }
+	        });    
+	    })
+	>>>>>>> 07dd147e76acf49cf07ef00da7fba22679969dee*/
 </script>
 {% endblock %}

@@ -167,7 +167,12 @@
                                     )
                                     $("#newmember").val("")
                                 }else{//EL USUARIO YA ESTA INVITADO
-                                    setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
+                                    if(data["message"]){
+                                        setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
+                                    }
+                                    else{
+                                        setAlert("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+                                    }
                                 }
                             }
                         )
@@ -216,7 +221,8 @@
     }
     article{
         min-height: 500px;
-        overflow: hidden;
+        overflow: visible;
+        padding-top: 0.5px;
     }
     article header img{
         margin-top:4px;
@@ -246,6 +252,12 @@
     }
     .btnSup{
         margin-top: 8px;
+    }
+    div > section ul{
+        margin-left:0;
+    }
+    div > section ul li{
+        list-style: none;
     }
 </style>
 {%endblock%}
