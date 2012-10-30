@@ -32,9 +32,9 @@
                                     <time>{{invitation.date_invited|date:"F d Y"}}</time>
                                 </span>
                                 <div class="buttons">
-                                <a href="#" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">Aceptar</a>
-                                <a href="#" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">Cancelar</a>
-                                <div class="pull-right load"></div>
+                                    <a href="#" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">Aceptar</a>
+                                    <a href="#" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">Cancelar</a>
+                                    <div class="pull-right load"></div>
                                 </div>
                                 <hr>
 
@@ -58,9 +58,9 @@
                                     el {{reunion.date_convened|date:"d F"}}
                                 </span>
                                 <div class="buttons">
-                                <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
-                                <a href="#" class="btn btn-small">No Asistir&eacute;</a>
-                                <a class="btn btn-link" href="#">Ver m&aacute;s</a>
+                                    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
+                                    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
+                                    <a class="btn btn-link" href="#">Ver m&aacute;s</a>
                                 </div>
                                 <hr>
 
@@ -181,17 +181,17 @@
             if (data["accepted"]){
                 setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
                 {
-        var actual = parseInt($("#inv-count").text())
-        actual--
-        $("#inv-count").text(""+actual)
-        $("#group-list").append(
-            "<li class='img-rounded'>"+
-                    "<a href='/groups/'>"+
+                    var actual = parseInt($("#inv-count").text())
+                    actual--
+                    $("#inv-count").text(""+actual)
+                    $("#group-list").append(
+                    "<li class='img-rounded'>"+
+                        "<a href='/groups/'>"+
                         "<img src='/static/img/org.png' alt=''/>"+
                         "Nombre Grupo"+
-                    "</a>"+
-                "</li>")
-    }
+                        "</a>"+
+                        "</li>")
+                }
                 
             }
             else{
@@ -205,12 +205,12 @@
         actual--
         $("#inv-count").text(""+actual)
         $("#group-list").append(
-            "<li class='img-rounded'>"+
-                    "<a href='/groups/'>"+
-                        "<img src='/static/img/org.png' alt=''/>"+
-                        "Nombre Grupo"+
-                    "</a>"+
-                "</li>")
+        "<li class='img-rounded'>"+
+            "<a href='/groups/'>"+
+            "<img src='/static/img/org.png' alt=''/>"+
+            "Nombre Grupo"+
+            "</a>"+
+            "</li>")
     })
 </script>
 {% endblock %}
