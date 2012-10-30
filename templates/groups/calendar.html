@@ -5,12 +5,14 @@
 <article>
     <section id="calendar" >
     	<div id="datepicker"></div>
+    	
     </section>
     <section id="reunions" >
+    		<div id="load_reunions"></div>
 			{% for reunion in reunions_day %}
 			<li>
 			    <span class="notification-text">
-			    Grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> Hora: {{reunion.date_reunion|date:"h:i A"}}
+			    Grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> Hora: {{reunion.date_reunion|date:"h:i A"}} 
 			    </span>
 			    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
 			    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
@@ -43,12 +45,11 @@
 		float:left;
 	}
 </style>
-<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui.css" />
 {%endblock%}
 
 {% block js %}
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
 <script>$("#menu-reunions").addClass("active")</script>
 
 <script type="text/javascript" >
@@ -58,6 +59,7 @@ $(function() {
 			"{{reunion.date_reunion|date:'Y-m-d'}}",
 		{% endfor %}                            
 	];
+	
     var dp = $( "#datepicker" ).datepicker({ 
         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
     	dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
@@ -69,10 +71,53 @@ $(function() {
 	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
     	},
 	    onSelect: function(dateText, inst) {  //alert("new date: " + dateText); //+ " " + $(this).datepicker('getDate'));
-	    	top.location="/groups/calendar/"+dateText;
-	    	//setAlert("Fecha",dateText);
+	    	//top.location="/groups/calendar/"+dateText;
+	    	sendAjax("/groups/getReunions",
+	    			{date:dateText},
+	    			"#load_reunions",
+	    			function(data){
+		    			//console.log(data)
+		    			var v="";
+		    			$.each(data, function() { 
+			    			   v = v + ' <li><span class="notification-text"> '+
+							   			    ' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+this.group_name+'</a> Hora: '+this.date+
+							   			    '</span>'+
+							   			    ' <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a> '+
+							   			    ' <a href="#" class="btn btn-small">No Asistir&eacute;</a> '+
+							   			    ' <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a> '+
+							   			    '<hr>'+
+							   	'</li>';
+		    		       });
+		    			$("#reunions").html(v);
+		    			url = location.pathname;
+		    			url2 = "/groups/calendar";
+		    			//alert(url+" "+url2);
+		    			if (url == url2){
+			    			//setAlert("SI",url+" "+url2);
+			    			html5url = "calendar/"+dateText;
+		    			}
+		    			else{     
+		    				//setAlert("NO",url+" "+url2);
+			    			html5url = dateText;
+		    			}
+		    			window.history.pushState(data, dateText, html5url);
+		    			//console.log("JSON"+v);
+		    			/*for(i in data){
+			    			console.log(data[i].date)
+		    			}*/
+
+	    		}
+	    	)
     	}
-	});    
+	});
+    url = location.pathname;
+	url2 = "/groups/calendar";
+	//alert(url+" "+url2);
+	if (url != url2){
+		dp.datepicker("setDate", (url).substring(17,27));  
+	}
+
+	
 });
 </script>
 {% endblock %}

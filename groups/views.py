@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
 import re
 import datetime
-from django.utils.timezone import make_aware, get_default_timezone
+from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 
@@ -282,3 +282,28 @@ def calendarDate(request, slug=None):
 
     
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
+
+def getReunions(request):
+#    if request.is_ajax():
+    if request.method == 'GET':
+        date = str(request.GET['date'])
+        gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
+        is_member = True #rel_user_group.objects.filter(id_group=gr, id_user=request.user)
+        if is_member:
+#                my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
+#            
+            dateslug_min = str(make_aware(datetime.datetime.strptime(date+" 00:00:00",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
+            dateslug_max = str(make_aware(datetime.datetime.strptime(date+" 23:59:59",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
+            my_reu_day = reunions.objects.filter(id_group__in=gr,date_reunion__range = [dateslug_min,dateslug_max]) #reuniones para un dia
+#            reu_json = json.JSONEncoder(my_reu_day)
+            i = 0   
+            json_array = {}
+            for reunion in my_reu_day:
+                json_array[i] = {"group_name": reunion.id_group.name, "date":(datetime.datetime.strftime( make_naive(reunion.date_reunion,get_default_timezone()), "%I:%M %p"))}
+                i= i+1
+            response = json_array   #str(reu_json)    #{"reunions_day": "si entra: "+date+" "+str(reu_json)}  {'0': 'HOLAZERO','1':"HOLADOS"}
+        else:
+            return HttpResponseRedirect('/reunions/#error-view-group')
+#    else:
+#        response = "Error Calendar"
+    return HttpResponse(json.dumps(response), mimetype="application/json")

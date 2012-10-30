@@ -7,6 +7,7 @@ groups_urls = patterns('',
     (r'^calendar', 'groups.views.calendar'),
     (r'^getMembers$', 'groups.views.getMembers'),
     (r'^setInvitation$', 'groups.views.newInvitation'),
+    (r'^getReunions$', 'groups.views.getReunions'),
     (r'^(?P<slug>[-\w]+)', 'groups.views.showGroup'),
     (r'^$', 'groups.views.groupsList'),
     
