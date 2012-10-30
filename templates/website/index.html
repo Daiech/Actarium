@@ -187,22 +187,34 @@
                     "Nombre Grupo"+
                     "</a>"+
                     "</li>")
-                $(element).parent().parent().empty().html(
-                "Aceptaste"
-            )
+                $(element).parent().parent().slideUp(900,function(){
+                        $(this).empty().html(
+                        "Aceptaste la invitaci&oacute;n para unirte al grupo"+
+                            " <a href='#'>Grupo</a>"+
+                            "<hr>"
+                    ).fadeIn()
+                    }
+                )
                 setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
             }
             else{
-                var actual = parseInt($("#inv-count").text())
-                actual--
-                $(element).parent().parent().empty().html(
-                "Cancelaste"+
-                    "<hr>"
-            )
+                
+                $(element).parent().parent().slideUp(900,function(){
+                    $(this).empty().html(
+                    "Cancelaste la invitaci&oacute;n para unirte al grupo NOMBRE GRUPO."+
+                        "<br />"+
+                        "Si lo hiciste por error comunicate con el administrador del grupo para"+
+                        " obtener una nueva invitaci&oacute;n"+
+
+                        "<hr>"
+                ).fadeIn()
+                })
+                var actual2 = parseInt($("#inv-count").text())
+                actual2--
+                 $("#inv-count").text(""+actual2)
                 setAlert("invitation","No Aceptar la invitacion "+accept.substr(1))
             }
-        }
-    )
+        })
     }
     
     $(".accept-inv").on("click",function(e){
@@ -210,42 +222,14 @@
         var accept = $(this).attr("data-invitation")
         if(accept.substring(0,1)=="n"){
             if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
-                acceptInvitation( $(this),accept)
-                $(this).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Cancelaste la invitaci&oacute;n para unirte al grupo NOMBRE GRUPO."+
-                        "<br />"+
-                        "Si lo hiciste por error comunicate con el administrador del grupo para"+
-                        " obtener una nueva invitaci&oacute;n"+
-                
-                        "<hr>"
-                ).fadeIn()
-                })
+                acceptInvitation($(this), accept)
+               
             }
         }else{
-            acceptInvitation( $(this),accept)
-            $(this).parent().parent().slideUp(900,function(){
-                $(this).empty().html(
-                "Aceptaste la invitaci&oacute;n para unirte al grupo"+
-                    " <a href='#'>Grupo</a>"+
-                    "<hr>"
-            ).fadeIn()
-            }
-        )
+            acceptInvitation($(this), accept)
         }
         
     })
-    $(".restar").on("click",function(){
-        var actual = parseInt($("#inv-count").text())
-        actual--
-        $("#inv-count").text(""+actual)
-        $("#group-list").append(
-        "<li class='img-rounded'>"+
-            "<a href='/groups/'>"+
-            "<img src='/static/img/org.png' alt=''/>"+
-            "Nombre Grupo"+
-            "</a>"+
-            "</li>")
-    })
+    
 </script>
 {% endblock %}
