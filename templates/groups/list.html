@@ -3,7 +3,12 @@
 
 {%block body%}
 <article>
-    <h2>Tus Grupos</h2>
+    <div class="row-fluid">
+        <h2 class="span10">Tus Grupos</h2>
+        <div class="btnSup">
+            <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
+        </div>
+    </div>
     <hr>
     <section class="row-fluid">
         <ul class="nav onOver span12">
@@ -16,7 +21,7 @@
                         <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
                         {{group.name}}
 
-                        <span>{{group.description}}</span>
+                        <span class="colorText"> - {{group.description}}</span>
                         <div class="pull-right button">
                             <button data-action="editar" class=""><i class="icon-pencil"></i></button>
                             <button data-action="eliminar" class=""><i class="icon-remove"></i></button>
@@ -30,13 +35,15 @@
             {% endfor %}
         </ul>
     </section>
-    <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
 
 </article>
 {%endblock%}
 
 {%block style%}
 <style>
+    .btnSup{
+        margin-top: 10px;
+    }
     section > ul li a{
         display: block;
     }
@@ -50,6 +57,9 @@
         margin-top:10px;
         margin-right:10px;
 
+    }
+    .colorText{
+        color:#555;
     }
 </style>
 {% endblock %}
