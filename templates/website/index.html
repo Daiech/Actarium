@@ -29,9 +29,11 @@
                                 <span class="notification-text alpha60">
                                     <strong>{{invitation.id_user_from.first_name}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
                                     <br />
-                                    en <time> {{invitation.date_invited|date:"F d Y"}}</time>
+                                    <time>{{invitation.date_invited|date:"F d Y"}}</time>
                                 </span>
-                                <a href="#" class="btn btn-small btn-info">Aceptar</a> <a href="#" class="btn btn-small">Cancelar</a>
+                                <a href="#" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">Aceptar</a>
+                                <a href="#" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">Cancelar</a>
+                                <div class="pull-right load"></div>
                                 <hr>
 
                             </li>
@@ -159,6 +161,26 @@
     //$("#menu-account").addClass("active")
     $(".collapse").collapse({
         //toggle: false
+    })
+    $(".accept-inv").on("click",function(e){
+        e.preventDefault();
+        var accept = $(this).attr("data-invitation")
+        sendAjax(
+            "/groups/acceptInvitation",
+            {"i_id":accept},
+            $(this).find("div.load"),
+            function(data){
+                //callback
+                setAlert("invitations","invitacion enviada")
+                if (data){
+                    setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
+                }
+                else{
+                    setAlert("invitation","No Aceptar la invitacion "+accept.substr(1))
+                }
+            }
+            )
+        }
     })
 </script>
 {% endblock %}
