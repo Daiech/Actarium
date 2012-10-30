@@ -15,6 +15,7 @@ from django.utils.timezone import make_aware, get_default_timezone
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 
+
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
@@ -69,7 +70,7 @@ def showGroup(request, slug):
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
-        members_pend = invitations.objects.filter(id_group=q.id)
+        members_pend = invitations.objects.filter(id_group=q.id, is_active=True)
         minutes_group = minutes.objects.filter(id_group=q.id)
         ctx = {'TITLE': q.name, "group": q, "members": members, "minutes": minutes_group, "members_pend": members_pend}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
@@ -143,6 +144,16 @@ def sendInvitationUser(email, user, group):
         return False
 
 
+def isMemberOfGroup(id_user, id_group):
+    try:
+        is_member = rel_user_group.objects.filter(id_user=id_user, id_group=id_group)
+        if is_member:
+            return True
+    except User.DoesNotExist, e:
+        print e
+        return False
+
+
 def isMemberOfGroupByEmail(email, id_group):
     if validateEmail(email):
         try:
@@ -151,13 +162,7 @@ def isMemberOfGroupByEmail(email, id_group):
             print e
             return False
         if ans:
-            try:
-                is_member = rel_user_group.objects.filter(id_user=ans, id_group=id_group)
-                if is_member:
-                    return True
-            except User.DoesNotExist, e:
-                print e
-                return False
+            return isMemberOfGroup(ans, id_group)
     else:
         return False
 
@@ -167,7 +172,13 @@ def isMemberOfGroupByEmail(email, id_group):
 def newInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
-            q = groups.objects.get(pk=request.GET['pk'])  # try
+            try:
+                q = groups.objects.get(pk=request.GET['pk'])
+                if not isMemberOfGroup(request.user, q):
+                    return HttpResponse(q)
+            except groups.DoesNotExist:
+                q = False
+                return HttpResponse(q)
             mail = str(request.GET['search'])
             if isMemberOfGroupByEmail(mail, q):
                 invited = False
@@ -180,6 +191,43 @@ def newInvitation(request):
                     invited = False
                     message = "El usuario tiene la invitacion pendiente"
             response = {"invited": invited, "message": message}
+    else:
+        response = "Error invitacion"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def acceptInvitation(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                if request.GET['i_id'][0] == 's':
+                    accept = True
+                else:
+                    if request.GET['i_id'][0] == 'n':
+                        accept = False
+                iid = request.GET['i_id'][1:]
+                try:
+                    inv = invitations.objects.get(id=iid)
+                    is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)
+                except invitations.DoesNotExist:
+                    inv = False
+                if accept and is_member and inv:  # aprobar la invitacion
+                    rel_user_group(id_user=request.user, id_group=inv.id_group).save()
+                    inv.is_active = False
+                    inv.save()
+                    accepted = True
+                    message = "Aceptar la solicitud"
+                else:  # no aprobar la invitacion
+                    if inv and not accept:
+                        inv.is_active = False
+                        inv.save()
+                        accepted = False
+                        message = "NO Aceptar la solicitud"
+                    else:
+                        return HttpResponse(inv)
+            except Exception:
+                return HttpResponse(False)
+            response = {"accepted": accepted, "message": message}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
