@@ -239,6 +239,9 @@ def deleteInvitation(request):
         if request.method == 'GET':
             try:
                 iid = request.GET['id_inv']
+                if iid == "" or iid == None:
+                    print "El identificador es NULO"
+                    return HttpResponse(False)
                 try:
                     inv = invitations.objects.get(id=iid, is_active=True)
                 except invitations.DoesNotExist:
@@ -247,7 +250,7 @@ def deleteInvitation(request):
                     inv.is_active = False
                     inv.save()
                     deleted = True
-                    message = "Solicitud Eliminada"
+                    message = "El usuario ("+inv.email_invited+") ya no podr&aacute;acceder a este grupo"
                 else:  # no aprobar la invitacion
                     return HttpResponse(inv)
             except Exception:

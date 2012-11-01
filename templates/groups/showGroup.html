@@ -101,14 +101,14 @@
             {"id_inv":$(this).attr("data-invitation")},
             "#load-member-actions",
             function(data){
-                if(data){
+                if(data['deleted']){
                     $(elem).parent().slideUp(600, function(){
                         $(this).empty().html("<spam  id='cancel-inv'>Invitaci&oacute;n cancelada</spam>").fadeIn()
                     })
-                    setAlertMessage("Eliminado","Invitaci&oacute;n cancelada.")
+                    setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
                 }
                 else{
-                    setAlertError("Error","No se pudo elimnar el Usuario.")
+                    setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
                 }
             }
         )
@@ -116,11 +116,11 @@
     }
     makeOver()
     function makeOver(){
-    $(".list-member-item").hover(function(){  
-        $(this).find("i.icon-remove").fadeIn(300)  
-    },function(){                      
-        $(this).find("i.icon-remove").fadeOut(300)
-    })
+        $(".list-member-item").hover(function(){  
+            $(this).find("i.icon-remove").fadeIn(300)  
+        },function(){                      
+            $(this).find("i.icon-remove").fadeOut(300)
+        })
     }
     
     
@@ -205,7 +205,7 @@
                                 "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
                                 "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
                                 "</div>"+
-                                '<span class="close-inv" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
+                                '<span class="close-inv" data-invitation="" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
 
                                 "</li>"
                         )
