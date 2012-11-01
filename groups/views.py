@@ -211,6 +211,7 @@ def acceptInvitation(request):
                     is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)
                 except invitations.DoesNotExist:
                     inv = False
+                    is_member = False
                 if accept and is_member and inv:  # aprobar la invitacion
                     rel_user_group(id_user=request.user, id_group=inv.id_group).save()
                     inv.is_active = False
@@ -228,6 +229,30 @@ def acceptInvitation(request):
             except Exception:
                 return HttpResponse(False)
             response = {"accepted": accepted, "message": message}
+    else:
+        response = "Error invitacion"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def deleteInvitation(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                iid = request.GET['id_inv']
+                try:
+                    inv = invitations.objects.get(id=iid, is_active=True)
+                except invitations.DoesNotExist:
+                    inv = False
+                if inv:  # si eliminar la invitacion
+                    inv.is_active = False
+                    inv.save()
+                    deleted = True
+                    message = "Solicitud Eliminada"
+                else:  # no aprobar la invitacion
+                    return HttpResponse(inv)
+            except Exception:
+                return HttpResponse(False)
+            response = {"deleted": deleted, "message": message}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
