@@ -38,26 +38,26 @@
             <h4>Miembros</h4>
             <ul class="nav list-members">
                 {%for member in members%}
-                    <li class="list-member-item">
-                        <div class="">
-                            <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
-                            {{member.id_user.first_name}} {{member.id_user.last_name}}
-                            {%if member.id_user == user%}
-                            (yo)
-                            {%else%}
-                            ({{member.id_user}})
-                            {%endif%}
-                        </div>
-                    </li>
+                <li class="list-member-item">
+                    <div class="">
+                        <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
+                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                        {%if member.id_user == user%}
+                        (yo)
+                        {%else%}
+                        ({{member.id_user}})
+                        {%endif%}
+                    </div>
+                </li>
                 {%endfor%}
                 {%for member in members_pend%}
-                    <li class="list-member-item" ><!--Usuarios pendientes-->
-                        <div class="">
-                            <img style="width:20px" src="{{member.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
-                            <span>{{member.email_invited}}</span> (pendiente)
-                        </div>
-                        <span class="btn-close" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></span>
-                    </li>
+                <li class="list-member-item" ><!--Usuarios pendientes-->
+                    <div class="">
+                        <img style="width:20px" src="{{member.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
+                        <span>{{member.email_invited}}</span> (pendiente)
+                    </div>
+                    <span id="close-inv" class="btn-close" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></span>
+                </li>
                 {%endfor%} 
             </ul>
 
@@ -66,7 +66,7 @@
                     Agregar miembro
                     <span class="caret"></span>
                 </div>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                     <li class="taling">
                         Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
                     </li>
@@ -91,8 +91,20 @@
 {%endblock%}
 {% block js %}
 <script>
+    $("#close-inv").on('click', function(e){
+        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
+            $(this).parent().slideUp(600, function(){
+                $(this).empty().html(
+                "<spam  id='cancel-inv'>Invitación cancelada</spam>"
+                    
+
+            ).fadeIn()
+            })
+    
+    });
+    
     $("#add-member").on('click focus', function(e) {
-        $(this).next(".dropdown-menu").addClass("disblock")
+        $(this).next("#add-member-menu").addClass("disblock")
         $("#newmember").focus()
     });
 
@@ -104,94 +116,94 @@
             p="";
             var user=$("#newmember").val()
             sendAjax(
-                "/groups/getMembers",
-                {search:user},
-                "#load-member",
-                function(data){
-                    console.log(data)
-                    if(data){
-                        if(data["mail_is_valid"]){
-                            if(data["username"]){
-                                user_to_invite = data['mail']+" ("+data['username']+")";
-                                if(user_to_invite.length > 27)
-                                    p="..."
-                                $("#search-result").html(
-                                    "<li class='user-li'>"+
-                                        "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                                            "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                                            user_to_invite.substring(0,27)+p+
-                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                                        "</a>"+
-                                    "</li>"
-                                    )
-                            }
-                            else{
-                                if(data['mail'].length > 27)
-                                    p="..."
-                                $("#search-result").html(
-                                    "<li class='user-li'>"+
-                                        "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                                            "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-                                            data['mail'].substring(0,27)+p+
-                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                                        "</a>"+
-                                    "</li>"
-                                )
-                            }
-
+            "/groups/getMembers",
+            {search:user},
+            "#load-member",
+            function(data){
+                console.log(data)
+                if(data){
+                    if(data["mail_is_valid"]){
+                        if(data["username"]){
+                            user_to_invite = data['mail']+" ("+data['username']+")";
+                            if(user_to_invite.length > 27)
+                                p="..."
+                            $("#search-result").html(
+                            "<li class='user-li'>"+
+                                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+                                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                                user_to_invite.substring(0,27)+p+
+                                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                                "</a>"+
+                                "</li>"
+                        )
                         }
                         else{
-                            //no result
+                            if(data['mail'].length > 27)
+                                p="..."
                             $("#search-result").html(
-                                "<li style='list-style:none'>"+
-                                    "<a href='#'>"+
-                                        ("No hay resultados").substring(0,27)+
-                                    "</a>"+
+                            "<li class='user-li'>"+
+                                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
+                                "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                                data['mail'].substring(0,27)+p+
+                                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                                "</a>"+
                                 "</li>"
-                            )
-                        }
-                    }else{
-                        //error en el server
-                    }
-                    $(".user-li > a").on("click",function(e){
-                        e.preventDefault();
-                        var mail = $(this).attr("data-email")
-                        var uname = $(this).attr("data-username")
-                        var group_id = $("#group_id").val()
-                        var group_name = $("#group_name").val()
-                        sendAjax(
-                            "/groups/setInvitation",
-                            {"pk":group_id, "search": mail},
-                            "#load-member",
-                            function(data){
-                                if(data['invited']){//USUARIO INVITADO
-                                    setAlertMessage("Invitado",data['message']+" al grupo "+group_name)
-                                    $(".list-members").append(
-                                        "<li style='list-style:none'>"+
-                                            "<i class='icon-user'></i> "+
-                                            "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
-                                        "</li>"
-                                    )
-                                    $("#newmember").val("")
-                                }else{//EL USUARIO YA ESTA INVITADO
-                                    if(data["message"]){
-                                        setAlertError("Informaci&oacute;n","("+mail+") "+data['message'])
-                                    }
-                                    else{
-                                        setAlertMessage("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-                                    }
-                                }
-                            }
                         )
-                    })
-                    $(".user-li").hover(function(){
-                            $(this).find("i").removeClass("hidden")
-                        },
-                        function(){
-                            $(this).find("i").addClass("hidden")
-                    })
+                        }
+
+                    }
+                    else{
+                        //no result
+                        $("#search-result").html(
+                        "<li style='list-style:none'>"+
+                            "<a href='#'>"+
+                            ("No hay resultados").substring(0,27)+
+                            "</a>"+
+                            "</li>"
+                    )
+                    }
+                }else{
+                    //error en el server
                 }
-            )//sendAjax
+                $(".user-li > a").on("click",function(e){
+                    e.preventDefault();
+                    var mail = $(this).attr("data-email")
+                    var uname = $(this).attr("data-username")
+                    var group_id = $("#group_id").val()
+                    var group_name = $("#group_name").val()
+                    sendAjax(
+                    "/groups/setInvitation",
+                    {"pk":group_id, "search": mail},
+                    "#load-member",
+                    function(data){
+                        if(data['invited']){//USUARIO INVITADO
+                            setAlertMessage("Invitado",data['message']+" al grupo "+group_name)
+                            $(".list-members").append(
+                            "<li style='list-style:none'>"+
+                                "<i class='icon-user'></i> "+
+                                "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
+                                "</li>"
+                        )
+                            $("#newmember").val("")
+                        }else{//EL USUARIO YA ESTA INVITADO
+                            if(data["message"]){
+                                setAlertError("Informaci&oacute;n","("+mail+") "+data['message'])
+                            }
+                            else{
+                                setAlertMessage("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+                            }
+                        }
+                    }
+                )
+                })
+                $(".user-li").hover(function(){
+                    $(this).find("i").removeClass("hidden")
+                },
+                function(){
+                    $(this).find("i").addClass("hidden")
+                })
+            }
+        )//sendAjax
         }
     });
 </script>
@@ -219,7 +231,7 @@
         right: 5px;
         position: absolute;
     }
-    ul.dropdown-menu li{
+    ul#add-member-menu li{
         margin-bottom: 10px;
     }
     .icon-remove{
@@ -266,12 +278,12 @@
     #newmember{
         margin: 3px 10px;
     }
-    .dropdown.dropdown-menu{
+    .dropdown#add-member-menu{
         text-decoration: none;
         margin: 5px 20px;
 
     }
-    .dropdown-menu{
+    #add-member-menu{
         width:280px;
     }
     .dropdownmenu  * li{
@@ -286,6 +298,10 @@
     }
     div > section ul li{
         list-style: none;
+    }
+    #cancel-inv{
+        font-style: italic;
+        color: #dadada;
     }
 </style>
 {%endblock%}
