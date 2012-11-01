@@ -35,7 +35,7 @@
             </ul>
         </section>
         <section class="span5 fix_btn">
-            <h4>Miembros</h4>
+            <h4>Miembros <span id="load-member-actions"></span></h4> 
             <ul class="nav list-members">
                 {%for member in members%}
                 <li class="list-member-item">
@@ -56,7 +56,7 @@
                         <img style="width:20px" src="{{member.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
                         <span>{{member.email_invited}}</span> (pendiente)
                     </div>
-                    <span id="close-inv" class="btn-close" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></span>
+                    <span class="close-inv" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
                 </li>
                 {%endfor%} 
             </ul>
@@ -91,17 +91,36 @@
 {%endblock%}
 {% block js %}
 <script>
-    $("#close-inv").on('click', function(e){
+    $(".close-inv").on('click', function(e){
         if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-            $(this).parent().slideUp(600, function(){
-                $(this).empty().html(
-                "<spam  id='cancel-inv'>Invitación cancelada</spam>"
-                    
+        {
+            sendAjax(
+                "/groups/deleteInvitation",
+                {"id_inv":$(this).attr("data-invitation")},
+                "#load-member-actions",
+                function(data){
+                    if(data){
+                        $(this).parent().slideUp(600, function(){
+                            $(this).empty().html("<spam  id='cancel-inv'>Invitación cancelada</spam>").fadeIn()
+                        })
+                        setAlertMessage("Eliminado","Usuario eliminado")
+                    }
+                    else{
+                        setAlertError("Error","No se pudo elimnar el Usuario")
+                    }
+                }
 
-            ).fadeIn()
-            })
-    
+            )
+        }
     });
+    
+    $(".list-member-item").hover(function(){  
+        $(this).find("i.icon-remove").fadeIn(300)  
+    },function(){                      
+        $(this).find("i.icon-remove").fadeOut(300)
+    })
+
+    
     
     $("#add-member").on('click focus', function(e) {
         $(this).next("#add-member-menu").addClass("disblock")
