@@ -91,35 +91,37 @@
 {%endblock%}
 {% block js %}
 <script>
-    $(".close-inv").on('click', function(e){
+    $(".close-inv").on('click', closeInvitation);
+    function closeInvitation(e){
         if(confirm("Realmente desea eliminar la invitación a este Usuario"))
         {
+            elem = $(this)
             sendAjax(
-                "/groups/deleteInvitation",
-                {"id_inv":$(this).attr("data-invitation")},
-                "#load-member-actions",
-                function(data){
-                    if(data){
-                        $(this).parent().slideUp(600, function(){
-                            $(this).empty().html("<spam  id='cancel-inv'>Invitación cancelada</spam>").fadeIn()
-                        })
-                        setAlertMessage("Eliminado","Usuario eliminado")
-                    }
-                    else{
-                        setAlertError("Error","No se pudo elimnar el Usuario")
-                    }
+            "/groups/deleteInvitation",
+            {"id_inv":$(this).attr("data-invitation")},
+            "#load-member-actions",
+            function(data){
+                if(data){
+                    $(elem).parent().slideUp(600, function(){
+                        $(this).empty().html("<spam  id='cancel-inv'>Invitaci&oacute;n cancelada</spam>").fadeIn()
+                    })
+                    setAlertMessage("Eliminado","Invitaci&oacute;n cancelada.")
                 }
-
-            )
+                else{
+                    setAlertError("Error","No se pudo elimnar el Usuario.")
+                }
+            }
+        )
         }
-    });
-    
+    }
+    makeOver()
+    function makeOver(){
     $(".list-member-item").hover(function(){  
         $(this).find("i.icon-remove").fadeIn(300)  
     },function(){                      
         $(this).find("i.icon-remove").fadeOut(300)
     })
-
+    }
     
     
     $("#add-member").on('click focus', function(e) {
@@ -198,9 +200,13 @@
                         if(data['invited']){//USUARIO INVITADO
                             setAlertMessage("Invitado",data['message']+" al grupo "+group_name)
                             $(".list-members").append(
-                            "<li style='list-style:none'>"+
-                                "<i class='icon-user'></i> "+
+                            "<li class='list-member-item' style='list-style:none'>"+
+                                "<div>"+
+                                "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
                                 "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
+                                "</div>"+
+                                '<span class="close-inv" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
+
                                 "</li>"
                         )
                             $("#newmember").val("")
@@ -212,7 +218,9 @@
                                 setAlertMessage("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
                             }
                         }
-                    }
+                        makeOver()
+                        $(".close-inv").on('click', closeInvitation)
+                }
                 )
                 })
                 $(".user-li").hover(function(){
@@ -320,7 +328,7 @@
     }
     #cancel-inv{
         font-style: italic;
-        color: #dadada;
+        color: gray;
     }
 </style>
 {%endblock%}
