@@ -7,8 +7,10 @@ register = template.Library()
 #@register.inclusion_tag('templatetags/gravatar.html')
 #@register.filter(name='showgravatar')
 
+
 def showgravatar(email, size):
-    default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
+    #default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
+    default = "actarium.daiech.com/static/img/user_default.png"
 
     url = "http://www.gravatar.com/avatar.php?"
     url += urllib.urlencode({

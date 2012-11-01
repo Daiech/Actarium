@@ -1,6 +1,6 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Actarium - {{TITLE}}{% endblock %}
-
+{% load gravatartag %}
 {%block body%}
 <article>
     <header >
@@ -38,18 +38,25 @@
             <h4>Miembros</h4>
             <ul class="nav list-members">
                 {%for member in members%}
-                    <li>
-                        <i class="icon-user"></i>
-                        {{member.id_user.first_name}} {{member.id_user.last_name}}
-                        {%if member.id_user == user%}
-                        (yo)
-                        {%endif%}
+                    <li class="list-member-item">
+                        <div class="">
+                            <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
+                            {{member.id_user.first_name}} {{member.id_user.last_name}}
+                            {%if member.id_user == user%}
+                            (yo)
+                            {%else%}
+                            ({{member.id_user}})
+                            {%endif%}
+                        </div>
                     </li>
                 {%endfor%}
                 {%for member in members_pend%}
-                    <li><!--Usuarios pendientes-->
-                        <i class="icon-user"></i>
-                        <span>{{member.email_invited}}</span> (pendiente)
+                    <li class="list-member-item" ><!--Usuarios pendientes-->
+                        <div class="">
+                            <img style="width:20px" src="{{member.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
+                            <span>{{member.email_invited}}</span> (pendiente)
+                        </div>
+                        <span class="btn-close" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></span>
                     </li>
                 {%endfor%} 
             </ul>
@@ -191,6 +198,27 @@
 {% endblock %}
 {%block style%}
 <style>
+    .list-member-item{
+        border: solid thin #eee;
+        border-bottom: solid thin #dadada;
+        border-radius: 3px;
+        padding: 2px;
+        margin: 1px 0;
+        position: relative;
+    }
+    .list-member-item:hover{
+        border: solid thin #dadada;
+    }
+    .list-member-item > div{
+        /*border: solid thin #dadada;*/
+        width: 80%;
+    }
+    .list-member-item > span{
+        cursor: pointer;
+        top: 0;
+        right: 5px;
+        position: absolute;
+    }
     ul.dropdown-menu li{
         margin-bottom: 10px;
     }
