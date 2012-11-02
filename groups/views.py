@@ -141,7 +141,7 @@ def sendInvitationUser(email, user, group):
         else:
             return False
     else:
-        return 0
+        return 0  # Email Failed
 
 
 def isMemberOfGroup(id_user, id_group):
@@ -185,18 +185,21 @@ def newInvitation(request):
                 message = "El usuario ya es miembro del grupo"
             else:
                 inv = sendInvitationUser(mail, request.user, q)
-                if inv and inv != 0:
+                if inv and not inv is 0:
                     invited = True
+                    iid = str(inv.id)
                     message = "Se ha enviado la invitación a " + str(mail) + " al grupo " + str(q.name)
                 else:
+                    iid = False
                     invited = False
-                    if not inv and inv == 0:
-                        invited = False
+                    if not inv and not inv is 0:
                         message = "El usuario tiene la invitación pendiente"
                     else:
                         if inv == 0:
                             message = "El correo electronico no es valido"
-            response = {"invited": invited, "message": message, "email": mail, "iid": str(inv.id)}
+                        else:
+                            message = "Error desconocido. Lo sentimos"
+            response = {"invited": invited, "message": message, "email": mail, "iid": iid}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
