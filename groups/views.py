@@ -183,6 +183,7 @@ def newInvitation(request):
             if isMemberOfGroupByEmail(mail, q):
                 invited = False
                 message = "El usuario ya es miembro del grupo"
+                iid = False
             else:
                 inv = sendInvitationUser(mail, request.user, q)
                 if inv and not inv is 0:

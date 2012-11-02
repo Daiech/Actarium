@@ -91,152 +91,150 @@
 {%endblock%}
 {% block js %}
 <script>
-$(".close-inv").on('click', closeInvitation);
-makeOver()
-function closeInvitation(e){
-    if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-    {
-        elem = $(this)
-        sendAjax(
-            "/groups/deleteInvitation",
-            {"id_inv":$(this).attr("data-invitation")},
-            "#load-member-actions",
-            function(data){
-                if(data['deleted']){
-                    $(elem).parent().slideUp(600, function(){
-                        $(this).empty().html("<spam  id='cancel-inv'>Invitaci&oacute;n cancelada</spam>").fadeIn()
-                    })
-                    setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
-                }
-                else{
-                    setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
-                }
-            }
-            )
+    band=0;//bandera para agragar una sola vez el evento sendInvitationOnClick()
+    showIconCloseOnHover()
+    function showIconAddMemberOnHover(){
+        // mostrar flecha sobre usuario
+        $(".user-li").hover(
+            function(){
+                $(this).find("i").removeClass("hidden")
+            },
+            function(){
+                $(this).find("i").addClass("hidden")
+        })
     }
-}
-function makeOver(){
-    $(".list-member-item").hover(function(){  
-        $(this).find("i.icon-remove").fadeIn(300)  
-    },function(){                      
-        $(this).find("i.icon-remove").fadeOut(300)
-    })
-}
-function setInvitation(data){
-    if(data['invited']){    //USUARIO INVITADO
-        setAlertMessage("Invitado",data['message'])
-        $(".list-members").append(
-            "<li class='list-member-item' style='list-style:none'>"+
-                "<div>"+
-                    "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
-                    "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
-                "</div>"+
-                '<span class="close-inv" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
-            "</li>"
-            )
-        $("#newmember").val("")
-    }else{//EL USUARIO YA ESTA INVITADO
-        if(data["message"]){
-            setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
-        }
-        else{
-            //si no hay mensaje, deberia gestionarse los tipos de errores
-            setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-        }
-    }
-    makeOver()
-    $(".close-inv").on('click', closeInvitation)
-}
-function newMember(data){
-    if(data){
-        if(data["mail_is_valid"]){
-            if(data["username"]){
-                user_to_invite = data['mail']+" ("+data['username']+")";
-                if(user_to_invite.length > 27)
-                    p="..."
-                $("#search-result").html(
-                    "<li class='user-li'>"+
-                    "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                    "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                    user_to_invite.substring(0,27)+p+
-                    '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                    "</a>"+
-                    "</li>"
-                    )
-            }
-            else{
-                if(data['mail'].length > 27)
-                    p="..."
-                $("#search-result").html(
-                    "<li class='user-li'>"+
-                    "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                    "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-                    data['mail'].substring(0,27)+p+
-                    '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                    "</a>"+
-                    "</li>"
-                    )
-            }
-
-        }
-        else{
-            //no result
+    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
+        if(data["username"]){//es usuario de la base de datos
+            user_to_invite = data['mail']+" ("+data['username']+")";
+            if(user_to_invite.length > 27)
+                p="..."
             $("#search-result").html(
-                "<li style='list-style:none'>"+
-                "<a href='#'>"+
-                ("No hay resultados").substring(0,27)+
+                "<li class='user-li'>"+
+                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                user_to_invite.substring(0,27)+p+
+                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
                 "</a>"+
                 "</li>"
                 )
         }
-    }else{
-        //error en el server
+        else{//No es usuario de la base de datos
+            if(data['mail'].length > 27)
+                p="..."
+            $("#search-result").html(
+                "<li class='user-li'>"+
+                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
+                "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                data['mail'].substring(0,27)+p+
+                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                "</a>"+
+                "</li>"
+                )
+        }
+        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
     }
-    $(".user-li > a").on("click",function(e){
-        e.preventDefault();
-        var mail = $(this).attr("data-email")
-        var uname = $(this).attr("data-username")
-        var group_id = $("#group_id").val()
-        var group_name = $("#group_name").val()
-        sendAjax(
-            "/groups/setInvitation",
-            {"pk":group_id, "search": mail},
-            "#load-member",
-            function(data){
-                setInvitation(data)
+    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
+        if(data['invited']){    //USUARIO INVITADO
+            setAlertMessage("Invitado",data['message'])
+            $(".list-members").append(
+                "<li class='list-member-item' style='list-style:none'>"+
+                    "<div>"+
+                        "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
+                        "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
+                    "</div>"+
+                    '<span class="close-inv" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
+                "</li>"
+                )
+            $("#newmember").val("")
+        }else{//EL USUARIO YA ESTA INVITADO
+            if(data["message"]){
+                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
             }
-        )
-    })
-    $(".user-li").hover(function(){
-            $(this).find("i").removeClass("hidden")
-        },
-        function(){
-            $(this).find("i").addClass("hidden")
+            else{
+                //si no hay mensaje, deberia gestionarse los tipos de errores
+                setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+            }
+        }
+        showIconCloseOnHover()
+        $(".close-inv").on('click', deleteInvitation)
+    }
+    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
+        if (band===0){
+            band=1;
+            $(".user-li > a").on("click",function(e){
+                e.preventDefault();
+                var mail = $(this).attr("data-email");
+                var uname = $(this).attr("data-username");
+                var group_id = $("#group_id").val();
+                var group_name = $("#group_name").val();
+                sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
+                         "#load-member",invitationResult);
+            })
+        }
+    }
+    function listMembers(data){//lista los usuarios disponibles a invitar
+        if(data){
+            p="";
+            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
+                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
+                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
+            }
+            else{//el correo es invalido o no hay resultados de usuarios existentes
+                $("#search-result").html("<li style='list-style:none'>"+
+                                            "<a href='#'>"+("No hay resultados").substring(0,27)+
+                                            "</a>"+
+                                        "</li>")
+            }
+        }else{//error en el server
+            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
+        }
+    }
+    function searchMember(e){//INVITACIONES MAIN 
+        if(e.keyCode==13){
+            var user=$("#newmember").val()
+            sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
+        }
+    }
+    function deleteInvitation(e){
+        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
+        {
+            elem = $(this)
+            sendAjax(
+                "/groups/deleteInvitation",
+                {"id_inv":$(this).attr("data-invitation")},
+                "#load-member-actions",
+                function(data){
+                    if(data['deleted']){
+                        $(elem).parent().slideUp(600, function(){
+                            $(this).empty().html("<div class='cancel-inv'>Invitaci&oacute;n cancelada</div>").fadeIn()
+                        })
+                        setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
+                    }
+                    else{
+                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
+                    }
+                }
+                )
+        }
+    }
+    function showIconCloseOnHover(){
+        $(".list-member-item").hover(function(){  
+            $(this).find("i.icon-remove").show(10)  
+        },function(){                      
+            $(this).find("i.icon-remove").hide(30)
         })
-}
-$("#add-member").on('click focus', function(e) {
-    $(this).next("#add-member-menu").addClass("disblock")
-    $("#newmember").focus()
-});
-
-$("#close-add-member").on("click",function(e){
-    $(this).parent().parent().removeClass("disblock")
-});
-
-$("#newmember").on("keyup",function(e){
-    if(e.keyCode==13){
-        p="";
-        var user=$("#newmember").val()
-        sendAjax(
-            "/groups/getMembers",
-            {search:user},
-            "#load-member",
-            function(data){
-                newMember(data)
-            } 
-        )//sendAjax
-}
-});
+    }
+    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
+    $(".close-inv").on('click', deleteInvitation);//Elimina invitaciones pendientes
+    $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
+        //give the focus to the input to search members
+        $(this).next("#add-member-menu").addClass("disblock")
+        $("#newmember").focus()
+    });
+    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
+        //Close the dropdown menu to add members
+       $(this).parent().parent().removeClass("disblock")
+    });
 </script>
 {% endblock %}
 {%block style%}
@@ -330,7 +328,7 @@ div > section ul{
 div > section ul li{
     list-style: none;
 }
-#cancel-inv{
+.cancel-inv{
     font-style: italic;
     color: gray;
 }
