@@ -137,11 +137,11 @@ def sendInvitationUser(email, user, group):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
             #  send email here
-            return True
+            return invitation
         else:
             return False
     else:
-        return False
+        return 0
 
 
 def isMemberOfGroup(id_user, id_group):
@@ -184,13 +184,19 @@ def newInvitation(request):
                 invited = False
                 message = "El usuario ya es miembro del grupo"
             else:
-                if sendInvitationUser(mail, request.user, q):
+                inv = sendInvitationUser(mail, request.user, q)
+                if inv and inv != 0:
                     invited = True
-                    message = "Se ha enviado la invitación a " + str(mail) + " "
+                    message = "Se ha enviado la invitación a " + str(mail) + " al grupo " + str(q.name)
                 else:
                     invited = False
-                    message = "El usuario tiene la invitacion pendiente"
-            response = {"invited": invited, "message": message}
+                    if not inv and inv == 0:
+                        invited = False
+                        message = "El usuario tiene la invitación pendiente"
+                    else:
+                        if inv == 0:
+                            message = "El correo electronico no es valido"
+            response = {"invited": invited, "message": message, "email": mail, "iid": str(inv.id)}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -205,6 +211,8 @@ def acceptInvitation(request):
                 else:
                     if request.GET['i_id'][0] == 'n':
                         accept = False
+                    else:
+                        return HttpResponse(False)  # error 1, peticion sin controlador s o n
                 iid = request.GET['i_id'][1:]
                 try:
                     inv = invitations.objects.get(id=iid)
@@ -226,11 +234,11 @@ def acceptInvitation(request):
                         message = "NO Aceptar la solicitud"
                     else:
                         return HttpResponse(inv)
+                response = {"accepted": accepted, "message": message, "inv": inv}
             except Exception:
                 return HttpResponse(False)
-            response = {"accepted": accepted, "message": message}
     else:
-        response = "Error invitacion"
+        response = "Error invitacion is not AJAX"
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
@@ -240,7 +248,6 @@ def deleteInvitation(request):
             try:
                 iid = request.GET['id_inv']
                 if iid == "" or iid == None:
-                    print "El identificador es NULO"
                     return HttpResponse(False)
                 try:
                     inv = invitations.objects.get(id=iid, is_active=True)
@@ -250,12 +257,12 @@ def deleteInvitation(request):
                     inv.is_active = False
                     inv.save()
                     deleted = True
-                    message = "El usuario ("+inv.email_invited+") ya no podr&aacute;acceder a este grupo"
-                else:  # no aprobar la invitacion
+                    message = "El usuario (" + inv.email_invited + ") ya no podr&aacute; acceder a este grupo"
+                    response = {"deleted": deleted, "message": message}
+                else:  # no eliminar la invitacion
                     return HttpResponse(inv)
             except Exception:
                 return HttpResponse(False)
-            response = {"deleted": deleted, "message": message}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")

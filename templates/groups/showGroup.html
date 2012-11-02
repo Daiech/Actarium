@@ -91,12 +91,13 @@
 {%endblock%}
 {% block js %}
 <script>
-    $(".close-inv").on('click', closeInvitation);
-    function closeInvitation(e){
-        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-        {
-            elem = $(this)
-            sendAjax(
+$(".close-inv").on('click', closeInvitation);
+makeOver()
+function closeInvitation(e){
+    if(confirm("Realmente desea eliminar la invitación a este Usuario"))
+    {
+        elem = $(this)
+        sendAjax(
             "/groups/deleteInvitation",
             {"id_inv":$(this).attr("data-invitation")},
             "#load-member-actions",
@@ -111,224 +112,227 @@
                     setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
                 }
             }
-        )
+            )
+    }
+}
+function makeOver(){
+    $(".list-member-item").hover(function(){  
+        $(this).find("i.icon-remove").fadeIn(300)  
+    },function(){                      
+        $(this).find("i.icon-remove").fadeOut(300)
+    })
+}
+function setInvitation(data){
+    if(data['invited']){    //USUARIO INVITADO
+        setAlertMessage("Invitado",data['message'])
+        $(".list-members").append(
+            "<li class='list-member-item' style='list-style:none'>"+
+                "<div>"+
+                    "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
+                    "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
+                "</div>"+
+                '<span class="close-inv" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
+            "</li>"
+            )
+        $("#newmember").val("")
+    }else{//EL USUARIO YA ESTA INVITADO
+        if(data["message"]){
+            setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
+        }
+        else{
+            //si no hay mensaje, deberia gestionarse los tipos de errores
+            setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
         }
     }
     makeOver()
-    function makeOver(){
-        $(".list-member-item").hover(function(){  
-            $(this).find("i.icon-remove").fadeIn(300)  
-        },function(){                      
-            $(this).find("i.icon-remove").fadeOut(300)
-        })
-    }
-    
-    
-    $("#add-member").on('click focus', function(e) {
-        $(this).next("#add-member-menu").addClass("disblock")
-        $("#newmember").focus()
-    });
+    $(".close-inv").on('click', closeInvitation)
+}
+function newMember(data){
+    if(data){
+        if(data["mail_is_valid"]){
+            if(data["username"]){
+                user_to_invite = data['mail']+" ("+data['username']+")";
+                if(user_to_invite.length > 27)
+                    p="..."
+                $("#search-result").html(
+                    "<li class='user-li'>"+
+                    "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+                    "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                    user_to_invite.substring(0,27)+p+
+                    '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                    "</a>"+
+                    "</li>"
+                    )
+            }
+            else{
+                if(data['mail'].length > 27)
+                    p="..."
+                $("#search-result").html(
+                    "<li class='user-li'>"+
+                    "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
+                    "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                    data['mail'].substring(0,27)+p+
+                    '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                    "</a>"+
+                    "</li>"
+                    )
+            }
 
-    $("#close-add-member").on("click",function(e){
-        $(this).parent().parent().removeClass("disblock")
-    });
-    $("#newmember").on("keyup",function(e){
-        if(e.keyCode==13){
-            p="";
-            var user=$("#newmember").val()
-            sendAjax(
+        }
+        else{
+            //no result
+            $("#search-result").html(
+                "<li style='list-style:none'>"+
+                "<a href='#'>"+
+                ("No hay resultados").substring(0,27)+
+                "</a>"+
+                "</li>"
+                )
+        }
+    }else{
+        //error en el server
+    }
+    $(".user-li > a").on("click",function(e){
+        e.preventDefault();
+        var mail = $(this).attr("data-email")
+        var uname = $(this).attr("data-username")
+        var group_id = $("#group_id").val()
+        var group_name = $("#group_name").val()
+        sendAjax(
+            "/groups/setInvitation",
+            {"pk":group_id, "search": mail},
+            "#load-member",
+            function(data){
+                setInvitation(data)
+            }
+        )
+    })
+    $(".user-li").hover(function(){
+            $(this).find("i").removeClass("hidden")
+        },
+        function(){
+            $(this).find("i").addClass("hidden")
+        })
+}
+$("#add-member").on('click focus', function(e) {
+    $(this).next("#add-member-menu").addClass("disblock")
+    $("#newmember").focus()
+});
+
+$("#close-add-member").on("click",function(e){
+    $(this).parent().parent().removeClass("disblock")
+});
+
+$("#newmember").on("keyup",function(e){
+    if(e.keyCode==13){
+        p="";
+        var user=$("#newmember").val()
+        sendAjax(
             "/groups/getMembers",
             {search:user},
             "#load-member",
             function(data){
-                console.log(data)
-                if(data){
-                    if(data["mail_is_valid"]){
-                        if(data["username"]){
-                            user_to_invite = data['mail']+" ("+data['username']+")";
-                            if(user_to_invite.length > 27)
-                                p="..."
-                            $("#search-result").html(
-                            "<li class='user-li'>"+
-                                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                                user_to_invite.substring(0,27)+p+
-                                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                                "</a>"+
-                                "</li>"
-                        )
-                        }
-                        else{
-                            if(data['mail'].length > 27)
-                                p="..."
-                            $("#search-result").html(
-                            "<li class='user-li'>"+
-                                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                                "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-                                data['mail'].substring(0,27)+p+
-                                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                                "</a>"+
-                                "</li>"
-                        )
-                        }
-
-                    }
-                    else{
-                        //no result
-                        $("#search-result").html(
-                        "<li style='list-style:none'>"+
-                            "<a href='#'>"+
-                            ("No hay resultados").substring(0,27)+
-                            "</a>"+
-                            "</li>"
-                    )
-                    }
-                }else{
-                    //error en el server
-                }
-                $(".user-li > a").on("click",function(e){
-                    e.preventDefault();
-                    var mail = $(this).attr("data-email")
-                    var uname = $(this).attr("data-username")
-                    var group_id = $("#group_id").val()
-                    var group_name = $("#group_name").val()
-                    sendAjax(
-                    "/groups/setInvitation",
-                    {"pk":group_id, "search": mail},
-                    "#load-member",
-                    function(data){
-                        if(data['invited']){//USUARIO INVITADO
-                            setAlertMessage("Invitado",data['message']+" al grupo "+group_name)
-                            $(".list-members").append(
-                            "<li class='list-member-item' style='list-style:none'>"+
-                                "<div>"+
-                                "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
-                                "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
-                                "</div>"+
-                                '<span class="close-inv" data-invitation="" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
-
-                                "</li>"
-                        )
-                            $("#newmember").val("")
-                        }else{//EL USUARIO YA ESTA INVITADO
-                            if(data["message"]){
-                                setAlertError("Informaci&oacute;n","("+mail+") "+data['message'])
-                            }
-                            else{
-                                setAlertMessage("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-                            }
-                        }
-                        makeOver()
-                        $(".close-inv").on('click', closeInvitation)
-                }
-                )
-                })
-                $(".user-li").hover(function(){
-                    $(this).find("i").removeClass("hidden")
-                },
-                function(){
-                    $(this).find("i").addClass("hidden")
-                })
-            }
+                newMember(data)
+            } 
         )//sendAjax
-        }
-    });
+}
+});
 </script>
 {% endblock %}
 {%block style%}
 <style>
-    .list-member-item{
-        border: solid thin #eee;
-        border-bottom: solid thin #dadada;
-        border-radius: 3px;
-        padding: 2px;
-        margin: 1px 0;
-        position: relative;
-    }
-    .list-member-item:hover{
-        border: solid thin #dadada;
-    }
-    .list-member-item > div{
-        /*border: solid thin #dadada;*/
-        width: 80%;
-    }
-    .list-member-item > span{
-        cursor: pointer;
-        top: 0;
-        right: 5px;
-        position: absolute;
-    }
-    ul#add-member-menu li{
-        margin-bottom: 10px;
-    }
-    .icon-remove{
-        margin: 5px;
-    }
-    ul#search-result{
-        margin-left: 0;
-    }
-    ul#search-result li span{
-        font-size: 13px;
-        margin-left: 13px;
-        color: gray;
-    }
-    .taling{
-        text-align: center;
-    }
-    .list-members span{
-        color: gray;
-    }
-    li a span{
-        color:black;
-    }
-    li p{
-        color:gray;
-        font-size: 12px;
-        line-height:  1;
-    }
-    article{
-        min-height: 500px;
-        overflow: visible;
-        padding-top: 1px;
-    }
-    article header img{
-        margin-top:4px;
-        float:left;
-    }
-    article header h3{
-        margin:0;
-        margin-left:35px;
-    }
-    #add-member{
-        position: static;
-    }
-    #newmember{
-        margin: 3px 10px;
-    }
-    .dropdown#add-member-menu{
-        text-decoration: none;
-        margin: 5px 20px;
+.list-member-item{
+    border: solid thin #eee;
+    border-bottom: solid thin #dadada;
+    border-radius: 3px;
+    padding: 2px;
+    margin: 1px 0;
+    position: relative;
+}
+.list-member-item:hover{
+    border: solid thin #dadada;
+}
+.list-member-item > div{
+    /*border: solid thin #dadada;*/
+    width: 80%;
+}
+.list-member-item > span{
+    cursor: pointer;
+    top: 0;
+    right: 5px;
+    position: absolute;
+}
+ul#add-member-menu li{
+    margin-bottom: 10px;
+}
+.icon-remove{
+    margin: 5px;
+}
+ul#search-result{
+    margin-left: 0;
+}
+ul#search-result li span{
+    font-size: 13px;
+    margin-left: 13px;
+    color: gray;
+}
+.taling{
+    text-align: center;
+}
+.list-members span{
+    color: gray;
+}
+li a span{
+    color:black;
+}
+li p{
+    color:gray;
+    font-size: 12px;
+    line-height:  1;
+}
+article{
+    min-height: 500px;
+    overflow: visible;
+    padding-top: 1px;
+}
+article header img{
+    margin-top:4px;
+    float:left;
+}
+article header h3{
+    margin:0;
+    margin-left:35px;
+}
+#add-member{
+    position: static;
+}
+#newmember{
+    margin: 3px 10px;
+}
+.dropdown#add-member-menu{
+    text-decoration: none;
+    margin: 5px 20px;
 
-    }
-    #add-member-menu{
-        width:280px;
-    }
-    .dropdownmenu  * li{
-        list-style:none;
-        text-decoration: none;
-    }
-    .btnSup{
-        margin-top: 8px;
-    }
-    div > section ul{
-        margin-left:0;
-    }
-    div > section ul li{
-        list-style: none;
-    }
-    #cancel-inv{
-        font-style: italic;
-        color: gray;
-    }
+}
+#add-member-menu{
+    width:280px;
+}
+.dropdownmenu  * li{
+    list-style:none;
+    text-decoration: none;
+}
+.btnSup{
+    margin-top: 8px;
+}
+div > section ul{
+    margin-left:0;
+}
+div > section ul li{
+    list-style: none;
+}
+#cancel-inv{
+    font-style: italic;
+    color: gray;
+}
 </style>
 {%endblock%}
