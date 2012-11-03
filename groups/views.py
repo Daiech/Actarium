@@ -184,15 +184,18 @@ def newInvitation(request):
                 invited = False
                 message = "El usuario ya es miembro del grupo"
                 iid = False
+                gravatar = False
             else:
                 inv = sendInvitationUser(mail, request.user, q)
                 if inv and not inv is 0:
                     invited = True
                     iid = str(inv.id)
+                    gravatar = showgravatar(mail, 30)
                     message = "Se ha enviado la invitación a " + str(mail) + " al grupo " + str(q.name)
                 else:
                     iid = False
                     invited = False
+                    gravatar = False
                     if not inv and not inv is 0:
                         message = "El usuario tiene la invitación pendiente"
                     else:
@@ -200,7 +203,7 @@ def newInvitation(request):
                             message = "El correo electronico no es valido"
                         else:
                             message = "Error desconocido. Lo sentimos"
-            response = {"invited": invited, "message": message, "email": mail, "iid": iid}
+            response = {"invited": invited, "message": message, "email": mail, "iid": iid, "gravatar": gravatar}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -218,6 +221,7 @@ def acceptInvitation(request):
                     else:
                         return HttpResponse(False)  # error 1, peticion sin controlador s o n
                 iid = request.GET['i_id'][1:]
+                print "inv id= %s" % (str(iid))
                 try:
                     inv = invitations.objects.get(id=iid)
                     is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)
@@ -229,17 +233,20 @@ def acceptInvitation(request):
                     inv.is_active = False
                     inv.save()
                     accepted = True
+                    group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                     message = "Aceptar la solicitud"
                 else:  # no aprobar la invitacion
                     if inv and not accept:
                         inv.is_active = False
                         inv.save()
                         accepted = False
+                        group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                         message = "NO Aceptar la solicitud"
                     else:
                         return HttpResponse(inv)
-                response = {"accepted": accepted, "message": message, "inv": inv}
-            except Exception:
+                response = {"accepted": accepted, "message": message, "group": group}
+            except Exception, e:
+                print e
                 return HttpResponse(False)
     else:
         response = "Error invitacion is not AJAX"

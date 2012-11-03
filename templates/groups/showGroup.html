@@ -53,10 +53,10 @@
                 {%for member in members_pend%}
                 <li class="list-member-item" ><!--Usuarios pendientes-->
                     <div class="">
-                        <img style="width:20px" src="{{member.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
+                        <img style="width:20px" src="{{member.email_invited|showgravatar:'20'}}" alt="{{member.id_user.username}}">
                         <span>{{member.email_invited}}</span> (pendiente)
                     </div>
-                    <span class="close-inv" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
+                    <span class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
                 </li>
                 {%endfor%} 
             </ul>
@@ -91,8 +91,29 @@
 {%endblock%}
 {% block js %}
 <script>
-    band=0;//bandera para agragar una sola vez el evento sendInvitationOnClick()
     showIconCloseOnHover()
+    function deleteInvitation(e){
+        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
+        {
+            elem = $(this)
+            sendAjax(
+                "/groups/deleteInvitation",
+                {"id_inv":$(this).attr("data-invitation")},
+                "#load-member-actions",
+                function(data){
+                    if(data['deleted']){
+                        $(elem).parent().animate({"height":0},"slow",function(e){
+                            $(this).hide()
+                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
+                        });
+                    }
+                    else{
+                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
+                    }
+                }
+                )
+        }
+    }
     function showIconAddMemberOnHover(){
         // mostrar flecha sobre usuario
         $(".user-li").hover(
@@ -139,38 +160,37 @@
             $(".list-members").append(
                 "<li class='list-member-item' style='list-style:none'>"+
                     "<div>"+
-                        "<img style='width:20px' src='/static/img/user_default.png' alt='Imagen de Usuario'>"+
+                        "<img style='width:20px' src='"+data['gravatar']+"' alt='Imagen de Usuario'> "+
                         "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
                     "</div>"+
-                    '<span class="close-inv" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
+                    '<span class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
                 "</li>"
-                )
+            )
+            showIconCloseOnHover()
+            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
             $("#newmember").val("")
         }else{//EL USUARIO YA ESTA INVITADO
             if(data["message"]){
                 setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
             }
             else{
-                //si no hay mensaje, deberia gestionarse los tipos de errores
+                //si no hay mensaje, error desconocido
                 setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
             }
         }
-        showIconCloseOnHover()
-        $(".close-inv").on('click', deleteInvitation)
     }
     function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
-        if (band===0){
-            band=1;
-            $(".user-li > a").on("click",function(e){
-                e.preventDefault();
-                var mail = $(this).attr("data-email");
-                var uname = $(this).attr("data-username");
-                var group_id = $("#group_id").val();
-                var group_name = $("#group_name").val();
-                sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
-                         "#load-member",invitationResult);
-            })
-        }
+        $(".user-li > a").on("click",function(e){
+            e.preventDefault();
+            var mail = $(this).attr("data-email");
+            var uname = $(this).attr("data-username");
+            var group_id = $("#group_id").val();
+            var group_name = $("#group_name").val();
+            sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
+                     "#load-member",invitationResult);
+            $(this).parent().fadeOut()
+            $("#newmember").focus()
+        })
     }
     function listMembers(data){//lista los usuarios disponibles a invitar
         if(data){
@@ -190,32 +210,10 @@
         }
     }
     function searchMember(e){//INVITACIONES MAIN 
-        if(e.keyCode==13){
+        // if(e.keyCode==13){
             var user=$("#newmember").val()
             sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
-        }
-    }
-    function deleteInvitation(e){
-        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-        {
-            elem = $(this)
-            sendAjax(
-                "/groups/deleteInvitation",
-                {"id_inv":$(this).attr("data-invitation")},
-                "#load-member-actions",
-                function(data){
-                    if(data['deleted']){
-                        $(elem).parent().slideUp(600, function(){
-                            $(this).empty().html("<div class='cancel-inv'>Invitaci&oacute;n cancelada</div>").fadeIn()
-                        })
-                        setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
-                    }
-                    else{
-                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
-                    }
-                }
-                )
-        }
+        // }
     }
     function showIconCloseOnHover(){
         $(".list-member-item").hover(function(){  
@@ -225,7 +223,7 @@
         })
     }
     $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
-    $(".close-inv").on('click', deleteInvitation);//Elimina invitaciones pendientes
+    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
     $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
         //give the focus to the input to search members
         $(this).next("#add-member-menu").addClass("disblock")
@@ -239,98 +237,98 @@
 {% endblock %}
 {%block style%}
 <style>
-.list-member-item{
-    border: solid thin #eee;
-    border-bottom: solid thin #dadada;
-    border-radius: 3px;
-    padding: 2px;
-    margin: 1px 0;
-    position: relative;
-}
-.list-member-item:hover{
-    border: solid thin #dadada;
-}
-.list-member-item > div{
-    /*border: solid thin #dadada;*/
-    width: 80%;
-}
-.list-member-item > span{
-    cursor: pointer;
-    top: 0;
-    right: 5px;
-    position: absolute;
-}
-ul#add-member-menu li{
-    margin-bottom: 10px;
-}
-.icon-remove{
-    margin: 5px;
-}
-ul#search-result{
-    margin-left: 0;
-}
-ul#search-result li span{
-    font-size: 13px;
-    margin-left: 13px;
-    color: gray;
-}
-.taling{
-    text-align: center;
-}
-.list-members span{
-    color: gray;
-}
-li a span{
-    color:black;
-}
-li p{
-    color:gray;
-    font-size: 12px;
-    line-height:  1;
-}
-article{
-    min-height: 500px;
-    overflow: visible;
-    padding-top: 1px;
-}
-article header img{
-    margin-top:4px;
-    float:left;
-}
-article header h3{
-    margin:0;
-    margin-left:35px;
-}
-#add-member{
-    position: static;
-}
-#newmember{
-    margin: 3px 10px;
-}
-.dropdown#add-member-menu{
-    text-decoration: none;
-    margin: 5px 20px;
+    .list-member-item{
+        border: solid thin #eee;
+        border-bottom: solid thin #dadada;
+        border-radius: 3px;
+        padding: 2px;
+        margin: 1px 0;
+        position: relative;
+    }
+    .list-member-item:hover{
+        border: solid thin #dadada;
+    }
+    .list-member-item > div{
+        /*border: solid thin #dadada;*/
+        width: 80%;
+    }
+    .list-member-item > span{
+        cursor: pointer;
+        top: 0;
+        right: 5px;
+        position: absolute;
+    }
+    ul#add-member-menu li{
+        margin-bottom: 10px;
+    }
+    .icon-remove{
+        margin: 5px;
+    }
+    ul#search-result{
+        margin-left: 0;
+    }
+    ul#search-result li span{
+        font-size: 13px;
+        margin-left: 13px;
+        color: gray;
+    }
+    .taling{
+        text-align: center;
+    }
+    .list-members span{
+        color: gray;
+    }
+    li a span{
+        color:black;
+    }
+    li p{
+        color:gray;
+        font-size: 12px;
+        line-height:  1;
+    }
+    article{
+        min-height: 500px;
+        overflow: visible;
+        padding-top: 1px;
+    }
+    article header img{
+        margin-top:4px;
+        float:left;
+    }
+    article header h3{
+        margin:0;
+        margin-left:35px;
+    }
+    #add-member{
+        position: static;
+    }
+    #newmember{
+        margin: 3px 10px;
+    }
+    .dropdown#add-member-menu{
+        text-decoration: none;
+        margin: 5px 20px;
 
-}
-#add-member-menu{
-    width:280px;
-}
-.dropdownmenu  * li{
-    list-style:none;
-    text-decoration: none;
-}
-.btnSup{
-    margin-top: 8px;
-}
-div > section ul{
-    margin-left:0;
-}
-div > section ul li{
-    list-style: none;
-}
-.cancel-inv{
-    font-style: italic;
-    color: gray;
-}
+    }
+    #add-member-menu{
+        width:280px;
+    }
+    .dropdownmenu  * li{
+        list-style:none;
+        text-decoration: none;
+    }
+    .btnSup{
+        margin-top: 8px;
+    }
+    div > section ul{
+        margin-left:0;
+    }
+    div > section ul li{
+        list-style: none;
+    }
+    .cancel-inv{
+        font-style: italic;
+        color: gray;
+    }
 </style>
 {%endblock%}
