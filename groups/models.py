@@ -84,6 +84,8 @@ class minutes(models.Model):
     is_full_signed = models.BooleanField(default=False)
     code = models.CharField(max_length=150, verbose_name="code")
 
+    def __unicode__(self):
+        return "%s " % (self.date_created)
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')

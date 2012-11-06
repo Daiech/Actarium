@@ -9,7 +9,8 @@ groups_urls = patterns('',
     (r'^setInvitation$', 'groups.views.newInvitation'),
     (r'^acceptInvitation$', 'groups.views.acceptInvitation'),
     (r'^deleteInvitation$', 'groups.views.deleteInvitation'),
+    (r'^(?P<slug>[-\w]+)/minutes/(?P<min_id>[-\w]+)$', 'groups.views.showMinutes'),
     (r'^(?P<slug>[-\w]+)', 'groups.views.showGroup'),
     (r'^$', 'groups.views.groupsList'),
-    
+
 )

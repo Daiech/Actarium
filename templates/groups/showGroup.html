@@ -23,7 +23,7 @@
             <ul>
                 {%for minute in minutes%}
                 <li>
-                    <a href="#">
+                    <a href="/groups/{{group.slug}}/minutes/{{minute.code}}">
                         Acta #{{minute.code}}
                         <span>{{minute.date_created|date}}</span>
                     </a>

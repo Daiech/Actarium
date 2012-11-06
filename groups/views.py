@@ -209,6 +209,7 @@ def newInvitation(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+@login_required(login_url='/account/login')
 def acceptInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -253,6 +254,7 @@ def acceptInvitation(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+@login_required(login_url='/account/login')
 def deleteInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -277,6 +279,15 @@ def deleteInvitation(request):
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+@login_required(login_url='/account/login')
+def showMinutes(request, slug, min_id):
+    group = groups.objects.get(slug=slug)
+    minute = minutes.objects.get(id_group=group, code=min_id)
+    members = rel_user_group.objects.filter(id_group=group, is_active=True)
+    ctx = {"group": group, "minute": minute, "members": members}
+    return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 
 def newMinutes(request, slug):

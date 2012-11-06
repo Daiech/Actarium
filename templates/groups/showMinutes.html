@@ -1,0 +1,80 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Actas{% endblock %}
+
+{%block body%}
+<article>
+    <header class="row-fluid">
+        <h2 class="span12">
+        	<a href="/groups/{{group.slug}}">
+        	<img src="{{STATIC_PREFIX}}{{minute.id_group.img_group}}"> {{minute.id_group.name}}</a>
+        	- Acta: {{minute.code}}</h2>
+        <span>Fecha de creaci&oacute;n: {{minute.date_created}}</span>
+    </header>
+	<hr>
+    <section class="row-fluid">
+    	<article class="minute">
+    		<header>
+    			<h3>{{group.name}}</h3>
+    		</header>
+    		<div>
+    			Acta No. {{minute.code}}<hr>
+    			Fecha : {{minute.id_extra_minutes.date_start|date}}<hr>
+    			Hora de inicio: {{minute.id_extra_minutes.date_start|time}}<hr>
+    			Hora de finalizaci&oacute;n: {{minute.id_extra_minutes.date_end|time}}<hr>
+    			Lugar : {{minute.id_extra_minutes.location}}<hr>
+    			Orden del dia: {{minute.id_extra_minutes.agenda}}<hr>
+    			Acuerdos : {{minute.id_extra_minutes.agreement}}<hr>
+    			Presentes: 
+    			<ul>
+	    			{%for member in members%}
+	    				<li>{{member.id_user.first_name}}</li>
+	    			{%endfor%}
+	    		</ul>
+	    		Ausentes: 
+    			<ul>
+	    			{%for member in members%}
+	    				<li>{{member.id_user.first_name}}</li>
+	    			{%endfor%}
+	    		</ul>
+    		</div>
+    		<footer></footer>
+    	</article>
+    </section>
+</article>
+{%endblock%}
+{% block js %}
+<script>
+</script>
+{% endblock %}
+
+{% block style%}
+<style>
+.minute{
+	border: solid thin #ddd;
+	background-color: #fff;
+	box-shadow: 0 8px 6px -6px #555;
+	border-radius: 3px;
+	margin-bottom: 40px;
+	position: relative;
+	width: 70%;
+}
+.minute > div{
+	padding: 0 50px;
+	/*border: solid thin gray;*/
+}
+.minute header{
+	width: auto;
+	margin:0;
+	padding: 50px 50px 20px 50px;
+}
+.minute footer{
+	border: none;
+	bottom: 0;
+	left: 0;
+	margin:0;
+	padding: 20px 40px;
+	width: auto;
+}
+
+</style>
+{%endblock%}
