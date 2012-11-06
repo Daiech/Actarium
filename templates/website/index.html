@@ -5,7 +5,7 @@
 <article>
     <header class="row-fluid">
         <h1 class="span10">Actarium</h1>
-        <div class="fix_btn"><a href="#" class="btn">Feed-back <i class="icon-bullhorn"></i></a></div>
+        <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
     </header>
 
     {% if user.is_authenticated %}
@@ -105,10 +105,37 @@
         </div>
     </div>
     {% endif %}
+
+
+
+    <div class="modal hide fade" id="myModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Env&iacute;anos tus comentarios</h3>
+        </div>
+        <div class="modal-body">
+            <p>Cu&eacute;ntanos c&oacute;mo fue tu experiencia usando Actarium y ay&uacute;danos a mejorar.</p>
+            <textarea id="textComent" placeholder="Comentario..."></textarea>
+        </div>
+        <div class="modal-footer">
+            <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+            
+            <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</a>
+            <a href="#" class="btn btn-primary">Enviar</a>
+        </div>
+    </div>
+
+
 </article>
 {%endblock%}
 {% block style%}
 <style>
+    #textComent{
+        margin-left: 12%;
+        margin-right: 12%;
+        min-height: 150px;
+        width: 70%;
+    }
     .accordion-heading{
         /*background-image: -webkit-linear-gradient(top, #62C462, #51A351);*/
 
@@ -165,7 +192,9 @@
 </style>
 {%endblock%}
 {% block js %}
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
+    
     $(".collapse").collapse({
         //toggle: false
     })
@@ -187,15 +216,15 @@
                     "</a>"+
                     "</li>")
                 $(element).parent().parent().slideUp(900,function(){
-                        $(this).empty().html(
-                            "Ahora perteneces al grupo "+
-                            "<a href='#'>"+data["group"]["name"]+"</a>"+
-                            "<hr>"
-                        ).fadeIn()
-                    }
-                )
+                    $(this).empty().html(
+                    "Ahora perteneces al grupo "+
+                        "<a href='#'>"+data["group"]["name"]+"</a>"+
+                        "<hr>"
+                ).fadeIn()
+                }
+            )
                 setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                    "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+                "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
             }
             else{
                 $(element).parent().parent().slideUp(900,function(){
@@ -209,9 +238,9 @@
                 })
                 var actual2 = parseInt($("#inv-count").text())
                 actual2--
-                 $("#inv-count").text(""+actual2)
+                $("#inv-count").text(""+actual2)
                 setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                    "Haz rechazado la invitaci&oacute;n")
+                "Haz rechazado la invitaci&oacute;n")
             }
         })
     }
