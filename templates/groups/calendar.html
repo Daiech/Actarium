@@ -77,6 +77,7 @@
 <script>$("#menu-reunions").addClass("active")</script>
 
 <script type="text/javascript" >
+//<<<<<<< HEAD
 
 
 
@@ -333,6 +334,32 @@ $(document).on("ready", function() {
 	setRejectButton();
 	setButtons();
 });
-
+/*
+=======
+    $(document).on("ready", function()
+    {
+        var events = [
+            {% for reunion in reunions %}
+            "{{reunion.date_reunion|date:'Y-m-d'}}",
+            {% endfor %}                            
+        ];
+        $( "#datepicker" ).text("")
+        var dp = $( "#datepicker" ).datepicker({ 
+            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            nextText: 'Siguiente',
+            prevText: 'Anterior',
+            dateFormat: 'yy-mm-dd',
+            beforeShowDay: function(date) {
+                var current = $.datepicker.formatDate('yy-mm-dd', date);
+                return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
+            },
+            onSelect: function(dateText, inst) {  //alert("new date: " + dateText); //+ " " + $(this).datepicker('getDate'));
+                top.location="/groups/calendar/"+dateText;
+                //setAlertMessage("Fecha",dateText);
+            }
+        });    
+    })
+>>>>>>> 79d7976f70ccae3f36d73f2fd7f64bf9b4faa3f5 */
 </script>
 {% endblock %}

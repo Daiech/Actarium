@@ -4,8 +4,8 @@
 {%block body%}
 <article>
     <header class="row-fluid">
-        <h1 class="span5">Actarium</h1>
-        <div class="fix_btn"><a href="#" class="btn">Feed-back <i class="icon-bullhorn"></i></a></div>
+        <h1 class="span10">Actarium</h1>
+        <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
     </header>
 
     {% if user.is_authenticated %}
@@ -19,7 +19,7 @@
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
-                            Tienes <span class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
+                            Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
                         </a>
                     </div>
                     <div  id="Invitations" class="accordion-body collapse in">
@@ -29,11 +29,13 @@
                                 <span class="notification-text alpha60">
                                     <strong>{{invitation.id_user_from.first_name}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name}}</a>
                                     <br />
-                                    <time>{{invitation.date_invited|date:"F d Y"}}</time>
+                                    <time datetime="{{reunion.date_convened|date:'c'}}">El {{invitation.date_invited}}</time>
                                 </span>
-                                <a href="#" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">Aceptar</a>
-                                <a href="#" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">Cancelar</a>
-                                <div class="pull-right load"></div>
+                                <div class="buttons">
+                                    <a href="#" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">Aceptar</a>
+                                    <a href="#" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">Cancelar</a>
+                                    <div class="pull-right load"></div>
+                                </div>
                                 <hr>
 
                             </li>
@@ -52,11 +54,14 @@
                             {% for reunion in reunions %}
                             <li>
                                 <span class="notification-text">
-                                    {{reunion.id_convener.first_name}} te convoc&oacute; a reunirte con el grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a> el {{reunion.date_convened|date:"d F"}}
+                                    <strong>{{reunion.id_convener.first_name}}</strong> te convoc&oacute; a una reuni&oacute;n del grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a><br />
+                                    <time datetime="{{reunion.date_convened|date:'c'}}">El {{reunion.date_convened}}</time>
                                 </span>
-                                <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
-                                <a href="#" class="btn btn-small">No Asistir&eacute;</a>
-                                <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a>
+                                <div class="buttons">
+                                    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
+                                    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
+                                    <a class="btn btn-link" href="#">Ver m&aacute;s</a>
+                                </div>
                                 <hr>
 
                             </li>
@@ -77,7 +82,7 @@
                 </div>
             </header>
             <hr>
-            <ul class="nav onOver">
+            <ul id="group-list" class="nav onOver">
                 {% for group in groups %}
                 <li class="img-rounded">
                     <a href="/groups/{{group.slug}}">
@@ -100,10 +105,37 @@
         </div>
     </div>
     {% endif %}
+
+
+
+    <div class="modal hide fade" id="myModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Env&iacute;anos tus comentarios</h3>
+        </div>
+        <div class="modal-body">
+            <p>Cu&eacute;ntanos c&oacute;mo fue tu experiencia usando Actarium y ay&uacute;danos a mejorar.</p>
+            <textarea id="textComent" placeholder="Comentario..."></textarea>
+        </div>
+        <div class="modal-footer">
+            <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+            
+            <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</a>
+            <a href="#" class="btn btn-primary">Enviar</a>
+        </div>
+    </div>
+
+
 </article>
 {%endblock%}
 {% block style%}
 <style>
+    #textComent{
+        margin-left: 12%;
+        margin-right: 12%;
+        min-height: 150px;
+        width: 70%;
+    }
     .accordion-heading{
         /*background-image: -webkit-linear-gradient(top, #62C462, #51A351);*/
 
@@ -118,7 +150,7 @@
         /* RGBa with 0.6 opacity */
         background: rgba(255, 255, 255, 0.6);
         /* For IE 8*/
-        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000,endColorstr=#99000000)";
+        -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#11111111,endColorstr=#11111111)";
     }
     .span6 h4{
         margin-bottom:20px;
@@ -154,30 +186,74 @@
     .containterMargin{
         margin:20px;
     }
+    .buttons{
+        margin-top:10px;
+    }
 </style>
 {%endblock%}
 {% block js %}
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
-    //$("#menu-account").addClass("active")
+    
     $(".collapse").collapse({
         //toggle: false
     })
+    function acceptInvitation(element, accept){
+        sendAjax(
+        "/groups/acceptInvitation",
+        {"i_id":accept},
+        $(element).next("div.load"),
+        function(data){
+            if (data["accepted"]){
+                var actual = parseInt($("#inv-count").text());
+                actual--;
+                $("#inv-count").text(""+actual);
+                $("#group-list").append(
+                "<li class='img-rounded'>"+
+                    "<a href='"+data["group"]["slug"]+"'>"+
+                    "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
+                    data["group"]["name"]+
+                    "</a>"+
+                    "</li>")
+                $(element).parent().parent().slideUp(900,function(){
+                    $(this).empty().html(
+                    "Ahora perteneces al grupo "+
+                        "<a href='#'>"+data["group"]["name"]+"</a>"+
+                        "<hr>"
+                ).fadeIn()
+                }
+            )
+                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+            }
+            else{
+                $(element).parent().parent().slideUp(900,function(){
+                    $(this).empty().html(
+                    "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                        "<br>"+
+                        "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                        "obtener una nueva invitaci&oacute;n."+
+                        "<hr>"
+                ).fadeIn()
+                })
+                var actual2 = parseInt($("#inv-count").text())
+                actual2--
+                $("#inv-count").text(""+actual2)
+                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                "Haz rechazado la invitaci&oacute;n")
+            }
+        })
+    }
     $(".accept-inv").on("click",function(e){
         e.preventDefault();
         var accept = $(this).attr("data-invitation")
-        sendAjax(
-            "/groups/acceptInvitation",
-            {"i_id":accept},
-            $(this).find("div.load"),
-            function(data){
-                if (data['accepted']){
-                    setAlert("invitation","Aceptar la invitacion "+accept.substr(1))
-                }
-                else{
-                    setAlert("invitation","No Aceptar la invitacion "+accept.substr(1))
-                }
+        if(accept.substring(0,1)=="n"){
+            if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                acceptInvitation($(this), accept)
             }
-            )
+        }else{
+            acceptInvitation($(this), accept)
+        }
     })
 </script>
 {% endblock %}

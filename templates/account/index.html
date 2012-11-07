@@ -5,13 +5,13 @@
 <article>
     <h2>Cuenta</h2>
     <div class="uTop">
-    <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
-    Hola
-    <strong>
-        <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
-            {{ user.first_name }} ({{user.username}})
-        </a>
-    </strong>
+        <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+        Hola
+        <strong>
+            <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
+                {{ user.first_name }} ({{user.username}})
+            </a>
+        </strong>
     </div>
     <hr>
     <form method="POST"  action="/account/">
@@ -40,7 +40,7 @@
         </table>
 
     </form>
-        <p class="containterMargin">Los datos con * son de caracter obligatorio.</p>
+    <p class="containterMargin">Los datos con * son de caracter obligatorio.</p>
 
     <hr>
     <form method="POST" action="/account/PasswordChange">
@@ -121,10 +121,10 @@
     $("#menu-account").addClass("active");
 
     {% if dataUpdate %}
-    setAlert("Datos Actualizados","Tus datos fueron actualizados correctamente")
+    setAlertMessage("Datos Actualizados","Tus datos fueron actualizados correctamente")
     {% endif %}
     {% if passwordUpdate %}
-    setAlert("ConstraseÃ±a Actualizada","Tu constraseÃ±a fue actualizada correctamente")
+    setAlertMessage("ConstraseÃ±a Actualizada","Tu constraseÃ±a fue actualizada correctamente")
     {% endif %}
 
 </script>

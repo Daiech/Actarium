@@ -58,7 +58,7 @@ function main(){
 
 }
 
-function setAlert(tittle, message){
+function setAlert(tittle, message, type){
     var l = message.length;
     var t=0;
     if (l===0) t=0;
@@ -66,12 +66,17 @@ function setAlert(tittle, message){
     else if (l<=100) t=3000;
     else if (l<=200) t=5000;
     else if (l> 200) t=7000;
-    $("#alert-message h4").html(tittle);
-    $("#alert-message p").html(message);
-    $("#alert-message").fadeIn().delay(t).fadeOut(1500);
+    $(type+" h4").html(tittle);
+    $(type+" p").html(message);
+    $(type).fadeIn().delay(t).fadeOut(1500);
     
 }
-
+function setAlertError(t, m){
+    setAlert(t, m, '#alert-error')
+}
+function setAlertMessage(t, m){
+    setAlert(t, m, '#alert-message')
+}
 function sendAjax(url, params, load_elem, myCallback){
     $(load_elem).show().html('<img src="/static/img/load16.gif" />');
     $.get(url, params, function(data,error) {

@@ -135,14 +135,14 @@ def sendInvitationUser(email, user, group):
         Enviar una invitacion a un usuario via email
     '''
     if validateEmail(email):
-        invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group)
+        invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
             #  send email here
-            return True
+            return invitation
         else:
             return False
     else:
-        return False
+        return 0  # Email Failed
 
 
 def isMemberOfGroup(id_user, id_group):
@@ -184,14 +184,27 @@ def newInvitation(request):
             if isMemberOfGroupByEmail(mail, q):
                 invited = False
                 message = "El usuario ya es miembro del grupo"
+                iid = False
+                gravatar = False
             else:
-                if sendInvitationUser(mail, request.user, q):
+                inv = sendInvitationUser(mail, request.user, q)
+                if inv and not inv is 0:
                     invited = True
-                    message = "Se ha enviado la invitación a " + str(mail) + " "
+                    iid = str(inv.id)
+                    gravatar = showgravatar(mail, 30)
+                    message = "Se ha enviado la invitación a " + str(mail) + " al grupo " + str(q.name)
                 else:
+                    iid = False
                     invited = False
-                    message = "El usuario tiene la invitacion pendiente"
-            response = {"invited": invited, "message": message}
+                    gravatar = False
+                    if not inv and not inv is 0:
+                        message = "El usuario tiene la invitación pendiente"
+                    else:
+                        if inv == 0:
+                            message = "El correo electronico no es valido"
+                        else:
+                            message = "Error desconocido. Lo sentimos"
+            response = {"invited": invited, "message": message, "email": mail, "iid": iid, "gravatar": gravatar}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -206,29 +219,62 @@ def acceptInvitation(request):
                 else:
                     if request.GET['i_id'][0] == 'n':
                         accept = False
+                    else:
+                        return HttpResponse(False)  # error 1, peticion sin controlador s o n
                 iid = request.GET['i_id'][1:]
+                print "inv id= %s" % (str(iid))
                 try:
                     inv = invitations.objects.get(id=iid)
                     is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)
                 except invitations.DoesNotExist:
                     inv = False
+                    is_member = False
                 if accept and is_member and inv:  # aprobar la invitacion
                     rel_user_group(id_user=request.user, id_group=inv.id_group).save()
                     inv.is_active = False
                     inv.save()
                     accepted = True
+                    group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                     message = "Aceptar la solicitud"
                 else:  # no aprobar la invitacion
                     if inv and not accept:
                         inv.is_active = False
                         inv.save()
                         accepted = False
+                        group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                         message = "NO Aceptar la solicitud"
                     else:
                         return HttpResponse(inv)
+                response = {"accepted": accepted, "message": message, "group": group}
+            except Exception, e:
+                print e
+                return HttpResponse(False)
+    else:
+        response = "Error invitacion is not AJAX"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def deleteInvitation(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                iid = request.GET['id_inv']
+                if iid == "" or iid == None:
+                    return HttpResponse(False)
+                try:
+                    inv = invitations.objects.get(id=iid, is_active=True)
+                except invitations.DoesNotExist:
+                    inv = False
+                if inv:  # si eliminar la invitacion
+                    inv.is_active = False
+                    inv.save()
+                    deleted = True
+                    message = "El usuario (" + inv.email_invited + ") ya no podr&aacute; acceder a este grupo"
+                    response = {"deleted": deleted, "message": message}
+                else:  # no eliminar la invitacion
+                    return HttpResponse(inv)
             except Exception:
                 return HttpResponse(False)
-            response = {"accepted": accepted, "message": message}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")

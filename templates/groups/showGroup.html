@@ -1,6 +1,6 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Actarium - {{TITLE}}{% endblock %}
-
+{% load gravatartag %}
 {%block body%}
 <article>
     <header >
@@ -35,22 +35,29 @@
             </ul>
         </section>
         <section class="span5 fix_btn">
-            <h4>Miembros</h4>
+            <h4>Miembros <span id="load-member-actions"></span></h4> 
             <ul class="nav list-members">
                 {%for member in members%}
-                    <li>
-                        <i class="icon-user"></i>
+                <li class="list-member-item">
+                    <div class="">
+                        <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
                         {{member.id_user.first_name}} {{member.id_user.last_name}}
                         {%if member.id_user == user%}
                         (yo)
+                        {%else%}
+                        ({{member.id_user}})
                         {%endif%}
-                    </li>
+                    </div>
+                </li>
                 {%endfor%}
                 {%for member in members_pend%}
-                    <li><!--Usuarios pendientes-->
-                        <i class="icon-user"></i>
+                <li class="list-member-item" ><!--Usuarios pendientes-->
+                    <div class="">
+                        <img style="width:20px" src="{{member.email_invited|showgravatar:'20'}}" alt="{{member.id_user.username}}">
                         <span>{{member.email_invited}}</span> (pendiente)
-                    </li>
+                    </div>
+                    <span class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
+                </li>
                 {%endfor%} 
             </ul>
 
@@ -59,7 +66,7 @@
                     Agregar miembro
                     <span class="caret"></span>
                 </div>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                     <li class="taling">
                         Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
                     </li>
@@ -84,114 +91,174 @@
 {%endblock%}
 {% block js %}
 <script>
-    $("#add-member").on('click focus', function(e) {
-        $(this).next(".dropdown-menu").addClass("disblock")
+    showIconCloseOnHover()
+    function deleteInvitation(e){
+        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
+        {
+            elem = $(this)
+            sendAjax(
+                "/groups/deleteInvitation",
+                {"id_inv":$(this).attr("data-invitation")},
+                "#load-member-actions",
+                function(data){
+                    if(data['deleted']){
+                        $(elem).parent().animate({"height":0},"slow",function(e){
+                            $(this).hide()
+                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
+                        });
+                    }
+                    else{
+                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
+                    }
+                }
+                )
+        }
+    }
+    function showIconAddMemberOnHover(){
+        // mostrar flecha sobre usuario
+        $(".user-li").hover(
+            function(){
+                $(this).find("i").removeClass("hidden")
+            },
+            function(){
+                $(this).find("i").addClass("hidden")
+        })
+    }
+    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
+        if(data["username"]){//es usuario de la base de datos
+            user_to_invite = data['mail']+" ("+data['username']+")";
+            if(user_to_invite.length > 27)
+                p="..."
+            $("#search-result").html(
+                "<li class='user-li'>"+
+                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                user_to_invite.substring(0,27)+p+
+                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                "</a>"+
+                "</li>"
+                )
+        }
+        else{//No es usuario de la base de datos
+            if(data['mail'].length > 27)
+                p="..."
+            $("#search-result").html(
+                "<li class='user-li'>"+
+                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
+                "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                data['mail'].substring(0,27)+p+
+                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                "</a>"+
+                "</li>"
+                )
+        }
+        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
+    }
+    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
+        if(data['invited']){    //USUARIO INVITADO
+            setAlertMessage("Invitado",data['message'])
+            $(".list-members").append(
+                "<li class='list-member-item' style='list-style:none'>"+
+                    "<div>"+
+                        "<img style='width:20px' src='"+data['gravatar']+"' alt='Imagen de Usuario'> "+
+                        "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
+                    "</div>"+
+                    '<span class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
+                "</li>"
+            )
+            showIconCloseOnHover()
+            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
+            $("#newmember").val("")
+        }else{//EL USUARIO YA ESTA INVITADO
+            if(data["message"]){
+                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
+            }
+            else{
+                //si no hay mensaje, error desconocido
+                setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+            }
+        }
+    }
+    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
+        $(".user-li > a").on("click",function(e){
+            e.preventDefault();
+            var mail = $(this).attr("data-email");
+            var uname = $(this).attr("data-username");
+            var group_id = $("#group_id").val();
+            var group_name = $("#group_name").val();
+            sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
+                     "#load-member",invitationResult);
+            $(this).parent().fadeOut()
+            $("#newmember").focus()
+        })
+    }
+    function listMembers(data){//lista los usuarios disponibles a invitar
+        if(data){
+            p="";
+            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
+                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
+                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
+            }
+            else{//el correo es invalido o no hay resultados de usuarios existentes
+                $("#search-result").html("<li style='list-style:none'>"+
+                                            "<a href='#'>"+("No hay resultados").substring(0,27)+
+                                            "</a>"+
+                                        "</li>")
+            }
+        }else{//error en el server
+            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
+        }
+    }
+    function searchMember(e){//INVITACIONES MAIN 
+        // if(e.keyCode==13){
+            var user=$("#newmember").val()
+            sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
+        // }
+    }
+    function showIconCloseOnHover(){
+        $(".list-member-item").hover(function(){  
+            $(this).find("i.icon-remove").show(10)  
+        },function(){                      
+            $(this).find("i.icon-remove").hide(30)
+        })
+    }
+    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
+    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
+    $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
+        //give the focus to the input to search members
+        $(this).next("#add-member-menu").addClass("disblock")
         $("#newmember").focus()
     });
-
-    $("#close-add-member").on("click",function(e){
-        $(this).parent().parent().removeClass("disblock")
-    });
-    $("#newmember").on("keyup",function(e){
-        if(e.keyCode==13){
-            p="";
-            var user=$("#newmember").val()
-            sendAjax(
-                "/groups/getMembers",
-                {search:user},
-                "#load-member",
-                function(data){
-                    console.log(data)
-                    if(data){
-                        if(data["mail_is_valid"]){
-                            if(data["username"]){
-                                user_to_invite = data['mail']+" ("+data['username']+")";
-                                if(user_to_invite.length > 27)
-                                    p="..."
-                                $("#search-result").html(
-                                    "<li class='user-li'>"+
-                                        "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                                            "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                                            user_to_invite.substring(0,27)+p+
-                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                                        "</a>"+
-                                    "</li>"
-                                    )
-                            }
-                            else{
-                                if(data['mail'].length > 27)
-                                    p="..."
-                                $("#search-result").html(
-                                    "<li class='user-li'>"+
-                                        "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                                            "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-                                            data['mail'].substring(0,27)+p+
-                                            '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                                        "</a>"+
-                                    "</li>"
-                                )
-                            }
-
-                        }
-                        else{
-                            //no result
-                            $("#search-result").html(
-                                "<li style='list-style:none'>"+
-                                    "<a href='#'>"+
-                                        ("No hay resultados").substring(0,27)+
-                                    "</a>"+
-                                "</li>"
-                            )
-                        }
-                    }else{
-                        //error en el server
-                    }
-                    $(".user-li > a").on("click",function(e){
-                        e.preventDefault();
-                        var mail = $(this).attr("data-email")
-                        var uname = $(this).attr("data-username")
-                        var group_id = $("#group_id").val()
-                        var group_name = $("#group_name").val()
-                        sendAjax(
-                            "/groups/setInvitation",
-                            {"pk":group_id, "search": mail},
-                            "#load-member",
-                            function(data){
-                                if(data['invited']){//USUARIO INVITADO
-                                    setAlert("Invitado",data['message']+" al grupo "+group_name)
-                                    $(".list-members").append(
-                                        "<li style='list-style:none'>"+
-                                            "<i class='icon-user'></i> "+
-                                            "<span>"+(mail).substring(0,35)+"</span> (pendiente)"+
-                                        "</li>"
-                                    )
-                                    $("#newmember").val("")
-                                }else{//EL USUARIO YA ESTA INVITADO
-                                    if(data["message"]){
-                                        setAlert("Informaci&oacute;n","("+mail+") "+data['message'])
-                                    }
-                                    else{
-                                        setAlert("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-                                    }
-                                }
-                            }
-                        )
-                    })
-                    $(".user-li").hover(function(){
-                            $(this).find("i").removeClass("hidden")
-                        },
-                        function(){
-                            $(this).find("i").addClass("hidden")
-                    })
-                }
-            )//sendAjax
-        }
+    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
+        //Close the dropdown menu to add members
+       $(this).parent().parent().removeClass("disblock")
     });
 </script>
 {% endblock %}
 {%block style%}
 <style>
-    ul.dropdown-menu li{
+    .list-member-item{
+        border: solid thin #eee;
+        border-bottom: solid thin #dadada;
+        border-radius: 3px;
+        padding: 2px;
+        margin: 1px 0;
+        position: relative;
+    }
+    .list-member-item:hover{
+        border: solid thin #dadada;
+    }
+    .list-member-item > div{
+        /*border: solid thin #dadada;*/
+        width: 80%;
+    }
+    .list-member-item > span{
+        cursor: pointer;
+        top: 0;
+        right: 5px;
+        position: absolute;
+    }
+    ul#add-member-menu li{
         margin-bottom: 10px;
     }
     .icon-remove{
@@ -222,7 +289,7 @@
     article{
         min-height: 500px;
         overflow: visible;
-        padding-top: 0.5px;
+        padding-top: 1px;
     }
     article header img{
         margin-top:4px;
@@ -238,12 +305,12 @@
     #newmember{
         margin: 3px 10px;
     }
-    .dropdown.dropdown-menu{
+    .dropdown#add-member-menu{
         text-decoration: none;
         margin: 5px 20px;
 
     }
-    .dropdown-menu{
+    #add-member-menu{
         width:280px;
     }
     .dropdownmenu  * li{
@@ -258,6 +325,10 @@
     }
     div > section ul li{
         list-style: none;
+    }
+    .cancel-inv{
+        font-style: italic;
+        color: gray;
     }
 </style>
 {%endblock%}

@@ -16,15 +16,16 @@
 
             <li class="img-rounded">
 
-                <a href="/groups/{{group.slug}}">
+                <a class="" href="/groups/{{group.slug}}">
                     <div class="">
                         <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
-                        {{group.name}}
+                        <span class="groupInfo">{{group.name|slice:"30"|lower|capfirst}}</span>
+                        <span class="colorText"> - {{group.description|slice:"80"|safe|lower|capfirst}}</span>
 
-                        <span class="colorText"> - {{group.description}}</span>
+
                         <div class="pull-right button">
-                            <button data-action="editar" class=""><i class="icon-pencil"></i></button>
-                            <button data-action="eliminar" class=""><i class="icon-remove"></i></button>
+                            <button data-action="editar" class="btn_block"><i class="icon-pencil"></i></button>
+                            <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>
                         </div>
                     </div>
                 </a>   
@@ -34,6 +35,7 @@
 
             {% endfor %}
         </ul>
+        <button id="large">Largo</button><button id="medium">Medio</button><button id="small">Corto</button>
     </section>
 
 </article>
@@ -66,13 +68,41 @@
 
 {% block js %}
 <script>
+    $("#large").click(function(){
+        var reduceText1=$(".groupInfo").text();
+        var reduceText2=$(".colorText").text();
+        
+        var reduce1=reduceText1.substring(0,50)
+        var reduce2=reduceText2.substring(0,50)
+        alert(reduce2+"...")
+
+    })
+    $("#medium").click(function(){
+        var reduceText1=$(".groupInfo").text();
+        var reduceText2=$(".colorText").text();
+        
+        var reduce1=reduceText1.substring(0,20)
+        var reduce2=reduceText2.substring(0,40)
+        alert(reduce2+"...")
+
+    })
+    $("#small").click(function(){
+        var reduceText1=$(".groupInfo").text();
+        var reduceText2=$(".colorText").text();
+        
+        var reduce1=reduceText1.substring(0,10)
+        var reduce2=reduceText2.substring(0,20)
+        alert(reduce2+"...")
+
+    })
+       
     $("#menu-organizations").addClass("active")
     $(".button button").click(function(e){
         e.preventDefault()
         if($(this).attr("data-action")!="editar")
             if(confirm("Seguro que quieres elimiar el grupo?")){
                 $(this).parent().parent().parent().parent().fadeOut(1600)
-                setAlert("Grupo eliminado","" )
+                setAlertMessage("Grupo eliminado","" )
             }
         
     }
