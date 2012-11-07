@@ -108,6 +108,9 @@ class assistance(models.Model):
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
     is_comfirmed = models.BooleanField(default=False)
     date_comfirmed = models.DateTimeField(auto_now = True)
+    
+    class Meta:
+        unique_together = ('id_user', 'id_reunion')
 
 
 class feddback(models.Model):
