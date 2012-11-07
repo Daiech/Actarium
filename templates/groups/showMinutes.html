@@ -1,44 +1,63 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Actarium - Actas{% endblock %}
-
+{% load gravatartag %}
 {%block body%}
 <article>
     <header class="row-fluid">
         <h2 class="span12">
         	<a href="/groups/{{group.slug}}">
-        	<img src="{{STATIC_PREFIX}}{{minute.id_group.img_group}}"> {{minute.id_group.name}}</a>
-        	- Acta: {{minute.code}}</h2>
-        <span>Fecha de creaci&oacute;n: {{minute.date_created}}</span>
+        	<img src="{{STATIC_PREFIX}}{{minutes.id_group.img_group}}"> {{minutes.id_group.name}}</a>
+        	- Acta: {{minutes.code}}</h2>
+        <span>Fecha de creaci&oacute;n: {{minutes.date_created}}</span>
     </header>
 	<hr>
     <section class="row-fluid">
+    	<ul class="pager">
+			<li class="previous {%if not prev %}disabled{%endif%}">
+				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
+			</li>
+
+			<li class="next {%if not next %}disabled{%endif%}">
+				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
+			</li>
+		</ul>
     	<article class="minute">
     		<header>
     			<h3>{{group.name}}</h3>
     		</header>
-    		<div>
-    			Acta No. {{minute.code}}<hr>
-    			Fecha : {{minute.id_extra_minutes.date_start|date}}<hr>
-    			Hora de inicio: {{minute.id_extra_minutes.date_start|time}}<hr>
-    			Hora de finalizaci&oacute;n: {{minute.id_extra_minutes.date_end|time}}<hr>
-    			Lugar : {{minute.id_extra_minutes.location}}<hr>
-    			Orden del dia: {{minute.id_extra_minutes.agenda}}<hr>
-    			Acuerdos : {{minute.id_extra_minutes.agreement}}<hr>
-    			Presentes: 
-    			<ul>
-	    			{%for member in members%}
-	    				<li>{{member.id_user.first_name}}</li>
-	    			{%endfor%}
-	    		</ul>
-	    		Ausentes: 
-    			<ul>
-	    			{%for member in members%}
-	    				<li>{{member.id_user.first_name}}</li>
-	    			{%endfor%}
-	    		</ul>
+    		<div class="">
+    			<strong>Acta No.</strong> {{minutes.code}} de <i>{{minutes.id_extra_minutes.date_start|date:"M d Y"}}</i><hr>
+    			<strong>Hora de inicio:</strong> {{minutes.id_extra_minutes.date_start|time}} - 
+    			<strong>Hora de finalizaci&oacute;n:</strong> {{minutes.id_extra_minutes.date_end|time}}<hr>
+    			<strong>Lugar :</strong> {{minutes.id_extra_minutes.location}}<hr>
+    			<div class="list-attendees box">
+    				<div class="span6">
+    					<strong>Presentes:</strong> 
+		    			<ol>
+			    			{%for member in members%}
+			    				<li>
+			    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+			    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+			    				</li>
+			    			{%endfor%}
+			    		</ol>	
+    				</div>
+    				<div class="span6">
+    					<strong>Ausentes:</strong>
+		    			<ol>
+			    			{%for member in members%}
+			    				<li>{{member.id_user.first_name}}</li>
+			    			{%endfor%}
+			    		</ol>
+    				</div>
+    			</div><hr>
+    			<strong>Orden del dia:</strong> {{minutes.id_extra_minutes.agenda|safe}}<hr>
+    			<strong>Acuerdos :</strong> {{minutes.id_extra_minutes.agreement|safe}}
+    			
     		</div>
     		<footer></footer>
     	</article>
+    	<span>* La visualizaci&oacute;n del acta está pendiente por definir</span>
     </section>
 </article>
 {%endblock%}
@@ -56,16 +75,17 @@
 	border-radius: 3px;
 	margin-bottom: 40px;
 	position: relative;
+	top:-50px;
 	width: 70%;
-}
-.minute > div{
-	padding: 0 50px;
-	/*border: solid thin gray;*/
 }
 .minute header{
 	width: auto;
 	margin:0;
-	padding: 50px 50px 20px 50px;
+	padding: 50px 80px 20px 80px;
+}
+.minute > div{
+	padding: 0 80px;
+	/*border: solid thin gray;*/
 }
 .minute footer{
 	border: none;
@@ -75,6 +95,7 @@
 	padding: 20px 40px;
 	width: auto;
 }
-
+.pager{
+}
 </style>
 {%endblock%}

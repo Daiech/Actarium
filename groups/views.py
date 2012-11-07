@@ -282,11 +282,27 @@ def deleteInvitation(request):
 
 
 @login_required(login_url='/account/login')
-def showMinutes(request, slug, min_id):
+def showMinutes(request, slug, minutes_id):
     group = groups.objects.get(slug=slug)
-    minute = minutes.objects.get(id_group=group, code=min_id)
+    minutes_current = minutes.objects.get(id_group=group, code=minutes_id)
+    minutes_group = minutes.objects.filter(id_group=group.id)
+    prev = None
+    next = None
+    try:
+        prev = minutes.get_previous_by_date_created(minutes_current, id_group=group)
+    except minutes.DoesNotExist:
+        prev = False
+    except Exception, e:
+        print "prev: " + str(e)
+    try:
+        next = minutes.get_next_by_date_created(minutes_current, id_group=group)
+    except minutes.DoesNotExist:
+        next = False
+    except Exception, e:
+        print "next: " + str(e)
     members = rel_user_group.objects.filter(id_group=group, is_active=True)
-    ctx = {"group": group, "minute": minute, "members": members}
+    ctx = {"group": group, "minutes": minutes_current, "members": members,
+            "minutes_list": minutes_group, "prev": prev, "next": next}
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 

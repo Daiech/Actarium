@@ -4,7 +4,7 @@ from groups.models import group_type
 
 
 class newGroupForm(forms.Form):
-    name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo'}))
+    name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo', 'autofocus': 'autofocus'}))
     description = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={'placeholder': 'Descripción'}))
     id_group_type = forms.ModelChoiceField(label="Tipo de Grupo", queryset=group_type.objects.all())
 

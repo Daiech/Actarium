@@ -85,7 +85,7 @@ class minutes(models.Model):
     code = models.CharField(max_length=150, verbose_name="code")
 
     def __unicode__(self):
-        return "%s " % (self.date_created)
+        return "id_group: %s, %s, %s" % (self.id_group, date_created, id_extra_minutes)
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')
