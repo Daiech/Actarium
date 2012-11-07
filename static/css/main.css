@@ -279,11 +279,6 @@ form table td input{
     /*padding: 0 10px;*/
     width: auto;
 }
-
-.span6{
-    border-right: solid thin #dadada;
-    padding: 0 20px;
-}
 .title-activity{
     border-bottom: solid thin #dadada;
     padding:5px;

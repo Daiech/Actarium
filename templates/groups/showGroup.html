@@ -23,7 +23,7 @@
             <ul>
                 {%for minute in minutes%}
                 <li>
-                    <a href="#">
+                    <a href="/groups/{{group.slug}}/minutes/{{minute.code}}">
                         Acta #{{minute.code}}
                         <span>{{minute.date_created|date}}</span>
                     </a>
@@ -257,6 +257,10 @@
         top: 0;
         right: 5px;
         position: absolute;
+    }
+    .span6{
+        border-right: solid thin #dadada;
+        padding: 0 20px;
     }
     ul#add-member-menu li{
         margin-bottom: 10px;

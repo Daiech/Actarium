@@ -210,6 +210,7 @@ def newInvitation(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+@login_required(login_url='/account/login')
 def acceptInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -254,6 +255,7 @@ def acceptInvitation(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+@login_required(login_url='/account/login')
 def deleteInvitation(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -278,6 +280,32 @@ def deleteInvitation(request):
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+@login_required(login_url='/account/login')
+def showMinutes(request, slug, minutes_id):
+    group = groups.objects.get(slug=slug)
+    minutes_current = minutes.objects.get(id_group=group, code=minutes_id)
+    minutes_group = minutes.objects.filter(id_group=group.id)
+    prev = None
+    next = None
+    try:
+        prev = minutes.get_previous_by_date_created(minutes_current, id_group=group)
+    except minutes.DoesNotExist:
+        prev = False
+    except Exception, e:
+        print "prev: " + str(e)
+    try:
+        next = minutes.get_next_by_date_created(minutes_current, id_group=group)
+    except minutes.DoesNotExist:
+        next = False
+    except Exception, e:
+        print "next: " + str(e)
+    members = rel_user_group.objects.filter(id_group=group, is_active=True)
+    ctx = {"group": group, "minutes": minutes_current, "members": members,
+            "minutes_list": minutes_group, "prev": prev, "next": next}
+    return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/account/login')
 def newMinutes(request, slug):
@@ -349,6 +377,7 @@ def newReunion(request, slug):
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
+
 @login_required(login_url='/account/login')
 def calendar(request):
     gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
@@ -358,6 +387,7 @@ def calendar(request):
        "reunions": my_reu,
            }
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
@@ -385,6 +415,7 @@ def calendarDate(request, slug=None):
        "my_reu_day_json":json.dumps(response)}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
+
 @login_required(login_url='/account/login')
 def getReunions(request):
     if request.is_ajax():
@@ -411,6 +442,7 @@ def getReunions(request):
     else:
         response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
 
 def setAssistance(request):
 #    if request.is_ajax():
