@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
@@ -14,6 +14,7 @@ import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
+from django.core import serializers
 
 
 @login_required(login_url='/account/login')
@@ -316,15 +317,26 @@ def calendar(request):
 def calendarDate(request, slug=None):
     gr = groups.objects.filter(rel_user_group__id_user=request.user) #grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False) #reuniones
-
     dateslug_min = str(make_aware(datetime.datetime.strptime(slug+" 00:00:00",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
     dateslug_max = str(make_aware(datetime.datetime.strptime(slug+" 23:59:59",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
     my_reu_day = reunions.objects.filter(id_group__in=gr,date_reunion__range = [dateslug_min,dateslug_max]) #reuniones para un dia
+    i = 0   
+    json_array = {}
+    for reunion in my_reu_day:
+        try:
+            confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+            is_comfirmed = confirm.is_comfirmed
+            is_saved = 1
+        except assistance.DoesNotExist: 
+            is_comfirmed = False
+            is_saved = 0
+        json_array[i] = {"id_r":str(reunion.id),"group_name": str(reunion.id_group.name), "date":(datetime.datetime.strftime( make_naive(reunion.date_reunion,get_default_timezone()), "%I:%M %p")), 'is_comfirmed': str(is_comfirmed),'is_saved':is_saved}
+        i= i+1
+    response = json_array  
     ctx = {'TITLE': "Actarium",
        "reunions_day": my_reu_day,
-       "reunions": my_reu,}
-
-    
+       "reunions": my_reu,
+       "my_reu_day_json":json.dumps(response)}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 @login_required(login_url='/account/login')
@@ -336,13 +348,55 @@ def getReunions(request):
             dateslug_min = str(make_aware(datetime.datetime.strptime(date+" 00:00:00",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
             dateslug_max = str(make_aware(datetime.datetime.strptime(date+" 23:59:59",'%Y-%m-%d %H:%M:%S'),get_default_timezone()))
             my_reu_day = reunions.objects.filter(id_group__in=gr,date_reunion__range = [dateslug_min,dateslug_max]) #reuniones para un dia
-#            reu_json = json.JSONEncoder(my_reu_day)
+            otra4 = serializers.serialize("json", my_reu_day, indent=1)
             i = 0   
             json_array = {}
             for reunion in my_reu_day:
-                json_array[i] = {"group_name": reunion.id_group.name, "date":(datetime.datetime.strftime( make_naive(reunion.date_reunion,get_default_timezone()), "%I:%M %p"))}
+                try:
+                    confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+                    is_comfirmed = confirm.is_comfirmed
+                    is_saved = 1
+                except assistance.DoesNotExist: 
+                    is_comfirmed = False
+                    is_saved = 0
+                json_array[i] = {"id_r":str(reunion.id),"group_name": reunion.id_group.name, "date":(datetime.datetime.strftime( make_naive(reunion.date_reunion,get_default_timezone()), "%I:%M %p")), 'is_comfirmed': is_comfirmed, 'is_saved':is_saved}
                 i= i+1
-            response = json_array   
+            response = json_array  
     else:
         response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+def setAssistance(request):
+#    if request.is_ajax():
+    if request.method == 'GET':
+        id_reunion = reunions.objects.get(pk=request.GET['id_reunion'])
+        id_user = request.user
+        is_comfirmed = str(request.GET['is_comfirmed'])
+        if (is_comfirmed == "true"):
+            is_comfirmed = True
+        else:
+            is_comfirmed = False
+            
+        
+        assis, created = assistance.objects.get_or_create(id_user=id_user, id_reunion=id_reunion)
+#        if created:
+#            assis = assistance.objects.get(id_user=id_user, id_reunion=id_reunion) 
+        assis.is_comfirmed=is_comfirmed
+#        assis.is_comfirmed = is_comfirmed
+        assis.save()
+        print assis
+        datos= "id_reunion = %s , id_user = %s , is_comfirmed = %s, created %s"%(id_reunion.pk,id_user,is_comfirmed, created)
+        print datos
+    return HttpResponse(json.dumps(datos), mimetype="application/json")
+#    else:
+#        response = "Error Calendar"
+
+
+
+
+
+
+
+
+
+
