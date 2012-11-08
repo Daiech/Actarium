@@ -9,7 +9,7 @@
             beneficios de <strong>ACTARIUM</strong></p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-            <table>{{newGroupForm}} 
+            <table>{{newGroupForm.as_table}} 
 
                 <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
                         <a href="/groups" class="btn btn-link">Mis Grupos</a></td></tr>
@@ -40,9 +40,10 @@
 {% block js %}
 <script>$("#menu-organizations").addClass("active")
 
-$('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click()
+$('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
+$(".form-horizontal td ul").addClass("btn-group").attr({"data-toggle":"buttons-radio"})
+$(".form-horizontal td ul li").addClass("btn")
 </script>
-
 
 
 {% endblock %}
