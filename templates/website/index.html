@@ -115,13 +115,14 @@
         </div>
         <div class="modal-body">
             <p>Cu&eacute;ntanos c&oacute;mo fue tu experiencia usando Actarium y ay&uacute;danos a mejorar.</p>
-            <textarea id="textComent" placeholder="Comentario..."></textarea>
+            <textarea id="textComent" placeholder="Ejemplo: No puedo cerrar sesi&oacute;n en dispositivos m&oacute;viles"></textarea>
         </div>
         <div class="modal-footer">
-            <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
-            
+            <div id="twitter-button">
+                <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+            </div>
             <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</a>
-            <a href="#" class="btn btn-primary">Enviar</a>
+            <a href="" class="btn btn-primary">Enviar</a>
         </div>
     </div>
 
@@ -130,6 +131,12 @@
 {%endblock%}
 {% block style%}
 <style>
+    #twitter-button{
+        height: 30px;
+        width: 177px;
+        display: inline-block;
+        float: left;
+    }
     #textComent{
         margin-left: 12%;
         margin-right: 12%;
