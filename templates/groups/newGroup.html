@@ -14,7 +14,7 @@
                 <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
                         <a href="/groups" class="btn btn-link">Mis Grupos</a></td></tr>
             </table>
-            
+
 
         </form>
     </div>
@@ -25,7 +25,7 @@
     #id_name{
         width:90%;
     }
-    
+
     .form-horizontal table{
         margin: auto;
         width: auto;
@@ -34,15 +34,25 @@
     table td .btn{
         margin-top:10px;
     }
+    label{
+        cursor: pointer;
+    }
 </style>
 {%endblock%}
 
 {% block js %}
-<script>$("#menu-organizations").addClass("active")
+<script>
+    $(document).on("ready",function(){
+        $("#menu-organizations").addClass("active")
 
-$('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
-$(".form-horizontal td ul").addClass("btn-group-vertical").attr({"data-toggle":"buttons-radio"})
-$(".form-horizontal td ul li").addClass("btn")
+        $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
+        $(".group-type").parent().parent().parent().addClass("btn-group-vertical").attr({"data-toggle":"buttons-radio"})
+        $(".btn-group-vertical li").addClass("btn")
+
+        $(".hidden").first().click().parent().parent().addClass("active")
+    })
+    
+
 </script>
 
 
