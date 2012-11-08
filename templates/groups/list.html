@@ -35,7 +35,7 @@
 
             {% endfor %}
         </ul>
-        <button id="large">Largo</button><button id="medium">Medio</button><button id="small">Corto</button>
+        
     </section>
 
 </article>
@@ -62,40 +62,16 @@
     }
     .colorText{
         color:#555;
+        overflow: hidden;
+        width: 50px;
     }
+    
 </style>
 {% endblock %}
 
 {% block js %}
 <script>
-    $("#large").click(function(){
-        var reduceText1=$(".groupInfo").text();
-        var reduceText2=$(".colorText").text();
-        
-        var reduce1=reduceText1.substring(0,50)
-        var reduce2=reduceText2.substring(0,50)
-        alert(reduce2+"...")
-
-    })
-    $("#medium").click(function(){
-        var reduceText1=$(".groupInfo").text();
-        var reduceText2=$(".colorText").text();
-        
-        var reduce1=reduceText1.substring(0,20)
-        var reduce2=reduceText2.substring(0,40)
-        alert(reduce2+"...")
-
-    })
-    $("#small").click(function(){
-        var reduceText1=$(".groupInfo").text();
-        var reduceText2=$(".colorText").text();
-        
-        var reduce1=reduceText1.substring(0,10)
-        var reduce2=reduceText2.substring(0,20)
-        alert(reduce2+"...")
-
-    })
-       
+          
     $("#menu-organizations").addClass("active")
     $(".button button").click(function(e){
         e.preventDefault()
