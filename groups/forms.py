@@ -4,9 +4,17 @@ from groups.models import group_type
 
 
 class newGroupForm(forms.Form):
+    group_type = group_type.objects.all()
+    i = 0
+    CHOICES = []
+    print len(group_type)
+    for gt in group_type:
+        CHOICES.append((gt.id, gt.name))
+        i = i + 1
     name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo', 'autofocus': 'autofocus'}))
-    description = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={'placeholder': 'Descripción'}))
-    id_group_type = forms.ModelChoiceField(label="Tipo de Grupo", queryset=group_type.objects.all())
+    description = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={'placeholder': 'Descripción', 'rows': '4'}))
+    id_group_type = forms.ChoiceField(label="Tipo de Grupo", choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'hidden'}))
+    #id_group_type = forms.ModelChoiceField(label="Tipo de Grupo", queryset=group_type.objects.all())
 
 #    class Meta:
 #        model = groups
