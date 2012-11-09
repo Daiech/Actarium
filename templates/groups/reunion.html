@@ -1,0 +1,63 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - Actas{% endblock %}
+
+{%block body%}
+<article>
+    <h2>Reunion</h2>
+    <hr>
+    <section id="reunion" >
+    	<ul>
+    		<li> Reunion convocada por: {{ reunion_data.convener }}</li>
+    		<li>En el grupo {{ reunion_data.group}}</li>
+    		<li>Convocada el dia: {{ reunion_data.date_convened}}</li>
+    		<li>Para el dia: {{ reunion_data.date_reunion}}</li>
+    		<li>Objetivo: {{ reunion_data.agenda}}</li>
+    		<li>Realizada? {{ reunion_data.is_done}}</li>
+    		
+    		
+    	</ul>
+		 <br />
+		 <br />
+		
+    </section>
+    
+</article>
+{%endblock%}
+{%block style%}
+<style>
+    h2{
+        margin-left: 20px;
+    }
+    h3{
+        margin-bottom: 20px;
+    }
+    .form-horizontal table{
+        margin: auto;
+        width: auto;
+    }
+
+    table td .btn{
+        margin-top:10px;
+    }
+ 
+ 
+/* Customize your modal window here, you can add background image too */
+#boxes #dialog {
+  width:375px;
+  height:203px;
+}
+</style>
+
+{%endblock%}
+
+{% block js %}
+
+<script>$("#menu-reunions").addClass("active")</script>
+
+<script type="text/javascript" >
+$(document).on("ready", function() {       
+     
+});
+
+</script>
+{% endblock %}

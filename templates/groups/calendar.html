@@ -3,13 +3,26 @@
 
 {%block body%}
 <article>
-    <h2>Pr&oacute;ximas reuniones</h2>
+    <h2>Pr&oacute;ximas reuniones  <div class="fix_btn"><a href="#" role="button" class="btn" data-toggle="modal">Modal Reuniones<i class="icon-bullhorn"></i></a></div>
+    </h2>
     <hr>
     <section id="calendar" >
 
         <div id="datepicker">Cargando calendario...
             <img src="/static/img/load16.gif" alt="cargando calendario"/>
         </div>
+        <div class="modal hide fade" id="myReunionModal">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Reunion</h3>
+			</div>
+			<div class="modal-body">
+				<div id="reunion-data">
+							datos de reuniones
+	        	</div>
+			</div>
+		</div>
+
         <div class="center">
             <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a>
         </div>
@@ -75,13 +88,7 @@
 {% block js %}
 <script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
 <script>$("#menu-reunions").addClass("active")</script>
-
 <script type="text/javascript" >
-//<<<<<<< HEAD
-
-
-
-
 $(document).on("ready", function() {
 	var events = [
 		{% for reunion in reunions %}
@@ -151,7 +158,7 @@ $(document).on("ready", function() {
 		   			    '</span>'+
 		   			    '<div class="botonera">'+
 		   			 		' <a href="#" class="btn btn-small btn-warning comfirmed-false" data-id_reunion="'+this.id_r+'">Cancelar</a> '+
-			   			    ' <a class="btn btn-link" href="#">Ver m&aacute;s</a> '+
+			   			    ' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+this.id_r+'">Ver m&aacute;s</a> '+
 		   			    '</div>'+
 		   			    '<hr>'+
 		  				'</li>';
@@ -165,7 +172,7 @@ $(document).on("ready", function() {
 		   			    '</span>'+
 		   			    '<div class="botonera">'+
 			   			    ' <a href="#" class="btn btn-small btn-info comfirmed-true" data-id_reunion="'+this.id_r+'">Asistir&eacute;</a> '+
-			   			    ' <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a> '+
+			   			 ' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+this.id_r+'">Ver m&aacute;s</a> '+
 		   			    '</div>'+
 		   			    '<hr>'+
 		  				'</li>';
@@ -181,11 +188,12 @@ $(document).on("ready", function() {
 		  			    '<div class="botonera">'+
 		   			    ' <a href="#" class="btn btn-small btn-info comfirmed2-true" data-id_reunion="'+this.id_r+'">Asistir&eacute;</a> '+
 		   			    ' <a href="#" class="btn btn-small comfirmed2-false" data-id_reunion="'+this.id_r+'">No Asistir&eacute;</a> '+
-		   			    ' <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a> '+
+		   			 ' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+this.id_r+'">Ver m&aacute;s</a> '+
 		  			    '</div>'+
 		  			    '<hr>'+
 		 				'</li>';
 			}
+
 		});
 		list1 =list1+"</ul>";
 	    list2 =list2+"</ul>";
@@ -198,6 +206,7 @@ $(document).on("ready", function() {
 	    if (o3 == 1)
 	    	full_text = full_text + list3;
 		$("#reunions").html(full_text);
+		setMoreButton();
 	}
 	//var y = {'hola':'mundo'};
 	//console.log(JSON.stringify(y));
@@ -224,7 +233,7 @@ $(document).on("ready", function() {
 			   			    '</span>'+
 			   			    '<div class="botonera">'+
 			   			 		' <a href="#" class="btn btn-small btn-warning comfirmed-false" data-id_reunion="'+id_reunion+'">Cancelar</a> '+
-				   			    ' <a class="btn btn-link" href="#">Ver m&aacute;s</a> '+
+			   			 	    ' <a href="#myReunionModal" class="btn btn-link pull-right get-reunion" data-toggle="modal" data-id-reunion="'+id_reunion+'" >Ver m&aacute;s</a> '+
 			   			    '</div>'+
 			   			    '<hr>'+
 			  				'</li>';
@@ -253,7 +262,7 @@ $(document).on("ready", function() {
 		   			    '</span>'+
 		   			    '<div class="botonera">'+
 			   			    ' <a href="#" class="btn btn-small btn-info comfirmed-true" data-id_reunion="'+id_reunion+'">Asistir&eacute;</a> '+
-			   			    ' <a class="btn btn-link pull-right" href="#">Ver m&aacute;s</a> '+
+			   			    ' <a href="#myReunionModal" class="btn btn-link pull-right get-reunion" data-toggle="modal" data-id-reunion="'+id_reunion+'" >Ver m&aacute;s</a> '+
 		   			    '</div>'+
 		   			    '<hr>'+
 		  				'</li>';
@@ -274,12 +283,41 @@ $(document).on("ready", function() {
             			setComfirmButton();
             			if(c.text()==""){c.remove(); $('#comfirmadas2').remove()}
         			}
+    				setMoreButton();
     				
     			}
     	)
     	
 	}
 
+	function getReunionData(id_reunion){
+		console.log('dame una reunion');
+		sendAjax("/groups/getReunion",
+    			{id_reunion:id_reunion},
+    			"#load_reunions",
+    			function(data){
+    				/*reunion_data = {"convener":data.convener,
+    				           "date_convened": data.date_convened,
+    				           "date_reunion": data.date_reunion,
+    				           "group": data.group,
+    				           "agenda": data.agenda, 
+    				           "is_done": data.is_done           
+    				       }*/
+    				reunion_list=
+        				"<ul>"+
+		    	    		"<li> Reunion convocada por: "+data.convener+"}</li>"+
+		    	    		"<li>En el grupo: "+data.date_convened+"</li>"+
+		    	    		"<li>Convocada el dia: "+data.date_reunion+"</li>"+
+		    	    		"<li>Para el dia: "+data.group+"</li>"+
+		    	    		"<li>Objetivo: "+data.agenda+"</li>"+
+		    	    		"<li>Realizada? "+data.is_done +"</li>"+
+    	    			"</ul>"
+				    console.log(reunion_list)
+					$('#reunion-data').html(reunion_list);
+    				//setMoreButton();
+    			}
+    	);
+	}
 	function setComfirmButton(){
 		//console.log('setComfirmButton');
 		$('.comfirmed-true').click(function(e){
@@ -330,36 +368,17 @@ $(document).on("ready", function() {
 			if(p.text()==""){p.remove(); $('#pendientes2').remove()}
 		});	
 	}
+	function setMoreButton(){
+		console.log('escucha el boton');
+		$('.get-reunion').click(function(e){
+			e.preventDefault();
+			getReunionData($(this).attr("data-id-reunion"));
+		});
+	}
 	setComfirmButton();
 	setRejectButton();
 	setButtons();
+
 });
-/*
-=======
-    $(document).on("ready", function()
-    {
-        var events = [
-            {% for reunion in reunions %}
-            "{{reunion.date_reunion|date:'Y-m-d'}}",
-            {% endfor %}                            
-        ];
-        $( "#datepicker" ).text("")
-        var dp = $( "#datepicker" ).datepicker({ 
-            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-            nextText: 'Siguiente',
-            prevText: 'Anterior',
-            dateFormat: 'yy-mm-dd',
-            beforeShowDay: function(date) {
-                var current = $.datepicker.formatDate('yy-mm-dd', date);
-                return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
-            },
-            onSelect: function(dateText, inst) {  //alert("new date: " + dateText); //+ " " + $(this).datepicker('getDate'));
-                top.location="/groups/calendar/"+dateText;
-                //setAlertMessage("Fecha",dateText);
-            }
-        });    
-    })
->>>>>>> 79d7976f70ccae3f36d73f2fd7f64bf9b4faa3f5 */
 </script>
 {% endblock %}
