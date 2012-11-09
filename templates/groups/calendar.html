@@ -146,7 +146,7 @@ $(document).on("ready", function() {
 		var o2 = 0;
 		var o3 = 0;
 		$.each(data, function() { 
-			console.log(data);
+			//console.log(data);
 			var base='<li data-group_name="'+this.group_name+'" data-date="'+this.date+'">'
 			if(this.is_saved == 1){
 				if(this.is_comfirmed == 'True' || this.is_comfirmed == true){ //reuniones comfirmadas
@@ -312,7 +312,7 @@ $(document).on("ready", function() {
 		    	    		"<li>Objetivo: "+data.agenda+"</li>"+
 		    	    		"<li>Realizada? "+data.is_done +"</li>"+
     	    			"</ul>"
-				    console.log(reunion_list)
+				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
     				//setMoreButton();
     			}
@@ -352,7 +352,7 @@ $(document).on("ready", function() {
 			li.fadeOut();
 			li.remove();
 			p = $('#pendientes')
-			console.log("|"+p.text()+"|");
+			//console.log("|"+p.text()+"|");
 			if(p.text()==""){p.remove(); $('#pendientes2').remove()}
 		});
 		$('.comfirmed2-false').click(function(e){
@@ -364,12 +364,12 @@ $(document).on("ready", function() {
 			li.fadeOut();
 			li.remove();
 			p = $('#pendientes')
-			console.log("|"+p.text()+"|");
+			//console.log("|"+p.text()+"|");
 			if(p.text()==""){p.remove(); $('#pendientes2').remove()}
 		});	
 	}
 	function setMoreButton(){
-		console.log('escucha el boton');
+		//console.log('escucha el boton');
 		$('.get-reunion').click(function(e){
 			e.preventDefault();
 			getReunionData($(this).attr("data-id-reunion"));
