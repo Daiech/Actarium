@@ -13,7 +13,7 @@ class newGroupForm(forms.Form):
         i = i + 1
     name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo', 'autofocus': 'autofocus'}))
     description = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={'placeholder': 'Descripción', 'rows': '4'}))
-    id_group_type = forms.ChoiceField(label="Tipo de Grupo", choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'hidden'}))
+    id_group_type = forms.ChoiceField(label="Tipo de Grupo", choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'hidden group-type'}))
     #id_group_type = forms.ModelChoiceField(label="Tipo de Grupo", queryset=group_type.objects.all())
 
 #    class Meta:
