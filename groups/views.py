@@ -468,3 +468,38 @@ def setAssistance(request):
     return HttpResponse(json.dumps(datos), mimetype="application/json")
 #    else:
 #        response = "Error Calendar"
+
+def getReunionData(request):
+#    if request.is_ajax():
+    if request.method == 'GET':
+        id_reunion = str(request.GET['id_reunion'])
+        reunion = reunions.objects.get(pk=id_reunion)
+        convener = reunion.id_convener.username
+        date_convened = reunion.date_convened
+        date_reunion = reunion.date_reunion
+        group = reunion.id_group.name
+        agenda = reunion.agenda
+        is_done = reunion.is_done
+        reunion_data = {"convener":convener,
+           "date_convened": str(date_convened),
+           "date_reunion": str(date_reunion),
+           "group": group,
+           "agenda": agenda, 
+           "is_done": is_done           
+       }
+#    else:
+#        reunion_data = "Error Calendar"
+    return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
+
+
+
+
+
+
+
+
+
+
+
+
+
