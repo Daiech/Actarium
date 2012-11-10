@@ -154,6 +154,9 @@ def isMemberOfGroup(id_user, id_group):
     except User.DoesNotExist, e:
         print e
         return False
+    except Exception, e:
+        print e
+        return False
 
 
 def isMemberOfGroupByEmail(email, id_group):
@@ -161,6 +164,9 @@ def isMemberOfGroupByEmail(email, id_group):
         try:
             ans = User.objects.get(email=email)
         except User.DoesNotExist, e:
+            print e
+            return False
+        except Exception, e:
             print e
             return False
         if ans:
@@ -179,6 +185,10 @@ def newInvitation(request):
                 if not isMemberOfGroup(request.user, q):
                     return HttpResponse(q)
             except groups.DoesNotExist:
+                q = False
+                return HttpResponse(q)
+            except Exception, e:
+                print e
                 q = False
                 return HttpResponse(q)
             mail = str(request.GET['search'])
