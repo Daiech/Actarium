@@ -154,6 +154,9 @@ def isMemberOfGroup(id_user, id_group):
     except User.DoesNotExist, e:
         print e
         return False
+    except Exception, e:
+        print e
+        return False
 
 
 def isMemberOfGroupByEmail(email, id_group):
@@ -161,6 +164,9 @@ def isMemberOfGroupByEmail(email, id_group):
         try:
             ans = User.objects.get(email=email)
         except User.DoesNotExist, e:
+            print e
+            return False
+        except Exception, e:
             print e
             return False
         if ans:
@@ -179,6 +185,10 @@ def newInvitation(request):
                 if not isMemberOfGroup(request.user, q):
                     return HttpResponse(q)
             except groups.DoesNotExist:
+                q = False
+                return HttpResponse(q)
+            except Exception, e:
+                print e
                 q = False
                 return HttpResponse(q)
             mail = str(request.GET['search'])
@@ -285,26 +295,45 @@ def deleteInvitation(request):
 
 @login_required(login_url='/account/login')
 def showMinutes(request, slug, minutes_id):
-    group = groups.objects.get(slug=slug)
-    minutes_current = minutes.objects.get(id_group=group, code=minutes_id)
-    minutes_group = minutes.objects.filter(id_group=group.id)
-    prev = None
-    next = None
     try:
-        prev = minutes.get_previous_by_date_created(minutes_current, id_group=group)
-    except minutes.DoesNotExist:
-        prev = False
+        group = groups.objects.get(slug=slug)
+    except groups.DoesNotExist:
+        group = False
     except Exception, e:
-        print "prev: " + str(e)
-    try:
-        next = minutes.get_next_by_date_created(minutes_current, id_group=group)
-    except minutes.DoesNotExist:
-        next = False
-    except Exception, e:
-        print "next: " + str(e)
-    members = rel_user_group.objects.filter(id_group=group, is_active=True)
-    ctx = {"group": group, "minutes": minutes_current, "members": members,
+        group = False
+        print e
+    if not group:
+        return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
+    if isMemberOfGroup(request.user, group):
+        try:
+            minutes_current = minutes.objects.get(id_group=group, code=minutes_id)
+        except minutes.DoesNotExist:
+            minutes_current = False
+        except Exception, e:
+            raise e
+            minutes_current = False
+        if not minutes_current:
+            return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
+        minutes_group = minutes.objects.filter(id_group=group.id)
+        prev = None
+        next = None
+        try:
+            prev = minutes.get_previous_by_date_created(minutes_current, id_group=group)
+        except minutes.DoesNotExist:
+            prev = False
+        except Exception, e:
+            print "prev: " + str(e)
+        try:
+            next = minutes.get_next_by_date_created(minutes_current, id_group=group)
+        except minutes.DoesNotExist:
+            next = False
+        except Exception, e:
+            print "next: " + str(e)
+        members = rel_user_group.objects.filter(id_group=group, is_active=True)
+        ctx = {"group": group, "minutes": minutes_current, "members": members,
             "minutes_list": minutes_group, "prev": prev, "next": next}
+    else:
+        return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 
@@ -325,18 +354,18 @@ def newMinutes(request, slug):
                 'agreement': form.cleaned_data['agreement'],
                 }
                 myNewMinutes_type_1 = minutes_type_1(
-                               date_start=datetime.datetime.strptime(str(datetime.date.today()) + " "+str(df['date_start']),'%Y-%m-%d %H:%M:%S'),
-                               date_end=datetime.datetime.strptime(str(datetime.date.today()) + " "+str(df['date_end']),'%Y-%m-%d %H:%M:%S'),
+                               date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
+                               date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
                                location=df['location'],
                                agenda=df['agenda'],
-                               agreement = df['agreement'],
+                               agreement=df['agreement'],
                              )
                 myNewMinutes_type_1.save()
                 myNewMinutes = minutes(
-                                code = df['code'],
-                                id_extra_minutes = myNewMinutes_type_1,
-                                id_group = q,
-                                id_type = minutes_type.objects.get(pk=1),
+                                code=df['code'],
+                                id_extra_minutes=myNewMinutes_type_1,
+                                id_group=q,
+                                id_type=minutes_type.objects.get(pk=1),
                             )
                 myNewMinutes.save()
                 return HttpResponseRedirect("/groups/" + str(q.slug))
@@ -363,9 +392,9 @@ def newReunion(request, slug):
                     'agenda': form.cleaned_data['agenda'],
                 }
                 myNewReunion = reunions(
-                               id_convener = request.user,
+                               id_convener=request.user,
                                date_reunion=df['date_reunion'],
-                               id_group = q,
+                               id_group=q,
                                agenda=df['agenda'],
                              )
                 myNewReunion.save()
@@ -469,6 +498,7 @@ def setAssistance(request):
 #    else:
 #        response = "Error Calendar"
 
+
 def getReunionData(request):
 #    if request.is_ajax():
     if request.method == 'GET':
@@ -480,12 +510,12 @@ def getReunionData(request):
         group = reunion.id_group.name
         agenda = reunion.agenda
         is_done = reunion.is_done
-        reunion_data = {"convener":convener,
+        reunion_data = {"convener": convener,
            "date_convened": str(date_convened),
            "date_reunion": str(date_reunion),
            "group": group,
-           "agenda": agenda, 
-           "is_done": is_done           
+           "agenda": agenda,
+           "is_done": is_done
        }
 #    else:
 #        reunion_data = "Error Calendar"
