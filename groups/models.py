@@ -108,8 +108,8 @@ class rel_reunion_minutes(models.Model):
 class assistance(models.Model):
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
-    is_comfirmed = models.BooleanField(default=False)
-    date_comfirmed = models.DateTimeField(auto_now=True)
+    is_confirmed = models.BooleanField(default=False)
+    date_confirmed = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('id_user', 'id_reunion')
