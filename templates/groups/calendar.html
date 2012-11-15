@@ -3,12 +3,10 @@
 
 {%block body%}
 <article>
-    <h2>Pr&oacute;ximas reuniones  <div class="fix_btn"><a href="#" role="button" class="btn" data-toggle="modal">Modal Reuniones<i class="icon-bullhorn"></i></a></div>
-    </h2>
+    <h2>Pr&oacute;ximas reuniones  </h2>
     <hr>
     <section id="calendar" >
-
-        <div id="datepicker">Cargando calendario...
+        <div id="datepicker">
             <img src="/static/img/load16.gif" alt="cargando calendario"/>
         </div>
         <div class="modal hide fade" id="myReunionModal">
@@ -18,22 +16,18 @@
 			</div>
 			<div class="modal-body">
 				<div id="reunion-data">
-							datos de reuniones
+					<div id="loading-reunion"></div>
 	        	</div>
 			</div>
 		</div>
-
         <div class="center">
             <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a>
         </div>
-        <section id="reunions2" >
-        </section>
-        <section id="reunions3" >
-        </section>
     </section>
+    <section id="date_reunions"></section>
     <section id="reunions" >
+    	<div id="load_reunions"></div>
     </section>
-
 </article>
 {%endblock%}
 {%block style%}
@@ -56,6 +50,10 @@
         padding-left: 30px;
         padding-top: 10px;
         float:left;
+    }
+    #date_reunions{
+    	 padding-left: 40px;
+    	 float: left;
     }
     #reunions {
         width: 490px;
@@ -81,6 +79,9 @@
         margin: 10px auto;
         width: 180px;
     }
+    #bold_date{
+    	font-size:21px;
+    }
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
 {%endblock%}
@@ -88,8 +89,9 @@
 {% block js %}
 <script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
 <script>$("#menu-reunions").addClass("active")</script>
-<script type="text/javascript" >
+<script type="text/javascript" ><!--
 $(document).on("ready", function() {
+	
 	var events = [
 		{% for reunion in reunions %}
 			"{{reunion.date_reunion|date:'Y-m-d'}}",
@@ -112,7 +114,6 @@ $(document).on("ready", function() {
 	    			"#load_reunions",
 	    			function(data){
 		    			//console.log(data);
-		    			//show_data(data)
 		    			url = location.pathname;
 		    			url2 = "/groups/calendar";
 		    			if (url == url2){
@@ -123,7 +124,8 @@ $(document).on("ready", function() {
 		    			}
 		    			window.history.pushState(data, dateText, html5url);
 		    			show_data(data)
-		    			setComfirmButton();
+		    			$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+dateText+" </span> </h4>");
+		    			setconfirmButton();
 		    			setRejectButton();
 		    			setButtons();
 		    			
@@ -135,65 +137,33 @@ $(document).on("ready", function() {
 	url2 = "/groups/calendar";
 	if (url != url2){
 		dp.datepicker("setDate", (url).substring(17,27));  
+		$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+(url).substring(17,27)+" </span> </h4>");
 	}
+	
 	function show_data(data){
 		var full_text = "";
-		var list1="<h3 id='comfirmadas2'>Reuniones cofirmadas</h3><ul id='comfirmadas'>";
+		var list1="<h3 id='confirmadas2'>Reuniones confirmadas</h3><ul id='confirmadas'>";
 		var list2="<h3 id='pendientes2'>Reuniones pendietes por confirmar</h3><ul id='pendientes'>";
 		var list3="<h3 id='rechazadas2'>Reuniones rechazadas</h3><ul id='rechazadas'>";
-		
 		var o1 = 0;
 		var o2 = 0;
 		var o3 = 0;
 		$.each(data, function() { 
 			//console.log(data);
-			var base='<li data-group_name="'+this.group_name+'" data-date="'+this.date+'">'
 			if(this.is_saved == 1){
-				if(this.is_comfirmed == 'True' || this.is_comfirmed == true){ //reuniones comfirmadas
+				if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
 					if (o1== 0){ o1 = 1 };
-					list1 = list1 + 
-					base+
-		 				'<span class=""> '+
-		   			    	' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+this.group_name+'</a> Hora: '+this.date+
-		   			    '</span>'+
-		   			    '<div class="botonera">'+
-		   			 		' <a href="#" class="btn btn-small btn-warning comfirmed-false" data-id_reunion="'+this.id_r+'">Cancelar</a> '+
-			   			    ' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+this.id_r+'">Ver m&aacute;s</a> '+
-		   			    '</div>'+
-		   			    '<hr>'+
-		  				'</li>';
+					list1 = list1 + createList(1,this.group_name,this.date,this.id_r);
 				}
 				else { //reuniones rechazadas
 					if (o3== 0){ o3 = 1 };
-					list3 = list3 + 
-					base+
-		 				'<span class=""> '+
-		   			    	' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+this.group_name+'</a> Hora: '+this.date+
-		   			    '</span>'+
-		   			    '<div class="botonera">'+
-			   			    ' <a href="#" class="btn btn-small btn-info comfirmed-true" data-id_reunion="'+this.id_r+'">Asistir&eacute;</a> '+
-			   			 ' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+this.id_r+'">Ver m&aacute;s</a> '+
-		   			    '</div>'+
-		   			    '<hr>'+
-		  				'</li>';
+					list3 = list3  + createList(2,this.group_name,this.date,this.id_r);
 				}
 			}
-			else{ //reuniones pendientes por comfirmar
+			else{ //reuniones pendientes por confirmar
 				if (o2== 0){ o2 = 1 };
-				list2 = list2 + 
-				base+
-						'<span class=""> '+
-		  			    	' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+this.group_name+'</a> Hora: '+this.date+
-		  			    '</span>'+
-		  			    '<div class="botonera">'+
-		   			    ' <a href="#" class="btn btn-small btn-info comfirmed2-true" data-id_reunion="'+this.id_r+'">Asistir&eacute;</a> '+
-		   			    ' <a href="#" class="btn btn-small comfirmed2-false" data-id_reunion="'+this.id_r+'">No Asistir&eacute;</a> '+
-		   			 ' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+this.id_r+'">Ver m&aacute;s</a> '+
-		  			    '</div>'+
-		  			    '<hr>'+
-		 				'</li>';
+				list2 = list2 + createList(3,this.group_name,this.date,this.id_r);
 			}
-
 		});
 		list1 =list1+"</ul>";
 	    list2 =list2+"</ul>";
@@ -208,65 +178,38 @@ $(document).on("ready", function() {
 		$("#reunions").html(full_text);
 		setMoreButton();
 	}
-	//var y = {'hola':'mundo'};
-	//console.log(JSON.stringify(y));
 	
 	var x = '{{ my_reu_day_json|safe }}';
-	show_data(JSON.parse(x))
+	if (x!=''){
+		show_data(JSON.parse(x));}
 	
-	function comfirm(id_reunion, is_comfirmed, group_name, date){
-		//console.log(id_reunion+" "+is_comfirmed);
-		
+	function confirm(id_reunion, is_confirmed, group_name, date){
+		//console.log(id_reunion+" "+is_confirmed);
 		sendAjax("/groups/setAssistance",
-    			{id_reunion:id_reunion, is_comfirmed: is_comfirmed},
+    			{id_reunion:id_reunion, is_confirmed: is_confirmed},
     			"#load_reunions",
     			function(data){
-    				var base='<li data-group_name="'+group_name+'" data-date="'+date+'">'
-    				var list1="<h3 id='comfirmadas2'>Reuniones cofirmadas</h3><ul id='comfirmadas'> </ul>";
-					var list2="<h3 id='rechazadas2'>Reuniones rechazadas</h3><ul id='rechazadas'> </ul>";
-    				if(is_comfirmed == true){
-    					
-    					//console.log($('#comfirmadas').html());
-        				L = base+
-	        				'<span class=""> '+
-			   			    	' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+group_name+'</a> Hora: '+date+
-			   			    '</span>'+
-			   			    '<div class="botonera">'+
-			   			 		' <a href="#" class="btn btn-small btn-warning comfirmed-false" data-id_reunion="'+id_reunion+'">Cancelar</a> '+
-			   			 	    ' <a href="#myReunionModal" class="btn btn-link pull-right get-reunion" data-toggle="modal" data-id-reunion="'+id_reunion+'" >Ver m&aacute;s</a> '+
-			   			    '</div>'+
-			   			    '<hr>'+
-			  				'</li>';
-			  				
-        				if($('#comfirmadas').length){
+    				var list1="<h3 id='confirmadas2'>Reuniones cofirmadas</h3><ul id='confirmadas'></ul>";
+					var list2="<h3 id='rechazadas2'>Reuniones rechazadas</h3><ul id='rechazadas'></ul>";
+    				if(is_confirmed == true){
+    					//console.log($('#confirmadas').html());
+        				L = createList(1,group_name,date,id_reunion);
+        				if($('#confirmadas').length){
         					//console.log('si existe');
-        					list= $('#comfirmadas').html();
+        					list= $('#confirmadas').html();
         					//console.log(list);
         					//console.log(L);
-        					$('#comfirmadas').html(list+L);
+        					$('#confirmadas').html(list+L);
         				}
     					else{
         					//console.log('no existe');
         					$('#reunions').prepend(list1);
-        					$('#comfirmadas').html(L);
+        					$('#confirmadas').html(L);
     					}
         				setRejectButton();
-        				r =$('#rechazadas');
-        				if (r.text()=="") {r.remove(); $('#rechazadas2').remove()}
-    					
     				}
         			else{
-            			L =base+
-            			'<span class=""> '+
-		   			    	' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+group_name+'</a> Hora: '+date+
-		   			    '</span>'+
-		   			    '<div class="botonera">'+
-			   			    ' <a href="#" class="btn btn-small btn-info comfirmed-true" data-id_reunion="'+id_reunion+'">Asistir&eacute;</a> '+
-			   			    ' <a href="#myReunionModal" class="btn btn-link pull-right get-reunion" data-toggle="modal" data-id-reunion="'+id_reunion+'" >Ver m&aacute;s</a> '+
-		   			    '</div>'+
-		   			    '<hr>'+
-		  				'</li>';
-		  				
+            			L = createList(2,group_name,date,id_reunion);
             			if($('#rechazadas').length){
         					//console.log('si existe');
         					list= $('#rechazadas').html();
@@ -279,106 +222,105 @@ $(document).on("ready", function() {
         					$('#reunions').append(list2);
         					$('#rechazadas').html(L);
     					}
-    					c=$('#comfirmadas');
-            			setComfirmButton();
-            			if(c.text()==""){c.remove(); $('#comfirmadas2').remove()}
+            			setconfirmButton();
         			}
-    				setMoreButton();
-    				
+    				setMoreButton();			
     			}
     	)
-    	
 	}
-
 	function getReunionData(id_reunion){
-		console.log('dame una reunion');
+		//console.log('dame una reunion');
 		sendAjax("/groups/getReunion",
     			{id_reunion:id_reunion},
-    			"#load_reunions",
+    			"#loading-reunion",
     			function(data){
-    				/*reunion_data = {"convener":data.convener,
-    				           "date_convened": data.date_convened,
-    				           "date_reunion": data.date_reunion,
-    				           "group": data.group,
-    				           "agenda": data.agenda, 
-    				           "is_done": data.is_done           
-    				       }*/
     				reunion_list=
         				"<ul>"+
-		    	    		"<li> Reunion convocada por: "+data.convener+"}</li>"+
-		    	    		"<li>En el grupo: "+data.date_convened+"</li>"+
+		    	    		"<li> Reunion convocada por: "+data.convener+"</li>"+
+		    	    		"<li>En el grupo: "+data.group+"</li>"+
 		    	    		"<li>Convocada el dia: "+data.date_reunion+"</li>"+
-		    	    		"<li>Para el dia: "+data.group+"</li>"+
+		    	    		"<li>Para el dia: "+data.date_convened+"</li>"+
 		    	    		"<li>Objetivo: "+data.agenda+"</li>"+
 		    	    		"<li>Realizada? "+data.is_done +"</li>"+
-    	    			"</ul>"
+		    	    		"<li>Assistentes: </li>";
+
+		    	    		$.each(data.assistants,function(){reunion_list = reunion_list+ "<li>"+ this.username+ " c: "+this.is_confirmed+"</li>"})
+		    	    		
+    	    			reunion_list = reunion_list + "</ul>";
+    	    			//console.log(data.assistants[0].username)
+    	    			$.each(data.assistants,function(){console.log(this.username)})
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
     				//setMoreButton();
     			}
     	);
 	}
-	function setComfirmButton(){
-		//console.log('setComfirmButton');
-		$('.comfirmed-true').click(function(e){
-			
-			e.preventDefault();
-			li = $(this).parent().parent();
-			//comfirm($(this).attr("data-id_reunion"),true,"d","s");
-			comfirm($(this).attr("data-id_reunion"),true, li.attr("data-group_name"), li.attr("data-date"));
-			li.fadeOut();
-			li.remove();
+	function setconfirmButton(){
+		$('.confirmed-true').click(function(e){
+			setList(e,$(this),$('#rechazadas'),$('#rechazadas2'), true);
 		});
 		
 	}
 	function setRejectButton(){
-		//console.log('setRejectButton');
-		$('.comfirmed-false').click(function(e){
-			e.preventDefault();
-			//$(this).parent().parent().fadeOut();
-			li = $(this).parent().parent();
-			comfirm($(this).attr("data-id_reunion"),false, li.attr("data-group_name"), li.attr("data-date"));
-			//comfirm($(this).attr("data-id_reunion"),true,"d","s");
-			li.fadeOut();
-			li.remove();
+		$('.confirmed-false').click(function(e){
+			setList(e,$(this),$('#confirmadas'),$('#confirmadas2'), false);
 		});	
 	}
+	
 	function setButtons(){
-		$('.comfirmed2-true').click(function(e){
-			e.preventDefault();
-			li = $(this).parent().parent();
-			//comfirm($(this).attr("data-id_reunion"),true,"d","s");
-			comfirm($(this).attr("data-id_reunion"),true, li.attr("data-group_name"), li.attr("data-date"));
-			li.fadeOut();
-			li.remove();
-			p = $('#pendientes')
-			//console.log("|"+p.text()+"|");
-			if(p.text()==""){p.remove(); $('#pendientes2').remove()}
+		$('.confirmed2-true').click(function(e){
+			setList(e,$(this),$('#pendientes'),$('#pendientes2'), true);
 		});
-		$('.comfirmed2-false').click(function(e){
-			e.preventDefault();
-			//$(this).parent().parent().fadeOut();
-			li = $(this).parent().parent();
-			comfirm($(this).attr("data-id_reunion"),false, li.attr("data-group_name"), li.attr("data-date"));
-			//comfirm($(this).attr("data-id_reunion"),true,"d","s");
-			li.fadeOut();
-			li.remove();
-			p = $('#pendientes')
-			//console.log("|"+p.text()+"|");
-			if(p.text()==""){p.remove(); $('#pendientes2').remove()}
+		$('.confirmed2-false').click(function(e){
+			setList(e,$(this),$('#pendientes'),$('#pendientes2'),false);
 		});	
 	}
 	function setMoreButton(){
-		//console.log('escucha el boton');
 		$('.get-reunion').click(function(e){
 			e.preventDefault();
 			getReunionData($(this).attr("data-id-reunion"));
 		});
 	}
-	setComfirmButton();
+	setconfirmButton();
 	setRejectButton();
 	setButtons();
 
+	function setList(e,btn, ul, h3, op){
+		var t = 500;
+		e.preventDefault();
+		li= btn.parent().parent();
+		li.animate({'height': 0},t,function(){
+			confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+			$(this).remove()
+			console.log("|"+ul.text()+"|");
+			if(ul.text()==""){ul.remove(); h3.remove()}
+		});
+	}
+
+	function createList(type,group_name,date,id_reunion){
+		li='<li data-group_name="'+group_name+'" data-date="'+date+'">'+
+				'<span class=""> '+
+		    		' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+group_name+'</a> Hora: '+date+
+		    	'</span>'+
+		    	'<div class="botonera">';
+				    switch (type){
+					    case 1 : {
+				 			li = li + '<a href="#" class="btn btn-small btn-warning confirmed-false" data-id_reunion="'+id_reunion+'">Cancelar</a>';
+				    	}; break;
+					    case 2 : {
+							li = li + '<a href="#" class="btn btn-small btn-info confirmed-true" data-id_reunion="'+id_reunion+'">Asistir&eacute;</a>';
+				    	}; break;
+					    case 3 : {
+							li = li + ' <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="'+id_reunion+'">Asistir&eacute;</a> '+
+							    	  ' <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="'+id_reunion+'">No Asistir&eacute;</a> ';
+						}; break;
+				    }
+					li = li+' <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="'+id_reunion+'">Ver m&aacute;s</a> '+
+		    	'</div>'+
+		    	'<hr>'+
+			'</li>';
+		return li;
+	}
 });
 </script>
 {% endblock %}

@@ -85,7 +85,7 @@ class minutes(models.Model):
     code = models.CharField(max_length=150, verbose_name="code")
 
     def __unicode__(self):
-        return "id_group: %s, %s, %s" % (self.id_group, date_created, id_extra_minutes)
+        return "id_group: %s, %s, %s" % (self.id_group, self.date_created, self.id_extra_minutes)
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')
@@ -106,8 +106,8 @@ class rel_reunion_minutes(models.Model):
 class assistance(models.Model):
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
-    is_comfirmed = models.BooleanField(default=False)
-    date_comfirmed = models.DateTimeField(auto_now = True)
+    is_confirmed = models.BooleanField(default=False)
+    date_confirmed = models.DateTimeField(auto_now = True)
     
     class Meta:
         unique_together = ('id_user', 'id_reunion')

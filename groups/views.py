@@ -413,10 +413,24 @@ def newReunion(request, slug):
 def calendar(request):
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False)  # reuniones
+    my_reu_day = reunions.objects.filter(id_group__in=gr)  # reuniones para un dia
+    i = 0
+    json_array = {}
+    for reunion in my_reu_day:
+        try:
+            confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+            is_confirmed = confirm.is_confirmed
+            is_saved = 1
+        except assistance.DoesNotExist:
+            is_confirmed = False
+            is_saved = 0
+        json_array[i] = {"id_r": str(reunion.id), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        i = i + 1
+    response = json_array
     ctx = {'TITLE': "Actarium",
        "reunions_day": my_reu,
        "reunions": my_reu,
-           }
+       "my_reu_day_json": json.dumps(response)}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
@@ -432,12 +446,12 @@ def calendarDate(request, slug=None):
     for reunion in my_reu_day:
         try:
             confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-            is_comfirmed = confirm.is_comfirmed
+            is_confirmed = confirm.is_confirmed
             is_saved = 1
         except assistance.DoesNotExist:
-            is_comfirmed = False
+            is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_comfirmed': str(is_comfirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -456,18 +470,17 @@ def getReunions(request):
             dateslug_min = str(make_aware(datetime.datetime.strptime(date + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
             dateslug_max = str(make_aware(datetime.datetime.strptime(date + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
             my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max])  # reuniones para un dia
-            otra4 = serializers.serialize("json", my_reu_day, indent=1)
             i = 0
             json_array = {}
             for reunion in my_reu_day:
                 try:
                     confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-                    is_comfirmed = confirm.is_comfirmed
+                    is_confirmed = confirm.is_confirmed
                     is_saved = 1
                 except assistance.DoesNotExist:
-                    is_comfirmed = False
+                    is_confirmed = False
                     is_saved = 0
-                json_array[i] = {"id_r": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_comfirmed': is_comfirmed, 'is_saved': is_saved}
+                json_array[i] = {"id_r": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved}
                 i = i + 1
             response = json_array
     else:
@@ -476,49 +489,76 @@ def getReunions(request):
 
 
 def setAssistance(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        id_reunion = reunions.objects.get(pk=request.GET['id_reunion'])
-        id_user = request.user
-        is_comfirmed = str(request.GET['is_comfirmed'])
-        if (is_comfirmed == "true"):
-            is_comfirmed = True
-        else:
-            is_comfirmed = False
-        assis, created = assistance.objects.get_or_create(id_user=id_user, id_reunion=id_reunion)
-#        if created:
-#            assis = assistance.objects.get(id_user=id_user, id_reunion=id_reunion)
-        assis.is_comfirmed = is_comfirmed
-#        assis.is_comfirmed = is_comfirmed
-        assis.save()
-        print assis
-        datos = "id_reunion = %s , id_user = %s , is_comfirmed = %s, created %s" % (id_reunion.pk, id_user, is_comfirmed, created)
-        print datos
-    return HttpResponse(json.dumps(datos), mimetype="application/json")
-#    else:
-#        response = "Error Calendar"
+    if request.is_ajax():
+        if request.method == 'GET':
+            id_reunion = reunions.objects.get(pk=request.GET['id_reunion'])
+            id_user = request.user
+            is_confirmed = str(request.GET['is_confirmed'])
+            if (is_confirmed == "true"):
+                is_confirmed = True
+            else:
+                is_confirmed = False
+            assis, created = assistance.objects.get_or_create(id_user=id_user, id_reunion=id_reunion)
+    #        if created:
+    #            assis = assistance.objects.get(id_user=id_user, id_reunion=id_reunion)
+            assis.is_confirmed = is_confirmed
+    #        assis.is_confirmed = is_confirmed
+            assis.save()
+            print assis
+            datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
+            print datos
+        return HttpResponse(json.dumps(datos), mimetype="application/json")
+    else:
+        response = "Error Calendar"
+        return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
 def getReunionData(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        id_reunion = str(request.GET['id_reunion'])
-        reunion = reunions.objects.get(pk=id_reunion)
-        convener = reunion.id_convener.username
-        date_convened = reunion.date_convened
-        date_reunion = reunion.date_reunion
-        group = reunion.id_group.name
-        agenda = reunion.agenda
-        is_done = reunion.is_done
-        reunion_data = {"convener": convener,
-           "date_convened": str(date_convened),
-           "date_reunion": str(date_reunion),
-           "group": group,
-           "agenda": agenda,
-           "is_done": is_done
-       }
-#    else:
-#        reunion_data = "Error Calendar"
+    if request.is_ajax():
+        if request.method == 'GET':
+            id_reunion = str(request.GET['id_reunion'])
+            reunion = reunions.objects.get(pk=id_reunion)
+            convener = reunion.id_convener.username
+            date_convened = reunion.date_convened
+            date_reunion = reunion.date_reunion
+            group = reunion.id_group.name
+            id_group = reunion.id_group
+            agenda = reunion.agenda
+            is_done = reunion.is_done
+            
+            assistants = rel_user_group.objects.filter(id_group=id_group)
+            assis_list = {}
+            i = 0
+            c = 0
+            for assistant in assistants:
+                try:
+                    confirm = assistance.objects.get(id_user=assistant.id_user, id_reunion=reunion.pk)
+                    is_confirmed = confirm.is_confirmed
+                    is_saved = 1
+                except assistance.DoesNotExist:
+                    is_confirmed = False
+                    is_saved = 0
+                if( is_saved == 1):
+                    if(is_confirmed == True): #reuniones confirmadas
+                        c=1
+                    else : #reuniones rechazadas
+                        c=2
+                else: #reuniones pendientes por confirmar
+                    c=3
+                
+                assis_list[i] = {'username': assistant.id_user.username, "is_confirmed":c}
+                i = i+1
+            
+            reunion_data = {"convener":convener,
+               "date_convened": str(date_convened),
+               "date_reunion": str(date_reunion),
+               "group": group,
+               "agenda": agenda, 
+               "is_done": is_done,
+               "assistants": assis_list           
+           }
+    else:
+        reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
 
 
