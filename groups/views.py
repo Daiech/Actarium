@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_signed
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
@@ -152,10 +152,10 @@ def isMemberOfGroup(id_user, id_group):
         if is_member:
             return True
     except User.DoesNotExist, e:
-        print e
+        print "El usuario no existe: %s" % e
         return False
     except Exception, e:
-        print e
+        print "El usuario no existe, Exception: %s" % e
         return False
 
 
@@ -293,53 +293,112 @@ def deleteInvitation(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
-@login_required(login_url='/account/login')
-def showMinutes(request, slug, minutes_id):
+def getMembersSigned(group, minutes_current):
+    try:
+        # members = TODOS los Miembros activos del grupo, TODOS!!!
+        members = rel_user_group.objects.filter(id_group=group, is_active=True)
+        members_signed = rel_user_minutes_signed.objects.filter(id_user__in=members, id_minutes=minutes_current)
+    except rel_user_group.DoesNotExist:
+        members = False
+    except rel_user_minutes_signed.DoesNotExist:
+        members_signed = False
+    except Exception, e:
+        print "Error getMembersSigned: %s " % e
+        members_signed = False
+    return members_signed
+
+
+def getMinutesByCode(group, code_id):
+    try:
+        minutes_current = minutes.objects.get(id_group=group, code=code_id)
+        print "code: %s " % minutes_current.code
+    except minutes.DoesNotExist:
+        minutes_current = False
+    except Exception, e:
+        print "Error getMinutesByCode: %s" % e
+        minutes_current = False
+    return minutes_current
+
+
+def getPrevNextOfGroup(group, minutes_id):
+    prev = None
+    next = None
+    print "GROUP: %s" % str(group)
+    print "MINUTES: %s" % str(minutes_id)
+    try:
+        prev = minutes.get_previous_by_date_created(minutes_id, id_group=group)
+        print "PREV: %s" % str(prev.code)
+    except minutes.DoesNotExist:
+        prev = False
+    except Exception, e:
+        print "Exception prev: " + str(e)
+    try:
+        next = minutes.get_next_by_date_created(minutes_id, id_group=group)
+        print "NEXT: %s" % str(next)
+    except minutes.DoesNotExist:
+        next = False
+    except Exception, e:
+        print "Exception next: " + str(e)
+    return prev, next
+
+
+def getGroupBySlug(slug):
     try:
         group = groups.objects.get(slug=slug)
     except groups.DoesNotExist:
         group = False
+        print "El grupo no existe"
     except Exception, e:
         group = False
-        print e
+        print "Error capturando grupo: %s " % e
+    return group
+
+
+@login_required(login_url='/account/login')
+def showMinutes(request, slug, minutes_code):
+    '''
+    Muestra toda la informacion de un Acta (minutes)
+    '''
+    group = getGroupBySlug(slug)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
+
     if isMemberOfGroup(request.user, group):
-        try:
-            minutes_current = minutes.objects.get(id_group=group, code=minutes_id)
-        except minutes.DoesNotExist:
-            minutes_current = False
-        except Exception, e:
-            raise e
-            minutes_current = False
+        minutes_current = getMinutesByCode(group, minutes_code)
         if not minutes_current:
             return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
-        minutes_group = minutes.objects.filter(id_group=group.id)
-        prev = None
-        next = None
-        try:
-            prev = minutes.get_previous_by_date_created(minutes_current, id_group=group)
-        except minutes.DoesNotExist:
-            prev = False
-        except Exception, e:
-            print "prev: " + str(e)
-        try:
-            next = minutes.get_next_by_date_created(minutes_current, id_group=group)
-        except minutes.DoesNotExist:
-            next = False
-        except Exception, e:
-            print "next: " + str(e)
+
+        ######## <SIGN> #########
+        members_signed = getMembersSigned(group, minutes_current)
+        ######## </SIGN> #########
+
+        ######## <PREV and NEXT> #########
+        prev, next = getPrevNextOfGroup(group, minutes_current)
+        ######## </PREV and NEXT> #########
+
         members = rel_user_group.objects.filter(id_group=group, is_active=True)
         ctx = {"group": group, "minutes": minutes_current, "members": members,
-            "minutes_list": minutes_group, "prev": prev, "next": next}
+        "members_signed": members_signed, "prev": prev, "next": next}
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')
-def newMinutes(request, slug):
-    q = groups.objects.get(slug=slug, is_active=True)
+def setSign(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            group = str(request.GET['group'])
+            minutes_id = str(request.GET['m_id'])
+            response = {"grupo": group, "minutes": minutes_id}
+    else:
+        response = "Error invitacion"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+@login_required(login_url='/account/login')
+def newMinutes(request, slug_group, id_reunion):
+    q = groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         if request.method == "POST":
@@ -371,8 +430,28 @@ def newMinutes(request, slug):
                 return HttpResponseRedirect("/groups/" + str(q.slug))
         else:
             form = newMinutesForm()
+            if id_reunion:
+                try:
+                    reunion = reunions.objects.get(id=id_reunion)
+                    members = None  # Lista de usuarios que confirmaron la asistencia
+                except reunions.DoesNotExist:
+                    reunion = None
+                except Exception, e:
+                    reunion = None
+                    print "Exception newReunion: %s" % e
+            else:
+                reunion = None
+                try:
+                    members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
+                except rel_user_group.DoesNotExist:
+                    members = None
+                except Exception, e:
+                    print "Exception members in newMinutes: %e" % e
         ctx = {'TITLE': "Actarium",
                "newMinutesForm": form,
+               "group": q,
+               "reunion": reunion,
+               "members": members
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -488,6 +567,15 @@ def getReunions(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+def getAssistance(id_minutes):
+    try:
+        assistan = assistance.objects.filter(id_minutes=id_minutes)
+    except Exception, e:
+        raise e
+        assistan = False
+    return assistan
+
+
 def setAssistance(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -560,16 +648,3 @@ def getReunionData(request):
     else:
         reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
-
-
-
-
-
-
-
-
-
-
-
-
-

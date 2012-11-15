@@ -121,6 +121,7 @@ article{
     margin-bottom: 10px;
     min-height: 400px;
     overflow: hidden;
+    padding-bottom: 20px;
     width: 100%;
 }
 article > header{

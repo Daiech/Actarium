@@ -1,22 +1,55 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Actarium - Actas{% endblock %}
-
-
-
+{% load gravatartag %}
 {%block body%}
 <article>
     <div class="containterMargin">
-        <h2>Crear nueva acta </h2>
+        <h2>
+            Crear nueva acta 
+        </h2>
+        <strong>
+            {%if reunion%}
+                de la <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">reuni&oacute;n del {{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group}}</a>
+            {%endif%}
+        </strong>
+        <hr>
         <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-            <table>{{ newMinutesForm }} 
-
-                <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
-                        <a href="/groups" class="btn btn-link">Volver a grupo</a></td></tr>
+            <table>
+                {{ newMinutesForm }} 
+                <tr>
+                    <td>
+                        Confirmar Asistencia:
+                    </td>
+                    <td class="member-list">
+                         {%if reunion%}
+                            Listado de miembros que confirmaron asistencia a la reuni&oacute;n:<br> {{reunion}}
+                         {%else%}
+                            <ul class="unstyled">
+                            {% for member in members%}
+                                <li>
+                                    <div class="">
+                                        <label for="user{{member.id_user}}">
+                                            <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
+                                            {{member.id_user.username}}
+                                            <input type="checkbox" id="user{{member.id_user}}" name="user{{member.id_user}}" checked="checked" />
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor%}
+                            </ul>
+                         {%endif%}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <a href="/groups" class="btn btn-link">Volver a grupo</a>
+                    </td>
+                </tr>
             </table>
-
-
         </form>
     </div>
 </article>
@@ -32,6 +65,19 @@
     table td .btn{
         margin-top:10px;
     }
+    .member-list{
+        /*border: solid thin;*/
+        padding: 10px 0;
+    }
+    .member-list ul li{
+        padding: 5px;
+    }
+    .member-list ul li:hover{
+        background-color: #dadada;
+    }
+    label{
+        cursor: pointer;
+    }
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
@@ -39,13 +85,19 @@
     .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
     .ui-timepicker-div dl { text-align: left; }
     .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-    .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+    .ui-timepicker-div dl dd { margin: 0 10px 0 65px; padding: 0; }
     .ui-timepicker-div td { font-size: 90%; }
     .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
     .ui-timepicker-rtl{ direction: rtl; }
     .ui-timepicker-rtl dl { text-align: right; }
     .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+    div.ui-datepicker{
+     font-size:12px;
+    }
+    select{
+        width: 100%;
+    }
 </style>
 
 {%endblock%}
@@ -59,11 +111,14 @@
 <script src="{{STATIC_PREFIX}}js/textareas.js"></script>
 
 <script type="text/javascript" >
-    $('.time-pick').timepicker({
-        ampm: true,
-        controlType: 'select',
-        hourMin: 0,
-        hourMax: 24
-    });
+    $(document).on("ready",function(){
+        $('.time-pick').timepicker({
+            ampm: true,
+            controlType: 'select',
+            hourMin: 0,
+            hourMax: 24,
+            width: 200
+        });
+    })
 </script>
 {% endblock %}
