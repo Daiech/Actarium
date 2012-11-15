@@ -12,16 +12,15 @@
     </header>
 	<hr>
     <section class="row-fluid">
-    	<ul class="pager">
+    	<ul class="pager hoja">
 			<li class="previous {%if not prev %}disabled{%endif%}">
 				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
 			</li>
-
 			<li class="next {%if not next %}disabled{%endif%}">
 				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
 			</li>
 		</ul>
-    	<article class="minute">
+    	<article class="minute hoja">
     		<header>
     			<h3>{{group.name}}</h3>
     		</header>
@@ -57,45 +56,86 @@
     		</div>
     		<footer></footer>
     	</article>
-    	<span>* La visualizaci&oacute;n del acta está pendiente por definir</span>
+    	<ul class="pager hoja">
+			<li class="previous {%if not prev %}disabled{%endif%}">
+				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
+			</li>
+			<li class="next {%if not next %}disabled{%endif%}">
+				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
+			</li>
+		</ul>
+    	<div id="sign" class="hoja b">
+    		{% for member in members_signed %}
+    			{{member.id_user.username}}
+    		{% endfor %}
+    		<a href="#" class="btn btn-success" id="btn-sign" data-minutes="{{minutes.id}}">
+    			Firmar <span></span></a>
+    	</div>
     </section>
 </article>
 {%endblock%}
 {% block js %}
 <script>
+	$(document).on("ready",function(){
+		$("#btn-sign").on("click",setSign)
+	});
+	function callBackSign(data){
+		console.log(data)
+	}
+	function setSign(e){
+		e.preventDefault();
+		$(this).attr({"disabled":"disabled"})
+		var minutes_id = $(this).attr("data-minutes");
+		// alert(minutes_id)
+		sendAjax(
+			"/groups/setSign",
+			{"group":"{{group.id}}", "m_id":minutes_id},
+			"#btn-sign span",
+			callBackSign
+			)
+	}
 </script>
 {% endblock %}
 
 {% block style%}
 <style>
-.minute{
-	border: solid thin #ddd;
-	background-color: #fff;
-	box-shadow: 8px 8px 6px -6px gray;
-	border-radius: 3px;
-	margin-bottom: 40px;
-	position: relative;
-	top:-50px;
-	width: 70%;
-}
-.minute header{
-	width: auto;
-	margin:0;
-	padding: 50px 80px 20px 80px;
-}
-.minute > div{
-	padding: 0 80px;
-	/*border: solid thin gray;*/
-}
-.minute footer{
-	border: none;
-	bottom: 0;
-	left: 0;
-	margin:0;
-	padding: 20px 40px;
-	width: auto;
-}
-.pager{
-}
+	.hoja{
+		width: 70%;
+	}
+	#sign{
+		margin: 0 auto;
+		min-height: 100px;
+	}
+	.minute{
+		border: solid thin #ddd;
+		background-color: #fff;
+		box-shadow: 8px 8px 6px -6px gray;
+		border-radius: 3px;
+		/*position: relative;
+		top:-55px;*/
+	}
+	.minute header{
+		width: auto;
+		margin:0;
+		padding: 50px 80px 20px 80px;
+	}
+	.minute > div{
+		padding: 0 80px;
+		/*border: solid thin gray;*/
+	}
+	.minute footer{
+		border: none;
+		bottom: 0;
+		left: 0;
+		margin:0;
+		padding: 20px 40px;
+		width: auto;
+	}
+	.pager{
+		margin: 5px auto;
+		padding: 0;
+		position: relative;
+		top: 0;
+	}
 </style>
 {%endblock%}
