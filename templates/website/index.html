@@ -2,13 +2,14 @@
 {% block TITLE %}Actarium - home{% endblock %}
 
 {%block body%}
+
+
+{% if user.is_authenticated %}
 <article>
     <header class="row-fluid">
         <h1 class="span10">Actarium</h1>
         <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
     </header>
-
-    {% if user.is_authenticated %}
     <hr>
     <div class="row-fluid">
         <section class="span6">
@@ -34,11 +35,11 @@
                                 <div class="buttons">
                                     <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
                                         Aceptar 
-                                         <span class="load"></span>
+                                        <span class="load"></span>
                                     </button>
                                     <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
                                         Cancelar
-                                         <span class="load"></span>
+                                        <span class="load"></span>
                                     </button>
                                     <div class="pull-right load"></div>
                                 </div>
@@ -101,54 +102,122 @@
 
         </section>
     </div>
-    {% else %}
-    <div class="containterMargin">
-        <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
-        <div class="sing">
-            <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
-            <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
-
-        </div>
-    </div>
-    {% endif %}
-
-
-
-    <div class="modal hide fade" id="myModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Env&iacute;anos tus comentarios</h3>
-        </div>
-        <div class="modal-body">
-            <p>Cu&eacute;ntanos c&oacute;mo fue tu experiencia usando Actarium y ay&uacute;danos a mejorar.</p>
-            <textarea id="textComent" placeholder="Ejemplo: No puedo cerrar sesi&oacute;n en dispositivos m&oacute;viles"></textarea>
-        </div>
-        <div class="modal-footer">
-            <div id="twitter-button">
-                <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
-            </div>
-            <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</a>
-            <a href="" class="btn btn-primary">Enviar</a>
-        </div>
-    </div>
-
-
 </article>
+{% else %}
+<div id="new-container">
+    <img src="/static/img/logo_grande.png" alt="Logo Actarium"/>
+</div>
+<div class="info-containter">
+    <div class="info-pics">
+        <div class="pic-log">
+            <a href="/account/login" >
+                <div id="left-bubble">
+                    <div class="bubble-text">
+                        Ingresar
+                    </div>
+
+                </div>
+            </a>
+            <div id="login-pic">
+                <img src="/static/img/iniciar_Sesion.png" alt="Log In" />
+            </div>
+        </div>
+        <div class="pic-down">
+            <img src="/static/img/flecha-abajo.png" alt="" />
+        </div>
+
+        <div class="pic-log">
+            <a href="/account/new">
+                <div class="right-bubble">
+                    <div class="bubble-text">
+                        Registrarse
+                    </div>
+                </div>
+            </a>
+            <div id="singup-pic">
+                <img src="/static/img/registro.png" alt="Sing Up" />
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+{% endif %}
+
 {%endblock%}
 {% block style%}
 <style>
-    #twitter-button{
-        height: 30px;
-        width: 177px;
-        display: inline-block;
+
+    /* **************************************************************************** 
+    Index Website
+    **************************************************************************** */
+    .container{
+        width:100%;
+    }
+    #new-container{
+        background-color: #E9E9E9;
+        height: 200px;
+        width: 100%;
+    }
+    #new-container > img{
+        display: block;
+        margin: auto;       
+        padding-top: 30px;
+        width:350px;
+    }
+    .info-pics{
+        display:block;
+        margin:auto;
+        overflow: hidden;
+        width:585px;
+    }
+    .pic-log{
         float: left;
+        margin-top: 30px;
+        width:260px;
     }
-    #textComent{
-        margin-left: 12%;
-        margin-right: 12%;
-        min-height: 150px;
-        width: 70%;
+    #login-pic{
+        position: relative;
+        left:100px;
+        top:-25px;
     }
+    #singup-pic{
+        position: relative;
+        top:-25px;
+    }
+    #left-bubble{
+        background-image: url('/static/img/left-bubble.png');
+        color: white;
+        width:166px;
+        height: 89px;
+        position: relative;
+        text-align: center;
+    }
+    .right-bubble{
+        background-image: url('/static/img/right-bubble.png');
+        color: white;
+        width: 166px;
+        height: 89px;
+        left:90px;
+        position:relative;
+        text-align: center;
+    }
+    .pic-down{
+        float: left;
+        margin: -10px 10px 0 10px;
+        z-index: 100000;
+    }
+    .bubble-text{
+        position: relative;
+        top:30px;
+    }
+    /* **************************************************************************** 
+    Termina Index Website
+    **************************************************************************** */
+
+
     .accordion-heading{
         /*background-image: -webkit-linear-gradient(top, #62C462, #51A351);*/
 
