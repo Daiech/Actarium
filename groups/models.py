@@ -10,7 +10,7 @@ class group_type(models.Model):
     date_added = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s " % (self.name)
+        return "tipo de grupo: %s " % (self.name)
 
 
 class groups(models.Model):
@@ -25,7 +25,7 @@ class groups(models.Model):
     slug = models.SlugField(max_length=150, unique=True)
 
     def __unicode__(self):
-        return "%s " % (self.name)
+        return "Group name: %s " % (self.name)
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"
@@ -47,6 +47,9 @@ class rel_user_group(models.Model):
     id_group = models.ForeignKey(groups)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return "user: %s " % (self.id_user.id)
 
 
 class admin_group(models.Model):
@@ -72,7 +75,7 @@ class minutes_type(models.Model):
     is_customized = models.BooleanField()
 
     def __unicode__(self):
-        return "%s " % (self.name)
+        return "minutes_type name: %s " % (self.name)
 
 
 class minutes(models.Model):
@@ -97,7 +100,7 @@ class reunions(models.Model):
     is_done = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "%s : %s" % (self.date_reunion, self.id_group)
+        return "%s , del %s" % (self.date_reunion, self.id_group)
 
 
 class rel_reunion_minutes(models.Model):
@@ -122,7 +125,7 @@ class feddback(models.Model):
     date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s " % (self.title)
+        return "feedback: %s " % (self.title)
 
 
 class action(models.Model):
@@ -131,7 +134,7 @@ class action(models.Model):
     date_created = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s " % (self.name)
+        return "Action: %s " % (self.name)
 
 
 class rel_user_action(models.Model):
@@ -143,5 +146,5 @@ class rel_user_action(models.Model):
 class rel_user_minutes_signed(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
-    is_signed_approved = models.BooleanField(default=False)
+    is_signed_approved = models.IntegerField(default=0)
     date_signed = models.DateTimeField(auto_now=True)

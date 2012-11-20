@@ -5,11 +5,11 @@
 <article>
     <div class="containterMargin">
         <h2>
-            Crear nueva acta 
+            Crear nueva acta para el grupo <a href="/groups/{{group.slug}}">{{group.name}}</a>
         </h2>
         <strong>
             {%if reunion%}
-                de la <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">reuni&oacute;n del {{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group}}</a>
+                de la <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">reuni&oacute;n del {{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
             {%endif%}
         </strong>
         <hr>
@@ -17,29 +17,41 @@
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
             <table>
-                {{ newMinutesForm }} 
+                {{ newMinutesForm }}
                 <tr>
                     <td>
                         Confirmar Asistencia:
                     </td>
                     <td class="member-list">
                          {%if reunion%}
-                            Listado de miembros que confirmaron asistencia a la reuni&oacute;n:<br> {{reunion}}
-                         {%else%}
+                            Listado de miembros que confirmaron asistencia a la reuni&oacute;n:<br>
+                            <a href="#">{{reunion}}</a>
+                         
+                         {%endif%}
                             <ul class="unstyled">
-                            {% for member in members%}
+                            {% for member in members_selected%}
                                 <li>
                                     <div class="">
                                         <label for="user{{member.id_user}}">
                                             <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
                                             {{member.id_user.username}}
-                                            <input type="checkbox" id="user{{member.id_user}}" name="user{{member.id_user}}" checked="checked" />
+                                            <input type="checkbox" id="user{{member.id_user}}" name="members[]" checked value="{{member.id_user.id}}" />
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor%}
+                            {% for member in members_no_selected %}
+                                <li>
+                                    <div class="">
+                                        <label for="user{{member.id_user}}">
+                                            <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
+                                            {{member.id_user.username}}
+                                            <input type="checkbox" id="user{{member.id_user}}" name="members[]" value="{{member.id_user.id}}" />
                                         </label>
                                     </div>
                                 </li>
                             {% endfor%}
                             </ul>
-                         {%endif%}
                     </td>
                 </tr>
                 <tr>
