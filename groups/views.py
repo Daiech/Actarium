@@ -396,44 +396,88 @@ def setSign(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+def getMembersOfGroupWithSelected(group, select):
+    '''
+    return a tuple with the list of selected members and no selected members
+    (selected_members, no_selected_members)
+    the tuple is a rel_user_group object
+    '''
+    all_members = rel_user_group.objects.filter(id_group=group, is_active=True).order_by("id")
+    memb_list = list()
+    for m in all_members:
+        memb_list.append(int(m.id_user.id))  # lista con id de todos los miembros del grupo
+    # print memb_list
+    selected_list = list()
+    for l in select:
+        selected_list.append(int(l))  # Lista de usuarios seleccionados
+    # print selected_list
+    no_selected_list = list(set(memb_list) - set(selected_list))  # lista de usuarios no seleccionados
+    # print no_selected_list
+    try:
+        selected_members = rel_user_group.objects.filter(id_group=group, id_user__in=selected_list, is_active=True)
+        no_selected_members = rel_user_group.objects.filter(id_group=group, id_user__in=no_selected_list, is_active=True)
+    except rel_user_group.DoesNotExist:
+        return None
+    except Exception, e:
+        raise e
+        return None
+    return (selected_members, no_selected_members)
+
+
+def saveMinute(group, form):
+    '''
+    Save the minutes in the tables of data base: minutes_type_1, minutes
+    return:
+    '''
+    df = {
+    'code': form.cleaned_data['code'],
+    'date_start': form.cleaned_data['date_start'],
+    'date_end': form.cleaned_data['date_end'],
+    'location': form.cleaned_data['location'],
+    'agenda': form.cleaned_data['agenda'],
+    'agreement': form.cleaned_data['agreement'],
+    }
+    myNewMinutes_type_1 = minutes_type_1(
+                   date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
+                   date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
+                   location=df['location'],
+                   agenda=df['agenda'],
+                   agreement=df['agreement'],
+                 )
+    m = myNewMinutes_type_1.save()
+    myNewMinutes = minutes(
+                    code=df['code'],
+                    id_extra_minutes=myNewMinutes_type_1,
+                    id_group=group,
+                    id_type=minutes_type.objects.get(pk=1),
+                )
+    m2 = myNewMinutes.save()
+    return (m, m2)
+
+
 @login_required(login_url='/account/login')
 def newMinutes(request, slug_group, id_reunion):
-    q = groups.objects.get(slug=slug_group, is_active=True)
-    is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
+    '''
+    This function creates a minutes with the form for this.
+    '''
+    reunion = None
+    group = groups.objects.get(slug=slug_group, is_active=True)
+    is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
     if is_member:
         if request.method == "POST":
             form = newMinutesForm(request.POST)
-            if form.is_valid():
-                df = {
-                'code': form.cleaned_data['code'],
-                'date_start': form.cleaned_data['date_start'],
-                'date_end': form.cleaned_data['date_end'],
-                'location': form.cleaned_data['location'],
-                'agenda': form.cleaned_data['agenda'],
-                'agreement': form.cleaned_data['agreement'],
-                }
-                myNewMinutes_type_1 = minutes_type_1(
-                               date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
-                               date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
-                               location=df['location'],
-                               agenda=df['agenda'],
-                               agreement=df['agreement'],
-                             )
-                myNewMinutes_type_1.save()
-                myNewMinutes = minutes(
-                                code=df['code'],
-                                id_extra_minutes=myNewMinutes_type_1,
-                                id_group=q,
-                                id_type=minutes_type.objects.get(pk=1),
-                            )
-                myNewMinutes.save()
-                return HttpResponseRedirect("/groups/" + str(q.slug))
+            select = request.POST.getlist('members[]')
+            m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
+            if form.is_valid() and len(select) != 0:
+                saveMinute(group, form)
+                return HttpResponseRedirect("/groups/" + str(group.slug))
         else:
             form = newMinutesForm()
             if id_reunion:
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
-                    members = None  # Lista de usuarios que confirmaron la asistencia
+                    reunion_list = []  # Lista de miembros que confirmaron la asistencia
+                    m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, reunion_list)
                 except reunions.DoesNotExist:
                     reunion = None
                 except Exception, e:
@@ -442,16 +486,18 @@ def newMinutes(request, slug_group, id_reunion):
             else:
                 reunion = None
                 try:
-                    members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
+                    m_selected = rel_user_group.objects.filter(id_group=group.id, is_active=True)
+                    m_no_selected = None
                 except rel_user_group.DoesNotExist:
-                    members = None
+                    m_selected = None
                 except Exception, e:
                     print "Exception members in newMinutes: %e" % e
-        ctx = {'TITLE': "Actarium",
+        ctx = {'TITLE': "Actarium - Nueva Acta",
                "newMinutesForm": form,
-               "group": q,
+               "group": group,
                "reunion": reunion,
-               "members": members
+               "members_selected": m_selected,
+               "members_no_selected": m_no_selected
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
