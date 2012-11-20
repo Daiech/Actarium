@@ -146,5 +146,5 @@ class rel_user_action(models.Model):
 class rel_user_minutes_signed(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
-    is_signed_approved = models.BooleanField(default=False)
+    is_signed_approved = models.IntegerField(default=0)
     date_signed = models.DateTimeField(auto_now=True)
