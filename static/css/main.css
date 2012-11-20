@@ -121,6 +121,7 @@ body{
     padding-top: 0;
 }
 #logo-sup{
+    float: left;
     padding: 0;
 }
 #logo-sup > img{
@@ -140,7 +141,7 @@ header div > ul li{
     border-bottom-right-radius: 5px;
     height: 70px;
     margin-top: 0px;
-    box-shadow: -1npx 0px 15px rgba(0,0,0,0.3);
+    box-shadow: -1px 0px 15px rgba(0,0,0,0.3);
     position: relative;
     top:0px;
 }
@@ -158,14 +159,14 @@ header div > ul li{
 }
 .navbar-select0{
     background-color: #79B632;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
     box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
 }
 .navbar-select1{
     background-color: #00AEAA;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
     box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
 }
 header div > ul li a {
@@ -175,9 +176,11 @@ header div > ul li a {
     width:100%;
     text-decoration:none;
 }
+#navbar-button-container{
+}
 #navbar-button-container > ul{
-    margin-left: 50px;
-    float:left;
+    margin-left: 50px;/*
+    */    float:left;
     display: block;
 }
 #social-buttons > a{
@@ -189,12 +192,14 @@ header div > ul li a {
     width:35px;
 }
 #social-buttons{
-    display: inline-block;
     float: right;
-    padding-top: 13px;
+    padding-top: 16px;
 }
 .navbar-active-class{
     background-color: black;
+}
+#top-button{
+    display: none;
 }
 /* **************************************************************************** 
 Termina barra superior Daiech
@@ -218,23 +223,33 @@ footer{
     background-color: white;
     margin-top: 50px;
     width: 100%;
-    height: 70px;
+    height: 80px;
 }
 .white-bar{
+    color: black;
     display:block;
     margin:auto;
     overflow: hidden;
+    text-align: center;
     width: 480px;
 }
 .footer-pic{
     float:left;
     height: 60px;
-    top: 18px;
     position: relative;
     width: 50%;
 }
-footer a , footer a:visited ,footer a:link,footer a:hover{
+footer a , footer a:visited ,footer a:link{
     color: #333;
+}
+footer a:hover{
+    color: #00AEAA;
+}
+footer p{
+    padding-top: 10px;
+}
+#cred-footer{
+    margin-top: 20px;
 }
 /* **************************************************************************** 
 Termina Footer
@@ -612,18 +627,16 @@ only screen and (min-resolution: 144dpi) {
 
 }
 @media (min-width: 980px) and (max-width: 1280px) {
-    article{
-        /*        width: 80%;*/
-        /*        border: solid thin yellow;*/
-    }
-    .columnaD{
-        width: 48%;
-    }
-    .notifications span{
-        display: inline;
-    }
 
 }
+.columnaD{
+    width: 48%;
+}
+.notifications span{
+    display: inline;
+}
+
+
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -633,8 +646,35 @@ only screen and (min-resolution: 144dpi) {
     }
     .columnaD{
         width: 40%;
+    } 
+/*    #navbar-button-container{
+        display: none;
+    }*/
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+    }
+    
+.navbar-button{
+        clear: both;
+    }
+    header div > ul li{
+        list-style-type: none;
+        width: 100%;
+
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        display: auto;
     }
 }
+
+
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     article{
@@ -655,12 +695,19 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 50%;
     }
+    #navbar-button-container{
+        display: none;
+    }
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+    }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     article{
         width: auto;
-        /*        border: solid thin gray;*/
     }
     .fix_btn{
         padding: 0 20px;
@@ -671,6 +718,14 @@ only screen and (min-resolution: 144dpi) {
     }
     .alert-block{
         width: 60%;
+    }
+    #navbar-button-container{
+        display: none;
+    }
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
     }
 }
 /*==================================================*/

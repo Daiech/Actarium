@@ -107,6 +107,27 @@
 <div id="new-container">
     <img src="/static/img/logo_grande.png" alt="Logo Actarium"/>
 </div>
+<div id="info-act" style="display:none">
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
+    <a href="/"><img id="arriba" src="/static/img/arrow-up.png" alt="arriba"/></a>
+</div>
 <div class="info-containter">
     <div class="info-pics">
         <div class="pic-log">
@@ -123,7 +144,7 @@
             </div>
         </div>
         <div class="pic-down">
-            <img src="/static/img/flecha-abajo.png" alt="" />
+            <a href="#" title="info"><img src="/static/img/flecha-abajo.png" alt="" /></a>
         </div>
 
         <div class="pic-log">
@@ -204,14 +225,24 @@
         position:relative;
         text-align: center;
     }
-    .pic-down{
+    .pic-down {
         float: left;
         margin: -10px 10px 0 10px;
         z-index: 100000;
     }
-    .bubble-text{
+    .bubble-text {
         position: relative;
-        top:30px;
+        top: 30px;
+    }
+    #info-act{
+        background-color: #dadada;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    #info-act a > img{
+        float: right;
     }
     /* **************************************************************************** 
     Termina Index Website
@@ -276,67 +307,76 @@
 {% block js %}
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
+    $(".pic-down").on("click",function(e){
+        e.preventDefault()
+         $("#info-act").slideToggle("fast")
+    })
+    
+    $("#arriba").on("click",function(e){
+        e.preventDefault()
+        $("#info-act").slideToggle("fast")
+    })
     
     $(".collapse").collapse({
         //toggle: false
     })
-    function acceptInvitation(element, accept){
-        sendAjax(
-        "/groups/acceptInvitation",
-        {"i_id":accept},
-        $(element).find(".load"),
-        function(data){
-            if (data["accepted"]){
-                var actual = parseInt($("#inv-count").text());
-                actual--;
-                $("#inv-count").text(""+actual);
-                $("#group-list").append(
-                "<li class='img-rounded'>"+
-                    "<a href='"+data["group"]["slug"]+"'>"+
-                    "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
-                    data["group"]["name"]+
-                    "</a>"+
-                    "</li>")
-                $(element).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Ahora perteneces al grupo "+
-                        "<a href='#'>"+data["group"]["name"]+"</a>"+
-                        "<hr>"
-                ).fadeIn()
-                }
-            )
-                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+function acceptInvitation(element, accept){
+    sendAjax(
+    "/groups/acceptInvitation",
+    {"i_id":accept},
+    $(element).find(".load"),
+    function(data){
+        if (data["accepted"]){
+            var actual = parseInt($("#inv-count").text());
+            actual--;
+            $("#inv-count").text(""+actual);
+            $("#group-list").append(
+            "<li class='img-rounded'>"+
+                "<a href='"+data["group"]["slug"]+"'>"+
+                "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
+                data["group"]["name"]+
+                "</a>"+
+                "</li>")
+            $(element).parent().parent().slideUp(900,function(){
+                $(this).empty().html(
+                "Ahora perteneces al grupo "+
+                    "<a href='#'>"+data["group"]["name"]+"</a>"+
+                    "<hr>"
+            ).fadeIn()
             }
-            else{
-                $(element).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
-                        "<br>"+
-                        "Si lo hiciste por error comunicate con el administrador del grupo para "+
-                        "obtener una nueva invitaci&oacute;n."+
-                        "<hr>"
-                ).fadeIn()
-                })
-                var actual2 = parseInt($("#inv-count").text())
-                actual2--
-                $("#inv-count").text(""+actual2)
-                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                "Haz rechazado la invitaci&oacute;n")
-            }
-        })
-    }
-    $(".accept-inv").on("click",function(e){
-        e.preventDefault();
-        $(this).attr("disabled", "disabled");
-        var accept = $(this).attr("data-invitation")
-        if(accept.substring(0,1)=="n"){
-            if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
-                acceptInvitation($(this), accept)
-            }
-        }else{
-            acceptInvitation($(this), accept)
+        )
+            setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+            "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+        }
+        else{
+            $(element).parent().parent().slideUp(900,function(){
+                $(this).empty().html(
+                "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                    "<br>"+
+                    "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                    "obtener una nueva invitaci&oacute;n."+
+                    "<hr>"
+            ).fadeIn()
+            })
+            var actual2 = parseInt($("#inv-count").text())
+            actual2--
+            $("#inv-count").text(""+actual2)
+            setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+            "Haz rechazado la invitaci&oacute;n")
         }
     })
+}
+$(".accept-inv").on("click",function(e){
+    e.preventDefault();
+    $(this).attr("disabled", "disabled");
+    var accept = $(this).attr("data-invitation")
+    if(accept.substring(0,1)=="n"){
+        if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+            acceptInvitation($(this), accept)
+        }
+    }else{
+        acceptInvitation($(this), accept)
+    }
+})
 </script>
 {% endblock %}
