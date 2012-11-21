@@ -489,7 +489,10 @@ def newMinutes(request, slug_group, id_reunion):
             if id_reunion:
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
+                    confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
                     reunion_list = []  # Lista de miembros que confirmaron la asistencia
+                    for user_confirmed in confirm:
+                        reunion_list.append(int(user_confirmed.id_user.id))
                     m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, reunion_list)
                 except reunions.DoesNotExist:
                     reunion = None
@@ -672,7 +675,7 @@ def getReunionData(request):
             id_group = reunion.id_group
             agenda = reunion.agenda
             is_done = reunion.is_done
-            
+            group_slug = reunion.id_group.slug
             assistants = rel_user_group.objects.filter(id_group=id_group)
             assis_list = {}
             i = 0
@@ -702,7 +705,8 @@ def getReunionData(request):
                "group": group,
                "agenda": agenda, 
                "is_done": is_done,
-               "assistants": assis_list           
+               "assistants": assis_list,   
+               "group_slug": group_slug
            }
     else:
         reunion_data = "Error Calendar"
