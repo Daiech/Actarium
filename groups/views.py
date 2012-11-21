@@ -444,15 +444,27 @@ def saveMinute(group, form):
                    agenda=df['agenda'],
                    agreement=df['agreement'],
                  )
-    m = myNewMinutes_type_1.save()
+    myNewMinutes_type_1.save()
     myNewMinutes = minutes(
                     code=df['code'],
                     id_extra_minutes=myNewMinutes_type_1,
                     id_group=group,
                     id_type=minutes_type.objects.get(pk=1),
                 )
-    m2 = myNewMinutes.save()
-    return (m, m2)
+    myNewMinutes.save()
+    return myNewMinutes
+
+
+def preparingToSign(members, minutes_id):
+    a = list()
+    for m in members:
+        a.append(
+            rel_user_minutes_signed(
+                id_user=m.id_user,
+                id_minutes=minutes_id
+                )
+        )
+    rel_user_minutes_signed.objects.bulk_create(a)
 
 
 @login_required(login_url='/account/login')
@@ -469,14 +481,18 @@ def newMinutes(request, slug_group, id_reunion):
             select = request.POST.getlist('members[]')
             m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             if form.is_valid() and len(select) != 0:
-                saveMinute(group, form)
+                new_minutes = saveMinute(group, form)
+                preparingToSign(m_selected, new_minutes)
                 return HttpResponseRedirect("/groups/" + str(group.slug))
         else:
             form = newMinutesForm()
             if id_reunion:
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
+                    confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
                     reunion_list = []  # Lista de miembros que confirmaron la asistencia
+                    for user_confirmed in confirm:
+                        reunion_list.append(int(user_confirmed.id_user.id))
                     m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, reunion_list)
                 except reunions.DoesNotExist:
                     reunion = None
@@ -659,7 +675,7 @@ def getReunionData(request):
             id_group = reunion.id_group
             agenda = reunion.agenda
             is_done = reunion.is_done
-            
+            group_slug = reunion.id_group.slug
             assistants = rel_user_group.objects.filter(id_group=id_group)
             assis_list = {}
             i = 0
@@ -689,7 +705,8 @@ def getReunionData(request):
                "group": group,
                "agenda": agenda, 
                "is_done": is_done,
-               "assistants": assis_list           
+               "assistants": assis_list,   
+               "group_slug": group_slug
            }
     else:
         reunion_data = "Error Calendar"
