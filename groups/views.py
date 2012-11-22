@@ -484,6 +484,15 @@ def saveMinute(group, form, m_selected):
         return False
 
 
+def getLastMinutes(group):
+    try:
+        l = minutes.objects.filter(id_group=group).order_by("-date_created")[0]
+        return l
+    except Exception, e:
+        print e
+        return "---"
+
+
 @login_required(login_url='/account/login')
 def newMinutes(request, slug_group, id_reunion):
     '''
@@ -537,13 +546,15 @@ def newMinutes(request, slug_group, id_reunion):
                     m_selected = None
                 except Exception, e:
                     print "Exception members in newMinutes: %e" % e
+        last = getLastMinutes(group)
         ctx = {'TITLE': "Actarium - Nueva Acta",
                "newMinutesForm": form,
                "group": group,
                "reunion": reunion,
                "members_selected": m_selected,
                "members_no_selected": m_no_selected,
-               "minutes_saved": {"saved": saved, "error": error}
+               "minutes_saved": {"saved": saved, "error": error},
+               "last": last
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:

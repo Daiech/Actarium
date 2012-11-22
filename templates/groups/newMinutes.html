@@ -14,8 +14,8 @@
         </strong>
         <hr>
         <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
-        <div class="alert alert-error">
-            {% if minutes_saved.error %}
+        {% if minutes_saved.error %}
+            <div class="alert alert-error">
                 {%if minutes_saved.error == "e0"%}
                     Error, el formulario no es valido
                 {%endif%}
@@ -25,11 +25,19 @@
                 {%if minutes_saved.error == "e2"%}
                     Error, este grupo tiene un acta con el mismo c&oacute;digo
                 {%endif%}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
             <table>
+                <tr>
+                    <th><label>&Uacute;ltimo c&oacute;digo:</label></th>
+                    <td>
+                        <a href="/groups/{{group.slug}}/minutes/{{lastCode}}" target="_blank">
+                            {{last.code}} del {{last.date_created}}
+                        </a>
+                    </td>
+                </tr>
                 {{ newMinutesForm }}
                 <tr>
                     <td>
