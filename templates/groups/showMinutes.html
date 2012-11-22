@@ -33,7 +33,7 @@
     				<div class="span6">
     					<strong>Presentes:</strong> 
 		    			<ol>
-			    			{%for member in members%}
+			    			{%for member in m_assistance%}
 			    				<li>
 			    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
 			    					{{member.id_user.first_name}} {{member.id_user.last_name}}
@@ -44,7 +44,7 @@
     				<div class="span6">
     					<strong>Ausentes:</strong>
 		    			<ol>
-			    			{%for member in members%}
+			    			{%for member in m_no_assistance%}
 			    				<li>{{member.id_user.first_name}}</li>
 			    			{%endfor%}
 			    		</ol>

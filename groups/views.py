@@ -354,6 +354,18 @@ def getGroupBySlug(slug):
     return group
 
 
+def getMembersAssistance(group, minutes_current):
+    try:
+        selected = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
+        s = list()
+        for m in selected:
+            s.append(int(m.id_user.id))
+        return getMembersOfGroupWithSelected(group, s)
+    except Exception, e:
+        print e
+        return None
+
+
 @login_required(login_url='/account/login')
 def showMinutes(request, slug, minutes_code):
     '''
@@ -368,6 +380,10 @@ def showMinutes(request, slug, minutes_code):
         if not minutes_current:
             return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
+        ######## <ASISTENTES> #########
+        m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
+        ######## <ASISTENTES> #########
+
         ######## <SIGN> #########
         members_signed = getMembersSigned(group, minutes_current)
         ######## </SIGN> #########
@@ -378,7 +394,7 @@ def showMinutes(request, slug, minutes_code):
 
         members = rel_user_group.objects.filter(id_group=group, is_active=True)
         ctx = {"group": group, "minutes": minutes_current, "members": members,
-        "members_signed": members_signed, "prev": prev, "next": next}
+        "members_signed": members_signed, "prev": prev, "next": next, "m_assistance": m_assistance, "m_no_assistance": m_no_assistance}
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))

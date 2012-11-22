@@ -33,9 +33,13 @@
                 <tr>
                     <th><label>&Uacute;ltimo c&oacute;digo:</label></th>
                     <td>
+                        {% if last != "---" %}
                         <a href="/groups/{{group.slug}}/minutes/{{lastCode}}" target="_blank">
                             {{last.code}} del {{last.date_created}}
                         </a>
+                        {% else%}
+                         Esta es tu primer Acta, recomendamos: 001, A001, etc.
+                        {% endif %}
                     </td>
                 </tr>
                 {{ newMinutesForm }}
