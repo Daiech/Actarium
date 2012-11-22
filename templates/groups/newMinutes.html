@@ -14,6 +14,19 @@
         </strong>
         <hr>
         <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
+        <div class="alert alert-error">
+            {% if minutes_saved.error %}
+                {%if minutes_saved.error == "e0"%}
+                    Error, el formulario no es valido
+                {%endif%}
+                {%if minutes_saved.error == "e1"%}
+                    Error, al menos un (1) miembro debe ser seleccionado
+                {%endif%}
+                {%if minutes_saved.error == "e2"%}
+                    Error, este grupo tiene un acta con el mismo c&oacute;digo
+                {%endif%}
+            {% endif %}
+        </div>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
             <table>
