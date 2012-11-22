@@ -88,6 +88,8 @@ def myAccount(request):
         if form.is_valid():
             form.save()
             update = True
+        else:
+            update = False
     else:
         form = UserForm(instance=request.user)
         update = False

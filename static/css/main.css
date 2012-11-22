@@ -93,6 +93,183 @@ textarea {
    Author's custom styles   
    @JonathanMG7
    ========================================================================== */
+
+/* ****************************************************************************
+    Barra superior DAIECH Contenedor y elementos
+**************************************************************************** */
+body > header{
+    background-repeat: repeat-x;
+    background-color: #EEEEEE;
+    background-image: url("/static/img/navbar-background.png");
+    box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
+    height: 70px;
+}
+body{
+    background-color: #E9E9E9;
+}
+.navbar-d{
+    height: 70px;
+    margin: 0 auto;
+    width: 90%;
+}
+#logo-button{
+    margin-top:  0px;
+    width: 140px;
+}
+.navbar-button{
+    height: 60px;
+    padding-top: 0;
+}
+#logo-sup{
+    float: left;
+    padding: 0;
+}
+#logo-sup > img{
+    padding-top: 10px;
+    width:130px;
+}
+header div > ul li{
+    list-style-type: none;
+    display: inline-block;
+    height: 60px;
+    width:100px;
+    text-align: center;
+
+}
+.navbar-element{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 70px;
+    margin-top: 0px;
+    box-shadow: -1px 0px 15px rgba(0,0,0,0.3);
+    position: relative;
+    top:0px;
+}
+.navbar-item{
+    background-color: #eeeeee;
+    height: 63px;
+}
+.navbar-item > span{
+    font-size: 14px;
+    position:relative;
+    top: 28px;
+}
+.navbar-button-propierties{
+    height: 10px;
+}
+.navbar-select0{
+    background-color: #79B632;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
+}
+.navbar-select1{
+    background-color: #00AEAA;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
+}
+header div > ul li a {
+    display:inline-block;
+    color:gray; 
+    margin: auto;
+    width:100%;
+    text-decoration:none;
+}
+#navbar-button-container{
+}
+#navbar-button-container > ul{
+    margin-left: 50px;/*
+    */    float:left;
+    display: block;
+}
+#social-buttons > a{
+    margin:0;
+    padding:0;
+    float:left;
+}
+#social-buttons a > img{
+    width:35px;
+}
+#social-buttons{
+    float: right;
+    padding-top: 16px;
+}
+.navbar-active-class{
+    background-color: black;
+}
+#top-button{
+    display: none;
+}
+/* **************************************************************************** 
+Termina barra superior Daiech
+**************************************************************************** */
+.info-containter{
+    background-image: url("/static/img/fondo_peq.jpg")
+}
+
+/* **************************************************************************** 
+Footer
+**************************************************************************** */
+footer{
+    background-color: #E9E9E9;
+    bottom: 0;
+    min-height: 210px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+#footer-bar{
+    background-color: white;
+    margin-top: 50px;
+    width: 100%;
+    height: 80px;
+}
+.white-bar{
+    color: black;
+    display:block;
+    margin:auto;
+    overflow: hidden;
+    text-align: center;
+    width: 480px;
+}
+.footer-pic{
+    float:left;
+    height: 60px;
+    position: relative;
+    width: 50%;
+}
+footer a , footer a:visited ,footer a:link{
+    color: #333;
+}
+footer a:hover{
+    color: #00AEAA;
+}
+footer p{
+    padding-top: 10px;
+}
+#cred-footer{
+    margin-top: 20px;
+}
+/* **************************************************************************** 
+Termina Footer
+**************************************************************************** */
+
+
+
+#twitter-button{
+    height: 30px;
+    width: 177px;
+    display: inline-block;
+    float: left;
+}
+#textComent{
+    margin-left: 12%;
+    margin-right: 12%;
+    min-height: 150px;
+    width: 70%;
+}
+
 .b{
     border: solid thin #dadada;
 }
@@ -153,11 +330,7 @@ hr{
     height: 0.01px;
     margin-bottom: 20px;
 }
-footer{
-    border-top: solid thin #dadada;
-    text-align: center;
-    padding: 20px;
-}
+
 
 article ul a img{
     margin:10px;
@@ -446,7 +619,7 @@ only screen and (min-resolution: 144dpi) {
 /* Large desktop */
 @media (min-width: 1200px) {
     article{
-        width: 80%;
+        /*        width: 80%;*/
         /*        border: solid thin green;*/
     }
     .columnaD{
@@ -455,18 +628,16 @@ only screen and (min-resolution: 144dpi) {
 
 }
 @media (min-width: 980px) and (max-width: 1280px) {
-    article{
-        width: 80%;
-        /*        border: solid thin yellow;*/
-    }
-    .columnaD{
-        width: 48%;
-    }
-    .notifications span{
-        display: inline;
-    }
 
 }
+.columnaD{
+    width: 48%;
+}
+.notifications span{
+    display: inline;
+}
+
+
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -476,8 +647,35 @@ only screen and (min-resolution: 144dpi) {
     }
     .columnaD{
         width: 40%;
+    } 
+/*    #navbar-button-container{
+        display: none;
+    }*/
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+    }
+    
+.navbar-button{
+        clear: both;
+    }
+    header div > ul li{
+        list-style-type: none;
+        width: 100%;
+
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        display: auto;
     }
 }
+
+
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     article{
@@ -498,12 +696,19 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 50%;
     }
+    #navbar-button-container{
+        display: none;
+    }
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+    }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     article{
         width: auto;
-        /*        border: solid thin gray;*/
     }
     .fix_btn{
         padding: 0 20px;
@@ -514,6 +719,14 @@ only screen and (min-resolution: 144dpi) {
     }
     .alert-block{
         width: 60%;
+    }
+    #navbar-button-container{
+        display: none;
+    }
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
     }
 }
 /*==================================================*/
