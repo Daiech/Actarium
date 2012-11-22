@@ -90,6 +90,9 @@ class minutes(models.Model):
     def __unicode__(self):
         return "id_group: %s, %s, %s" % (self.id_group, self.date_created, self.id_extra_minutes)
 
+    class Meta:
+        unique_together = ('id_group', 'code')
+
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')

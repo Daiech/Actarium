@@ -424,7 +424,26 @@ def getMembersOfGroupWithSelected(group, select):
     return (selected_members, no_selected_members)
 
 
-def saveMinute(group, form):
+def preparingToSign(members, minutes_id):
+    '''
+    Stored in the database records all users attending a reunion.
+    '''
+    a = list()
+    for m in members:
+        a.append(
+            rel_user_minutes_signed(
+                id_user=m.id_user,
+                id_minutes=minutes_id
+                )
+        )
+    try:
+        rel_user_minutes_signed.objects.bulk_create(a)
+    except Exception, e:
+        print e
+        return "Exception"
+
+
+def saveMinute(group, form, m_selected):
     '''
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
@@ -437,34 +456,32 @@ def saveMinute(group, form):
     'agenda': form.cleaned_data['agenda'],
     'agreement': form.cleaned_data['agreement'],
     }
-    myNewMinutes_type_1 = minutes_type_1(
-                   date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
-                   date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
-                   location=df['location'],
-                   agenda=df['agenda'],
-                   agreement=df['agreement'],
-                 )
-    myNewMinutes_type_1.save()
-    myNewMinutes = minutes(
-                    code=df['code'],
-                    id_extra_minutes=myNewMinutes_type_1,
-                    id_group=group,
-                    id_type=minutes_type.objects.get(pk=1),
-                )
-    myNewMinutes.save()
-    return myNewMinutes
-
-
-def preparingToSign(members, minutes_id):
-    a = list()
-    for m in members:
-        a.append(
-            rel_user_minutes_signed(
-                id_user=m.id_user,
-                id_minutes=minutes_id
-                )
-        )
-    rel_user_minutes_signed.objects.bulk_create(a)
+    try:
+        minu = minutes.objects.get(id_group=group, code=form.cleaned_data['code'])
+    except minutes.DoesNotExist, e:
+        print e
+        minu = None
+    if minu == None:
+        myNewMinutes_type_1 = minutes_type_1(
+                       date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
+                       date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
+                       location=df['location'],
+                       agenda=df['agenda'],
+                       agreement=df['agreement'],
+                     )
+        myNewMinutes_type_1.save()
+        myNewMinutes = minutes(
+                        code=df['code'],
+                        id_extra_minutes=myNewMinutes_type_1,
+                        id_group=group,
+                        id_type=minutes_type.objects.get(pk=1),
+                    )
+        myNewMinutes.save()
+        # registra los usuarios que asistieron a la reunión en la que se creó el acta
+        preparingToSign(m_selected, myNewMinutes)
+        return myNewMinutes
+    else:
+        return False
 
 
 @login_required(login_url='/account/login')
@@ -481,11 +498,23 @@ def newMinutes(request, slug_group, id_reunion):
             select = request.POST.getlist('members[]')
             m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             if form.is_valid() and len(select) != 0:
-                new_minutes = saveMinute(group, form)
-                preparingToSign(m_selected, new_minutes)
-                return HttpResponseRedirect("/groups/" + str(group.slug))
+                save = saveMinute(group, form, m_selected)
+                if save:
+                    saved = True
+                    error = False
+                    return HttpResponseRedirect("/groups/" + str(group.slug) + "/minutes/" + str(save.code))
+                else:
+                    saved = False
+                    error = "e2"  # error, mismo código de acta, o error al guardar en la db
+            else:
+                saved = False
+                error = "e0"  # error, el formulario no es valido
+                if len(select) == 0:
+                    error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
         else:
             form = newMinutesForm()
+            saved = False
+            error = False
             if id_reunion:
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
@@ -513,7 +542,8 @@ def newMinutes(request, slug_group, id_reunion):
                "group": group,
                "reunion": reunion,
                "members_selected": m_selected,
-               "members_no_selected": m_no_selected
+               "members_no_selected": m_no_selected,
+               "minutes_saved": {"saved": saved, "error": error}
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
