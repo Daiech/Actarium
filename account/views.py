@@ -9,7 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm  # 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset
-
+from actions_log.views import saveActionLog
+from django.contrib.auth.models import User
 
 #------------------------------- <Normal User>---------------------------
 def newUser(request):
@@ -22,7 +23,10 @@ def newUser(request):
         formulario = RegisterForm(request.POST)
         if formulario.is_valid():
             formulario.save()
-            return userLogin(request, formulario['username'].data, formulario['password1'].data)
+            user_name = formulario['username'].data
+            user_id = User.objects.get(username=user_name)
+            action_saved = saveActionLog(user_id,"SIGN_IN","username: %s"%(user_name))
+            return userLogin(request, user_name, formulario['password1'].data)
     else:
         formulario = RegisterForm()
     ctx = {'formNewUser': formulario}
@@ -53,6 +57,7 @@ def log_out(request):
     '''
         Finaliza una sesion activa
     '''
+    action_saved = saveActionLog(request.user,"LOG_OUT","username: %s"%(request.user))  # Guarda la accion de cerrar sesion
     logout(request)
     return HttpResponseRedirect('/')
 
@@ -66,6 +71,8 @@ def userLogin(request, user_name, password):
     if acceso is not None:
         if acceso.is_active:
             login(request, acceso)
+            user_id = User.objects.get(username=user_name)
+            action_saved = saveActionLog(user_id,"LOG_IN","username: %s"%(user_name))  # Guarda la accion de inicar sesion
             return HttpResponseRedirect('/#login')
         else:
             return render_to_response('account/status.html', context_instance=RequestContext(request))
