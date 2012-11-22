@@ -53,20 +53,22 @@
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
-                            Tienes <span class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
+                            Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
                         </a>
                     </div>
                     <div  id="Reunions" class="accordion-body collapse in">
                         <ul class="accordion-inner">
+                            
                             {% for reunion in reunions %}
-                            <li>
+                        
+                            <li data-group_name="{{reunion.group_name}}" data-date="{{reunion.date}}">
                                 <span class="notification-text">
-                                    <strong>{{reunion.id_convener.first_name}}</strong> te convoc&oacute; a una reuni&oacute;n del grupo <a href="/groups/{{invitation.id_group.slug}}">{{reunion.id_group.name}}</a><br />
-                                    <time datetime="{{reunion.date_convened|date:'c'}}">El {{reunion.date_convened}}</time>
+                                    <strong>Grupo </strong><a href="/groups/">{{reunion.group_name}}</a><br />
+                                    <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
                                 </span>
                                 <div class="buttons">
-                                    <a href="#" class="btn btn-small btn-info">Asistir&eacute;</a>
-                                    <a href="#" class="btn btn-small">No Asistir&eacute;</a>
+                                    <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
+                                    <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
                                     <a class="btn btn-link" href="#">Ver m&aacute;s</a>
                                 </div>
                                 <hr>
@@ -365,6 +367,42 @@ function acceptInvitation(element, accept){
             "Haz rechazado la invitaci&oacute;n")
         }
     })
+
+    function confirm(id_reunion, is_confirmed, group_name, date){
+		//console.log(id_reunion+" "+is_confirmed);
+		sendAjax("/groups/setAssistance",
+    			{id_reunion:id_reunion, is_confirmed: is_confirmed},
+    			"#load_reunions",
+    			function(data){
+                    
+    			}
+    	)
+	}
+    function setList(e,btn, op){
+		var t = 500;
+		e.preventDefault();
+		li= btn.parent().parent();
+		li.animate({'height': 0},t,function(){
+			confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+			$(this).remove();
+			l = $("#length-reunion").html();
+			$("#length-reunion").html(l-1);
+		});
+		//console.log(btn.attr("data-id_reunion"));
+	}
+    function setButtons(){
+		$('.confirmed2-true').click(function(e){
+			setList(e,$(this), true);
+			//console.log($(this).attr("data-id_reunion"))
+		});
+		$('.confirmed2-false').click(function(e){
+			setList(e,$(this),false);
+			//console.log($(this).attr("data-id_reunion"))
+		});	
+	}
+	setButtons();
+    
+
 }
 $(".accept-inv").on("click",function(e){
     e.preventDefault();

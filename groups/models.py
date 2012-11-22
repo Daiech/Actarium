@@ -85,7 +85,8 @@ class minutes(models.Model):
     code = models.CharField(max_length=150, verbose_name="code")
 
     def __unicode__(self):
-        return "id_group: %s, %s, %s" % (self.id_group, date_created, id_extra_minutes)
+        return "id_group: %s, %s, %s" % (self.id_group, self.date_created, self.id_extra_minutes)
+
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')
@@ -94,21 +95,22 @@ class reunions(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)
-    
+
     def __unicode__(self):
-        return "%s : %s"%(self.date_reunion,self.id_group)
+        return "%s : %s" % (self.date_reunion, self.id_group)
+
 
 class rel_reunion_minutes(models.Model):
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
     id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
-    
-    
+
+
 class assistance(models.Model):
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
     id_reunion = models.ForeignKey(reunions, null=False, related_name='%(class)s_id_reunion')
-    is_comfirmed = models.BooleanField(default=False)
-    date_comfirmed = models.DateTimeField(auto_now = True)
-    
+    is_confirmed = models.BooleanField(default=False)
+    date_confirmed = models.DateTimeField(auto_now=True)
+
     class Meta:
         unique_together = ('id_user', 'id_reunion')
 
@@ -118,21 +120,28 @@ class feddback(models.Model):
     title = models.CharField(max_length=150, verbose_name="title")
     comment = models.TextField(blank=True)
     date = models.DateTimeField(auto_now=True)
-        
+
     def __unicode__(self):
-        return "%s "%(self.title)
+        return "%s " % (self.title)
 
 
 class action(models.Model):
-    name = models.CharField(max_length = 150, verbose_name = "name")
-    description = models.TextField(blank = True)
+    name = models.CharField(max_length=150, verbose_name="name")
+    description = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now=True)
-    
+
     def __unicode__(self):
-        return "%s "%(self.name)
+        return "%s " % (self.name)
 
 
 class rel_user_action(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_action = models.ForeignKey(action,  null=False, related_name='%(class)s_id_action')
-    date_done = models.DateTimeField(auto_now = True)
+    date_done = models.DateTimeField(auto_now=True)
+
+
+class rel_user_minutes_signed(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
+    is_signed_approved = models.BooleanField(default=False)
+    date_signed = models.DateTimeField(auto_now=True)

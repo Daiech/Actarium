@@ -51,7 +51,7 @@ tinyMCE.init({
     }
     ],
  
-    width: '300',
+    width: '500',
     height: '300'
  
 });
