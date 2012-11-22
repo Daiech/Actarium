@@ -25,6 +25,9 @@
                 {%if minutes_saved.error == "e2"%}
                     Error, este grupo tiene un acta con el mismo c&oacute;digo
                 {%endif%}
+                {%if minutes_saved.error == "e3"%}
+                    Ha ocurrido un error, intenta de nuevo mas tarde.
+                {%endif%}
             </div>
         {% endif %}
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
@@ -34,7 +37,7 @@
                     <th><label>&Uacute;ltimo c&oacute;digo:</label></th>
                     <td>
                         {% if last != "---" %}
-                        <a href="/groups/{{group.slug}}/minutes/{{lastCode}}" target="_blank">
+                        <a href="/groups/{{group.slug}}/minutes/{{last.code}}" target="_blank">
                             {{last.code}} del {{last.date_created}}
                         </a>
                         {% else%}
@@ -49,8 +52,8 @@
                     </td>
                     <td class="member-list">
                          {%if reunion%}
-                            Listado de miembros que confirmaron asistencia a la reuni&oacute;n:<br>
-                            <a href="#">{{reunion}}</a>
+                            Miembros que confirmaron asistencia a la reuni&oacute;n: del 
+                            <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}" target="_blanck">{{reunion.date_reunion|date}}</a>
                          
                          {%endif%}
                             <ul class="unstyled">
@@ -83,7 +86,7 @@
                     <td></td>
                     <td>
                         <button type="submit" class="btn btn-success">Guardar</button>
-                        <a href="/groups" class="btn btn-link">Volver a grupo</a>
+                        <a href="/groups/{{group.slug}}" class="btn btn-link">Volver a grupo</a>
                     </td>
                 </tr>
             </table>
