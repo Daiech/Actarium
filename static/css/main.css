@@ -211,7 +211,7 @@ Termina barra superior Daiech
 /* **************************************************************************** 
 Footer
 **************************************************************************** */
-footer{
+#daiech-footer{
     background-color: #E9E9E9;
     bottom: 0;
     min-height: 210px;
@@ -239,14 +239,11 @@ footer{
     position: relative;
     width: 50%;
 }
-footer a , footer a:visited ,footer a:link{
+#daiech-footer a , #daiech-footer a:visited ,#daiech-footer a:link{
     color: #333;
 }
-footer a:hover{
+#daiech-footer a:hover{
     color: #00AEAA;
-}
-footer p{
-    padding-top: 10px;
 }
 #cred-footer{
     margin-top: 20px;
@@ -625,17 +622,22 @@ only screen and (min-resolution: 144dpi) {
     .columnaD{
         width: 48%;
     }
-
+    .navbar-fixed-top {
+        margin-bottom: 26px;
+    }
 }
 @media (min-width: 980px) and (max-width: 1280px) {
-
-}
 .columnaD{
     width: 48%;
 }
 .notifications span{
     display: inline;
 }
+.navbar-fixed-top {
+        margin-bottom: 26px;
+    }
+}
+
 
 
 
@@ -648,22 +650,34 @@ only screen and (min-resolution: 144dpi) {
     .columnaD{
         width: 40%;
     } 
-/*    #navbar-button-container{
-        display: none;
-    }*/
+    /*    #navbar-button-container{
+            display: none;
+        }*/
+    
+    
+    .navbar-fixed-top {
+        margin-bottom: 26px;
+    }
+    
+
+    /*    Menu superior*/
     #top-button{
         display: block;
         width: 80px;
         margin: auto;
     }
-    
-.navbar-button{
+
+    .navbar-button{
         clear: both;
     }
+    #navbar-button-container{
+        display:none;
+    }
     header div > ul li{
+        display: block;
         list-style-type: none;
-        width: 100%;
-
+        margin: auto;
+        width: 150px;
     }
     .navbar-button-propierties{
         display: none;
@@ -671,8 +685,20 @@ only screen and (min-resolution: 144dpi) {
     #navbar-button-container > ul {
         margin-left: 0px;
         float: none;
+        margin-top: 26px;
         display: auto;
     }
+
+    .navbar-element{
+        box-shadow: 0px 0px 0px rgba(0,0,0,0);
+        height: 63px;
+    }
+    #drop-d-menu{
+        margin-top: 18px;
+        width: 100%;
+    }
+    /*   fin Menu superior*/
+
 }
 
 
@@ -696,14 +722,51 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 50%;
     }
-    #navbar-button-container{
-        display: none;
+    
+    .navbar-fixed-top {
+        margin-bottom: 26px;
     }
+    
+
+    /*    Menu superior*/
     #top-button{
         display: block;
         width: 80px;
         margin: auto;
     }
+
+    .navbar-button{
+        clear: both;
+    }
+    #navbar-button-container{
+        display:none;
+    }
+    header div > ul li{
+        display: block;
+        list-style-type: none;
+        margin: auto;
+        width: 150px;
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        margin-top: 26px;
+        display: auto;
+    }
+
+    .navbar-element{
+        box-shadow: 0px 0px 0px rgba(0,0,0,0);
+        height: 63px;
+    }
+    #drop-d-menu{
+        margin-top: 18px;
+        width: 100%;
+    }
+    /*   fin Menu superior*/
+
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -720,36 +783,74 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 60%;
     }
-    #navbar-button-container{
-        display: none;
+    
+    .navbar-fixed-top {
+        margin-bottom: 26px;
     }
+    
+    /*    Menu superior*/
     #top-button{
         display: block;
         width: 80px;
         margin: auto;
+        float: right
     }
-}
-/*==================================================*/
-/*                  Cierra Responsive               */                    
-/*==================================================*/
 
-
-
-/*@media only screen and (max-width:1280px){
-    .columnaD{
-        margin-left: 380px;
+    .navbar-button{
+        clear: both;
     }
-}*/
+    #navbar-button-container{
+        display:none;
+    }
+    header div > ul li{
+        display: block;
+        list-style-type: none;
+        margin: auto;
+        width: 150px;
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        margin-top: 26px;
+        display: auto;
+    }
+
+    .navbar-element{
+        box-shadow: 0px 0px 0px rgba(0,0,0,0);
+        height: 63px;
+    }
+    #drop-d-menu{
+        margin-top: 18px;
+        width: 100%;
+    }
+    #social-buttons{
+        display: none;
+        /*   fin Menu superior*/
+    }
+    /*==================================================*/
+    /*                  Cierra Responsive               */                    
+    /*==================================================*/
 
 
 
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid required HTTP connection: h5bp.com/r
-   ========================================================================== */
+    /*@media only screen and (max-width:1280px){
+        .columnaD{
+            margin-left: 380px;
+        }
+    }*/
 
-@media print {
-    * {
+
+
+    /* ==========================================================================
+       Print styles.
+       Inlined to avoid required HTTP connection: h5bp.com/r
+       ========================================================================== */
+
+    @media print {
+        * {
         background: transparent !important;
         color: #000 !important; /* Black prints faster: h5bp.com/s */
         box-shadow:none !important;

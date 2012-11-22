@@ -107,7 +107,7 @@
 </article>
 {% else %}
 <div id="new-container">
-    <img src="/static/img/logo_grande.png" alt="Logo Actarium"/>
+    <img id="logo-act-big" src="/static/img/logo_grande.png" alt="Logo Actarium"/>
 </div>
 <div id="info-act" style="display:none">
     Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
@@ -309,14 +309,9 @@
 {% block js %}
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
-    $(".pic-down").on("click",function(e){
+    $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
         e.preventDefault()
          $("#info-act").slideToggle("fast")
-    })
-    
-    $("#arriba").on("click",function(e){
-        e.preventDefault()
-        $("#info-act").slideToggle("fast")
     })
     
     $(".collapse").collapse({
