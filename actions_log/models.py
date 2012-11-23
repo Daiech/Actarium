@@ -18,3 +18,4 @@ class rel_user_action(models.Model):
     id_action = models.ForeignKey(actions,  null=False, related_name='%(class)s_id_action')
     extra = models.TextField(blank=True)
     date_done = models.DateTimeField(auto_now=True)
+    ip_address = models.CharField(max_length=100, verbose_name="IP_address")

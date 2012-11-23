@@ -25,7 +25,7 @@ def newUser(request):
             formulario.save()
             user_name = formulario['username'].data
             user_id = User.objects.get(username=user_name)
-            action_saved = saveActionLog(user_id,"SIGN_IN","username: %s"%(user_name))
+            saveActionLog(user_id,"SIGN_IN","username: %s, email: %s"%(user_name, formulario['email'].data),str(request.META['REMOTE_ADDR']))
             return userLogin(request, user_name, formulario['password1'].data)
     else:
         formulario = RegisterForm()
@@ -57,7 +57,7 @@ def log_out(request):
     '''
         Finaliza una sesion activa
     '''
-    action_saved = saveActionLog(request.user,"LOG_OUT","username: %s"%(request.user))  # Guarda la accion de cerrar sesion
+    saveActionLog(request.user,"LOG_OUT","username: %s"%(request.user),request.META['REMOTE_ADDR'])  # Guarda la accion de cerrar sesion
     logout(request)
     return HttpResponseRedirect('/')
 
@@ -72,7 +72,7 @@ def userLogin(request, user_name, password):
         if acceso.is_active:
             login(request, acceso)
             user_id = User.objects.get(username=user_name)
-            action_saved = saveActionLog(user_id,"LOG_IN","username: %s"%(user_name))  # Guarda la accion de inicar sesion
+            saveActionLog(user_id,"LOG_IN","username: %s"%(user_name),request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
             return HttpResponseRedirect('/#login')
         else:
             return render_to_response('account/status.html', context_instance=RequestContext(request))
@@ -90,10 +90,13 @@ def myAccount(request):
         Control para usuarios logueados.
         se consultan los datos y se los envia al template para imprimirlos
     '''
+    last_data = "last=> username: %s, name: %s, last_name: %s, email %s"%(request.user.username, request.user.first_name, request.user.last_name, request.user.email)
     if request.method == "POST":
         form = UserForm(request.POST, instance=request.user)
+        
         if form.is_valid():
             form.save()
+            saveActionLog(request.user,"CHG_USDATA",last_data,request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
             update = True
     else:
         form = UserForm(instance=request.user)
@@ -110,6 +113,7 @@ def PasswordChange(request):
         passForm = PasswordChangeForm(data=request.POST, user=request.user)
         if passForm.is_valid():
             passForm.save()
+            saveActionLog(request.user,"CHG_PASS","Password changed",request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
             passUpdate = True
     else:
         passForm = PasswordChangeForm(user=request.user)
