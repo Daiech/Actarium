@@ -131,21 +131,6 @@ class feddback(models.Model):
         return "feedback: %s " % (self.title)
 
 
-class action(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return "Action: %s " % (self.name)
-
-
-class rel_user_action(models.Model):
-    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_action = models.ForeignKey(action,  null=False, related_name='%(class)s_id_action')
-    date_done = models.DateTimeField(auto_now=True)
-
-
 class rel_user_minutes_signed(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')

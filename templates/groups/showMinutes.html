@@ -16,6 +16,7 @@
 			<li class="previous {%if not prev %}disabled{%endif%}">
 				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
 			</li>
+			<li><a href="/groups/{{group.slug}}">Ver listado</a></li>
 			<li class="next {%if not next %}disabled{%endif%}">
 				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
 			</li>
@@ -33,8 +34,8 @@
     				<div class="span6">
     					<strong>Presentes:</strong> 
 		    			<ol>
-			    			{%for member in members%}
-			    				<li>
+			    			{%for member in m_assistance%}
+			    				<li id="user{{member.id_user.id}}">
 			    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
 			    					{{member.id_user.first_name}} {{member.id_user.last_name}}
 			    				</li>
@@ -44,8 +45,11 @@
     				<div class="span6">
     					<strong>Ausentes:</strong>
 		    			<ol>
-			    			{%for member in members%}
-			    				<li>{{member.id_user.first_name}}</li>
+			    			{%for member in m_no_assistance%}
+			    				<li>
+			    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+			    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+			    				</li>
 			    			{%endfor%}
 			    		</ol>
     				</div>
@@ -54,24 +58,29 @@
     			<strong>Acuerdos :</strong> {{minutes.id_extra_minutes.agreement|safe}}
     			
     		</div>
-    		<footer></footer>
+    		<footer>
+    			<p><strong>Los miembros ausentes presentaron excusa de su inasistencia.</strong></p>
+    		</footer>
     	</article>
     	<ul class="pager hoja">
 			<li class="previous {%if not prev %}disabled{%endif%}">
 				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
 			</li>
+			<li><a href="/groups/{{group.slug}}">Ver listado</a></li>
 			<li class="next {%if not next %}disabled{%endif%}">
 				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
 			</li>
 		</ul>
-    	<div id="sign" class="hoja b">
-    		{% for member in members_signed %}
-    			{{member.id_user.username}}
-    		{% endfor %}
-    		<a href="#" class="btn btn-success" id="btn-sign" data-minutes="{{minutes.id}}">
-    			Firmar <span></span></a>
-    	</div>
     </section>
+    {% if my_attending %}
+    <div id="sign" class="hoja b">
+		{% for member in members_signed %}
+			{{member.id_user}}<br>
+		{% endfor %}
+		<a href="#" class="btn btn-success" id="btn-sign" data-minutes="{{minutes.id}}">
+			Firmar <span></span></a>
+	</div>
+	{%endif%}
 </article>
 {%endblock%}
 {% block js %}
@@ -89,7 +98,7 @@
 		// alert(minutes_id)
 		sendAjax(
 			"/groups/setSign",
-			{"group":"{{group.id}}", "m_id":minutes_id},
+			{"m_id":minutes_id},
 			"#btn-sign span",
 			callBackSign
 			)
@@ -126,6 +135,7 @@
 	.minute footer{
 		border: none;
 		bottom: 0;
+		font-size: 14px;
 		left: 0;
 		margin:0;
 		padding: 20px 40px;

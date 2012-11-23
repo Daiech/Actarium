@@ -15,6 +15,7 @@ from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 from django.core import serializers
+from actions_log.views import saveActionLog 
 
 
 @login_required(login_url='/account/login')
@@ -53,6 +54,8 @@ def newGroup(request):
             myNewGroup.save()
             rel_user_group(id_user=request.user, id_group=myNewGroup).save()
             admin_group(id_user=request.user, id_group=myNewGroup).save()
+            saveActionLog(request.user, 'NEW_GROUP',"id_group: %s, group_name: %s, admin: %s"%(myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR']) #Guardar accion de crear reunion
+            #print "group: %s, id_group: %s"%(myNewGroup,myNewGroup.pk)
             return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
     else:
         form = newGroupForm()
@@ -245,6 +248,8 @@ def acceptInvitation(request):
                     rel_user_group(id_user=request.user, id_group=inv.id_group).save()
                     inv.is_active = False
                     inv.save()
+                    #print "user: %s, id_user: %s, id_group: %s, acept: %s, group_name: %s"%(request.user, request.user.pk, inv.id_group.pk, True, inv.id_group.name)
+                    saveActionLog(request.user, 'SET_INVITA',"id_group: %s, acept: %s, group_name: %s"%(inv.id_group.pk, True, inv.id_group.name), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
                     accepted = True
                     group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                     message = "Aceptar la solicitud"
@@ -252,6 +257,7 @@ def acceptInvitation(request):
                     if inv and not accept:
                         inv.is_active = False
                         inv.save()
+                        saveActionLog(request.user, 'SET_INVITA',"id_group: %s, acept: %s, group_name: %s"%(inv.id_group.pk, False, inv.id_group.name), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
                         accepted = False
                         group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                         message = "NO Aceptar la solicitud"
@@ -281,6 +287,7 @@ def deleteInvitation(request):
                 if inv:  # si eliminar la invitacion
                     inv.is_active = False
                     inv.save()
+                    saveActionLog(request.user, 'DEL_INVITA',"id_invitacion: %s, grupo: %s, email_invited: %s"%(iid,inv.id_group.name, inv.email_invited), request.META['REMOTE_ADDR']) # Accion de eliminar invitaciones
                     deleted = True
                     message = "El usuario (" + inv.email_invited + ") ya no podr&aacute; acceder a este grupo"
                     response = {"deleted": deleted, "message": message}
@@ -295,11 +302,7 @@ def deleteInvitation(request):
 
 def getMembersSigned(group, minutes_current):
     try:
-        # members = TODOS los Miembros activos del grupo, TODOS!!!
-        members = rel_user_group.objects.filter(id_group=group, is_active=True)
-        members_signed = rel_user_minutes_signed.objects.filter(id_user__in=members, id_minutes=minutes_current)
-    except rel_user_group.DoesNotExist:
-        members = False
+        members_signed = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
     except rel_user_minutes_signed.DoesNotExist:
         members_signed = False
     except Exception, e:
@@ -311,7 +314,6 @@ def getMembersSigned(group, minutes_current):
 def getMinutesByCode(group, code_id):
     try:
         minutes_current = minutes.objects.get(id_group=group, code=code_id)
-        print "code: %s " % minutes_current.code
     except minutes.DoesNotExist:
         minutes_current = False
     except Exception, e:
@@ -323,18 +325,18 @@ def getMinutesByCode(group, code_id):
 def getPrevNextOfGroup(group, minutes_id):
     prev = None
     next = None
-    print "GROUP: %s" % str(group)
-    print "MINUTES: %s" % str(minutes_id)
+    # print "GROUP: %s" % str(group)
+    # print "MINUTES: %s" % str(minutes_id)
     try:
         prev = minutes.get_previous_by_date_created(minutes_id, id_group=group)
-        print "PREV: %s" % str(prev.code)
+        # print "PREV: %s" % str(prev.code)
     except minutes.DoesNotExist:
         prev = False
     except Exception, e:
         print "Exception prev: " + str(e)
     try:
         next = minutes.get_next_by_date_created(minutes_id, id_group=group)
-        print "NEXT: %s" % str(next)
+        # print "NEXT: %s" % str(next)
     except minutes.DoesNotExist:
         next = False
     except Exception, e:
@@ -354,6 +356,18 @@ def getGroupBySlug(slug):
     return group
 
 
+def getMembersAssistance(group, minutes_current):
+    try:
+        selected = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
+        s = list()
+        for m in selected:
+            s.append(int(m.id_user.id))
+        return getMembersOfGroupWithSelected(group, s)
+    except Exception, e:
+        print e
+        return None
+
+
 @login_required(login_url='/account/login')
 def showMinutes(request, slug, minutes_code):
     '''
@@ -368,6 +382,22 @@ def showMinutes(request, slug, minutes_code):
         if not minutes_current:
             return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
+        ######## <ASISTENTES> #########
+        m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
+        ######## <ASISTENTES> #########
+
+        my_attending = False
+        signed = {}
+        for m in m_assistance:
+            try:
+                if m.id_user.id == request.user.id:
+                    my_attending = True
+                is_signed = rel_user_minutes_signed.objects.get(id_minutes=minutes_current, id_user=m.id_user)
+                # print str(m.id_user) + " => " + str(is_signed.is_signed_approved)
+                signed[int(m.id_user.id)] = int(is_signed.is_signed_approved)
+            except Exception, e:
+                print "Assistance Error: %s" % e
+                is_signed = None
         ######## <SIGN> #########
         members_signed = getMembersSigned(group, minutes_current)
         ######## </SIGN> #########
@@ -376,9 +406,8 @@ def showMinutes(request, slug, minutes_code):
         prev, next = getPrevNextOfGroup(group, minutes_current)
         ######## </PREV and NEXT> #########
 
-        members = rel_user_group.objects.filter(id_group=group, is_active=True)
-        ctx = {"group": group, "minutes": minutes_current, "members": members,
-        "members_signed": members_signed, "prev": prev, "next": next}
+        ctx = {"group": group, "minutes": minutes_current, "my_attending": my_attending, "signed_list": signed,
+        "members_signed": members_signed, "prev": prev, "next": next, "m_assistance": m_assistance, "m_no_assistance": m_no_assistance}
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
@@ -388,9 +417,8 @@ def showMinutes(request, slug, minutes_code):
 def setSign(request):
     if request.is_ajax():
         if request.method == 'GET':
-            group = str(request.GET['group'])
             minutes_id = str(request.GET['m_id'])
-            response = {"grupo": group, "minutes": minutes_id}
+            response = {"minutes": minutes_id}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -443,7 +471,7 @@ def preparingToSign(members, minutes_id):
         return "Exception"
 
 
-def saveMinute(group, form, m_selected):
+def saveMinute(request, group, form, m_selected):
     '''
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
@@ -477,11 +505,23 @@ def saveMinute(group, form, m_selected):
                         id_type=minutes_type.objects.get(pk=1),
                     )
         myNewMinutes.save()
+        id_user = request.user
+        print "id_user: %s group: %s, code: %s"%(id_user, group.name, df['code'])
+        saveActionLog(id_user,'NEW_MINUTE', "group: %s, code: %s"%(group.name, df['code']),request.META['REMOTE_ADDR'])
         # registra los usuarios que asistieron a la reunión en la que se creó el acta
         preparingToSign(m_selected, myNewMinutes)
         return myNewMinutes
     else:
         return False
+
+
+def getLastMinutes(group):
+    try:
+        l = minutes.objects.filter(id_group=group).order_by("-date_created")[0]
+        return l
+    except Exception, e:
+        print e
+        return "---"
 
 
 @login_required(login_url='/account/login')
@@ -498,7 +538,7 @@ def newMinutes(request, slug_group, id_reunion):
             select = request.POST.getlist('members[]')
             m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             if form.is_valid() and len(select) != 0:
-                save = saveMinute(group, form, m_selected)
+                save = saveMinute(request, group, form, m_selected)
                 if save:
                     saved = True
                     error = False
@@ -512,12 +552,15 @@ def newMinutes(request, slug_group, id_reunion):
                 if len(select) == 0:
                     error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
         else:
-            form = newMinutesForm()
             saved = False
             error = False
             if id_reunion:
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
+                    print reunion.agenda
+                    form = newMinutesForm(initial={"agenda": reunion.agenda})
+                    print form
+                    form.code = 123
                     confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
                     reunion_list = []  # Lista de miembros que confirmaron la asistencia
                     for user_confirmed in confirm:
@@ -527,8 +570,12 @@ def newMinutes(request, slug_group, id_reunion):
                     reunion = None
                 except Exception, e:
                     reunion = None
+                    m_selected = None
+                    m_no_selected = None
+                    error = "e3"
                     print "Exception newReunion: %s" % e
             else:
+                form = newMinutesForm(initial={"agenda": "<ol><li>Lectura del Acta anterior</li></ol>"})
                 reunion = None
                 try:
                     m_selected = rel_user_group.objects.filter(id_group=group.id, is_active=True)
@@ -537,13 +584,15 @@ def newMinutes(request, slug_group, id_reunion):
                     m_selected = None
                 except Exception, e:
                     print "Exception members in newMinutes: %e" % e
+        last = getLastMinutes(group)
         ctx = {'TITLE': "Actarium - Nueva Acta",
                "newMinutesForm": form,
                "group": group,
                "reunion": reunion,
                "members_selected": m_selected,
                "members_no_selected": m_no_selected,
-               "minutes_saved": {"saved": saved, "error": error}
+               "minutes_saved": {"saved": saved, "error": error},
+               "last": last
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -569,6 +618,11 @@ def newReunion(request, slug):
                                agenda=df['agenda'],
                              )
                 myNewReunion.save()
+                id_reunion = reunions.objects.get(id_convener=request.user,
+                               date_reunion=df['date_reunion'],
+                               id_group=q,
+                               agenda=df['agenda'])
+                saveActionLog(request.user, 'NEW_REUNION',"id_reunion: %s grupo: %s"%(id_reunion.pk, q.name), request.META['REMOTE_ADDR']) #Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/" + str(q.slug))
         else:
             form = newReunionForm()
@@ -684,9 +738,11 @@ def setAssistance(request):
             assis.is_confirmed = is_confirmed
     #        assis.is_confirmed = is_confirmed
             assis.save()
-            print assis
+            saveActionLog(id_user,'SET_ASSIST',"id_reunion: %s, is_confirmed: %s"%(id_reunion.pk,is_confirmed), request.META['REMOTE_ADDR'])
+            #print assis
+            #print request.META['REMOTE_ADDR']
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
-            print datos
+           # print datos
         return HttpResponse(json.dumps(datos), mimetype="application/json")
     else:
         response = "Error Calendar"
