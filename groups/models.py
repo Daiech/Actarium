@@ -130,6 +130,7 @@ class feddback(models.Model):
     def __unicode__(self):
         return "feedback: %s " % (self.title)
 
+
 class rel_user_minutes_signed(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
