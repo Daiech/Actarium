@@ -68,7 +68,7 @@ class minutes_type_1(models.Model):
 
 class minutes_type(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
-    descritpion = models.TextField(blank=True)
+    description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now=True)
     id_creator = models.ForeignKey(User,  null=False, related_name='%(class)s_id_creator')
     is_public = models.BooleanField()
