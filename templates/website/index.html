@@ -233,7 +233,7 @@
                 $(element).parent().parent().slideUp(900,function(){
                     $(this).empty().html(
                     "Ahora perteneces al grupo "+
-                        "<a href='#'>"+data["group"]["name"]+"</a>"+
+                        "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
                         "<hr>"
                 ).fadeIn()
                 }
@@ -267,16 +267,20 @@
             if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
                 acceptInvitation($(this), accept)
             }
+            else{
+                $(this).attr("disabled", false);
+            }
         }else{
             acceptInvitation($(this), accept)
         }
     })
-    function confirm(id_reunion, is_confirmed, group_name, date){
-		//console.log(id_reunion+" "+is_confirmed);
+    function confirmar(id_reunion, is_confirmed, group_name, date){
 		sendAjax("/groups/setAssistance",
     			{id_reunion:id_reunion, is_confirmed: is_confirmed},
     			"#load_reunions",
     			function(data){
+                    console.log(data)
+                    setAlertMessage("Reuniones", "Puedes ver la actividad de tus reuniones en el men&uacute; <a href='/groups/calendar'>Reuniones</a>")
     			}
     	)
 	}
@@ -285,21 +289,20 @@
 		e.preventDefault();
 		li= btn.parent().parent();
 		li.animate({'height': 0},t,function(){
-			confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+			confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
 			$(this).remove();
 			l = $("#length-reunion").html();
 			$("#length-reunion").html(l-1);
 		});
-		//console.log(btn.attr("data-id_reunion"));
 	}
     function setButtons(){
 		$('.confirmed2-true').click(function(e){
+            $(this).attr("disabled", "disabled");
 			setList(e,$(this), true);
-			//console.log($(this).attr("data-id_reunion"))
 		});
 		$('.confirmed2-false').click(function(e){
+            $(this).attr("disabled", "disabled");
 			setList(e,$(this),false);
-			//console.log($(this).attr("data-id_reunion"))
 		});	
 	}
 	setButtons();
