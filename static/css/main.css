@@ -107,6 +107,13 @@ body > header{
 body{
     background-color: #E9E9E9;
 }
+#loco-daiech-p{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -31px;
+    height: 45px;
+    margin-top: 10px;
+    width: 131px;
+}
 .navbar-d{
     height: 70px;
     margin: 0 auto;
@@ -123,10 +130,6 @@ body{
 #logo-sup{
     float: left;
     padding: 0;
-}
-#logo-sup > img{
-    padding-top: 10px;
-    width:130px;
 }
 header div > ul li{
     list-style-type: none;
@@ -146,6 +149,11 @@ header div > ul li{
     top:0px;
 }
 .navbar-item{
+    background-image: url("/static/img/item-background.png");
+
+    background-position: -42px 0;
+    /*    background-size: 100px 10px;*/
+    background-repeat:repeat-x;
     background-color: #eeeeee;
     height: 63px;
 }
@@ -183,13 +191,27 @@ header div > ul li a {
     */    float:left;
     display: block;
 }
-#social-buttons > a{
+.social-but{
+    height: 31px;
     margin:0;
     padding:0;
+    width: 34px;
     float:left;
 }
-#social-buttons a > img{
-    width:35px;
+.navbar .brand{
+    padding: 10px 10px 10px;
+}
+#fb-but{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px 0;
+}
+#gp-but{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -122px 0;
+}
+#tt-but{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -156px 0;
 }
 #social-buttons{
     float: right;
@@ -231,13 +253,13 @@ Footer
     margin:auto;
     overflow: hidden;
     text-align: center;
-    width: 480px;
+    width: 262px;
 }
 .footer-pic{
     float:left;
     height: 60px;
     position: relative;
-    width: 50%;
+    width: 131px;
 }
 #daiech-footer a , #daiech-footer a:visited ,#daiech-footer a:link{
     color: #333;
@@ -247,6 +269,19 @@ Footer
 }
 #cred-footer{
     margin-top: 20px;
+}
+
+.img-foot{
+    height: 34px;
+    width: 131px;
+}
+#daiech-foot{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -75px;
+}
+#parque-foot{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -110px;
 }
 /* **************************************************************************** 
 Termina Footer
@@ -627,13 +662,13 @@ only screen and (min-resolution: 144dpi) {
     }
 }
 @media (min-width: 980px) and (max-width: 1280px) {
-.columnaD{
-    width: 48%;
-}
-.notifications span{
-    display: inline;
-}
-.navbar-fixed-top {
+    .columnaD{
+        width: 48%;
+    }
+    .notifications span{
+        display: inline;
+    }
+    .navbar-fixed-top {
         margin-bottom: 26px;
     }
 }
@@ -653,12 +688,12 @@ only screen and (min-resolution: 144dpi) {
     /*    #navbar-button-container{
             display: none;
         }*/
-    
-    
+
+
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
-    
+
 
     /*    Menu superior*/
     #top-button{
@@ -722,11 +757,11 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 50%;
     }
-    
+
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
-    
+
 
     /*    Menu superior*/
     #top-button{
@@ -783,11 +818,11 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 60%;
     }
-    
+
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
-    
+
     /*    Menu superior*/
     #top-button{
         display: block;

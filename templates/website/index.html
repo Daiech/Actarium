@@ -58,9 +58,9 @@
                     </div>
                     <div  id="Reunions" class="accordion-body collapse in">
                         <ul class="accordion-inner">
-                            
+
                             {% for reunion in reunions %}
-                        
+
                             <li data-group_name="{{reunion.group_name}}" data-date="{{reunion.date}}">
                                 <span class="notification-text">
                                     <strong>Grupo </strong><a href="/groups/">{{reunion.group_name}}</a><br />
@@ -142,11 +142,17 @@
                 </div>
             </a>
             <div id="login-pic">
-                <img src="/static/img/iniciar_Sesion.png" alt="Log In" />
+                <div id="img-log">
+
+                </div>
             </div>
         </div>
         <div class="pic-down">
-            <a href="#" title="info"><img src="/static/img/flecha-abajo.png" alt="" /></a>
+            <a href="#" title="info">
+                <div id="arrow-down">
+                    
+                </div>
+            </a>
         </div>
 
         <div class="pic-log">
@@ -158,7 +164,9 @@
                 </div>
             </a>
             <div id="singup-pic">
-                <img src="/static/img/registro.png" alt="Sing Up" />
+                <div id="img-reg">
+
+                </div>
             </div>
         </div>
 
@@ -203,7 +211,7 @@
     }
     #login-pic{
         position: relative;
-        left:100px;
+        left:109px;
         top:-25px;
     }
     #singup-pic{
@@ -211,21 +219,40 @@
         top:-25px;
     }
     #left-bubble{
-        background-image: url('/static/img/left-bubble.png');
+        background-image: url('/static/img/imagen_central.png');
+        background-position: 0 -135.413px;
         color: white;
         width:166px;
-        height: 89px;
+        height: 88.46px;
         position: relative;
         text-align: center;
     }
     .right-bubble{
-        background-image: url('/static/img/right-bubble.png');
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -166px -135.413px;
         color: white;
         width: 166px;
-        height: 89px;
+        height: 88.46px;
         left:90px;
         position:relative;
         text-align: center;
+    }
+    #img-log{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: 0 -225.863px;
+        background-repeat: no-repeat;
+        /*        position: relative;
+                left:100px;
+                top:-25px;*/
+        height: 188.133px;
+        width: 150.234px;
+    }
+    #img-reg{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -166px -225.863px;
+        background-repeat: no-repeat;
+        height: 188.133px;
+        width: 150.234px;
     }
     .pic-down {
         float: left;
@@ -245,6 +272,18 @@
     }
     #info-act a > img{
         float: right;
+    }
+    #arrow-down:hover{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -363px -135.413px;
+        height: 27.749px;
+        width: 42.22px;
+    }
+    #arrow-down{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -363px -163.413px;
+        height: 27.749px;
+        width: 42.22px;
     }
     /* **************************************************************************** 
     Termina Index Website
@@ -311,105 +350,105 @@
 <script>
     $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
         e.preventDefault()
-         $("#info-act").slideToggle("fast")
+        $("#info-act").slideToggle("fast")
     })
     
     $(".collapse").collapse({
         //toggle: false
     })
-function acceptInvitation(element, accept){
-    sendAjax(
-    "/groups/acceptInvitation",
-    {"i_id":accept},
-    $(element).find(".load"),
-    function(data){
-        if (data["accepted"]){
-            var actual = parseInt($("#inv-count").text());
-            actual--;
-            $("#inv-count").text(""+actual);
-            $("#group-list").append(
-            "<li class='img-rounded'>"+
-                "<a href='"+data["group"]["slug"]+"'>"+
-                "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
-                data["group"]["name"]+
-                "</a>"+
-                "</li>")
-            $(element).parent().parent().slideUp(900,function(){
-                $(this).empty().html(
-                "Ahora perteneces al grupo "+
-                    "<a href='#'>"+data["group"]["name"]+"</a>"+
-                    "<hr>"
-            ).fadeIn()
+    function acceptInvitation(element, accept){
+        sendAjax(
+        "/groups/acceptInvitation",
+        {"i_id":accept},
+        $(element).find(".load"),
+        function(data){
+            if (data["accepted"]){
+                var actual = parseInt($("#inv-count").text());
+                actual--;
+                $("#inv-count").text(""+actual);
+                $("#group-list").append(
+                "<li class='img-rounded'>"+
+                    "<a href='"+data["group"]["slug"]+"'>"+
+                    "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
+                    data["group"]["name"]+
+                    "</a>"+
+                    "</li>")
+                $(element).parent().parent().slideUp(900,function(){
+                    $(this).empty().html(
+                    "Ahora perteneces al grupo "+
+                        "<a href='#'>"+data["group"]["name"]+"</a>"+
+                        "<hr>"
+                ).fadeIn()
+                }
+            )
+                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+            }
+            else{
+                $(element).parent().parent().slideUp(900,function(){
+                    $(this).empty().html(
+                    "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                        "<br>"+
+                        "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                        "obtener una nueva invitaci&oacute;n."+
+                        "<hr>"
+                ).fadeIn()
+                })
+                var actual2 = parseInt($("#inv-count").text())
+                actual2--
+                $("#inv-count").text(""+actual2)
+                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                "Haz rechazado la invitaci&oacute;n")
+            }
+        })
+
+        function confirm(id_reunion, is_confirmed, group_name, date){
+            //console.log(id_reunion+" "+is_confirmed);
+            sendAjax("/groups/setAssistance",
+            {id_reunion:id_reunion, is_confirmed: is_confirmed},
+            "#load_reunions",
+            function(data){
+                    
             }
         )
-            setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-            "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
         }
-        else{
-            $(element).parent().parent().slideUp(900,function(){
-                $(this).empty().html(
-                "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
-                    "<br>"+
-                    "Si lo hiciste por error comunicate con el administrador del grupo para "+
-                    "obtener una nueva invitaci&oacute;n."+
-                    "<hr>"
-            ).fadeIn()
-            })
-            var actual2 = parseInt($("#inv-count").text())
-            actual2--
-            $("#inv-count").text(""+actual2)
-            setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-            "Haz rechazado la invitaci&oacute;n")
+        function setList(e,btn, op){
+            var t = 500;
+            e.preventDefault();
+            li= btn.parent().parent();
+            li.animate({'height': 0},t,function(){
+                confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+                $(this).remove();
+                l = $("#length-reunion").html();
+                $("#length-reunion").html(l-1);
+            });
+            //console.log(btn.attr("data-id_reunion"));
         }
-    })
-
-    function confirm(id_reunion, is_confirmed, group_name, date){
-		//console.log(id_reunion+" "+is_confirmed);
-		sendAjax("/groups/setAssistance",
-    			{id_reunion:id_reunion, is_confirmed: is_confirmed},
-    			"#load_reunions",
-    			function(data){
-                    
-    			}
-    	)
-	}
-    function setList(e,btn, op){
-		var t = 500;
-		e.preventDefault();
-		li= btn.parent().parent();
-		li.animate({'height': 0},t,function(){
-			confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
-			$(this).remove();
-			l = $("#length-reunion").html();
-			$("#length-reunion").html(l-1);
-		});
-		//console.log(btn.attr("data-id_reunion"));
-	}
-    function setButtons(){
-		$('.confirmed2-true').click(function(e){
-			setList(e,$(this), true);
-			//console.log($(this).attr("data-id_reunion"))
-		});
-		$('.confirmed2-false').click(function(e){
-			setList(e,$(this),false);
-			//console.log($(this).attr("data-id_reunion"))
-		});	
-	}
-	setButtons();
+        function setButtons(){
+            $('.confirmed2-true').click(function(e){
+                setList(e,$(this), true);
+                //console.log($(this).attr("data-id_reunion"))
+            });
+            $('.confirmed2-false').click(function(e){
+                setList(e,$(this),false);
+                //console.log($(this).attr("data-id_reunion"))
+            });	
+        }
+        setButtons();
     
 
-}
-$(".accept-inv").on("click",function(e){
-    e.preventDefault();
-    $(this).attr("disabled", "disabled");
-    var accept = $(this).attr("data-invitation")
-    if(accept.substring(0,1)=="n"){
-        if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+    }
+    $(".accept-inv").on("click",function(e){
+        e.preventDefault();
+        $(this).attr("disabled", "disabled");
+        var accept = $(this).attr("data-invitation")
+        if(accept.substring(0,1)=="n"){
+            if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                acceptInvitation($(this), accept)
+            }
+        }else{
             acceptInvitation($(this), accept)
         }
-    }else{
-        acceptInvitation($(this), accept)
-    }
-})
+    })
 </script>
 {% endblock %}
