@@ -55,7 +55,15 @@ function main(){
     });
     //------ </On close activity>--------------/
 
-
+    $(".navbar-element").hover(function(){
+        $(this).find(".navbar-button-propierties").animate({"height":"15px"}, 100)
+    },function(){
+        $(this).find(".navbar-button-propierties").animate({"height":"10px"}, 100)
+    })
+    $("#drop-d-menu").on("click",function(){
+        $("#navbar-button-container").slideToggle("fast")      
+    }
+    )
 }
 
 function setAlert(tittle, message, type){

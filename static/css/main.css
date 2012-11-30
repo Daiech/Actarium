@@ -93,6 +93,215 @@ textarea {
    Author's custom styles   
    @JonathanMG7
    ========================================================================== */
+
+/* ****************************************************************************
+    Barra superior DAIECH Contenedor y elementos
+**************************************************************************** */
+body > header{
+    background-repeat: repeat-x;
+    background-color: #EEEEEE;
+    background-image: url("/static/img/navbar-background.png");
+    box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
+    height: 70px;
+}
+body{
+    background-color: #E9E9E9;
+}
+#loco-daiech-p{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -31px;
+    height: 45px;
+    margin-top: 10px;
+    width: 131px;
+}
+.navbar-d{
+    height: 70px;
+    margin: 0 auto;
+    width: 90%;
+}
+#logo-button{
+    margin-top:  0px;
+    width: 140px;
+}
+.navbar-button{
+    height: 60px;
+    padding-top: 0;
+}
+#logo-sup{
+    float: left;
+    padding: 0;
+}
+header div > ul li{
+    list-style-type: none;
+    display: inline-block;
+    height: 60px;
+    width:100px;
+    text-align: center;
+
+}
+.navbar-element{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 70px;
+    margin-top: 0px;
+    box-shadow: -1px 0px 15px rgba(0,0,0,0.3);
+    position: relative;
+    top:0px;
+}
+.navbar-item{
+    background-image: url("/static/img/item-background.png");
+
+    background-position: -42px 0;
+    /*    background-size: 100px 10px;*/
+    background-repeat:repeat-x;
+    background-color: #eeeeee;
+    height: 63px;
+}
+.navbar-item > span{
+    font-size: 14px;
+    position:relative;
+    top: 28px;
+}
+.navbar-button-propierties{
+    height: 10px;
+}
+.navbar-select0{
+    background-color: #79B632;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
+}
+.navbar-select1{
+    background-color: #00AEAA;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
+}
+header div > ul li a {
+    display:inline-block;
+    color:gray; 
+    margin: auto;
+    width:100%;
+    text-decoration:none;
+}
+#navbar-button-container{
+}
+#navbar-button-container > ul{
+    margin-left: 50px;/*
+    */    float:left;
+    display: block;
+}
+.social-but{
+    height: 31px;
+    margin:0;
+    padding:0;
+    width: 34px;
+    float:left;
+}
+.navbar .brand{
+    padding: 10px 10px 10px;
+}
+#fb-but{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px 0;
+}
+#gp-but{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -122px 0;
+}
+#tt-but{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -156px 0;
+}
+#social-buttons{
+    float: right;
+    padding-top: 16px;
+}
+.navbar-active-class{
+    background-color: black;
+}
+#top-button{
+    display: none;
+}
+/* **************************************************************************** 
+Termina barra superior Daiech
+**************************************************************************** */
+.info-containter{
+    background-image: url("/static/img/fondo_peq.jpg")
+}
+
+/* **************************************************************************** 
+Footer
+**************************************************************************** */
+#daiech-footer{
+    background-color: #E9E9E9;
+    bottom: 0;
+    min-height: 210px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+#footer-bar{
+    background-color: white;
+    margin-top: 50px;
+    width: 100%;
+    height: 80px;
+}
+.white-bar{
+    color: black;
+    display:block;
+    margin:auto;
+    overflow: hidden;
+    text-align: center;
+    width: 262px;
+}
+.footer-pic{
+    float:left;
+    height: 60px;
+    position: relative;
+    width: 131px;
+}
+#daiech-footer a , #daiech-footer a:visited ,#daiech-footer a:link{
+    color: #333;
+}
+#daiech-footer a:hover{
+    color: #00AEAA;
+}
+#cred-footer{
+    margin-top: 20px;
+}
+
+.img-foot{
+    height: 34px;
+    width: 131px;
+}
+#daiech-foot{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -75px;
+}
+#parque-foot{
+    background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -110px;
+}
+/* **************************************************************************** 
+Termina Footer
+**************************************************************************** */
+
+
+
+#twitter-button{
+    height: 30px;
+    width: 177px;
+    display: inline-block;
+    float: left;
+}
+#textComent{
+    margin-left: 12%;
+    margin-right: 12%;
+    min-height: 150px;
+    width: 70%;
+}
+
 .b{
     border: solid thin #dadada;
 }
@@ -153,11 +362,7 @@ hr{
     height: 0.01px;
     margin-bottom: 20px;
 }
-footer{
-    border-top: solid thin #dadada;
-    text-align: center;
-    padding: 20px;
-}
+
 
 article ul a img{
     margin:10px;
@@ -446,27 +651,30 @@ only screen and (min-resolution: 144dpi) {
 /* Large desktop */
 @media (min-width: 1200px) {
     article{
-        width: 80%;
+        /*        width: 80%;*/
         /*        border: solid thin green;*/
     }
     .columnaD{
         width: 48%;
     }
-
+    .navbar-fixed-top {
+        margin-bottom: 26px;
+    }
 }
 @media (min-width: 980px) and (max-width: 1280px) {
-    article{
-        width: 80%;
-        /*        border: solid thin yellow;*/
-    }
     .columnaD{
         width: 48%;
     }
     .notifications span{
         display: inline;
     }
-
+    .navbar-fixed-top {
+        margin-bottom: 26px;
+    }
 }
+
+
+
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -476,8 +684,59 @@ only screen and (min-resolution: 144dpi) {
     }
     .columnaD{
         width: 40%;
+    } 
+    /*    #navbar-button-container{
+            display: none;
+        }*/
+
+
+    .navbar-fixed-top {
+        margin-bottom: 26px;
     }
+
+
+    /*    Menu superior*/
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+    }
+
+    .navbar-button{
+        clear: both;
+    }
+    #navbar-button-container{
+        display:none;
+    }
+    header div > ul li{
+        display: block;
+        list-style-type: none;
+        margin: auto;
+        width: 150px;
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        margin-top: 26px;
+        display: auto;
+    }
+
+    .navbar-element{
+        box-shadow: 0px 0px 0px rgba(0,0,0,0);
+        height: 63px;
+    }
+    #drop-d-menu{
+        margin-top: 18px;
+        width: 100%;
+    }
+    /*   fin Menu superior*/
+
 }
+
+
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     article{
@@ -498,12 +757,56 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 50%;
     }
+
+    .navbar-fixed-top {
+        margin-bottom: 26px;
+    }
+
+
+    /*    Menu superior*/
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+    }
+
+    .navbar-button{
+        clear: both;
+    }
+    #navbar-button-container{
+        display:none;
+    }
+    header div > ul li{
+        display: block;
+        list-style-type: none;
+        margin: auto;
+        width: 150px;
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        margin-top: 26px;
+        display: auto;
+    }
+
+    .navbar-element{
+        box-shadow: 0px 0px 0px rgba(0,0,0,0);
+        height: 63px;
+    }
+    #drop-d-menu{
+        margin-top: 18px;
+        width: 100%;
+    }
+    /*   fin Menu superior*/
+
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     article{
         width: auto;
-        /*        border: solid thin gray;*/
     }
     .fix_btn{
         padding: 0 20px;
@@ -515,28 +818,74 @@ only screen and (min-resolution: 144dpi) {
     .alert-block{
         width: 60%;
     }
-}
-/*==================================================*/
-/*                  Cierra Responsive               */                    
-/*==================================================*/
 
-
-
-/*@media only screen and (max-width:1280px){
-    .columnaD{
-        margin-left: 380px;
+    .navbar-fixed-top {
+        margin-bottom: 26px;
     }
-}*/
+
+    /*    Menu superior*/
+    #top-button{
+        display: block;
+        width: 80px;
+        margin: auto;
+        float: right
+    }
+
+    .navbar-button{
+        clear: both;
+    }
+    #navbar-button-container{
+        display:none;
+    }
+    header div > ul li{
+        display: block;
+        list-style-type: none;
+        margin: auto;
+        width: 150px;
+    }
+    .navbar-button-propierties{
+        display: none;
+    }
+    #navbar-button-container > ul {
+        margin-left: 0px;
+        float: none;
+        margin-top: 26px;
+        display: auto;
+    }
+
+    .navbar-element{
+        box-shadow: 0px 0px 0px rgba(0,0,0,0);
+        height: 63px;
+    }
+    #drop-d-menu{
+        margin-top: 18px;
+        width: 100%;
+    }
+    #social-buttons{
+        display: none;
+        /*   fin Menu superior*/
+    }
+    /*==================================================*/
+    /*                  Cierra Responsive               */                    
+    /*==================================================*/
 
 
 
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid required HTTP connection: h5bp.com/r
-   ========================================================================== */
+    /*@media only screen and (max-width:1280px){
+        .columnaD{
+            margin-left: 380px;
+        }
+    }*/
 
-@media print {
-    * {
+
+
+    /* ==========================================================================
+       Print styles.
+       Inlined to avoid required HTTP connection: h5bp.com/r
+       ========================================================================== */
+
+    @media print {
+        * {
         background: transparent !important;
         color: #000 !important; /* Black prints faster: h5bp.com/s */
         box-shadow:none !important;

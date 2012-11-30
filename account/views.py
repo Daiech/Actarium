@@ -98,6 +98,8 @@ def myAccount(request):
             form.save()
             saveActionLog(request.user,"CHG_USDATA",last_data,request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
             update = True
+        else:
+            update = False
     else:
         form = UserForm(instance=request.user)
         update = False
