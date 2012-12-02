@@ -14,8 +14,8 @@ import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
-from django.core import serializers
-from actions_log.views import saveActionLog 
+from django.core.mail import EmailMessage
+from actions_log.views import saveActionLog
 
 
 @login_required(login_url='/account/login')
@@ -54,7 +54,7 @@ def newGroup(request):
             myNewGroup.save()
             rel_user_group(id_user=request.user, id_group=myNewGroup).save()
             admin_group(id_user=request.user, id_group=myNewGroup).save()
-            saveActionLog(request.user, 'NEW_GROUP',"id_group: %s, group_name: %s, admin: %s"%(myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR']) #Guardar accion de crear reunion
+            saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
             #print "group: %s, id_group: %s"%(myNewGroup,myNewGroup.pk)
             return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
     else:
@@ -141,7 +141,7 @@ def sendInvitationUser(email, user, group):
     if validateEmail(email):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
-            #  send email here
+            sendEmail(email, "Te han enviado un Mensaje")
             return invitation
         else:
             return False
@@ -738,7 +738,7 @@ def setAssistance(request):
             assis.is_confirmed = is_confirmed
     #        assis.is_confirmed = is_confirmed
             assis.save()
-            saveActionLog(id_user,'SET_ASSIST',"id_reunion: %s, is_confirmed: %s"%(id_reunion.pk,is_confirmed), request.META['REMOTE_ADDR'])
+            saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             #print assis
             #print request.META['REMOTE_ADDR']
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
@@ -774,26 +774,35 @@ def getReunionData(request):
                 except assistance.DoesNotExist:
                     is_confirmed = False
                     is_saved = 0
-                if( is_saved == 1):
-                    if(is_confirmed == True): #reuniones confirmadas
-                        c=1
-                    else : #reuniones rechazadas
-                        c=2
-                else: #reuniones pendientes por confirmar
-                    c=3
-                
-                assis_list[i] = {'username': assistant.id_user.username, "is_confirmed":c}
-                i = i+1
-            
-            reunion_data = {"convener":convener,
+                if is_saved == 1:
+                    if is_confirmed == True:  # reuniones confirmadas
+                        c = 1
+                    else:  # reuniones rechazadas
+                        c = 2
+                else:  # reuniones pendientes por confirmar
+                    c = 3
+                assis_list[i] = {'username': assistant.id_user.username, "is_confirmed": c}
+                i = i + 1
+            reunion_data = {"convener": convener,
                "date_convened": str(date_convened),
                "date_reunion": str(date_reunion),
                "group": group,
-               "agenda": agenda, 
+               "agenda": agenda,
                "is_done": is_done,
-               "assistants": assis_list,   
+               "assistants": assis_list,
                "group_slug": group_slug
            }
     else:
         reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
+
+
+def sendEmail(mail, contenido):
+    titulo = 'Mensaje desde Actarium'
+    contenido = contenido + "\n"
+    contenido += 'Comunicarse a: ' + mail
+    try:
+        correo = EmailMessage(titulo, contenido, to=['contacto@daiech.com'])
+        correo.send()
+    except Exception, e:
+        print e
