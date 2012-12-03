@@ -803,7 +803,7 @@ def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n"
     try:
         correo = EmailMessage(titulo, contenido, from_email=["no-reply@daiech.com"], to=[str(mail_to)])
-        correo.content_subtype = "html"
+        # correo.content_subtype = "html"
         correo.send()
     except Exception, e:
         print e
