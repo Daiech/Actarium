@@ -802,8 +802,8 @@ def getReunionData(request):
 def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n"
     try:
-        correo = EmailMessage(titulo, contenido, "no-reply@daiech.com", to=[str(mail_to)])
-        # correo.content_subtype = "html"
+        correo = EmailMessage(titulo, contenido, 'Actarium <contacto@daiech.com>',  to=[str(mail_to)])
+        correo.content_subtype = "html"
         correo.send()
     except Exception, e:
         print e
