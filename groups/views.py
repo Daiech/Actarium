@@ -141,7 +141,9 @@ def sendInvitationUser(email, user, group):
     if validateEmail(email):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
-            sendEmail(email, "Te han enviado un Mensaje")
+            title = str(user.first_name) + " (" + str(user.username) + ") te agregó a un grupo en Actarium"
+            contenido = title + " te ha invitado al grupo " + str(group.name) + "\n\n" + "ingresa a Actarium en: http://actarium.daiech.com"
+            sendEmail(email, title, contenido)
             return invitation
         else:
             return False
@@ -797,12 +799,11 @@ def getReunionData(request):
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
 
 
-def sendEmail(mail, contenido):
-    titulo = 'Mensaje desde Actarium'
+def sendEmail(mail, titulo, contenido):
     contenido = contenido + "\n"
     contenido += 'Comunicarse a: ' + mail
     try:
-        correo = EmailMessage(titulo, contenido, to=['contacto@daiech.com'])
+        correo = EmailMessage(titulo, contenido, to=[str(mail)])
         correo.send()
     except Exception, e:
         print e
