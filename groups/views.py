@@ -141,7 +141,12 @@ def sendInvitationUser(email, user, group):
     if validateEmail(email):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
-            sendEmail(email, "Te han enviado un Mensaje")
+            try:
+                title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo " + str(group.name.encode('utf8', 'replace')) + "\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                sendEmail(email, title, contenido)
+            except Exception, e:
+                print "Exception mail: %s" % e
             return invitation
         else:
             return False
@@ -797,12 +802,11 @@ def getReunionData(request):
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
 
 
-def sendEmail(mail, contenido):
-    titulo = 'Mensaje desde Actarium'
-    contenido = contenido + "\n"
-    contenido += 'Comunicarse a: ' + mail
+def sendEmail(mail_to, titulo, contenido):
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por Daiech. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
-        correo = EmailMessage(titulo, contenido, to=['contacto@daiech.com'])
+        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', to=[str(mail_to)])
+        correo.content_subtype = "html"
         correo.send()
     except Exception, e:
         print e
