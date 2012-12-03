@@ -800,7 +800,7 @@ def getReunionData(request):
 
 
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n"
+    contenido = "<div><img src='http://actarium.daiech.com/static/img/actarium.png' alt='Actarium'></div>" + contenido + "\n"
     try:
         correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', to=[str(mail_to)])
         correo.content_subtype = "html"
