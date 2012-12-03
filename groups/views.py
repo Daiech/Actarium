@@ -142,7 +142,7 @@ def sendInvitationUser(email, user, group):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         if created:
             title = str(user.first_name) + " (" + str(user.username) + ") te agregó a un grupo en Actarium"
-            contenido = str(user.first_name) + " (" + str(user.username) + " te ha invitado al grupo " + str(group.name) + "\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' target='_blank'>Actarium.com</a>"
+            contenido = str(user.first_name) + " (" + str(user.username) + ") te ha invitado al grupo " + str(group.name) + "\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' target='_blank'>Actarium.com</a>"
             sendEmail(email, title, contenido)
             return invitation
         else:
@@ -800,9 +800,9 @@ def getReunionData(request):
 
 
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n"
+    contenido = "<div><img src='http://actarium.daiech.com/static/img/actarium.png'></div>" + contenido + "\n"
     try:
-        correo = EmailMessage(titulo, contenido, 'Actarium <contacto@daiech.com>',  to=[str(mail_to)])
+        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>',  to=[str(mail_to)]
         correo.content_subtype = "html"
         correo.send()
     except Exception, e:
