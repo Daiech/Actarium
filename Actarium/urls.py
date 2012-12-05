@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from account.urls import account_urls
 from groups.urls import groups_urls
+from actions_log.urls import actions_log_urls
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^update', 'github.views.update'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
+    url(r'^actions/', include(actions_log_urls)),
     # url(r'^Actarium/', include('Actarium.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -19,4 +21,5 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+ 
 )
