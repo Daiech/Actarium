@@ -3,7 +3,7 @@
 {% load gravatartag %}
 {% block body %}
 <article>
-    <h2>Acciones</h2>
+    <h2><a href="/actions">Acciones</a></h2>
     <hr>
     <div class="uTop">
     
@@ -24,7 +24,7 @@
 			<td><a href="/actions/action/{{action.id_action.pk}}">{{ action.id_action.name}}</a></td>
 			<td>{{ action.extra }}</td>
 			<td>{{ action.date_done }}</td>
-			<td>{{ action.ip_address}}</td>
+			<td><a href="http://www.elhacker.net/geolocalizacion.html?host={{ action.ip_address}}" target="_blank">{{ action.ip_address}}</a></td>
 	        {% endfor %}
 	    </tr>
     </table>
