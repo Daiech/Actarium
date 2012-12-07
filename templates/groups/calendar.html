@@ -20,8 +20,22 @@
 	        	</div>
 			</div>
 		</div>
+		<div class="modal hide fade" id="newReunionModal">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Convocar nueva reunion</h3>
+			<hr>
+			<h4>Elige un grupo</h4>
+			</div>
+			<div class="modal-body">
+				<select id="select-group">
+					<option value="0">Selecciona un grupo</option>
+				</select>
+			</div>
+		</div>
         <div class="center">
-            <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a>
+            <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a><br><br>
+            <a href="#newReunionModal" data-toggle="modal" class="btn btn-success ">Convocar reunion</a>
         </div>
     </section>
     <section id="date_reunions"></section>
@@ -321,6 +335,16 @@ $(document).on("ready", function() {
 			'</li>';
 		return li;
 	}
+
+	function fillSelectGroup(){
+		{% for group in groups %}
+				$('#select-group').append('<option value="{{ group.slug }}" >{{ group.name }}</option>');
+		{% endfor %}
+		$('#select-group').change(function(){
+			window.location = "/groups/newReunion/"+$('#select-group option:selected').val();
+		});
+	}
+	fillSelectGroup();
 });
 </script>
 {% endblock %}

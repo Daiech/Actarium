@@ -660,7 +660,8 @@ def calendar(request):
     ctx = {'TITLE': "Actarium",
        "reunions_day": my_reu,
        "reunions": my_reu,
-       "my_reu_day_json": json.dumps(response)}
+       "my_reu_day_json": json.dumps(response),
+       "groups": gr}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
@@ -687,7 +688,8 @@ def calendarDate(request, slug=None):
     ctx = {'TITLE': "Actarium",
        "reunions_day": my_reu_day,
        "reunions": my_reu,
-       "my_reu_day_json": json.dumps(response)}
+       "my_reu_day_json": json.dumps(response),
+       "groups": gr}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
