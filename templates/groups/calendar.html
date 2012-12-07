@@ -341,7 +341,9 @@ $(document).on("ready", function() {
 				$('#select-group').append('<option value="{{ group.slug }}" >{{ group.name }}</option>');
 		{% endfor %}
 		$('#select-group').change(function(){
-			window.location = "/groups/newReunion/"+$('#select-group option:selected').val();
+			group_slug = $('#select-group option:selected').val()
+			if (group_slug != "0"){
+				window.location = "/groups/newReunion/"+group_slug;}
 		});
 	}
 	fillSelectGroup();

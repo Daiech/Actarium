@@ -623,6 +623,16 @@ def newReunion(request, slug):
                                agenda=df['agenda'],
                              )
                 myNewReunion.save()
+                relations = rel_user_group.objects.filter(id_group= q, is_active=1)
+                for relation in relations:
+                    print "Nombre %s Correo %s"%(relation.id_user.username,relation.id_user.email)
+                    try:
+                        title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion en Actarium"
+                        contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") La reunion sera el dia: " + str(df['date_reunion']) + "\n\n" + "Objetivos: "+ str(df['agenda'])+"\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                        sendEmail(str(relation.id_user.email), title, contenido)
+                    except Exception, e:
+                        print "Exception mail: %s" % e
+                    
                 id_reunion = reunions.objects.get(id_convener=request.user,
                                date_reunion=df['date_reunion'],
                                id_group=q,
