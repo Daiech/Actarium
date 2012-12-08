@@ -96,6 +96,19 @@
     #bold_date{
     	font-size:21px;
     }
+    .tabla {
+		font-size: 12px;
+		background-color: #fdfdf1;
+		color: #990000;
+		text-align:left;
+	}
+	.tabla td {
+		padding: 5px;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #EBE9BC;
+	}
+
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
 {%endblock%}
@@ -249,20 +262,16 @@ $(document).on("ready", function() {
     			"#loading-reunion",
     			function(data){
     				reunion_list=
-        				"<ul>"+
-		    	    		"<li> Reunion convocada por: "+data.convener+"</li>"+
-		    	    		"<li>En el grupo: "+data.group+"</li>"+
-		    	    		"<li>Convocada el dia: "+data.date_reunion+"</li>"+
-		    	    		"<li>Para el dia: "+data.date_convened+"</li>"+
-		    	    		"<li>Objetivo: "+data.agenda+"</li>"+
-		    	    		"<li>Realizada? "+data.is_done +"</li>"+
-		    	    		"<li>Assistentes: </li>";
-			    	    		$.each(data.assistants,function(){reunion_list = reunion_list+ "<li>"+ this.username+ " c: "+this.is_confirmed+"</li>"})
-	    	    				reunion_list = reunion_list + 
-	    	    			"<a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' >Crear Acta</a>"+
-	    	    		"</ul>";
-    	    			//console.log(data.assistants[0].username)
-    	    			$.each(data.assistants,function(){console.log(this.username)})
+						"Reunion convocada el <strong>"+data.date_reunion+"</strong> por <strong>"+data.convener+"</strong>  en el grupo <strong>"+data.group+"</strong>  <br /> Se llevara a cabo el <strong>"+data.date_convened+"</strong> <br /><br /> Objetivos: <br /> <strong>"+data.agenda+"</strong><br />Asistentes: <br /><table class='tabla'>";
+						$.each(data.assistants,function(){reunion_list = reunion_list+ "<tr><td><strong>"+ this.username+ "</strong></td><td>"+this.is_confirmed+"</td></tr>"});
+						reunion_list = reunion_list +"</table> <br /> ";
+    	    			if (data.is_done == false)
+    	    				reunion_list = reunion_list + "Esta reunion aun no ha sido realizada";
+    	    			else
+    	    				reunion_list = reunion_list + "Esta reunion ya ha sido realizada";
+   	    				if (data.iconf == 1)
+       	    				reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+    	    			
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
     				//setMoreButton();
