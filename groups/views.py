@@ -793,13 +793,24 @@ def getReunionData(request):
                     is_saved = 0
                 if is_saved == 1:
                     if is_confirmed == True:  # reuniones confirmadas
-                        c = 1
+                        c = "Asistirá"
                     else:  # reuniones rechazadas
-                        c = 2
+                        c = "No asistirá"
                 else:  # reuniones pendientes por confirmar
-                    c = 3
+                    c = "Sin responder"
                 assis_list[i] = {'username': assistant.id_user.username, "is_confirmed": c}
                 i = i + 1
+            iconf = 0;
+            try:
+                my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+                my_confirmation = my_confirm.is_confirmed
+                if my_confirmation == True:
+                    iconf= 1
+                else:
+                    if my_confirmation == False:
+                        iconf= 2
+            except assistance.DoesNotExist:
+                    iconf= 3
             reunion_data = {"convener": convener,
                "date_convened": str(date_convened),
                "date_reunion": str(date_reunion),
@@ -807,7 +818,8 @@ def getReunionData(request):
                "agenda": agenda,
                "is_done": is_done,
                "assistants": assis_list,
-               "group_slug": group_slug
+               "group_slug": group_slug,
+               "iconf": iconf
            }
     else:
         reunion_data = "Error Calendar"
