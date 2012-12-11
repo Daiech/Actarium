@@ -51,7 +51,6 @@ hr {
     margin: 1em 0;
     padding: 0;
 }
-
 /*
  * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
 */
@@ -107,7 +106,10 @@ body > header{
 body{
     background-color: #E9E9E9;
 }
-#loco-daiech-p{
+#navnavbar-button-container > ul{
+    position: relative;
+}
+#logo-daiech-p{
     background-image: url('/static/img/texturas_menu2.png');
     background-position: -88px -31px;
     height: 45px;
@@ -139,6 +141,15 @@ header div > ul li{
     text-align: center;
 
 }
+.ico-top{
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    width: 32px;
+}
+
 .navbar-element{
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -153,7 +164,7 @@ header div > ul li{
 
     background-position: -42px 0;
     /*    background-size: 100px 10px;*/
-    background-repeat:repeat-x;
+    background-repeat: repeat;
     background-color: #eeeeee;
     height: 63px;
 }
@@ -287,6 +298,102 @@ Footer
 Termina Footer
 **************************************************************************** */
 
+
+/* ****************************************************************************
+Imagenes de logueo
+******************************************************************************/
+
+.info-pics{
+        display:block;
+        margin:auto;
+        overflow: hidden;
+        width:585px;
+    }
+    .pic-log{
+        float: left;
+        margin-top: 30px;
+        width:260px;
+    }
+    #login-pic{
+        position: relative;
+        left:109px;
+        top:-25px;
+    }
+    #singup-pic{
+        position: relative;
+        top:-25px;
+    }
+    #left-bubble{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: 0 -135.413px;
+        color: white;
+        width:166px;
+        height: 88.46px;
+        position: relative;
+        text-align: center;
+    }
+    .right-bubble{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -166px -135.413px;
+        color: white;
+        width: 166px;
+        height: 88.46px;
+        left:90px;
+        position:relative;
+        text-align: center;
+    }
+    #img-log{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: 0 -225.863px;
+        background-repeat: no-repeat;
+        /*        position: relative;
+                left:100px;
+                top:-25px;*/
+        height: 188.133px;
+        width: 150.234px;
+    }
+    #img-reg{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -166px -225.863px;
+        background-repeat: no-repeat;
+        height: 188.133px;
+        width: 150.234px;
+    }
+    .pic-down {
+        float: left;
+        margin: -10px 10px 0 10px;
+        z-index: 100000;
+    }
+    .bubble-text {
+        position: relative;
+        top: 30px;
+    }
+    #info-act{
+        background-color: #dadada;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    #info-act a > img{
+        float: right;
+    }
+    #arrow-down:hover{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -363px -135.413px;
+        height: 27.749px;
+        width: 42.22px;
+    }
+    #arrow-down{
+        background-image: url('/static/img/imagen_central.png');
+        background-position: -363px -163.413px;
+        height: 27.749px;
+        width: 42.22px;
+    }
+
+/* ***************************************************************************
+FIN Imagenes de logueo
+*****************************************************************************/
 
 
 #twitter-button{
@@ -688,61 +795,29 @@ only screen and (min-resolution: 144dpi) {
     /*    #navbar-button-container{
             display: none;
         }*/
-
-
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
 
 
-    /*    Menu superior*/
-    #top-button{
-        display: block;
-        width: 80px;
-        margin: auto;
-    }
 
-    .navbar-button{
-        clear: both;
-    }
-    #navbar-button-container{
-        display:none;
-    }
-    header div > ul li{
-        display: block;
-        list-style-type: none;
-        margin: auto;
-        width: 150px;
-    }
-    .navbar-button-propierties{
-        display: none;
-    }
-    #navbar-button-container > ul {
-        margin-left: 0px;
-        float: none;
-        margin-top: 26px;
-        display: auto;
-    }
 
-    .navbar-element{
-        box-shadow: 0px 0px 0px rgba(0,0,0,0);
-        height: 63px;
-    }
-    #drop-d-menu{
-        margin-top: 18px;
-        width: 100%;
-    }
-    /*   fin Menu superior*/
+
 
 }
 
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-    article{
-        width: auto;
-        /*        border: solid thin red;*/
-    }
+    body {
+padding-right: 0px;
+padding-left: 0px;
+}
+.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+margin-right: 0px;
+margin-left: 0px;
+}
+    
     .columnaI{
         width: 100%;
     }.columnaD{
@@ -761,109 +836,57 @@ only screen and (min-resolution: 144dpi) {
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
+    .info-pics {
+    width: 100%;
+}
 
+ #left-bubble{
+ 
+left: 109px;
+top: -31px;
 
-    /*    Menu superior*/
-    #top-button{
-        display: block;
-        width: 80px;
-        margin: auto;
-    }
+ }
+ .right-bubble{
+    top: -30px;
+    left: -9px;
+ }
 
-    .navbar-button{
-        clear: both;
-    }
-    #navbar-button-container{
-        display:none;
-    }
-    header div > ul li{
-        display: block;
-        list-style-type: none;
-        margin: auto;
-        width: 150px;
-    }
-    .navbar-button-propierties{
-        display: none;
-    }
-    #navbar-button-container > ul {
-        margin-left: 0px;
-        float: none;
-        margin-top: 26px;
-        display: auto;
-    }
-
-    .navbar-element{
-        box-shadow: 0px 0px 0px rgba(0,0,0,0);
-        height: 63px;
-    }
-    #drop-d-menu{
-        margin-top: 18px;
-        width: 100%;
-    }
-    /*   fin Menu superior*/
-
+    
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
-    article{
-        width: auto;
-    }
-    .fix_btn{
-        padding: 0 20px;
-    }
-    .btn_block{
-        display:none;
+    body {
+padding-right: 0px;
+padding-left: 0px;
+}
+.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+margin-right: 0px;
+margin-left: 0px;
+}
+ #left-bubble{
+ 
+left: 109px;
+top: -31px;
 
-    }
-    .alert-block{
-        width: 60%;
-    }
+ }
+ .right-bubble{
+    top: -30px;
+    left: -9px;
+ }
+ .pic-log{
+    width: 166px;
+    position: absolute;
+ }
+ .pic-log-left{
+    
+    float:left;
+ }
+ .pic-log-right{
+    
+    float:right;
+ }
 
-    .navbar-fixed-top {
-        margin-bottom: 26px;
-    }
-
-    /*    Menu superior*/
-    #top-button{
-        display: block;
-        width: 80px;
-        margin: auto;
-        float: right
-    }
-
-    .navbar-button{
-        clear: both;
-    }
-    #navbar-button-container{
-        display:none;
-    }
-    header div > ul li{
-        display: block;
-        list-style-type: none;
-        margin: auto;
-        width: 150px;
-    }
-    .navbar-button-propierties{
-        display: none;
-    }
-    #navbar-button-container > ul {
-        margin-left: 0px;
-        float: none;
-        margin-top: 26px;
-        display: auto;
-    }
-
-    .navbar-element{
-        box-shadow: 0px 0px 0px rgba(0,0,0,0);
-        height: 63px;
-    }
-    #drop-d-menu{
-        margin-top: 18px;
-        width: 100%;
-    }
-    #social-buttons{
-        display: none;
-        /*   fin Menu superior*/
+   
     }
     /*==================================================*/
     /*                  Cierra Responsive               */                    
