@@ -778,6 +778,9 @@ only screen and (min-resolution: 144dpi) {
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
+    #social-buttons{
+    display: visible;
+}
 }
 
 
@@ -801,7 +804,9 @@ only screen and (min-resolution: 144dpi) {
 
 
 
-
+#social-buttons{
+    display: visible;
+}
 
 
 }
@@ -850,6 +855,9 @@ top: -31px;
     top: -30px;
     left: -9px;
  }
+ #social-buttons{
+    display: visible;
+}
 
     
 }
@@ -885,7 +893,24 @@ top: -31px;
     
     float:right;
  }
-
+.navbar-element{
+    height: 47px;
+}
+.navbar-item{
+    height: 37px;
+}
+.ico-top{
+    top: 0px;
+}
+.navbar-item > span {
+    top: 19px;
+}
+#navbar-button-container > ul {
+    margin-top: 63px;
+}
+#social-buttons{
+    display: none;
+}
    
     }
     /*==================================================*/
