@@ -832,7 +832,7 @@ def getReunionData(request):
 def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por Daiech. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
-        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', to=mail_to)
+        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"
         correo.send()
     except Exception, e:
