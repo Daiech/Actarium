@@ -624,14 +624,16 @@ def newReunion(request, slug):
                              )
                 myNewReunion.save()
                 relations = rel_user_group.objects.filter(id_group= q, is_active=1)
+                email_list = []
                 for relation in relations:
-                    print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
-                    try:
-                        title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion en Actarium"
-                        contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "Objetivos: \n\n"+ str(df['agenda'])+"\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
-                        sendEmail(str(relation.id_user.email), title, contenido)
-                    except Exception, e:
-                        print "Exception mail: %s" % e
+                    #print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
+                    email_list.append(str(relation.id_user.email))
+                try:
+                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion en Actarium"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n"+ str(df['agenda'])+"\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                    sendEmail(email_list, title, contenido)
+                except Exception, e:
+                    print "Exception mail: %s" % e
                     
                 id_reunion = reunions.objects.get(id_convener=request.user,
                                date_reunion=df['date_reunion'],
