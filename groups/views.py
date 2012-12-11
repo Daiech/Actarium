@@ -140,6 +140,7 @@ def sendInvitationUser(email, user, group):
     '''
     if validateEmail(email):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
+        email = [email]
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
@@ -627,7 +628,7 @@ def newReunion(request, slug):
                 email_list = []
                 for relation in relations:
                     #print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
-                    email_list.append(str(relation.id_user.email))
+                    email_list.append(str(relation.id_user.email)+",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion en Actarium"
                     contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n"+ str(df['agenda'])+"\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
@@ -831,7 +832,7 @@ def getReunionData(request):
 def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por Daiech. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
-        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', to=[str(mail_to)])
+        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', to=mail_to)
         correo.content_subtype = "html"
         correo.send()
     except Exception, e:
