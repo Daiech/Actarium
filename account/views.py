@@ -160,7 +160,7 @@ def password_reset2(request):
         """
         if not request.user.is_authenticated():
                 print "entro a password_reset2"
-                return password_reset(request, template_name='account/password_reset_form.html', email_template_name= 'account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
+                return password_reset(request, template_name='account/password_reset_form.html', email_template_name= 'account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', from_email='Actarium <no-reply@actarium.com>', post_reset_redirect='/account/password/reset/done/')
                 
         else:
                 print "no entro a password_reset2"
