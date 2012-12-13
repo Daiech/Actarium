@@ -307,10 +307,9 @@ Imagenes de logueo
         display:block;
         margin:auto;
         overflow: hidden;
-        width:585px;
+        width:100%;
     }
     .pic-log{
-        float: left;
         margin-top: 30px;
         width:260px;
     }
@@ -332,7 +331,7 @@ Imagenes de logueo
         position: relative;
         text-align: center;
     }
-    .right-bubble{
+    #right-bubble{
         background-image: url('/static/img/imagen_central.png');
         background-position: -166px -135.413px;
         color: white;
@@ -361,8 +360,9 @@ Imagenes de logueo
     }
     .pic-down {
         float: left;
-        margin: -10px 10px 0 10px;
+        margin: auto;
         z-index: 100000;
+        width:50px;
     }
     .bubble-text {
         position: relative;
@@ -390,6 +390,14 @@ Imagenes de logueo
         height: 27.749px;
         width: 42.22px;
     }
+    #pic-log-left{
+    
+    float:right;
+ }
+ #pic-log-right{
+    
+    float:left;
+ }
 
 /* ***************************************************************************
 FIN Imagenes de logueo
@@ -851,7 +859,7 @@ left: 109px;
 top: -31px;
 
  }
- .right-bubble{
+ #right-bubble{
     top: -30px;
     left: -9px;
  }
@@ -877,7 +885,7 @@ left: 109px;
 top: -31px;
 
  }
- .right-bubble{
+ #right-bubble{
     top: -30px;
     left: -9px;
  }
@@ -885,11 +893,11 @@ top: -31px;
     width: 166px;
     position: absolute;
  }
- .pic-log-left{
+ #pic-log-left{
     
     float:left;
  }
- .pic-log-right{
+ #pic-log-right{
     
     float:right;
  }

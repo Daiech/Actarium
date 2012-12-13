@@ -130,9 +130,35 @@
     Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
     <a href="/"><img id="arriba" src="/static/img/arrow-up.png" alt="arriba"/></a>
 </div>
+<div id="middle-down">
+<div class="pic-down">
+            <a href="#" title="info">
+                <div id="arrow-down">
+                    
+                </div>
+            </a>
+    </div>
+</div>
 <div class="info-containter">
     <div class="info-pics">
-        <div class="pic-log pic-log-left">
+        <div id="left-panel">
+        <div id="register-form" class="containterMargin hidden">
+        <h1>Iniciar Sesi&oacute;n</h1>
+        <form name="" action="" method="POST" id="" class="form-horizontal">
+            {% csrf_token %}
+            <table>{{ formulario }}</table>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        <!--                            <input type="checkbox">Recordarme</a>-->
+                    </label>
+                    <button type="submit" name="submit" id="id_submit" class="btn btn-success">Log In</button>
+                    <a href="/account/new" class="btn btn-link">Registrarse</a>
+                </div>
+            </div>
+        </form>
+    </div>
+        <div id="pic-log-left" class="pic-log">
             <a href="/account/login" >
                 <div id="left-bubble">
                     <div class="bubble-text">
@@ -147,17 +173,19 @@
                 </div>
             </div>
         </div>
-        <div class="pic-down">
+        </div>
+
+        <!-- <div class="pic-down">
             <a href="#" title="info">
                 <div id="arrow-down">
                     
                 </div>
             </a>
-        </div>
-
-        <div class="pic-log pic-log-right">
+        </div> -->
+        <div id="right-panel">
+        <div id="pic-log-right" class="pic-log">
             <a href="/account/new">
-                <div class="right-bubble">
+                <div id="right-bubble">
                     <div class="bubble-text">
                         Registrarse
                     </div>
@@ -168,6 +196,7 @@
 
                 </div>
             </div>
+        </div>
         </div>
 
 
@@ -187,10 +216,27 @@
     .container{
         width:100%;
     }
+    #middle-down{
+        width:50px;
+        margin: 0 auto 0 auto;
+    }
+    #left-panel{
+        display: block;
+        float: left;
+        width:49%;
+    }
+    #right-panel{
+        display: block;
+        float: right;
+        width: 49%;
+    }
+
     #new-container{
         background-color: #E9E9E9;
         height: 200px;
+        min-height: 200px;
         width: 100%;
+        padding-bottom: 35px;
     }
     #new-container > img{
         display: block;
@@ -262,6 +308,16 @@
 {% block js %}
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
+
+    $("#left-bubble").on("click", function(e){
+        e.preventDefault()
+        $("#pic-log-left").slideToggle("fast")
+        $("#register-form").removeClass("hidden")
+        })
+    $("#right-bubble").on("click", function(e){
+        e.preventDefault()
+        $("#pic-log-right").slideToggle("fast")
+        })
     $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
         e.preventDefault()
         $("#info-act").slideToggle("fast")
