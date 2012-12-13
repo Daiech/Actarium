@@ -9,12 +9,17 @@
     <header class="row-fluid">
         <h1 class="span10">Actarium</h1>
         <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
+        
     </header>
     <hr>
     <div class="row-fluid">
         <section class="span6">
             <header>
-                <h4>Actividad Reciente</h4>
+                <h4>Actividad Reciente  
+                {% if user.is_staff %}
+                	<a href="/actions" role="button" class="btn" style="float:right">Acciones</a>
+                {% endif %} 
+                </h4>
             </header>
             <div class="accordion " id="accordion">
                 <div class="accordion-group">

@@ -140,11 +140,12 @@ def sendInvitationUser(email, user, group):
     '''
     if validateEmail(email):
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
+        email = [email]
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
                 contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo " + str(group.name.encode('utf8', 'replace')) + "\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
-                sendEmail(email, title, contenido)
+                sendEmail(email, title, contenido) 
             except Exception, e:
                 print "Exception mail: %s" % e
             return invitation
@@ -207,6 +208,7 @@ def newInvitation(request):
                 gravatar = False
             else:
                 inv = sendInvitationUser(mail, request.user, q)
+                saveActionLog(request.user, 'SEN_INVITA',"email: %s"%(mail), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
                 if inv and not inv is 0:
                     invited = True
                     iid = str(inv.id)
@@ -316,6 +318,17 @@ def getMembersSigned(group, minutes_current):
     return members_signed
 
 
+def getMinutesById(minutes_id):
+    try:
+        the_minutes = minutes.objects.get(id=minutes_id)
+    except minutes.DoesNotExist:
+        the_minutes = False
+    except Exception, e:
+        print "Error getMinutesById: %s" % e
+        the_minutes = False
+    return the_minutes
+
+
 def getMinutesByCode(group, code_id):
     try:
         minutes_current = minutes.objects.get(id_group=group, code=code_id)
@@ -391,39 +404,49 @@ def showMinutes(request, slug, minutes_code):
         m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
         ######## <ASISTENTES> #########
 
-        my_attending = False
-        signed = {}
-        for m in m_assistance:
-            try:
-                if m.id_user.id == request.user.id:
-                    my_attending = True
-                is_signed = rel_user_minutes_signed.objects.get(id_minutes=minutes_current, id_user=m.id_user)
-                # print str(m.id_user) + " => " + str(is_signed.is_signed_approved)
-                signed[int(m.id_user.id)] = int(is_signed.is_signed_approved)
-            except Exception, e:
-                print "Assistance Error: %s" % e
-                is_signed = None
-        ######## <SIGN> #########
-        members_signed = getMembersSigned(group, minutes_current)
-        ######## </SIGN> #########
+        ######## <ATTENDING> #########
+        try:
+            my_attending = rel_user_minutes_signed.objects.get(id_minutes=minutes_current, id_user=request.user)
+            my_attending = True if my_attending.is_signed_approved == 0 else False
+        except Exception, e:
+            print e
+            my_attending = False
+        ######## </ATTENDING> #########
+
+        ######## <APPROVED LISTS> #########
+        missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
+        missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
+        approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
+        approved_list = 0 if len(approved_list) == 0 else approved_list
+        no_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
+        no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
+        ######## </APPROVED LISTS> #########
 
         ######## <PREV and NEXT> #########
         prev, next = getPrevNextOfGroup(group, minutes_current)
         ######## </PREV and NEXT> #########
 
-        ctx = {"group": group, "minutes": minutes_current, "my_attending": my_attending, "signed_list": signed,
-        "members_signed": members_signed, "prev": prev, "next": next, "m_assistance": m_assistance, "m_no_assistance": m_no_assistance}
+        ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
+        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "my_attending": my_attending,
+        "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list}
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')
-def setSign(request):
+def setApprove(request):
     if request.is_ajax():
         if request.method == 'GET':
             minutes_id = str(request.GET['m_id'])
-            response = {"minutes": minutes_id}
+            approved = 1 if int(request.GET['approve']) == 1 else 2
+            try:
+                sign = rel_user_minutes_signed.objects.get(id_minutes=minutes_id, id_user=request.user)
+                sign.is_signed_approved = approved
+                sign.save()
+            except Exception, e:
+                print "Error Al Firmar" % e
+            response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -623,12 +646,24 @@ def newReunion(request, slug):
                                agenda=df['agenda'],
                              )
                 myNewReunion.save()
+                relations = rel_user_group.objects.filter(id_group= q, is_active=1)
+                email_list = []
+                for relation in relations:
+                    #print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
+                    email_list.append(str(relation.id_user.email)+",")
+                try:
+                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion en Actarium"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n"+ str(df['agenda'])+"\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                    sendEmail(email_list, title, contenido)
+                except Exception, e:
+                    print "Exception mail: %s" % e
+                    
                 id_reunion = reunions.objects.get(id_convener=request.user,
                                date_reunion=df['date_reunion'],
                                id_group=q,
                                agenda=df['agenda'])
                 saveActionLog(request.user, 'NEW_REUNION',"id_reunion: %s grupo: %s"%(id_reunion.pk, q.name), request.META['REMOTE_ADDR']) #Guardar accion de crear reunion
-                return HttpResponseRedirect("/groups/" + str(q.slug))
+                return HttpResponseRedirect("/groups/calendar/" +  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d"))+"?r="+str(id_reunion.pk))
         else:
             form = newReunionForm()
         ctx = {'TITLE': "Actarium",
@@ -654,13 +689,14 @@ def calendar(request):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id),"group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
        "reunions_day": my_reu,
        "reunions": my_reu,
-       "my_reu_day_json": json.dumps(response)}
+       "my_reu_day_json": json.dumps(response),
+       "groups": gr}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
@@ -681,13 +717,14 @@ def calendarDate(request, slug=None):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id),"group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
        "reunions_day": my_reu_day,
        "reunions": my_reu,
-       "my_reu_day_json": json.dumps(response)}
+       "my_reu_day_json": json.dumps(response),
+       "groups": gr}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
@@ -710,7 +747,7 @@ def getReunions(request):
                 except assistance.DoesNotExist:
                     is_confirmed = False
                     is_saved = 0
-                json_array[i] = {"id_r": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved}
+                json_array[i] = {"id_r": str(reunion.id),"group_slug": reunion.id_group.slug ,"group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved}
                 i = i + 1
             response = json_array
     else:
@@ -781,13 +818,24 @@ def getReunionData(request):
                     is_saved = 0
                 if is_saved == 1:
                     if is_confirmed == True:  # reuniones confirmadas
-                        c = 1
+                        c = "Asistirá"
                     else:  # reuniones rechazadas
-                        c = 2
+                        c = "No asistirá"
                 else:  # reuniones pendientes por confirmar
-                    c = 3
+                    c = "Sin responder"
                 assis_list[i] = {'username': assistant.id_user.username, "is_confirmed": c}
                 i = i + 1
+            iconf = 0;
+            try:
+                my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+                my_confirmation = my_confirm.is_confirmed
+                if my_confirmation == True:
+                    iconf= 1
+                else:
+                    if my_confirmation == False:
+                        iconf= 2
+            except assistance.DoesNotExist:
+                    iconf= 3
             reunion_data = {"convener": convener,
                "date_convened": str(date_convened),
                "date_reunion": str(date_reunion),
@@ -795,7 +843,8 @@ def getReunionData(request):
                "agenda": agenda,
                "is_done": is_done,
                "assistants": assis_list,
-               "group_slug": group_slug
+               "group_slug": group_slug,
+               "iconf": iconf
            }
     else:
         reunion_data = "Error Calendar"
@@ -805,7 +854,7 @@ def getReunionData(request):
 def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por Daiech. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
-        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', to=[str(mail_to)])
+        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"
         correo.send()
     except Exception, e:
