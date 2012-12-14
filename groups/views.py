@@ -588,7 +588,7 @@ def newMinutes(request, slug_group, id_reunion):
                     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(save.code)
                     link = URL_BASE + url_new_minute
                     email_list = getEmailListByGroup(group)
-                    title = request.user.first_name + "(" + request.user.username + ") registró un acta en el grupo '" + str(group.name) + "' de Actarium"
+                    title = request.user.first_name + "(" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
                     content = request.user.first_name + "(" + request.user.username + ") ha creado una nueva acta en Actarium"
                     content = content + "<br><br>Link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong>: <a href='" + link + "'>" + link + "</a><br><br>"
                     content = content + "Revisa su contenido, y si asististe, apruebala.<br>"
@@ -675,7 +675,7 @@ def newReunion(request, slug):
                     #print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
-                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunión del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
+                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
                     contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
