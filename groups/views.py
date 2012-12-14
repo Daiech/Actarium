@@ -318,6 +318,17 @@ def getMembersSigned(group, minutes_current):
     return members_signed
 
 
+def getMinutesById(minutes_id):
+    try:
+        the_minutes = minutes.objects.get(id=minutes_id)
+    except minutes.DoesNotExist:
+        the_minutes = False
+    except Exception, e:
+        print "Error getMinutesById: %s" % e
+        the_minutes = False
+    return the_minutes
+
+
 def getMinutesByCode(group, code_id):
     try:
         minutes_current = minutes.objects.get(id_group=group, code=code_id)
@@ -393,39 +404,49 @@ def showMinutes(request, slug, minutes_code):
         m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
         ######## <ASISTENTES> #########
 
-        my_attending = False
-        signed = {}
-        for m in m_assistance:
-            try:
-                if m.id_user.id == request.user.id:
-                    my_attending = True
-                is_signed = rel_user_minutes_signed.objects.get(id_minutes=minutes_current, id_user=m.id_user)
-                # print str(m.id_user) + " => " + str(is_signed.is_signed_approved)
-                signed[int(m.id_user.id)] = int(is_signed.is_signed_approved)
-            except Exception, e:
-                print "Assistance Error: %s" % e
-                is_signed = None
-        ######## <SIGN> #########
-        members_signed = getMembersSigned(group, minutes_current)
-        ######## </SIGN> #########
+        ######## <ATTENDING> #########
+        try:
+            my_attending = rel_user_minutes_signed.objects.get(id_minutes=minutes_current, id_user=request.user)
+            my_attending = True if my_attending.is_signed_approved == 0 else False
+        except Exception, e:
+            print e
+            my_attending = False
+        ######## </ATTENDING> #########
+
+        ######## <APPROVED LISTS> #########
+        missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
+        missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
+        approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
+        approved_list = 0 if len(approved_list) == 0 else approved_list
+        no_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
+        no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
+        ######## </APPROVED LISTS> #########
 
         ######## <PREV and NEXT> #########
         prev, next = getPrevNextOfGroup(group, minutes_current)
         ######## </PREV and NEXT> #########
 
-        ctx = {"group": group, "minutes": minutes_current, "my_attending": my_attending, "signed_list": signed,
-        "members_signed": members_signed, "prev": prev, "next": next, "m_assistance": m_assistance, "m_no_assistance": m_no_assistance}
+        ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
+        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "my_attending": my_attending,
+        "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list}
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')
-def setSign(request):
+def setApprove(request):
     if request.is_ajax():
         if request.method == 'GET':
             minutes_id = str(request.GET['m_id'])
-            response = {"minutes": minutes_id}
+            approved = 1 if int(request.GET['approve']) == 1 else 2
+            try:
+                sign = rel_user_minutes_signed.objects.get(id_minutes=minutes_id, id_user=request.user)
+                sign.is_signed_approved = approved
+                sign.save()
+            except Exception, e:
+                print "Error Al Firmar" % e
+            response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
