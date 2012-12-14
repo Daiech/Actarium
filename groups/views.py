@@ -145,8 +145,8 @@ def sendInvitationUser(email, user, group):
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo " + str(group.name.encode('utf8', 'replace')) + "\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
-                sendEmail(email, title, contenido) 
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
             return invitation
@@ -209,12 +209,12 @@ def newInvitation(request):
                 gravatar = False
             else:
                 inv = sendInvitationUser(mail, request.user, q)
-                saveActionLog(request.user, 'SEN_INVITA',"email: %s"%(mail), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
+                saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (mail), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                 if inv and not inv is 0:
                     invited = True
                     iid = str(inv.id)
                     gravatar = showgravatar(mail, 30)
-                    message = "Se ha enviado la invitación a " + str(mail) + " al grupo " + str(q.name)
+                    message = "Se ha enviado la invitación a " + str(mail) + " al grupo <strong>" + str(q.name) + "</strong>"
                 else:
                     iid = False
                     invited = False
@@ -257,7 +257,7 @@ def acceptInvitation(request):
                     inv.is_active = False
                     inv.save()
                     #print "user: %s, id_user: %s, id_group: %s, acept: %s, group_name: %s"%(request.user, request.user.pk, inv.id_group.pk, True, inv.id_group.name)
-                    saveActionLog(request.user, 'SET_INVITA',"id_group: %s, acept: %s, group_name: %s"%(inv.id_group.pk, True, inv.id_group.name), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
+                    saveActionLog(request.user, 'SET_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, True, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                     accepted = True
                     group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                     message = "Aceptar la solicitud"
@@ -265,7 +265,7 @@ def acceptInvitation(request):
                     if inv and not accept:
                         inv.is_active = False
                         inv.save()
-                        saveActionLog(request.user, 'SET_INVITA',"id_group: %s, acept: %s, group_name: %s"%(inv.id_group.pk, False, inv.id_group.name), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
+                        saveActionLog(request.user, 'SET_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, False, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                         accepted = False
                         group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                         message = "NO Aceptar la solicitud"
@@ -295,7 +295,7 @@ def deleteInvitation(request):
                 if inv:  # si eliminar la invitacion
                     inv.is_active = False
                     inv.save()
-                    saveActionLog(request.user, 'DEL_INVITA',"id_invitacion: %s, grupo: %s, email_invited: %s"%(iid,inv.id_group.name, inv.email_invited), request.META['REMOTE_ADDR']) # Accion de eliminar invitaciones
+                    saveActionLog(request.user, 'DEL_INVITA', "id_invitacion: %s, grupo: %s, email_invited: %s" % (iid, inv.id_group.name, inv.email_invited), request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
                     deleted = True
                     message = "El usuario (" + inv.email_invited + ") ya no podr&aacute; acceder a este grupo"
                     response = {"deleted": deleted, "message": message}
@@ -535,8 +535,8 @@ def saveMinute(request, group, form, m_selected):
                     )
         myNewMinutes.save()
         id_user = request.user
-        print "id_user: %s group: %s, code: %s"%(id_user, group.name, df['code'])
-        saveActionLog(id_user,'NEW_MINUTE', "group: %s, code: %s"%(group.name, df['code']),request.META['REMOTE_ADDR'])
+        print "id_user: %s group: %s, code: %s" % (id_user, group.name, df['code'])
+        saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
         # registra los usuarios que asistieron a la reunión en la que se creó el acta
         preparingToSign(m_selected, myNewMinutes)
         return myNewMinutes
@@ -588,7 +588,7 @@ def newMinutes(request, slug_group, id_reunion):
                     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(save.code)
                     link = URL_BASE + url_new_minute
                     email_list = getEmailListByGroup(group)
-                    title = request.user.first_name + "(" + request.user.username + ") registr&oacute; una nueva acta en el grupo '" + str(group.name) + "' de Actarium"
+                    title = request.user.first_name + "(" + request.user.username + ") registró un acta en el grupo '" + str(group.name) + "' de Actarium"
                     content = request.user.first_name + "(" + request.user.username + ") ha creado una nueva acta en Actarium"
                     content = content + "<br><br>Link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong>: <a href='" + link + "'>" + link + "</a><br><br>"
                     content = content + "Revisa su contenido, y si asististe, apruebala.<br>"
@@ -669,24 +669,24 @@ def newReunion(request, slug):
                                agenda=df['agenda'],
                              )
                 myNewReunion.save()
-                relations = rel_user_group.objects.filter(id_group= q, is_active=1)
+                relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
                 for relation in relations:
                     #print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
-                    email_list.append(str(relation.id_user.email)+",")
+                    email_list.append(str(relation.id_user.email) + ",")
                 try:
-                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n"+ str(df['agenda'])+"\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunión del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
-                    
+
                 id_reunion = reunions.objects.get(id_convener=request.user,
                                date_reunion=df['date_reunion'],
                                id_group=q,
                                agenda=df['agenda'])
-                saveActionLog(request.user, 'NEW_REUNION',"id_reunion: %s grupo: %s"%(id_reunion.pk, q.name), request.META['REMOTE_ADDR']) #Guardar accion de crear reunion
-                return HttpResponseRedirect("/groups/calendar/" +  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d"))+"?r="+str(id_reunion.pk))
+                saveActionLog(request.user, 'NEW_REUNION', "id_reunion: %s grupo: %s" % (id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+                return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
             form = newReunionForm()
         ctx = {'TITLE': "Actarium",
@@ -712,7 +712,7 @@ def calendar(request):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id),"group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -740,7 +740,7 @@ def calendarDate(request, slug=None):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id),"group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -770,7 +770,7 @@ def getReunions(request):
                 except assistance.DoesNotExist:
                     is_confirmed = False
                     is_saved = 0
-                json_array[i] = {"id_r": str(reunion.id),"group_slug": reunion.id_group.slug ,"group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved}
+                json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved}
                 i = i + 1
             response = json_array
     else:
@@ -848,17 +848,17 @@ def getReunionData(request):
                     c = "Sin responder"
                 assis_list[i] = {'username': assistant.id_user.username, "is_confirmed": c}
                 i = i + 1
-            iconf = 0;
+            iconf = 0
             try:
                 my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
                 my_confirmation = my_confirm.is_confirmed
                 if my_confirmation == True:
-                    iconf= 1
+                    iconf = 1
                 else:
                     if my_confirmation == False:
-                        iconf= 2
+                        iconf = 2
             except assistance.DoesNotExist:
-                    iconf= 3
+                    iconf = 3
             reunion_data = {"convener": convener,
                "date_convened": str(date_convened),
                "date_reunion": str(date_reunion),
