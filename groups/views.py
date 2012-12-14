@@ -16,6 +16,7 @@ from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
+from Actarium.settings import URL_BASE
 
 
 @login_required(login_url='/account/login')
@@ -552,6 +553,20 @@ def getLastMinutes(group):
         return "---"
 
 
+def getEmailListByGroup(group):
+    '''
+    Retorna los correos de los miembros activos de un grupo.
+    '''
+    try:
+        group_list = rel_user_group.objects.filter(id_group=group, is_active=True)
+        mails = list()
+        for member in group_list:
+            mails.append(member.id_user.email)
+        return mails
+    except Exception, e:
+        print e
+
+
 @login_required(login_url='/account/login')
 def newMinutes(request, slug_group, id_reunion):
     '''
@@ -570,7 +585,15 @@ def newMinutes(request, slug_group, id_reunion):
                 if save:
                     saved = True
                     error = False
-                    return HttpResponseRedirect("/groups/" + str(group.slug) + "/minutes/" + str(save.code))
+                    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(save.code)
+                    link = URL_BASE + url_new_minute
+                    email_list = getEmailListByGroup(group)
+                    title = request.user.first_name + "(" + request.user.username + ") registr&oacute; una nueva acta en el grupo '" + str(group.name) + "' de Actarium"
+                    content = request.user.first_name + "(" + request.user.username + ") ha creado una nueva acta en Actarium"
+                    content = content + "<br><br>Link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong>: <a href='" + link + "'>" + link + "</a><br><br>"
+                    content = content + "Revisa su contenido, y si asististe, apruebala.<br>"
+                    sendEmail(email_list, title, content)
+                    return HttpResponseRedirect(url_new_minute)
                 else:
                     saved = False
                     error = "e2"  # error, mismo código de acta, o error al guardar en la db
