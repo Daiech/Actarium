@@ -5,17 +5,12 @@
 
 
 {% if user.is_authenticated %}
-<article>
-    <header class="row-fluid">
-        <h1 class="span10">Actarium</h1>
-        <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
-        
-    </header>
-    <hr>
+<article id="b-page">
+    
     <div class="row-fluid">
         <section class="span6">
             <header>
-                <h4>Actividad Reciente  
+                <h4 id="tittle-page">Actividad Reciente  
                 {% if user.is_staff %}
                 	<a href="/actions" role="button" class="btn" style="float:right">Acciones</a>
                 {% endif %} 
@@ -148,21 +143,25 @@
     <div class="info-pics">
         <div id="left-panel">
         <div id="register-form" class="containterMargin hidden">
-        <h1>Iniciar Sesi&oacute;n</h1>
-        <form name="" action="" method="POST" id="" class="form-horizontal">
-            {% csrf_token %}
-            <table>{{ formulario }}</table>
-            <div class="control-group">
-                <div class="controls">
-                    <label class="checkbox">
-                        <!--                            <input type="checkbox">Recordarme</a>-->
-                    </label>
-                    <button type="submit" name="submit" id="id_submit" class="btn btn-success">Log In</button>
-                    <a href="/account/new" class="btn btn-link">Registrarse</a>
+            <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
+                {% csrf_token %}
+                    <label for="id_username">Nombre de usuario</label>
+                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus />
+                    <label for="id_password">Contrase&ntilde;a</label>
+                    <input type="password" name="password" id="id_password" />
+                
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <!--                            <input type="checkbox">Recordarme</a>-->
+                        </label>
+                        <button type="submit" name="submit" id="id_submit" class="btn btn-success">Log In</button>
+                        <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+            
+        </div>
         <div id="pic-log-left" class="pic-log">
             <a href="/account/login" >
                 <div id="left-bubble">
@@ -221,6 +220,7 @@
     .container{
         width:100%;
     }
+    
     #middle-down{
         width:50px;
         margin: 0 auto 0 auto;
@@ -270,6 +270,19 @@
         background: rgba(255, 255, 255, 0.6);
         /* For IE 8*/
         -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#11111111,endColorstr=#11111111)";
+    }
+    #b-page{
+        background-image: url("/static/img/fondo_peq.jpg");
+        padding-top: 100px;
+    }
+    #tittle-page{
+        margin-left: 48px;
+    }
+    .accordion-group{
+        border: solid gray;
+        margin-left: 48px;
+        margin-top: 10px;
+        width: 70%;
     }
     .span6 h4{
         margin-bottom:20px;

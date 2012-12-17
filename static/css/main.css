@@ -171,7 +171,7 @@ header div > ul li{
 .navbar-item > span{
     font-size: 14px;
     position:relative;
-    top: 28px;
+    top: 34px;
 }
 .navbar-button-propierties{
     height: 10px;
@@ -240,7 +240,9 @@ Termina barra superior Daiech
 .info-containter{
     background-image: url("/static/img/fondo_peq.jpg")
 }
-
+.info-pics{
+    margin: 0px;
+}
 /* **************************************************************************** 
 Footer
 **************************************************************************** */
@@ -277,9 +279,14 @@ Footer
 }
 #daiech-footer a:hover{
     color: #00AEAA;
+
 }
 #cred-footer{
     margin-top: 20px;
+}
+#cred-footer > p{
+    margin-bottom: 1px;
+    font-size: 12px;
 }
 
 .img-foot{
@@ -293,7 +300,9 @@ Footer
 #parque-foot{
     background-image: url('/static/img/texturas_menu2.png');
     background-position: -88px -110px;
+
 }
+
 /* **************************************************************************** 
 Termina Footer
 **************************************************************************** */
@@ -401,6 +410,44 @@ Imagenes de logueo
 
 /* ***************************************************************************
 FIN Imagenes de logueo
+*****************************************************************************/
+
+
+/* ***************************************************************************
+FEED
+*****************************************************************************/
+
+#feed-option{
+    background-color: gray;
+    color:white;
+    position: absolute;
+    top: 200px;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    position: fixed;
+}
+#feed-option:hover{
+    cursor: pointer;
+    background-color: gray;
+}
+.modal{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    left: auto;
+    top: 200px;
+    right: -505px;
+    width: 500px;
+    margin: auto;
+}
+#feed-imput{
+    margin: auto;
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+/* ***************************************************************************
+FIN FEED
 *****************************************************************************/
 
 

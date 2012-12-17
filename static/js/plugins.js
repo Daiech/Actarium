@@ -55,11 +55,12 @@ function main(){
     });
     //------ </On close activity>--------------/
 
-    $(".navbar-element").hover(function(){
-        $(this).find(".navbar-button-propierties").animate({"height":"15px"}, 100)
+  /*  $(".navbar-element").hover(function(){
+        $(this).find(".navbar-button-propierties").animate({"height":"15px"})
     },function(){
-        $(this).find(".navbar-button-propierties").animate({"height":"10px"}, 100)
-    })
+        $(this).find(".navbar-button-propierties").animate({"height":"10px"})
+    })*/
+    
     $("#drop-d-menu").on("click",function(){
         $("#navbar-button-container").slideToggle("fast")      
     }
