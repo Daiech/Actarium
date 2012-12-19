@@ -16,6 +16,7 @@
                 {% endif %} 
                 </h4>
             </header>
+
             <div class="accordion " id="accordion">
                 <div class="accordion-group">
                     <div class="accordion-heading">
@@ -130,6 +131,7 @@
     Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
     <a href="/"><img id="arriba" src="/static/img/arrow-up.png" alt="arriba"/></a>
 </div>
+<div id="middle-bar">
 <div id="middle-down">
 <div class="pic-down">
             <a href="#" title="info">
@@ -139,10 +141,11 @@
             </a>
     </div>
 </div>
+</div>
 <div class="info-containter">
     <div class="info-pics">
         <div id="left-panel">
-        <div id="register-form" class="containterMargin hidden">
+        <div id="register-form" class="hidden">
             <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
                 {% csrf_token %}
                     <label for="id_username">Nombre de usuario</label>
@@ -152,10 +155,7 @@
                 
                 <div class="control-group">
                     <div class="controls">
-                        <label class="checkbox">
-                            <!--                            <input type="checkbox">Recordarme</a>-->
-                        </label>
-                        <button type="submit" name="submit" id="id_submit" class="btn btn-success">Log In</button>
+                        <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Log In</button>
                         <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
                     </div>
                 </div>
@@ -179,15 +179,26 @@
         </div>
         </div>
 
-        <!-- <div class="pic-down">
-            <a href="#" title="info">
-                <div id="arrow-down">
-                    
-                </div>
-            </a>
-        </div> -->
         <div id="right-panel">
-        <div id="pic-log-right" class="pic-log">
+            <div id="new-user" class="hidden">
+            <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
+                {% csrf_token %}
+                    <label for="id_username">Nombre de usuario</label>
+                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus />
+                    <label for="id_password">Contrase&ntilde;a</label>
+                    <input type="password" name="password" id="id_password" />
+                
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Log In</button>
+                        <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                    </div>
+                </div>
+            </form>
+            
+        </div>            
+
+            <div id="pic-log-right" class="pic-log">
             <a href="/account/new">
                 <div id="right-bubble">
                     <div class="bubble-text">
@@ -220,6 +231,11 @@
     .container{
         width:100%;
     }
+    #middle-bar{
+        height: 51px;
+        position: absolute;
+        width: 100%;
+    }
     
     #middle-down{
         width:50px;
@@ -248,6 +264,30 @@
         margin: auto;       
         padding-top: 30px;
         width:350px;
+    }
+    #register-form{
+        width: 224px;
+        float: right;
+    }
+    #register-form > form{
+        padding: 25px;
+        width: auto;
+        border: none;
+    }
+    #new-user{
+        width: 224px;
+        float: left;
+    }
+    #new-user > form{
+        padding: 25px;
+        width: auto;
+        border: none;
+    }
+    #id_submit{
+        width: 70px;
+    }
+    .controls{
+        margin-top: 15px;
     }
     
     /* **************************************************************************** 
@@ -335,7 +375,8 @@
     $("#right-bubble").on("click", function(e){
         e.preventDefault()
         $("#pic-log-right").slideToggle("fast")
-        })
+        $("#new-user").removeClass("hidden")
+       })
     $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
         e.preventDefault()
         $("#info-act").slideToggle("fast")

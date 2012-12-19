@@ -234,6 +234,16 @@ header div > ul li a {
 #top-button{
     display: none;
 }
+#menu-login{
+    margin-top: 20px;
+    margin-right: 33px;
+    
+}
+#log-sup{
+    background-color: white;
+    border-radius: 10px;
+}
+
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */
@@ -466,6 +476,9 @@ FIN FEED
 
 .b{
     border: solid thin #dadada;
+}
+.form-horizontal .controls {
+margin-left: 0;
 }
 .margin5{
     margin: 10px;
