@@ -19,7 +19,7 @@
     <div class="navbar-button" id="navbar-button-container">
         <ul class="">
             <li class="">
-                <a href="#">
+                <a href="/groups">
                     <div class="navbar-element">
                         <div class="navbar-item">
                             <div class="ico-top"> 
@@ -35,7 +35,7 @@
             </li>
 
             <li class="">
-                <a href="#">
+                <a href="/groups/calendar">
                     <div class="navbar-element">
                         <div class="navbar-item">
                             <div class="ico-top"> 
@@ -49,9 +49,9 @@
                     </div>
                 </a>
             </li>
-
+            {% if user.is_authenticated %}
             <li class="">
-                <a href="#">
+                <a href="/account">
                     <div class="navbar-element">
                         <div class="navbar-item">
                             <div class="ico-top"> 
@@ -65,9 +65,9 @@
                     </div>
                 </a>
             </li>
-
+            {% endif %}
             <li class="">
-                <a href="#">
+                <a href="/about">
                     <div class="navbar-element">
                         <div class="navbar-item">
                             <div class="ico-top"> 
@@ -84,35 +84,35 @@
            
         </ul>
         <div id="menu-login" class="btn-group pull-right">
-                        <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="icon-user"></i>
-                            {% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            {% if user.is_authenticated %}
-                            <li class="current-user">
-                                <a href="/account">
-                                    <div class="content-box">
-                                        <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
-                                        <span class="fullname">Mi Cuenta</span>
-                                        <small class="metadata">Editar configuraci&oacute;n</small>
-                                    </div>
-                                </a>
-                            </li>
-                            <li><a href="#">Privacidad</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
-                            {% else %}
-                            <form method ="post" action="/account/login">
-                                <li>{% csrf_token %}</li>
-                                <li><p>Inicia sesi&oacute;n</p></li>
-                                <li><input id="username"  name="username" class="input-small next-li" type="text" placeholder="Usuario" autofocus></li>
-                                <li><input id="password"  name="password" class="input-small next-li" type="password" placeholder="Contrase&ntilde;a" ></li>
-                                <a id="close-login-menu" class="pull-left" href="#">cerrar</a><input id="btn-login" class="input-small btn btn-primary next-li pull-right" type="submit" value="Entrar" >
-                            </form>
-                            {% endif %}
-                        </ul>
-                    </div>  
+            <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-user"></i>
+                {% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                {% if user.is_authenticated %}
+                <li class="current-user">
+                    <a href="/account">
+                        <div class="content-box">
+                            <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
+                            <span class="fullname">Mi Cuenta</span>
+                            <small class="metadata">Editar configuraci&oacute;n</small>
+                        </div>
+                    </a>
+                </li>
+                <li><a href="#">Privacidad</a></li>
+                <li class="divider"></li>
+                <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
+                {% else %}
+                <form method ="post" action="/account/login">
+                    <li>{% csrf_token %}</li>
+                    <li><p>Inicia sesi&oacute;n</p></li>
+                    <li><input id="username"  name="username" class="input-small next-li" type="text" placeholder="Usuario" autofocus></li>
+                    <li><input id="password"  name="password" class="input-small next-li" type="password" placeholder="Contrase&ntilde;a" ></li>
+                    <a id="close-login-menu" class="pull-left" href="#">cerrar</a><input id="btn-login" class="input-small btn btn-primary next-li pull-right" type="submit" value="Entrar" >
+                </form>
+                {% endif %}
+            </ul>
+        </div>  
     </div>
 </div>
