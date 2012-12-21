@@ -441,7 +441,7 @@ FEED
     cursor: pointer;
     background-color: gray;
 }
-.modal{
+#feed-modal{
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     left: auto;

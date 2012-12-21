@@ -63,8 +63,19 @@ function main(){
     
     $("#drop-d-menu").on("click",function(){
         $("#navbar-button-container").slideToggle("fast")      
-    }
-    )
+    })
+
+    $("#feed-option").on("click", function(){
+        $("#feed-modal").animate({
+            'right':'0px'
+        })
+    })
+
+    $("#close-feed, #cancel-feed").on("click", function(e){
+        $("#feed-modal").animate({
+            'right':'-505px'
+        })
+    })
 }
 
 function setAlert(tittle, message, type){

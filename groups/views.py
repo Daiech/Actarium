@@ -145,7 +145,7 @@ def sendInvitationUser(email, user, group):
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
                 contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo " + str(group.name.encode('utf8', 'replace')) + "\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
-                sendEmail(email, title, contenido) 
+                sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
             return invitation
@@ -208,7 +208,7 @@ def newInvitation(request):
                 gravatar = False
             else:
                 inv = sendInvitationUser(mail, request.user, q)
-                saveActionLog(request.user, 'SEN_INVITA',"email: %s"%(mail), request.META['REMOTE_ADDR']) # Accion de aceptar invitacion a grupo
+                saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (mail), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                 if inv and not inv is 0:
                     invited = True
                     iid = str(inv.id)

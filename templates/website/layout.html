@@ -113,23 +113,9 @@
         <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
         {% block js %}
         {% endblock%}
-
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
-
-        $("#feed-option").on("click", function(){
-        $("#feed-modal").animate({
-            'right':'0px'
-        })
-    }    )
-
-         $("#close-feed, #cancel-feed").on("click", function(e){
-        $("#feed-modal").animate({
-            'right':'-505px'
-        })
-    }    )
-
-
 
             //     var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
             //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
