@@ -209,7 +209,7 @@ def newInvitation(request):
                 gravatar = False
             else:
                 inv = sendInvitationUser(mail, request.user, q)
-                saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (mail), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                saveActionLog(request.user, 'SET_INVITA', "email: %s" % (mail), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                 if inv and not inv is 0:
                     invited = True
                     iid = str(inv.id)
