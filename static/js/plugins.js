@@ -55,15 +55,17 @@ function main(){
     });
     //------ </On close activity>--------------/
 
+    //----------<On Menu hover>-------------------/
     $(".navbar-element").hover(function(){
-        $(this).find(".navbar-button-propierties").animate({"height":"15px"}, 100)
+        $(this).children("div.navbar-button-propierties").css({"height":"15px"}, 100);
     },function(){
-        $(this).find(".navbar-button-propierties").animate({"height":"10px"}, 100)
-    })
+        $(this).children("div.navbar-button-propierties").css({"height":"10px"}, 100);
+    });
+    //----------</On Menu hover>-------------------/
+
     $("#drop-d-menu").on("click",function(){
-        $("#navbar-button-container").slideToggle("fast")      
-    }
-    )
+        $("#navbar-button-container").slideToggle("fast");
+    });
 }
 
 function setAlert(tittle, message, type){
@@ -80,10 +82,10 @@ function setAlert(tittle, message, type){
     
 }
 function setAlertError(t, m){
-    setAlert(t, m, '#alert-error')
+    setAlert(t, m, '#alert-error');
 }
 function setAlertMessage(t, m){
-    setAlert(t, m, '#alert-message')
+    setAlert(t, m, '#alert-message');
 }
 function sendAjax(url, params, load_elem, myCallback){
     $(load_elem).show().html('<img src="/static/img/load16.gif" />');
