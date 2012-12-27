@@ -5,7 +5,7 @@ Actarium, el producto [Daiech](http://daiech.com) para el registro actas de cual
 Registrate, crea grupos, invita a tus colegas a tus grupos, organiza reuniones con ellos y crea todas las Actas necesarias para llevar un control detallado de las decisiones que toman en sus reuniones.
 
 
-##Donde nos encontrarlo?
+##Donde encontrarlo?
 * Código: [https://github.com/Daiech/Actarium](https://github.com/Daiech/Actarium)
 * Homepage: [http://actarium.daiech.com](http://actarium.daiech.com)
 * Twitter: [@Actarium](http://twitter.com/Actarium)

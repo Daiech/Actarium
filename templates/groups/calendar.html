@@ -20,8 +20,22 @@
 	        	</div>
 			</div>
 		</div>
+		<div class="modal hide fade" id="newReunionModal">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Convocar nueva reunion</h3>
+			<hr>
+			<h4>Elige un grupo</h4>
+			</div>
+			<div class="modal-body">
+				<select id="select-group">
+					<option value="0">Selecciona un grupo</option>
+				</select>
+			</div>
+		</div>
         <div class="center">
-            <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a>
+            <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a><br><br>
+            <a href="#newReunionModal" data-toggle="modal" class="btn btn-success ">Convocar reunion</a>
         </div>
     </section>
     <section id="date_reunions"></section>
@@ -82,6 +96,19 @@
     #bold_date{
     	font-size:21px;
     }
+    .tabla {
+		font-size: 12px;
+		background-color: #fdfdf1;
+		color: #990000;
+		text-align:left;
+	}
+	.tabla td {
+		padding: 5px;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #EBE9BC;
+	}
+
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
 {%endblock%}
@@ -153,16 +180,16 @@ $(document).on("ready", function() {
 			if(this.is_saved == 1){
 				if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
 					if (o1== 0){ o1 = 1 };
-					list1 = list1 + createList(1,this.group_name,this.date,this.id_r);
+					list1 = list1 + createList(1,this.group_name,this.group_slug,this.date,this.id_r);
 				}
 				else { //reuniones rechazadas
 					if (o3== 0){ o3 = 1 };
-					list3 = list3  + createList(2,this.group_name,this.date,this.id_r);
+					list3 = list3  + createList(2,this.group_name,this.group_slug,this.date,this.id_r);
 				}
 			}
 			else{ //reuniones pendientes por confirmar
 				if (o2== 0){ o2 = 1 };
-				list2 = list2 + createList(3,this.group_name,this.date,this.id_r);
+				list2 = list2 + createList(3,this.group_name,this.group_slug,this.date,this.id_r);
 			}
 		});
 		list1 =list1+"</ul>";
@@ -183,7 +210,7 @@ $(document).on("ready", function() {
 	if (x!=''){
 		show_data(JSON.parse(x));}
 	
-	function confirm(id_reunion, is_confirmed, group_name, date){
+	function confirm(id_reunion, is_confirmed, group_name,group_slug, date){
 		//console.log(id_reunion+" "+is_confirmed);
 		sendAjax("/groups/setAssistance",
     			{id_reunion:id_reunion, is_confirmed: is_confirmed},
@@ -193,7 +220,7 @@ $(document).on("ready", function() {
 					var list2="<h3 id='rechazadas2'>Reuniones rechazadas</h3><ul id='rechazadas'></ul>";
     				if(is_confirmed == true){
     					//console.log($('#confirmadas').html());
-        				L = createList(1,group_name,date,id_reunion);
+        				L = createList(1,group_name,group_slug,date,id_reunion);
         				if($('#confirmadas').length){
         					//console.log('si existe');
         					list= $('#confirmadas').html();
@@ -209,7 +236,7 @@ $(document).on("ready", function() {
         				setRejectButton();
     				}
         			else{
-            			L = createList(2,group_name,date,id_reunion);
+            			L = createList(2,group_name,group_slug, date,id_reunion);
             			if($('#rechazadas').length){
         					//console.log('si existe');
         					list= $('#rechazadas').html();
@@ -235,20 +262,16 @@ $(document).on("ready", function() {
     			"#loading-reunion",
     			function(data){
     				reunion_list=
-        				"<ul>"+
-		    	    		"<li> Reunion convocada por: "+data.convener+"</li>"+
-		    	    		"<li>En el grupo: "+data.group+"</li>"+
-		    	    		"<li>Convocada el dia: "+data.date_reunion+"</li>"+
-		    	    		"<li>Para el dia: "+data.date_convened+"</li>"+
-		    	    		"<li>Objetivo: "+data.agenda+"</li>"+
-		    	    		"<li>Realizada? "+data.is_done +"</li>"+
-		    	    		"<li>Assistentes: </li>";
-
-		    	    		$.each(data.assistants,function(){reunion_list = reunion_list+ "<li>"+ this.username+ " c: "+this.is_confirmed+"</li>"})
-		    	    		
-    	    			reunion_list = reunion_list + "</ul>";
-    	    			//console.log(data.assistants[0].username)
-    	    			$.each(data.assistants,function(){console.log(this.username)})
+						"Reunion convocada el <strong>"+data.date_reunion+"</strong> por <strong>"+data.convener+"</strong>  en el grupo <strong>"+data.group+"</strong>  <br /> Se llevara a cabo el <strong>"+data.date_convened+"</strong> <br /><br /> Objetivos: <br /> <strong>"+data.agenda+"</strong><br />Asistentes: <br /><table class='tabla'>";
+						$.each(data.assistants,function(){reunion_list = reunion_list+ "<tr><td><strong>"+ this.username+ "</strong></td><td>"+this.is_confirmed+"</td></tr>"});
+						reunion_list = reunion_list +"</table> <br /> ";
+    	    			if (data.is_done == false)
+    	    				reunion_list = reunion_list + "Esta reunion aun no ha sido realizada";
+    	    			else
+    	    				reunion_list = reunion_list + "Esta reunion ya ha sido realizada";
+   	    				if (data.iconf == 1)
+       	    				reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+    	    			
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
     				//setMoreButton();
@@ -297,10 +320,10 @@ $(document).on("ready", function() {
 		});
 	}
 
-	function createList(type,group_name,date,id_reunion){
-		li='<li data-group_name="'+group_name+'" data-date="'+date+'">'+
+	function createList(type,group_name,group_slug,date,id_reunion){
+		li='<li id="reunion_'+id_reunion+'" data-group_name="'+group_name+'" data-date="'+date+'">'+
 				'<span class=""> '+
-		    		' Grupo <a href="/groups/{{invitation.id_group.slug}}">'+group_name+'</a> Hora: '+date+
+		    		' Grupo <a href="/groups/'+group_slug+'">'+group_name+'</a> Hora: '+date+
 		    	'</span>'+
 		    	'<div class="botonera">';
 				    switch (type){
@@ -321,6 +344,33 @@ $(document).on("ready", function() {
 			'</li>';
 		return li;
 	}
+	function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	        vars[key] = value;
+	    });
+	    return vars;
+	}
+		
+	function chargeWindow(){
+		{% for group in groups %}
+				$('#select-group').append('<option value="{{ group.slug }}" >{{ group.name }}</option>');
+		{% endfor %}
+		$('#select-group').change(function(){
+			group_slug = $('#select-group option:selected').val()
+			if (group_slug != "0"){
+				window.location = "/groups/newReunion/"+group_slug;}
+		});
+		if( getUrlVars()["r"]){
+			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#51a351");
+			$('#reunion_'+getUrlVars()["r"]).animate({'background-color': '#eeeeee'},3500,function(){ });
+		}
+	}
+	//setAlertMessage('Titulo', 'Contenido');
+	chargeWindow();
+
+
+	
 });
 </script>
 {% endblock %}

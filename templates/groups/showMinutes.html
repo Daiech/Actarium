@@ -6,9 +6,12 @@
     <header class="row-fluid">
         <h2 class="span12">
         	<a href="/groups/{{group.slug}}">
-        	<img src="{{STATIC_PREFIX}}{{minutes.id_group.img_group}}"> {{minutes.id_group.name}}</a>
-        	- Acta: {{minutes.code}}</h2>
+        		<img src="{{STATIC_PREFIX}}{{minutes.id_group.img_group}}"> {{minutes.id_group.name}}
+        	</a>
+        	- Acta: {{minutes.code}}
+        </h2>
         <span>Fecha de creaci&oacute;n: {{minutes.date_created}}</span>
+        <a href="/groups/{{group.slug}}/newMinutes" class="btn"><i class="icon-plus"></i> Crear acta</a>
     </header>
 	<hr>
     <section class="row-fluid">
@@ -16,6 +19,7 @@
 			<li class="previous {%if not prev %}disabled{%endif%}">
 				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
 			</li>
+			<li><a href="/groups/{{group.slug}}">Ver listado</a></li>
 			<li class="next {%if not next %}disabled{%endif%}">
 				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
 			</li>
@@ -29,12 +33,12 @@
     			<strong>Hora de inicio:</strong> {{minutes.id_extra_minutes.date_start|time}} - 
     			<strong>Hora de finalizaci&oacute;n:</strong> {{minutes.id_extra_minutes.date_end|time}}<hr>
     			<strong>Lugar :</strong> {{minutes.id_extra_minutes.location}}<hr>
-    			<div class="list-attendees box">
+    			<div class="box">
     				<div class="span6">
     					<strong>Presentes:</strong> 
 		    			<ol>
-			    			{%for member in members%}
-			    				<li>
+			    			{%for member in m_assistance%}
+			    				<li id="user{{member.id_user.id}}">
 			    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
 			    					{{member.id_user.first_name}} {{member.id_user.last_name}}
 			    				</li>
@@ -44,52 +48,133 @@
     				<div class="span6">
     					<strong>Ausentes:</strong>
 		    			<ol>
-			    			{%for member in members%}
-			    				<li>{{member.id_user.first_name}}</li>
+			    			{%for member in m_no_assistance%}
+			    				<li>
+			    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+			    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+			    				</li>
 			    			{%endfor%}
 			    		</ol>
     				</div>
-    			</div><hr>
+    			</div>
+    			<hr>
     			<strong>Orden del dia:</strong> {{minutes.id_extra_minutes.agenda|safe}}<hr>
     			<strong>Acuerdos :</strong> {{minutes.id_extra_minutes.agreement|safe}}
     			
     		</div>
-    		<footer></footer>
+    		<footer>
+    			<p><strong>Los miembros ausentes presentaron excusa de su inasistencia.</strong></p>
+    		</footer>
     	</article>
     	<ul class="pager hoja">
 			<li class="previous {%if not prev %}disabled{%endif%}">
 				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
 			</li>
+			<li><a href="/groups/{{group.slug}}">Ver listado</a></li>
 			<li class="next {%if not next %}disabled{%endif%}">
 				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
 			</li>
 		</ul>
-    	<div id="sign" class="hoja b">
-    		{% for member in members_signed %}
-    			{{member.id_user.username}}
-    		{% endfor %}
-    		<a href="#" class="btn btn-success" id="btn-sign" data-minutes="{{minutes.id}}">
-    			Firmar <span></span></a>
-    	</div>
     </section>
+    
+    <div id="sign" class="hoja">
+    	{% if my_attending %}
+    		<div id="div-sign">
+	    		<strong>Estas de acuerdo con la redacci&oacute;n de &eacute;sta Acta?</strong>
+		    	<a href="#" class="btn btn-success btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+					Aprobar <span></span>
+				</a>
+				<a href="#" class="btn btn-approve" data-minutes="{{minutes.id}}" data-approve="0">
+					No Aprobar <span></span>
+				</a>
+			</div>
+		{%endif%}
+		<hr>
+		<div class="box row-fluid b">
+			<div class="span6">
+				<strong>Miembros que aprobaron:</strong>
+    			<ol id="approved-list">
+					{% if approved_list == 0 %}
+		    			0
+	    			{%else%}
+		    			{%for member in approved_list%}
+		    				<li id="approved-{{member.id_user.id}}">
+		    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+		    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+		    				</li>
+		    			{%endfor%}
+		    		{% endif %}
+	    		</ol>
+			</div>
+			<div class="span6">
+				<strong>Miembros que no aprobaron:</strong>
+				<ol id="no-approved-list">
+    				{% if no_approved_list == 0 %}
+		    			0
+	    			{%else%}
+	    				{%for member in no_approved_list%}
+		    				<li  id="no-approved-{{member.id_user.id}}">
+		    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+		    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+		    				</li>
+		    			{%endfor%}
+	    			{% endif %}
+	    		</ol>
+			</div>
+		</div>
+		<div class="">
+			<strong>Miembros faltantes por aprobar:</strong>
+			{% if missing_approved_list == 0 %}
+    			0
+			{%else%}
+			<ol id="missing-list">
+    			{%for member in missing_approved_list%}
+    				<li id="missing-{{member.id_user.id}}">
+    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+    				</li>
+    			{%endfor%}
+    		</ol>
+    		{% endif %}
+		</div>
+	</div>
 </article>
 {%endblock%}
 {% block js %}
 <script>
 	$(document).on("ready",function(){
-		$("#btn-sign").on("click",setSign)
+		$(".btn-approve").on("click",setApprove)
 	});
 	function callBackSign(data){
 		console.log(data)
+		$("#div-sign").fadeOut(300,function(){$(this).empty()})
+		var u = $("#missing-"+data["user-id"]).html()
+		$("#missing-"+data["user-id"]).fadeOut(300,function(){$(this).empty()})
+		if(data['approved']==1){
+			var l = $("#approved-list")
+			if (l.html() == 0){
+				l.empty()
+			}
+			l.append("<li>"+u+"</li>")
+			setAlertMessage("Aprobado!", "Haz aprobado esta acta.")
+		}
+		if(data['approved']==2){
+			var l = $("#no-approved-list")
+			if(l.html()==0){
+				l.empty()
+			}
+			l.append("<li>"+u+"</li>")
+			setAlertMessage("No Aprobado!", "No haz aprobado esta acta.")
+		}
 	}
-	function setSign(e){
+	function setApprove(e){
 		e.preventDefault();
 		$(this).attr({"disabled":"disabled"})
 		var minutes_id = $(this).attr("data-minutes");
-		// alert(minutes_id)
+		var approved = parseInt($(this).attr("data-approve"));
 		sendAjax(
-			"/groups/setSign",
-			{"group":"{{group.id}}", "m_id":minutes_id},
+			"/groups/setApprove",
+			{"m_id":minutes_id, "approve": approved},
 			"#btn-sign span",
 			callBackSign
 			)
@@ -104,6 +189,7 @@
 	}
 	#sign{
 		margin: 0 auto;
+		margin-top: 20px;
 		min-height: 100px;
 	}
 	.minute{
@@ -126,6 +212,7 @@
 	.minute footer{
 		border: none;
 		bottom: 0;
+		font-size: 14px;
 		left: 0;
 		margin:0;
 		padding: 20px 40px;

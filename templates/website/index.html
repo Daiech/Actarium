@@ -9,12 +9,17 @@
     <header class="row-fluid">
         <h1 class="span10">Actarium</h1>
         <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
+        
     </header>
     <hr>
     <div class="row-fluid">
         <section class="span6">
             <header>
-                <h4>Actividad Reciente</h4>
+                <h4>Actividad Reciente  
+                {% if user.is_staff %}
+                	<a href="/actions" role="button" class="btn" style="float:right">Acciones</a>
+                {% endif %} 
+                </h4>
             </header>
             <div class="accordion " id="accordion">
                 <div class="accordion-group">
@@ -376,7 +381,7 @@
                 $(element).parent().parent().slideUp(900,function(){
                     $(this).empty().html(
                     "Ahora perteneces al grupo "+
-                        "<a href='#'>"+data["group"]["name"]+"</a>"+
+                        "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
                         "<hr>"
                 ).fadeIn()
                 }
@@ -446,9 +451,47 @@
             if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
                 acceptInvitation($(this), accept)
             }
+            else{
+                $(this).attr("disabled", false);
+            }
         }else{
             acceptInvitation($(this), accept)
         }
     })
+
+    function confirmar(id_reunion, is_confirmed, group_name, date){
+		sendAjax("/groups/setAssistance",
+    			{id_reunion:id_reunion, is_confirmed: is_confirmed},
+    			"#load_reunions",
+    			function(data){
+                    console.log(data)
+                    setAlertMessage("Reuniones", "Puedes ver la actividad de tus reuniones en el men&uacute; <a href='/groups/calendar'>Reuniones</a>")
+    			}
+    	)
+	}
+    function setList(e,btn, op){
+		var t = 500;
+		e.preventDefault();
+		li= btn.parent().parent();
+		li.animate({'height': 0},t,function(){
+			confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+			$(this).remove();
+			l = $("#length-reunion").html();
+			$("#length-reunion").html(l-1);
+		});
+	}
+    function setButtons(){
+		$('.confirmed2-true').click(function(e){
+            $(this).attr("disabled", "disabled");
+			setList(e,$(this), true);
+		});
+		$('.confirmed2-false').click(function(e){
+            $(this).attr("disabled", "disabled");
+			setList(e,$(this),false);
+		});	
+	}
+	setButtons();
+    
+
 </script>
 {% endblock %}
