@@ -26,6 +26,31 @@
         <script src="{{ STATIC_PREFIX }}js/vendor/modernizr-2.6.1.min.js"></script>
     </head>
     <body>
+        <div id="feed-option">
+        F
+        </div>
+        <div class="modal" id="feed-modal">
+            <div class="modal-header">
+                <button id="close-feed" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Env&iacute;anos tus comentarios</h3>
+            </div>
+            <div class="modal-body">
+                <p>Califica tu experiencia en Actarium y ayudanos a mejorar</p>
+                <div id="feed-imput">
+                <input type="radio" name="group1" value="Excelente"> Excelente
+                <input type="radio" name="group1" value="Aceptable"> Aceptable
+                <input type="radio" name="group1" value="Mala"> Mala
+            </div>
+                <textarea id="textComent" placeholder="Ejemplo: No puedo cerrar sesi&oacute;n en dispositivos m&oacute;viles"></textarea>
+            </div>
+            <div class="modal-footer">
+                <div id="twitter-button">
+                    <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+                </div>
+                <a href="#" class="btn" id="cancel-feed" >Cancelar</a>
+                <a href="#" class="btn btn-primary">Enviar</a>
+            </div>
+        </div>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
@@ -80,23 +105,7 @@
             </p>
             </div>
         </footer>
-        <div class="modal hide fade" id="myModal">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3>Env&iacute;anos tus comentarios</h3>
-            </div>
-            <div class="modal-body">
-                <p>Cu&eacute;ntanos c&oacute;mo fue tu experiencia usando Actarium y ay&uacute;danos a mejorar.</p>
-                <textarea id="textComent" placeholder="Ejemplo: No puedo cerrar sesi&oacute;n en dispositivos m&oacute;viles"></textarea>
-            </div>
-            <div class="modal-footer">
-                <div id="twitter-button">
-                    <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
-                </div>
-                <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</a>
-                <a href="" class="btn btn-primary">Enviar</a>
-            </div>
-        </div>
+        
         <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>-->
         <script>window.jQuery || document.write('<script src="{{ STATIC_PREFIX }}js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
         <script src="{{ STATIC_PREFIX }}js/plugins.js"></script>
@@ -104,9 +113,10 @@
         <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
         {% block js %}
         {% endblock%}
-
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
+
             //     var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
             //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             //     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';

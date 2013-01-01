@@ -35,7 +35,7 @@ def home(request):
 
         ctx = {'TITLE': "Actarium", "groups": gr, "invitations": my_inv, "reunions": json_array}
     else:
-        ctx = {'TITLE': "Actarium"}
+        ctx = {'TITLE': "Actarium by Daiech"}
 
     return render_to_response('website/index.html', ctx, context_instance=RequestContext(request))
 

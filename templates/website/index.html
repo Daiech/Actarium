@@ -5,22 +5,18 @@
 
 
 {% if user.is_authenticated %}
-<article>
-    <header class="row-fluid">
-        <h1 class="span10">Actarium</h1>
-        <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
-        
-    </header>
-    <hr>
+<article id="b-page">
+    
     <div class="row-fluid">
         <section class="span6">
             <header>
-                <h4>Actividad Reciente  
+                <h4 id="tittle-page">Actividad Reciente  
                 {% if user.is_staff %}
                 	<a href="/actions" role="button" class="btn" style="float:right">Acciones</a>
                 {% endif %} 
                 </h4>
             </header>
+
             <div class="accordion " id="accordion">
                 <div class="accordion-group">
                     <div class="accordion-heading">
@@ -135,9 +131,38 @@
     Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
     <a href="/"><img id="arriba" src="/static/img/arrow-up.png" alt="arriba"/></a>
 </div>
+<div id="middle-bar">
+<div id="middle-down">
+<div class="pic-down">
+            <a href="#" title="info">
+                <div id="arrow-down">
+                    
+                </div>
+            </a>
+    </div>
+</div>
+</div>
 <div class="info-containter">
     <div class="info-pics">
-        <div class="pic-log">
+        <div id="left-panel">
+        <div id="register-form" class="hidden">
+            <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
+                {% csrf_token %}
+                    <label for="id_username">Nombre de usuario</label>
+                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus />
+                    <label for="id_password">Contrase&ntilde;a</label>
+                    <input type="password" name="password" id="id_password" />
+                
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Log In</button>
+                        <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+        <div id="pic-log-left" class="pic-log">
             <a href="/account/login" >
                 <div id="left-bubble">
                     <div class="bubble-text">
@@ -152,17 +177,30 @@
                 </div>
             </div>
         </div>
-        <div class="pic-down">
-            <a href="#" title="info">
-                <div id="arrow-down">
-                    
-                </div>
-            </a>
         </div>
 
-        <div class="pic-log">
+        <div id="right-panel">
+            <div id="new-user" class="hidden">
+            <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
+                {% csrf_token %}
+                    <label for="id_username">Nombre de usuario</label>
+                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus />
+                    <label for="id_password">Contrase&ntilde;a</label>
+                    <input type="password" name="password" id="id_password" />
+                
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Log In</button>
+                        <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                    </div>
+                </div>
+            </form>
+            
+        </div>            
+
+            <div id="pic-log-right" class="pic-log">
             <a href="/account/new">
-                <div class="right-bubble">
+                <div id="right-bubble">
                     <div class="bubble-text">
                         Registrarse
                     </div>
@@ -173,6 +211,7 @@
 
                 </div>
             </div>
+        </div>
         </div>
 
 
@@ -192,10 +231,33 @@
     .container{
         width:100%;
     }
+    #middle-bar{
+        height: 51px;
+        position: absolute;
+        width: 100%;
+    }
+    
+    #middle-down{
+        width:50px;
+        margin: 0 auto 0 auto;
+    }
+    #left-panel{
+        display: block;
+        float: left;
+        width:49%;
+    }
+    #right-panel{
+        display: block;
+        float: right;
+        width: 49%;
+    }
+
     #new-container{
         background-color: #E9E9E9;
         height: 200px;
+        min-height: 200px;
         width: 100%;
+        padding-bottom: 35px;
     }
     #new-container > img{
         display: block;
@@ -203,93 +265,31 @@
         padding-top: 30px;
         width:350px;
     }
-    .info-pics{
-        display:block;
-        margin:auto;
-        overflow: hidden;
-        width:585px;
-    }
-    .pic-log{
-        float: left;
-        margin-top: 30px;
-        width:260px;
-    }
-    #login-pic{
-        position: relative;
-        left:109px;
-        top:-25px;
-    }
-    #singup-pic{
-        position: relative;
-        top:-25px;
-    }
-    #left-bubble{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: 0 -135.413px;
-        color: white;
-        width:166px;
-        height: 88.46px;
-        position: relative;
-        text-align: center;
-    }
-    .right-bubble{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -166px -135.413px;
-        color: white;
-        width: 166px;
-        height: 88.46px;
-        left:90px;
-        position:relative;
-        text-align: center;
-    }
-    #img-log{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: 0 -225.863px;
-        background-repeat: no-repeat;
-        /*        position: relative;
-                left:100px;
-                top:-25px;*/
-        height: 188.133px;
-        width: 150.234px;
-    }
-    #img-reg{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -166px -225.863px;
-        background-repeat: no-repeat;
-        height: 188.133px;
-        width: 150.234px;
-    }
-    .pic-down {
-        float: left;
-        margin: -10px 10px 0 10px;
-        z-index: 100000;
-    }
-    .bubble-text {
-        position: relative;
-        top: 30px;
-    }
-    #info-act{
-        background-color: #dadada;
-        padding-left: 50px;
-        padding-right: 50px;
-        padding-bottom: 20px;
-        padding-top: 20px;
-    }
-    #info-act a > img{
+    #register-form{
+        width: 224px;
         float: right;
     }
-    #arrow-down:hover{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -363px -135.413px;
-        height: 27.749px;
-        width: 42.22px;
+    #register-form > form{
+        padding: 25px;
+        width: auto;
+        border: none;
     }
-    #arrow-down{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -363px -163.413px;
-        height: 27.749px;
-        width: 42.22px;
+    #new-user{
+        width: 224px;
+        float: left;
     }
+    #new-user > form{
+        padding: 25px;
+        width: auto;
+        border: none;
+    }
+    #id_submit{
+        width: 70px;
+    }
+    .controls{
+        margin-top: 15px;
+    }
+    
     /* **************************************************************************** 
     Termina Index Website
     **************************************************************************** */
@@ -310,6 +310,19 @@
         background: rgba(255, 255, 255, 0.6);
         /* For IE 8*/
         -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#11111111,endColorstr=#11111111)";
+    }
+    #b-page{
+        background-image: url("/static/img/fondo_peq.jpg");
+        padding-top: 100px;
+    }
+    #tittle-page{
+        margin-left: 48px;
+    }
+    .accordion-group{
+        border: solid gray;
+        margin-left: 48px;
+        margin-top: 10px;
+        width: 70%;
     }
     .span6 h4{
         margin-bottom:20px;
@@ -351,8 +364,18 @@
 </style>
 {%endblock%}
 {% block js %}
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <script>
+
+    $("#left-bubble").on("click", function(e){
+        e.preventDefault()
+        $("#pic-log-left").slideToggle("fast")
+        $("#register-form").removeClass("hidden")
+        })
+    $("#right-bubble").on("click", function(e){
+        e.preventDefault()
+        $("#pic-log-right").slideToggle("fast")
+        $("#new-user").removeClass("hidden")
+       })
     $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
         e.preventDefault()
         $("#info-act").slideToggle("fast")
@@ -491,7 +514,6 @@
 		});	
 	}
 	setButtons();
-    
 
 </script>
 {% endblock %}

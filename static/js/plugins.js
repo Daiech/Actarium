@@ -49,7 +49,7 @@ function main(){
             $(this).children("i").removeClass("icon-chevron-up").addClass("icon-chevron-right")
         }
         else{
-            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up")
+            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up");
         }
         
     });
@@ -65,6 +65,21 @@ function main(){
 
     $("#drop-d-menu").on("click",function(){
         $("#navbar-button-container").slideToggle("fast");
+    });
+    $("#drop-d-menu").on("click",function(){
+        $("#navbar-button-container").slideToggle("fast");
+    });
+
+    $("#feed-option").on("click", function(){
+        $("#feed-modal").animate({
+            'right':'0px'
+        });
+    });
+
+    $("#close-feed, #cancel-feed").on("click", function(e){
+        $("#feed-modal").animate({
+            'right':'-505px'
+        });
     });
 }
 
