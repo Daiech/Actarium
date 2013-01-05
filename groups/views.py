@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_signed
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
@@ -72,7 +73,10 @@ def showGroup(request, slug):
     '''
         Muestra la informacion de un grupo
     '''
-    q = groups.objects.get(slug=slug, is_active=True)
+    try:
+        q = groups.objects.get(slug=slug, is_active=True)
+    except groups.DoesNotExist:
+        raise Http404
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
