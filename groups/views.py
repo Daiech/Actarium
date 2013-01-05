@@ -1,10 +1,10 @@
 # Create your views here.
 #encoding:utf-8
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_signed
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
@@ -26,7 +26,7 @@ def groupsList(request):
     '''
     try:
         mygroups = groups.objects.filter(rel_user_group__id_user=request.user, rel_user_group__is_active=True)
-    except ObjectDoesNotExist:
+    except groups.DoesNotExist:
         mygroups = "Either the entry or blog doesn't exist."
 
     ctx = {'TITLE': "Actarium", "groups": mygroups}
@@ -72,7 +72,10 @@ def showGroup(request, slug):
     '''
         Muestra la informacion de un grupo
     '''
-    q = groups.objects.get(slug=slug, is_active=True)
+    try:
+        q = groups.objects.get(slug=slug, is_active=True)
+    except groups.DoesNotExist:
+        raise Http404
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
@@ -368,9 +371,10 @@ def getGroupBySlug(slug):
         group = groups.objects.get(slug=slug)
     except groups.DoesNotExist:
         group = False
-        print "El grupo no existe"
+        raise Http404
     except Exception, e:
         group = False
+        raise Http404
         print "Error capturando grupo: %s " % e
     return group
 
@@ -500,6 +504,7 @@ def preparingToSign(members, minutes_id):
         return "Exception"
 
 
+@login_required(login_url='/account/login')
 def saveMinute(request, group, form, m_selected):
     '''
     Save the minutes in the tables of data base: minutes_type_1, minutes
@@ -787,6 +792,7 @@ def getAssistance(id_minutes):
     return assistan
 
 
+@login_required(login_url='/account/login')
 def setAssistance(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -814,6 +820,7 @@ def setAssistance(request):
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+@login_required(login_url='/account/login')
 def getReunionData(request):
     if request.is_ajax():
         if request.method == 'GET':
