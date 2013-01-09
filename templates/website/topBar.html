@@ -17,7 +17,7 @@
         <button id="drop-d-menu">Menu</button>
     </div>
     <div class="navbar-button" id="navbar-button-container">
-        <ul class="">
+        <ul id="top-menu-style" class="">
             <li class="">
                 <a href="/groups">
                     <div class="navbar-element">
@@ -83,6 +83,7 @@
             </li>
            
         </ul>
+        {% if user.is_authenticated %}
         <div id="menu-login" class="btn-group pull-right">
             <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="icon-user"></i>
@@ -113,6 +114,7 @@
                 </form>
                 {% endif %}
             </ul>
-        </div>  
+        </div>
+        {% endif %}
     </div>
 </div>
