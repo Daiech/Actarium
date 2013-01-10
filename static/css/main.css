@@ -189,18 +189,16 @@ header div > #top-menu-style li{
     border-bottom-right-radius: 4px;
     box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
 }
-header div > ul li a {
+header .navbar-button > ul li a {
     display:inline-block;
     color:gray; 
     margin: auto;
     width:100%;
     text-decoration:none;
 }
-#navbar-button-container{
-}
-#navbar-button-container > ul{
-    margin-left: 50px;/*
-    */    float:left;
+#navbar-button-container > #top-menu-style{
+    margin-left: 50px;
+    float:left;
     display: block;
 }
 .social-but{
@@ -227,9 +225,10 @@ header div > ul li a {
 }
 #social-buttons{
     float: right;
-    padding-top: 16px;
+    padding-top: 11px;
 }
-.navbar-active-class{
+
+.navbar-active-class {
     background-color: black;
 }
 #top-button{
@@ -238,7 +237,7 @@ header div > ul li a {
 #menu-login{
     margin-top: 20px;
     margin-right: 33px;
-    
+
 }
 #log-sup{
     background-color: white;
@@ -326,100 +325,100 @@ Imagenes de logueo
 ******************************************************************************/
 
 .info-pics{
-        display:block;
-        margin:auto;
-        overflow: hidden;
-        width:100%;
-    }
-    .pic-log{
-        margin-top: 30px;
-        width:260px;
-    }
-    #login-pic{
-        position: relative;
-        left:109px;
-        top:-25px;
-    }
-    #singup-pic{
-        position: relative;
-        top:-25px;
-    }
-    #left-bubble{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: 0 -135.413px;
-        color: white;
-        width:166px;
-        height: 88.46px;
-        position: relative;
-        text-align: center;
-    }
-    #right-bubble{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -166px -135.413px;
-        color: white;
-        width: 166px;
-        height: 88.46px;
-        left:90px;
-        position:relative;
-        text-align: center;
-    }
-    #img-log{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: 0 -225.863px;
-        background-repeat: no-repeat;
-        /*        position: relative;
-                left:100px;
-                top:-25px;*/
-        height: 188.133px;
-        width: 150.234px;
-    }
-    #img-reg{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -166px -225.863px;
-        background-repeat: no-repeat;
-        height: 188.133px;
-        width: 150.234px;
-    }
-    .pic-down {
-        float: left;
-        margin: auto;
-        z-index: 100000;
-        width:50px;
-    }
-    .bubble-text {
-        position: relative;
-        top: 30px;
-    }
-    #info-act{
-        background-color: #dadada;
-        padding-left: 50px;
-        padding-right: 50px;
-        padding-bottom: 20px;
-        padding-top: 20px;
-    }
-    #info-act a > img{
-        float: right;
-    }
-    #arrow-down:hover{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -363px -135.413px;
-        height: 27.749px;
-        width: 42.22px;
-    }
-    #arrow-down{
-        background-image: url('/static/img/imagen_central.png');
-        background-position: -363px -163.413px;
-        height: 27.749px;
-        width: 42.22px;
-    }
-    #pic-log-left{
-    
+    display:block;
+    margin:auto;
+    overflow: hidden;
+    width:100%;
+}
+.pic-log{
+    margin-top: 30px;
+    width:260px;
+}
+#login-pic{
+    position: relative;
+    left:109px;
+    top:-25px;
+}
+#singup-pic{
+    position: relative;
+    top:-25px;
+}
+#left-bubble{
+    background-image: url('/static/img/imagen_central.png');
+    background-position: 0 -135.413px;
+    color: white;
+    width:166px;
+    height: 88.46px;
+    position: relative;
+    text-align: center;
+}
+#right-bubble{
+    background-image: url('/static/img/imagen_central.png');
+    background-position: -166px -135.413px;
+    color: white;
+    width: 166px;
+    height: 88.46px;
+    left:90px;
+    position:relative;
+    text-align: center;
+}
+#img-log{
+    background-image: url('/static/img/imagen_central.png');
+    background-position: 0 -225.863px;
+    background-repeat: no-repeat;
+    /*        position: relative;
+            left:100px;
+            top:-25px;*/
+    height: 188.133px;
+    width: 150.234px;
+}
+#img-reg{
+    background-image: url('/static/img/imagen_central.png');
+    background-position: -166px -225.863px;
+    background-repeat: no-repeat;
+    height: 188.133px;
+    width: 150.234px;
+}
+.pic-down {
+    float: left;
+    margin: auto;
+    z-index: 100000;
+    width:50px;
+}
+.bubble-text {
+    position: relative;
+    top: 30px;
+}
+#info-act{
+    background-color: #dadada;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+#info-act a > img{
+    float: right;
+}
+#arrow-down:hover{
+    background-image: url('/static/img/imagen_central.png');
+    background-position: -363px -135.413px;
+    height: 27.749px;
+    width: 42.22px;
+}
+#arrow-down{
+    background-image: url('/static/img/imagen_central.png');
+    background-position: -363px -163.413px;
+    height: 27.749px;
+    width: 42.22px;
+}
+#pic-log-left{
+
     float:right;
- }
- #pic-log-right{
-    
+}
+#pic-log-right{
+
     float:left;
- }
+}
 
 /* ***************************************************************************
 FIN Imagenes de logueo
@@ -481,7 +480,7 @@ FIN FEED
     border: solid thin #dadada;
 }
 .form-horizontal .controls {
-margin-left: 0;
+    margin-left: 0;
 }
 .margin5{
     margin: 10px;
@@ -852,8 +851,8 @@ only screen and (min-resolution: 144dpi) {
         margin-bottom: 26px;
     }
     #social-buttons{
-    display: visible;
-}
+        display: visible;
+    }
 }
 
 
@@ -877,9 +876,9 @@ only screen and (min-resolution: 144dpi) {
 
 
 
-#social-buttons{
-    display: visible;
-}
+    #social-buttons{
+        display: visible;
+    }
 
 
 }
@@ -888,14 +887,14 @@ only screen and (min-resolution: 144dpi) {
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     body {
-padding-right: 0px;
-padding-left: 0px;
-}
-.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-margin-right: 0px;
-margin-left: 0px;
-}
-    
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
     .columnaI{
         width: 100%;
     }.columnaD{
@@ -915,98 +914,98 @@ margin-left: 0px;
         margin-bottom: 26px;
     }
     .info-pics {
-    width: 100%;
-}
+        width: 100%;
+    }
 
- #left-bubble{
- 
-left: 109px;
-top: -31px;
+    #left-bubble{
 
- }
- #right-bubble{
-    top: -30px;
-    left: -9px;
- }
- #social-buttons{
-    display: visible;
-}
+        left: 109px;
+        top: -31px;
 
-    
+    }
+    #right-bubble{
+        top: -30px;
+        left: -9px;
+    }
+    #social-buttons{
+        display: visible;
+    }
+
+
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     body {
-padding-right: 0px;
-padding-left: 0px;
-}
-.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-margin-right: 0px;
-margin-left: 0px;
-}
- #left-bubble{
- 
-left: 109px;
-top: -31px;
-
- }
- #right-bubble{
-    top: -30px;
-    left: -9px;
- }
- .pic-log{
-    width: 166px;
-    position: absolute;
- }
- #pic-log-left{
-    
-    float:left;
- }
- #pic-log-right{
-    
-    float:right;
- }
-.navbar-element{
-    height: 47px;
-}
-.navbar-item{
-    height: 37px;
-}
-.ico-top{
-    top: 0px;
-}
-.navbar-item > span {
-    top: 19px;
-}
-#navbar-button-container > ul {
-    margin-top: 63px;
-}
-#social-buttons{
-    display: none;
-}
-   
+        padding-right: 0px;
+        padding-left: 0px;
     }
-    /*==================================================*/
-    /*                  Cierra Responsive               */                    
-    /*==================================================*/
+    .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    #left-bubble{
+
+        left: 109px;
+        top: -31px;
+
+    }
+    #right-bubble{
+        top: -30px;
+        left: -9px;
+    }
+    .pic-log{
+        width: 166px;
+        position: absolute;
+    }
+    #pic-log-left{
+
+        float:left;
+    }
+    #pic-log-right{
+
+        float:right;
+    }
+    .navbar-element{
+        height: 47px;
+    }
+    .navbar-item{
+        height: 37px;
+    }
+    .ico-top{
+        top: 0px;
+    }
+    .navbar-item > span {
+        top: 19px;
+    }
+    #navbar-button-container > ul {
+        margin-top: 63px;
+    }
+    #social-buttons{
+        display: none;
+    }
+
+}
+/*==================================================*/
+/*                  Cierra Responsive               */                    
+/*==================================================*/
 
 
 
-    /*@media only screen and (max-width:1280px){
-        .columnaD{
-            margin-left: 380px;
-        }
-    }*/
+/*@media only screen and (max-width:1280px){
+    .columnaD{
+        margin-left: 380px;
+    }
+}*/
 
 
 
-    /* ==========================================================================
-       Print styles.
-       Inlined to avoid required HTTP connection: h5bp.com/r
-       ========================================================================== */
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
 
-    @media print {
-        * {
+@media print {
+    * {
         background: transparent !important;
         color: #000 !important; /* Black prints faster: h5bp.com/s */
         box-shadow:none !important;

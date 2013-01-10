@@ -393,10 +393,12 @@
             $("#new-user").removeClass("hidden")
             $("#pic-log-left").removeClass("hidden")
             $("#register-form").addClass("hidden")
+            $("username").focus()
         }
         else
             $("#pic-log-right").addClass("hidden")
         $("#new-user").removeClass("hidden")
+        $("username").focus()
     })
     $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
         e.preventDefault()
