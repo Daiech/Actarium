@@ -41,4 +41,5 @@ class newMinutesForm(forms.Form):
 class newReunionForm(forms.Form):
     #formulario para agregar una nueva reunion
     date_reunion = forms.DateTimeField(label="Fecha", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    locale = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Objetivos", widget=forms.Textarea(attrs={'placeholder': 'Objetivos de la reunión'}))
