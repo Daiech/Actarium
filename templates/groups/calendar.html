@@ -262,7 +262,7 @@ $(document).on("ready", function() {
     			"#loading-reunion",
     			function(data){
     				reunion_list=
-						"Reunion convocada el <strong>"+data.date_reunion+"</strong> por <strong>"+data.convener+"</strong>  en el grupo <strong>"+data.group+"</strong>  <br /> Se llevara a cabo el <strong>"+data.date_convened+"</strong> <br /><br /> Objetivos: <br /> <strong>"+data.agenda+"</strong><br />Asistentes: <br /><table class='tabla'>";
+						"Reunion convocada el <strong>"+data.date_reunion+"</strong> por <strong>"+data.convener+"</strong>  en el grupo <strong>"+data.group+"</strong>  <br /> Se llevara a cabo el <strong>"+data.date_convened+"</strong> en <strong>"+data.locale+"</strong> <br /><br /> Objetivos: <br /> <strong>"+data.agenda+"</strong><br />Asistentes: <br /><table class='tabla'>";
 						$.each(data.assistants,function(){reunion_list = reunion_list+ "<tr><td><strong>"+ this.username+ "</strong></td><td>"+this.is_confirmed+"</td></tr>"});
 						reunion_list = reunion_list +"</table> <br /> ";
     	    			if (data.is_done == false)
