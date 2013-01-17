@@ -319,7 +319,7 @@
         margin-left: 48px;
     }
     .accordion-group{
-        border: solid gray thin;
+        border: solid thin gray;
         margin-left: 48px;
         margin-top: 10px;
         width: 70%;
@@ -481,7 +481,6 @@
             acceptInvitation($(this), accept)
         }
     })
-
     function confirmar(id_reunion, is_confirmed, group_name, date){
 		sendAjax("/groups/setAssistance",
     			{id_reunion:id_reunion, is_confirmed: is_confirmed},
@@ -514,6 +513,6 @@
 		});	
 	}
 	setButtons();
-
 </script>
+
 {% endblock %}
