@@ -146,10 +146,10 @@
     <div class="info-pics">
         <div id="left-panel">
             <div id="register-form" class="hidden">
-                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
+                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
                     <label for="id_username">Nombre de usuario</label>
-                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus />
+                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
                     <label for="id_password">Contrase&ntilde;a</label>
                     <input type="password" name="password" id="id_password" />
 
@@ -166,7 +166,7 @@
                 <a href="/account/login" >
                     <div id="left-bubble">
                         <div class="bubble-text">
-                            Ingresar
+                            Tengo una cuenta.<br>Iniciar Sesi&oacute;n
                         </div>
 
                     </div>
@@ -181,10 +181,10 @@
 
         <div id="right-panel">
             <div id="new-user" class="hidden">
-                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right b">
+                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
                     <label for="id_username">Nombre de usuario:</label>
-                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus />
+                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
                     <label for="id_email">Correo Electr&oacute;nico:</label>
                     <input type="text" name="mail" id="id_email" />
                     <label for="id_pasword1">Contraseña:</label>
@@ -205,7 +205,7 @@
                 <a href="/account/new">
                     <div id="right-bubble">
                         <div class="bubble-text">
-                            Registrarse
+                            No tengo cuenta.<br>Registrarme
                         </div>
                     </div>
                 </a>
@@ -279,7 +279,7 @@
         border: none;
     }
     #new-user{
-        width: 224px;
+        width: auto;
         float: left;
     }
     #new-user > form{
@@ -369,8 +369,18 @@
 {%endblock%}
 {% block js %}
 <script>
+    $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
+        e.preventDefault()
+        $("#info-act").slideToggle("fast")
+    })
+    
+    $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
+    $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
 
-    $("#left-bubble").on("click", function(e){
+    function login(e){
+        /*  Muestra el formulario para iniciar sesion
+            Oculta el formulario de registro
+        */
         e.preventDefault()
         if($("#pic-log-right").hasClass("hidden"))
         {
@@ -378,14 +388,18 @@
             $("#pic-log-left").addClass("hidden")
             $("#register-form").removeClass("hidden")
             $("#new-user").addClass("hidden")
+            $("#register-form form input.first-input").focus()
         }
         else{
             $("#pic-log-left").addClass("hidden")
             $("#register-form").removeClass("hidden")
         }
+    }
 
-    })
-    $("#right-bubble").on("click", function(e){
+    function register(e) {
+        /*  Muestra el formulario para registro
+            Oculta el formulario de login
+        */
         e.preventDefault()
         if($("#pic-log-left").hasClass("hidden"))
         {
@@ -393,18 +407,16 @@
             $("#new-user").removeClass("hidden")
             $("#pic-log-left").removeClass("hidden")
             $("#register-form").addClass("hidden")
-            $("username").focus()
+            $("#new-user form input.first-input").focus()
         }
-        else
+        else{
             $("#pic-log-right").addClass("hidden")
-        $("#new-user").removeClass("hidden")
-        $("username").focus()
-    })
-    $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
-        e.preventDefault()
-        $("#info-act").slideToggle("fast")
-    })
-    
+            $("#new-user").removeClass("hidden")
+        }
+    }
+</script>    
+{% if user.is_authenticated%}
+<script>
     $(".collapse").collapse({
         //toggle: false
     })
@@ -538,4 +550,5 @@
     }
     setButtons();
 </script>
+{% endif %}
 {% endblock %}
