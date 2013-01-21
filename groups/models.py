@@ -98,6 +98,7 @@ class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')
     date_convened = models.DateTimeField(auto_now=True)
     date_reunion = models.DateTimeField()
+    locale = models.CharField(max_length=150, verbose_name="locale")
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)

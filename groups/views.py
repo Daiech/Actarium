@@ -665,11 +665,13 @@ def newReunion(request, slug):
             if form.is_valid():
                 df = {
                     'date_reunion': form.cleaned_data['date_reunion'],
+                    'locale': form.cleaned_data['locale'],
                     'agenda': form.cleaned_data['agenda'],
                 }
                 myNewReunion = reunions(
                                id_convener=request.user,
                                date_reunion=df['date_reunion'],
+                               locale = df['locale'],
                                id_group=q,
                                agenda=df['agenda'],
                              )
@@ -681,7 +683,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "\n\n\n" + "<br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en "+ str(df['locale']) +" \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -813,7 +815,7 @@ def setAssistance(request):
             #print assis
             #print request.META['REMOTE_ADDR']
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
-           # print datos
+            # print datos
         return HttpResponse(json.dumps(datos), mimetype="application/json")
     else:
         response = "Error Calendar"
@@ -829,6 +831,7 @@ def getReunionData(request):
             convener = reunion.id_convener.username
             date_convened = reunion.date_convened
             date_reunion = reunion.date_reunion
+            locale = reunion.locale
             group = reunion.id_group.name
             id_group = reunion.id_group
             agenda = reunion.agenda
@@ -871,6 +874,7 @@ def getReunionData(request):
                "date_reunion": str(date_reunion),
                "group": group,
                "agenda": agenda,
+               "locale": locale,
                "is_done": is_done,
                "assistants": assis_list,
                "group_slug": group_slug,
