@@ -109,6 +109,7 @@
 {% else %}
 <div id="new-container">
     <img id="logo-act-big" src="/static/img/logo_grande.png" alt="Logo Actarium"/>
+    <p id="text-center"> la soluci&oacute;n empresarial para el registro de sus reuniones.</p>
 </div>
 <div id="info-act" style="display:none">
     Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
@@ -231,7 +232,11 @@
     /* **************************************************************************** 
     Index Website
     **************************************************************************** */
-
+    
+    #text-center{
+        text-align: center;
+    }
+    
     .container{
         width:100%;
     }
@@ -248,12 +253,12 @@
     #left-panel{
         display: block;
         float: left;
-        width:49%;
+        width:45%;
     }
     #right-panel{
         display: block;
         float: right;
-        width: 49%;
+        width: 45%;
     }
 
     #new-container{
