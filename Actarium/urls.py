@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'website.views.home', name='home'),
     url(r'^about', 'website.views.about'),
+    url(r'^feed-back', 'website.views.sendFeedBack'),
     url(r'^update', 'github.views.update'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
@@ -21,5 +22,5 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
- 
+
 )

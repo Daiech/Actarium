@@ -455,11 +455,14 @@ FEED
     margin: auto;
 }
 #feed-imput{
-    margin: auto;
-    width: 80%;
     margin-bottom: 15px;
 }
-
+#feed-imput .btn{
+    width: 100px;
+}
+#fb-email{
+    width: 97%;
+}
 /* ***************************************************************************
 FIN FEED
 *****************************************************************************/
@@ -472,10 +475,10 @@ FIN FEED
     float: left;
 }
 #textComent{
-    margin-left: 12%;
-    margin-right: 12%;
+    /*margin-left: 12%;
+    margin-right: 12%;*/
     min-height: 150px;
-    width: 70%;
+    width: 97%;
 }
 
 .b{
