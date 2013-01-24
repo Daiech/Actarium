@@ -706,8 +706,8 @@ def newReunion(request, slug):
 @login_required(login_url='/account/login')
 def calendar(request):
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False)  # reuniones
-    my_reu_day = reunions.objects.filter(id_group__in=gr)  # reuniones para un dia
+    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
+    my_reu_day = reunions.objects.filter(id_group__in=gr).order_by("-date_convened")  # reuniones para un dia
     i = 0
     json_array = {}
     for reunion in my_reu_day:
@@ -732,10 +732,10 @@ def calendar(request):
 @login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False)  # reuniones
+    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
     dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
-    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max])  # reuniones para un dia
+    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
     i = 0
     json_array = {}
     for reunion in my_reu_day:
@@ -765,7 +765,7 @@ def getReunions(request):
             gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
             dateslug_min = str(make_aware(datetime.datetime.strptime(date + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
             dateslug_max = str(make_aware(datetime.datetime.strptime(date + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
-            my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max])  # reuniones para un dia
+            my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
             i = 0
             json_array = {}
             for reunion in my_reu_day:
