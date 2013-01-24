@@ -9,7 +9,7 @@
         <div id="datepicker">
             <img src="/static/img/load16.gif" alt="cargando calendario"/>
         </div>
-        <div class="modal hide fade" id="myReunionModal">
+        <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
 			<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			<h3>Reunion</h3>
@@ -20,7 +20,7 @@
 	        	</div>
 			</div>
 		</div>
-		<div class="modal hide fade" id="newReunionModal">
+		<div class="modal hide fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
 			<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			<h3>Convocar nueva reunion</h3>
@@ -36,12 +36,32 @@
         <div class="center">
             <a href="/groups/calendar" class="btn btn-success ">Ver todas las reuniones</a><br><br>
             <a href="#newReunionModal" data-toggle="modal" class="btn btn-success ">Convocar reunion</a>
+             <div id="load_reunions"></div>
         </div>
     </section>
-    <section id="date_reunions"></section>
-    <section id="reunions" >
-    	<div id="load_reunions"></div>
+    
+    <section id="date_reunions2">
+	    <section class="tabbable reunion-tabs"> 
+			  <ul class="nav nav-tabs">
+			    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder</a></li>
+			    <li><a href="#tab2" data-toggle="tab">Confirmadas</a></li>
+			    <li><a href="#tab3" data-toggle="tab">Rechazadas</a></li>
+			  </ul>
+			  <div class="tab-content">
+			    <div class="tab-pane active" id="tab1">
+			      <ul id='tab-pendientes'></ul>
+			    </div>
+			    <div class="tab-pane" id="tab2">
+			      <ul id='tab-confirmadas'></ul>
+			    </div>
+			    <div class="tab-pane" id="tab3">
+			      <ul id='tab-rechazadas'></ul>
+			    </div>
+			  </div>
+	    </section>
     </section>
+    <section id="date_reunions1"></section>
+   
 </article>
 {%endblock%}
 {%block style%}
@@ -69,6 +89,10 @@
     	 padding-left: 40px;
     	 float: left;
     }
+    #date_reunions2{
+    	 padding-left: 40px;
+    	 float: left;
+    }
     #reunions {
         width: 490px;
         margin-left: 40px;
@@ -82,6 +106,11 @@
 
         margin-left: 0;
     }
+    
+    .tab-content div ul{
+    	list-style: none;
+    }
+    
     .btn-link{
         padding-left: 0;
     }
@@ -168,41 +197,25 @@ $(document).on("ready", function() {
 	}
 	
 	function show_data(data){
-		var full_text = "";
-		var list1="<h3 id='confirmadas2'>Reuniones confirmadas</h3><ul id='confirmadas'>";
-		var list2="<h3 id='pendientes2'>Reuniones pendietes por confirmar</h3><ul id='pendientes'>";
-		var list3="<h3 id='rechazadas2'>Reuniones rechazadas</h3><ul id='rechazadas'>";
-		var o1 = 0;
-		var o2 = 0;
-		var o3 = 0;
+		var tablist1="";
+		var tablist2="";
+		var tablist3="";
 		$.each(data, function() { 
-			//console.log(data);
 			if(this.is_saved == 1){
 				if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
-					if (o1== 0){ o1 = 1 };
-					list1 = list1 + createList(1,this.group_name,this.group_slug,this.date,this.id_r);
+					tablist1 = tablist1 + createList(1,this.group_name,this.group_slug,this.date,this.id_r);
 				}
 				else { //reuniones rechazadas
-					if (o3== 0){ o3 = 1 };
-					list3 = list3  + createList(2,this.group_name,this.group_slug,this.date,this.id_r);
+					tablist3 = tablist3  + createList(2,this.group_name,this.group_slug,this.date,this.id_r);
 				}
 			}
 			else{ //reuniones pendientes por confirmar
-				if (o2== 0){ o2 = 1 };
-				list2 = list2 + createList(3,this.group_name,this.group_slug,this.date,this.id_r);
+				tablist2 = tablist2 + createList(3,this.group_name,this.group_slug,this.date,this.id_r);
 			}
 		});
-		list1 =list1+"</ul>";
-	    list2 =list2+"</ul>";
-	    list3 =list3+"</ul>";
-	    
-	    if (o1 == 1)
-		    full_text = full_text + list1;
-	    if (o2 == 1)
-	    	full_text = full_text + list2;
-	    if (o3 == 1)
-	    	full_text = full_text + list3;
-		$("#reunions").html(full_text);
+	    $("#tab-pendientes").html(tablist2);
+	    $("#tab-confirmadas").html(tablist1);
+	    $("#tab-rechazadas").html(tablist3);
 		setMoreButton();
 	}
 	
@@ -211,44 +224,18 @@ $(document).on("ready", function() {
 		show_data(JSON.parse(x));}
 	
 	function confirm(id_reunion, is_confirmed, group_name,group_slug, date){
-		//console.log(id_reunion+" "+is_confirmed);
 		sendAjax("/groups/setAssistance",
     			{id_reunion:id_reunion, is_confirmed: is_confirmed},
     			"#load_reunions",
     			function(data){
-    				var list1="<h3 id='confirmadas2'>Reuniones cofirmadas</h3><ul id='confirmadas'></ul>";
-					var list2="<h3 id='rechazadas2'>Reuniones rechazadas</h3><ul id='rechazadas'></ul>";
-    				if(is_confirmed == true){
-    					//console.log($('#confirmadas').html());
+    				if(is_confirmed == true){ //reuniones confirmadas
         				L = createList(1,group_name,group_slug,date,id_reunion);
-        				if($('#confirmadas').length){
-        					//console.log('si existe');
-        					list= $('#confirmadas').html();
-        					//console.log(list);
-        					//console.log(L);
-        					$('#confirmadas').html(list+L);
-        				}
-    					else{
-        					//console.log('no existe');
-        					$('#reunions').prepend(list1);
-        					$('#confirmadas').html(L);
-    					}
+        				$('#tab-confirmadas').append(L);
         				setRejectButton();
     				}
-        			else{
+        			else{  //reuniones rechazadas
             			L = createList(2,group_name,group_slug, date,id_reunion);
-            			if($('#rechazadas').length){
-        					//console.log('si existe');
-        					list= $('#rechazadas').html();
-        					//console.log(list);
-        					//console.log(L);
-        					$('#rechazadas').html(list+L);
-        				}
-    					else{
-        					//console.log('no existe');
-        					$('#reunions').append(list2);
-        					$('#rechazadas').html(L);
-    					}
+    					$('#tab-rechazadas').append(L);
             			setconfirmButton();
         			}
     				setMoreButton();			
@@ -274,7 +261,6 @@ $(document).on("ready", function() {
     	    			
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
-    				//setMoreButton();
     			}
     	);
 	}
@@ -366,7 +352,6 @@ $(document).on("ready", function() {
 			$('#reunion_'+getUrlVars()["r"]).animate({'background-color': '#eeeeee'},3500,function(){ });
 		}
 	}
-	//setAlertMessage('Titulo', 'Contenido');
 	chargeWindow();
 
 
