@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap.css">
         <style>
             body {
-                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+                padding-top: 90px; /* 60px to make the container go all the way to the bottom of the topbar */
             }
         </style>
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap-responsive.css">
@@ -26,33 +26,86 @@
         <script src="{{ STATIC_PREFIX }}js/vendor/modernizr-2.6.1.min.js"></script>
     </head>
     <body>
+        <div id="feed-option">
+        F
+        </div>
+        <div class="modal" id="feed-modal">
+            <div class="modal-header">
+                <button id="close-feed" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Env&iacute;anos tus comentarios</h3>
+            </div>
+            <div class="modal-body">
+                <p>Califica tu experiencia en Actarium y ayudanos a mejorar</p>
+                <div id="feed-imput">
+                <input type="radio" name="group1" value="Excelente"> Excelente
+                <input type="radio" name="group1" value="Aceptable"> Aceptable
+                <input type="radio" name="group1" value="Mala"> Mala
+            </div>
+                <textarea id="textComent" placeholder="Ejemplo: No puedo cerrar sesi&oacute;n en dispositivos m&oacute;viles"></textarea>
+            </div>
+            <div class="modal-footer">
+                <div id="twitter-button">
+                    <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+                </div>
+                <a href="#" class="btn" id="cancel-feed" >Cancelar</a>
+                <a href="#" class="btn btn-primary">Enviar</a>
+            </div>
+        </div>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
-		<header class="navbar navbar-fixed-top">
-			{% include "website/topBar.html" %}
-		</header>
+        <header class="navbar navbar-fixed-top">
+            {% include "website/topBar.html" %}
+        </header>
         <div id="body_container"  class="container">
             <div id="alert-message" class="alert alert-block" style="display: none">
-            <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
-              <h4></h4>
-              <p></p>
+                <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
+                <h4></h4>
+                <p></p>
             </div>
             <div id="alert-error" class="alert alert-error" style="display: none">
-            <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
-              <h4></h4>
-              <p></p>
+                <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
+                <h4></h4>
+                <p></p>
             </div>
             <div>
                 {%block body%}
                 {% endblock%}
             </div>
         </div> <!-- /container -->
-        <footer>
-            <img src="/static/img/logo_daiech.png" alt="Logo Daiech" /><br />
-            <a href="http://www.twitter.com/daiech" target="_blank">@Daiech</a><br/>
-            <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
+        <footer id="daiech-footer">
+            <div id="footer-bar">
+                <div class="white-bar">
+                    <p>Powered By:</p>
+                    <div class="footer-pic">
+                        <a href="http://www.daiech.com" target="_blank">
+                            <div id="daiech-foot" class="img-foot">
+                                
+                            </div>
+                        </a> 
+                    </div>
+                    <div class="footer-pic">
+                        <a href="http://www.parquesoftpereira.com" target="_blank">
+                            <div id="parque-foot" class="img-foot">
+                                
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="cred-footer">
+            <p>     
+                <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
+            </p>
+            <p>Todos los derechos reservados</p>
+            <p><script>
+                var f = new Date();
+                document.write(f.getFullYear());
+                </script>
+            </p>
+            </div>
         </footer>
+        
         <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>-->
         <script>window.jQuery || document.write('<script src="{{ STATIC_PREFIX }}js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
         <script src="{{ STATIC_PREFIX }}js/plugins.js"></script>
@@ -60,13 +113,14 @@
         <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap.min.js"></script>
         {% block js %}
         {% endblock%}
-		
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
-        //     var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
-        //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-        //     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-        //     s.parentNode.insertBefore(g,s)}(document,'script'));
+
+            //     var _gaq=[['_setAccount','UA-26046263-2'],['_trackPageview']];
+            //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            //     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            //     s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
     </body>
 </html>

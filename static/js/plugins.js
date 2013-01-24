@@ -49,13 +49,38 @@ function main(){
             $(this).children("i").removeClass("icon-chevron-up").addClass("icon-chevron-right")
         }
         else{
-            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up")
+            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up");
         }
         
     });
     //------ </On close activity>--------------/
 
+    //----------<On Menu hover>-------------------/
+    $(".navbar-element").hover(function(){
+        $(this).children("div.navbar-button-propierties").css({"height":"15px"}, 100);
+    },function(){
+        $(this).children("div.navbar-button-propierties").css({"height":"10px"}, 100);
+    });
+    //----------</On Menu hover>-------------------/
 
+    $("#drop-d-menu").on("click",function(){
+        $("#navbar-button-container").slideToggle("fast");
+    });
+    $("#drop-d-menu").on("click",function(){
+        $("#navbar-button-container").slideToggle("fast");
+    });
+
+    $("#feed-option").on("click", function(){
+        $("#feed-modal").animate({
+            'right':'0px'
+        });
+    });
+
+    $("#close-feed, #cancel-feed").on("click", function(e){
+        $("#feed-modal").animate({
+            'right':'-505px'
+        });
+    });
 }
 
 function setAlert(tittle, message, type){
@@ -72,10 +97,10 @@ function setAlert(tittle, message, type){
     
 }
 function setAlertError(t, m){
-    setAlert(t, m, '#alert-error')
+    setAlert(t, m, '#alert-error');
 }
 function setAlertMessage(t, m){
-    setAlert(t, m, '#alert-message')
+    setAlert(t, m, '#alert-message');
 }
 function sendAjax(url, params, load_elem, myCallback){
     $(load_elem).show().html('<img src="/static/img/load16.gif" />');

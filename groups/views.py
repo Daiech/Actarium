@@ -4,7 +4,6 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_signed
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
@@ -27,7 +26,7 @@ def groupsList(request):
     '''
     try:
         mygroups = groups.objects.filter(rel_user_group__id_user=request.user, rel_user_group__is_active=True)
-    except ObjectDoesNotExist:
+    except groups.DoesNotExist:
         mygroups = "Either the entry or blog doesn't exist."
 
     ctx = {'TITLE': "Actarium", "groups": mygroups}
@@ -149,7 +148,7 @@ def sendInvitationUser(email, user, group):
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
                 sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
@@ -372,9 +371,10 @@ def getGroupBySlug(slug):
         group = groups.objects.get(slug=slug)
     except groups.DoesNotExist:
         group = False
-        print "El grupo no existe"
+        raise Http404
     except Exception, e:
         group = False
+        raise Http404
         print "Error capturando grupo: %s " % e
     return group
 
@@ -504,6 +504,7 @@ def preparingToSign(members, minutes_id):
         return "Exception"
 
 
+@login_required(login_url='/account/login')
 def saveMinute(request, group, form, m_selected):
     '''
     Save the minutes in the tables of data base: minutes_type_1, minutes
@@ -670,7 +671,7 @@ def newReunion(request, slug):
                 myNewReunion = reunions(
                                id_convener=request.user,
                                date_reunion=df['date_reunion'],
-                               locale = df['locale'],
+                               locale=df['locale'],
                                id_group=q,
                                agenda=df['agenda'],
                              )
@@ -682,7 +683,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en "+ str(df['locale']) +" \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en " + str(df['locale']) + " \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -793,6 +794,7 @@ def getAssistance(id_minutes):
     return assistan
 
 
+@login_required(login_url='/account/login')
 def setAssistance(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -820,6 +822,7 @@ def setAssistance(request):
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+@login_required(login_url='/account/login')
 def getReunionData(request):
     if request.is_ajax():
         if request.method == 'GET':
