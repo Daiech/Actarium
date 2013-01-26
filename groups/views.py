@@ -614,7 +614,7 @@ def newMinutes(request, slug_group, id_reunion):
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
                     print reunion.agenda
-                    form = newMinutesForm(initial={"agenda": reunion.agenda})
+                    form = newMinutesForm(initial={"agenda": reunion.agenda, "location": reunion.locale})
                     print form
                     form.code = 123
                     confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
