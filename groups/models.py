@@ -71,7 +71,7 @@ class minutes_type(models.Model):
     description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now=True)
     id_creator = models.ForeignKey(User,  null=False, related_name='%(class)s_id_creator')
-    is_public = models.BooleanField()
+    is_public = models.BooleanField(default=False)
     is_customized = models.BooleanField()
 
     def __unicode__(self):
@@ -132,8 +132,8 @@ class feddback(models.Model):
         return "feedback: %s " % (self.title)
 
 
-class rel_user_minutes_signed(models.Model):
+class rel_user_minutes_assistance(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
-    is_signed_approved = models.IntegerField(default=0)
-    date_signed = models.DateTimeField(auto_now=True)
+    assistance = models.BooleanField()
+    date_assistance = models.DateTimeField(auto_now=True)
