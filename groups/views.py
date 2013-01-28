@@ -148,7 +148,7 @@ def sendInvitationUser(email, user, group):
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
                 sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
@@ -614,7 +614,7 @@ def newMinutes(request, slug_group, id_reunion):
                 try:
                     reunion = reunions.objects.get(id=id_reunion)
                     print reunion.agenda
-                    form = newMinutesForm(initial={"agenda": reunion.agenda})
+                    form = newMinutesForm(initial={"agenda": reunion.agenda, "location": reunion.locale})
                     print form
                     form.code = 123
                     confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
@@ -671,7 +671,7 @@ def newReunion(request, slug):
                 myNewReunion = reunions(
                                id_convener=request.user,
                                date_reunion=df['date_reunion'],
-                               locale = df['locale'],
+                               locale=df['locale'],
                                id_group=q,
                                agenda=df['agenda'],
                              )
@@ -683,7 +683,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en "+ str(df['locale']) +" \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.daiech.com' >Actarium.com</a>"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en " + str(df['locale']) + " \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -707,8 +707,8 @@ def newReunion(request, slug):
 @login_required(login_url='/account/login')
 def calendar(request):
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False)  # reuniones
-    my_reu_day = reunions.objects.filter(id_group__in=gr)  # reuniones para un dia
+    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
+    my_reu_day = reunions.objects.filter(id_group__in=gr).order_by("-date_convened")  # reuniones para un dia
     i = 0
     json_array = {}
     for reunion in my_reu_day:
@@ -733,10 +733,10 @@ def calendar(request):
 @login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False)  # reuniones
+    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
     dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
-    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max])  # reuniones para un dia
+    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
     i = 0
     json_array = {}
     for reunion in my_reu_day:
@@ -766,7 +766,7 @@ def getReunions(request):
             gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
             dateslug_min = str(make_aware(datetime.datetime.strptime(date + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
             dateslug_max = str(make_aware(datetime.datetime.strptime(date + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
-            my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max])  # reuniones para un dia
+            my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
             i = 0
             json_array = {}
             for reunion in my_reu_day:

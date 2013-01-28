@@ -1,9 +1,13 @@
 # Create your views here.
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.http import HttpResponseRedirect, HttpResponse
 import datetime
-from django.utils.timezone import make_aware, get_default_timezone, make_naive
+import re
+from django.utils.timezone import get_default_timezone, make_naive
 from groups.models import groups, invitations, reunions, assistance
+from django.utils import simplejson as json
+from website.models import feedBack
 
 
 def home(request):
@@ -38,6 +42,38 @@ def home(request):
         ctx = {'TITLE': "Actarium by Daiech"}
 
     return render_to_response('website/index.html', ctx, context_instance=RequestContext(request))
+
+
+def sendFeedBack(request):
+    '''
+    Formulario para feedback
+    '''
+    if request.is_ajax():
+        if request.method == 'GET':
+            print request.GET
+            rate = request.GET['rate']
+            comment = request.GET['comment']
+            mail = request.GET['email']
+            if(validateEmail(mail)):
+                feed = feedBack(type_feed=rate, email=mail, comment=comment)
+                feed.save()
+                response = {"feed_id": feed.id}
+            else:
+                response = {"error": "Correo invalido"}
+            return HttpResponse(json.dumps(response), mimetype="application/json")
+    else:
+        return HttpResponseRedirect("/")
+    return True
+
+
+def validateEmail(email):
+    if len(email) > 7:
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email):
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 def about(request):

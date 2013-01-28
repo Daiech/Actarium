@@ -33,7 +33,7 @@
                     </div>
                 </a>
             </li>
-
+            {% if user.is_authenticated %}
             <li class="">
                 <a href="/groups/calendar">
                     <div class="navbar-element">
@@ -49,22 +49,7 @@
                     </div>
                 </a>
             </li>
-            {% if user.is_authenticated %}
-            <li class="">
-                <a href="/account">
-                    <div class="navbar-element">
-                        <div class="navbar-item">
-                            <div class="ico-top"> 
-                                <img src="/static/img/ico-cuenta.png" alt="acerca"/>
-                            </div>
-                                
-                           
-                                <span class="top-text">Cuenta</span>
-                        </div>
-                        <div class="navbar-button-propierties navbar-select0"></div>
-                    </div>
-                </a>
-            </li>
+            
             {% endif %}
             <li class="">
                 <a href="/about">
@@ -77,7 +62,7 @@
                            
                                 <span class="top-text">Acerca</span>
                         </div>
-                        <div class="navbar-button-propierties navbar-select1"></div>
+                        <div class="navbar-button-propierties navbar-select0"></div>
                     </div>
                 </a>
             </li>
@@ -86,7 +71,7 @@
         {% if user.is_authenticated %}
         <div id="menu-login" class="btn-group pull-right">
             <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="icon-user"></i>
+                <img src="/static/img/icono_usuario.png" alt="ico-usuario" /> 
                 {% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
                 <span class="caret"></span>
             </a>
