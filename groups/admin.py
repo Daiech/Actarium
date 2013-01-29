@@ -11,3 +11,8 @@ admin.site.register(invitations)
 admin.site.register(rel_user_group)
 admin.site.register(admin_group)
 admin.site.register(rel_user_minutes_assistance)
+admin.site.register(user_role)
+admin.site.register(groups_permissions)
+admin.site.register(rel_role_group_permissions)
+admin.site.register(packages)
+

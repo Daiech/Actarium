@@ -21,6 +21,7 @@ class groups(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+    is_pro = models.BooleanField(default=False)
     id_group_type = models.ForeignKey(group_type, null=False, related_name='%(class)s_id_group_type')
     slug = models.SlugField(max_length=150, unique=True)
 
@@ -45,8 +46,13 @@ class invitations(models.Model):
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_group = models.ForeignKey(groups)
-    is_active = models.BooleanField(default=True)
+    is_member = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_approver = models.BooleanField(default=False)
+    is_secretary = models.BooleanField(default=False)
+    is_superadmin = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
         return "user: %s " % (self.id_user.id)
@@ -137,3 +143,64 @@ class rel_user_minutes_assistance(models.Model):
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
     assistance = models.BooleanField()
     date_assistance = models.DateTimeField(auto_now=True)
+    
+# Definicion del modelo para manerjo de roles de usuarios en grupos
+    
+class user_role(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    description = models.CharField(max_length=150, verbose_name="description")
+    date_joined = models.DateTimeField(auto_now=True)
+    
+class groups_permissions(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    code = models.CharField(max_length=150, verbose_name="code")
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField(auto_now=True)
+    
+class rel_role_group_permissions(models.Model):   
+    id_role = models.ForeignKey(user_role, null=False, related_name='%(class)s_id_role')
+    id_group_permission = models.ForeignKey(groups_permissions, null=False, related_name='%(class)s_id_group_permission')
+    
+# nueva configuracion para manejo de grupos Pro y finanzas
+
+class packages(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    number_groups_pro = models.IntegerField()
+    price = models.CharField(max_length=150, verbose_name="price")
+    is_visible = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now=True)
+    
+class billing(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_package = models.ForeignKey(packages,  null=False, related_name='%(class)s_id_package')
+    date_request = models.DateTimeField(auto_now=True)
+    groups_pro_available =  models.IntegerField()
+    is_active = models.BooleanField(default=False)
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+
+class organizations(models.Model): 
+    id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_admin')
+    logo_address = models.CharField(max_length=150, verbose_name="logo_address")
+    description = models.TextField(blank=True)
+    date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    
+class groups_pro(models.Model):
+    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_organization = models.ForeignKey(organizations,  null=False, related_name='%(class)s_id_organization')
+    id_billing = models.ForeignKey(billing,  null=False, related_name='%(class)s_id_billing')
+    is_active = models.BooleanField(default=True)
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
