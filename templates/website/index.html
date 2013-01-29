@@ -111,27 +111,7 @@
     <img id="logo-act-big" src="/static/img/logo_grande.png" alt="Logo Actarium"/>
     <p id="text-center"> la soluci&oacute;n empresarial para el registro de sus reuniones.</p>
 </div>
-<div id="info-act" style="display:none">
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    Aqu&iacute; consignaremos informaci&oacute;n de inter&eacute;s sobre Actarium.
-    <a href="/"><img id="arriba" src="/static/img/arrow-up.png" alt="arriba"/></a>
-</div>
+
 <div id="middle-bar">
     <div id="middle-down">
         <div class="pic-down">
@@ -149,14 +129,14 @@
             <div id="register-form" class="hidden">
                 <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
-                    <label for="id_username">Nombre de usuario</label>
-                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
-                    <label for="id_password">Contrase&ntilde;a</label>
-                    <input type="password" name="password" id="id_password" />
+                    <label for="id_username-login">Nombre de usuario</label>
+                    <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                    <label for="id_password-login">Contrase&ntilde;a</label>
+                    <input type="password" name="password" id="id_password-login" />
 
                     <div class="control-group">
                         <div class="controls">
-                            <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Log In</button>
+                            <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
                             <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
                         </div>
                     </div>
@@ -182,16 +162,16 @@
 
         <div id="right-panel">
             <div id="new-user" class="hidden">
-                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
+                <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
-                    <label for="id_username">Nombre de usuario:</label>
-                    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                    <label for="id_username-register">Nombre de usuario:</label>
+                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
                     <label for="id_email">Correo Electr&oacute;nico:</label>
-                    <input type="text" name="mail" id="id_email" />
-                    <label for="id_pasword1">Contraseña:</label>
-                    <input type="pasword" name="pasword1" id="id_pasword1" />
-                    <label for="id_pasword2">Contraseña(Confirmaci&oacute;n):</label>
-                    <input type="pasword" name="pasword2" id="id_pasword2" />
+                    <input type="text" name="email" id="id_email" />
+                    <label for="id_password1">Contraseña:</label>
+                    <input type="password" name="password1" id="id_pasword1" />
+                    <label for="id_password2">Contraseña(Confirmaci&oacute;n):</label>
+                    <input type="password" name="password2" id="id_pasword2" />
 
                     <div class="control-group">
                         <div class="controls">
@@ -248,7 +228,7 @@
 
     #middle-down{
         width:50px;
-        margin: 0 auto 0 auto;
+        margin: 0 auto;
     }
     #left-panel{
         display: block;
@@ -263,8 +243,8 @@
 
     #new-container{
         background-color: #E9E9E9;
-        height: 200px;
-        min-height: 200px;
+        height: 240px;
+        min-height: 240px;
         width: 100%;
         padding-bottom: 35px;
     }
@@ -374,11 +354,6 @@
 {%endblock%}
 {% block js %}
 <script>
-    $(".pic-down, #arriba, #logo-act-big").on("click",function(e){
-        e.preventDefault()
-        $("#info-act").slideToggle("fast")
-    })
-    
     $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
     $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
 

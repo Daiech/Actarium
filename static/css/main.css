@@ -240,11 +240,14 @@ header #navbar-button-container > ul li a {
     margin-right: 33px;
     
 }
-#log-sup{
-    background-color: white;
-    border-radius: 10px;
+#log-sup img{
+    width: 14px;
 }
-
+.dinline{
+    display: inline;
+    position: relative;
+    top: 1px;
+}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */
