@@ -227,7 +227,7 @@ header #navbar-button-container > ul li a {
 }
 #social-buttons{
     float: right;
-    padding-top: 11px;
+    margin-top: 22px;
 }
 .navbar-active-class{
     background-color: black;
