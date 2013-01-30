@@ -24,7 +24,7 @@
 				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
 			</li>
 		</ul>
-    	<article class="minute hoja">
+    	<article id="minute" class="minute hoja">
     		<header>
     			<h3>{{group.name}}</h3>
     		</header>
@@ -192,7 +192,7 @@
 		margin-top: 20px;
 		min-height: 100px;
 	}
-	.minute{
+	#minute, .minute{
 		border: solid thin #ddd;
 		background-color: #fff;
 		box-shadow: 8px 8px 6px -6px gray;

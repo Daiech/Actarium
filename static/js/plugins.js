@@ -40,31 +40,88 @@ function main(){
     });
     //------ </On Login Submit >--------------/
 
+    //----------<On Menu hover>-------------------/
+    $(".navbar-element").hover(function(){
+        $(this).children("div.navbar-button-propierties").css({"height":"15px"}, 100);
+    },function(){
+        $(this).children("div.navbar-button-propierties").css({"height":"10px"}, 100);
+    });
+    //----------</On Menu hover>-------------------/
 
-    //------ <On close activity >--------------/
-    $(".title-activity a.close-activity").on("click",function(e){
-        e.preventDefault();
-        $(this).parent().next().slideToggle();
-        if($(this).children("i").hasClass("icon-chevron-up")){
-            $(this).children("i").removeClass("icon-chevron-up").addClass("icon-chevron-right")
+    //----------------<>-------------------/
+    $("#drop-d-menu").on("click",function(){
+        $("#navbar-button-container").slideToggle("fast");
+    });
+    //----------------</>-------------------/
+
+    //----------------<feedback>-------------------/
+    $("#feed-option").on("click", function(){
+        $("#feed-modal").animate({
+            'right':'0px'
+        });
+    });
+    $("#close-feed, #cancel-feed").on("click", closeFeedBack);
+    function closeFeedBack(e) {
+        $("#feed-modal").animate({
+            'right':'-505px'
+        });
+    }
+    var num = 0;
+    $("#feed-imput > button.btn").on("click", function(){
+        num = $(this).val();
+        $("#textComent").focus();
+        ph = "";
+        switch(parseInt(num)){
+            case 0 : ph = "Escribenos tus comentarios..."; break;
+            case 1 : ph = "Tienes alguna idea para Actarium? Escribenos."; break;
+            case 2 : ph = "Encontraste un error? Escribenos"; break;
+            case 3 : ph = "Tienes una duda o una pregunta en general?"; break;
+            default: ph = "Error";
+        }
+        $("#textComent").attr({"placeholder": ph});
+    });
+    function enablendButton(e) {
+        if($("#textComent").val().length>0){
+            $("#send-feed-back").removeClass("disabled");
         }
         else{
-            $(this).children("i").removeClass("icon-chevron-right").addClass("icon-chevron-up")
+            $("#send-feed-back").addClass("disabled");
         }
-        
+    }
+    $("#textComent").on("keyup",enablendButton);
+    $("#send-feed-back").on("click",function(e){
+        e.preventDefault();
+        if(!$(this).hasClass("disabled")){
+            comment = $("#textComent");
+            mail = $("#fb-email");
+            params = {"rate": num, "comment": comment.val(), "email": mail.val()}
+            $("#send-feed-back").addClass("disabled");
+            sendAjax("/feed-back",params, "#load-feed-back", function(data) {
+                console.log(data)
+                if(data['error']){
+                    $("#send-feed-back").removeClass("disabled");
+                    mail.focus().parent().addClass("error")
+                }
+                else{
+                    setAlertMessage("Muchas gracias", "Tu mensaje ha sido enviado, te agradecemos por escribirnos y esperamos poder responderte pronto.")
+                    comment.val("");
+                    mail.parent().removeClass("error");
+                    $("#feed-imput > button.btn").removeClass("active");
+                    closeFeedBack();  
+                }
+            });//sendAjax
+        }
     });
-    //------ </On close activity>--------------/
-
-
+    //----------------</feedback>-------------------/
 }
 
 function setAlert(tittle, message, type){
     var l = message.length;
     var t=0;
     if (l===0) t=0;
-    else if (l<=50)  t=2000;
-    else if (l<=100) t=3000;
-    else if (l<=200) t=5000;
+    else if (l<=50)  t=3000;
+    else if (l<=100) t=5000;
+    else if (l<=200) t=6000;
     else if (l> 200) t=7000;
     $(type+" h4").html(tittle);
     $(type+" p").html(message);
@@ -72,10 +129,10 @@ function setAlert(tittle, message, type){
     
 }
 function setAlertError(t, m){
-    setAlert(t, m, '#alert-error')
+    setAlert(t, m, '#alert-error');
 }
 function setAlertMessage(t, m){
-    setAlert(t, m, '#alert-message')
+    setAlert(t, m, '#alert-message');
 }
 function sendAjax(url, params, load_elem, myCallback){
     $(load_elem).show().html('<img src="/static/img/load16.gif" />');

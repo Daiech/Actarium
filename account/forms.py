@@ -19,16 +19,17 @@ class RegisterForm(UserCreationForm):
     def save(self, commit=True):
         user = super(RegisterForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
+        user.first_name = self.cleaned_data["username"]
         if commit:
             user.save()
         return user
 
 
 class UserForm(forms.ModelForm):
-    email = forms.EmailField(label="Correo Electrónico", widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    username = forms.CharField(label="Nombre de usuario", widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    first_name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre'}))
-    last_name = forms.CharField(label="Apellido", widget=forms.TextInput(attrs={'placeholder': 'Apellido'}))
+    email = forms.EmailField(label="* Correo Electrónico", widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    username = forms.CharField(label="* Nombre de usuario", widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    first_name = forms.CharField(label="* Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre'}))
+    last_name = forms.CharField(label="Apellido", required=False, widget=forms.TextInput(attrs={'placeholder': 'Apellido'}))
 
     class Meta:
         model = User
