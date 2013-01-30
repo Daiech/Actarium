@@ -72,10 +72,12 @@
         </ul>
         {% if user.is_authenticated %}
         <div id="menu-login" class="btn-group pull-right">
-            <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#" title="Configuraci&oacute;n de cuenta">
                 <img src="/static/img/user_default.png" alt="ico-usuario" /> 
-                {% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
-                <span class="caret"></span>
+                <div class="dinline">
+                    {% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
+                    <span class="caret"></span>
+                </div>
             </a>
             <ul class="dropdown-menu">
                 {% if user.is_authenticated %}
