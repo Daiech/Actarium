@@ -1,0 +1,16 @@
+{% extends "asettings/settings_menu.html" %}
+
+{% block bodysettings %}
+<h3> Configuracion de Organizaciones </h3>
+<p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funcion es personalizar una organizacion para una acta.</p>
+
+{% endblock %}
+
+
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-organization").addClass("active");
+	});
+</script>
+{% endblock %}
