@@ -1,0 +1,43 @@
+{% extends "website/layout.html" %}
+
+
+{%block body%}
+<article class="row-fluid">
+    <h2>Configuraciones  </h2>
+    <hr>
+    <div class="span12">
+	    <section id="menu_settings" class="span3">
+	        <ul class="nav nav-pills nav-stacked">
+				<li id="settings-account" ><a href="/account">Cuenta</a></li>
+				<li id="settings-billing" ><a href="/settings/billing">Facturacion</a></li>
+				<li id="settings-organization" ><a href="/settings/organizations">Organizaciones</a></li>
+			</ul>
+	    </section>
+	    
+	    <section id="body_settings" class="span9">
+		   		{% block bodysettings %}{% endblock %}
+	    </section>
+	</div>
+   
+</article>
+{%endblock%}
+{%block style%}
+<style>
+   #menu_settings{
+   		/*width: 200px;
+   		float: left;*/
+   }
+   #body_settings{
+   		/*width: 900px;
+   		float: left;
+   		padding-left:20px;*/
+   }
+
+</style>
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
+{%endblock%}
+
+{% block js %}
+<script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
+{% block settings_js %}{% endblock  %}
+{% endblock %}

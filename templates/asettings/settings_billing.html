@@ -1,0 +1,16 @@
+{% extends "asettings/settings_menu.html" %}
+
+{% block bodysettings %}
+<h3> Configuracion de facturacion </h3>
+<p>En esta parte se muestra toda la informacion que tiene que ver con precios, promociones o paquetes, se podra adquirir un nuevo paquete y ver los paquetes activos.</p>
+
+{% endblock %}
+
+
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-billing").addClass("active");
+	});
+</script>
+{% endblock %}

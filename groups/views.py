@@ -148,7 +148,7 @@ def sendInvitationUser(email, user, group):
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitac&oacute;n."
                 sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
@@ -604,10 +604,10 @@ def newMinutes(request, slug_group, id_reunion):
                     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(save.code)
                     link = URL_BASE + url_new_minute
                     email_list = getEmailListByGroup(group)
-                    title = request.user.first_name + "(" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
+                    title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
                     content = request.user.first_name + "(" + request.user.username + ") ha creado una nueva acta en Actarium"
-                    content = content + "<br><br>Link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong>: <a href='" + link + "'>" + link + "</a><br><br>"
-                    content = content + "Revisa su contenido, y si asististe, apruebala.<br>"
+                    content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
+                    content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, content)
                     return HttpResponseRedirect(url_new_minute)
                 else:
@@ -694,7 +694,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en " + str(df['locale']) + " \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: <strong>" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -897,7 +897,7 @@ def getReunionData(request):
 
 
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por Daiech. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
         correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"
