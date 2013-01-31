@@ -435,18 +435,16 @@ FEED
 *****************************************************************************/
 
 #feed-option{
-    background-color: gray;
     color:white;
     position: absolute;
-    top: 200px;
-    right: 0px;
-    width: 30px;
-    height: 30px;
+    top: 250px;
+    right: -5px;
+    width: 50px;
     position: fixed;
 }
 #feed-option:hover{
     cursor: pointer;
-    background-color: gray;
+    /*background-color: gray;*/
 }
 #feed-modal{
     border-top-right-radius: 0px;
