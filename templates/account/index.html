@@ -1,9 +1,8 @@
-{% extends "website/layout.html" %}
+{% extends "asettings/settings_menu.html" %}
 {% block TITLE %}Actarium - Cuenta de Usuario{% endblock %}
 {% load gravatartag %}
-{% block body %}
+{% block bodysettings %}
 <article>
-    <h2>Cuenta</h2>
     <div class="uTop">
         <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
         Hola
@@ -71,7 +70,7 @@
 
 
 
-{% block style %}
+{% block settings_style %}
 <style>
     h2{
         margin-left: 10px;
@@ -84,9 +83,7 @@
         line-height: 1;
         margin: 5px;
     }
-    hr{
-        margin:10px;
-    }
+
     li hr{
         margin:20px;
     }
@@ -116,9 +113,11 @@
 </style>
 {% endblock %}
 
-{% block js %}
+{% block settings_js %}
 <script>
-    $("#menu-account").addClass("active");
+	$(document).on("ready", function() {
+		$("#settings-account").addClass("active");
+	});
 
     {% if dataUpdate %}
     setAlertMessage("Datos Actualizados","Tus datos fueron actualizados correctamente")

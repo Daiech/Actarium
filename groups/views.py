@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_signed
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
@@ -148,7 +148,7 @@ def sendInvitationUser(email, user, group):
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong>\n\n" + "ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitac&oacute;n."
                 sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
@@ -313,8 +313,8 @@ def deleteInvitation(request):
 
 def getMembersSigned(group, minutes_current):
     try:
-        members_signed = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
-    except rel_user_minutes_signed.DoesNotExist:
+        members_signed = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current)
+    except rel_user_minutes_assistance.DoesNotExist:
         members_signed = False
     except Exception, e:
         print "Error getMembersSigned: %s " % e
@@ -381,11 +381,9 @@ def getGroupBySlug(slug):
 
 def getMembersAssistance(group, minutes_current):
     try:
-        selected = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
-        s = list()
-        for m in selected:
-            s.append(int(m.id_user.id))
-        return getMembersOfGroupWithSelected(group, s)
+        selected = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=True)
+        no_selected = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=False)
+        return (selected, no_selected)
     except Exception, e:
         print e
         return None
@@ -410,21 +408,21 @@ def showMinutes(request, slug, minutes_code):
         ######## <ASISTENTES> #########
 
         ######## <ATTENDING> #########
-        try:
-            my_attending = rel_user_minutes_signed.objects.get(id_minutes=minutes_current, id_user=request.user)
-            my_attending = True if my_attending.is_signed_approved == 0 else False
-        except Exception, e:
-            print e
-            my_attending = False
+        # try:
+        #     my_attending = rel_user_minutes_assistance.objects.get(id_minutes=minutes_current, id_user=request.user)
+        #     my_attending = my_attending.assistance
+        # except Exception, e:
+        #     print e
+        #     my_attending = False
         ######## </ATTENDING> #########
 
         ######## <APPROVED LISTS> #########
-        missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
-        missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
-        approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
-        approved_list = 0 if len(approved_list) == 0 else approved_list
-        no_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
-        no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
+        # missing_approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
+        # missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
+        # approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
+        # approved_list = 0 if len(approved_list) == 0 else approved_list
+        # no_approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
+        # no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
         ######## </APPROVED LISTS> #########
 
         ######## <PREV and NEXT> #########
@@ -432,8 +430,10 @@ def showMinutes(request, slug, minutes_code):
         ######## </PREV and NEXT> #########
 
         ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
-        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "my_attending": my_attending,
-        "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list}
+        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance,
+        # "my_attending": my_attending,
+        # "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list
+        }
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
@@ -446,7 +446,7 @@ def setApprove(request):
             minutes_id = str(request.GET['m_id'])
             approved = 1 if int(request.GET['approve']) == 1 else 2
             try:
-                sign = rel_user_minutes_signed.objects.get(id_minutes=minutes_id, id_user=request.user)
+                sign = rel_user_minutes_assistance.objects.get(id_minutes=minutes_id, id_user=request.user)
                 sign.is_signed_approved = approved
                 sign.save()
             except Exception, e:
@@ -485,27 +485,38 @@ def getMembersOfGroupWithSelected(group, select):
     return (selected_members, no_selected_members)
 
 
-def preparingToSign(members, minutes_id):
+def setMinuteAssistance(minutes_id, members_selected, members_no_selected):
     '''
     Stored in the database records all users attending a reunion.
     '''
     a = list()
-    for m in members:
+    b = list()
+    for m in members_selected:
         a.append(
-            rel_user_minutes_signed(
+            rel_user_minutes_assistance(
                 id_user=m.id_user,
-                id_minutes=minutes_id
+                id_minutes=minutes_id,
+                assistance=True
+                )
+        )
+    for m in members_no_selected:
+        b.append(
+            rel_user_minutes_assistance(
+                id_user=m.id_user,
+                id_minutes=minutes_id,
+                assistance=False
                 )
         )
     try:
-        rel_user_minutes_signed.objects.bulk_create(a)
+        rel_user_minutes_assistance.objects.bulk_create(a)
+        rel_user_minutes_assistance.objects.bulk_create(b)
     except Exception, e:
         print e
         return "Exception"
 
 
 @login_required(login_url='/account/login')
-def saveMinute(request, group, form, m_selected):
+def saveMinute(request, group, form, m_selected, m_no_selected):
     '''
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
@@ -536,14 +547,14 @@ def saveMinute(request, group, form, m_selected):
                         code=df['code'],
                         id_extra_minutes=myNewMinutes_type_1,
                         id_group=group,
-                        id_type=minutes_type.objects.get(pk=1),
+                        id_type=minutes_type.objects.get(pk=1),  # pk=1 ==> Reunion
                     )
         myNewMinutes.save()
         id_user = request.user
         print "id_user: %s group: %s, code: %s" % (id_user, group.name, df['code'])
         saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
         # registra los usuarios que asistieron a la reunión en la que se creó el acta
-        preparingToSign(m_selected, myNewMinutes)
+        setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
         return myNewMinutes
     else:
         return False
@@ -586,17 +597,17 @@ def newMinutes(request, slug_group, id_reunion):
             select = request.POST.getlist('members[]')
             m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             if form.is_valid() and len(select) != 0:
-                save = saveMinute(request, group, form, m_selected)
+                save = saveMinute(request, group, form, m_selected, m_no_selected)
                 if save:
                     saved = True
                     error = False
                     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(save.code)
                     link = URL_BASE + url_new_minute
                     email_list = getEmailListByGroup(group)
-                    title = request.user.first_name + "(" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
+                    title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
                     content = request.user.first_name + "(" + request.user.username + ") ha creado una nueva acta en Actarium"
-                    content = content + "<br><br>Link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong>: <a href='" + link + "'>" + link + "</a><br><br>"
-                    content = content + "Revisa su contenido, y si asististe, apruebala.<br>"
+                    content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
+                    content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, content)
                     return HttpResponseRedirect(url_new_minute)
                 else:
@@ -683,7 +694,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: " + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + " en " + str(df['locale']) + " \n\n\n <br><br>Objetivos: \n\n" + str(df['agenda']) + "\n\n" + "<hr>Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a>"
+                    contenido = "La reunion se programó para la siguiente fecha y hora: <strong>" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -886,7 +897,7 @@ def getReunionData(request):
 
 
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por Daiech. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
         correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"

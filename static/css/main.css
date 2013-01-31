@@ -227,7 +227,7 @@ header #navbar-button-container > ul li a {
 }
 #social-buttons{
     float: right;
-    padding-top: 11px;
+    margin-top: 22px;
 }
 .navbar-active-class{
     background-color: black;
@@ -240,11 +240,14 @@ header #navbar-button-container > ul li a {
     margin-right: 33px;
     
 }
-#log-sup{
-    background-color: white;
-    border-radius: 10px;
+#log-sup img{
+    width: 14px;
 }
-
+.dinline{
+    display: inline;
+    position: relative;
+    top: 1px;
+}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */
@@ -432,18 +435,16 @@ FEED
 *****************************************************************************/
 
 #feed-option{
-    background-color: gray;
     color:white;
     position: absolute;
-    top: 200px;
-    right: 0px;
-    width: 30px;
-    height: 30px;
+    top: 250px;
+    right: -5px;
+    width: 50px;
     position: fixed;
 }
 #feed-option:hover{
     cursor: pointer;
-    background-color: gray;
+    /*background-color: gray;*/
 }
 #feed-modal{
     border-top-right-radius: 0px;

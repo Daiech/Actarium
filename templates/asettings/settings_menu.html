@@ -1,0 +1,58 @@
+{% extends "website/layout.html" %}
+
+
+{%block body%}
+<article class="row-fluid ">
+    <header id="settings-header" class="span12" data-spy="affix">
+    	<h2 >Configuraciones  </h2>
+    	<hr style="width: 1200px;">
+    </header>
+    	<div id="settings-all" class="span12">
+	  		<section id="settings-menu" class="span3" >
+		    	<div class=" bs-docs-sidebar" data-spy="affix">
+			        <ul class="nav nav-list bs-docs-sidenav ">
+						<li id="settings-account" ><a href="/account"><i class="icon-chevron-right"></i>Cuenta</a></li>
+						<li id="settings-billing" ><a href="/settings/billing"><i class="icon-chevron-right"></i>Facturacion</a></li>
+						<li id="settings-organization" ><a href="/settings/organizations"><i class="icon-chevron-right"></i>Organizaciones</a></li>
+			          
+			        </ul>
+	      		</div>
+	    </section>
+	    <section id="settings-container" class="span9">
+		   		{% block bodysettings %}{% endblock %}
+	    </section>
+	</div>
+   
+</article>
+{%endblock%}
+
+{% block style_libs %}
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/docs.css" />
+{%block settings_style_libs %}{% endblock %}
+{% endblock %}
+
+{%block style%}
+<style>
+	#settings-all{
+		margin-top: 70px;
+	}
+	#settings-menu {
+		padding-top:0px;
+	}
+	#settings-container {
+		margin-top:0px;
+	}
+	#settings-header{
+		color: #7a7a7a;
+		margin-top: 0px;
+		padding-top: 20px;
+		background-color: #E9E9E9;
+		background-image: url("/static/img/fondo_peq.jpg");
+	}
+</style>
+{%block settings_style%}{% endblock %}
+{%endblock%}
+
+{% block js %}
+{% block settings_js %}{% endblock  %}
+{% endblock %}
