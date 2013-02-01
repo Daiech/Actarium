@@ -24,6 +24,9 @@
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/bootstrap-responsive.css">
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/main.css">
         {%block style%}{%endblock%}
+        {% if not user.is_authenticated %}
+        <style type="text/css">#feed-option{top:435px;}</style>
+        {% endif %}
         <script src="{{ STATIC_PREFIX }}js/vendor/modernizr-2.6.1.min.js"></script>
     </head>
     <body>

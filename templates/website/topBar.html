@@ -1,24 +1,15 @@
 {% load gravatartag %}
 <div class="navbar-d">
- 
-
     <a href="/" class="" id="logo-sup">
-        <div id="logo-daiech-p">
-            
+        <div class="navbar-element">
+            <div class="navbar-item navbar-item-logo">
+                <div class="logo-center"><div id="logo-daiech-p"></div></div>
+            </div>
+            <div class="navbar-button-propierties navbar-select1"></div>
         </div>
     </a>
-    
-    <div id="social-buttons">
-        <a href="https://www.facebook.com/actarium" class="" ><div class="social-but" id="fb-but"></div></a>
-        <a href="https://www.twitter.com/actarium" class="" ><div class="social-but" id="gp-but"></div></a>   
-        <a href="https://plus.google.com/u/2/103573222326693941191/posts" class="">
-            <div class="social-but" id="tt-but"></div>
-        </a>   
-    </div>
-    <div id="top-button">
-        <button id="drop-d-menu">Menu</button>
-    </div>
-    <div class="navbar-button" id="navbar-button-container">
+
+    <div class="navbar-button b" id="navbar-button-container">
         <ul id="top-menu-style" class="">
             <li class="">
                 <a href="/groups">
@@ -70,8 +61,15 @@
             </li>
            
         </ul>
-        {% if user.is_authenticated %}
-        <div id="menu-login" class="btn-group pull-right">
+    </div>
+    <div id="social-buttons" class="mt20 pull-right">
+        <a href="https://www.facebook.com/actarium" class="" ><div class="social-but" id="fb-but"></div></a>
+        <a href="https://www.twitter.com/actarium" class="" ><div class="social-but" id="gp-but"></div></a>   
+        <a href="https://plus.google.com/u/2/103573222326693941191/posts" class="">
+            <div class="social-but" id="tt-but"></div>
+        </a>   
+    </div>
+    <div id="menu-login" class="btn-group mt20 pull-right">
             <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#" title="Configuraci&oacute;n de cuenta">
                 <img src="/static/img/user_default.png" alt="ico-usuario" /> 
                 <div class="dinline">
@@ -103,7 +101,6 @@
                 </form>
                 {% endif %}
             </ul>
-        </div>
-        {% endif %}
     </div>
+    <div id="ac-load" class="pull-right b mt20">loading...</div>
 </div>

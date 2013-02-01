@@ -107,14 +107,24 @@ body{
     background-color: #E9E9E9;
     background-image: url("/static/img/fondo_peq.jpg");
 }
-#navnavbar-button-container > ul{
-    position: relative;
+header #navbar-button-container > ul li a {
+    display:inline-block;
+    color:gray; 
+    margin: auto;
+    width:100%;
+    text-decoration:none;
+}
+#navbar-button-container{
+    display: inline;
+}
+#navbar-button-container > ul{
+    float:left;
+    display: block;
 }
 #logo-daiech-p{
     background-image: url('/static/img/texturas_menu2.png');
     background-position: -88px -31px;
     height: 45px;
-    margin-top: 10px;
     width: 131px;
 }
 .navbar-d{
@@ -134,13 +144,16 @@ body{
     float: left;
     padding: 0;
 }
+header div > #top-menu-style{
+    margin-left: 2px;
+}
 header div > #top-menu-style li{
     list-style-type: none;
     display: inline-block;
     height: 60px;
     width:100px;
     text-align: center;
-
+    margin: -1px;
 }
 .ico-top{
     top: 10px;
@@ -150,24 +163,35 @@ header div > #top-menu-style li{
     position: absolute;
     width: 32px;
 }
-
+.logo-center{
+    padding-top: 10px;
+}
 .navbar-element{
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     height: 70px;
     margin-top: 0px;
-    box-shadow: -1px 0px 15px rgba(0,0,0,0.3);
+    margin: 0;
+    box-shadow: -1px 0px 5px rgba(0,0,0,0.3);
     position: relative;
     top:0px;
 }
+.navbar-item-logo{
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-bottom: 0;
+    height: 53px;
+}
 .navbar-item{
-    background-image: url("/static/img/item-background.png");
-
-    background-position: -42px 0;
+    background-image: url("/static/img/textura-menu.png");
+    /*background-position: -42px 0;*/
     /*    background-size: 100px 10px;*/
     background-repeat: repeat;
     background-color: #eeeeee;
     height: 63px;
+}
+.navbar-item-hover{
+    background-image: url("/static/img/textura-menu-hover.png");
 }
 .navbar-item > span{
     font-size: 14px;
@@ -188,20 +212,6 @@ header div > #top-menu-style li{
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     box-shadow: 0px 1px 2px rgba(0,0,0,0.5) inset;
-}
-header #navbar-button-container > ul li a {
-    display:inline-block;
-    color:gray; 
-    margin: auto;
-    width:100%;
-    text-decoration:none;
-}
-#navbar-button-container{
-}
-#navbar-button-container > ul{
-    margin-left: 50px;/*
-    */    float:left;
-    display: block;
 }
 .social-but{
     height: 31px;
@@ -226,19 +236,16 @@ header #navbar-button-container > ul li a {
     background-position: -156px 0;
 }
 #social-buttons{
-    float: right;
-    margin-top: 22px;
 }
 .navbar-active-class{
     background-color: black;
 }
-#top-button{
-    display: none;
-}
 #menu-login{
+    margin-right: 20px;
     margin-top: 20px;
-    margin-right: 33px;
-    
+}
+.mt20{
+    margin-top: 20px;
 }
 #log-sup img{
     width: 14px;
@@ -247,6 +254,13 @@ header #navbar-button-container > ul li a {
     display: inline;
     position: relative;
     top: 1px;
+}
+#ac-load{
+    background-color: #dadada;
+    display: none;
+    margin-right: 15px;
+    padding: 5px 10px;
+    text-align:center;
 }
 /* **************************************************************************** 
 Termina barra superior Daiech
@@ -267,6 +281,7 @@ Footer
     overflow: hidden;
     position: relative;
     text-align: center;
+    z-index: -100;
 }
 #footer-bar{
     background-color: white;
@@ -432,12 +447,12 @@ FIN Imagenes de logueo
 
 /* ***************************************************************************
 FEED
-*****************************************************************************/
+********************************************************{{TITLE}}*********************/
 
 #feed-option{
     color:white;
     position: absolute;
-    top: 250px;
+    top: 200px;
     right: -2px;
     width: 32px;
     position: fixed;
