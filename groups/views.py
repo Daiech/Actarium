@@ -18,7 +18,7 @@ from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
 import locale
-locale.setlocale(locale.LC_ALL, '')
+# locale.setlocale(locale.LC_ALL, '')
 
 
 @login_required(login_url='/account/login')
@@ -688,6 +688,11 @@ def newReunion(request, slug):
                                id_group=q,
                                agenda=df['agenda'],
                              )
+#                print "Fechas- - - - - - - -  - - - -- - - - - - -  -- - - - - -"
+#                print df['date_reunion']
+#                print make_naive(df['date_reunion'],get_default_timezone())
+#                print datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")
+#                print str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d"))
                 myNewReunion.save()
                 relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
@@ -696,7 +701,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para el d&iacute;a <strong>" + dateTimeFormat(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                    contenido = "La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -837,69 +842,81 @@ def setAssistance(request):
 
 @login_required(login_url='/account/login')
 def getReunionData(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            id_reunion = str(request.GET['id_reunion'])
-            reunion = reunions.objects.get(pk=id_reunion)
-            convener = reunion.id_convener.username
-            date_convened = reunion.date_convened
-            date_reunion = reunion.date_reunion
-            locale = reunion.locale
-            group = reunion.id_group.name
-            id_group = reunion.id_group
-            agenda = reunion.agenda
-            is_done = reunion.is_done
-            group_slug = reunion.id_group.slug
-            assistants = rel_user_group.objects.filter(id_group=id_group)
-            assis_list = {}
-            i = 0
-            c = 0
-            for assistant in assistants:
-                try:
-                    confirm = assistance.objects.get(id_user=assistant.id_user, id_reunion=reunion.pk)
-                    is_confirmed = confirm.is_confirmed
-                    is_saved = 1
-                except assistance.DoesNotExist:
-                    is_confirmed = False
-                    is_saved = 0
-                if is_saved == 1:
-                    if is_confirmed == True:  # reuniones confirmadas
-                        c = "Asistir&aacute;"
-                    else:  # reuniones rechazadas
-                        c = "No asistir&aacute;"
-                else:  # reuniones pendientes por confirmar
-                    c = "Sin responder"
-                assis_list[i] = {'username': assistant.id_user.first_name + " (" + assistant.id_user.username + ")", "is_confirmed": c, "gravatar": showgravatar(assistant.id_user.email, 30)}
-                i = i + 1
-            iconf = 0
+#    if request.is_ajax():
+    if request.method == 'GET':
+        id_reunion = str(request.GET['id_reunion'])
+        reunion = reunions.objects.get(pk=id_reunion)
+        convener = reunion.id_convener.username
+        date_convened = reunion.date_convened
+        date_reunion = reunion.date_reunion
+        date_reunion = removeGMT(date_reunion)
+        locale = reunion.locale
+        group = reunion.id_group.name
+        id_group = reunion.id_group
+        agenda = reunion.agenda
+        is_done = reunion.is_done
+        group_slug = reunion.id_group.slug
+        assistants = rel_user_group.objects.filter(id_group=id_group)
+        assis_list = {}
+        i = 0
+        c = 0
+        for assistant in assistants:
             try:
-                my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-                my_confirmation = my_confirm.is_confirmed
-                if my_confirmation == True:
-                    iconf = 1
-                else:
-                    if my_confirmation == False:
-                        iconf = 2
+                confirm = assistance.objects.get(id_user=assistant.id_user, id_reunion=reunion.pk)
+                is_confirmed = confirm.is_confirmed
+                is_saved = 1
             except assistance.DoesNotExist:
-                    iconf = 3
-            reunion_data = {"convener": convener,
-               "date_convened": str(dateTimeFormat(date_convened)),
-               "date_reunion": str(dateTimeFormat(date_reunion)),
-               "group": group,
-               "agenda": agenda,
-               "locale": locale,
-               "is_done": is_done,
-               "assistants": assis_list,
-               "group_slug": group_slug,
-               "iconf": iconf
-           }
-    else:
-        reunion_data = "Error Calendar"
+                is_confirmed = False
+                is_saved = 0
+            if is_saved == 1:
+                if is_confirmed == True:  # reuniones confirmadas
+                    c = "Asistir&aacute;"
+                else:  # reuniones rechazadas
+                    c = "No asistir&aacute;"
+            else:  # reuniones pendientes por confirmar
+                c = "Sin responder"
+            assis_list[i] = {'username': assistant.id_user.first_name + " (" + assistant.id_user.username + ")", "is_confirmed": c, "gravatar": showgravatar(assistant.id_user.email, 30)}
+            i = i + 1
+        iconf = 0
+        try:
+            my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+            my_confirmation = my_confirm.is_confirmed
+            if my_confirmation == True:
+                iconf = 1
+            else:
+                if my_confirmation == False:
+                    iconf = 2
+        except assistance.DoesNotExist:
+                iconf = 3
+        reunion_data = {"convener": convener,
+           "date_convened": str(dateTimeFormatDb(date_convened)),
+           "date_reunion": str(dateTimeFormatDb(date_reunion)),
+           "group": group,
+           "agenda": agenda,
+           "locale": locale,
+           "is_done": is_done,
+           "assistants": assis_list,
+           "group_slug": group_slug,
+           "iconf": iconf
+       }
+#    else:
+#        reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
 
 
-def dateTimeFormat(datetime_var):
+def dateTimeFormatForm(datetime_var):
     return str(datetime.datetime.strftime(make_naive(datetime_var, get_default_timezone()), "%d de %B de %Y a las %I:%M %p"))
+
+
+def dateTimeFormatDb(datetime_var):
+    UTC_OFFSET_TIMEDELTA = datetime.datetime.utcnow() - datetime.datetime.now()
+    local_datetime = datetime.datetime.strptime(str(datetime_var), "%Y-%m-%d %H:%M:%S")
+    result_utc_datetime = local_datetime - UTC_OFFSET_TIMEDELTA
+    return str(result_utc_datetime.strftime("%d de %B de %Y a las %I:%M %p"))
+
+
+def removeGMT(datetime_var):
+    return datetime.datetime.strftime(datetime_var, "%Y-%m-%d %H:%M:%S")
 
 
 def sendEmail(mail_to, titulo, contenido):
