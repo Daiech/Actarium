@@ -42,8 +42,10 @@ function main(){
 
     //----------<On Menu hover>-------------------/
     $(".navbar-element").hover(function(){
+        $(this).children("div.navbar-item").addClass("navbar-item-hover");
         $(this).children("div.navbar-button-propierties").css({"height":"15px"}, 100);
     },function(){
+        $(this).children("div.navbar-item").removeClass("navbar-item-hover");
         $(this).children("div.navbar-button-propierties").css({"height":"10px"}, 100);
     });
     //----------</On Menu hover>-------------------/
