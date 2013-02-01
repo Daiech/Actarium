@@ -17,6 +17,8 @@ from account.templatetags.gravatartag import showgravatar
 from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
+import locale
+locale.setlocale(locale.LC_ALL, '')
 
 
 @login_required(login_url='/account/login')
@@ -605,7 +607,7 @@ def newMinutes(request, slug_group, id_reunion):
                     link = URL_BASE + url_new_minute
                     email_list = getEmailListByGroup(group)
                     title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
-                    content = request.user.first_name + "(" + request.user.username + ") ha creado una nueva acta en Actarium"
+                    content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
                     content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
                     content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, content)
@@ -694,7 +696,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para la siguiente fecha y hora: <strong>" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                    contenido = "La reunion se programó para el d&iacute;a <strong>" + dateTimeFormat(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -862,12 +864,12 @@ def getReunionData(request):
                     is_saved = 0
                 if is_saved == 1:
                     if is_confirmed == True:  # reuniones confirmadas
-                        c = "Asistirá"
+                        c = "Asistir&aacute;"
                     else:  # reuniones rechazadas
-                        c = "No asistirá"
+                        c = "No asistir&aacute;"
                 else:  # reuniones pendientes por confirmar
                     c = "Sin responder"
-                assis_list[i] = {'username': assistant.id_user.username, "is_confirmed": c}
+                assis_list[i] = {'username': assistant.id_user.first_name + " (" + assistant.id_user.username + ")", "is_confirmed": c, "gravatar": showgravatar(assistant.id_user.email, 30)}
                 i = i + 1
             iconf = 0
             try:
@@ -881,8 +883,8 @@ def getReunionData(request):
             except assistance.DoesNotExist:
                     iconf = 3
             reunion_data = {"convener": convener,
-               "date_convened": str(date_convened),
-               "date_reunion": str(date_reunion),
+               "date_convened": str(dateTimeFormat(date_convened)),
+               "date_reunion": str(dateTimeFormat(date_reunion)),
                "group": group,
                "agenda": agenda,
                "locale": locale,
@@ -894,6 +896,10 @@ def getReunionData(request):
     else:
         reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
+
+
+def dateTimeFormat(datetime_var):
+    return str(datetime.datetime.strftime(make_naive(datetime_var, get_default_timezone()), "%d de %B de %Y a las %I:%M %p"))
 
 
 def sendEmail(mail_to, titulo, contenido):

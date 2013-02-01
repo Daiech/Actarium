@@ -1,8 +1,56 @@
 {% extends "asettings/settings_menu.html" %}
 
 {% block bodysettings %}
-<h3> Configuracion de facturacion </h3>
-<p>En esta parte se muestra toda la informacion que tiene que ver con precios, promociones o paquetes, se podra adquirir un nuevo paquete y ver los paquetes activos.</p>
+<h3> Paquetes disponibles</h3>
+<p>A continuaci&oacute;n se muestra los paquetes que se encuentran disponibles en Actarium, a los cuales puedes acceder seleccionando el boton adquirir.</p>
+<br />
+<table class="table table-striped">
+<tr>
+	<th>Nombre del Paquete</th>
+	<th>Numero de grupos Pro</th>
+	<th>Precio</th>
+	<th>Acciones</th>
+	
+</tr>
+
+ {% for package in packages_list %}
+            <tr>
+                        <td >{{package.name}}</td>
+                        <td >{{package.number_groups_pro}}</td>
+                        <td >${{package.price}}/mes </td>
+                        <td> <a href="#" data-id-package="{{package.pk}}" data-gpa="{{package.number_groups_pro}}" class="request_btn btn btn-success">Adquirir</a></td>
+            </tr>
+
+{% endfor %}
+</table>
+
+<h3> Paquetes activos</h3>
+<p>A continuaci&oacute;n se muestra los paquetes que se encuentran activos actualmente</p>
+<br />
+<table class="table table-striped">
+	<tr>
+		<th>Nombre del Paquete</th>
+		<th>Grupos</th>
+		<th>Precio</th>
+		<th>Pago</th>
+		<th>Caducidad</th>
+		<th>Acciones</th>
+		
+	</tr>
+
+{% for billing in billing_list %}
+            <tr>
+                        <td >{{billing.id_package.name}}</td>
+                        <td >{{billing.groups_pro_available}}/{{billing.id_package.number_groups_pro}}</td>
+                        <td >${{billing.id_package.price}}/mes </td>
+                        <td> {{billing.date_start|date:"d M Y"}}</td>
+                        <td> {{billing.date_end|date:"d M Y"}}</td>
+                        <td> <a href="#" data-id-package="{{billing.pk}}" class="btn btn-info">Renovar</a></td>
+            </tr>
+
+{% endfor %}
+</table>
+
 
 {% endblock %}
 
@@ -11,6 +59,24 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#settings-billing").addClass("active");
+	});
+	$(".request_btn").click(function(e){
+		e.preventDefault();
+		id_package=$(this).attr("data-id-package")
+		gpa=$(this).attr("data-gpa")
+		/*console.log("idp:"+id_package+" gpa:"+gpa)*/
+    	sendAjax("/settings/requestPackage",
+    			{id_package:id_package,gpa:gpa},
+    			"#load_packages",
+    			function(data){
+        			console.log(data)
+	    			if (data=="True"){
+		    			console.log("si")
+		    		    alert("La solicitud ha sido enviada, te daremos respuesta lo mas pronto posible");
+	    			}
+    		}
+    	)
+	
 	});
 </script>
 {% endblock %}
