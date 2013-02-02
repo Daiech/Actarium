@@ -842,65 +842,66 @@ def setAssistance(request):
 
 @login_required(login_url='/account/login')
 def getReunionData(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        id_reunion = str(request.GET['id_reunion'])
-        reunion = reunions.objects.get(pk=id_reunion)
-        convener = reunion.id_convener.username
-        date_convened = reunion.date_convened
-        date_reunion = reunion.date_reunion
-        date_reunion = removeGMT(date_reunion)
-        locale = reunion.locale
-        group = reunion.id_group.name
-        id_group = reunion.id_group
-        agenda = reunion.agenda
-        is_done = reunion.is_done
-        group_slug = reunion.id_group.slug
-        assistants = rel_user_group.objects.filter(id_group=id_group)
-        assis_list = {}
-        i = 0
-        c = 0
-        for assistant in assistants:
+    if request.is_ajax():
+        if request.method == 'GET':
+            id_reunion = str(request.GET['id_reunion'])
+            reunion = reunions.objects.get(pk=id_reunion)
+            convener = reunion.id_convener.username
+            date_convened = reunion.date_convened
+            date_convened = removeGMT(date_convened)
+            date_reunion = reunion.date_reunion
+            date_reunion = removeGMT(date_reunion)
+            locale = reunion.locale
+            group = reunion.id_group.name
+            id_group = reunion.id_group
+            agenda = reunion.agenda
+            is_done = reunion.is_done
+            group_slug = reunion.id_group.slug
+            assistants = rel_user_group.objects.filter(id_group=id_group)
+            assis_list = {}
+            i = 0
+            c = 0
+            for assistant in assistants:
+                try:
+                    confirm = assistance.objects.get(id_user=assistant.id_user, id_reunion=reunion.pk)
+                    is_confirmed = confirm.is_confirmed
+                    is_saved = 1
+                except assistance.DoesNotExist:
+                    is_confirmed = False
+                    is_saved = 0
+                if is_saved == 1:
+                    if is_confirmed == True:  # reuniones confirmadas
+                        c = "Asistir&aacute;"
+                    else:  # reuniones rechazadas
+                        c = "No asistir&aacute;"
+                else:  # reuniones pendientes por confirmar
+                    c = "Sin responder"
+                assis_list[i] = {'username': assistant.id_user.first_name + " (" + assistant.id_user.username + ")", "is_confirmed": c, "gravatar": showgravatar(assistant.id_user.email, 30)}
+                i = i + 1
+            iconf = 0
             try:
-                confirm = assistance.objects.get(id_user=assistant.id_user, id_reunion=reunion.pk)
-                is_confirmed = confirm.is_confirmed
-                is_saved = 1
+                my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+                my_confirmation = my_confirm.is_confirmed
+                if my_confirmation == True:
+                    iconf = 1
+                else:
+                    if my_confirmation == False:
+                        iconf = 2
             except assistance.DoesNotExist:
-                is_confirmed = False
-                is_saved = 0
-            if is_saved == 1:
-                if is_confirmed == True:  # reuniones confirmadas
-                    c = "Asistir&aacute;"
-                else:  # reuniones rechazadas
-                    c = "No asistir&aacute;"
-            else:  # reuniones pendientes por confirmar
-                c = "Sin responder"
-            assis_list[i] = {'username': assistant.id_user.first_name + " (" + assistant.id_user.username + ")", "is_confirmed": c, "gravatar": showgravatar(assistant.id_user.email, 30)}
-            i = i + 1
-        iconf = 0
-        try:
-            my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-            my_confirmation = my_confirm.is_confirmed
-            if my_confirmation == True:
-                iconf = 1
-            else:
-                if my_confirmation == False:
-                    iconf = 2
-        except assistance.DoesNotExist:
-                iconf = 3
-        reunion_data = {"convener": convener,
-           "date_convened": str(dateTimeFormatDb(date_convened)),
-           "date_reunion": str(dateTimeFormatDb(date_reunion)),
-           "group": group,
-           "agenda": agenda,
-           "locale": locale,
-           "is_done": is_done,
-           "assistants": assis_list,
-           "group_slug": group_slug,
-           "iconf": iconf
-       }
-#    else:
-#        reunion_data = "Error Calendar"
+                    iconf = 3
+            reunion_data = {"convener": convener,
+               "date_convened": str(dateTimeFormatDb(date_convened)),
+               "date_reunion": str(dateTimeFormatDb(date_reunion)),
+               "group": group,
+               "agenda": agenda,
+               "locale": locale,
+               "is_done": is_done,
+               "assistants": assis_list,
+               "group_slug": group_slug,
+               "iconf": iconf
+           }
+    else:
+        reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
 
 
@@ -916,7 +917,13 @@ def dateTimeFormatDb(datetime_var):
 
 
 def removeGMT(datetime_var):
-    return datetime.datetime.strftime(datetime_var, "%Y-%m-%d %H:%M:%S")
+    # print "datetime valores  --- - - - - --- -- -- --- --- -"
+    # print datetime_var
+    dt= str(datetime_var)
+    # print dt
+    dt_s= dt[:19]
+    # print dt_s
+    return str(datetime.datetime.strptime("%s"%(dt_s), "%Y-%m-%d %H:%M:%S"))
 
 
 def sendEmail(mail_to, titulo, contenido):
