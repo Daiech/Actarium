@@ -1,7 +1,7 @@
 {% load gravatartag %}
 <div class="navbar-d">
     <a href="/" class="" id="logo-sup">
-        <div class="navbar-element">
+        <div id="actarium-logo" class="navbar-element">
             <div class="navbar-item navbar-item-logo">
                 <div class="logo-center"><div id="logo-daiech-p"></div></div>
             </div>
@@ -14,7 +14,7 @@
             {% if user.is_authenticated %}
             <li class="">
                 <a href="/groups">
-                    <div class="navbar-element">
+                    <div id="groups" class="navbar-element">
                         <div class="navbar-item">
                             <div id="ico-groups" class="menu-icons ico-top"></div>
                             <span class="top-text">Mis Grupos</span>
@@ -25,7 +25,7 @@
             </li>
             <li class="">
                 <a href="/groups/calendar">
-                    <div class="navbar-element">
+                    <div id="menu-reunions" class="navbar-element">
                         <div class="navbar-item">
                             <div id="ico-reunions" class="ico-top menu-icons"></div>
                             <span class="top-text">Reuniones</span>
@@ -37,7 +37,7 @@
             {% endif %}
             <li class="">
                 <a href="/blog">
-                    <div class="navbar-element">
+                    <div id="blog" class="navbar-element">
                         <div class="navbar-item">
                             <div id="ico-blog" class="ico-top menu-icons"></div>
                             <span class="top-text">Blog</span>
@@ -48,7 +48,7 @@
             </li>
             <li class="">
                 <a href="/help/faq">
-                    <div class="navbar-element">
+                    <div id="faq" class="navbar-element">
                         <div class="navbar-item">
                             <div id="ico-faqs" class="ico-top menu-icons"></div>
                             <span class="top-text">Faq</span>
@@ -59,7 +59,7 @@
             </li>
             <li class="">
                 <a href="/about">
-                    <div class="navbar-element">
+                    <div id="about" class="navbar-element">
                         <div class="navbar-item">
                             <div id="ico-about" class="ico-top menu-icons"></div>
                             <span class="top-text">Acerca</span>

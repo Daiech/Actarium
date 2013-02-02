@@ -27,6 +27,10 @@
 
 {% block js %}
 <script>
-    $("#menu-about").addClass("active")
+    $(document).on("ready",function(e){
+        $("#about").addClass("menu-active")
+        $("#about .navbar-item").addClass("navbar-item-hover");
+        $("#about .navbar-button-propierties").css({"height":"15px"}, 100);
+    });
 </script>
 {% endblock %}
