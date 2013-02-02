@@ -15,12 +15,8 @@
                 <a href="/groups">
                     <div class="navbar-element">
                         <div class="navbar-item">
-                            <div class="ico-top"> 
-                                <img src="/static/img/ico-grupos.png" alt="acerca"/>
-                            </div>
-                                
-                           
-                                <span class="top-text">Mis Grupos</span>
+                            <div id="ico-groups" class="menu-icons ico-top"></div>
+                            <span class="top-text">Mis Grupos</span>
                         </div>
                         <div class="navbar-button-propierties navbar-select0"></div>
                     </div>
@@ -31,12 +27,8 @@
                 <a href="/groups/calendar">
                     <div class="navbar-element">
                         <div class="navbar-item">
-                            <div class="ico-top"> 
-                                <img src="/static/img/ico-reuniones.png" alt="acerca"/>
-                            </div>
-                                
-                           
-                                <span class="top-text">Reuniones</span>
+                            <div id="ico-reunions" class="ico-top menu-icons"></div>
+                            <span class="top-text">Reuniones</span>
                         </div>
                         <div class="navbar-button-propierties navbar-select1"></div>
                     </div>
@@ -45,15 +37,33 @@
             
             {% endif %}
             <li class="">
+                <a href="/blog">
+                    <div class="navbar-element">
+                        <div class="navbar-item">
+                            <div id="ico-blog" class="ico-top menu-icons"></div>
+                            <span class="top-text">Blog</span>
+                        </div>
+                        <div class="navbar-button-propierties navbar-select0"></div>
+                    </div>
+                </a>
+            </li>
+            <li class="">
+                <a href="/help/faq">
+                    <div class="navbar-element">
+                        <div class="navbar-item">
+                            <div id="ico-faqs" class="ico-top menu-icons"></div>
+                            <span class="top-text">Faq</span>
+                        </div>
+                        <div class="navbar-button-propierties navbar-select1"></div>
+                    </div>
+                </a>
+            </li>
+            <li class="">
                 <a href="/about">
                     <div class="navbar-element">
                         <div class="navbar-item">
-                            <div class="ico-top"> 
-                                <img src="/static/img/ico-acerca.png" alt="acerca"/>
-                            </div>
-                                
-                           
-                                <span class="top-text">Acerca</span>
+                            <div id="ico-about" class="ico-top menu-icons"></div>
+                            <span class="top-text">Acerca</span>
                         </div>
                         <div class="navbar-button-propierties navbar-select0"></div>
                     </div>
@@ -63,9 +73,9 @@
         </ul>
     </div>
     <div id="social-buttons" class="mt20 pull-right">
-        <a href="https://www.facebook.com/actarium" class="" ><div class="social-but" id="fb-but"></div></a>
-        <a href="https://www.twitter.com/actarium" class="" ><div class="social-but" id="gp-but"></div></a>   
-        <a href="https://plus.google.com/u/2/103573222326693941191/posts" class="">
+        <a href="https://www.facebook.com/actarium" target="_blank"><div class="social-but" id="fb-but"></div></a>
+        <a href="https://www.twitter.com/actarium" target="_blank"><div class="social-but" id="gp-but"></div></a>
+        <a href="https://plus.google.com/u/2/103573222326693941191/posts" target="_blank">
             <div class="social-but" id="tt-but"></div>
         </a>   
     </div>

@@ -17,7 +17,7 @@ from account.templatetags.gravatartag import showgravatar
 from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
-import locale
+# import locale
 # locale.setlocale(locale.LC_ALL, '')
 
 
@@ -917,17 +917,13 @@ def dateTimeFormatDb(datetime_var):
 
 
 def removeGMT(datetime_var):
-    # print "datetime valores  --- - - - - --- -- -- --- --- -"
-    # print datetime_var
-    dt= str(datetime_var)
-    # print dt
-    dt_s= dt[:19]
-    # print dt_s
-    return str(datetime.datetime.strptime("%s"%(dt_s), "%Y-%m-%d %H:%M:%S"))
+    dt = str(datetime_var)
+    dt_s = dt[:19]
+    return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
 
 
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a>, <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
         correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"
