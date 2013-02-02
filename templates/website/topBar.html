@@ -11,6 +11,7 @@
 
     <div class="navbar-button b" id="navbar-button-container">
         <ul id="top-menu-style" class="">
+            {% if user.is_authenticated %}
             <li class="">
                 <a href="/groups">
                     <div class="navbar-element">
@@ -22,7 +23,6 @@
                     </div>
                 </a>
             </li>
-            {% if user.is_authenticated %}
             <li class="">
                 <a href="/groups/calendar">
                     <div class="navbar-element">
@@ -34,7 +34,6 @@
                     </div>
                 </a>
             </li>
-            
             {% endif %}
             <li class="">
                 <a href="/blog">
