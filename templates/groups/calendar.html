@@ -152,9 +152,11 @@
 
 {% block js %}
 <script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
-<script>$("#menu-reunions").addClass("active")</script>
 <script type="text/javascript" ><!--
 $(document).on("ready", function() {
+	$("#menu-reunions").addClass("menu-active")
+	$("#menu-reunions .navbar-item").addClass("navbar-item-hover");
+    $("#menu-reunions .navbar-button-propierties").css({"height":"15px"}, 100);
 	
 	var events = [
 		{% for reunion in reunions %}

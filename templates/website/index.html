@@ -352,9 +352,14 @@
 {%endblock%}
 {% block js %}
 <script>
-    $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
-    $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
-
+    $(document).on("ready",function(){
+        $("#actarium-logo").addClass("menu-active")
+        $("#logo-sup .navbar-item").addClass("navbar-item-hover");
+        $("#logo-sup .navbar-button-propierties").css({"height":"15px"}, 100);
+        $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
+        $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
+    });
+    
     function login(e){
         /*  Muestra el formulario para iniciar sesion
             Oculta el formulario de registro
