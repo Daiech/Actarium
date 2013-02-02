@@ -140,10 +140,6 @@ header #navbar-button-container > ul li a {
     height: 60px;
     padding-top: 0;
 }
-#logo-sup{
-    float: left;
-    padding: 0;
-}
 header div > #top-menu-style{
     margin-left: 2px;
 }
@@ -162,6 +158,13 @@ header div > #top-menu-style li{
     margin: auto;
     position: absolute;
     width: 32px;
+}
+#logo-sup{
+    float: left;
+    padding: 0;
+}
+#logo-sup > .navbar-element{
+    /*box-shadow: none;*/
 }
 .logo-center{
     padding-top: 10px;
@@ -262,6 +265,32 @@ header div > #top-menu-style li{
     padding: 5px 10px;
     text-align:center;
 }
+.top-text{
+    /*font-weight: bold;*/
+}
+.menu-icons{
+    background-image: url("/static/img/iconos.png");
+    width: 26px;
+    height: 26px;
+}
+#ico-groups{
+    background-position: 0 0;
+}
+#ico-reunions{
+    background-position: -35px 0;
+    width: 28px;
+}
+#ico-blog{
+    background-position: -72px 0;
+}
+#ico-faqs{
+    background-position: -107px 0;
+    width: 28px;
+}
+#ico-about{
+    background-position: -150px 0;
+    width: 24px;
+}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */
@@ -281,12 +310,12 @@ Footer
     overflow: hidden;
     position: relative;
     text-align: center;
-    z-index: -100;
+    width: 100%;
 }
 #footer-bar{
     background-color: white;
     background-image: url("/static/img/fondo_peq.jpg");
-    margin-top: 50px;
+    margin-top: 20px;
     width: 100%;
     height: 80px;
     padding-top: 12px;
@@ -294,15 +323,20 @@ Footer
 .white-bar{
     color: black;
     display:block;
-    margin:auto;
+    margin:0 auto;
     overflow: hidden;
     text-align: center;
-    width: 262px;
+    width: 25%;
+}
+.white-bar > div{
+    margin: 0 auto;
+    overflow: hidden;
+    width: 100%;
 }
 .footer-pic{
-    float:left;
+    /*float:left;*/
     height: 60px;
-    position: relative;
+    /*position: relative;*/
     width: 131px;
 }
 #daiech-footer a , #daiech-footer a:visited ,#daiech-footer a:link{
@@ -430,15 +464,14 @@ Imagenes de logueo
         background-position: -363px -163.413px;
         height: 27.749px;
         width: 42.22px;
+        margin-top: -1px;
     }
     #pic-log-left{
-    
-    float:right;
- }
- #pic-log-right{
-    
-    float:left;
- }
+        float:right;
+     }
+     #pic-log-right{
+        float:left;
+     }
 
 /* ***************************************************************************
 FIN Imagenes de logueo
@@ -451,11 +484,11 @@ FEED
 
 #feed-option{
     color:white;
-    position: absolute;
     top: 200px;
     right: -2px;
     width: 32px;
     position: fixed;
+    z-index: 1000;
 }
 #feed-option:hover{
     cursor: pointer;
@@ -864,6 +897,9 @@ only screen and (min-resolution: 144dpi) {
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
+    .white-bar{
+        width: 30%;
+    }
 }
 @media (min-width: 980px) and (max-width: 1280px) {
     .columnaD{
@@ -876,12 +912,12 @@ only screen and (min-resolution: 144dpi) {
         margin-bottom: 26px;
     }
     #social-buttons{
-    display: visible;
+        display: visible;
+    }
+    .white-bar{
+        width: 27%;
+    }
 }
-}
-
-
-
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -898,12 +934,12 @@ only screen and (min-resolution: 144dpi) {
     .navbar-fixed-top {
         margin-bottom: 26px;
     }
-
-
-
-#social-buttons{
-    display: visible;
-}
+    .white-bar{
+        width: 40%
+    }
+    #social-buttons{
+        display: visible;
+    }
 
 
 }
@@ -912,14 +948,13 @@ only screen and (min-resolution: 144dpi) {
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     body {
-padding-right: 0px;
-padding-left: 0px;
-}
-.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-margin-right: 0px;
-margin-left: 0px;
-}
-    
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
     .columnaI{
         width: 100%;
     }.columnaD{
@@ -939,77 +974,77 @@ margin-left: 0px;
         margin-bottom: 26px;
     }
     .info-pics {
-    width: 100%;
-}
+        width: 100%;
+    }
+     #left-bubble{
+        left: 109px;
+        top: -31px;
 
- #left-bubble{
- 
-left: 109px;
-top: -31px;
-
- }
- #right-bubble{
-    top: -30px;
-    left: -9px;
- }
- #social-buttons{
-    display: visible;
-}
-
-    
+     }
+     #right-bubble{
+        top: -30px;
+        left: -9px;
+     }
+     #social-buttons{
+        display: visible;
+    }
+    .white-bar{
+        width: 55%
+    }
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     body {
-padding-right: 0px;
-padding-left: 0px;
-}
-.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-margin-right: 0px;
-margin-left: 0px;
-}
- #left-bubble{
- 
-left: 109px;
-top: -31px;
-
- }
- #right-bubble{
-    top: -30px;
-    left: -9px;
- }
- .pic-log{
-    width: 166px;
-    position: absolute;
- }
- #pic-log-left{
-    
-    float:left;
- }
- #pic-log-right{
-    
-    float:right;
- }
-.navbar-element{
-    height: 47px;
-}
-.navbar-item{
-    height: 37px;
-}
-.ico-top{
-    top: 0px;
-}
-.navbar-item > span {
-    top: 19px;
-}
-#navbar-button-container > ul {
-    margin-top: 63px;
-}
-#social-buttons{
-    display: none;
-}
-   
+        padding-right: 0px;
+        padding-left: 0px;
     }
+    .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+     #left-bubble{
+        left: 109px;
+        top: -31px;
+     }
+     #right-bubble{
+        top: -30px;
+        left: -9px;
+     }
+     .pic-log{
+        width: 166px;
+        position: absolute;
+     }
+     #pic-log-left{
+        
+        float:left;
+     }
+     #pic-log-right{
+        
+        float:right;
+     }
+    .navbar-element{
+        height: 47px;
+    }
+    .navbar-item{
+        height: 37px;
+    }
+    .ico-top{
+        top: 0px;
+    }
+    .navbar-item > span {
+        top: 19px;
+    }
+    #navbar-button-container > ul {
+        margin-top: 63px;
+    }
+    #social-buttons{
+        display: none;
+    }
+    .white-bar{
+        width: 80%;
+    }
+   
+}
     /*==================================================*/
     /*                  Cierra Responsive               */                    
     /*==================================================*/
