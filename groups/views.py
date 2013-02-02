@@ -678,12 +678,14 @@ def newReunion(request, slug):
             if form.is_valid():
                 df = {
                     'date_reunion': form.cleaned_data['date_reunion'],
+                    'title': form.cleaned_data['title'],
                     'locale': form.cleaned_data['locale'],
                     'agenda': form.cleaned_data['agenda'],
                 }
                 myNewReunion = reunions(
                                id_convener=request.user,
                                date_reunion=df['date_reunion'],
+                               title=df['title'],
                                locale=df['locale'],
                                id_group=q,
                                agenda=df['agenda'],
@@ -701,7 +703,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                    contenido = "Reunion: <strong>"+str(df['title'])+"</strong><br><br>La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -710,7 +712,7 @@ def newReunion(request, slug):
                                date_reunion=df['date_reunion'],
                                id_group=q,
                                agenda=df['agenda'])
-                saveActionLog(request.user, 'NEW_REUNION', "id_reunion: %s grupo: %s" % (id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (str(df['title']),id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
             form = newReunionForm()
@@ -737,7 +739,7 @@ def calendar(request):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved, "title": reunion.title}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -765,7 +767,7 @@ def calendarDate(request, slug=None):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved}
+        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved, 'title': reunion.title}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -795,7 +797,7 @@ def getReunions(request):
                 except assistance.DoesNotExist:
                     is_confirmed = False
                     is_saved = 0
-                json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved}
+                json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved, "title": reunion.title}
                 i = i + 1
             response = json_array
     else:
@@ -852,6 +854,7 @@ def getReunionData(request):
             date_reunion = reunion.date_reunion
             date_reunion = removeGMT(date_reunion)
             locale = reunion.locale
+            title = reunion.title
             group = reunion.id_group.name
             id_group = reunion.id_group
             agenda = reunion.agenda
@@ -895,6 +898,7 @@ def getReunionData(request):
                "group": group,
                "agenda": agenda,
                "locale": locale,
+               "title": title,
                "is_done": is_done,
                "assistants": assis_list,
                "group_slug": group_slug,
