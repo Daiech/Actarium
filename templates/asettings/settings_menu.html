@@ -2,25 +2,25 @@
 
 
 {%block body%}
-<article class="row-fluid ">
-    <header id="settings-header" class="span12" data-spy="affix">
+<article class="">
+    <header class="">
     	<h2 >Configuraciones  </h2>
-    	<hr style="width: 1200px;">
+    	<hr>
     </header>
-    	<div id="settings-all" class="span12">
-	  		<section id="settings-menu" class="span3" >
-		    	<div class=" bs-docs-sidebar" data-spy="affix">
-			        <ul class="nav nav-list bs-docs-sidenav ">
-						<li id="settings-account"      ><a href="/account"><i class="icon-chevron-right"></i>Cuenta</a></li>
-						<li id="settings-billing"      ><a href="/settings/billing"><i class="icon-chevron-right"></i>Facturacion</a></li>
-						<li id="settings-organization" ><a href="/settings/organizations"><i class="icon-chevron-right"></i>Organizaciones</a></li>
-				        {% if user.is_staff %}
-	                    <li id="settings-actions"      ><a href="/actions"><i class="icon-chevron-right"></i>Acciones</a></li>
-	                    {% endif %} 
-			        </ul>
-	      		</div>
-	    </section>
-	    <section id="settings-container" class="span9">
+	<div class="row-fluid">
+  		<section id="settings-menu" class="span3" >
+	    	<div class="bs-docs-sidebar">
+		        <ul class="nav nav-list bs-docs-sidenav ">
+					<li id="settings-account"      ><a href="/account"><i class="icon-chevron-right"></i>Cuenta</a></li>
+					<li id="settings-billing"      ><a href="/settings/billing"><i class="icon-chevron-right"></i>Facturacion</a></li>
+					<li id="settings-organization" ><a href="/settings/organizations"><i class="icon-chevron-right"></i>Organizaciones</a></li>
+			        {% if user.is_staff %}
+                    <li id="settings-actions"      ><a href="/actions"><i class="icon-chevron-right"></i>Acciones</a></li>
+                    {% endif %} 
+		        </ul>
+      		</div>
+    	</section>
+	    <section id="settings-container" class="span9 b">
 		   		{% block bodysettings %}{% endblock %}
 	    </section>
 	</div>
@@ -35,21 +35,21 @@
 
 {%block style%}
 <style>
-	#settings-all{
-		margin-top: 70px;
+	section{padding: 0}
+	#settings-menu ul{
+		margin: 0;
 	}
-	#settings-menu {
-		padding-top:0px;
-	}
-	#settings-container {
-		margin-top:0px;
+	#settings-container{
+		background-color: #fff;
+		padding: 20px 15px;
+		border-radius: 5px;
 	}
 	#settings-header{
 		color: #7a7a7a;
 		margin-top: 0px;
-		padding-top: 20px;
-		background-color: #E9E9E9;
-		background-image: url("/static/img/fondo_peq.jpg");
+		/*padding-top: 20px;*/
+		/*background-color: #E9E9E9;*/
+		/*background-image: url("/static/img/fondo_peq.jpg");*/
 	}
 </style>
 {%block settings_style%}{% endblock %}

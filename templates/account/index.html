@@ -2,7 +2,7 @@
 {% block TITLE %}Actarium - Cuenta de Usuario{% endblock %}
 {% load gravatartag %}
 {% block bodysettings %}
-<article>
+<div>
     <div class="uTop">
         <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
         Hola
@@ -64,7 +64,7 @@
 
     <p>Eres miembro desde el {{ user.date_joined }} </p>
     <p>Ultimo logueo: {{ user.last_login}}.</p>
-</article>
+</div>
 
 {% endblock%}
 
@@ -72,11 +72,8 @@
 
 {% block settings_style %}
 <style>
-    h2{
-        margin-left: 10px;
-    }
     .uTop{
-        padding:10px;
+        /*padding:10px;*/
     }
     article p{
         font-size: 12px;

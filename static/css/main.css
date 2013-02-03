@@ -565,12 +565,10 @@ article{
     padding-bottom: 20px;
     width: 100%;
 }
-article > header{
-    margin: 20px;
-}
-.row-fluid{
-    width:auto;
-}
+#body-container > article{
+        padding-top:20px;
+        margin-top: 20px;
+    }
 #body_container{
     /*border:solid thin gray;*/
     margin-top:-20px;
@@ -613,7 +611,6 @@ article ul.onOver li:hover{
     box-shadow: 1px 1px 1px rgba(255,255,255,0.5);
 }
 .containterMargin{
-    background-image: url("/static/img/fondo_peq.jpg");
     margin:20px;
 }
 
