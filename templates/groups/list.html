@@ -5,23 +5,19 @@
 <article>
     <div class="row-fluid">
         <h2>Tus Grupos</h2>
-        <!-- <div class="btnSup">
-            <a href="/groups/new" class="btn btn-large"><i class="icon-book"></i>Crear Grupo</a>
-        </div> -->
+        <div class="btnSup">
+            <a href="/groups/new" class="btn"><i class="icon-book"></i>Crear Grupo</a>
+        </div>
         <hr>
         <section class="row-fluid">
             <ul class="nav onOver span12">
                 {% for group in groups %}
-
                 <li class="img-rounded">
-
                     <a class="" href="/groups/{{group.slug}}">
                         <div class="">
                             <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
                             <span class="groupInfo">{{group.name|slice:"30"|lower|capfirst}}</span>
                             <span class="colorText"> - {{group.description|slice:"80"|safe|lower|capfirst}}</span>
-
-
                             <div class="pull-right button">
                                 <button data-action="editar" class="btn_block"><i class="icon-pencil"></i></button>
                                 <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>

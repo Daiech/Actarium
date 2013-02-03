@@ -1,51 +1,120 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - Actas{% endblock %}
+{% block TITLE %}Actarium - Crear Grupo{% endblock %}
 
 {%block body%}
 <article>
-    <div class="containterMargin">
+    <div class="row-fluid">
         <h2>Crear nuevo grupo</h2>
-        <p>Pon un nombre y una descripci&oacute;n a tu grupo y empieza a disfrutar de los
-            beneficios de <strong>ACTARIUM</strong></p>
+        <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-            <table>
-                {{newGroupForm.as_table}} 
-                <tr>
-                    <td></td>
-                    <td>
-                        <button type="submit" class="btn btn-success btn-large btn-block">Guardar</button>
-                    </td>
-                </tr>
-            </table>
-
-
+            <div id="form-new-group" class="">
+                <div id="sel-type-group" class="">
+                    <div class="type-group">
+                        <input id="free" value="0" type="radio" name="type-group" class="btn btn-info pull-left" checked> 
+                        <div>
+                            <label for="free">
+                                <i class="icon-flag"></i>
+                                Grupo Free
+                            </label>
+                            <div class="text-info-smal">Gestiona tus reuniones y actas de forma f&aacute;cil y gratuita.</div>
+                        </div>
+                    </div>
+                    <div class="type-group">
+                        <input id="pro" value="1" type="radio" name="type-group" class="btn btn-info pull-left">
+                        <div>
+                            <label for="pro">
+                                <i class="icon-cog"></i>
+                                Grupo Pro
+                            </label>
+                            <div class="text-info-smal">Crea organizaciones, sube actas anteriores, descargalas cuando quieras.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="data-pro hidden">
+                    <label for="sel-org">Organizaci&oacute;n:</label>
+                    <select id="sel-org">
+                        {% for org in organizations%}
+                        <option value="{{org.id}}">{{org.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <a href="/admin/groups/organizations/"> + Crear organizaci&oacute;n</a>
+                </div>
+                <div class="data-pro hidden">
+                    <label for="">Paquete:</label>
+                    <select>
+                        {% for bill in billing%}
+                        <option value="{{bill.id}}">{{bill.id_package.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <a href="/settings/billing"> + Adquirir paquete</a>
+                </div>
+                <div>
+                    <ul class="unstyled">
+                    {{newGroupForm.as_ul}}
+                    </ul>
+                </div>
+                <div>
+                    <input type="hidden" id="type-group-value" name="type-group" value="0">
+                    <button type="submit" class="btn btn-success btn-large">Guardar</button>
+                    <a href="/groups" class="btn-link btn-small">Ver mis grupos</a>
+                </div>
+            </div>
         </form>
     </div>
 </article>
 {%endblock%}
 {%block style%}
 <style>
-    #id_name{
-        width:90%;
+    #form-new-group input[type="text"], #form-new-group input[type="text"]{
+        padding: 10px;
+        width: 95%;
     }
-
-    .form-horizontal table{
-        margin: auto;
-        width: auto;
+    #form-new-group{
+        background-color: #eee;
+        border-radius: 5px;
     }
-
+    #sel-type-group{
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    #sel-type-group > div input{
+        padding-top: 0;
+        margin: 5px 4px;
+    }
+    #sel-type-group > div > div{
+        margin-left: 10px;
+    }
+    .type-group{
+        margin: 4px 0;
+    }
     table td .btn{
         margin-top:10px;
     }
     table td ul{
         margin: 0;
-        width: 87%;
+        /*width: 87%;*/
     }
-    label{
+    .form-horizontal label{
         cursor: pointer;
         margin-bottom: 0;
         margin: 3px;
+        font-weight: bold;
+    }
+    #sel-type-group label{
+        display: inline;
+    }
+    .form-horizontal li{
+        margin-bottom: 20px;
+    }
+    .btn-group-vertical li{
+        margin-bottom: 0;
+    }
+    ul.btn-group{
+        margin: 0;
+    }
+    .data-pro{
+        margin-bottom: 20px;
     }
 
 </style>
@@ -56,11 +125,22 @@
     $(document).on("ready",function(){
         $("#menu-organizations").addClass("active")
 
-        $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
-        $(".group-type").parent().parent().parent().addClass("btn-group-vertical").attr({"data-toggle":"buttons-radio"})
-        $(".btn-group-vertical li").addClass("btn");
+        // $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
+        $(".group-type").parent().parent().parent().addClass("btn-group").attr({"data-toggle":"buttons-radio"})
+        $("#form-new-group .btn-group li").addClass("btn");
 
-        $(".hidden").first().click().parent().parent().addClass("active")
+        $(".group-type").first().click().parent().parent().addClass("active")
+
+        $("#sel-type-group input").on("click",function(e){
+            if($(this).val()==0){
+                $("#type-group-value").val(0);
+                $(".data-pro").addClass("hidden");
+            }
+            else{
+                $("#type-group-value").val(1);
+                $(".data-pro").removeClass("hidden");
+            }
+        })
     })
     
 
