@@ -44,9 +44,9 @@
 	    <section id="date_reunions2">
 		    <section class="tabbable reunion-tabs"> 
 				  <ul class="nav nav-tabs">
-				    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder</a></li>
-				    <li><a href="#tab2" data-toggle="tab">Confirmadas</a></li>
-				    <li><a href="#tab3" data-toggle="tab">Rechazadas</a></li>
+				    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
+				    <li><a href="#tab2" data-toggle="tab">Confirmadas (<span id="size-confirmadas">0</span>)</a></li>
+				    <li><a href="#tab3" data-toggle="tab">Rechazadas (<span id="size-rechazadas">0</span>)</a></li>
 				  </ul>
 				  <div class="tab-content">
 				    <div class="tab-pane active" id="tab1">
@@ -205,22 +205,35 @@ $(document).on("ready", function() {
 		var tablist1="";
 		var tablist2="";
 		var tablist3="";
+		var asize_p=0;
+		var asize_c=0;
+		var asize_r=0;
 		$.each(data, function() { 
 			if(this.is_saved == 1){
 				if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
 					tablist1 = tablist1 + createList(1,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+					console.log("antes"+asize_c);
+					asize_c=asize_c +1;
+					console.log("despues"+asize_c);
 				}
 				else { //reuniones rechazadas
 					tablist3 = tablist3  + createList(2,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+					asize_r=asize_r +1;
 				}
 			}
 			else{ //reuniones pendientes por confirmar
 				tablist2 = tablist2 + createList(3,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+				asize_p=asize_p +1;
 			}
 		});
+
 	    $("#tab-pendientes").html(tablist2);
 	    $("#tab-confirmadas").html(tablist1);
 	    $("#tab-rechazadas").html(tablist3);
+	    console.log("tamanos: "+asize_c+" "+asize_r+" "+asize_p);
+	    $("#size-pendientes").html(asize_p);
+	    $("#size-confirmadas").html(asize_c);
+	    $("#size-rechazadas").html(asize_r);
 		setMoreButton();
 	}
 	
@@ -236,11 +249,13 @@ $(document).on("ready", function() {
     				if(is_confirmed == true){ //reuniones confirmadas
         				L = createList(1,group_name,group_slug,date,id_reunion,title);
         				$('#tab-confirmadas').append(L);
+        				setSizeTabReunion('size-confirmadas',1);
         				setRejectButton();
     				}
         			else{  //reuniones rechazadas
             			L = createList(2,group_name,group_slug, date,id_reunion,title);
     					$('#tab-rechazadas').append(L);
+    					setSizeTabReunion('size-rechazadas',1);
             			setconfirmButton();
         			}
     				setMoreButton();			
@@ -281,11 +296,13 @@ $(document).on("ready", function() {
 	function setconfirmButton(){
 		$('.confirmed-true').click(function(e){
 			setList(e,$(this),$('#rechazadas'),$('#rechazadas2'), true);
+			setSizeTabReunion('size-rechazadas',0)
 		});
 		
 	}
 	function setRejectButton(){
 		$('.confirmed-false').click(function(e){
+			setSizeTabReunion('size-confirmadas',0)
 			setList(e,$(this),$('#confirmadas'),$('#confirmadas2'), false);
 		});	
 	}
@@ -293,9 +310,11 @@ $(document).on("ready", function() {
 	function setButtons(){
 		$('.confirmed2-true').click(function(e){
 			setList(e,$(this),$('#pendientes'),$('#pendientes2'), true);
+			setSizeTabReunion('size-pendientes',0)
 		});
 		$('.confirmed2-false').click(function(e){
 			setList(e,$(this),$('#pendientes'),$('#pendientes2'),false);
+			setSizeTabReunion('size-pendientes',0)
 		});	
 	}
 	function setMoreButton(){
@@ -365,6 +384,15 @@ $(document).on("ready", function() {
 			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#51a351");
 			$('#reunion_'+getUrlVars()["r"]).animate({'background-color': '#eeeeee'},3500,function(){ });
 		}
+	}
+
+	function setSizeTabReunion(sizetab,op){
+		console.log(sizetab+" "+op)
+		nsize = $("#"+sizetab).html();
+       	if (op==1)
+       		$('#'+sizetab).html(parseInt(nsize)+1);
+       	else if (op ==0)
+       		$('#'+sizetab).html(parseInt(nsize)-1);
 	}
 	chargeWindow();
 
