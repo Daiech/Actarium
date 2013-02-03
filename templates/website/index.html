@@ -6,7 +6,6 @@
 
 {% if user.is_authenticated %}
 <article id="b-page">
-
     <div class="row-fluid">
         <section class="span6">
             <header>
@@ -335,10 +334,10 @@
         list-style-type: none;
         font-size: 12px;
         margin-bottom: 5px;
-    }
+    }/*
     li hr{
         margin:20;
-    }
+    }*/
     ul{
         margin:0;
     }
@@ -353,9 +352,6 @@
 {% block js %}
 <script>
     $(document).on("ready",function(){
-        $("#actarium-logo").addClass("menu-active")
-        $("#logo-sup .navbar-item").addClass("navbar-item-hover");
-        $("#logo-sup .navbar-button-propierties").css({"height":"15px"}, 100);
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
     });
