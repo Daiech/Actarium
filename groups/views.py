@@ -702,11 +702,6 @@ def newReunion(request, slug):
                                id_group=q,
                                agenda=df['agenda'],
                              )
-#                print "Fechas- - - - - - - -  - - - -- - - - - - -  -- - - - - -"
-#                print df['date_reunion']
-#                print make_naive(df['date_reunion'],get_default_timezone())
-#                print datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")
-#                print str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d"))
                 myNewReunion.save()
                 relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
@@ -812,6 +807,32 @@ def getReunions(request):
                 json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved, "title": reunion.title}
                 i = i + 1
             response = json_array
+    else:
+        response = "Error Calendar"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+@login_required(login_url='/account/login')
+def getNextReunions(request):
+    if request.is_ajax():
+        gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+        my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
+        i = 0
+        json_array = {}
+        for reunion in my_reu_day:
+            if(i<3):
+                try:
+                    confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+                    is_confirmed = confirm.is_confirmed
+                    is_saved = 1
+                    if (is_confirmed):
+                        json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved, "title": reunion.title}
+                        print "---------------------------------------------------------"
+                        i = i + 1
+                except assistance.DoesNotExist:
+                    is_confirmed = False
+                    is_saved = 0            
+        response = json_array
+        print json_array;
     else:
         response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")
