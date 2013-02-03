@@ -6,6 +6,17 @@
 
 {% if user.is_authenticated %}
 <article id="b-page">
+    <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Detalles de la Reuni&oacute;n</h3>
+        </div>
+        <div class="modal-body">
+            <div id="reunion-data">
+                <div id="loading-reunion"></div>
+            </div>
+        </div>
+    </div>
     <div class="row-fluid">
         <section class="span6">
             <header>
@@ -61,13 +72,13 @@
 
                             <li data-group_name="{{reunion.group_name}}" data-date="{{reunion.date}}">
                                 <span class="notification-text">
-                                    <strong>Grupo </strong><a href="/groups/">{{reunion.group_name}}</a><br />
+                                    <strong>{{reunion.title}}</strong> (<a href="/groups/">{{reunion.group_name}}</a>)<br />
                                     <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
                                 </span>
                                 <div class="buttons">
                                     <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
                                     <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
-                                    <a class="btn btn-link" href="#">Ver m&aacute;s</a>
+                                    <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="{{reunion.id_reunion}}">Ver m&aacute;s</a>
                                 </div>
                                 <hr>
 
@@ -526,7 +537,44 @@
             $(this).attr("disabled", "disabled");
             setList(e,$(this),false);
         });	
+        $('.get-reunion').click(function(e){
+            e.preventDefault();
+            getReunionData($(this).attr("data-id-reunion"));
+        });
     }
+    function getReunionData(id_reunion){
+        //console.log('dame una reunion');
+        sendAjax("/groups/getReunion",
+                {id_reunion:id_reunion},
+                "#loading-reunion",
+                function(data){
+                    reunion_list=
+                        "<strong>"+data.title+"</strong><br /><br />"+
+                        "Grupo: <a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br>"+
+                        "Fecha de creaci&oacute;n: <strong>"+data.date_reunion+"</strong><br><br>"+
+                        "<strong>"+data.convener+"</strong> convoc&oacute; a una reuni&oacute;n de "+
+                        "<strong>"+data.group+"</strong> para el d&iacute;a "+
+                        "<strong>"+data.date_convened+"</strong> en <strong>"+data.locale+"</strong> <br /><br />"+
+                        "Los objetivos propuestos son: <br /> <strong>"+data.agenda+"</strong><br />"+
+                        "Lista de asistentes: <table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
+                        $.each(data.assistants,function(){
+                            reunion_list = reunion_list+
+                        "<tr><td><img class='img20' src='"+this.gravatar+"''> <strong>"+this.username+"</strong></td><td>"+this.is_confirmed+"</td></tr>"});
+                        reunion_list = reunion_list +"</table> <br /> ";
+                        if (data.is_done == false)
+                            reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
+                        else
+                            reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
+                        if (data.iconf == 1)
+                            reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+                        
+                    //console.log(reunion_list)
+                    $('#reunion-data').html(reunion_list);
+                }
+        );
+    }
+
+
     setButtons();
 </script>
 {% endif %}
