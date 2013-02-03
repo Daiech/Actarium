@@ -22,7 +22,7 @@ def home(request):
         #-----------------</INVITACIONES>-----------------
 
         #-----------------<REUNIONES>-----------------
-        my_reu = reunions.objects.filter(id_group__in=gr, is_done=False)
+        my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
         #-----------------</REUNIONES>-----------------
 #        i = 0
         json_array = []
@@ -34,7 +34,7 @@ def home(request):
             except assistance.DoesNotExist:
 #                is_confirmed = False
 #                is_saved = 0
-                json_array.append({"id_reunion": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%I:%M %p"))})
+                json_array.append({"id_reunion": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), "title": reunion.title})
 #            i = i + 1
 
         ctx = {'TITLE': "Actarium", "groups": gr, "invitations": my_inv, "reunions": json_array}
