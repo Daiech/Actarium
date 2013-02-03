@@ -16,4 +16,4 @@ admin.site.register(groups_permissions)
 admin.site.register(rel_role_group_permissions)
 admin.site.register(packages)
 admin.site.register(billing)
-
+admin.site.register(organizations)

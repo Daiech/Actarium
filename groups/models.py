@@ -144,68 +144,64 @@ class rel_user_minutes_assistance(models.Model):
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
     assistance = models.BooleanField()
     date_assistance = models.DateTimeField(auto_now=True)
-    
+
+
 # Definicion del modelo para manerjo de roles de usuarios en grupos
-    
+
 class user_role(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     description = models.CharField(max_length=150, verbose_name="description")
     date_joined = models.DateTimeField(auto_now=True)
-    
+
+
 class groups_permissions(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     code = models.CharField(max_length=150, verbose_name="code")
     description = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now=True)
-    
-class rel_role_group_permissions(models.Model):   
+
+
+class rel_role_group_permissions(models.Model):
     id_role = models.ForeignKey(user_role, null=False, related_name='%(class)s_id_role')
     id_group_permission = models.ForeignKey(groups_permissions, null=False, related_name='%(class)s_id_group_permission')
-    
-# nueva configuracion para manejo de grupos Pro y finanzas
 
+
+# nueva configuracion para manejo de grupos Pro y finanzas
 class packages(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     number_groups_pro = models.IntegerField()
     price = models.CharField(max_length=150, verbose_name="price")
     is_visible = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
+
     def __unicode__(self):
         return "%s" % (self.name)
-    
+
+
 class billing(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_package = models.ForeignKey(packages,  null=False, related_name='%(class)s_id_package')
     date_request = models.DateTimeField(auto_now=True)
-    groups_pro_available =  models.IntegerField()
+    groups_pro_available = models.IntegerField()
     is_active = models.BooleanField(default=False)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
-    def __unicode__(self):
-        return "Factura: %s %s %s" % (self.id_package.name,self.id_user.username, self.is_active)
 
-class organizations(models.Model): 
+    def __unicode__(self):
+        return "Factura: %s %s %s" % (self.id_package.name, self.id_user.username, self.is_active)
+
+
+class organizations(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
     id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_admin')
     logo_address = models.CharField(max_length=150, verbose_name="logo_address")
     description = models.TextField(blank=True)
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-    
+
+
 class groups_pro(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     id_organization = models.ForeignKey(organizations,  null=False, related_name='%(class)s_id_organization')
     id_billing = models.ForeignKey(billing,  null=False, related_name='%(class)s_id_billing')
     is_active = models.BooleanField(default=True)
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

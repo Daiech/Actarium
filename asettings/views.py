@@ -27,6 +27,7 @@ from django.utils import simplejson as json
 #    ctx = {'TITLE': "Actarium by Daiech"}
 #    return render_to_response('website/settings_account.html', ctx, context_instance=RequestContext(request))
 
+
 @login_required(login_url='/account/login')
 def settingsBilling(request):
     try:
@@ -35,15 +36,17 @@ def settingsBilling(request):
         packages_list = "No hay información disponible."
     try:
         billing_list = billing.objects.filter(is_active=True, id_user=request.user)
-    except packages.DoesNotExist:
+    except billing.DoesNotExist:
         billing_list = "No hay información disponible."
     ctx = {'TITLE': "Facturación - configuración", "packages_list": packages_list, "billing_list": billing_list}
     return render_to_response('asettings/settings_billing.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/account/login')
 def settingsOrganizations(request):
     ctx = {'TITLE': "Actarium by Daiech"}
     return render_to_response('asettings/settings_organization.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/account/login')
 def requestPackage(request):
@@ -51,7 +54,7 @@ def requestPackage(request):
         if request.method == 'GET':
             id_pack = str(request.GET['id_package'])
             id_package = packages.objects.get(pk=id_pack)
-            gpa = str(request.GET['gpa']) 
+            gpa = str(request.GET['gpa'])
             billing(id_package=id_package, id_user=request.user, groups_pro_available=gpa, date_start=datetime.date.today(), date_end=datetime.date.today()).save()
             is_billing_saved = "True"
         else:
@@ -59,8 +62,3 @@ def requestPackage(request):
     else:
         is_billing_saved = "Error de servidor"
     return HttpResponse(json.dumps(is_billing_saved), mimetype="application/json")
-
-
-
-
-

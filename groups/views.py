@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance
+from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance, organizations, billing
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
@@ -40,6 +40,7 @@ def newGroup(request):
     '''
         crea una nuevo grupo
     '''
+    orgs = None
     if request.method == "POST":
         form = newGroupForm(request.POST)
         if form.is_valid():
@@ -62,9 +63,20 @@ def newGroup(request):
             return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
     else:
         form = newGroupForm()
+        try:
+            orgs = organizations.objects.filter(id_admin=request.user)
+        except Exception, e:
+            orgs = None
+            raise e
+        try:
+            billing_list = billing.objects.filter(is_active=True, id_user=request.user)
+        except billing.DoesNotExist:
+            billing_list = "No hay información disponible."
 
     ctx = {'TITLE': "Actarium",
            "newGroupForm": form,
+           "organizations": orgs,
+           "billing": billing_list
            }
     return render_to_response('groups/newGroup.html', ctx, context_instance=RequestContext(request))
 
