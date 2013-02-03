@@ -33,7 +33,7 @@
                 </div>
                 <div class="data-pro hidden">
                     <label for="sel-org">Organizaci&oacute;n:</label>
-                    <select id="sel-org">
+                    <select name="sel-organization" id="sel-org">
                         {% for org in organizations%}
                         <option value="{{org.id}}">{{org.name}}</option>
                         {% endfor %}
@@ -41,8 +41,8 @@
                     <a href="/admin/groups/organizations/"> + Crear organizaci&oacute;n</a>
                 </div>
                 <div class="data-pro hidden">
-                    <label for="">Paquete:</label>
-                    <select>
+                    <label for="sel-billing">Paquete:</label>
+                    <select name="sel-billing" id="sel-billing">
                         {% for bill in billing%}
                         <option value="{{bill.id}}">{{bill.id_package.name}}</option>
                         {% endfor %}
@@ -55,7 +55,6 @@
                     </ul>
                 </div>
                 <div>
-                    <input type="hidden" id="type-group-value" name="type-group" value="0">
                     <button type="submit" class="btn btn-success btn-large">Guardar</button>
                     <a href="/groups" class="btn-link btn-small">Ver mis grupos</a>
                 </div>
@@ -133,11 +132,9 @@
 
         $("#sel-type-group input").on("click",function(e){
             if($(this).val()==0){
-                $("#type-group-value").val(0);
                 $(".data-pro").addClass("hidden");
             }
             else{
-                $("#type-group-value").val(1);
                 $(".data-pro").removeClass("hidden");
             }
         })

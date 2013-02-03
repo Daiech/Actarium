@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from groups.models import groups, group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance, organizations, billing
+from groups.models import *
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
 #from django.core.mail import EmailMessage
@@ -36,45 +36,85 @@ def groupsList(request):
 
 
 @login_required(login_url='/account/login')
+def newFreeGroup(request, form):
+    df = {
+        'name': form.cleaned_data['name'],
+        'description': form.cleaned_data['description'],
+        'id_creator': request.user,
+        'id_group_type': form.cleaned_data['id_group_type']
+    }
+    myNewGroup = groups(name=df['name'],
+                       description=df['description'],
+                       id_creator=df['id_creator'],
+                       id_group_type=group_type.objects.get(pk=df['id_group_type']),
+                     )
+    myNewGroup.save()
+    rel_user_group(id_user=request.user, id_group=myNewGroup).save()
+    admin_group(id_user=request.user, id_group=myNewGroup).save()
+    saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+    # return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
+    return myNewGroup
+
+
+@login_required(login_url='/account/login')
+def newProGroup(request, form):
+    print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
+    try:
+        org = organizations.objects.get(id=request.POST['sel-organization'], id_admin=request.user, is_active=True)
+    except Exception, e:
+        org = None
+        raise e
+    try:
+        bill = billing.objects.get(id=request.POST['sel-billing'], id_user=request.user, is_active=True)
+    except Exception, e:
+        bill = None
+        raise e
+    if org and bill:
+        # crear pro
+        new_group = newFreeGroup(request, form)
+        g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
+        g_pro.save()
+        return new_group
+    else:
+        return False
+
+
+@login_required(login_url='/account/login')
+def getProGroupDataForm(request):
+    orgs = None
+    billing_list = None
+    try:
+        orgs = organizations.objects.filter(is_active=True, id_admin=request.user)
+    except Exception, e:
+        orgs = None
+        raise e
+    try:
+        billing_list = billing.objects.filter(is_active=True, id_user=request.user)
+    except billing.DoesNotExist:
+        billing_list = "No hay información disponible."
+    return (orgs, billing_list)
+
+
+@login_required(login_url='/account/login')
 def newGroup(request):
     '''
         crea una nuevo grupo
     '''
     orgs = None
+    billing_list = None
     if request.method == "POST":
         form = newGroupForm(request.POST)
         if form.is_valid():
-            df = {
-                'name': form.cleaned_data['name'],
-                'description': form.cleaned_data['description'],
-                'id_creator': request.user,
-                'id_group_type': form.cleaned_data['id_group_type']
-            }
-            myNewGroup = groups(name=df['name'],
-                           description=df['description'],
-                           id_creator=df['id_creator'],
-                           id_group_type=group_type.objects.get(pk=df['id_group_type']),
-                         )
-            myNewGroup.save()
-            rel_user_group(id_user=request.user, id_group=myNewGroup).save()
-            admin_group(id_user=request.user, id_group=myNewGroup).save()
-            saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
-            #print "group: %s, id_group: %s"%(myNewGroup,myNewGroup.pk)
-            return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
+            if int(request.POST['type-group']) == 0:
+                resp = newFreeGroup(request, form)
+            else:
+                resp = newProGroup(request, form)
+            if resp:
+                return HttpResponseRedirect("/groups/" + str(resp.slug))
     else:
         form = newGroupForm()
-        try:
-            orgs = organizations.objects.filter(id_admin=request.user)
-        except Exception, e:
-            orgs = None
-            raise e
-        try:
-            billing_list = billing.objects.filter(is_active=True, id_user=request.user)
-        except billing.DoesNotExist:
-            billing_list = "No hay información disponible."
-
-    ctx = {'TITLE': "Actarium",
-           "newGroupForm": form,
+    orgs, billing_list = getProGroupDataForm(request)
+    ctx = {"newGroupForm": form,
            "organizations": orgs,
            "billing": billing_list
            }
