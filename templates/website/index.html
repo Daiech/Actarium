@@ -17,100 +17,101 @@
             </div>
         </div>
     </div>
-    <div class="row-fluid">
-        <section class="span6">
-            <header>
-                <h4 id="tittle-page">Actividad Reciente  
+    <div id="content-container" class="row-fluid">
+        <section id="notifications" class="span6">
+            <div style="margin-left:60px;" class="white-box-contaider b">
+                <header class="row-fluid fix_btn">
+                    <h4 class="span7 ml50">Actividad Reciente</h4>
+                </header>
+                <hr>
+                <div class="accordion " id="accordion">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
+                                Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
+                            </a>
+                        </div>
+                        <div  id="Invitations" class="accordion-body collapse in">
+                            <ul class="accordion-inner">
+                                {% for invitation in invitations %}
+                                <li>
+                                    <span class="notification-text alpha60">
+                                        <strong>{{invitation.id_user_from.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
+                                        <br />
+                                        <time datetime="{{reunion.date_convened|date:'c'}}">El {{invitation.date_invited}}</time>
+                                    </span>
+                                    <div class="buttons">
+                                        <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
+                                            Aceptar 
+                                            <span class="load"></span>
+                                        </button>
+                                        <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
+                                            Cancelar
+                                            <span class="load"></span>
+                                        </button>
+                                        <div class="pull-right load"></div>
+                                    </div>
+                                    <hr>
 
-                </h4>
-            </header>
-
-            <div class="accordion " id="accordion">
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
-                            Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
-                        </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
-                    <div  id="Invitations" class="accordion-body collapse in">
-                        <ul class="accordion-inner">
-                            {% for invitation in invitations %}
-                            <li>
-                                <span class="notification-text alpha60">
-                                    <strong>{{invitation.id_user_from.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
-                                    <br />
-                                    <time datetime="{{reunion.date_convened|date:'c'}}">El {{invitation.date_invited}}</time>
-                                </span>
-                                <div class="buttons">
-                                    <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
-                                        Aceptar 
-                                        <span class="load"></span>
-                                    </button>
-                                    <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
-                                        Cancelar
-                                        <span class="load"></span>
-                                    </button>
-                                    <div class="pull-right load"></div>
-                                </div>
-                                <hr>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
+                                Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
+                            </a>
+                        </div>
+                        <div  id="Reunions" class="accordion-body collapse in">
+                            <ul class="accordion-inner">
 
-                            </li>
-                            {% endfor %}
-                        </ul>
+                                {% for reunion in reunions %}
+
+                                <li data-group-name="{{reunion.group_name}}" data-date="{{reunion.date}}">
+                                    <span class="notification-text">
+                                        <strong>{{reunion.title}}</strong> (<a href="/groups/">{{reunion.group_name}}</a>)
+                                        <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
+                                    </span>
+                                    <div class="buttons">
+                                        <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
+                                        <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
+                                        <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="{{reunion.id_reunion}}">Ver m&aacute;s</a>
+                                    </div>
+                                    <hr>
+
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
-                            Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
-                        </a>
-                    </div>
-                    <div  id="Reunions" class="accordion-body collapse in">
-                        <ul class="accordion-inner">
+                </div><!--cierra notifications-->
 
-                            {% for reunion in reunions %}
-
-                            <li data-group_name="{{reunion.group_name}}" data-date="{{reunion.date}}">
-                                <span class="notification-text">
-                                    <strong>{{reunion.title}}</strong> (<a href="/groups/">{{reunion.group_name}}</a>)
-                                    <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
-                                </span>
-                                <div class="buttons">
-                                    <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
-                                    <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
-                                    <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="{{reunion.id_reunion}}">Ver m&aacute;s</a>
-                                </div>
-                                <hr>
-
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div><!--cierra notifications-->
+            </div>
         </section>
-        <section class="span5 margint30">
-            <header class="row-fluid fix_btn">
-                <h4 class="span7">Tus grupos</h4>
+        <section class="white-box-contaider b span5">
+                <header class="row-fluid fix_btn">
+                    <h4 class="span7">Tus grupos</h4>
 
-                <div class="span4">
-                    <a href="/groups/new" class="btn btn-small">
-                        <i class="icon-book"></i> Crear Grupo
-                    </a>
-                </div>
-            </header>
-            <hr>
-            <ul id="group-list" class="nav onOver">
-                {% for group in groups %}
-                <li class="img-rounded">
-                    <a href="/groups/{{group.slug}}">
-                        <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
-                        {{group.name}}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-
+                    <div class="span4">
+                        <a href="/groups/new" class="btn btn-small">
+                            <i class="icon-book"></i> Crear Grupo
+                        </a>
+                    </div>
+                </header>
+                <hr>
+            
+                <ul id="group-list" class="nav onOver">
+                    {% for group in groups %}
+                    <li class="">
+                        <a href="/groups/{{group.slug}}">
+                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
+                            {{group.name}}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
         </section>
     </div>
 </article>
@@ -220,7 +221,17 @@
     /* **************************************************************************** 
     Index Website
     **************************************************************************** */
-    
+    .white-box-contaider{
+        background-color: #fff;
+        border-radius: 5px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        border: 1px solid #ddd;
+        font-size: 1em;
+        margin-bottom: 20px;
+        padding: 20px 15px;
+    }
+
     #text-center{
         text-align: center;
     }
@@ -286,6 +297,9 @@
     .controls{
         margin-top: 15px;
     }
+    #content-container .white-box-contaider{
+        min-height: 220px;
+    }
 
     /* **************************************************************************** 
     Termina Index Website
@@ -309,20 +323,15 @@
         -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#11111111,endColorstr=#11111111)";
     }
     #b-page{
-        background-image: url("/static/img/fondo_peq.jpg");
         padding-top: 100px;
     }
-    #tittle-page{
+    .ml50{
         margin-left: 48px;
     }
     .accordion-group{
-        border: solid gray thin;
-        margin-left: 48px;
+        border: solid #dadada thin;
         margin-top: 10px;
-        width: 70%;
-    }
-    .span6 h4{
-        margin-bottom:20px;
+        width: 100%;
     }
     span.notification-text{
         display: block;
@@ -337,13 +346,9 @@
     .span2{
         margin-right: 20px;
     }
-    .span6{
-        border-right: solid thin #dadada;
-        padding: 0 20px;
-    }
-    section div ul li{
+    #notifications ul *{
         list-style-type: none;
-        font-size: 12px;
+        font-size: 13px;
         margin-bottom: 5px;
     }/*
     li hr{
@@ -421,7 +426,7 @@
                 actual--;
                 $("#inv-count").text(""+actual);
                 $("#group-list").append(
-                "<li class='img-rounded'>"+
+                "<li class=''>"+
                     "<a href='"+data["group"]["slug"]+"'>"+
                     "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
                     data["group"]["name"]+
@@ -471,7 +476,7 @@
             e.preventDefault();
             li= btn.parent().parent();
             li.animate({'height': 0},t,function(){
-                confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+                confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group-name"), $(this).attr("data-date"));
                 $(this).remove();
                 l = $("#length-reunion").html();
                 $("#length-reunion").html(l-1);
@@ -522,7 +527,7 @@
         e.preventDefault();
         li= btn.parent().parent();
         li.animate({'height': 0},t,function(){
-            confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
+            confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group-name"), $(this).attr("data-date"));
             $(this).remove();
             l = $("#length-reunion").html();
             $("#length-reunion").html(l-1);
