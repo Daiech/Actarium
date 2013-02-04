@@ -35,7 +35,9 @@
                     <label for="sel-org">Organizaci&oacute;n:</label>
                     <select name="sel-organization" id="sel-org">
                         {% for org in organizations%}
-                        <option value="{{org.id}}">{{org.name}}</option>
+                        <option value="{{org.id}}" >
+                            {{org.name}}
+                        </option>
                         {% endfor %}
                     </select>
                     <a href="/admin/groups/organizations/"> + Crear organizaci&oacute;n</a>
@@ -55,6 +57,7 @@
                     </ul>
                 </div>
                 <div>
+                    <input type="hidden" value="{{sel_org}}" id="org-selected">
                     <button type="submit" class="btn btn-success btn-large">Guardar</button>
                     <a href="/groups" class="btn-link btn-small">Ver mis grupos</a>
                 </div>
@@ -123,7 +126,12 @@
 <script>
     $(document).on("ready",function(){
         $("#menu-organizations").addClass("active")
-
+        var selected = $("#org-selected").val()
+        $("#sel-org").val(selected)
+        {%if sel_org%}
+            $("#pro").click()
+            $(".data-pro").removeClass("hidden");
+        {%endif%}
         // $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
         $(".group-type").parent().parent().parent().addClass("btn-group").attr({"data-toggle":"buttons-radio"})
         $("#form-new-group .btn-group li").addClass("btn");

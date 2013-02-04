@@ -2,7 +2,7 @@
 {% block TITLE %}Actarium - Organizaciones{% endblock %}
 {% block bodysettings %}
 
-<a class="btn pull-right" href="/admin/groups/organizations/add/"><i class="icon-plus"></i> Crear Organizaci&oacute;n</a>
+<a class="btn pull-right" href="/settings/organizations/new"><i class="icon-plus"></i> Crear Organizaci&oacute;n</a>
 <h3> Configuraci&oacute;n de Organizaciones </h3>
 <p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funci&oacute;n es personalizar una organizaci&oacute;n para una acta.</p>
 
@@ -21,7 +21,7 @@
 		    <div id="collapse{{data.org.id}}" class="accordion-body collapse in">
 		      <div class="accordion-inner">
 		      		<div class="span6">
-		      			<a href="#" class="btn btn-small"><i class="icon-plus"></i> Crear grupo</a>
+		      			<a href="/groups/new?org={{data.org.id}}" class="btn btn-small"><i class="icon-plus"></i> Crear grupo</a>
 		      		</div>
 		      		<div class="db">
 			        	<ul class="nav nav-tabs nav-stacked">
