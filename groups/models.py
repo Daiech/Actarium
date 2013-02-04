@@ -173,7 +173,7 @@ class packages(models.Model):
     price = models.CharField(max_length=150, verbose_name="price")
     is_visible = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
-    time = models.CharField(max_length=2, verbose_name="time")
+    time = models.CharField(max_length=3, verbose_name="time")
     def __unicode__(self):
         return "%s" % (self.name)
 
@@ -186,7 +186,7 @@ class billing(models.Model):
     state = models.CharField(max_length=1, verbose_name="state", default="0")
     date_start = models.DateTimeField(null=True)
     date_end = models.DateTimeField(null=True)
-    time = models.CharField(max_length=2, verbose_name="time")
+    time = models.CharField(max_length=3, verbose_name="time")
 
     def __unicode__(self):
         return "Factura: %s %s %s" % (self.id_package.name, self.id_user.username, self.state)

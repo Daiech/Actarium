@@ -12,6 +12,7 @@ from groups.forms import newOrganizationForm
 # from django.core.mail import EmailMessage
 #import re
 import datetime
+# from dateutil.relativedelta import * 
 #from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
@@ -131,10 +132,10 @@ def setReplyRequestPackage(request):
             id_billing = str(request.GET['id_billing'])
             state = str(request.GET['answer'])
             b=billing.objects.get(id=id_billing)
-            mtime = b.time
+            mtim = b.time
             dtn = datetime.datetime.now()
             b.date_start= dtn
-            dtn.month+int(mtime)
+            dtn= dtn+datetime.timedelta(days=(30*int(mtim)))
             b.date_end= dtn
             b.state=state
             b.save()
