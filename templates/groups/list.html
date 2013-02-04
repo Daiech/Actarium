@@ -18,7 +18,7 @@
                             <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
                             <span class="groupInfo">{{group.name|slice:"30"|lower|capfirst}}</span>
                             <span class="colorText"> - {{group.description|slice:"80"|safe|lower|capfirst}}</span>
-                            <div class="pull-right button">
+                            <div class="pull-right buttons-edit">
                                 <button data-action="editar" class="btn_block"><i class="icon-pencil"></i></button>
                                 <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>
                             </div>
@@ -48,10 +48,8 @@
     section > ul li{
         overflow: hidden;
     }
-    .button{
-        margin-top:10px;
-        margin-right:10px;
-
+    .buttons-edit{
+        margin-top: 5px;
     }
     .colorText{
         color:#555;

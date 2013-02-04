@@ -44,3 +44,15 @@ class newReunionForm(forms.Form):
     title = forms.CharField(label="Título", widget=forms.TextInput(attrs={'placeholder': 'Título'}))
     locale = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Objetivos de la reunión'}))
+
+
+
+class newOrganizationForm(forms.Form):
+    name = forms.CharField(label="Nombre de Organización", widget=forms.TextInput(attrs={'placeholder': 'Nombre de organización', 'autofocus': 'autofocus'}))
+    logo_address = forms.FileField(label="Logo", required=False, widget=forms.FileInput(attrs={'placeholder': 'URL del logo'}))
+    description = forms.CharField(label="Descripción", required=False, widget=forms.TextInput(attrs={'class': '', 'placeholder': 'Nombre de organización'}))
+
+    # def save(self):
+    #     user = super(newOrganizationForm, self).save()
+    #     return user
+

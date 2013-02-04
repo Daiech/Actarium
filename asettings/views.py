@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 # from django.http import Http404
-from groups.models import billing, packages
+from groups.models import billing, packages, organizations, groups_pro
 # group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance
-#from groups.forms import newGroupForm, newMinutesForm, newReunionForm
+from groups.forms import newOrganizationForm
 #from django.contrib.auth.models import User
 # from django.core.mail import EmailMessage
 #import re
@@ -17,7 +17,7 @@ from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
 #from actions_log.views import saveActionLog
-#from Actarium.settings import URL_BASE
+from Actarium.settings import MEDIA_ROOT
 
 #def settings(request):
 #    ctx = {'TITLE': "Actarium by Daiech"}
@@ -48,8 +48,54 @@ def settingsBilling(request):
 
 @login_required(login_url='/account/login')
 def settingsOrganizations(request):
-    ctx = {'TITLE': "Actarium by Daiech"}
+    try:
+        orgs = organizations.objects.filter(is_active=True, id_admin=request.user)
+    except Exception, e:
+        orgs = None
+        raise e
+    groups = list()
+    for org in orgs:
+        groups.append({"org": org, "groups_org_list": groups_pro.objects.filter(id_organization=org.id)})
+    ctx = {"organizations": groups}
     return render_to_response('asettings/settings_organization.html', ctx, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/account/login')
+def newOrganization(request):
+    if request.method == "POST":
+        form = newOrganizationForm(request.POST, request.FILES)
+        if form.is_valid() and form.is_multipart():
+            url = "/static/img/groups/default.jpg"
+            org = organizations(
+                id_admin=request.user,
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                logo_address=url)
+            org.save()
+            try:
+                url_file = request.FILES['logo_address']
+            except Exception:
+                url_file = None
+            if url_file:
+                url = save_file(url_file, str(org.name) + "-" + str(org.id))
+                org.logo_address = url
+                org.save()
+            return HttpResponseRedirect("/settings/organizations")
+    else:
+        form = newOrganizationForm()
+    ctx = {"form_org": form}
+    return render_to_response('asettings/settings_new_organization.html', ctx, context_instance=RequestContext(request))
+
+
+def save_file(file, slug, path=''):
+    ''' Little helper to save a file
+    '''
+    print '%s/%s' % (MEDIA_ROOT, str(path) + str(slug))
+    fd = open('%s/%s' % (MEDIA_ROOT, str(path) + str(slug)), 'wb')
+    for chunk in file.chunks():
+        fd.write(chunk)
+    fd.close()
+    return "/media/" + str(slug)
 
 
 @login_required(login_url='/account/login')

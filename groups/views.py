@@ -102,6 +102,12 @@ def newGroup(request):
     '''
     orgs = None
     billing_list = None
+    sel_org = False
+    if request.method == "GET":
+        try:
+            sel_org = request.GET['org']
+        except Exception:
+            sel_org = False
     if request.method == "POST":
         form = newGroupForm(request.POST)
         if form.is_valid():
@@ -116,7 +122,8 @@ def newGroup(request):
     orgs, billing_list = getProGroupDataForm(request)
     ctx = {"newGroupForm": form,
            "organizations": orgs,
-           "billing": billing_list
+           "billing": billing_list,
+           "sel_org": sel_org
            }
     return render_to_response('groups/newGroup.html', ctx, context_instance=RequestContext(request))
 

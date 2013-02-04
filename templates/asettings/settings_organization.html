@@ -1,16 +1,80 @@
 {% extends "asettings/settings_menu.html" %}
-
+{% block TITLE %}Actarium - Organizaciones{% endblock %}
 {% block bodysettings %}
-<h3> Configuracion de Organizaciones </h3>
-<p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funcion es personalizar una organizacion para una acta.</p>
 
+<a class="btn pull-right" href="/settings/organizations/new"><i class="icon-plus"></i> Crear Organizaci&oacute;n</a>
+<h3> Configuraci&oacute;n de Organizaciones </h3>
+<p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funci&oacute;n es personalizar una organizaci&oacute;n para una acta.</p>
+
+<div class="accordion">
+	{% for data in organizations %}
+		  <div class="accordion-group">
+		    <div class="accordion-heading">
+		      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{data.org.id}}" href="#collapse{{data.org.id}}">
+		        <img class="org-img" src="{{data.org.logo_address}}"> {{data.org.name}} <small class="muted hidden">- {{data.org.description}}</small>
+				<div class="pull-right buttons-edit hidden">
+                    <button data-action="editar" class="btn_block"><i class="icon-pencil"></i></button>
+                    <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>
+                </div>
+		      </a>
+		    </div>
+		    <div id="collapse{{data.org.id}}" class="accordion-body collapse in">
+		      <div class="accordion-inner">
+		      		<div class="span6">
+		      			<a href="/groups/new?org={{data.org.id}}" class="btn btn-small"><i class="icon-plus"></i> Crear grupo</a>
+		      		</div>
+		      		<div class="db">
+			        	<ul class="nav nav-tabs nav-stacked">
+			        			<li class="title-groups">
+			        				<a href="#">
+			        					<strong>Grupos:</strong>
+			        				</a>
+			        			</li>
+			        		{% for g in data.groups_org_list%}
+			        			<li>
+			        				<a href="/groups/{{g.id_group.slug}}">{{g.id_group.name}}
+				        				<div class="pull-right buttons-edit hidden">
+						                    <button data-action="editar" class="btn_block"><i class="icon-pencil"></i></button>
+						                    <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>
+						                </div>
+						            </a>
+			        			</li>
+			        		{% endfor %}
+						</ul>
+					</div>
+		      </div>
+		    </div>
+		  </div>
+	{% endfor%}
+</div>
 {% endblock %}
-
-
+{%block settings_style%}
+<style type="text/css">
+.accordion-heading{overflow: hidden;}.org-img{width: 30px;}
+.db{display: block;clear: both; margin-top: 45px;}
+.title-groups{background-color: #eee;}
+.title-groups a{cursor: default;color: #555}
+</style>
+{% endblock %}
 {% block settings_js %}
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#settings-organization").addClass("active");
+		$(".collapse").collapse({"toogle":false});
+		$('.title-groups a').on('click', function (e) {
+		  e.preventDefault();
+		})
+		$('.collapse').on('show', function () {
+		  $(this).parent().find("small.muted").removeClass("hidden");
+		})
+		$('.collapse').on('hidden', function () {
+		  $(this).parent().find("small.muted").addClass("hidden");
+		})
+		$('.accordion-group').hover(function () {
+		  $(this).find("div.buttons-edit").removeClass("hidden");
+		},function(){
+			$(this).find("div.buttons-edit").addClass("hidden");
+		})
 	});
 </script>
 {% endblock %}

@@ -200,6 +200,9 @@ class organizations(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
+    def __unicode__(self):
+        return "Org: %s" % (self.name)
+
 
 class groups_pro(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
