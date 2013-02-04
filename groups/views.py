@@ -65,7 +65,7 @@ def newProGroup(request, form):
         org = None
         raise e
     try:
-        bill = billing.objects.get(id=request.POST['sel-billing'], id_user=request.user, is_active=True)
+        bill = billing.objects.get(id=request.POST['sel-billing'], id_user=request.user, state='1')
     except Exception, e:
         bill = None
         raise e
@@ -89,7 +89,7 @@ def getProGroupDataForm(request):
         orgs = None
         raise e
     try:
-        billing_list = billing.objects.filter(is_active=True, id_user=request.user)
+        billing_list = billing.objects.filter(state='1', id_user=request.user)
     except billing.DoesNotExist:
         billing_list = "No hay información disponible."
     return (orgs, billing_list)
