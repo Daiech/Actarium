@@ -173,7 +173,7 @@ class packages(models.Model):
     price = models.CharField(max_length=150, verbose_name="price")
     is_visible = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
-
+    time = models.CharField(max_length=2, verbose_name="time")
     def __unicode__(self):
         return "%s" % (self.name)
 
@@ -183,12 +183,13 @@ class billing(models.Model):
     id_package = models.ForeignKey(packages,  null=False, related_name='%(class)s_id_package')
     date_request = models.DateTimeField(auto_now=True)
     groups_pro_available = models.IntegerField()
-    is_active = models.BooleanField(default=False)
-    date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
+    state = models.CharField(max_length=1, verbose_name="state", default="0")
+    date_start = models.DateTimeField(null=True)
+    date_end = models.DateTimeField(null=True)
+    time = models.CharField(max_length=2, verbose_name="time")
 
     def __unicode__(self):
-        return "Factura: %s %s %s" % (self.id_package.name, self.id_user.username, self.is_active)
+        return "Factura: %s %s %s" % (self.id_package.name, self.id_user.username, self.state)
 
 
 class organizations(models.Model):
