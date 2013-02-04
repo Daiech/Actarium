@@ -1,5 +1,5 @@
 {% extends "asettings/settings_menu.html" %}
-
+{% block TITLE %}Facturaci&oacute;n{% endblock %}
 {% block bodysettings %}
 <div class="modal hide fade" id="newBillingModal">  <!-- Ventana modal para contratar nuevo paquete -->
 	<div class="modal-header">
@@ -13,7 +13,7 @@
 		<span id="id-package-modal" style="display:none;"></span>
 		Precio por mes= <strong>$<span id="price-modal"></span></strong><br />
 		Numero de meses= <select id="select-time"></select><br />
-		Total= <strong><span id="total-modal"></span></strong><br /><br />
+		Total= <strong>$<span id="total-modal"></span></strong><br /><br />
 				
 		<a class="request-btn btn btn-success" >Solicitar paquete</a>
 	</div>
@@ -24,9 +24,9 @@
 <table class="table table-striped">
 <tr>
 	<th>Nombre del Paquete</th>
-	<th>Grupos Pro</th>
-	<th>Minimo (Meses)</th>
 	<th>Precio</th>
+	<th>Minimo (Meses)</th>
+	<th>Grupos Pro</th>
 	<th>Acciones</th>
 	
 </tr>
@@ -34,9 +34,9 @@
  {% for package in packages_list %}
             <tr>
                         <td >{{package.name}}</td>
-                        <td >{{package.number_groups_pro}}</td>
-                        <td >{{package.time}}</td>
                         <td >${{package.price}}/mes </td>
+                        <td >{{package.time}}</td>
+                        <td >{{package.number_groups_pro}}</td>
                         <td> <a class="get-time btn btn-success"  href="#newBillingModal" data-toggle="modal" data-time="{{package.time}}" data-id-package="{{package.pk}}" data-gpa="{{package.number_groups_pro}}" data-price="{{package.price}}" data-name="{{package.name}}">Adquirir</a></td>
             </tr>
 
