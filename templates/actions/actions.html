@@ -139,6 +139,8 @@ table tr:hover td{
 
 {% block settings_js %}
 <script>
-
+$(document).on("ready", function() {
+		$("#settings-actions").addClass("active");
+	});
 </script>
 {% endblock %}

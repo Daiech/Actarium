@@ -30,15 +30,19 @@ from Actarium.settings import MEDIA_ROOT
 
 @login_required(login_url='/account/login')
 def settingsBilling(request):
+    array_billing=[]
+    i=0
     try:
         packages_list = packages.objects.filter(is_visible=True)
     except packages.DoesNotExist:
         packages_list = "No hay información disponible."
     try:
-        billing_list = billing.objects.filter(is_active=True, id_user=request.user)
+        billing_list = billing.objects.filter(id_user=request.user)
     except billing.DoesNotExist:
         billing_list = "No hay información disponible."
-    ctx = {'TITLE': "Facturación - configuración", "packages_list": packages_list, "billing_list": billing_list}
+        for b in billing:
+            array_billing[b.id]= int(p.time)*int(p.id_package.price)
+    ctx = {'TITLE': "Facturación - configuración", "packages_list": packages_list, "billing_list": billing_list, 'array_billing':array_billing}
     return render_to_response('asettings/settings_billing.html', ctx, context_instance=RequestContext(request))
 
 
@@ -101,7 +105,39 @@ def requestPackage(request):
             id_pack = str(request.GET['id_package'])
             id_package = packages.objects.get(pk=id_pack)
             gpa = str(request.GET['gpa'])
-            billing(id_package=id_package, id_user=request.user, groups_pro_available=gpa, date_start=datetime.date.today(), date_end=datetime.date.today()).save()
+            time = str(request.GET['time'])
+            billing(id_package=id_package, id_user=request.user, groups_pro_available=gpa, time=time).save()
+            is_billing_saved = "True"
+        else:
+            is_billing_saved = "False"
+    else:
+        is_billing_saved = "Error de servidor"
+    return HttpResponse(json.dumps(is_billing_saved), mimetype="application/json")
+
+@login_required(login_url="/account/login")
+def replyRequestPackage(request):
+    if request.user.is_staff:
+        ctx = {"billing_list": billing.objects.exclude(state= 0).order_by("-date_request"), 
+                "billing_list2": billing.objects.filter(state='0').order_by("-date_request")
+        }
+        return render_to_response('asettings/settings_replyRequest.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/')
+
+
+def setReplyRequestPackage(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            id_billing = str(request.GET['id_billing'])
+            state = str(request.GET['answer'])
+            b=billing.objects.get(id=id_billing)
+            mtime = b.time
+            dtn = datetime.datetime.now()
+            b.date_start= dtn
+            dtn.month+int(mtime)
+            b.date_end= dtn
+            b.state=state
+            b.save()
             is_billing_saved = "True"
         else:
             is_billing_saved = "False"
