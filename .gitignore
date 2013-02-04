@@ -1,5 +1,6 @@
 *.pyc
 Actarium/settings.py
+media/*
 .project
 .pydevproject
 .settings/
