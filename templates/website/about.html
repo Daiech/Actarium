@@ -5,22 +5,15 @@
 <article>
     <div class="row-fluid">
         <header class="row-fluid ">
-            <h2 class="span12">Actarium</h2>
+            <h2 class="span12 hidden">Actarium</h2>
         </header>
-        <div class="row-fluid">
-            <section class="span11">
-                <p><strong>Actarium</strong> es la mejor plataforma online para el registro actas y seguimiento de reuniones de todo tipo. Lo invitamos a <a href="/account/new">registrarse</a> totalmente gratis y a disfrutar de los beneficios que <strong>Actarium</strong> le puede traer.</p>
-                <p>Actarium, un producto <strong><a href="http://daiech.com">Daiech</a></strong>.</p>
-            </section>
-        </div>
         <div id="infografia">
-            <p>Infograf&iacute;a</p>
             <div id="infografia1"></div>
             <div id="infografia2"></div>
             <div id="infografia3"></div>
         </div>
         <div>
-            <p>Env&iacute;enos sus comentarios y sugerencias a <a href="mailto:contacto@daiech.com">contacto@daiech.com</a></p>
+            <p>Env&iacute;enos sus comentarios o sugerencias en nuestro sistema de <a href="#" id="callFeed">feedback</a> o escribenos a <a href="mailto:contacto@daiech.com">contacto@daiech.com</a></p>
         </div>
     </div>
 </article>
@@ -30,7 +23,6 @@
 <style type="text/css">
 #infografia{margin-top: 20px}
 #infografia div{width: 900px;height: 600px;margin:0 auto;}
-#infografia p{width: 40%;margin:0 auto;text-align: center;font-size: 40px;}
 #infografia1{background-image: url("{{STATIC_PREFIX}}img/infografia/1.png");}
 #infografia2{background-image: url("{{STATIC_PREFIX}}img/infografia/2.png");}
 #infografia3{background-image: url("{{STATIC_PREFIX}}img/infografia/3.png");}
@@ -41,7 +33,10 @@
 {% block js %}
 <script>
     $(document).on("ready",function(e){
-        $("#about").addClass("menu-active")
+        $("#about").addClass("menu-active");
+        $("#callFeed").on("click", function(e){e.preventDefault();$("#feed-modal").animate({
+            'right':'0px'
+        });})
         $("#about .navbar-item").addClass("navbar-item-hover");
         $("#about .navbar-button-propierties").css({"height":"15px"}, 100);
     });
