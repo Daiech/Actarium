@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'website.views.home', name='home'),
     url(r'^about', 'website.views.about'),
-    url(r'^help/faq', 'website.views.about'),
+    url(r'^help/faq', 'website.views.help'),
     url(r'^blog', 'website.views.about'),
     url(r'^feed-back', 'website.views.sendFeedBack'),
     url(r'^update', 'github.views.update'),
@@ -21,8 +21,6 @@ urlpatterns = patterns('',
     url(r'^groups/', include(groups_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
-    # url(r'^Actarium/', include('Actarium.foo.urls')),
-
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

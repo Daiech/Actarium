@@ -1,0 +1,51 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Ayuda{% endblock %}
+
+{%block body%}
+<article class="row-fluid">
+    <header class="row-fluid ">
+        <h2 class="span12">Servicio de Ayuda</h2>
+    </header>
+    <hr>
+    <p>Toda la ayuda referente a <strong>Actarium</strong> <i class="icon-question-sign"></i></p>
+    <div class="row-fluid">
+        <section class="white-box-container span3">
+            <h4>Preguntas frecuentes</h4>
+            <hr>
+            <ul class="unstyled">
+                {% for f in faqs%}
+                <li>
+                    <p><i class="icon-question-sign"></i> {{f.question}}</p>
+                </li>
+                {%endfor%}
+            </ul>
+        </section>
+        <section class="white-box-container span9">
+            <h4>Preguntas y respuestas</h4>
+            <hr>
+            <ul class="unstyled">
+                {% for f in faqs%}
+                <li>
+                    <strong><i class="icon-question-sign"></i> {{f.question}}</strong>
+                    <p><i class="icon-chevron-right"></i> {{f.answer}}</p>
+                </li>
+                {%endfor%}
+            </ul>
+        </section>
+    </div>
+</article>
+{%endblock%}
+
+{%block style %}
+<style type="text/css">
+</style>
+{%endblock%}
+
+
+{% block js %}
+<script>
+    $(document).on("ready",function(e){
+        $("#faq").addClass("menu-active");
+    });
+</script>
+{% endblock %}

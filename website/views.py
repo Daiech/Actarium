@@ -7,7 +7,7 @@ import re
 from django.utils.timezone import get_default_timezone, make_naive
 from groups.models import groups, invitations, reunions, assistance
 from django.utils import simplejson as json
-from website.models import feedBack
+from website.models import feedBack, faq
 
 
 def home(request):
@@ -24,7 +24,6 @@ def home(request):
         #-----------------<REUNIONES>-----------------
         my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
         #-----------------</REUNIONES>-----------------
-#        i = 0
         json_array = []
         for reunion in my_reu:
             try:
@@ -80,8 +79,9 @@ def about(request):
     return render_to_response('website/about.html', {}, context_instance=RequestContext(request))
 
 
-
-
-
-
-
+def help(request):
+    try:
+        faqs = faq.objects.filter(is_active=True)
+    except faq.DoesNotExist:
+        faqs = None
+    return render_to_response('website/help.html', {"faqs": faqs}, context_instance=RequestContext(request))

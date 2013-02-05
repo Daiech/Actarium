@@ -768,6 +768,18 @@ form table td input{
 .buttons-edit{
     margin-top: -2px;
 }
+.white-box-container{
+    background-color: #fff;
+    border-radius: 5px;
+    border:solid thin #dadada;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    margin-bottom: 20px;
+    padding: 20px 15px;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
