@@ -201,7 +201,7 @@
                     p="..."
                 $("#search-result").html(
                     "<li class='user-li'>"+
-                    "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' data-uid='"+data['user_id']+"'>"+
+                    "<a href='#invite-user' data-is-user='true' data-email='"+data['mail']+"' data-username='"+data['username']+"' data-uid='"+data['user_id']+"'>"+
                     "<img class='img20' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
                     user_to_invite.substring(0,len)+p+
                     '<i class="icon-accept pull-right icon-ok hidden"></i>'+
@@ -214,7 +214,7 @@
                     p="..."
                 $("#search-result").html(
                     "<li class='user-li'>"+
-                    "<a href='#' data-email='"+data['mail']+"' data-username='Se enviar&aacute; invitaci&oacute;n'>"+
+                    "<a href='#' data-is-user='false' data-email='"+data['mail']+"' data-username='Se enviar&aacute; invitaci&oacute;n' data-uid='"+data['user_id']+"'>"+
                     "<img class='img20' src='"+data['gravatar']+"' alt='"+data['mail']+"' />"+
                     data['mail'].substring(0,len)+p+
                     '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
@@ -225,18 +225,25 @@
             showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
         }
         var j = 1;
-        function addNewAdmin(g){//escucha el evento click para agregar al usuario al grupo
+        function addNewAdmin(g){//escucha el evento click para agregar al usuario a la lista de admins
             $(".user-li > a").on("click",function(e){
                 e.preventDefault();
                 var mail = $(this).attr("data-email");
                 var uname = $(this).attr("data-username");
                 var uid = $(this).attr("data-uid");
+                var id_user = $(this).attr("data-is-user");
+                if(id_user==="true"){
+                    title ="data-original-title='"+uname+" ya disfruta de Actarium. Se le enviar&aacute; un correo electr&oacute;nico con un link para el registro.'";}
+                else{
+                    title ="data-original-title='El usuario no est&aacute; registrado. Se le enviar&aacute; un correo electr&oacute;nico con un link para el registro.'"
+                }
                 $("#search-result").removeClass("b")
                 $("#admin-list").append("<li>"+
-                    '<label for="id_admin'+j+'">'+
+                    '<label for="id_admin'+j+'" '+title+'>'+
                         '<input type="radio" name="id_admin" value="'+uid+'" id="id_admin'+j+'" checked> <img src="'+g+'" class="img20"> '+mail+" ("+uname+")"+
                     '</label></li>'
                 )
+                $("label").tooltip();
                 j++;
                 $(this).parent().fadeOut();
                 $("#search-member").val("").focus();

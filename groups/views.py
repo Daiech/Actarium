@@ -188,8 +188,9 @@ def getMembers(request):
                         "gravatar": showgravatar(ans.email, 20)}
                 else:
                     if ans == 1:
-                        message = {"mail_is_valid": True, "mail": search, "username": False,
-                        "gravatar": showgravatar(search, 20)}
+                        message = {"user_id": search, "mail_is_valid": True,
+                                    "mail": search, "username": False,
+                                    "gravatar": showgravatar(search, 20)}
                     else:
                         if ans == 2:
                             message = {"mail_is_valid": False}
