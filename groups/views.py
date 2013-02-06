@@ -35,9 +35,42 @@ def groupsList(request):
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url='/account/login')
 def groupSettings(request, slug_group):
     ctx = {}
     return render_to_response('groups/adminGroup.html', ctx, context_instance=RequestContext(request))
+
+
+def setUserRoles(_user, _group, sadmin=False, is_admin=False, is_approver=False, is_secretary=False):
+    try:
+        relation = rel_user_group.objects.get(id_user=_user, id_group=_group)
+        if sadmin:
+            relation.is_superadmin = sadmin
+        if is_admin:
+            relation.is_admin = is_admin
+        if is_secretary:
+            relation.is_secretary = is_secretary
+        if is_approver:
+            relation.is_approver = is_approver
+        relation.save()
+    except rel_user_group.DoesNotExist:
+        rel = rel_user_group(id_user=_user, id_group=_group,
+        is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=sadmin)
+        rel.save()
+
+
+def get_user_or_email(s):
+    if validateEmail(s):
+        return {"user": False, "email": str(s)}
+    else:
+        try:
+            if isinstance(int(s), int):  # valida si es un entero
+                _user = User.objects.get(id=int(s))
+                return {"user": _user, "email": str(s)}
+        except User.DoesNotExist:
+            return {"user": False, "email": str(s)}
+        except Exception:
+            return {"user": False, "email": False}
 
 
 @login_required(login_url='/account/login')
@@ -54,7 +87,11 @@ def newFreeGroup(request, form):
                        id_group_type=group_type.objects.get(pk=df['id_group_type']),
                      )
     myNewGroup.save()
-    rel_user_group(id_user=request.user, id_group=myNewGroup).save()
+    setUserRoles(request.user, myNewGroup, sadmin=True)
+    user_or_email = get_user_or_email(request.POST['id_admin'])
+    print user_or_email['user']
+    if user_or_email['user']:
+        setUserRoles(user_or_email['user'], myNewGroup, is_admin=True)
     admin_group(id_user=request.user, id_group=myNewGroup).save()
     saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
     # return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
@@ -108,15 +145,16 @@ def newGroup(request):
     orgs = None
     billing_list = None
     sel_org = False
-    if request.method == "GET":
+    if request.method == "GET":  # envia una variable para seleccionar una organizacion
         try:
             sel_org = request.GET['org']
         except Exception:
             sel_org = False
-    if request.method == "POST":
+
+    if request.method == "POST":  # selecciona los datos para crear un nuevo grupo
         form = newGroupForm(request.POST)
         if form.is_valid():
-            if int(request.POST['type-group']) == 0:
+            if int(request.POST['type-group']) == 0:  # 0 = grupo Free
                 resp = newFreeGroup(request, form)
             else:
                 resp = newProGroup(request, form)
@@ -765,7 +803,7 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "Reunion: <strong>"+str(df['title'])+"</strong><br><br>La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                    contenido = "Reunion: <strong>" + str(df['title']) + "</strong><br><br>La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
@@ -774,7 +812,7 @@ def newReunion(request, slug):
                                date_reunion=df['date_reunion'],
                                id_group=q,
                                agenda=df['agenda'])
-                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (str(df['title']),id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (str(df['title']), id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
             form = newReunionForm()
