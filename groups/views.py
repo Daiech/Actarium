@@ -181,13 +181,15 @@ def getMembers(request):
                         ans = 2  # no existe el usuario
                 if ans != 1 and ans != 2:
                     message = {
+                        "user_id": ans.id,
                         "mail_is_valid": True,
                         "username": ans.username,
                         "mail": ans.email,
-                        "gravatar": showgravatar(ans.email, 30)}
+                        "gravatar": showgravatar(ans.email, 20)}
                 else:
                     if ans == 1:
-                        message = {"mail_is_valid": True, "mail": search, "username": False}
+                        message = {"mail_is_valid": True, "mail": search, "username": False,
+                        "gravatar": showgravatar(search, 20)}
                     else:
                         if ans == 2:
                             message = {"mail_is_valid": False}
