@@ -866,6 +866,7 @@ def getReunions(request):
         response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
+
 @login_required(login_url='/account/login')
 def getNextReunions(request):
     if request.is_ajax():
@@ -874,7 +875,7 @@ def getNextReunions(request):
         i = 0
         json_array = {}
         for reunion in my_reu_day:
-            if(i<3):
+            if(i < 3):
                 try:
                     confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
                     is_confirmed = confirm.is_confirmed
@@ -885,9 +886,9 @@ def getNextReunions(request):
                         i = i + 1
                 except assistance.DoesNotExist:
                     is_confirmed = False
-                    is_saved = 0            
+                    is_saved = 0
         response = json_array
-        print json_array;
+        print json_array
     else:
         response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")
