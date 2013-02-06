@@ -32,7 +32,12 @@ def groupsList(request):
         mygroups = "Either the entry or blog doesn't exist."
 
     ctx = {'TITLE': "Actarium", "groups": mygroups}
-    return render_to_response('groups/list.html', ctx, context_instance=RequestContext(request))
+    return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
+
+
+def groupSettings(request, slug_group):
+    ctx = {}
+    return render_to_response('groups/adminGroup.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')

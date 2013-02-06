@@ -8,7 +8,7 @@
         <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-            <div id="form-new-group" class="">
+            <div id="form-new-group" class="white-box-container">
                 <div id="sel-type-group" class="">
                     <div class="type-group">
                         <input id="free" value="0" type="radio" name="type-group" class="btn btn-info pull-left" checked> 
@@ -73,7 +73,6 @@
         width: 95%;
     }
     #form-new-group{
-        background-color: #eee;
         border-radius: 5px;
     }
     #sel-type-group{
