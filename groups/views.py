@@ -100,17 +100,15 @@ def newFreeGroup(request, form):
 
 @login_required(login_url='/account/login')
 def newProGroup(request, form):
-    print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
+    # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
     try:
         org = organizations.objects.get(id=request.POST['sel-organization'], id_admin=request.user, is_active=True)
-    except Exception, e:
-        org = None
-        raise e
+    except Exception:
+        org = False
     try:
         bill = billing.objects.get(id=request.POST['sel-billing'], id_user=request.user, state='1')
-    except Exception, e:
-        bill = None
-        raise e
+    except Exception:
+        bill = False
     if org and bill:
         # crear pro
         new_group = newFreeGroup(request, form)
