@@ -13,6 +13,7 @@
             <div class="span4 btnSup">
                 <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-info btn-small">Crear acta</a>
                 <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
+                <a href="/groups/{{ group.slug}}/admin" class="btn btn-info btn-small">Configuraci&oacute;n</a>
             </div>
         </div>
     </header>
@@ -145,7 +146,7 @@
             $("#search-result").html(
                 "<li class='user-li'>"+
                 "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
+                "<img class='img20' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
                 data['mail'].substring(0,27)+p+
                 '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
                 "</a>"+

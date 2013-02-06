@@ -32,7 +32,12 @@ def groupsList(request):
         mygroups = "Either the entry or blog doesn't exist."
 
     ctx = {'TITLE': "Actarium", "groups": mygroups}
-    return render_to_response('groups/list.html', ctx, context_instance=RequestContext(request))
+    return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
+
+
+def groupSettings(request, slug_group):
+    ctx = {}
+    return render_to_response('groups/adminGroup.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')
@@ -176,13 +181,16 @@ def getMembers(request):
                         ans = 2  # no existe el usuario
                 if ans != 1 and ans != 2:
                     message = {
+                        "user_id": ans.id,
                         "mail_is_valid": True,
                         "username": ans.username,
                         "mail": ans.email,
-                        "gravatar": showgravatar(ans.email, 30)}
+                        "gravatar": showgravatar(ans.email, 20)}
                 else:
                     if ans == 1:
-                        message = {"mail_is_valid": True, "mail": search, "username": False}
+                        message = {"user_id": search, "mail_is_valid": True,
+                                    "mail": search, "username": False,
+                                    "gravatar": showgravatar(search, 20)}
                     else:
                         if ans == 2:
                             message = {"mail_is_valid": False}

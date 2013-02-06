@@ -17,3 +17,6 @@ class faq(models.Model):
     answer = models.TextField(max_length=200, null=False, verbose_name="Respuesta")
     is_active = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return "%s is_active: %s" % (self.question, self.is_active)

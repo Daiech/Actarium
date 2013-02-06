@@ -1,0 +1,51 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Crear Grupo{% endblock %}
+
+{%block body%}
+<article>
+    <div class="row-fluid">
+        <h2>Administrac&oacute;n de grupo</h2>
+        <hr>
+        <div class="row-fluid">
+            <section id="settings-menu" class="span3" >
+                <div class="bs-docs-sidebar">
+                    <ul class="nav nav-list bs-docs-sidenav ">
+                        {% if user.is_staff %}
+                        <li id="settings-actions"      ><a href="/actions"><i class="icon-chevron-right"></i>Administrador de grupo</a></li>
+                        {% endif %} 
+                        <li><a href="/account"><i class="icon-chevron-right"></i>Configuraci&oacute;n de roles</a></li>
+                        <li><a href="/settings/billing"><i class="icon-chevron-right"></i>Editar informaci&oacute;n</a></li>
+                        
+                    </ul>
+                </div>
+            </section>
+            <section id="settings-container" class="span9 b">
+                    {% block bodysettings %}{% endblock %}
+            </section>
+        </div>
+    </div>
+</article>
+{%endblock%}
+{% block style_libs %}
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/docs.css" />
+{%block settings_style_libs %}{% endblock %}
+{% endblock %}
+{%block style%}
+<style>
+    section{padding: 0}
+    #settings-menu ul{
+        margin: 0;
+    }
+</style>
+{%endblock%}
+
+{% block js %}
+<script>
+    $(document).on("ready",function(){
+        $("#menu-organizations").addClass("active")
+        
+    });
+</script>
+
+
+{% endblock %}
