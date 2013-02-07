@@ -40,7 +40,7 @@
                         </option>
                         {% endfor %}
                     </select>
-                    <a href="/admin/groups/organizations/"> + Crear organizaci&oacute;n</a>
+                    <a href="/settings/organizations/new"> + Crear organizaci&oacute;n</a>
                 </div>
                 <div class="data-pro hidden">
                     <label for="sel-billing">Paquete:</label>
@@ -51,13 +51,14 @@
                     </select>
                     <a href="/settings/billing"> + Adquirir paquete</a>
                 </div>
-                <div>
-                    <ul class="unstyled">
-                    {{newGroupForm.as_ul}}
-                    </ul>
+                <div id="is-memeber" class="data-pro hidden">
+                    <label data-original-title="Accede al grupo. Puede crear actas, reuniones, etc." for="is_member">
+                        <input type="checkbox" id="is_member" name="is_member" value="1" checked>
+                        Ser miembro del grupo
+                    </label>
                 </div>
-                <div id="administrator">
-                    <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo">Administrador de grupo:</label>
+                <div id="administrator" class="data-pro hidden">
+                    <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador">Administrador de grupo:</label>
                     <a id="new-admin" class="pull-right" href="#">+ Asignar otro administrador</a>
                     <ul id="admin-list" class="unstyled">
                         <li>
@@ -75,6 +76,11 @@
                     
                 </div>
                 <div>
+                    <ul class="unstyled">
+                    {{newGroupForm.as_ul}}
+                    </ul>
+                </div>
+                <div>
                     <input type="hidden" id="group_name" value="{{group.name}}">
                     <input type="hidden" id="group_id" value="{{group.id}}">
                     <input type="hidden" value="{{sel_org}}" id="org-selected">
@@ -89,6 +95,7 @@
 {%block style%}
 <style>
     #administrator{margin-bottom: 40px;}
+    #is-memeber{margin-bottom: 20px;font-weight: normal;}
     #administrator label:first{margin-bottom: 10px;}
     #admin-box{margin-top: 20px;}
     #form-new-group input[type="text"], #form-new-group input[type="text"]{
@@ -139,6 +146,7 @@
     }
     .data-pro{
         margin-bottom: 20px;
+        margin-left: 22px;
     }
     input[type="checkbox"]{margin-top: 0;}
     .icon-remove{

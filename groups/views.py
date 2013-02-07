@@ -41,22 +41,23 @@ def groupSettings(request, slug_group):
     return render_to_response('groups/adminGroup.html', ctx, context_instance=RequestContext(request))
 
 
-def setUserRoles(_user, _group, sadmin=False, is_admin=False, is_approver=False, is_secretary=False):
+def setUserRoles(_user, _group, sadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1):
     try:
         relation = rel_user_group.objects.get(id_user=_user, id_group=_group)
+        relation.is_member = bool(is_member)
         if sadmin:
-            relation.is_superadmin = sadmin
+            relation.is_superadmin = bool(sadmin)
         if is_admin:
-            relation.is_admin = is_admin
+            relation.is_admin = bool(is_admin)
         if is_secretary:
-            relation.is_secretary = is_secretary
+            relation.is_secretary = bool(is_secretary)
         if is_approver:
-            relation.is_approver = is_approver
-        relation.save()
+            relation.is_approver = bool(is_approver)
     except rel_user_group.DoesNotExist:
-        rel = rel_user_group(id_user=_user, id_group=_group,
+        relation = rel_user_group(id_user=_user, id_group=_group, is_member=bool(is_member),
         is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=sadmin)
-        rel.save()
+    relation.save()
+    print "is_member %s" % relation.is_member
 
 
 def get_user_or_email(s):
@@ -74,7 +75,7 @@ def get_user_or_email(s):
 
 
 @login_required(login_url='/account/login')
-def newFreeGroup(request, form):
+def newBasicGroup(request, form, pro=False):
     df = {
         'name': form.cleaned_data['name'],
         'description': form.cleaned_data['description'],
@@ -87,11 +88,21 @@ def newFreeGroup(request, form):
                        id_group_type=group_type.objects.get(pk=df['id_group_type']),
                      )
     myNewGroup.save()
-    setUserRoles(request.user, myNewGroup, sadmin=True)
-    user_or_email = get_user_or_email(request.POST['id_admin'])
-    print user_or_email['user']
-    if user_or_email['user']:
-        setUserRoles(user_or_email['user'], myNewGroup, is_admin=True)
+    if not pro:
+        setUserRoles(request.user, myNewGroup, sadmin=True, is_admin=True)
+    else:
+        try:
+            is_memb = int(request.POST['is_member'])
+        except Exception:
+            is_memb = 0
+        setUserRoles(request.user, myNewGroup, sadmin=1, is_member=is_memb)
+        user_or_email = get_user_or_email(request.POST['id_admin'])
+        if user_or_email['user']:
+            if user_or_email['user'] != request.user:
+                setUserRoles(user_or_email['user'], myNewGroup, is_admin=1)
+            else:
+                setUserRoles(user_or_email['user'], myNewGroup, is_admin=1, is_member=is_memb)
+
     admin_group(id_user=request.user, id_group=myNewGroup).save()
     saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
     # return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
@@ -111,7 +122,7 @@ def newProGroup(request, form):
         bill = False
     if org and bill:
         # crear pro
-        new_group = newFreeGroup(request, form)
+        new_group = newBasicGroup(request, form, pro=True)
         g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
         g_pro.save()
         return new_group
@@ -153,7 +164,7 @@ def newGroup(request):
         form = newGroupForm(request.POST)
         if form.is_valid():
             if int(request.POST['type-group']) == 0:  # 0 = grupo Free
-                resp = newFreeGroup(request, form)
+                resp = newBasicGroup(request, form)
             else:
                 resp = newProGroup(request, form)
             if resp:
