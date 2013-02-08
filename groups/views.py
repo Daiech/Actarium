@@ -27,11 +27,14 @@ def groupsList(request):
     lista los grupos del usuario registrado
     '''
     try:
-        mygroups = groups.objects.filter(rel_user_group__id_user=request.user, rel_user_group__is_active=True)
+        mygroups = groups.objects.filter(
+            rel_user_group__id_user=request.user,
+            rel_user_group__is_active=True,
+            rel_user_group__is_member=True)
     except groups.DoesNotExist:
-        mygroups = "Either the entry or blog doesn't exist."
+        mygroups = "You Dont hava any groups"
 
-    ctx = {'TITLE': "Actarium", "groups": mygroups}
+    ctx = {"groups": mygroups}
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
@@ -41,12 +44,12 @@ def groupSettings(request, slug_group):
     return render_to_response('groups/adminGroup.html', ctx, context_instance=RequestContext(request))
 
 
-def setUserRoles(_user, _group, sadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1):
+def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1):
     try:
         relation = rel_user_group.objects.get(id_user=_user, id_group=_group)
         relation.is_member = bool(is_member)
-        if sadmin:
-            relation.is_superadmin = bool(sadmin)
+        if is_superadmin:
+            relation.is_superadmin = bool(is_superadmin)
         if is_admin:
             relation.is_admin = bool(is_admin)
         if is_secretary:
@@ -55,7 +58,7 @@ def setUserRoles(_user, _group, sadmin=0, is_admin=0, is_approver=0, is_secretar
             relation.is_approver = bool(is_approver)
     except rel_user_group.DoesNotExist:
         relation = rel_user_group(id_user=_user, id_group=_group, is_member=bool(is_member),
-        is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=sadmin)
+        is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
     relation.save()
     print "is_member %s" % relation.is_member
 
@@ -89,23 +92,19 @@ def newBasicGroup(request, form, pro=False):
                      )
     myNewGroup.save()
     if not pro:
-        setUserRoles(request.user, myNewGroup, sadmin=True, is_admin=True)
+        setUserRoles(request.user, myNewGroup, is_superadmin=1, is_admin=1)
     else:
         try:
             is_memb = int(request.POST['is_member'])
         except Exception:
             is_memb = 0
-        setUserRoles(request.user, myNewGroup, sadmin=1, is_member=is_memb)
+        setUserRoles(request.user, myNewGroup, is_member=is_memb)
         user_or_email = get_user_or_email(request.POST['id_admin'])
         if user_or_email['user']:
             if user_or_email['user'] != request.user:
-                setUserRoles(user_or_email['user'], myNewGroup, is_admin=1)
+                setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1)
             else:
-                setUserRoles(user_or_email['user'], myNewGroup, is_admin=1, is_member=is_memb)
-
-    admin_group(id_user=request.user, id_group=myNewGroup).save()
-    saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (myNewGroup.pk, df['name'], request.user.username), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
-    # return HttpResponseRedirect("/groups/" + str(myNewGroup.slug))
+                setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb)
     return myNewGroup
 
 
@@ -168,6 +167,8 @@ def newGroup(request):
             else:
                 resp = newProGroup(request, form)
             if resp:
+                # Guardar accion de crear reunion
+                saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
                 return HttpResponseRedirect("/groups/" + str(resp.slug))
     else:
         form = newGroupForm()
@@ -186,15 +187,15 @@ def showGroup(request, slug):
         Muestra la informacion de un grupo
     '''
     try:
-        q = groups.objects.get(slug=slug, is_active=True)
+        g = groups.objects.get(slug=slug, is_active=True)
     except groups.DoesNotExist:
         raise Http404
-    is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
+    is_member = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
     if is_member:
-        members = rel_user_group.objects.filter(id_group=q.id, is_active=True)
-        members_pend = invitations.objects.filter(id_group=q.id, is_active=True)
-        minutes_group = minutes.objects.filter(id_group=q.id)
-        ctx = {'TITLE': q.name, "group": q, "members": members, "minutes": minutes_group, "members_pend": members_pend}
+        members = rel_user_group.objects.filter(id_group=g.id, is_active=True)
+        members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
+        minutes_group = minutes.objects.filter(id_group=g.id)
+        ctx = {"group": g, "members": members, "minutes": minutes_group, "members_pend": members_pend}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/#error-view-group')

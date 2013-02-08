@@ -14,7 +14,10 @@ def home(request):
     if request.user.is_authenticated():
 
         #-----------------</GRUPOS>-----------------
-        gr = groups.objects.filter(rel_user_group__id_user=request.user)
+        gr = groups.objects.filter(
+            rel_user_group__id_user=request.user,
+            rel_user_group__is_active=True,
+            rel_user_group__is_member=True)
         #-----------------</GRUPOS>-----------------
 
         #-----------------<INVITACIONES>-----------------
