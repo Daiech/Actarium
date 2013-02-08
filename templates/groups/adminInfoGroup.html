@@ -7,8 +7,9 @@
 <div>
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
-		
-		<input type="submit" class="btn btn db" >
+		{{form}}
+		<hr>
+		<input type="submit" class="btn btn-large db" value="Guardar" >
 	</form>
 </div>
 {% endblock %}
@@ -24,6 +25,9 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#admin-info").addClass("active")
+		{% if message %}
+		setAlertMessage("Datos guardados", "{{message}}")
+		{% endif %}
 	});
 </script>
 {% endblock %}

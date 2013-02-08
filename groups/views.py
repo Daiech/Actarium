@@ -69,7 +69,18 @@ def groupInfoSettings(request, slug_group):
         raise Http404
     is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
     if is_admin:
-        ctx = {"group": g, "is_admin": is_admin}
+        message = False
+        if request.method == "POST":
+            form = newGroupForm(request.POST)
+            if form.is_valid():
+                g.name = form.cleaned_data['name']
+                g.description = form.cleaned_data['description']
+                g.save()
+                message = "Los datos del grupo han sido actualizados"
+            else:
+                message = "Hubo un error en los datos del grupo. Intenta de nuevo."
+        form = newGroupForm(initial={"name": g.name, "description": g.description})
+        ctx = {"group": g, "is_admin": is_admin, "form": form, "message": message}
         return render_to_response('groups/adminInfoGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
@@ -114,7 +125,8 @@ def newBasicGroup(request, form, pro=False):
         'name': form.cleaned_data['name'],
         'description': form.cleaned_data['description'],
         'id_creator': request.user,
-        'id_group_type': form.cleaned_data['id_group_type']
+        # 'id_group_type': form.cleaned_data['id_group_type']  # Se omite para no pedir tipo de grupo
+        'id_group_type': 1
     }
     myNewGroup = groups(name=df['name'],
                        description=df['description'],
