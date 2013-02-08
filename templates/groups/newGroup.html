@@ -254,7 +254,8 @@
                 $("label").tooltip();
                 j++;
                 $(this).parent().fadeOut();
-                $("#search-member").val("").focus();
+                $("#search-member").val("").hide();
+                $("#id_name").focus();
             });
         }
         function listMembers(data){//lista los usuarios disponibles a invitar
