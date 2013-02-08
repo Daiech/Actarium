@@ -1,6 +1,7 @@
 #encoding:utf-8
 from django import forms
-from groups.models import group_type
+# from groups.models import group_type
+from groups.models import groups
 
 
 class newGroupForm(forms.Form):
@@ -21,6 +22,9 @@ class newGroupForm(forms.Form):
 #    def save(self,*args, **kwargs):
 #        super(groups, self).save(*args, **kwargs)
 #        return True
+
+    # class Meta:
+    #     model = groups
 
 
 class newMinutesForm(forms.Form):
