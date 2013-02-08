@@ -1,0 +1,29 @@
+{% extends "groups/adminGroup.html" %}
+{% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
+{% block bodysettings %}
+
+<h3> Edici&oacute;n de informaci&oacute;n</h3>
+<p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funci&oacute;n es personalizar una organizaci&oacute;n para una acta.</p>
+<div>
+	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
+		{% csrf_token %}
+		
+		<input type="submit" class="btn btn db" >
+	</form>
+</div>
+{% endblock %}
+{%block settings_style%}
+<style type="text/css">
+	.form-horizontal label{
+		font-weight: bold;
+		margin-top: 10px;
+	}
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#admin-info").addClass("active")
+	});
+</script>
+{% endblock %}
