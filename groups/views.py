@@ -114,7 +114,8 @@ def newBasicGroup(request, form, pro=False):
         'name': form.cleaned_data['name'],
         'description': form.cleaned_data['description'],
         'id_creator': request.user,
-        'id_group_type': form.cleaned_data['id_group_type']
+        # 'id_group_type': form.cleaned_data['id_group_type']  # Se omite para no pedir tipo de grupo
+        'id_group_type': 1
     }
     myNewGroup = groups(name=df['name'],
                        description=df['description'],
