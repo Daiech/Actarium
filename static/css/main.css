@@ -598,7 +598,7 @@ article ul a img{
 }*/
 article ul.onOver li{
     border:  solid thin  #eee;
-    margin:5px;
+    margin:5px 0;
 }
 article ul.onOver li:hover{
     border:  solid thin  #dadada;

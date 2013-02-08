@@ -91,17 +91,21 @@
             </div>
         </section>
         <section class="white-box-container span5">
-                <header class="row-fluid fix_btn">
-                    <h4 class="span7">Tus grupos</h4>
-
-                    <div class="span4">
-                        <a href="/groups/new" class="btn btn-small">
-                            <i class="icon-book"></i> Crear Grupo
-                        </a>
-                    </div>
+                <header class="row-fluid">
+                    <h4 class="span12">Tus grupos</h4>
                 </header>
+                <div class="">
+                    <a href="/groups/new" class="btn btn-small">
+                        <i class="icon-plus"></i> Crear Grupo
+                    </a>
+                    <a href="/groups/calendar" class="btn btn-small">
+                        <i class="icon-calendar"></i> Reuniones
+                    </a>
+                    <a href="/settings/organizations" class="btn btn-small">
+                        <i class="icon-wrench"></i> Organizaciones
+                    </a>
+                </div>
                 <hr>
-            
                 <ul id="group-list" class="nav onOver">
                     {% for group in groups %}
                     <li class="">
@@ -289,7 +293,9 @@
     #content-container .white-box-container{
         min-height: 220px;
     }
-
+    #group-list{
+        margin: 10px 0;
+    }
     /* **************************************************************************** 
     Termina Index Website
     **************************************************************************** */
@@ -402,7 +408,7 @@
 {% if user.is_authenticated%}
 <script>
     $(".collapse").collapse({
-        toggle: false
+        // toggle: false
     })
     function acceptInvitation(element, accept){
         sendAjax(
