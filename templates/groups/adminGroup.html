@@ -1,28 +1,37 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Crear Grupo{% endblock %}
+{% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
 
 {%block body%}
 <article>
-    <div class="row-fluid">
-        <h2>Administraci&oacute;n de grupo</h2>
-        <hr>
+    <header >
         <div class="row-fluid">
-            <section id="settings-menu" class="span3" >
-                <div class="bs-docs-sidebar">
-                    <ul class="nav nav-list bs-docs-sidenav ">
-                        {% if user.is_staff %}
-                        <li id="settings-actions"      ><a href="/actions"><i class="icon-chevron-right"></i>Administrador de grupo</a></li>
-                        {% endif %} 
-                        <li><a href="/account"><i class="icon-chevron-right"></i>Configuraci&oacute;n de roles</a></li>
-                        <li><a href="/settings/billing"><i class="icon-chevron-right"></i>Editar informaci&oacute;n</a></li>
-                        
-                    </ul>
-                </div>
-            </section>
-            <section id="settings-container" class="span9 b">
-                    {% block bodysettings %}{% endblock %}
-            </section>
+            <div class="span8">
+                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
+                <h3><a href="/groups/{{ group.slug}}">{{group.name}}</a> - Administraci&oacute;n</h3>
+            </div>
         </div>
+    </header>
+    <hr>
+    <div class="row-fluid">
+        <nav id="settings-menu" class="span3" >
+            <div class="bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav ">
+                    <li id="admin-roles">
+                        <a href="/groups/{{group.slug}}/admin/">
+                            <i class="icon-chevron-right"></i>Usuarios y roles
+                        </a>
+                    </li>
+                    <li id="admin-info">
+                        <a href="/groups/{{group.slug}}/admin/info">
+                            <i class="icon-chevron-right"></i>Editar informaci&oacute;n
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <section class="span9 white-box-container">
+                {% block bodysettings %}{% endblock %}
+        </section>
     </div>
 </article>
 {%endblock%}
@@ -36,16 +45,11 @@
     #settings-menu ul{
         margin: 0;
     }
+    section h3{margin-top: 0;}
 </style>
+{%block settings_style%}{% endblock %}
 {%endblock%}
 
 {% block js %}
-<script>
-    $(document).on("ready",function(){
-        $("#menu-organizations").addClass("active")
-        
-    });
-</script>
-
-
+{% block settings_js %}{% endblock  %}
 {% endblock %}

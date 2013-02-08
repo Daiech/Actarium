@@ -32,7 +32,7 @@ def groupsList(request):
             rel_user_group__is_active=True,
             rel_user_group__is_member=True)
     except groups.DoesNotExist:
-        mygroups = "You Dont hava any groups"
+        mygroups = "You Dont have any groups"
 
     ctx = {"groups": mygroups}
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
@@ -40,8 +40,39 @@ def groupsList(request):
 
 @login_required(login_url='/account/login')
 def groupSettings(request, slug_group):
-    ctx = {}
-    return render_to_response('groups/adminGroup.html', ctx, context_instance=RequestContext(request))
+    '''
+        Muestra la configuracion de un grupo
+    '''
+    try:
+        g = groups.objects.get(slug=slug_group, is_active=True)
+    except groups.DoesNotExist:
+        raise Http404
+    is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
+    if is_admin:
+        members = rel_user_group.objects.filter(id_group=g.id, is_active=True)
+        members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
+        ctx = {"group": g, "is_admin": is_admin, "members": members, "members_pend": members_pend}
+        return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/' + str(g.slug))
+
+
+@login_required(login_url='/account/login')
+def groupInfoSettings(request, slug_group):
+    '''
+        Muestra la configuracion de un grupo
+    '''
+    print "INFO GROUPS"
+    try:
+        g = groups.objects.get(slug=slug_group, is_active=True)
+    except groups.DoesNotExist:
+        raise Http404
+    is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
+    if is_admin:
+        ctx = {"group": g, "is_admin": is_admin}
+        return render_to_response('groups/adminInfoGroup.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/' + str(g.slug))
 
 
 def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1):

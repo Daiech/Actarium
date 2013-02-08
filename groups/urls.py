@@ -1,6 +1,7 @@
 from django.conf.urls import url, patterns
 groups_urls = patterns('',
     url(r'^new$', 'groups.views.newGroup', name='something'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groups.views.groupInfoSettings', name='Admin Info Groups'),
     url(r'^(?P<slug_group>[-\w]+)/admin', 'groups.views.groupSettings', name='Admin Groups'),
     url(r'^(?P<slug_group>[-\w]+)/newMinutes(?P<id_reunion>.*)', 'groups.views.newMinutes', name='something'),
     url(r'^(?P<slug_group>[-\w]+)/newMinutes', 'groups.views.newMinutes', name='something'),

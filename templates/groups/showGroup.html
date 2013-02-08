@@ -8,12 +8,17 @@
             <div class="span8">
                 <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
                 <h3>{{group.name}}</h3>
-                <a href="#" class="btn btn-link">Editar grupo</a>
+                <!-- <a href="#" class="btn btn-link">Editar grupo</a> -->
             </div>
             <div class="span4 btnSup">
-                <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-info btn-small">Crear acta</a>
-                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
-                <a href="/groups/{{ group.slug}}/admin" class="btn btn-info btn-small">Configuraci&oacute;n</a>
+                <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-small">
+                    <i class="icon-plus"></i> Crear acta</a>
+                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-small">
+                    <i class="icon-calendar"></i> Convocar Reunion</a>
+                {%if is_admin%}
+                <a href="/groups/{{ group.slug}}/admin" class="btn btn-small">
+                    <i class="icon-wrench"></i> Configuraci&oacute;n</a>
+                {%endif%}
             </div>
         </div>
     </header>
@@ -62,278 +67,16 @@
                 {%endfor%} 
             </ul>
 
-            <div class="dropdown">
-                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
-                    Agregar miembro
-                    <span class="caret"></span>
-                </div>
-                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li class="taling">
-                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
-                    </li>
-                    <li>
-                        <input type="hidden" id="group_name" value="{{group.name}}">
-                        <input type="hidden" id="group_id" value="{{group.id}}">
-                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-                        <span id="load-member"></span>
-                    </li>
-                    <li>
-                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
-                    </li>
-                    <li>
-                        <ul id="search-result">
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- dropdown -->
         </section>
     </div>
 </article>
 {%endblock%}
 {% block js %}
 <script>
-    showIconCloseOnHover()
-    function deleteInvitation(e){
-        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-        {
-            elem = $(this)
-            sendAjax(
-                "/groups/deleteInvitation",
-                {"id_inv":$(this).attr("data-invitation")},
-                "#load-member-actions",
-                function(data){
-                    if(data['deleted']){
-                        $(elem).parent().animate({"height":0},"slow",function(e){
-                            $(this).hide()
-                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
-                        });
-                    }
-                    else{
-                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
-                    }
-                }
-                )
-        }
-    }
-    function showIconAddMemberOnHover(){
-        // mostrar flecha sobre usuario
-        $(".user-li").hover(
-            function(){
-                $(this).find("i").removeClass("hidden")
-            },
-            function(){
-                $(this).find("i").addClass("hidden")
-        })
-    }
-    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
-        if(data["username"]){//es usuario de la base de datos
-            user_to_invite = data['mail']+" ("+data['username']+")";
-            if(user_to_invite.length > 27)
-                p="..."
-            $("#search-result").html(
-                "<li class='user-li'>"+
-                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                user_to_invite.substring(0,27)+p+
-                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                "</a>"+
-                "</li>"
-                )
-        }
-        else{//No es usuario de la base de datos
-            if(data['mail'].length > 27)
-                p="..."
-            $("#search-result").html(
-                "<li class='user-li'>"+
-                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                "<img class='img20' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-                data['mail'].substring(0,27)+p+
-                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                "</a>"+
-                "</li>"
-                )
-        }
-        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
-    }
-    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
-        if(data['invited']){    //USUARIO INVITADO
-            setAlertMessage("Invitado",data['message'])
-            $(".list-members").append(
-                "<li class='list-member-item' style='list-style:none'>"+
-                    "<div>"+
-                        "<img style='width:20px' src='"+data['gravatar']+"' alt='Imagen de Usuario'> "+
-                        "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
-                    "</div>"+
-                    '<span class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
-                "</li>"
-            )
-            showIconCloseOnHover()
-            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
-            $("#newmember").val("")
-        }else{//EL USUARIO YA ESTA INVITADO
-            if(data["message"]){
-                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
-            }
-            else{
-                //si no hay mensaje, error desconocido
-                setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-            }
-        }
-    }
-    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
-        $(".user-li > a").on("click",function(e){
-            e.preventDefault();
-            var mail = $(this).attr("data-email");
-            var uname = $(this).attr("data-username");
-            var group_id = $("#group_id").val();
-            var group_name = $("#group_name").val();
-            sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
-                     "#load-member",invitationResult);
-            $(this).parent().fadeOut()
-            $("#newmember").focus()
-        })
-    }
-    function listMembers(data){//lista los usuarios disponibles a invitar
-        if(data){
-            p="";
-            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
-                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
-                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
-            }
-            else{//el correo es invalido o no hay resultados de usuarios existentes
-                $("#search-result").html("<li style='list-style:none'>"+
-                                            "<a href='#'>"+("No hay resultados").substring(0,27)+
-                                            "</a>"+
-                                        "</li>")
-            }
-        }else{//error en el server
-            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
-        }
-    }
-    function searchMember(e){//INVITACIONES MAIN 
-        // if(e.keyCode==13){
-            var user=$("#newmember").val()
-            sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
-        // }
-    }
-    function showIconCloseOnHover(){
-        $(".list-member-item").hover(function(){  
-            $(this).find("i.icon-remove").show(10)  
-        },function(){                      
-            $(this).find("i.icon-remove").hide(30)
-        })
-    }
-    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
-    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
-    $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
-        //give the focus to the input to search members
-        $(this).next("#add-member-menu").addClass("disblock")
-        $("#newmember").focus()
-    });
-    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
-        //Close the dropdown menu to add members
-       $(this).parent().parent().removeClass("disblock")
-    });
 </script>
 {% endblock %}
 {%block style%}
 <style>
-    .list-member-item{
-        border: solid thin #eee;
-        border-bottom: solid thin #dadada;
-        border-radius: 3px;
-        padding: 2px;
-        margin: 1px 0;
-        position: relative;
-    }
-    .list-member-item:hover{
-        border: solid thin #dadada;
-    }
-    .list-member-item > div{
-        /*border: solid thin #dadada;*/
-        width: 80%;
-    }
-    .list-member-item > span{
-        cursor: pointer;
-        top: 0;
-        right: 5px;
-        position: absolute;
-    }
-    .span6{
-        border-right: solid thin #dadada;
-        padding: 0 20px;
-    }
-    ul#add-member-menu li{
-        margin-bottom: 10px;
-    }
-    .icon-remove{
-        margin: 5px;
-    }
-    ul#search-result{
-        margin-left: 0;
-    }
-    ul#search-result li span{
-        font-size: 13px;
-        margin-left: 13px;
-        color: gray;
-    }
-    .taling{
-        text-align: center;
-    }
-    .list-members span{
-        color: gray;
-    }
-    li a span{
-        color:black;
-    }
-    li p{
-        color:gray;
-        font-size: 12px;
-        line-height:  1;
-    }
-    article{
-        min-height: 500px;
-        overflow: visible;
-        padding-top: 1px;
-    }
-    article header img{
-        margin-top:4px;
-        float:left;
-    }
-    article header h3{
-        margin:0;
-        margin-left:35px;
-    }
-    #add-member{
-        position: static;
-    }
-    #newmember{
-        margin: 3px 10px;
-    }
-    .dropdown#add-member-menu{
-        text-decoration: none;
-        margin: 5px 20px;
-
-    }
-    #add-member-menu{
-        width:280px;
-    }
-    .dropdownmenu  * li{
-        list-style:none;
-        text-decoration: none;
-    }
-    .btnSup{
-        margin-top: 8px;
-    }
-    div > section ul{
-        margin-left:0;
-    }
-    div > section ul li{
-        list-style: none;
-    }
-    .cancel-inv{
-        font-style: italic;
-        color: gray;
-    }
+    
 </style>
 {%endblock%}

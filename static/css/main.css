@@ -774,9 +774,16 @@ form table td input{
     border: 1px solid #ddd;
     font-size: 1em;
     margin-bottom: 20px;
-    padding: 20px 15px;
+    padding: 15px 15px;
 }
-
+article header img{
+    margin-top:7px;
+    float:left;
+}
+article header h3{
+    margin:0;
+    margin-left:40px;
+}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
