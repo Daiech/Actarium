@@ -254,7 +254,7 @@
                 $("label").tooltip();
                 j++;
                 $(this).parent().fadeOut();
-                $("#search-member").val("").hide();
+                $("#search-member").val("").parent().css({"display":"none"});
                 $("#id_name").focus();
             });
         }
