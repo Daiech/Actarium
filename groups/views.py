@@ -31,10 +31,14 @@ def groupsList(request):
             rel_user_group__id_user=request.user,
             rel_user_group__is_active=True,
             rel_user_group__is_member=True)
+        my_admin_groups = groups.objects.filter(
+            rel_user_group__id_user=request.user,
+            rel_user_group__is_active=True,
+            rel_user_group__is_admin=True)
     except groups.DoesNotExist:
         mygroups = "You Dont have any groups"
 
-    ctx = {"groups": mygroups}
+    ctx = {"groups": mygroups, "admin_groups": my_admin_groups}
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
