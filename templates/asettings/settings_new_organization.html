@@ -9,6 +9,7 @@
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
 		{{form_org}}<br><br>
+		<input type="hidden" value="{{ref}}" name="ref" >
 		<input type="submit" class="btn btn db" >
 	</form>
 </div>
