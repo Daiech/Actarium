@@ -41,7 +41,7 @@ def groupsList(request):
 @login_required(login_url='/account/login')
 def groupSettings(request, slug_group):
     '''
-        Muestra la configuracion de un grupo
+        Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
     try:
         g = groups.objects.get(slug=slug_group, is_active=True)
@@ -219,7 +219,8 @@ def newGroup(request):
     ctx = {"newGroupForm": form,
            "organizations": orgs,
            "billing": billing_list,
-           "sel_org": sel_org
+           "sel_org": sel_org,
+           "full_path": request.get_full_path()
            }
     return render_to_response('groups/newGroup.html', ctx, context_instance=RequestContext(request))
 
@@ -236,7 +237,7 @@ def showGroup(request, slug):
     is_member = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
     is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
     if is_member:
-        members = rel_user_group.objects.filter(id_group=g.id, is_active=True)
+        members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
         members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
         minutes_group = minutes.objects.filter(id_group=g.id)
         ctx = {"group": g, "members": members, "minutes": minutes_group, "members_pend": members_pend,
