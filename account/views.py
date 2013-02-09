@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_complete, password_reset_confirm
 from actions_log.views import saveActionLog
 from django.contrib.auth.models import User
-
+from django.utils.hashcompat import sha_constructor
+import random
 
 #------------------------------- <Normal User>---------------------------
 def newUser(request):
@@ -23,11 +24,33 @@ def newUser(request):
     if request.method == "POST":
         formulario = RegisterForm(request.POST)
         if formulario.is_valid():
-            formulario.save()
-            user_name = formulario['username'].data
-            user_id = User.objects.get(username=user_name)
-            saveActionLog(user_id, "SIGN_IN", "username: %s, email: %s" % (user_name, formulario['email'].data), str(request.META['REMOTE_ADDR']))
-            return userLogin(request, user_name, formulario['password1'].data)
+            # formulario.save()
+            # user_name = formulario['username'].data
+            email_list = []
+            email_user = formulario.cleaned_data['email']
+            name_newuser = formulario.cleaned_data['username']
+            salt = sha_constructor(str(random.random())).hexdigest()[:5]
+            activation_key = sha_constructor(salt+email_user).hexdigest()            
+            new_user = formulario.save()
+            new_user.is_active = False
+            new_user.save()
+            from models import activation_keys
+            activation_keys(id_user=new_user, email=email_user, activation_key= activation_key).save()
+            
+            email_list.append(str(email_user) + ",")
+            try:
+                title = "Bienvenido a Actarium"
+                contenido = "<strong>"+str(name_newuser)+"</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/"+activation_key+"' >http://actarium.daiech.com/account/activate/"+activation_key+"</a>"
+#                print contenido
+                sendEmail(email_list, title, contenido)
+            except Exception, e:
+                print "Exception mail: %s" % e
+            return render_to_response('account/registered.html')
+
+
+            user_id = User.objects.get(username=name_newuser)
+            saveActionLog(user_id, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
+            # return userLogin(request, user_name, formulario['password1'].data)
     else:
         formulario = RegisterForm()
     ctx = {'formNewUser': formulario}
@@ -80,7 +103,7 @@ def userLogin(request, user_name, password):
             saveActionLog(user_id, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
             return HttpResponseRedirect(next)
         else:
-            return render_to_response('account/status.html', context_instance=RequestContext(request))
+            return render_to_response('account/noactivo.html', context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/account/login?next=' + next)
 
@@ -182,3 +205,33 @@ def password_reset_complete2(request):
                 return HttpResponseRedirect("/account/")
 
 # --------------------------------</Recuperacion de contrasena>----------------------
+
+# ---------------------------------<activacion de cuenta>----------------------------
+
+def activate_account(request,activation_key):
+    if  not(activate_account_now(request,activation_key)== False):
+        return render_to_response('account/account_actived.html',{},context_instance = RequestContext(request))
+    else:
+        return render_to_response('account/invalid_link.html')
+    
+    
+def activate_account_now(request, activation_key):
+    from models import activation_keys
+    from django.contrib.auth.models import User
+    try:
+        activation_obj = activation_keys.objects.get(activation_key = activation_key)
+    except  Exception, e:
+        return False
+    if not(activation_obj.is_expired):
+        user = User.objects.get(id=activation_obj.id_user.pk)
+        user.is_active = True
+        user.save()
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        activation_obj.is_expired = True
+        activation_obj.save()
+        return True
+    else: 
+        return False
+
+

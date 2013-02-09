@@ -13,4 +13,5 @@ account_urls = patterns('',
     (r'^password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'account.views.password_reset_confirm2'),
           #  {'post_reset_redirect' : '/account/password/done/'}),
     (r'^password/done/$', 'account.views.password_reset_complete2'),
+    (r'^activate/(?P<activation_key>[-\w]+)', 'account.views.activate_account'),
 )
