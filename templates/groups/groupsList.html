@@ -3,36 +3,47 @@
 
 {%block body%}
 <article>
-    <div class="row-fluid">
-        <h2>Tus Grupos</h2>
-        <div class="btnSup">
-            <a href="/groups/new" class="btn"><i class="icon-book"></i>Crear Grupo</a>
+    <header >
+        <div class="row-fluid">
+            <div class="span1"><h3 class="">Grupos</h3></div>
+            <div class="pull-right btnSup">
+            <a href="/groups/new" class="btn btn-small">
+                <i class="icon-plus"></i> Crear Grupo</a>
+            </div>
         </div>
-        <hr>
-        <section class="row-fluid">
-            <ul class="nav onOver span12">
-                {% for group in groups %}
-                <li class="img-rounded">
-                    <a class="" href="/groups/{{group.slug}}">
-                        <div class="">
-                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}" />
-                            <span class="groupInfo">{{group.name|slice:"30"|lower|capfirst}}</span>
-                            <span class="colorText"> - {{group.description|slice:"80"|safe|lower|capfirst}}</span>
-                            <div class="pull-right buttons-edit">
-                                <button data-action="editar" class="btn_block"><i class="icon-pencil"></i></button>
-                                <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>
-                            </div>
-                        </div>
-                    </a>   
-
-
-                </li>
-
-                {% endfor %}
-            </ul>
-            
+    </header>
+    <hr>
+    <div id="content-container" class="row-fluid">
+        <section id="notifications" class="span6 white-box-container">
+                <h4 class=" ml50">Soy miembro</h4>
+                <hr>
+                <ul id="group-list" class="nav onOver">
+                    {% for group in groups %}
+                    <li class="">
+                        <a href="/groups/{{group.slug}}">
+                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
+                            {{group.name}}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
         </section>
-
+        <section class="white-box-container span6">
+                <h4 class="">Grupos que administro</h4>
+                <hr>
+                <ul id="group-list" class="nav onOver">
+                    {% for group in admin_groups %}
+                    {%if not group in groups %}
+                    <li class="">
+                        <a href="/groups/{{group.slug}}">
+                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
+                            {{group.name}}
+                        </a>
+                    </li>
+                    {%endif%}
+                    {% endfor %}
+                </ul>
+        </section>
     </div>
 </article>
 {%endblock%}

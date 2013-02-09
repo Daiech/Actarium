@@ -63,6 +63,12 @@ def settingsOrganizations(request):
 
 @login_required(login_url='/account/login')
 def newOrganization(request):
+    ref_get = ""
+    if request.method == "GET":
+        try:
+            ref_get = request.GET['ref']
+        except Exception:
+            ref_get = "/settings/organizations"
     if request.method == "POST":
         form = newOrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
@@ -81,10 +87,15 @@ def newOrganization(request):
                 url = save_file(url_file, str(org.name) + "-" + str(org.id))
                 org.logo_address = url
                 org.save()
-            return HttpResponseRedirect("/settings/organizations")
+            print "req_ %s - ref_ %s" % (request.POST['ref'], ref_get)
+            try:
+                ref = request.POST['ref'] + "?org=" + str(org.id)
+            except Exception:
+                ref = ref_get
+            return HttpResponseRedirect(ref)
     else:
         form = newOrganizationForm()
-    ctx = {"form_org": form}
+    ctx = {"form_org": form, "ref": ref_get}
     return render_to_response('asettings/settings_new_organization.html', ctx, context_instance=RequestContext(request))
 
 
