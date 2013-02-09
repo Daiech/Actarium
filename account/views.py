@@ -12,6 +12,7 @@ from django.contrib.auth.views import password_reset, password_reset_done, passw
 from actions_log.views import saveActionLog
 from django.contrib.auth.models import User
 from django.utils.hashcompat import sha_constructor
+from django.core.mail import EmailMessage
 import random
 
 #------------------------------- <Normal User>---------------------------
@@ -45,7 +46,7 @@ def newUser(request):
                 sendEmail(email_list, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
-            return render_to_response('account/registered.html')
+            return render_to_response('account/registered.html',{ 'email_address': email_user})
 
 
             user_id = User.objects.get(username=name_newuser)
@@ -233,5 +234,14 @@ def activate_account_now(request, activation_key):
         return True
     else: 
         return False
+
+def sendEmail(mail_to, titulo, contenido):
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
+    try:
+        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
+        correo.content_subtype = "html"
+        correo.send()
+    except Exception, e:
+        print e
 
 
