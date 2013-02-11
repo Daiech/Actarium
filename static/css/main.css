@@ -273,21 +273,21 @@ header div > #top-menu-style li{
     width: 26px;
     height: 26px;
 }
-#ico-groups{
+.icon-groups{
     background-position: 0 0;
 }
-#ico-reunions{
+.icon-reunions{
     background-position: -35px 0;
     width: 28px;
 }
-#ico-blog{
+.icon-blog{
     background-position: -72px 0;
 }
-#ico-faqs{
+.icon-faqs{
     background-position: -107px 0;
     width: 28px;
 }
-#ico-about{
+.icon-about{
     background-position: -150px 0;
     width: 24px;
 }
@@ -783,6 +783,16 @@ article header img{
 article header h3{
     margin:0;
     margin-left:40px;
+}
+.d-in{
+    display: inline;
+}
+.icons-page{
+    float: left;
+    margin-top: 7px;
+}
+.icon-reunion{
+    background-position: -35px 0;
 }
 /* ==========================================================================
    Helper classes
