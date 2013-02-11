@@ -46,7 +46,7 @@ def newUser(request):
                 sendEmail(email_list, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
-            return render_to_response('account/registered.html',{ 'email_address': email_user})
+            return render_to_response('account/registered.html',{ 'email_address': email_user}, context_instance=RequestContext(request))
 
 
             user_id = User.objects.get(username=name_newuser)
@@ -213,7 +213,7 @@ def activate_account(request,activation_key):
     if  not(activate_account_now(request,activation_key)== False):
         return render_to_response('account/account_actived.html',{},context_instance = RequestContext(request))
     else:
-        return render_to_response('account/invalid_link.html')
+        return render_to_response('account/invalid_link.html',{}, context_instance=RequestContext(request))
     
     
 def activate_account_now(request, activation_key):
