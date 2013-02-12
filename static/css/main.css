@@ -294,6 +294,12 @@ header div > #top-menu-style li{
 .t-a-r{
     text-align:right;
 }
+.t-a-l{
+    text-align:right;
+}
+.t-a-c{
+    text-align:right;
+}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */
@@ -794,9 +800,10 @@ article header h3{
     float: left;
     margin-top: 7px;
 }
-.icon-reunion{
-    background-position: -35px 0;
+.td-first{
+    width: 35%;
 }
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
