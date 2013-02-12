@@ -259,11 +259,12 @@ header div > #top-menu-style li{
     top: 1px;
 }
 #ac-load{
-    background-color: #dadada;
+    /*background-color: #dadada;*/
     display: none;
     margin-right: 15px;
     padding: 5px 10px;
     text-align:center;
+    width: 68px;
 }
 .top-text{
     /*font-weight: bold;*/

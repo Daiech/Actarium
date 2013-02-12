@@ -139,10 +139,12 @@ function setAlertMessage(t, m){
     setAlert(t, m, '#alert-message');
 }
 function sendAjax(url, params, load_elem, myCallback){
-    $(load_elem).show().html('<img src="/static/img/load16.gif" />');
+    // $(load_elem).show().html('<img src="/static/img/load16.gif" />');
+    $("#ac-load").fadeIn().html('<img src="/static/img/load.gif" />');
     $.get(url, params, function(data,error) {
             myCallback(data,error);
-            $(load_elem).hide();
+            // $(load_elem).hide();
+            $("#ac-load").fadeOut();
         }
     );
 }
