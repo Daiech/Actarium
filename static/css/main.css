@@ -576,9 +576,10 @@ article{
     }
 #body_container{
     /*border:solid thin gray;*/
+    clear: both;
+    color: #555;
     margin-top:-20px;
     min-height: 400px;
-    color: #555;
 }
 .but{
     background-color:  #999;
@@ -802,7 +803,7 @@ article header h3{
     margin-top: 7px;
 }
 .td-first{
-    width: 35%;
+    /*width: 45%;*/
 }
 
 /* ==========================================================================
