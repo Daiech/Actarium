@@ -34,23 +34,27 @@
         margin-top:10px;
     }
 </style>
-<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui.css" />
+<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
-	/*datetimepicker*/
-	select{
-		width:100px;
-	}
-	.ui-datepicker{ z-index: 1031;}
-	.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-	.ui-timepicker-div dl { text-align: left; }
-	.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-	.ui-timepicker-div dl dd { margin: 0 10px 0 65px; }
-	.ui-timepicker-div td { font-size: 90%; }
-	.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-	
-	.ui-timepicker-rtl{ direction: rtl; }
-	.ui-timepicker-rtl dl { text-align: right; }
-	.ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+    /*datetimepicker*/
+    .ui-timepicker-div .ui-widget-header { margin-bottom: 8px;}
+    .ui-timepicker-div dl { text-align: left; }
+    .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+    .ui-timepicker-div dl dd { margin: 0 10px 0 65px; padding: 0; }
+    .ui-timepicker-div td { font-size: 90%; }
+    .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+    .ui-timepicker-rtl{ direction: rtl; }
+    .ui-timepicker-rtl dl { text-align: right; }
+    .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+
+    div.ui-datepicker{
+     font-size:12px;
+     z-index: 9999 !important;
+    }
+    select{
+        width: 100%;
+    }
 </style>
 
 {%endblock%}

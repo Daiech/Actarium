@@ -2,7 +2,7 @@
 from django import forms
 # from groups.models import group_type
 from groups.models import groups
-
+from groups.validators import validate_date
 
 class newGroupForm(forms.Form):
     # group_type = group_type.objects.all()
@@ -31,19 +31,19 @@ class newMinutesForm(forms.Form):
     #formulario generico para cualquier tipo de acta
     code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Codigo de acta'}))
     #configuracion para campos de hora
-    format_valid = ['%I:%M %p']
-    time_widget = forms.widgets.TimeInput(attrs={'class': 'time-pick'})
+    # format_valid = ['%I:%M %p']
+    # time_widget = forms.widgets.TimeInput(attrs={'class': 'time-pick'})
     #formulario personalizado para un tipo de acta especifico para esta version es el unico tipo
-    date_start = forms.TimeField(label="Hora de Inicio", widget=time_widget, input_formats=format_valid)
+    date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
     location = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Orden del día'}))
     agreement = forms.CharField(label="Acuerdos", widget=forms.Textarea(attrs={'placeholder': 'Acuerdos'}))
-    date_end = forms.TimeField(label="Hora de finalización", widget=time_widget, input_formats=format_valid)
+    date_end = forms.DateTimeField(label="Fecha finalización", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
 
 
 class newReunionForm(forms.Form):
     #formulario para agregar una nueva reunion
-    date_reunion = forms.DateTimeField(label="Fecha", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    date_reunion = forms.DateTimeField(label="Fecha", validators=[validate_date], widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
     title = forms.CharField(label="Título", widget=forms.TextInput(attrs={'placeholder': 'Título'}))
     locale = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Objetivos de la reunión'}))
