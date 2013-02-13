@@ -2,7 +2,7 @@
 from django import forms
 # from groups.models import group_type
 from groups.models import groups
-
+from groups.validators import validate_date
 
 class newGroupForm(forms.Form):
     # group_type = group_type.objects.all()
@@ -43,7 +43,7 @@ class newMinutesForm(forms.Form):
 
 class newReunionForm(forms.Form):
     #formulario para agregar una nueva reunion
-    date_reunion = forms.DateTimeField(label="Fecha", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    date_reunion = forms.DateTimeField(label="Fecha", validators=[validate_date], widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
     title = forms.CharField(label="Título", widget=forms.TextInput(attrs={'placeholder': 'Título'}))
     locale = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Objetivos de la reunión'}))

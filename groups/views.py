@@ -76,7 +76,7 @@ def groupInfoSettings(request, slug_group):
         message = False
         if request.method == "POST":
             form = newGroupForm(request.POST)
-            if form.is_valid():
+            if form.is_valid(): 
                 g.name = form.cleaned_data['name']
                 g.description = form.cleaned_data['description']
                 g.save()
