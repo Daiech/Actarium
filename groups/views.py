@@ -705,8 +705,8 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
         minu = None
     if minu == None:
         myNewMinutes_type_1 = minutes_type_1(
-                       date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
-                       date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
+                       date_start=df['date_start'],
+                       date_end=df['date_end'],
                        location=df['location'],
                        agenda=df['agenda'],
                        agreement=df['agreement'],

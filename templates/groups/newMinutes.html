@@ -122,7 +122,7 @@
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
     /*datetimepicker*/
-    .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+    .ui-timepicker-div .ui-widget-header { margin-bottom: 8px;}
     .ui-timepicker-div dl { text-align: left; }
     .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
     .ui-timepicker-div dl dd { margin: 0 10px 0 65px; padding: 0; }
@@ -132,8 +132,10 @@
     .ui-timepicker-rtl{ direction: rtl; }
     .ui-timepicker-rtl dl { text-align: right; }
     .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+
     div.ui-datepicker{
      font-size:12px;
+     z-index: 9999 !important;
     }
     select{
         width: 100%;
@@ -151,14 +153,10 @@
 <script src="{{STATIC_PREFIX}}js/textareas.js"></script>
 
 <script type="text/javascript" >
-    $(document).on("ready",function(){
-        $('.time-pick').timepicker({
-            ampm: true,
-            controlType: 'select',
-            hourMin: 0,
-            hourMax: 24,
-            width: 200
-        });
-    })
+   $('.date-pick').datetimepicker({
+        dateFormat: 'yy-mm-dd',
+        controlType: 'select',
+        ampm: true
+    }).css({"z-index":"1034"});
 </script>
 {% endblock %}
