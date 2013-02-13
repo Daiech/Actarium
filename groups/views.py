@@ -317,7 +317,7 @@ def sendInvitationUser(email, user, group):
         if created:
             try:
                 title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitac&oacute;n."
+                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
                 sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
@@ -705,8 +705,8 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
         minu = None
     if minu == None:
         myNewMinutes_type_1 = minutes_type_1(
-                       date_start=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_start']), '%Y-%m-%d %H:%M:%S'),
-                       date_end=datetime.datetime.strptime(str(datetime.date.today()) + " " + str(df['date_end']), '%Y-%m-%d %H:%M:%S'),
+                       date_start=df['date_start'],
+                       date_end=df['date_end'],
                        location=df['location'],
                        agenda=df['agenda'],
                        agreement=df['agreement'],
