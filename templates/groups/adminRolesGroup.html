@@ -11,7 +11,6 @@
 			<table id="table-roles" class="table table-bordered table-hover">
 				<tr>
 					<th class="td-first">Usuario</th>
-					<th>Miembro</th>
 					<th>Secretario</th>
 					<th>Aprobador</th>
 					<th>Administrador</th>
@@ -30,10 +29,15 @@
 	                        {%endif%}
 	                    </div>
 					</td>
-					<td class="t-a-c"><input type="checkbox" checked disabled></td>
-					<td class="t-a-c"><input type="checkbox"></td>
-					<td class="t-a-c"><input type="checkbox"></td>
-					<td class="t-a-c"><input type="checkbox"></td>
+					<td class="t-a-c">
+						<input type="checkbox" data-role="1" data-role-name="Secretario" data-uid="{{member.id_user.id}}" >
+					</td>
+					<td class="t-a-c">
+						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.id_user.id}}">
+					</td>
+					<td class="t-a-c">
+						<input type="checkbox" data-role="3" data-role-name="Administrador" data-uid="{{member.id_user.id}}">
+					</td>
 					<td class="t-a-c">
 						<a href="#" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 					</td>
@@ -47,10 +51,15 @@
 	                        {{member.email_invited}} (pendiente)
 	                    </div>
 					</td>
-					<td class="t-a-c"><input type="checkbox" checked disabled></td>
-					<td class="t-a-c"><input type="checkbox"></td>
-					<td class="t-a-c"><input type="checkbox"></td>
-					<td class="t-a-c"><input type="checkbox"></td>
+					<td class="t-a-c">
+						<input type="checkbox" data-role="1" data-role-name="Secretario" data-uid="{{member.email_invited}}" >
+					</td>
+					<td class="t-a-c">
+						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.email_invited}}" >
+					</td>
+					<td class="t-a-c">
+						<input type="checkbox" data-role="3" data-role-name="Administrador" data-uid="{{member.email_invited}}" >
+					</td>
 					<td class="t-a-c">
 						<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 					</td>
@@ -197,6 +206,24 @@
 	$(document).on("ready", function() {
 		$("#admin-roles").addClass("active")
 	    showIconCloseOnHover()
+	    function setRole(e) {
+	    	var checkbox = $(this);
+	    	var role = checkbox.attr("data-role")
+	    	var role_name = checkbox.attr("data-role-name")
+	    	var uid = checkbox.attr("data-uid")
+	    	if(checkbox.is(":checked")){
+	    		setAlertMessage("Role",uid+" Ahora es rol "+role_name)
+	    	}
+	    	else{
+	    		if(confirm("Seguro que desea eliminarle este rol?")){
+	    			setAlertMessage("Role",uid+" Ya no es rol"+role_name)
+	    		}
+	    		else{
+	    			checkbox.attr("checked","checked")
+	    			setAlertMessage("y ahora?","¿que?")
+	    		}
+	    	}
+	    }
 	    function deleteInvitation(e){
 	    	e.preventDefault()
 	        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
@@ -269,7 +296,6 @@
 	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
 	                    '</div>'+
 					'</td>'+
-					'<td class="t-a-c"><input type="checkbox" checked disabled></td>'+
 					'<td class="t-a-c"><input type="checkbox"></td>'+
 					'<td class="t-a-c"><input type="checkbox"></td>'+
 					'<td class="t-a-c"><input type="checkbox"></td>'+
@@ -333,16 +359,15 @@
 	            $(this).find("i.icon-remove").hide(30)
 	        })
 	    }
+	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
 	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
 	    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
 	    $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
-	        //give the focus to the input to search members
-	        $(this).next("#add-member-menu").addClass("disblock")
-	        $("#newmember").focus()
+	        $(this).next("#add-member-menu").addClass("disblock");
+	        $("#newmember").focus()//give the focus to the input to search members
 	    });
 	    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
-	        //Close the dropdown menu to add members
-	       $(this).parent().parent().removeClass("disblock")
+	        $(this).parent().parent().removeClass("disblock");//Close the dropdown menu to add members
 	    });
 	});
 </script>
