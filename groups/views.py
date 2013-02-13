@@ -870,11 +870,8 @@ def newReunion(request, slug):
                 except Exception, e:
                     print "Exception mail: %s" % e
 
-                id_reunion = reunions.objects.get(id_convener=request.user,
-                               date_reunion=df['date_reunion'],
-                               id_group=q,
-                               agenda=df['agenda'])
-                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (str(df['title']), id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+                id_reunion = myNewReunion
+                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
             form = newReunionForm()
