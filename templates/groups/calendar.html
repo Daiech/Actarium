@@ -3,10 +3,7 @@
 
 {%block body%}
 <article>
-	
-    
-	<div class="row-fluid">
-		<header class="span12">
+		<header class="">
 	    	<div class="span4">
 	    		<div class="menu-icons icons-page icon-reunions"></div>
 	    		<h3>Reuniones</h3>
@@ -20,63 +17,64 @@
 	    	</div>
 		    <div  class="span12" style="margin-left:0px;" ><hr></div>
         </header>
-	    <section id="calendar" >
-	        <div id="datepicker">
-	            <img src="/static/img/load16.gif" alt="cargando calendario"/>
-	        </div>
-	        <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
-				<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h3>Detalles de la Reuni&oacute;n</h3>
-				</div>
-				<div class="modal-body">
-					<div id="reunion-data">
-						<div id="loading-reunion"></div>
-		        	</div>
-				</div>
-			</div>
-			<div class="modal hide fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
-				<div class="modal-header">
+		<div class="row-fluid">
+		    <section id="calendar" class="white-box-container span5" >
+		        <div id="datepicker">
+		            <img src="/static/img/load.gif" alt="cargando calendario"/>
+		        </div>
+		        <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
+					<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>Convocar nueva reuni&oacute;n</h3>
-					<hr>
-					<h4>Elige un grupo</h4>
+					<h3>Detalles de la Reuni&oacute;n</h3>
+					</div>
+					<div class="modal-body">
+						<div id="reunion-data">
+							<div id="loading-reunion"></div>
+			        	</div>
+					</div>
 				</div>
-				<div class="modal-body">
-					<select id="select-group">
-						<option value="0">Selecciona un grupo</option>
-					</select>
+				<div class="modal hide fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Convocar nueva reuni&oacute;n</h3>
+						<hr>
+						<h4>Elige un grupo</h4>
+					</div>
+					<div class="modal-body">
+						<select id="select-group">
+							<option value="0">Selecciona un grupo</option>
+						</select>
+					</div>
 				</div>
-			</div>
-	        <div class="center">
-	        	<h3> Proximas reuniones</h3>
-	        	<div id="next-reunions">
-	        	</div>
-	        </div>
-	    </section>
-	    
-	    <section id="date_reunions2">
-		    <section class="tabbable reunion-tabs"> 
-				  <ul class="nav nav-tabs">
-				    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
-				    <li><a href="#tab2" data-toggle="tab">Confirmadas (<span id="size-confirmadas">0</span>)</a></li>
-				    <li><a href="#tab3" data-toggle="tab">Rechazadas (<span id="size-rechazadas">0</span>)</a></li>
-				  </ul>
-				  <div class="tab-content">
-				    <div class="tab-pane active" id="tab1">
-				      <ul id='tab-pendientes'></ul>
-				    </div>
-				    <div class="tab-pane" id="tab2">
-				      <ul id='tab-confirmadas'></ul>
-				    </div>
-				    <div class="tab-pane" id="tab3">
-				      <ul id='tab-rechazadas'></ul>
-				    </div>
-				  </div>
+		        <div class="center">
+		        	<div class="ml20"><h3> Proximas reuniones</h3></div>
+		        	<div id="next-reunions">
+		        	</div>
+		        </div>
 		    </section>
-	    </section>
-	    <section id="date_reunions1"></section>
-    </div>
+		    
+		    <section id="date_reunions2" class="white-box-container span7" >
+			    <section class="tabbable reunion-tabs"> 
+					  <ul class="nav nav-tabs">
+					    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
+					    <li><a href="#tab2" data-toggle="tab">Confirmadas (<span id="size-confirmadas">0</span>)</a></li>
+					    <li><a href="#tab3" data-toggle="tab">Rechazadas (<span id="size-rechazadas">0</span>)</a></li>
+					  </ul>
+					  <div class="tab-content">
+					    <div class="tab-pane active" id="tab1">
+					      <ul id='tab-pendientes'></ul>
+					    </div>
+					    <div class="tab-pane" id="tab2">
+					      <ul id='tab-confirmadas'></ul>
+					    </div>
+					    <div class="tab-pane" id="tab3">
+					      <ul id='tab-rechazadas'></ul>
+					    </div>
+					  </div>
+			    </section>
+		    </section>
+		    <section id="date_reunions1"></section>
+	    </div>
 </article>
 {%endblock%}
 {%block style%}
@@ -86,14 +84,14 @@
         width: auto;
     }
     .tab-content{
-    	width: 500px;
+    	/*width: 500px;*/
     }
     table td .btn{
         margin-top:10px;
     }
     #calendar {
-        padding-top: 10px;
-        float:left;
+        /*padding-top: 10px;
+        float:left;*/
     }
     #date_reunions{
     	 padding-left: 40px;
@@ -119,8 +117,18 @@
     
     .tab-content div ul{
     	list-style: none;
+    	padding-left: 0;
+    	margin-left: 5px;
     }
-    
+    .tab-content div ul li{
+    	border-radius: 3px;
+    	margin-bottom: 3px;
+    	padding: 5px;
+    }
+    .tab-content div ul li hr{
+    	margin: 4px;
+    	margin-top: 6px;
+    }
     .btn-link{
         padding-left: 0;
     }
@@ -135,7 +143,8 @@
         margin: 10px auto;
     }
     .center h3{
-    	padding-left: 10px;
+    	/*padding-left: 25px;*/
+    	text-align: center;
     }
     #bold_date{
     	font-size:21px;
@@ -161,11 +170,15 @@
 		border-bottom: solid thin #EBE9BC;
 	}
 	#next-reunions{
-		width:270px;
+		/*width:270px;*/
 	}
 	#next-reunions ul{
 		list-style: none;
 	}
+	.white-box-container{min-height: 454px;}
+	#datepicker{margin: 0 auto;width: 308px;}
+
+
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
 {%endblock%}
@@ -285,7 +298,7 @@ $(document).on("ready", function() {
             			setConfirmButton();
         			}
     				setMoreButton();
-    				$('#reunion_'+id_reunion).css('background-color',"#51a351");
+    				$('#reunion_'+id_reunion).css('background-color',"#dadada");
 					$('#reunion_'+id_reunion).animate({'background-color': '#eeeeee'},3500,function(){ });		
 					setNextReunions();	
     			}
@@ -445,7 +458,7 @@ $(document).on("ready", function() {
 				window.location = "/groups/newReunion/"+group_slug;}
 		});
 		if( getUrlVars()["r"]){
-			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#51a351");
+			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#dadada");
 			$('#reunion_'+getUrlVars()["r"]).animate({'background-color': '#eeeeee'},3500,function(){ });
 		}
 	}
