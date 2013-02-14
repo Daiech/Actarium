@@ -716,7 +716,7 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
                         code=df['code'],
                         id_extra_minutes=myNewMinutes_type_1,
                         id_group=group,
-                        id_type=minutes_type.objects.get(pk=1),  # pk=1 ==> Reunion
+                        id_type=minutes_type.objects.get(pk=1)  # pk=1 ==> Reunion
                     )
         myNewMinutes.save()
         id_user = request.user
@@ -1078,6 +1078,7 @@ def getReunionData(request):
             group_slug = reunion.id_group.slug
             assistants = rel_user_group.objects.filter(id_group=id_group)
             assis_list = {}
+            hM = reunion.hasMinutes()
             i = 0
             c = 0
             for assistant in assistants:
@@ -1108,6 +1109,12 @@ def getReunionData(request):
                         iconf = 2
             except assistance.DoesNotExist:
                     iconf = 3
+            if hM:
+                has_minute = 1
+                minute_code = reunion.getMinutes().code
+            else:
+                has_minute = 0
+                minute_code = 0
             reunion_data = {"convener": convener,
                "date_convened": str(dateTimeFormatDb(date_convened)),
                "date_reunion": str(dateTimeFormatDb(date_reunion)),
@@ -1118,7 +1125,9 @@ def getReunionData(request):
                "is_done": is_done,
                "assistants": assis_list,
                "group_slug": group_slug,
-               "iconf": iconf
+               "iconf": iconf,
+               "has_minute": has_minute,
+               "minute_code": minute_code
            }
     else:
         reunion_data = "Error Calendar"

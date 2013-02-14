@@ -292,7 +292,7 @@ $(document).on("ready", function() {
     	)
 	}
 	function getReunionData(id_reunion){
-		console.log('dame una reunion'+id_reunion);
+		//console.log('dame una reunion'+id_reunion);
 		sendAjax("/groups/getReunion",
     			{id_reunion:id_reunion},
     			"#loading-reunion",
@@ -314,8 +314,11 @@ $(document).on("ready", function() {
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
     	    			else
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
-   	    				if (data.iconf == 1)
-       	    				reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+    	    			console.log("iconf: "+data.iconf+" has_minute: "+data.has_minute)
+   	    				if (data.has_minute == 1)
+  	   	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/minutes/"+data.minute_code+"' class='btn btn-info' >Ver Acta</a>";
+   	    				if (data.iconf == 1 && data.has_minute == 0)
+       	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
     	    			
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
@@ -345,12 +348,12 @@ $(document).on("ready", function() {
 		$('.confirmed2-true').click(function(e){
 			setList(e,$(this),$('#pendientes'),$('#pendientes2'), true);
 			setSizeTabReunion('size-pendientes',0);
-			console.log('confirm2true');
+			//console.log('confirm2true');
 		});
 		$('.confirmed2-false').click(function(e){
 			setList(e,$(this),$('#pendientes'),$('#pendientes2'),false);
 			setSizeTabReunion('size-pendientes',0);
-			console.log('confirm2false');
+			//console.log('confirm2false');
 		});	
 	}
 	function setMoreButton(){
@@ -364,7 +367,7 @@ $(document).on("ready", function() {
 			e.preventDefault();
 		    getReunionData($(this).attr("data-id-reunion"));
 		});
-		console.log("setNextReunionButton");
+		//console.log("setNextReunionButton");
 	}
 	
 	setButtons();
@@ -376,7 +379,7 @@ $(document).on("ready", function() {
 		li.animate({'height': 0},t,function(){
 			confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-group_slug"), $(this).attr("data-date"), $(this).attr("data-title"));
 			$(this).remove()
-			console.log("|"+ul.text()+"|");
+			//console.log("|"+ul.text()+"|");
 			if(ul.text()==""){ul.remove(); h3.remove()}
 		});
 	}

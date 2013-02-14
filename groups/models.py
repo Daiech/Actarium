@@ -118,6 +118,15 @@ class reunions(models.Model):
             return False
         except Exception:
             return False
+        
+    def getMinutes(self):
+        try:
+            m = rel_reunion_minutes.objects.get(id_reunion=self.id)
+            return m.id_minutes
+        except rel_reunion_minutes.DoesNotExist():
+            return False
+        except Exception:
+            return False
 
     def __unicode__(self):
         return "%s , del %s" % (self.date_reunion, self.id_group)
