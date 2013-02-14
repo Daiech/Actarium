@@ -9,7 +9,7 @@
         </h2>
         <strong>
             {%if reunion%}
-                de la <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">reuni&oacute;n del {{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
+                de la reuni&oacute;n de <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">{{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
             {%endif%}
         </strong>
         <hr>
