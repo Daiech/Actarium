@@ -966,6 +966,9 @@ def getReunions(request):
 
 @login_required(login_url='/account/login')
 def getNextReunions(request):
+    """
+        Se muestra debajo del calendario las proximas 3 reuniones a las cuales ya ha sido confirmada la asistencia.
+    """
     if request.is_ajax():
         gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
         my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
@@ -979,13 +982,13 @@ def getNextReunions(request):
                     is_saved = 1
                     if (is_confirmed):
                         json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved, "title": reunion.title}
-                        print "---------------------------------------------------------"
+                        # print "---------------------------------------------------------"
                         i = i + 1
                 except assistance.DoesNotExist:
                     is_confirmed = False
                     is_saved = 0
         response = json_array
-        print json_array
+        # print json_array
     else:
         response = "Error Calendar"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -1009,14 +1012,26 @@ def setAssistance(request):
             is_confirmed = str(request.GET['is_confirmed'])
             if (is_confirmed == "true"):
                 is_confirmed = True
+                resp= "Si asistir&aacute;"
             else:
                 is_confirmed = False
+                resp= "No asistir&aacute;"
             assis, created = assistance.objects.get_or_create(id_user=id_user, id_reunion=id_reunion)
     #        if created:
     #            assis = assistance.objects.get(id_user=id_user, id_reunion=id_reunion)
             assis.is_confirmed = is_confirmed
     #        assis.is_confirmed = is_confirmed
             assis.save()
+            email_list = []
+            email_list.append(str(id_reunion.id_convener.email) + ",")
+            try:
+                title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") "+resp+ " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
+                contenido = "Reunion: <strong>" + id_reunion.title + "</strong><br><br>Grupo: "+str(id_reunion.id_group.name.encode('utf8', 'replace')) +"<br><br>Respuesta: <strong>"+resp+"</strong>"
+                sendEmail(email_list, title, contenido)
+            except Exception, e:
+                print "Exception mail: %s" % e
+
+
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             #print assis
             #print request.META['REMOTE_ADDR']
