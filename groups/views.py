@@ -1012,10 +1012,10 @@ def setAssistance(request):
             is_confirmed = str(request.GET['is_confirmed'])
             if (is_confirmed == "true"):
                 is_confirmed = True
-                resp= "Si asistir&aacute;"
+                resp= u"Si asistirá"
             else:
                 is_confirmed = False
-                resp= "No asistir&aacute;"
+                resp= u"No asistirá"
             assis, created = assistance.objects.get_or_create(id_user=id_user, id_reunion=id_reunion)
     #        if created:
     #            assis = assistance.objects.get(id_user=id_user, id_reunion=id_reunion)
@@ -1023,14 +1023,13 @@ def setAssistance(request):
     #        assis.is_confirmed = is_confirmed
             assis.save()
             email_list = []
-            email_list.append(str(id_reunion.id_convener.email) + ",")
+            email_list.append(str(id_reunion.id_convener.email) + ",") 
             try:
                 title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") "+resp+ " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
-                contenido = "Reunion: <strong>" + id_reunion.title + "</strong><br><br>Grupo: "+str(id_reunion.id_group.name.encode('utf8', 'replace')) +"<br><br>Respuesta: <strong>"+resp+"</strong>"
+                contenido = "Reunion: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>"+str(id_reunion.id_group.name.encode('utf8', 'replace')) +"</strong><br><br>Respuesta: <strong>"+resp+"</strong>"
                 sendEmail(email_list, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
-
 
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             #print assis
@@ -1041,7 +1040,7 @@ def setAssistance(request):
     else:
         response = "Error Calendar"
         return HttpResponse(json.dumps(response), mimetype="application/json")
-
+ 
 
 @login_required(login_url='/account/login')
 def getReunionData(request):
