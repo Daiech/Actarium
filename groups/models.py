@@ -110,6 +110,15 @@ class reunions(models.Model):
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)
 
+    def hasMinutes(self):
+        try:
+            rel_reunion_minutes.objects.get(id_reunion=self.id)
+            return True
+        except rel_reunion_minutes.DoesNotExist():
+            return False
+        except Exception:
+            return False
+
     def __unicode__(self):
         return "%s , del %s" % (self.date_reunion, self.id_group)
 

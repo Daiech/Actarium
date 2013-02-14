@@ -76,7 +76,7 @@ def groupInfoSettings(request, slug_group):
         message = False
         if request.method == "POST":
             form = newGroupForm(request.POST)
-            if form.is_valid(): 
+            if form.is_valid():
                 g.name = form.cleaned_data['name']
                 g.description = form.cleaned_data['description']
                 g.save()
@@ -758,6 +758,7 @@ def newMinutes(request, slug_group, id_reunion):
     This function creates a minutes with the form for this.
     '''
     reunion = None
+    hM = True
     group = groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
     if is_member:
@@ -766,11 +767,26 @@ def newMinutes(request, slug_group, id_reunion):
             select = request.POST.getlist('members[]')
             m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             if form.is_valid() and len(select) != 0:
-                save = saveMinute(request, group, form, m_selected, m_no_selected)
-                if save:
+                try:
+                    reunion_id = int(request.POST['reunion_id'])
+                    _reunion = reunions.objects.get(id=reunion_id)
+                    #  esta reunion pertenece a un grupo mio?
+                    hM = _reunion.hasMinutes()
+                    if hM:
+                        return HttpResponseRedirect("/#ya-existe-un-acta-para-esta-reunion")
+                except rel_reunion_minutes.DoesNotExist:
+                    reunion_id = None
+                except reunions.DoesNotExist:
+                    reunion_id = None
+                except Exception:
+                    reunion_id = False
+                _minute = saveMinute(request, group, form, m_selected, m_no_selected)
+                if _minute:
+                    if not hM:
+                        rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
                     saved = True
                     error = False
-                    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(save.code)
+                    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
                     link = URL_BASE + url_new_minute
                     email_list = getEmailListByGroup(group)
                     title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
