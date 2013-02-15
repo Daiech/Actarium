@@ -874,6 +874,7 @@ def newReunion(request, slug):
                                agenda=df['agenda'],
                              )
                 myNewReunion.save()
+                id_reunion = myNewReunion
                 relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
                 for relation in relations:
@@ -881,12 +882,13 @@ def newReunion(request, slug):
                     email_list.append(str(relation.id_user.email) + ",")
                 try:
                     title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "Reunion: <strong>" + str(df['title']) + "</strong><br><br>La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                    contenido = "Reunion: <strong>" + str(df['title']) + "</strong><br><br>La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Acepta o rechaza la reunion en: <a href='http://actarium.daiech.com/groups/calendar/"+ str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk)+"' >http://actarium.com/groups/calendar/"+ str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk)+"</a><br>"
+                    print contenido
                     sendEmail(email_list, title, contenido)
                 except Exception, e:
                     print "Exception mail: %s" % e
 
-                id_reunion = myNewReunion
+                
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
@@ -907,6 +909,12 @@ def calendar(request):
     i = 0
     json_array = {}
     for reunion in my_reu_day:
+        td = make_naive(reunion.date_reunion,get_default_timezone()) - datetime.datetime.now()
+#           print td
+        if not(td.days >=0 and td.seconds >= 0 and td.microseconds >=0):
+            is_last = 1
+        else:
+            is_last = 0
         try:
             confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
             is_confirmed = confirm.is_confirmed
@@ -914,7 +922,14 @@ def calendar(request):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved, "title": reunion.title}
+        json_array[i] = {"id_r": str(reunion.id), 
+                         "group_slug": str(reunion.id_group.slug), 
+                         "group_name": str(reunion.id_group.name), 
+                         "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 
+                         'is_confirmed': str(is_confirmed), 
+                         'is_saved': is_saved, 
+                         "title": reunion.title,
+                         'is_last':is_last}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -935,6 +950,13 @@ def calendarDate(request, slug=None):
     i = 0
     json_array = {}
     for reunion in my_reu_day:
+        td = make_naive(reunion.date_reunion,get_default_timezone()) - datetime.datetime.now()
+#           print td
+        if not(td.days >=0 and td.seconds >= 0 and td.microseconds >=0):
+            is_last = 1
+        else:
+            is_last = 0
+#        print is_last
         try:
             confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
             is_confirmed = confirm.is_confirmed
@@ -942,7 +964,14 @@ def calendarDate(request, slug=None):
         except assistance.DoesNotExist:
             is_confirmed = False
             is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id), "group_slug": str(reunion.id_group.slug), "group_name": str(reunion.id_group.name), "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': str(is_confirmed), 'is_saved': is_saved, 'title': reunion.title}
+        json_array[i] = {"id_r": str(reunion.id), 
+                         "group_slug": str(reunion.id_group.slug), 
+                         "group_name": str(reunion.id_group.name), 
+                         "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 
+                         'is_confirmed': str(is_confirmed), 
+                         'is_saved': is_saved, 
+                         'title': reunion.title,
+                         'is_last':is_last}
         i = i + 1
     response = json_array
     ctx = {'TITLE': "Actarium",
@@ -965,6 +994,17 @@ def getReunions(request):
             i = 0
             json_array = {}
             for reunion in my_reu_day:
+#                print "----------------------------------------------------------------------"
+#                print reunion.date_reunion
+#                print make_naive(reunion.date_reunion,get_default_timezone())
+#                print datetime.datetime.now()
+                td = make_naive(reunion.date_reunion,get_default_timezone()) - datetime.datetime.now()
+#                print td
+                if not(td.days >=0 and td.seconds >= 0 and td.microseconds >=0):
+                    is_last = 1
+                else:
+                    is_last = 0
+#                print is_last
                 try:
                     confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
                     is_confirmed = confirm.is_confirmed
@@ -972,7 +1012,14 @@ def getReunions(request):
                 except assistance.DoesNotExist:
                     is_confirmed = False
                     is_saved = 0
-                json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved, "title": reunion.title}
+                json_array[i] = {"id_r": str(reunion.id), 
+                                 "group_slug": reunion.id_group.slug, 
+                                 "group_name": reunion.id_group.name, 
+                                 "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 
+                                 'is_confirmed': is_confirmed, 
+                                 'is_saved': is_saved, 
+                                 "title": reunion.title,
+                                 "is_last": is_last}
                 i = i + 1
             response = json_array
     else:
@@ -997,7 +1044,13 @@ def getNextReunions(request):
                     is_confirmed = confirm.is_confirmed
                     is_saved = 1
                     if (is_confirmed):
-                        json_array[i] = {"id_r": str(reunion.id), "group_slug": reunion.id_group.slug, "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 'is_confirmed': is_confirmed, 'is_saved': is_saved, "title": reunion.title}
+                        json_array[i] = {"id_r": str(reunion.id), 
+                                         "group_slug": reunion.id_group.slug, 
+                                         "group_name": reunion.id_group.name, 
+                                         "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), 
+                                         'is_confirmed': is_confirmed, 
+                                         'is_saved': is_saved, 
+                                         "title": reunion.title}
                         # print "---------------------------------------------------------"
                         i = i + 1
                 except assistance.DoesNotExist:
