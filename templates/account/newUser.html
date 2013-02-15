@@ -1,9 +1,9 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Registro{% endblock %}
 {%block body%}
-<article>
-    <div class="containterMargin">
-        <h1>Registro de Usuario</h1>
+<article class="white-box-container">
+        <h3>Registro de Usuario</h3>
+        <p class="lead">llena el siguiente formulario para registrarte en <strong>Actarium</strong></p>
         <form class="form-horizontal" method="POST">
             {% csrf_token %}
             <table>{{ formNewUser }}</table>
@@ -17,6 +17,5 @@
                 </div>
             </div>
         </form>
-    </div>
 </article>
 {%endblock%}

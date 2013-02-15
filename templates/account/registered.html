@@ -1,9 +1,10 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Correo enviado{% endblock %}
 {%block body %}		
-	<article class="esqred">
-		<h3>Te hemos enviado un correo a {{ email_address }} con un link para activar tu cuenta</h3>
-		<p>Recuerda agregar el contacto <strong>no-repy@daiech.com</strong> para que tus correo lleguen a la bandeja de entrada, si no ves tu correo de activacion revisa la bandeja de correo no deseado.</p><br />
-
+	<article class="white-box-container info-message">
+		<h3>La cuenta ha sido registrada!</h3>
+		<p class="lead">Te hemos enviado un correo a <strong>{{ email_address }}</strong> con un link para activar tu cuenta.</p>
+		<p class="lead">Recuerda agregar el contacto <strong>no-repy@daiech.com</strong> para que los correos de <strong>Actarium</strong> lleguen a tu bandeja de entrada.</p>
+		<p class="lead">Si no ves tu correo de activacion revisa la bandeja de correo no deseado.</p>
 	</article>
 {% endblock%}
