@@ -2,9 +2,9 @@
 {% block TITLE %}Iniciar Sesi&oacute;n{% endblock %}
 
 {%block body%}
-<article>
-    <div class="containterMargin">
-        <h1>Iniciar Sesi&oacute;n</h1>
+<article class="white-box-container">
+        <h3>Iniciar Sesi&oacute;n</h3>
+        <p class="lead">Ingresa tus datos de usuario para acceder a tu cuenta en <strong>Actarium</strong></p>
         <form name="" action="" method="POST" id="" class="form-horizontal">
             {% csrf_token %}
             <table>{{ formulario }}</table>
@@ -19,6 +19,5 @@
                 </div>
             </div>
         </form>
-    </div>
 </article>
 {%endblock%}

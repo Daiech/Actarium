@@ -1,9 +1,10 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Link no valido{% endblock %}
 {%block body %}		
-	<article class="esqred">
-		<h3>Este link no funciona</h3>
-		<p>El link no esta activo en el momento.</p><br />
-
+	<article class="white-box-container">
+		<h3>Link no valido!</h3>
+		<p class="lead">El link al que ingresaste ya no es valido</p>
+		<p class="lead">Si deseas iniciar sesion ingresa a: <a href="/account/login">Iniciar sesi&oacute;n</a></p>
+		<p class="lead">Si olvidaste tu contrase&ntilde;a utiliza la <a href="/account/password/reset/">opci&oacute;n de recuperaci&oacute;n de contrase&ntilde;a</a></p>
 	</article>
 {% endblock%}

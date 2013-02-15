@@ -18,7 +18,7 @@
 		    <div  class="span12" style="margin-left:0px;" ><hr></div>
         </header>
 		<div class="row-fluid">
-		    <section id="calendar" class="white-box-container span5" >
+		    <section id="calendar" class="white-box-container span4" >
 		        <div id="datepicker">
 		            <img src="/static/img/load.gif" title="cargando calendario" style="width:80px" />
 		        </div>
@@ -53,12 +53,13 @@
 		        </div>
 		    </section>
 		    
-		    <section id="date_reunions2" class="white-box-container span7" >
+		    <section id="date_reunions2" class="white-box-container span8" >
 			    <section class="tabbable reunion-tabs"> 
 					  <ul class="nav nav-tabs">
 					    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
 					    <li><a href="#tab2" data-toggle="tab">Confirmadas (<span id="size-confirmadas">0</span>)</a></li>
 					    <li><a href="#tab3" data-toggle="tab">Rechazadas (<span id="size-rechazadas">0</span>)</a></li>
+					    <li><a href="#tab4" data-toggle="tab">Anteriores (<span id="size-anteriores">0</span>)</a></li>
 					  </ul>
 					  <div class="tab-content">
 					    <div class="tab-pane active" id="tab1">
@@ -69,6 +70,9 @@
 					    </div>
 					    <div class="tab-pane" id="tab3">
 					      <ul id='tab-rechazadas'></ul>
+					    </div>
+					    <div class="tab-pane" id="tab4">
+					      <ul id='tab-anteriores'></ul>
 					    </div>
 					  </div>
 			    </section>
@@ -225,7 +229,7 @@ $(document).on("ready", function() {
 		    			}
 		    			window.history.pushState(data, dateText, html5url);
 		    			show_data(data)
-		    			$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+dateText+" </span> </h4>");
+		    			//$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+dateText+" </span> </h4>");
 		    			setConfirmButton();
 		    			setRejectButton();
 		    			setButtons();
@@ -245,33 +249,43 @@ $(document).on("ready", function() {
 		var tablist1="";
 		var tablist2="";
 		var tablist3="";
+		var tablist4="";
 		var asize_p=0;
 		var asize_c=0;
 		var asize_r=0;
+		var asize_a=0;
 		$.each(data, function() { 
-			if(this.is_saved == 1){
-				if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
-					tablist1 = tablist1 + createList(false,1,this.group_name,this.group_slug,this.date,this.id_r,this.title);
-					asize_c=asize_c +1;
-				}
-				else { //reuniones rechazadas
-					tablist3 = tablist3  + createList(false,2,this.group_name,this.group_slug,this.date,this.id_r,this.title);
-					asize_r=asize_r +1;
-				}
+			if(this.is_last == 1){
+				tablist4 = tablist4 + createList(false,4,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+				asize_a=asize_a +1;
 			}
-			else{ //reuniones pendientes por confirmar
-				tablist2 = tablist2 + createList(false,3,this.group_name,this.group_slug,this.date,this.id_r,this.title);
-				asize_p=asize_p +1;
+			else{
+				if(this.is_saved == 1){
+					if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
+						tablist1 = tablist1 + createList(false,1,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+						asize_c=asize_c +1;
+					}
+					else { //reuniones rechazadas
+						tablist3 = tablist3  + createList(false,2,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+						asize_r=asize_r +1;
+					}
+				}
+				else{ //reuniones pendientes por confirmar
+					tablist2 = tablist2 + createList(false,3,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+					asize_p=asize_p +1;
+				}
 			}
 		});
 
 	    $("#tab-pendientes").html(tablist2);
 	    $("#tab-confirmadas").html(tablist1);
 	    $("#tab-rechazadas").html(tablist3);
+	    $("#tab-anteriores").html(tablist4);
 	    
 	    $("#size-pendientes").html(asize_p);
 	    $("#size-confirmadas").html(asize_c);
 	    $("#size-rechazadas").html(asize_r);
+	    $("#size-anteriores").html(asize_a);
 	    
 		setMoreButton();
 	}
