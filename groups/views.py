@@ -84,7 +84,7 @@ def setRole(request, slug_group):
                     saved = True
                     try:
                         if role_name:  # the rol has been assigned
-                            agrego = "agregó"
+                            agrego = "agrego"
                             title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
                             contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> al grupo <strong>" + str(g.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ahora tienes permisos especiales sobre este grupo. Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y enterate de lo que est&aacute; pasando."
                             sendEmail([rel.id_user.email], title, contenido)
