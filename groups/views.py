@@ -85,8 +85,9 @@ def setRole(request, slug_group):
                     try:
                         if role_name:  # the rol has been assigned
                             agrego = "agrego"
-                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
-                            contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> al grupo <strong>" + str(g.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ahora tienes permisos especiales sobre este grupo. Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y enterate de lo que est&aacute; pasando."
+                            link = URL_BASE + "/groups/" + str(g.slug)
+                            title = "[Actarium] " + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
+                            contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a><br><br>Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
                             sendEmail([rel.id_user.email], title, contenido)
                     except Exception, e:
                         # saveAction
@@ -1287,7 +1288,7 @@ def removeGMT(datetime_var):
 
 
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado autom&aacute;ticamente por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter<br> <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
         correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"
