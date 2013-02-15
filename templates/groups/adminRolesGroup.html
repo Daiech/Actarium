@@ -16,30 +16,30 @@
 					<th>Administrador</th>
 					<th>Eliminar</th>
 				</tr>
-				{%for member in members%}
+				{%for m in members%}
 				<tr>
 					<td>
 						<div class="">
-	                        <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
-	                        {{member.id_user.first_name}} {{member.id_user.last_name}}
-	                        {%if member.id_user == user%}
+	                        <img style="width:20px" src="{{m.member.id_user.email|showgravatar:'20'}}" alt="{{m.member.id_user}}">
+	                        {{m.member.id_user.first_name}} {{m.member.id_user.last_name}}
+	                        {%if m.member.id_user == user%}
 	                        (yo)
 	                        {%else%}
-	                        ({{member.id_user}})
+	                        ({{m.member.id_user}})
 	                        {%endif%}
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="1" data-role-name="Secretario" data-uid="{{member.id_user.id}}" >
+						<input type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_secretary%}checked{%endif%}> 
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.id_user.id}}">
+						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_approver%}checked{%endif%}>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="3" data-role-name="Administrador" data-uid="{{member.id_user.id}}">
+						<input type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_admin%}checked{%endif%} {%if m.roles.is_superadmin or m.member.id_user == user%}disabled{%endif%}>
 					</td>
 					<td class="t-a-c">
-						<a href="#" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+						<a href="#" data-invitation="{{m.member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 					</td>
 				</tr>
                 {%endfor%}
@@ -52,13 +52,13 @@
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="1" data-role-name="Secretario" data-uid="{{member.email_invited}}" >
+						<input type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.email_invited}}" >
 					</td>
 					<td class="t-a-c">
 						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.email_invited}}" >
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="3" data-role-name="Administrador" data-uid="{{member.email_invited}}" >
+						<input type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.email_invited}}" >
 					</td>
 					<td class="t-a-c">
 						<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
@@ -69,7 +69,7 @@
 			<div class="mt20">
 				<div class="dropdown">
                 <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
-                    Agregar miembro
+                    <i class="icon-plus icon-white"></i> Agregar miembro
                     <span class="caret"></span>
                 </div>
                 <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -206,21 +206,46 @@
 	$(document).on("ready", function() {
 		$("#admin-roles").addClass("active")
 	    showIconCloseOnHover()
+	    function getRoleName (op) {
+	    	switch(op){
+	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
+	    		case 2 : return "Aprobador de actas"; break;
+	    		case 3 : return "Secretario (Puede redactar Actas)"; break;
+	    	}
+	    }
+
+	    function callbackSetRole(data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("Permiso agregado", data['u'] + " ahora es " + getRoleName(data['role']))
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+	    }
+	    function callbackRemoveRole(data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("Rol removido", data['u'] + " ya no es " + getRoleName(data['role']))
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+	    }
 	    function setRole(e) {
 	    	var checkbox = $(this);
 	    	var role = checkbox.attr("data-role")
 	    	var role_name = checkbox.attr("data-role-name")
 	    	var uid = checkbox.attr("data-uid")
 	    	if(checkbox.is(":checked")){
-	    		setAlertMessage("Role",uid+" Ahora es rol "+role_name)
+	    		sendAjax("/groups/{{group.slug}}/setRole",
+	    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
 	    	}
 	    	else{
 	    		if(confirm("Seguro que desea eliminarle este rol?")){
-	    			setAlertMessage("Role",uid+" Ya no es rol"+role_name)
+	    			sendAjax("/groups/{{group.slug}}/setRole",
+	    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
 	    		}
 	    		else{
 	    			checkbox.attr("checked","checked")
-	    			setAlertMessage("y ahora?","¿que?")
 	    		}
 	    	}
 	    }

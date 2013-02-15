@@ -42,6 +42,57 @@ def groupsList(request):
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
+def setRole(request, slug_group):
+    """
+        Set or remove role to a user
+        Roles id:
+            1 = admin
+            2 = Approver
+            3 = Secretary
+    """
+    error = False
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = groups.objects.get(slug=slug_group, is_active=True)
+                is_admin = rel_user_group.objects.filter(id_group=g, id_user=request.user, is_admin=True, is_active=True)
+                if is_admin:
+                    role = int(request.GET['role'])
+                    remove = bool(int(request.GET['remove']))
+                    _user = get_user_or_email(request.GET['uid'])
+                    u = _user['user']
+                    # mail = _user['email']
+                    if u:
+                        rel = getUserGroupRel(u, g)
+                    if role == 1 and u and not remove:
+                        rel.is_admin = True
+                    if role == 2 and u and not remove:
+                        rel.is_approver = True
+                    if role == 3 and u and not remove:
+                        rel.is_secretary = True
+                    if role == 1 and u and remove:
+                        rel.is_admin = False
+                    if role == 2 and u and remove:
+                        rel.is_approver = False
+                    if role == 3 and u and remove:
+                        rel.is_secretary = False
+                    rel.save()
+                    saved = True
+                else:
+                    error = True
+            except groups.DoesNotExist:
+                error = True
+            except rel_user_group.DoesNotExist:
+                error = True
+            except Exception:
+                error = True
+            if error:
+                return HttpResponse(json.dumps({"error": "Por favor recarga la p&aacute;gina e intenta de nuevo.", "saved": False}), mimetype="application/json")
+            response = {"saved": saved, "u": u.first_name, "role": role}
+            return HttpResponse(json.dumps(response), mimetype="application/json")
+    return True
+
+
 @login_required(login_url='/account/login')
 def groupSettings(request, slug_group):
     '''
@@ -53,9 +104,20 @@ def groupSettings(request, slug_group):
         raise Http404
     is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
     if is_admin:
-        members = rel_user_group.objects.filter(id_group=g.id, is_active=True)
+        members = rel_user_group.objects.filter(id_group=g.id, is_active=True).order_by("date_joined")
+        _members = list()
+        for m in members:
+            _members.append({
+                "member": m,
+                "roles": {
+                        "is_admin": m.is_admin,
+                        "is_superadmin": m.is_superadmin,
+                        "is_approver": m.is_approver,
+                        "is_secretary": m.is_secretary
+                        }
+            })
         members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
-        ctx = {"group": g, "is_admin": is_admin, "members": members, "members_pend": members_pend}
+        ctx = {"group": g, "is_admin": is_admin, "members": _members, "members_pend": members_pend}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
@@ -90,23 +152,36 @@ def groupInfoSettings(request, slug_group):
         return HttpResponseRedirect('/groups/' + str(g.slug))
 
 
+def getUserGroupRel(_user, _group):
+    try:
+        return rel_user_group.objects.get(id_user=_user, id_group=_group)
+    except rel_user_group.DoesNotExist:
+        return False
+    except Exception, e:
+        return False
+        raise e
+
+
 def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1):
     try:
         relation = rel_user_group.objects.get(id_user=_user, id_group=_group)
         relation.is_member = bool(is_member)
         if is_superadmin:
             relation.is_superadmin = bool(is_superadmin)
+            print "super"
         if is_admin:
             relation.is_admin = bool(is_admin)
+            print "admin"
         if is_secretary:
             relation.is_secretary = bool(is_secretary)
+            print "Secretary"
         if is_approver:
             relation.is_approver = bool(is_approver)
+            print "Approver"
     except rel_user_group.DoesNotExist:
         relation = rel_user_group(id_user=_user, id_group=_group, is_member=bool(is_member),
         is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
     relation.save()
-    print "is_member %s" % relation.is_member
 
 
 def get_user_or_email(s):
@@ -1028,10 +1103,10 @@ def setAssistance(request):
             is_confirmed = str(request.GET['is_confirmed'])
             if (is_confirmed == "true"):
                 is_confirmed = True
-                resp= u"Si asistirá"
+                resp = u"Si asistirá"
             else:
                 is_confirmed = False
-                resp= u"No asistirá"
+                resp = u"No asistirá"
             assis, created = assistance.objects.get_or_create(id_user=id_user, id_reunion=id_reunion)
     #        if created:
     #            assis = assistance.objects.get(id_user=id_user, id_reunion=id_reunion)
@@ -1039,10 +1114,10 @@ def setAssistance(request):
     #        assis.is_confirmed = is_confirmed
             assis.save()
             email_list = []
-            email_list.append(str(id_reunion.id_convener.email) + ",") 
+            email_list.append(str(id_reunion.id_convener.email) + ",")
             try:
-                title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") "+resp+ " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
-                contenido = "Reunion: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>"+str(id_reunion.id_group.name.encode('utf8', 'replace')) +"</strong><br><br>Respuesta: <strong>"+resp+"</strong>"
+                title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") " + resp + " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
+                contenido = "Reunion: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>" + str(id_reunion.id_group.name.encode('utf8', 'replace')) + "</strong><br><br>Respuesta: <strong>" + resp + "</strong>"
                 sendEmail(email_list, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
@@ -1056,7 +1131,7 @@ def setAssistance(request):
     else:
         response = "Error Calendar"
         return HttpResponse(json.dumps(response), mimetype="application/json")
- 
+
 
 @login_required(login_url='/account/login')
 def getReunionData(request):
