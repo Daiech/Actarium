@@ -84,8 +84,9 @@ def setRole(request, slug_group):
                     saved = True
                     try:
                         if role_name:  # the rol has been assigned
-                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + u") te agregó como " + role_name + " en el grupo " + g.name
-                            contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> al grupo <strong>" + str(g.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ahora tienes permisos especiales sobre este grupo. Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y enterate de lo que est&aacute; pasando."
+                            agrego = "agregó"
+                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
+                            contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> al grupo <strong>" + str(g.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ahora tienes permisos especiales sobre este grupo. Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y enterate de lo que est&aacute; pasando."
                             sendEmail([rel.id_user.email], title, contenido)
                     except Exception, e:
                         # saveAction
@@ -1176,7 +1177,7 @@ def setAssistance(request):
             email_list.append(str(id_reunion.id_convener.email) + ",")
             try:
                 title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") " + resp + " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
-                contenido = "Reunion: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>" + str(id_reunion.id_group.name.encode('utf8', 'replace')) + "</strong><br><br>Respuesta: <strong>" + resp + "</strong>"
+                contenido = "Reuni&oacute;n: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>" + str(id_reunion.id_group.name.encode('utf8', 'replace')) + "</strong><br><br>Respuesta: <strong>" + resp + "</strong>"
                 sendEmail(email_list, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
