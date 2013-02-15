@@ -86,8 +86,8 @@ def setRole(request, slug_group):
                         if role_name:  # the rol has been assigned
                             agrego = "agrego"
                             link = URL_BASE + "/groups/" + str(g.slug)
-                            title = "[Actarium] " + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
-                            contenido = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a><br><br>Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
+                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
+                            contenido = "<br>" + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a>. Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
                             sendEmail([rel.id_user.email], title, contenido)
                     except Exception, e:
                         # saveAction
