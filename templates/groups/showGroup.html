@@ -11,21 +11,24 @@
                 <!-- <a href="#" class="btn btn-link">Editar grupo</a> -->
             </div>
             <div class="span4 btnSup">
-                <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-small">
-                    <i class="icon-plus"></i> Crear acta</a>
-                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-small">
-                    <i class="icon-calendar"></i> Convocar Reunion</a>
-                {%if is_admin%}
-                <a href="/groups/{{ group.slug}}/admin" class="btn btn-small">
-                    <i class="icon-wrench"></i> Configuraci&oacute;n</a>
-                {%endif%}
+                
             </div>
         </div>
     </header>
     <hr/>
     <div class="row-fluid">
-        <section class="span6">
-            <h4>Actas</h4> 
+        <section class="span6  white-box-container">
+            <header class="span4">
+                <h4 class="">Listado de Actas</h4>
+            </header>
+            <div class="t-a-r button-group">
+                <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-small">
+                    <i class="icon-plus"></i> Crear acta</a>
+                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-small">
+                    <i class="icon-calendar"></i> Convocar Reunion
+                </a>
+            </div>
+            <hr>
             <ul>
                 {%for minute in minutes%}
                 <li>
@@ -40,8 +43,17 @@
                 {%endif%}
             </ul>
         </section>
-        <section class="span5 fix_btn">
-            <h4>Miembros <span id="load-member-actions"></span></h4> 
+        <section class="span6 white-box-container">
+            <header class="span3">
+                <h4 class="">Miembros <span id="load-member-actions"></span></h4>
+            </header>
+            <div class="t-a-r button-group">
+                {%if is_admin%}
+                <a href="/groups/{{ group.slug}}/admin" class="btn btn-small">
+                    <i class="icon-wrench"></i> Configuraci&oacute;n</a>
+                {%endif%}
+            </div>
+            <hr>
             <ul class="nav list-members">
                 {%for member in members%}
                 <li class="list-member-item">

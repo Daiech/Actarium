@@ -802,6 +802,7 @@ article header h3{
     float: left;
     margin-top: 7px;
 }
+.button-group{min-height: 25px;}
 
 /* ==========================================================================
    Helper classes
