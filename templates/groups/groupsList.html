@@ -19,7 +19,7 @@
     <hr>
     <div id="content-container" class="row-fluid">
         <section id="notifications" class="span6 white-box-container">
-                <h4 class=" ml50">Soy miembro</h4>
+                <h4 class=" ml50" title="Pertenezco al grupo. Puedo ver actas, crear reuniones o tener permisos sobre el grupo." >Soy miembro</h4>
                 <hr>
                 <ul id="group-list" class="nav onOver">
                     {% for group in groups %}
@@ -33,7 +33,7 @@
                 </ul>
         </section>
         <section class="white-box-container span6">
-                <h4 class="">Grupos que administro</h4>
+                <h4 title="Grupos que administro pero no pertenzco. Puedo administrar el grupo, pero no puedo ver las actas ni crear reuniones.">&Uacute;nicamente administro</h4>
                 <hr>
                 <ul id="group-list" class="nav onOver">
                     {% for group in admin_groups %}
@@ -77,22 +77,23 @@
 
 {% block js %}
 <script>
-    
-    $("#groups").addClass("menu-active")
-    $("#groups .navbar-item").addClass("navbar-item-hover");
-    $("#groups .navbar-button-propierties").css({"height":"15px"}, 100);
-          
-    $("#menu-organizations").addClass("active")
-    $(".button button").click(function(e){
-        e.preventDefault()
-        if($(this).attr("data-action")!="editar")
-            if(confirm("Seguro que quieres elimiar el grupo?")){
-                $(this).parent().parent().parent().parent().fadeOut(1600)
-                setAlertMessage("Grupo eliminado","" )
+    $(document).on("ready",function() {
+        $("h4").tooltip();
+        $("#groups").addClass("menu-active")
+        $("#groups .navbar-item").addClass("navbar-item-hover");
+        $("#groups .navbar-button-propierties").css({"height":"15px"}, 100);
+              
+        $("#menu-organizations").addClass("active")
+        $(".button button").click(function(e){
+            e.preventDefault()
+            if($(this).attr("data-action")!="editar")
+                if(confirm("Seguro que quieres elimiar el grupo?")){
+                    $(this).parent().parent().parent().parent().fadeOut(1600)
+                    setAlertMessage("Grupo eliminado","" )
+                }
             }
-        
-    }
-)
+        )
+    });
 
 </script>
 {% endblock %}
