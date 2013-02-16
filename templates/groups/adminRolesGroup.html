@@ -10,16 +10,16 @@
 		<section class="">
 			<table id="table-roles" class="table table-bordered table-hover">
 				<tr>
-					<th class="td-first">Usuario</th>
-					<th>Secretario</th>
-					<th>Aprobador</th>
-					<th>Administrador</th>
-					<th>Eliminar</th>
+					<th class="td-first" title="Lista de todos los miembros del grupo '{{group.name}}'">Usuarios del grupo</th>
+					<th title="Personas encargadas de redactar actas">Secretario</th>
+					<th title="Personas encargadas de aprobar actas">Aprobador</th>
+					<th title="Personas encargadas de administrar el grupo">Administrador</th>
+					<th  title="Elimina la persona de este grupo" class="th-delelte">Eliminar</th>
 				</tr>
 				{%for m in members%}
 				<tr>
-					<td>
-						<div class="">
+					<td class="td-first">
+						<div class="username-info">
 	                        <img style="width:20px" src="{{m.member.id_user.email|showgravatar:'20'}}" alt="{{m.member.id_user}}">
 	                        {{m.member.id_user.first_name}} {{m.member.id_user.last_name}}
 	                        {%if m.member.id_user == user%}
@@ -30,38 +30,54 @@
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_secretary%}checked{%endif%}> 
+						<label for="secretary{{m.member.id_user.id}}">
+							<input id="secretary{{m.member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_secretary%}checked{%endif%}> 
+						</label>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_approver%}checked{%endif%}>
+						<label for="aprover{{m.member.id_user.id}}">
+							<input id="aprover{{m.member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_approver%}checked{%endif%}>
+						</label>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_admin%}checked{%endif%} {%if m.roles.is_superadmin or m.member.id_user == user%}disabled{%endif%}>
+						<label for="admin{{m.member.id_user.id}}">
+							<input id="admin{{m.member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_admin%}checked{%endif%} {%if m.roles.is_superadmin or m.member.id_user == user%}disabled{%endif%}>
+						</label>
 					</td>
 					<td class="t-a-c">
-						<a href="#" data-invitation="{{m.member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+						<div class="remove-invitation-container">
+							<a href="#" data-invitation="{{m.member.id}}" class="disabled" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+						</div>
 					</td>
 				</tr>
                 {%endfor%}
                 {%for member in members_pend%}
                 <tr><!--Usuarios pendientes-->
-                	<td>
-						<div class="">
+                	<td class="td-first">
+						<div class="username-info">
 	                        <img style="width:20px" src="{{member.email_invited|showgravatar:'20'}}" alt="{{member.id_user.username}}">
 	                        {{member.email_invited}} (pendiente)
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.email_invited}}" >
+						<label for="secretary-{{member.id}}">
+							<input id="secretary-{{member.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.email_invited}}" >
+						</label>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.email_invited}}" >
+						<label for="aprover-{{member.id}}">
+							<input id="aprover-{{member.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.email_invited}}" >
+						</label>
 					</td>
 					<td class="t-a-c">
-						<input type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.email_invited}}" >
+						<label for="admin-{{member.id}}">
+							<input id="admin-{{member.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.email_invited}}" >
+						</label>
 					</td>
 					<td class="t-a-c">
-						<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+						<div class="remove-invitation-container">
+							<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+						</div>
 					</td>
                 </tr>
                 {%endfor%}
@@ -98,6 +114,28 @@
 {% endblock %}
 {%block settings_style%}
 <style type="text/css">
+	td label{
+		cursor: pointer;
+		margin: 0;
+		padding: 9px;
+	}
+	.th-delelte{width: 9%;}
+	th{
+		width: 12.5%;
+		text-align: center;
+	}
+	.td-first{
+		text-align: left;
+	    width: 50%;
+	}
+	.username-info{
+		padding: 8px;
+	}
+	.remove-invitation-container{margin-top: 7px;}
+	td input[type='checkbox']{margin-top: 0;}
+	#table-roles td{
+		padding: 0;
+	}
 	#table-roles td.t-a-c{
 		text-align: center;
 	}
@@ -109,7 +147,7 @@
 	}
 	.form-horizontal label{
 		font-weight: bold;
-		margin-top: 10px;
+		/*margin-top: 10px;*/
 	}.list-member-item{
         border: solid thin #eee;
         border-bottom: solid thin #dadada;
@@ -205,6 +243,7 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#admin-roles").addClass("active")
+		$("th").tooltip()
 	    showIconCloseOnHover()
 	    function getRoleName (op) {
 	    	switch(op){
