@@ -327,14 +327,15 @@ def showGroup(request, slug):
         g = groups.objects.get(slug=slug, is_active=True)
     except groups.DoesNotExist:
         raise Http404
-    is_member = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
+    is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
     is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
     if is_member:
         members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
         members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
         minutes_group = minutes.objects.filter(id_group=g.id)
-        ctx = {"group": g, "members": members, "minutes": minutes_group, "members_pend": members_pend,
-        "is_admin": is_admin}
+        member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
+        ctx = {"group": g, "member": member, "members": members, "minutes": minutes_group,
+        "members_pend": members_pend}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
     else:
         if is_admin:
