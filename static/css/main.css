@@ -341,6 +341,7 @@ Footer
     overflow: hidden;
     width: 100%;
 }
+#footer-bar p{font-size: 12px;}
 .footer-pic{
     /*float:left;*/
     height: 60px;
@@ -359,7 +360,7 @@ Footer
 }
 #cred-footer > p{
     margin-bottom: 1px;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .img-foot{
@@ -778,11 +779,8 @@ form table td input{
 }
 .white-box-container{
     background-color: #fff;
-    border-radius: 5px;
-    border:solid thin #dadada;
-    box-sizing: border-box;
     border-radius: 3px;
-    border: 1px solid #ddd;
+    border: 1px solid #79B632;
     font-size: 1em;
     margin-bottom: 20px;
     padding: 15px 15px;
@@ -803,13 +801,14 @@ article header h3{
     margin-top: 7px;
 }
 .button-group{min-height: 25px;}
-
+.icons-info {margin-top:10px;margin-bottom: -5px;}
+.icons-info span{font-size: 12px;margin-left: 15px;}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
 
 /*
- * Image replacement
+ * Imageleft
 */
 
 .ir {
@@ -1038,6 +1037,7 @@ only screen and (min-resolution: 144dpi) {
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
+    .span6{margin: 6px auto;width: 96%;}
     body {
         padding-right: 0px;
         padding-left: 0px;

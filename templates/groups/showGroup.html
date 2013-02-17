@@ -22,7 +22,7 @@
                 <h4 class="">Listado de Actas</h4>
             </header>
             <div class="t-a-r button-group">
-                {%if member.is_secretary%}
+                {%if current_member.is_secretary%}
                     <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-small">
                         <i class="icon-plus"></i> Crear acta
                     </a>
@@ -32,11 +32,11 @@
                 </a>
             </div>
             <hr>
-            <ul class="unstyled">
+            <ul class="unstyled minutes-list">
                 {%for minute in minutes%}
                 <li class="list-item">
                     <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
-                        Acta #{{minute.code}}
+                        #{{minute.code}} - 
                         <span>{{minute.date_created|date}}</span>
                     </a>
                 </li>
@@ -44,14 +44,14 @@
                 {%if not minutes%}<li>Este grupo no tiene actas</li>{%endif%}
             </ul>
         </section>
-        <section class="span6 white-box-container">
+        <section class="span6 white-box-container row-fluid">
             <header class="span3">
                 <h4 class="">Miembros</h4>
             </header>
             <div class="t-a-r button-group">
-                {%if member.is_admin%}
+                {%if current_member.is_admin%}
                 <a href="/groups/{{ group.slug}}/admin" class="btn btn-small">
-                    <i class="icon-wrench"></i> Configuraci&oacute;n</a>
+                    <i class="icon-wrench"></i> Administrar miembros</a>
                 {%endif%}
             </div>
             <hr>
@@ -67,16 +67,17 @@
                             {%if member.id_user == user%}(yo){%else%}({{member.id_user}}){%endif%}
                         </span>
                         <span class="pull-right">
-                            {% if member.is_admin%}<i class="icon-wrench"></i> Admin. {%endif%}
-                            {% if member.is_secretary%}<i class="icon-list-alt"></i> Sec. {%endif%}
-                            {% if member.is_approver%}<i class="icon-thumbs-up"></i> Appr.{%endif%}
+                            {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
+                            {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
+                            {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                            {% if not member.is_approver and not member.is_secretary and not member.is_admin and current_member.is_admin%}<a title="Agregar un rol a {{member.id_user.first_name}}" href="/groups/{{ group.slug}}/admin"><i class="icon-plus"></i> Rol</a>{%endif%}
                         </span>
                     </div>
                 </li>
                 {%endfor%}
                 {%for member in members_pend%}
-                <li class="list-member-item" ><!--Usuarios pendientes-->
-                    <div class="">
+                <li class="list-item" ><!--Usuarios pendientes-->
+                    <div class="list-item-next">
                         <img style="width:20px" src="{{member.email_invited|showgravatar:'20'}}" alt="{{member.id_user.username}}">
                         <span>{{member.email_invited}}</span> (pendiente)
                     </div>
@@ -84,22 +85,30 @@
                 </li>
                 {%endfor%} 
             </ul>
-
+            <div class="icons-info pull-right">
+                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+            </div>
         </section>
     </div>
 </article>
 {%endblock%}
 {% block js %}
 <script>
+    $(document).on("ready",function(){
+        $("i, a, span").tooltip();
+    })
 </script>
 {% endblock %}
 {%block style%}
 <style>
     .list-item{position: relative;margin: 4px 0;}
     .list-item-next{padding: 8px;border-radius: 3px}
-    .list-item a{border:solid thin #ddd;display:block;}
+    .list-item > a{border:solid thin #ddd;display:block;}
     .list-item div{border:solid thin white;border-bottom: solid thin #ddd;}
-    .list-item a:hover{border:solid thin #ddd;background-color: #eee}
+    .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
     .list-item div:hover{border:solid thin #ddd;background-color: #eee}
+    .minutes-list{min-height: 200px;}
 </style>
 {%endblock%}

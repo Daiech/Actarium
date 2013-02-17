@@ -300,7 +300,7 @@
 	                function(data){
 	                    if(data['deleted']){
 	                        $(elem).parent().animate({"height":0},"slow",function(e){
-	                            $(this).parent().fadeOut()
+	                            $(this).parent().parent().fadeOut()
 	                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
 	                        });
 	                    }
@@ -356,13 +356,13 @@
 	            setAlertMessage("Invitado",data['message'])
 	            $("#table-roles").append(
 	            	'<tr><td>'+
-						'<div class="">'+
+						'<div class="username-info">'+
 	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
 	                    '</div>'+
 					'</td>'+
-					'<td class="t-a-c"><input type="checkbox"></td>'+
-					'<td class="t-a-c"><input type="checkbox"></td>'+
-					'<td class="t-a-c"><input type="checkbox"></td>'+
+					'<td class="t-a-c"><label><input type="checkbox"></label></td>'+
+					'<td class="t-a-c"><label><input type="checkbox"></label</td>'+
+					'<td class="t-a-c"><label><input type="checkbox"></label</td>'+
 					'<td class="t-a-c">'+
 						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
 					'</td></tr>'

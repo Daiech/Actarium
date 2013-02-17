@@ -334,7 +334,7 @@ def showGroup(request, slug):
         members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
         minutes_group = minutes.objects.filter(id_group=g.id)
         member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
-        ctx = {"group": g, "member": member, "members": members, "minutes": minutes_group,
+        ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
         "members_pend": members_pend}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
     else:
