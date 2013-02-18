@@ -376,7 +376,12 @@
 	            }
 	            else{
 	                //si no hay mensaje, error desconocido
-	                setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+	                if(data["error"]){
+	                	setAlertError("Ups! Algo sali&oacute; mal :(",data['error'])
+	                }
+	                else{
+	                	setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+	                }
 	            }
 	        }
 	    }
@@ -387,8 +392,8 @@
 	            var uname = $(this).attr("data-username");
 	            var group_id = $("#group_id").val();
 	            var group_name = $("#group_name").val();
-	            sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
-	                     "#load-member",invitationResult);
+	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},
+	                     "",invitationResult);
 	            $(this).parent().fadeOut()
 	            $("#newmember").focus()
 	        })

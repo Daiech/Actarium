@@ -378,12 +378,12 @@ def getMembers(request):
                         "mail": ans.email,
                         "gravatar": showgravatar(ans.email, 20)}
                 else:
-                    if ans == 1:
+                    if ans == 1:  # email valido, pero no es usuario
                         message = {"user_id": search, "mail_is_valid": True,
                                     "mail": search, "username": False,
                                     "gravatar": showgravatar(search, 20)}
                     else:
-                        if ans == 2:
+                        if ans == 2:  # no existe el usuario
                             message = {"mail_is_valid": False}
                         else:
                             message = False
@@ -403,6 +403,7 @@ def sendInvitationUser(email, user, group):
         Enviar una invitacion a un usuario via email
     '''
     if validateEmail(email):
+        # crear usuario ficticio
         invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
         email = [email]
         if created:
@@ -450,46 +451,50 @@ def isMemberOfGroupByEmail(email, id_group):
 
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 @login_required(login_url='/account/login')
-def newInvitation(request):
+def newInvitationToGroup(request):
     if request.is_ajax():
         if request.method == 'GET':
             try:
-                q = groups.objects.get(pk=request.GET['pk'])
-                if not isMemberOfGroup(request.user, q):
-                    return HttpResponse(q)
+                g = groups.objects.get(pk=request.GET['pk'])
+                if not isMemberOfGroup(request.user, g):
+                    return HttpResponse(g)
             except groups.DoesNotExist:
-                q = False
-                return HttpResponse(q)
+                g = False
+                return HttpResponse(g)
             except Exception, e:
                 print e
-                q = False
-                return HttpResponse(q)
-            mail = str(request.GET['search'])
-            if isMemberOfGroupByEmail(mail, q):
-                invited = False
-                message = "El usuario ya es miembro del grupo"
-                iid = False
-                gravatar = False
-            else:
-                inv = sendInvitationUser(mail, request.user, q)
-                saveActionLog(request.user, 'SET_INVITA', "email: %s" % (mail), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                if inv and not inv is 0:
-                    invited = True
-                    iid = str(inv.id)
-                    gravatar = showgravatar(mail, 30)
-                    message = "Se ha enviado la invitación a " + str(mail) + " al grupo <strong>" + str(q.name) + "</strong>"
-                else:
-                    iid = False
+                g = False
+                return HttpResponse(g)
+
+            if getUserGroupRel(request.user, g).is_admin:
+                email = str(request.GET['mail'])
+                if isMemberOfGroupByEmail(email, g):
                     invited = False
+                    message = "El usuario ya es miembro del grupo"
+                    iid = False
                     gravatar = False
-                    if not inv and not inv is 0:
-                        message = "El usuario tiene la invitación pendiente"
+                else:
+                    inv = sendInvitationUser(email, request.user, g)
+                    saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                    if inv and not inv is 0:
+                        invited = True
+                        iid = str(inv.id)
+                        gravatar = showgravatar(mail, 30)
+                        message = "Se ha enviado la invitación a " + str(mail) + " al grupo <strong>" + str(g.name) + "</strong>"
                     else:
-                        if inv == 0:
-                            message = "El correo electronico no es valido"
+                        iid = False
+                        invited = False
+                        gravatar = False
+                        if not inv and not inv is 0:
+                            message = "El usuario tiene la invitación pendiente"
                         else:
-                            message = "Error desconocido. Lo sentimos"
-            response = {"invited": invited, "message": message, "email": mail, "iid": iid, "gravatar": gravatar}
+                            if inv == 0:
+                                message = "El correo electronico no es valido"
+                            else:
+                                message = "Error desconocido. Lo sentimos"
+                response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+            else:
+                response = {"error": "No tienes permiso para hacer eso"}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")
