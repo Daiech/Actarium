@@ -3,6 +3,7 @@ from account.urls import account_urls
 from groups.urls import groups_urls
 from actions_log.urls import actions_log_urls
 from asettings.urls import asettings_urls
+from pdfmodule.urls import pdfmodule_urls
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -19,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^update', 'github.views.update'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
+    url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
     # Uncomment the admin/doc line below to enable admin documentation:
