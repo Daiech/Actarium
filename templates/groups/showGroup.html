@@ -59,7 +59,7 @@
                         <span class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
                     </li>
                     {%endfor%}
-                    <li><a style="padding:10px" id="show-minus" href="#Ver-menos">Ver menos...</a>
+                    <li class="show-more"><a id="show-minus" href="#Ver-menos">Ver menos...</a>
                     </li>
                 </ul>
                 <ul class="unstyled list-member-pics">
@@ -76,7 +76,8 @@
                             </div>
                         </li>
                     {%endfor%}
-                    <li style="display:inline"><a id="show-more" href="#Ver-mas">Ver mas...</a>
+                    <li class="show-more">
+                        <a id="show-more" href="#Ver-mas">Ver m&aacute;s...</a>
                     </li>
                 </ul>
                 <div class="icons-info t-a-r">
@@ -143,12 +144,13 @@
             $("ul.list-members").fadeOut("fast",function(){
                 $("ul.list-member-pics").fadeIn();
             });
-        })
+        })//79B632 verde
     });
 </script>
 {% endblock %}
 {%block style%}
 <style>
+    .list-members{border-bottom: solid thin #ddd;padding-bottom: 5px;}
     .list-item{position: relative;margin: 4px 0;}
     .list-item-next{padding: 8px;border-radius: 3px}
     .list-item > a{border:solid thin #ddd;display:block;}
@@ -157,10 +159,13 @@
     .list-item div:hover{border:solid thin #ddd;background-color: #eee}
     .minutes-list{min-height: 200px;}
     #minutes-section{min-height: 319px;}
-    .member-pic{display:inline;margin-right: 5px; display: inline-block;padding: 4px; border-radius: 2px;border:solid thin #79B632;text-align: center;min-width: 55px;min-height: 77px}
+    .member-pic{display:inline;margin-right: 5px; display: inline-block;padding: 4px; border-radius: 2px;border:solid thin #eee;text-align: center;min-width: 55px;min-height: 77px}
     .member-pic i{display: block;float: left;}
     .list-member-pics{padding: 5px;border-bottom: solid 1px #ddd}
     .user-name-pic{font-size: 14px}
     .w42{width: 42px;margin: auto}
+    #show-more{display: block;}
+    .show-more{border-radius:3px;margin-top:10px;padding: 6px 2px;text-align: center;}
+    .show-more:hover{background-color: #eee}
 </style>
 {%endblock%}
