@@ -98,7 +98,13 @@
                 </div>
                 <hr>
                 <ul class="unstyled">
+                    {%if reunions%}
+                        {%for r in reunions%}
+                            <li><a href="#">{{r.id_convener}}</a> concoc&oacute; a una reuni&oacute;n para el d&iacute;a <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion|date}}</a></li>
+                        {%endfor%}
+                    {%else%}
                     <li>No hay reuni&oacute;nes para este grupo</li>
+                    {%endif%}
                 </ul>
             </section>
         </div>
