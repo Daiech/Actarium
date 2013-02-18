@@ -15,6 +15,7 @@ from django.utils.hashcompat import sha_constructor
 from django.core.mail import EmailMessage
 import random
 
+
 #------------------------------- <Normal User>---------------------------
 def newUser(request):
     '''
@@ -31,32 +32,37 @@ def newUser(request):
             email_user = formulario.cleaned_data['email']
             name_newuser = formulario.cleaned_data['username']
             salt = sha_constructor(str(random.random())).hexdigest()[:5]
-            activation_key = sha_constructor(salt+email_user).hexdigest()            
+            activation_key = sha_constructor(salt + email_user).hexdigest()
             new_user = formulario.save()
             new_user.is_active = False
             new_user.save()
             from models import activation_keys
-            activation_keys(id_user=new_user, email=email_user, activation_key= activation_key).save()
-            
+            activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
             email_list.append(str(email_user) + ",")
+            user_id = User.objects.get(username=name_newuser)
+            saveActionLog(user_id, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
             try:
-                title = ""+str(name_newuser)+"Bienvenido a Actarium"
-                contenido = "<strong>"+str(name_newuser)+"</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/"+activation_key+"' >http://actarium.daiech.com/account/activate/"+activation_key+"</a>"
-#                print contenido
+                title = "" + str(name_newuser) + "Bienvenido a Actarium"
+                contenido = "<strong>" + str(name_newuser) + "</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>"
                 sendEmail(email_list, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
-            return render_to_response('account/registered.html',{ 'email_address': email_user}, context_instance=RequestContext(request))
-
-
-            user_id = User.objects.get(username=name_newuser)
-            saveActionLog(user_id, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
+            return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
             # return userLogin(request, user_name, formulario['password1'].data)
     else:
         formulario = RegisterForm()
     ctx = {'formNewUser': formulario}
     return render_to_response('account/newUser.html', ctx, context_instance=RequestContext(request))
 #    return render_to_response('account/newUser.html',{}, context_instance = RequestContext(request))
+
+
+def newInvitedUser(request):
+    '''
+    crea un nuevo usuario inactivo desde invitacion
+    '''
+    if not request.user.is_anonymous():
+        return HttpResponseRedirect('/account/')
+    return True
 
 
 def log_in(request):
@@ -209,19 +215,20 @@ def password_reset_complete2(request):
 
 # ---------------------------------<activacion de cuenta>----------------------------
 
-def activate_account(request,activation_key):
-    if  not(activate_account_now(request,activation_key)== False):
-        return render_to_response('account/account_actived.html',{},context_instance = RequestContext(request))
+
+def activate_account(request, activation_key):
+    if not(activate_account_now(request, activation_key) == False):
+        return render_to_response('account/account_actived.html', {}, context_instance=RequestContext(request))
     else:
-        return render_to_response('account/invalid_link.html',{}, context_instance=RequestContext(request))
-    
-    
+        return render_to_response('account/invalid_link.html', {}, context_instance=RequestContext(request))
+
+
 def activate_account_now(request, activation_key):
     from models import activation_keys
     from django.contrib.auth.models import User
     try:
-        activation_obj = activation_keys.objects.get(activation_key = activation_key)
-    except  Exception, e:
+        activation_obj = activation_keys.objects.get(activation_key=activation_key)
+    except Exception:
         return False
     if not(activation_obj.is_expired):
         user = User.objects.get(id=activation_obj.id_user.pk)
@@ -232,16 +239,15 @@ def activate_account_now(request, activation_key):
         activation_obj.is_expired = True
         activation_obj.save()
         return True
-    else: 
+    else:
         return False
 
+
 def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
+    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado autom&aacute;ticamente por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter<br> <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
         correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
         correo.content_subtype = "html"
         correo.send()
     except Exception, e:
         print e
-
-

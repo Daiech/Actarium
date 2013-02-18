@@ -1093,10 +1093,6 @@ def getReunions(request):
             i = 0
             json_array = {}
             for reunion in my_reu_day:
-#                print "----------------------------------------------------------------------"
-#                print reunion.date_reunion
-#                print make_naive(reunion.date_reunion,get_default_timezone())
-#                print datetime.datetime.now()
                 td = make_naive(reunion.date_reunion, get_default_timezone()) - datetime.datetime.now()
                 if not(td.days >= 0 and td.seconds >= 0 and td.microseconds >= 0):
                     is_last = 1
