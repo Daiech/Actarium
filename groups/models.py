@@ -55,7 +55,7 @@ class rel_user_group(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "user: %s " % (self.id_user.id)
+        return "user: %s, is_admin: %s " % (self.id_user, self.is_admin)
 
 
 class admin_group(models.Model):
@@ -110,6 +110,24 @@ class reunions(models.Model):
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)
 
+    def hasMinutes(self):
+        try:
+            rel_reunion_minutes.objects.get(id_reunion=self.id)
+            return True
+        except rel_reunion_minutes.DoesNotExist():
+            return False
+        except Exception:
+            return False
+        
+    def getMinutes(self):
+        try:
+            m = rel_reunion_minutes.objects.get(id_reunion=self.id)
+            return m.id_minutes
+        except rel_reunion_minutes.DoesNotExist():
+            return False
+        except Exception:
+            return False
+
     def __unicode__(self):
         return "%s , del %s" % (self.date_reunion, self.id_group)
 
@@ -153,6 +171,9 @@ class user_role(models.Model):
     description = models.CharField(max_length=150, verbose_name="description")
     date_joined = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return "%s: %s" % (self.name, self.description)
+
 
 class groups_permissions(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
@@ -174,6 +195,7 @@ class packages(models.Model):
     is_visible = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
     time = models.CharField(max_length=3, verbose_name="time")
+
     def __unicode__(self):
         return "%s" % (self.name)
 

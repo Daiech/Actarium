@@ -3,10 +3,7 @@
 
 {%block body%}
 <article>
-	
-    
-	<div class="row-fluid">
-		<header class="span12">
+		<header class="">
 	    	<div class="span4">
 	    		<div class="menu-icons icons-page icon-reunions"></div>
 	    		<h3>Reuniones</h3>
@@ -20,63 +17,68 @@
 	    	</div>
 		    <div  class="span12" style="margin-left:0px;" ><hr></div>
         </header>
-	    <section id="calendar" >
-	        <div id="datepicker">
-	            <img src="/static/img/load16.gif" alt="cargando calendario"/>
-	        </div>
-	        <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
-				<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h3>Detalles de la Reuni&oacute;n</h3>
-				</div>
-				<div class="modal-body">
-					<div id="reunion-data">
-						<div id="loading-reunion"></div>
-		        	</div>
-				</div>
-			</div>
-			<div class="modal hide fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
-				<div class="modal-header">
+		<div class="row-fluid">
+		    <section id="calendar" class="white-box-container span4" >
+		        <div id="datepicker">
+		            <img src="/static/img/load.gif" title="cargando calendario" style="width:80px" />
+		        </div>
+		        <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
+					<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>Convocar nueva reuni&oacute;n</h3>
-					<hr>
-					<h4>Elige un grupo</h4>
+					<h3>Detalles de la Reuni&oacute;n</h3>
+					</div>
+					<div class="modal-body">
+						<div id="reunion-data">
+							<div id="loading-reunion"></div>
+			        	</div>
+					</div>
 				</div>
-				<div class="modal-body">
-					<select id="select-group">
-						<option value="0">Selecciona un grupo</option>
-					</select>
+				<div class="modal hide fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Convocar nueva reuni&oacute;n</h3>
+						<hr>
+						<h4>Elige un grupo</h4>
+					</div>
+					<div class="modal-body">
+						<select id="select-group">
+							<option value="0">Selecciona un grupo</option>
+						</select>
+					</div>
 				</div>
-			</div>
-	        <div class="center">
-	        	<h3> Proximas reuniones</h3>
-	        	<div id="next-reunions">
-	        	</div>
-	        </div>
-	    </section>
-	    
-	    <section id="date_reunions2">
-		    <section class="tabbable reunion-tabs"> 
-				  <ul class="nav nav-tabs">
-				    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
-				    <li><a href="#tab2" data-toggle="tab">Confirmadas (<span id="size-confirmadas">0</span>)</a></li>
-				    <li><a href="#tab3" data-toggle="tab">Rechazadas (<span id="size-rechazadas">0</span>)</a></li>
-				  </ul>
-				  <div class="tab-content">
-				    <div class="tab-pane active" id="tab1">
-				      <ul id='tab-pendientes'></ul>
-				    </div>
-				    <div class="tab-pane" id="tab2">
-				      <ul id='tab-confirmadas'></ul>
-				    </div>
-				    <div class="tab-pane" id="tab3">
-				      <ul id='tab-rechazadas'></ul>
-				    </div>
-				  </div>
+		        <div class="center">
+		        	<div class="ml20"><h3> Proximas reuniones</h3></div>
+		        	<div id="next-reunions">
+		        	</div>
+		        </div>
 		    </section>
-	    </section>
-	    <section id="date_reunions1"></section>
-    </div>
+		    
+		    <section id="date_reunions2" class="white-box-container span8" >
+			    <section class="tabbable reunion-tabs"> 
+					  <ul class="nav nav-tabs">
+					    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
+					    <li><a href="#tab2" data-toggle="tab">Confirmadas (<span id="size-confirmadas">0</span>)</a></li>
+					    <li><a href="#tab3" data-toggle="tab">Rechazadas (<span id="size-rechazadas">0</span>)</a></li>
+					    <li><a href="#tab4" data-toggle="tab">Anteriores (<span id="size-anteriores">0</span>)</a></li>
+					  </ul>
+					  <div class="tab-content">
+					    <div class="tab-pane active" id="tab1">
+					      <ul id='tab-pendientes'></ul>
+					    </div>
+					    <div class="tab-pane" id="tab2">
+					      <ul id='tab-confirmadas'></ul>
+					    </div>
+					    <div class="tab-pane" id="tab3">
+					      <ul id='tab-rechazadas'></ul>
+					    </div>
+					    <div class="tab-pane" id="tab4">
+					      <ul id='tab-anteriores'></ul>
+					    </div>
+					  </div>
+			    </section>
+		    </section>
+		    <section id="date_reunions1"></section>
+	    </div>
 </article>
 {%endblock%}
 {%block style%}
@@ -86,14 +88,14 @@
         width: auto;
     }
     .tab-content{
-    	width: 500px;
+    	/*width: 500px;*/
     }
     table td .btn{
         margin-top:10px;
     }
     #calendar {
-        padding-top: 10px;
-        float:left;
+        /*padding-top: 10px;
+        float:left;*/
     }
     #date_reunions{
     	 padding-left: 40px;
@@ -119,8 +121,18 @@
     
     .tab-content div ul{
     	list-style: none;
+    	padding-left: 0;
+    	margin-left: 5px;
     }
-    
+    .tab-content div ul li{
+    	border-radius: 3px;
+    	margin-bottom: 3px;
+    	padding: 5px;
+    }
+    .tab-content div ul li hr{
+    	margin: 4px;
+    	margin-top: 6px;
+    }
     .btn-link{
         padding-left: 0;
     }
@@ -135,7 +147,8 @@
         margin: 10px auto;
     }
     .center h3{
-    	padding-left: 10px;
+    	/*padding-left: 25px;*/
+    	text-align: center;
     }
     #bold_date{
     	font-size:21px;
@@ -161,11 +174,15 @@
 		border-bottom: solid thin #EBE9BC;
 	}
 	#next-reunions{
-		width:270px;
+		/*width:270px;*/
 	}
 	#next-reunions ul{
 		list-style: none;
 	}
+	.white-box-container{min-height: 454px;}
+	#datepicker{margin: 0 auto;width: 308px;text-align: center;}
+
+
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
 {%endblock%}
@@ -212,7 +229,7 @@ $(document).on("ready", function() {
 		    			}
 		    			window.history.pushState(data, dateText, html5url);
 		    			show_data(data)
-		    			$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+dateText+" </span> </h4>");
+		    			//$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+dateText+" </span> </h4>");
 		    			setConfirmButton();
 		    			setRejectButton();
 		    			setButtons();
@@ -232,33 +249,43 @@ $(document).on("ready", function() {
 		var tablist1="";
 		var tablist2="";
 		var tablist3="";
+		var tablist4="";
 		var asize_p=0;
 		var asize_c=0;
 		var asize_r=0;
+		var asize_a=0;
 		$.each(data, function() { 
-			if(this.is_saved == 1){
-				if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
-					tablist1 = tablist1 + createList(false,1,this.group_name,this.group_slug,this.date,this.id_r,this.title);
-					asize_c=asize_c +1;
-				}
-				else { //reuniones rechazadas
-					tablist3 = tablist3  + createList(false,2,this.group_name,this.group_slug,this.date,this.id_r,this.title);
-					asize_r=asize_r +1;
-				}
+			if(this.is_last == 1){
+				tablist4 = tablist4 + createList(false,4,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+				asize_a=asize_a +1;
 			}
-			else{ //reuniones pendientes por confirmar
-				tablist2 = tablist2 + createList(false,3,this.group_name,this.group_slug,this.date,this.id_r,this.title);
-				asize_p=asize_p +1;
+			else{
+				if(this.is_saved == 1){
+					if(this.is_confirmed == 'True' || this.is_confirmed == true){ //reuniones confirmadas
+						tablist1 = tablist1 + createList(false,1,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+						asize_c=asize_c +1;
+					}
+					else { //reuniones rechazadas
+						tablist3 = tablist3  + createList(false,2,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+						asize_r=asize_r +1;
+					}
+				}
+				else{ //reuniones pendientes por confirmar
+					tablist2 = tablist2 + createList(false,3,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+					asize_p=asize_p +1;
+				}
 			}
 		});
 
 	    $("#tab-pendientes").html(tablist2);
 	    $("#tab-confirmadas").html(tablist1);
 	    $("#tab-rechazadas").html(tablist3);
+	    $("#tab-anteriores").html(tablist4);
 	    
 	    $("#size-pendientes").html(asize_p);
 	    $("#size-confirmadas").html(asize_c);
 	    $("#size-rechazadas").html(asize_r);
+	    $("#size-anteriores").html(asize_a);
 	    
 		setMoreButton();
 	}
@@ -285,14 +312,14 @@ $(document).on("ready", function() {
             			setConfirmButton();
         			}
     				setMoreButton();
-    				$('#reunion_'+id_reunion).css('background-color',"#51a351");
+    				$('#reunion_'+id_reunion).css('background-color',"#dadada");
 					$('#reunion_'+id_reunion).animate({'background-color': '#eeeeee'},3500,function(){ });		
 					setNextReunions();	
     			}
     	)
 	}
 	function getReunionData(id_reunion){
-		console.log('dame una reunion'+id_reunion);
+		//console.log('dame una reunion'+id_reunion);
 		sendAjax("/groups/getReunion",
     			{id_reunion:id_reunion},
     			"#loading-reunion",
@@ -314,8 +341,11 @@ $(document).on("ready", function() {
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
     	    			else
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
-   	    				if (data.iconf == 1)
-       	    				reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+    	    			console.log("iconf: "+data.iconf+" has_minute: "+data.has_minute)
+   	    				if (data.has_minute == 1)
+  	   	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/minutes/"+data.minute_code+"' class='btn btn-info' >Ver Acta</a>";
+   	    				if (data.iconf == 1 && data.has_minute == 0)
+       	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
     	    			
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
@@ -345,12 +375,12 @@ $(document).on("ready", function() {
 		$('.confirmed2-true').click(function(e){
 			setList(e,$(this),$('#pendientes'),$('#pendientes2'), true);
 			setSizeTabReunion('size-pendientes',0);
-			console.log('confirm2true');
+			//console.log('confirm2true');
 		});
 		$('.confirmed2-false').click(function(e){
 			setList(e,$(this),$('#pendientes'),$('#pendientes2'),false);
 			setSizeTabReunion('size-pendientes',0);
-			console.log('confirm2false');
+			//console.log('confirm2false');
 		});	
 	}
 	function setMoreButton(){
@@ -364,7 +394,7 @@ $(document).on("ready", function() {
 			e.preventDefault();
 		    getReunionData($(this).attr("data-id-reunion"));
 		});
-		console.log("setNextReunionButton");
+		//console.log("setNextReunionButton");
 	}
 	
 	setButtons();
@@ -376,7 +406,7 @@ $(document).on("ready", function() {
 		li.animate({'height': 0},t,function(){
 			confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-group_slug"), $(this).attr("data-date"), $(this).attr("data-title"));
 			$(this).remove()
-			console.log("|"+ul.text()+"|");
+			//console.log("|"+ul.text()+"|");
 			if(ul.text()==""){ul.remove(); h3.remove()}
 		});
 	}
@@ -442,7 +472,7 @@ $(document).on("ready", function() {
 				window.location = "/groups/newReunion/"+group_slug;}
 		});
 		if( getUrlVars()["r"]){
-			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#51a351");
+			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#dadada");
 			$('#reunion_'+getUrlVars()["r"]).animate({'background-color': '#eeeeee'},3500,function(){ });
 		}
 	}

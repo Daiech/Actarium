@@ -112,7 +112,7 @@ def save_file(file, slug, path=''):
 
 @login_required(login_url='/account/login')
 def requestPackage(request):
-    if request.is_ajax():
+    if request.is_ajax(): 
         if request.method == 'GET':
             id_pack = str(request.GET['id_package'])
             id_package = packages.objects.get(pk=id_pack)
