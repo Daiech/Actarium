@@ -781,41 +781,44 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
     '''
-    df = {
-    'code': form.cleaned_data['code'],
-    'date_start': form.cleaned_data['date_start'],
-    'date_end': form.cleaned_data['date_end'],
-    'location': form.cleaned_data['location'],
-    'agenda': form.cleaned_data['agenda'],
-    'agreement': form.cleaned_data['agreement'],
-    }
-    try:
-        minu = minutes.objects.get(id_group=group, code=form.cleaned_data['code'])
-    except minutes.DoesNotExist, e:
-        print e
-        minu = None
-    if minu == None:
-        myNewMinutes_type_1 = minutes_type_1(
-                       date_start=df['date_start'],
-                       date_end=df['date_end'],
-                       location=df['location'],
-                       agenda=df['agenda'],
-                       agreement=df['agreement'],
-                     )
-        myNewMinutes_type_1.save()
-        myNewMinutes = minutes(
-                        code=df['code'],
-                        id_extra_minutes=myNewMinutes_type_1,
-                        id_group=group,
-                        id_type=minutes_type.objects.get(pk=1)  # pk=1 ==> Reunion
-                    )
-        myNewMinutes.save()
-        id_user = request.user
-        print "id_user: %s group: %s, code: %s" % (id_user, group.name, df['code'])
-        saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
-        # registra los usuarios que asistieron a la reunión en la que se creó el acta
-        setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
-        return myNewMinutes
+    if getUserGroupRel(request.user, group).is_secretary:
+        df = {
+        'code': form.cleaned_data['code'],
+        'date_start': form.cleaned_data['date_start'],
+        'date_end': form.cleaned_data['date_end'],
+        'location': form.cleaned_data['location'],
+        'agenda': form.cleaned_data['agenda'],
+        'agreement': form.cleaned_data['agreement'],
+        }
+        try:
+            minu = minutes.objects.get(id_group=group, code=form.cleaned_data['code'])
+        except minutes.DoesNotExist, e:
+            print e
+            minu = None
+        if minu == None:
+            myNewMinutes_type_1 = minutes_type_1(
+                           date_start=df['date_start'],
+                           date_end=df['date_end'],
+                           location=df['location'],
+                           agenda=df['agenda'],
+                           agreement=df['agreement'],
+                         )
+            myNewMinutes_type_1.save()
+            myNewMinutes = minutes(
+                            code=df['code'],
+                            id_extra_minutes=myNewMinutes_type_1,
+                            id_group=group,
+                            id_type=minutes_type.objects.get(pk=1)  # pk=1 ==> Reunion
+                        )
+            myNewMinutes.save()
+            id_user = request.user
+            print "id_user: %s group: %s, code: %s" % (id_user, group.name, df['code'])
+            saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
+            # registra los usuarios que asistieron a la reunión en la que se creó el acta
+            setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
+            return myNewMinutes
+        else:
+            return False
     else:
         return False
 
@@ -853,91 +856,94 @@ def newMinutes(request, slug_group, id_reunion):
     group = groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
     if is_member:
-        if request.method == "POST":
-            form = newMinutesForm(request.POST)
-            select = request.POST.getlist('members[]')
-            m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
-            if form.is_valid() and len(select) != 0:
-                try:
-                    reunion_id = int(request.POST['reunion_id'])
-                    _reunion = reunions.objects.get(id=reunion_id)
-                    #  esta reunion pertenece a un grupo mio?
-                    hM = _reunion.hasMinutes()
-                    if hM:
-                        return HttpResponseRedirect("/#ya-existe-un-acta-para-esta-reunion")
-                except rel_reunion_minutes.DoesNotExist:
-                    reunion_id = None
-                except reunions.DoesNotExist:
-                    reunion_id = None
-                except Exception:
-                    reunion_id = False
-                _minute = saveMinute(request, group, form, m_selected, m_no_selected)
-                if _minute:
-                    if not hM:
-                        rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
-                    saved = True
-                    error = False
-                    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
-                    link = URL_BASE + url_new_minute
-                    email_list = getEmailListByGroup(group)
-                    title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
-                    content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
-                    content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
-                    content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
-                    sendEmail(email_list, title, content)
-                    return HttpResponseRedirect(url_new_minute)
+        if getUserGroupRel(request.user, group).is_secretary:
+            if request.method == "POST":
+                form = newMinutesForm(request.POST)
+                select = request.POST.getlist('members[]')
+                m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
+                if form.is_valid() and len(select) != 0:
+                    try:
+                        reunion_id = int(request.POST['reunion_id'])
+                        _reunion = reunions.objects.get(id=reunion_id)
+                        #  esta reunion pertenece a un grupo mio?
+                        hM = _reunion.hasMinutes()
+                        if hM:
+                            return HttpResponseRedirect("/#ya-existe-un-acta-para-esta-reunion")
+                    except rel_reunion_minutes.DoesNotExist:
+                        reunion_id = None
+                    except reunions.DoesNotExist:
+                        reunion_id = None
+                    except Exception:
+                        reunion_id = False
+                    _minute = saveMinute(request, group, form, m_selected, m_no_selected)
+                    if _minute:
+                        if not hM:
+                            rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
+                        saved = True
+                        error = False
+                        url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
+                        link = URL_BASE + url_new_minute
+                        email_list = getEmailListByGroup(group)
+                        title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
+                        content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
+                        content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
+                        content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                        sendEmail(email_list, title, content)
+                        return HttpResponseRedirect(url_new_minute)
+                    else:
+                        saved = False
+                        error = "e2"  # error, mismo código de acta, o error al guardar en la db
                 else:
                     saved = False
-                    error = "e2"  # error, mismo código de acta, o error al guardar en la db
+                    error = "e0"  # error, el formulario no es valido
+                    if len(select) == 0:
+                        error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
             else:
                 saved = False
-                error = "e0"  # error, el formulario no es valido
-                if len(select) == 0:
-                    error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
+                error = False
+                if id_reunion:
+                    try:
+                        reunion = reunions.objects.get(id=id_reunion)
+                        print reunion.agenda
+                        form = newMinutesForm(initial={"agenda": reunion.agenda, "location": reunion.locale})
+                        print form
+                        form.code = 123
+                        confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
+                        reunion_list = []  # Lista de miembros que confirmaron la asistencia
+                        for user_confirmed in confirm:
+                            reunion_list.append(int(user_confirmed.id_user.id))
+                        m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, reunion_list)
+                    except reunions.DoesNotExist:
+                        reunion = None
+                    except Exception, e:
+                        reunion = None
+                        m_selected = None
+                        m_no_selected = None
+                        error = "e3"
+                        print "Exception newReunion: %s" % e
+                else:
+                    form = newMinutesForm(initial={"agenda": "<ol><li>Lectura del Acta anterior</li></ol>"})
+                    reunion = None
+                    try:
+                        m_selected = rel_user_group.objects.filter(id_group=group.id, is_active=True)
+                        m_no_selected = None
+                    except rel_user_group.DoesNotExist:
+                        m_selected = None
+                    except Exception, e:
+                        print "Exception members in newMinutes: %e" % e
+            last = getLastMinutes(group)
+            ctx = {'TITLE': "Actarium - Nueva Acta",
+                   "newMinutesForm": form,
+                   "group": group,
+                   "reunion": reunion,
+                   "members_selected": m_selected,
+                   "members_no_selected": m_no_selected,
+                   "minutes_saved": {"saved": saved, "error": error},
+                   "last": last
+                   }
+            return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
         else:
-            saved = False
-            error = False
-            if id_reunion:
-                try:
-                    reunion = reunions.objects.get(id=id_reunion)
-                    print reunion.agenda
-                    form = newMinutesForm(initial={"agenda": reunion.agenda, "location": reunion.locale})
-                    print form
-                    form.code = 123
-                    confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
-                    reunion_list = []  # Lista de miembros que confirmaron la asistencia
-                    for user_confirmed in confirm:
-                        reunion_list.append(int(user_confirmed.id_user.id))
-                    m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, reunion_list)
-                except reunions.DoesNotExist:
-                    reunion = None
-                except Exception, e:
-                    reunion = None
-                    m_selected = None
-                    m_no_selected = None
-                    error = "e3"
-                    print "Exception newReunion: %s" % e
-            else:
-                form = newMinutesForm(initial={"agenda": "<ol><li>Lectura del Acta anterior</li></ol>"})
-                reunion = None
-                try:
-                    m_selected = rel_user_group.objects.filter(id_group=group.id, is_active=True)
-                    m_no_selected = None
-                except rel_user_group.DoesNotExist:
-                    m_selected = None
-                except Exception, e:
-                    print "Exception members in newMinutes: %e" % e
-        last = getLastMinutes(group)
-        ctx = {'TITLE': "Actarium - Nueva Acta",
-               "newMinutesForm": form,
-               "group": group,
-               "reunion": reunion,
-               "members_selected": m_selected,
-               "members_no_selected": m_no_selected,
-               "minutes_saved": {"saved": saved, "error": error},
-               "last": last
-               }
-        return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
+            return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
