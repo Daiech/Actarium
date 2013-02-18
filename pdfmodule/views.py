@@ -52,15 +52,15 @@ def minutesToPdf(request,id_minutes):
         
 
         # Añadimos algunos flowables.
-        p1 = Paragraph("Grupo: %s"%(m_group), estilo1)
-        p2 = Paragraph("Codigo de acta: %s Creada el: %s"%(m_code,m_date_created),estilo1)
-        p3 = Paragraph("La reunion inicio el: %s Y finalizo el: %s"%(m_date_start,m_date_end),estilo1)
-        p4 = Paragraph("Lugar de encuentro: %s"%(m_location),estilo1)
-        p5 = Paragraph("Orden de dia",estilo1)
-        p6 = Paragraph("%s"%(m_agenda),estilo1)
-        p7 = Paragraph("Conclusiones",estilo1)
-        p8 = Paragraph("%s"%(m_agreement),estilo1)
-        p9 = Paragraph('España, Murcia, Lorca',estilo2)
+        p1 = Paragraph(u"Grupo: %s"%(m_group), estilo1)
+        p2 = Paragraph(u"Codigo de acta: %s Creada el: %s"%(m_code,m_date_created),estilo1)
+        p3 = Paragraph(u"La reunion inicio el: %s Y finalizo el: %s"%(m_date_start,m_date_end),estilo1)
+        p4 = Paragraph(u"Lugar de encuentro: %s"%(m_location),estilo1)
+        p5 = Paragraph(u"Orden de dia",estilo1)
+        p6 = Paragraph(u"%s"%(m_agenda),estilo1)
+        p7 = Paragraph(u"Conclusiones",estilo1)
+        p8 = Paragraph(u"%s"%(m_agreement),estilo1)
+
 
 
         # Añadimos los flowables a la lista story.
@@ -73,7 +73,6 @@ def minutesToPdf(request,id_minutes):
         story.append(p6)
         story.append(p7)
         story.append(p8)
-        story.append(p9)
 
         #creo los frames
         f1 = Frame(50,600,500,200,showBoundary=1)
