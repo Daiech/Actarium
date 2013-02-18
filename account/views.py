@@ -40,7 +40,7 @@ def newUser(request):
             
             email_list.append(str(email_user) + ",")
             try:
-                title = "Bienvenido a Actarium"
+                title = ""+str(name_newuser)+"Bienvenido a Actarium"
                 contenido = "<strong>"+str(name_newuser)+"</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/"+activation_key+"' >http://actarium.daiech.com/account/activate/"+activation_key+"</a>"
 #                print contenido
                 sendEmail(email_list, title, contenido)
