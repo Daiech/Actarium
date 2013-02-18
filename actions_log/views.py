@@ -8,7 +8,6 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 #from django.core.mail import EmailMessage
 
-
 def saveActionLog(id_user, code, extra, ip_address):
     try:
         action = actions.objects.get(code=code)
@@ -70,3 +69,4 @@ def showUserActionsOrder(request, username, field):
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
+

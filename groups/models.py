@@ -55,7 +55,7 @@ class rel_user_group(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "user: %s " % (self.id_user.id)
+        return "user: %s, is_admin: %s " % (self.id_user, self.is_admin)
 
 
 class admin_group(models.Model):
@@ -171,6 +171,9 @@ class user_role(models.Model):
     description = models.CharField(max_length=150, verbose_name="description")
     date_joined = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return "%s: %s" % (self.name, self.description)
+
 
 class groups_permissions(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
@@ -192,6 +195,7 @@ class packages(models.Model):
     is_visible = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
     time = models.CharField(max_length=3, verbose_name="time")
+
     def __unicode__(self):
         return "%s" % (self.name)
 
