@@ -332,11 +332,11 @@ def showGroup(request, slug):
     if is_member:
         members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
         members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
-        minutes_group = minutes.objects.filter(id_group=g.id)
-        _reunions = reunions.objects.filter(id_group=g)
+        minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
+        _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
         member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
         ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
-        "members_pend": members_pend, "reunions": _reunions}
+        "members_pend": members_pend, "reunions": _reunions, "now_": datetime.datetime.now()}
         return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
     else:
         if is_admin:

@@ -29,8 +29,8 @@
                         <i class="icon-wrench"></i> Administrar miembros</a>
                     {%endif%}
                 </div>
-                <hr>
-                <ul class="nav list-members" style="display:none">
+                <hr style="margin-bottom:5px;">
+                <ul class="unstyled list-members" style="display:none">
                     {%for member in members%}
                     <li class="list-item">
                         <div class="list-item-next">
@@ -59,14 +59,23 @@
                         <span class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
                     </li>
                     {%endfor%}
-                    <li class="show-more"><a id="show-minus" href="#Ver-menos">Ver menos...</a>
+                    <li>
+                        <div class="icons-info">
+                            <span>Info:</span>
+                            <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                            <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                            <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+                        </div>
+                    </li>
+                    <li class="show-more show-minus">
+                        <a id="show-minus" class="btn btn-link btn-mini" href="#Ver-menos">Ver menos...</a>
                     </li>
                 </ul>
                 <ul class="unstyled list-member-pics">
                     {%for member in members%}
                         <li style="display:inline">
                             <div class="member-pic" title="{{member.id_user.first_name}}">
-                                <div class="user-name-pic"><strong>{{member.id_user.username}}</strong></div>
+                                <div class="user-name-pic">{{member.id_user.username}}</div>
                                 <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
                                 <div class="w42">
                                     {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
@@ -77,15 +86,9 @@
                         </li>
                     {%endfor%}
                     <li class="show-more">
-                        <a id="show-more" href="#Ver-mas">Ver m&aacute;s...</a>
+                        <a id="show-more" class="btn btn-link btn-mini" href="#Ver-mas">Ver m&aacute;s...</a>
                     </li>
                 </ul>
-                <div class="icons-info t-a-r">
-                    <span>Info:</span>
-                    <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-                    <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
-                    <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
-                </div>
             </section>
             <section class="white-box-container">
                 <header class="span6">
@@ -99,11 +102,28 @@
                 <hr>
                 <ul class="unstyled">
                     {%if reunions%}
+                    <li><strong>Pr&oacute;ximas:</strong></li>
                         {%for r in reunions%}
-                            <li><a href="#">{{r.id_convener}}</a> concoc&oacute; a una reuni&oacute;n para el d&iacute;a <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion|date}}</a></li>
+                            {% if r.date_reunion|date:"Y-d-m" >= now_|date:"Y-d-m" %}
+                                <li class="list-item">
+                                    <div class="ml10 list-item-next">
+                                        {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                                    </div>
+                                </li>
+                            {%endif%}
+                        {%endfor%}
+                        <li class="mt20"><strong>Anteriores:</strong> </li>
+                        {%for r in reunions%}
+                            {% if r.date_reunion|date:"Y-d-m" < now_|date:"Y-d-m" %}
+                                <li class="list-item">
+                                    <div class="ml10 list-item-next">
+                                        {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                                    </div>
+                                </li>
+                            {%endif%}
                         {%endfor%}
                     {%else%}
-                    <li>No hay reuni&oacute;nes para este grupo</li>
+                    <li>No hay reuniones para este grupo</li>
                     {%endif%}
                 </ul>
             </section>
@@ -125,7 +145,8 @@
                 <li class="list-item">
                     <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
                         #{{minute.code}} - 
-                        <span>{{minute.date_created|date}}</span>
+                        <span>{{minute.id_extra_minutes.date_start|date}}</span>
+                        <span class="date-minute-created" style="display:none"> creada {{minute.date_created|date}}</span>
                     </a>
                 </li>
                 {%endfor%}
@@ -151,14 +172,20 @@
                 $("ul.list-member-pics").fadeIn();
             });
         })//79B632 verde
+        $(".list-item").hover(function(){
+            $(this).find(".date-minute-created").fadeIn("fast");
+        }, function(){
+            $(this).find(".date-minute-created").fadeOut("fast");
+        })
     });
 </script>
 {% endblock %}
 {%block style%}
 <style>
-    .list-members{border-bottom: solid thin #ddd;padding-bottom: 5px;}
+    .list-members{/*border-bottom: solid thin #ddd;*/margin-bottom: 0;}
     .list-item{position: relative;margin: 4px 0;}
-    .list-item-next{padding: 8px;border-radius: 3px}
+    .list-item-next{padding: 8px;border-radius: 0px}
+    .list-item-next:hover{padding: 8px;border-radius: 3px}
     .list-item > a{border:solid thin #ddd;display:block;}
     .list-item div{border:solid thin white;border-bottom: solid thin #ddd;}
     .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
@@ -167,11 +194,14 @@
     #minutes-section{min-height: 319px;}
     .member-pic{display:inline;margin-right: 5px; display: inline-block;padding: 4px; border-radius: 2px;border:solid thin #eee;text-align: center;min-width: 55px;min-height: 77px}
     .member-pic i{display: block;float: left;}
-    .list-member-pics{padding: 5px;border-bottom: solid 1px #ddd}
+    .list-member-pics{padding: 5px;margin-bottom: -15px;/*border-bottom: solid 1px #ddd*/}
     .user-name-pic{font-size: 14px}
     .w42{width: 42px;margin: auto}
-    #show-more{display: block;}
-    .show-more{border-radius:3px;margin-top:10px;padding: 6px 2px;text-align: center;}
+    #show-more, #show-minus{display: block;}
+    .show-more{border-radius:3px;margin-top:10px;padding: 6px 2px;}
+    .show-minus{margin-top:19px;margin-bottom: -10px;}
     .show-more:hover{background-color: #eee}
+    .date-minute-created{color: #777;text-align: right;float:right}
+    .icons-info{margin-bottom: -5px;margin-top: 20px}
 </style>
 {%endblock%}

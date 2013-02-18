@@ -250,6 +250,7 @@ header div > #top-menu-style li{
 .mt20{
     margin-top: 20px;
 }
+.ml10{margin-left: 10px;}
 #log-sup img{
     width: 14px;
 }
@@ -802,7 +803,7 @@ article header h3{
 }
 .button-group{min-height: 25px;}
 .icons-info {margin-top:10px;margin-bottom: -5px;}
-.icons-info span{font-size: 12px;margin-left: 15px;}
+.icons-info span{font-size: 12px;margin-right: 15px;}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
