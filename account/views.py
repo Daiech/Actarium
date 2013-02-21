@@ -83,15 +83,16 @@ def newInvitedUser(email_to_invite, username_invited):
         _user.save()
         from models import activation_keys
         activation_keys(id_user=_user, email=email_to_invite, activation_key=activation_key).save()
-        print "http://actarium.daiech.com/account/activate/" + activation_key
     except activation_keys.DoesNotExist:
         return False
     except Exception, e:
         print "Error: %s" % e
         return False
     try:
+        id_inv = activation_key[5:20]
         title = username_invited + u" te invitó a Actarium, La plataforma de gestión de Actas y reuniones."
-        contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos provisionales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
+        contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "/invited" + id_inv + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos Temporales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
+        print "localhost:8000/account/activate/" + activation_key + "/invited" + id_inv
         sendEmail([email_to_invite], title, contenido)
     except Exception, e:
         print "Exception mail: %s" % e
@@ -250,16 +251,15 @@ def password_reset_complete2(request):
 # ---------------------------------<activacion de cuenta>----------------------------
 
 
-def activate_account(request, activation_key):
+def activate_account(request, activation_key, is_invited=False):
     if not(activate_account_now(request, activation_key) == False):
-        return render_to_response('account/account_actived.html', {}, context_instance=RequestContext(request))
+        return render_to_response('account/account_actived.html', {"invited": is_invited}, context_instance=RequestContext(request))
     else:
         return render_to_response('account/invalid_link.html', {}, context_instance=RequestContext(request))
 
 
 def activate_account_now(request, activation_key):
     from models import activation_keys
-    from django.contrib.auth.models import User
     try:
         activation_obj = activation_keys.objects.get(activation_key=activation_key)
     except Exception:
