@@ -55,28 +55,28 @@
                 <tr><!--Usuarios pendientes-->
                 	<td class="td-first">
 						<div class="username-info">
-	                        <img style="width:20px" src="{{member.email_invited|showgravatar:'20'}}" alt="{{member.id_user.username}}">
-	                        {{member.email_invited}} (pendiente)
+	                        <img style="width:20px" src="{{member.id_user_invited.email|showgravatar:'20'}}" alt="{{member.id_user_invited.username}}">
+	                        {{member.id_user_invited.first_name}} (pendiente)
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<label for="secretary-{{member.id}}">
-							<input id="secretary-{{member.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.email_invited}}" >
+						<label for="secretary-{{member.id_user_invited.id}}">
+							<input id="secretary-{{member.id_user_invited.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.id_user_invited.id}}" >
 						</label>
 					</td>
 					<td class="t-a-c">
-						<label for="aprover-{{member.id}}">
-							<input id="aprover-{{member.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.email_invited}}" >
+						<label for="aprover-{{member.id_user_invited.id}}">
+							<input id="aprover-{{member.id_user_invited.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.id_user_invited.id}}" >
 						</label>
 					</td>
 					<td class="t-a-c">
-						<label for="admin-{{member.id}}">
-							<input id="admin-{{member.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.email_invited}}" >
+						<label for="admin-{{member.id_user_invited.id}}">
+							<input id="admin-{{member.id_user_invited.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.id_user_invited.id}}" >
 						</label>
 					</td>
 					<td class="t-a-c">
 						<div class="remove-invitation-container">
-							<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+							<a href="#" class="remove-invitation" data-invitation="{{member.id_user_invited.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 						</div>
 					</td>
                 </tr>

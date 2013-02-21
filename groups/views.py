@@ -130,7 +130,7 @@ def groupSettings(request, slug_group):
                         "is_secretary": m.is_secretary
                         }
             })
-        members_pend = invitations.objects.filter(id_group=g.id, is_active=True)
+        members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=False)
         ctx = {"group": g, "is_admin": is_admin, "members": _members, "members_pend": members_pend}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
@@ -345,7 +345,7 @@ def showGroup(request, slug):
 
 
 def validateEmail(email):
-    if len(email) > 7:
+    if len(email) > 4:
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email):
             return True
         else:
@@ -398,22 +398,30 @@ def getMembers(request):
         return HttpResponse(message)
 
 
-def sendInvitationUser(email, user, group):
+def sendInvitationUser(email, user_invite, group):
     '''
         Enviar una invitacion a un usuario via email
     '''
     if validateEmail(email):
-        # crear usuario ficticio
-        invitation, created = invitations.objects.get_or_create(email_invited=email, id_user_from=user, id_group=group, is_active=True)
+        try:
+            from account.views import newInvitedUser
+            _user = newInvitedUser(email, user_invite.first_name + " " + user_invite.last_name)
+            if _user:
+                _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=False)
+            else:
+                print "No hay usuario"
+                return False
+        except Exception, e:
+            print e
         email = [email]
-        if created:
+        if _created:
             try:
-                title = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-                contenido = str(user.first_name.encode('utf8', 'replace')) + " (" + str(user.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
+                title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
+                contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
                 sendEmail(email, title, contenido)
             except Exception, e:
                 print "Exception mail: %s" % e
-            return invitation
+            return _inv
         else:
             return False
     else:
@@ -428,20 +436,21 @@ def isMemberOfGroup(id_user, id_group):
     except User.DoesNotExist, e:
         print "El usuario no existe: %s" % e
         return False
+    except rel_user_group.DoesNotExist:
+        print "No hay este usuario en este grupo"
+        return False
     except Exception, e:
         print "El usuario no existe, Exception: %s" % e
         return False
 
 
 def isMemberOfGroupByEmail(email, id_group):
-    if validateEmail(email):
+    if validateEmail(str(email)):
         try:
             ans = User.objects.get(email=email)
-        except User.DoesNotExist, e:
-            print e
+        except User.DoesNotExist:
             return False
-        except Exception, e:
-            print e
+        except Exception:
             return False
         if ans:
             return isMemberOfGroup(ans, id_group)
@@ -457,15 +466,14 @@ def newInvitationToGroup(request):
             try:
                 g = groups.objects.get(pk=request.GET['pk'])
                 if not isMemberOfGroup(request.user, g):
-                    return HttpResponse(g)
+                    return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
             except groups.DoesNotExist:
                 g = False
                 return HttpResponse(g)
             except Exception, e:
-                print e
+                print "Exception newInvitationToGroup: " % e
                 g = False
                 return HttpResponse(g)
-
             if getUserGroupRel(request.user, g).is_admin:
                 email = str(request.GET['mail'])
                 if isMemberOfGroupByEmail(email, g):
@@ -479,8 +487,8 @@ def newInvitationToGroup(request):
                     if inv and not inv is 0:
                         invited = True
                         iid = str(inv.id)
-                        gravatar = showgravatar(mail, 30)
-                        message = "Se ha enviado la invitación a " + str(mail) + " al grupo <strong>" + str(g.name) + "</strong>"
+                        gravatar = showgravatar(email, 30)
+                        message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
                     else:
                         iid = False
                         invited = False
@@ -496,7 +504,7 @@ def newInvitationToGroup(request):
             else:
                 response = {"error": "No tienes permiso para hacer eso"}
     else:
-        response = "Error invitacion"
+        response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 

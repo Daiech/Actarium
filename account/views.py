@@ -1,3 +1,4 @@
+#encoding:utf-8
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
@@ -31,16 +32,14 @@ def newUser(request):
             email_list = []
             email_user = formulario.cleaned_data['email']
             name_newuser = formulario.cleaned_data['username']
-            salt = sha_constructor(str(random.random())).hexdigest()[:5]
-            activation_key = sha_constructor(salt + email_user).hexdigest()
+            activation_key = getActivationKey(email_user)
             new_user = formulario.save()
             new_user.is_active = False
             new_user.save()
             from models import activation_keys
             activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
             email_list.append(str(email_user) + ",")
-            user_id = User.objects.get(username=name_newuser)
-            saveActionLog(user_id, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
+            saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
             try:
                 title = "" + str(name_newuser) + "Bienvenido a Actarium"
                 contenido = "<strong>" + str(name_newuser) + "</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>"
@@ -56,13 +55,45 @@ def newUser(request):
 #    return render_to_response('account/newUser.html',{}, context_instance = RequestContext(request))
 
 
-def newInvitedUser(request):
+def getActivationKey(email_user):
+    return sha_constructor(sha_constructor(str(random.random())).hexdigest()[:5] + email_user).hexdigest()
+
+
+def newInvitedUser(email_to_invite, username_invited):
     '''
     crea un nuevo usuario inactivo desde invitacion
     '''
-    if not request.user.is_anonymous():
-        return HttpResponseRedirect('/account/')
-    return True
+    try:
+        _user = User.objects.get(email=email_to_invite)
+        return _user
+    except User.DoesNotExist:
+        _user = None
+    _username = email_to_invite.split("@")[0]
+    try:
+        _user = User.objects.get(username=_username)
+        return _user
+    except User.DoesNotExist:
+        _user = None
+    try:
+        _user = User(username=_username, first_name=_username, email=email_to_invite, is_active=False)
+        _user.save()
+        activation_key = getActivationKey(email_to_invite)
+        from models import activation_keys
+        activation_keys(id_user=_user, email=email_to_invite, activation_key=activation_key, password=activation_key[:8]).save()
+        print "http://actarium.daiech.com/account/activate/" + activation_key
+    except activation_keys.DoesNotExist:
+        return False
+    except Exception, e:
+        print "Error: %s" % e
+        return False
+    try:
+        title = username_invited + u" te invitó a Actarium, La plataforma de gestión de Actas y reuniones."
+        contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos provisionales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
+        sendEmail([email_to_invite], title, contenido)
+    except Exception, e:
+        print "Exception mail: %s" % e
+
+    return _user
 
 
 def log_in(request):
