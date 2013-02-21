@@ -2,20 +2,24 @@
 {% block TITLE %}Iniciar Sesi&oacute;n{% endblock %}
 
 {%block body%}
-<article class="white-box-container">
+<article class="message-box white-box-container">
         <h3>Iniciar Sesi&oacute;n</h3>
-        <p class="lead">Ingresa tus datos de usuario para acceder a tu cuenta en <strong>Actarium</strong></p>
-        <form name="" action="" method="POST" id="" class="form-horizontal">
+        <p>Ingresa tus datos de usuario para acceder a tu cuenta en <strong>Actarium</strong></p>
+        <form name="" action="" method="POST" id="" class="form-horizontal mt20">
             {% csrf_token %}
-            <table>{{ formulario }}</table>
             <div class="control-group">
+                <table>{{ formulario }}</table>
+            </div>
+            <div class="control-group t-a-c">
                 <div class="controls">
                     <label class="checkbox">
-                        <!--	                        <input type="checkbox">Recordarme</a>-->
+                        <!--<input type="checkbox">Recordarme</a>-->
                     </label>
-                    <button type="submit" name="submit" id="id_submit" class="btn btn-success">Log In</button>
-                    <a href="/account/new" class="btn btn-link">Registrarse</a><br />
-                    <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                    <div class="">
+                        <button type="submit" name="submit" id="id_submit" class="btn btn-info btn-large">Inicia sesi&oacute;n</button>
+                        <a href="/account/new" class="btn btn-link">Registrarse</a><br>
+                        <a href="/account/password/reset/" class="btn btn-link mt20">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                    </div>
                 </div>
             </div>
         </form>

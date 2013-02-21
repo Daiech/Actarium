@@ -59,13 +59,16 @@ function main(){
     //----------------</>-------------------/
 
     //----------------<feedback>-------------------/
-    $("#feed-option").on("click", function(){
+    $("#feed-option, #callFeed").on("click", openFeedBack);
+    $("#close-feed, #cancel-feed").on("click", closeFeedBack);
+    function openFeedBack(e){
+        e.preventDefault();
         $("#feed-modal").animate({
             'right':'0px'
         });
-    });
-    $("#close-feed, #cancel-feed").on("click", closeFeedBack);
+    }
     function closeFeedBack(e) {
+        e.preventDefault();
         $("#feed-modal").animate({
             'right':'-505px'
         });
