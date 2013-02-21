@@ -43,6 +43,14 @@ class invitations(models.Model):
     is_active = models.BooleanField(default=True)
 
 
+class invitations_groups(models.Model):
+    id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
+    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_user_invited = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_invited')
+    date_invited = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_group = models.ForeignKey(groups)
@@ -118,7 +126,7 @@ class reunions(models.Model):
             return False
         except Exception:
             return False
-        
+
     def getMinutes(self):
         try:
             m = rel_reunion_minutes.objects.get(id_reunion=self.id)

@@ -31,8 +31,7 @@ from Actarium.settings import MEDIA_ROOT
 
 @login_required(login_url='/account/login')
 def settingsBilling(request):
-    array_billing=[]
-    i=0
+    array_billing = []
     try:
         packages_list = packages.objects.filter(is_visible=True)
     except packages.DoesNotExist:
@@ -42,8 +41,8 @@ def settingsBilling(request):
     except billing.DoesNotExist:
         billing_list = "No hay información disponible."
         for b in billing:
-            array_billing[b.id]= int(p.time)*int(p.id_package.price)
-    ctx = {'TITLE': "Facturación - configuración", "packages_list": packages_list, "billing_list": billing_list, 'array_billing':array_billing}
+            array_billing[b.id] = int(p.time) * int(p.id_package.price)
+    ctx = {'TITLE': "Facturación - configuración", "packages_list": packages_list, "billing_list": billing_list, 'array_billing': array_billing}
     return render_to_response('asettings/settings_billing.html', ctx, context_instance=RequestContext(request))
 
 
@@ -84,7 +83,8 @@ def newOrganization(request):
             except Exception:
                 url_file = None
             if url_file:
-                url = save_file(url_file, str(org.name) + "-" + str(org.id))
+                from django.template import defaultfilters
+                url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id))
                 org.logo_address = url
                 org.save()
             print "req_ %s - ref_ %s" % (request.POST['ref'], ref_get)
@@ -112,7 +112,7 @@ def save_file(file, slug, path=''):
 
 @login_required(login_url='/account/login')
 def requestPackage(request):
-    if request.is_ajax(): 
+    if request.is_ajax():
         if request.method == 'GET':
             id_pack = str(request.GET['id_package'])
             id_package = packages.objects.get(pk=id_pack)
@@ -126,10 +126,11 @@ def requestPackage(request):
         is_billing_saved = "Error de servidor"
     return HttpResponse(json.dumps(is_billing_saved), mimetype="application/json")
 
+
 @login_required(login_url="/account/login")
 def replyRequestPackage(request):
     if request.user.is_staff:
-        ctx = {"billing_list": billing.objects.exclude(state= 0).order_by("-date_request"), 
+        ctx = {"billing_list": billing.objects.exclude(state=0).order_by("-date_request"),
                 "billing_list2": billing.objects.filter(state='0').order_by("-date_request")
         }
         return render_to_response('asettings/settings_replyRequest.html', ctx, context_instance=RequestContext(request))
@@ -142,13 +143,13 @@ def setReplyRequestPackage(request):
         if request.method == 'GET':
             id_billing = str(request.GET['id_billing'])
             state = str(request.GET['answer'])
-            b=billing.objects.get(id=id_billing)
+            b = billing.objects.get(id=id_billing)
             mtim = b.time
             dtn = datetime.datetime.now()
-            b.date_start= dtn
-            dtn= dtn+datetime.timedelta(days=(30*int(mtim)))
-            b.date_end= dtn
-            b.state=state
+            b.date_start = dtn
+            dtn = dtn + datetime.timedelta(days=(30 * int(mtim)))
+            b.date_end = dtn
+            b.state = state
             b.save()
             is_billing_saved = "True"
         else:
