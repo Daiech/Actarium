@@ -42,24 +42,25 @@
     <p class="containterMargin">Los datos con * son de caracter obligatorio.</p>
 
     <hr>
-    <form method="POST" action="/account/PasswordChange">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <th colspan="2" class="title">Cambiar Contrase&ntilde;a</th>
-            </tr>
-            {{passForm}}
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="btn btn-info btn-large">
-                        <i class="icon-wrench icon-white"></i> Actualizar Contrase&ntilde;a
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </form>
-
+    <div id="password-site">
+        <form method="POST" action="/account/PasswordChange">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th colspan="2" class="title">Cambiar Contrase&ntilde;a</th>
+                </tr>
+                {{passForm}}
+                <tr>
+                    <td></td>
+                    <td>
+                        <button type="submit" class="btn btn-info btn-large">
+                            <i class="icon-wrench icon-white"></i> Actualizar Contrase&ntilde;a
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
     <hr>
 
     <p>Eres miembro desde el {{ user.date_joined }} </p>

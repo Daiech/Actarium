@@ -409,7 +409,6 @@ def sendInvitationUser(email, user_invite, group):
             if _user:
                 _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=False)
             else:
-                print "No hay usuario"
                 return False
         except Exception, e:
             print e
