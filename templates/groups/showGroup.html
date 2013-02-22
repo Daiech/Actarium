@@ -23,7 +23,6 @@
                     <h4 class="">Miembros</h4>
                 </header>
                 <div class="t-a-r button-group">
-                    <!-- <a href="#">Ver todos</a> -->
                     {%if current_member.is_admin%}
                     <a href="/groups/{{ group.slug}}/admin" class="btn btn-small">
                         <i class="icon-wrench"></i> Administrar miembros</a>
@@ -94,7 +93,9 @@
                                     {% if member.is_admin%}<i title="{{member.id_user_invited.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
                                     {% if member.is_approver%}<i title="{{member.id_user_invited.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
                                     {% if member.is_secretary%}<i title="{{member.id_user_invited.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
+
                                 </div>
+                                <i title="El usuario no ha aceptado la invitaci&oacute;n a este grupo" style="font-size:12px;height:10px;">pendiente</i>
                             </div>
                         </li>
                     {%endfor%}

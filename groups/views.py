@@ -130,7 +130,7 @@ def groupSettings(request, slug_group):
                         "is_secretary": m.is_secretary
                         }
             })
-        members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=False)
+        members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=True)
         ctx = {"group": g, "is_admin": is_admin, "members": _members, "members_pend": members_pend}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
@@ -325,23 +325,25 @@ def showGroup(request, slug):
     '''
     try:
         g = groups.objects.get(slug=slug, is_active=True)
+        is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
+        is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
+        if is_member:
+            members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
+            members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=True)
+            minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
+            _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
+            member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
+            ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
+            "members_pend": members_pend, "reunions": _reunions, "now_": datetime.datetime.now()}
+            return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
+        else:
+            if is_admin:
+                return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
+            return HttpResponseRedirect('/groups/#error-view-group')
     except groups.DoesNotExist:
         raise Http404
-    is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
-    is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
-    if is_member:
-        members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
-        members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=False)
-        minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
-        _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
-        member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
-        ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
-        "members_pend": members_pend, "reunions": _reunions, "now_": datetime.datetime.now()}
-        return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
-    else:
-        if is_admin:
-            return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
-        return HttpResponseRedirect('/groups/#error-view-group')
+    except rel_user_group.DoesNotExist:
+        raise Http404
 
 
 def validateEmail(email):
@@ -407,7 +409,7 @@ def sendInvitationUser(email, user_invite, group):
             from account.views import newInvitedUser
             _user = newInvitedUser(email, user_invite.first_name + " " + user_invite.last_name)
             if _user:
-                _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=False)
+                _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=True)
             else:
                 return False
         except Exception, e:
@@ -432,9 +434,6 @@ def isMemberOfGroup(id_user, id_group):
         is_member = rel_user_group.objects.filter(id_user=id_user, id_group=id_group)
         if is_member:
             return True
-    except User.DoesNotExist, e:
-        print "El usuario no existe: %s" % e
-        return False
     except rel_user_group.DoesNotExist:
         print "No hay este usuario en este grupo"
         return False
@@ -509,6 +508,10 @@ def newInvitationToGroup(request):
 
 @login_required(login_url='/account/login')
 def acceptInvitation(request):
+    """
+        Acepta invitaciones a grupos
+    """
+    noHasPerms = False
     if request.is_ajax():
         if request.method == 'GET':
             try:
@@ -520,18 +523,19 @@ def acceptInvitation(request):
                     else:
                         return HttpResponse(False)  # error 1, peticion sin controlador s o n
                 iid = request.GET['i_id'][1:]
-                print "inv id= %s" % (str(iid))
                 try:
-                    inv = invitations.objects.get(id=iid)
-                    is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)
-                except invitations.DoesNotExist:
+                    inv = invitations_groups.objects.get(id=iid, id_user_invited=request.user, is_active=True)
+                    user_from_is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)  # el usuario que lo invito es miembro?
+                except invitations_groups.DoesNotExist:
                     inv = False
-                    is_member = False
-                if accept and is_member and inv:  # aprobar la invitacion
-                    rel_user_group(id_user=request.user, id_group=inv.id_group).save()
+                    user_from_is_member = False
+                if accept and user_from_is_member and inv:  # aprobar la invitacion
+                    rel = rel_user_group(id_user=inv.id_user_invited, id_group=inv.id_group)
+                    rel.save()
+                    print rel
                     inv.is_active = False
                     inv.save()
-                    #print "user: %s, id_user: %s, id_group: %s, acept: %s, group_name: %s"%(request.user, request.user.pk, inv.id_group.pk, True, inv.id_group.name)
+                    print inv
                     saveActionLog(request.user, 'SET_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, True, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                     accepted = True
                     group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
@@ -540,13 +544,16 @@ def acceptInvitation(request):
                     if inv and not accept:
                         inv.is_active = False
                         inv.save()
-                        saveActionLog(request.user, 'SET_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, False, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                        saveActionLog(request.user, 'DEL_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, False, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de no aceptar invitacion a grupo
                         accepted = False
                         group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                         message = "NO Aceptar la solicitud"
                     else:
-                        return HttpResponse(inv)
-                response = {"accepted": accepted, "message": message, "group": group}
+                        accepted = False
+                        message = "El administrador del grupo ha cancelado tu invitaci&oacute;n"
+                        group = ""
+                        noHasPerms = True
+                response = {"accepted": accepted, "message": message, "group": group, "canceled": noHasPerms}
             except Exception, e:
                 print e
                 return HttpResponse(False)
@@ -564,20 +571,25 @@ def deleteInvitation(request):
                 if iid == "" or iid == None:
                     return HttpResponse(False)
                 try:
-                    inv = invitations.objects.get(id=iid, is_active=True)
-                except invitations.DoesNotExist:
+                    inv = invitations_groups.objects.get(id=iid, is_active=True)
+                except invitations_groups.DoesNotExist:
                     inv = False
+                    print "inv ", inv
                 if inv:  # si eliminar la invitacion
                     inv.is_active = False
+                    print "iid ", iid
                     inv.save()
-                    saveActionLog(request.user, 'DEL_INVITA', "id_invitacion: %s, grupo: %s, email_invited: %s" % (iid, inv.id_group.name, inv.email_invited), request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
+                    saveActionLog(request.user, 'DEL_INVITA', "id_invitacion: %s, grupo: %s, email_invited: %s" % (iid, inv.id_group.name, inv.id_user_invited.email), request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
                     deleted = True
-                    message = "El usuario (" + inv.email_invited + ") ya no podr&aacute; acceder a este grupo"
+                    message = "El usuario (" + inv.id_user_invited.username + ") ya no podr&aacute; acceder a este grupo"
                     response = {"deleted": deleted, "message": message}
                 else:  # no eliminar la invitacion
                     return HttpResponse(inv)
-            except Exception:
+            except Exception, e:
+                print "error ", e
                 return HttpResponse(False)
+        if request.method == 'POST':
+            print "POST"
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")

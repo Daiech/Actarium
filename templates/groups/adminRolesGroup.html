@@ -46,7 +46,7 @@
 					</td>
 					<td class="t-a-c">
 						<div class="remove-invitation-container">
-							<a href="#" data-invitation="{{m.member.id}}" class="disabled" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+							<a href="#" data-invitation="{{m.member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 						</div>
 					</td>
 				</tr>
@@ -76,37 +76,43 @@
 					</td>
 					<td class="t-a-c">
 						<div class="remove-invitation-container">
-							<a href="#" class="remove-invitation" data-invitation="{{member.id_user_invited.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+							<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 						</div>
 					</td>
                 </tr>
                 {%endfor%}
 			</table>
+            <div class="icons-info t-a-r">
+                <span>Info:</span>
+                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+            </div>
 			<div class="mt20">
 				<div class="dropdown">
-                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
-                    <i class="icon-plus icon-white"></i> Agregar miembro
-                    <span class="caret"></span>
-                </div>
-                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li class="taling">
-                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
-                    </li>
-                    <li>
-                        <input type="hidden" id="group_name" value="{{group.name}}">
-                        <input type="hidden" id="group_id" value="{{group.id}}">
-                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-                        <span id="load-member"></span>
-                    </li>
-                    <li>
-                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
-                    </li>
-                    <li>
-                        <ul id="search-result">
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- dropdown -->
+	                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
+	                    <i class="icon-plus icon-white"></i> Agregar miembro
+	                    <span class="caret"></span>
+	                </div>
+	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	                    <li class="taling">
+	                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
+	                    </li>
+	                    <li>
+	                        <input type="hidden" id="group_name" value="{{group.name}}">
+	                        <input type="hidden" id="group_id" value="{{group.id}}">
+	                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+	                        <span id="load-member"></span>
+	                    </li>
+	                    <li>
+	                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
+	                    </li>
+	                    <li>
+	                        <ul id="search-result">
+	                        </ul>
+	                    </li>
+	                </ul>
+	            </div><!-- dropdown -->
 			</div>
 		</section>
 	</form>
@@ -300,7 +306,7 @@
 	                function(data){
 	                    if(data['deleted']){
 	                        $(elem).parent().animate({"height":0},"slow",function(e){
-	                            $(this).parent().parent().fadeOut()
+	                            $(this).parent().fadeOut()
 	                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
 	                        });
 	                    }

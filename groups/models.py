@@ -50,6 +50,9 @@ class invitations_groups(models.Model):
     date_invited = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
+    def __unicode__(self):
+        return "from: %s, to: %s, is_active : %s " % (self.id_user_from, self.id_user_invited, self.is_active)
+
 
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
@@ -63,7 +66,7 @@ class rel_user_group(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "user: %s, is_admin: %s " % (self.id_user, self.is_admin)
+        return "%s  - is_admin: %s " % (self.id_user, self.is_admin)
 
 
 class admin_group(models.Model):

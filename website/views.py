@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 import re
 from django.utils.timezone import get_default_timezone, make_naive
-from groups.models import groups, invitations, reunions, assistance
+from groups.models import groups, invitations_groups, reunions, assistance
 from django.utils import simplejson as json
 from website.models import feedBack, faq
 
@@ -21,7 +21,7 @@ def home(request):
         #-----------------</GRUPOS>-----------------
 
         #-----------------<INVITACIONES>-----------------
-        my_inv = invitations.objects.filter(email_invited=request.user.email, is_active=True)
+        my_inv = invitations_groups.objects.filter(id_user_invited=request.user, is_active=True)
         #-----------------</INVITACIONES>-----------------
 
         #-----------------<REUNIONES>-----------------

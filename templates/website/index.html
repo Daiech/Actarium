@@ -432,27 +432,34 @@
                     "Ahora perteneces al grupo "+
                         "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
                         "<hr>"
-                ).fadeIn()
-                }
-            )
+                    ).fadeIn()
+                    }
+                )
                 setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
                 "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
             }
             else{
-                $(element).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
-                        "<br>"+
-                        "Si lo hiciste por error comunicate con el administrador del grupo para "+
-                        "obtener una nueva invitaci&oacute;n."+
-                        "<hr>"
-                ).fadeIn()
-                })
                 var actual2 = parseInt($("#inv-count").text())
                 actual2--
                 $("#inv-count").text(""+actual2)
-                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                "Haz rechazado la invitaci&oacute;n")
+                if(data["canceled"]){
+                    $(element).parent().parent().slideUp(900,function(){
+                        $(this).empty()
+                    })
+                    setAlertError("Error", data['message'])
+                }else{
+                    $(element).parent().parent().slideUp(900,function(){
+                        $(this).empty().html(
+                        "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                            "<br>"+
+                            "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                            "obtener una nueva invitaci&oacute;n."+
+                            "<hr>"
+                    ).fadeIn()
+                    })
+                    setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                        "Haz rechazado la invitaci&oacute;n")
+                }
             }
         })
 
