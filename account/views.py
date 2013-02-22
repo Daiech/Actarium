@@ -30,25 +30,20 @@ def newUser(request):
         if formulario.is_valid():
             # formulario.save()
             # user_name = formulario['username'].data
-            email_list = []
             email_user = formulario.cleaned_data['email']
             name_newuser = formulario.cleaned_data['username']
             activation_key = getActivationKey(email_user)
             new_user = formulario.save()
             new_user.is_active = False
-            new_user.save()
-            from models import activation_keys
-            activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
-#            email_list.append(str(email_user) + ",")
-            saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
-#            try:
-#                title = "" + str(name_newuser) + "Bienvenido a Actarium"
-#                contenido = "<strong>" + str(name_newuser) + "</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>"
-#                sendEmail(email_list, title, contenido)
-#            except Exception, e:
-#                print "Exception mail: %s" % e
-            sendEmailHtml(1,{'username': name_newuser,'activation_key': activation_key},[str(email_user)])
-            return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
+            try:
+                new_user.save()
+                from models import activation_keys
+                activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
+                saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))  # Registro en el Action log
+                sendEmailHtml(1, {'username': name_newuser, 'activation_key': activation_key}, [str(email_user)])  # Envio de correo con clave de activacion
+                return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
+            except:
+                return HttpResponseRedirect('/#Error-de-registro-de-usuario')
             # return userLogin(request, user_name, formulario['password1'].data)
     else:
         formulario = RegisterForm()
