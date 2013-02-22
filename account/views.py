@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.utils.hashcompat import sha_constructor
 from django.core.mail import EmailMessage
 import random
+from emailmodule.views import sendEmailHtml 
 
 
 #------------------------------- <Normal User>---------------------------
@@ -38,14 +39,15 @@ def newUser(request):
             new_user.save()
             from models import activation_keys
             activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
-            email_list.append(str(email_user) + ",")
+#            email_list.append(str(email_user) + ",")
             saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))
-            try:
-                title = "" + str(name_newuser) + "Bienvenido a Actarium"
-                contenido = "<strong>" + str(name_newuser) + "</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>"
-                sendEmail(email_list, title, contenido)
-            except Exception, e:
-                print "Exception mail: %s" % e
+#            try:
+#                title = "" + str(name_newuser) + "Bienvenido a Actarium"
+#                contenido = "<strong>" + str(name_newuser) + "</strong> <br ><br> Te damos la bienvenida a Actarium, solo falta un paso para activar tu cuenta. <br > Ingresa al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>"
+#                sendEmail(email_list, title, contenido)
+#            except Exception, e:
+#                print "Exception mail: %s" % e
+            sendEmailHtml(1,{'username': name_newuser,'activation_key': activation_key},[str(email_user)])
             return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
             # return userLogin(request, user_name, formulario['password1'].data)
     else:
