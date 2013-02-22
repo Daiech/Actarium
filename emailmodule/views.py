@@ -18,7 +18,7 @@ def sendEmailHtml(email_type,ctx, to):
     elif email_type == 2:
         subject = ctx['firstname']+" (" + ctx['username'] + u") Te ha invitado a una reunión del grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
-        htmly     = get_template('emailmodule/email_activate_account.html')
+        htmly     = get_template('emailmodule/email_new_reunion.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly     = get_template('emailmodule/emailtest.html')
