@@ -9,11 +9,16 @@ def sendEmailHtml(email_type,ctx, to):
         el tipo de correo que se envia y el contexto con las variables que se trasmitiran a cada template.
         La siguiente lista define los valores perimitidos para la variable type y su respectivo significado.
         1- correo de validacion.
+        2 - Correo de nueva reunion
     """
     if email_type == 1:
+        subject = ctx['username']+" Bienvenido a Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly     = get_template('emailmodule/email_activate_account.html')
-        subject = ctx['username']+" Bienvenido a Actarium"
+    elif email_type == 2:
+        subject = ctx['firstname']+" (" + ctx['username'] + u") Te ha invitado a una reunión del grupo " + ctx['groupname'] + " en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly     = get_template('emailmodule/email_activate_account.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly     = get_template('emailmodule/emailtest.html')
