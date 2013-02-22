@@ -205,7 +205,11 @@ def password_reset2(request):
         """
         if not request.user.is_authenticated():
             print "entro a password_reset2"
-            return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
+            try:
+                return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
+            except Exception, e:
+                print e
+                return HttpResponseRedirect("/account/password/reset/done/")
         else:
             print "no entro a password_reset2"
             return HttpResponseRedirect("/account/")
@@ -216,11 +220,9 @@ def password_reset_done2(request):
         django.contrib.auth.views.password_reset_done - after password reset view
         """
         if not request.user.is_authenticated():
-                print "entro a password_reset_done2"
-                return password_reset_done(request, template_name='account/password_reset_done.html')
+            return password_reset_done(request, template_name='account/password_reset_done.html')
         else:
-                print "no entro a password_reset_done2"
-                return HttpResponseRedirect("/account/")
+            return HttpResponseRedirect("/account/")
 
 
 def password_reset_confirm2(request, uidb36, token):
