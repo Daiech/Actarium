@@ -39,8 +39,8 @@ def newUser(request):
                 new_user.save()
                 from models import activation_keys
                 activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
-                saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR'])) #Registro en el Action log
-                sendEmailHtml(1,{'username': name_newuser,'activation_key': activation_key},[str(email_user)]) # Envio de correo con clave de activacion
+                saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))  # Registro en el Action log
+                sendEmailHtml(1, {'username': name_newuser, 'activation_key': activation_key}, [str(email_user)])  # Envio de correo con clave de activacion
                 return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
             except:
                 return HttpResponseRedirect('/#Error-de-registro-de-usuario')
@@ -200,7 +200,10 @@ def password_reset2(request):
         """
         if not request.user.is_authenticated():
             print "entro a password_reset2"
-            return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
+            try:
+                return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
+            except Exception, e:
+                return HttpResponseRedirect("/account/password/reset/done/")
         else:
             print "no entro a password_reset2"
             return HttpResponseRedirect("/account/")
@@ -211,11 +214,9 @@ def password_reset_done2(request):
         django.contrib.auth.views.password_reset_done - after password reset view
         """
         if not request.user.is_authenticated():
-                print "entro a password_reset_done2"
-                return password_reset_done(request, template_name='account/password_reset_done.html')
+            return password_reset_done(request, template_name='account/password_reset_done.html')
         else:
-                print "no entro a password_reset_done2"
-                return HttpResponseRedirect("/account/")
+            return HttpResponseRedirect("/account/")
 
 
 def password_reset_confirm2(request, uidb36, token):
