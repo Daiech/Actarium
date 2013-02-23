@@ -3,8 +3,16 @@
 {% load gravatartag %}
 {%block body%}
 <article>
+    <header >
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="menu-icons icons-page icon-groups"></div>
+                <h3>Crear grupo</h3>
+            </div>
+        </div>
+    </header>
+    <hr/>
     <div class="row-fluid">
-        <h2>Crear nuevo grupo</h2>
         <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
@@ -84,7 +92,7 @@
                     <input type="hidden" id="group_name" value="{{group.name}}">
                     <input type="hidden" id="group_id" value="{{group.id}}">
                     <input type="hidden" value="{{sel_org}}" id="org-selected">
-                    <button type="submit" class="btn btn-success btn-large">Guardar</button>
+                    <button type="submit" class="btn btn-info btn-large">Guardar</button>
                     <a href="/groups" class="btn-link btn-small">Ver mis grupos</a>
                 </div>
             </div>

@@ -30,12 +30,12 @@ body {
 */
 
 ::-moz-selection {
-    background: #b3d4fc;
+    background: #EBD438;
     text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
+    background: #EBD438;
     text-shadow: none;
 }
 
@@ -90,8 +90,19 @@ textarea {
 
 /* ==========================================================================
    Author's custom styles   
-   @JonathanMG7
+   @MaoAiz
    ========================================================================== */
+
+
+body{
+    /*background-color: #E9E9E9;*/
+    background-image: url("/static/img/debut_light.png");
+}
+a {color: #00aeaa;text-decoration: none;}
+.b{border: solid thin #dadada;}
+
+
+
 
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
@@ -102,10 +113,6 @@ body > header{
     background-image: url("/static/img/navbar-background.png");
     box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
     height: 70px;
-}
-body{
-    /*background-color: #E9E9E9;*/
-    background-image: url("/static/img/debut_light.png");
 }
 header #navbar-button-container > ul li a {
     display:inline-block;
@@ -542,9 +549,6 @@ FIN FEED
     width: 97%;
 }
 
-.b{
-    border: solid thin #dadada;
-}
 .form-horizontal .controls {
 margin-left: 0;
 }
@@ -804,6 +808,8 @@ article header h3{
     float: left;
     margin-top: 7px;
 }
+h3 a{color: #3b5998}
+h3 a:hover{text-decoration:underline;}
 .button-group{min-height: 25px;}
 .icons-info {margin-top:10px;margin-bottom: -5px;}
 .icons-info span{font-size: 12px;margin-right: 15px;}
@@ -813,6 +819,12 @@ article header h3{
 .td-first{text-align: left;width: 45%;}
 .roles{margin-top: 8px;margin-right: 5px;}
 .container{width:90%;}
+.nav-list > .active > a, .nav-list > .active > a:hover{background-color:#00aeaa;}
+.btn-info{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
+.btn-link{color:#00aeaa;}
+.btn-link:hover{color:#00aeaa;}
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a:hover{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
+/*.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{background-color:#dadada;}*/
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -965,6 +977,7 @@ only screen and (min-resolution: 144dpi) {
     .white-bar{
         width: 27%;
     }
+    .logo-center{right: 20px}
 }
 
 /* Portrait tablet to landscape and desktop */

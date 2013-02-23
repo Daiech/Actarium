@@ -1039,6 +1039,7 @@ def newReunion(request, slug):
             form = newReunionForm()
         ctx = {'TITLE': "Actarium",
                "newReunionForm": form,
+               "group": q
                }
         return render_to_response('groups/newReunion.html', ctx, context_instance=RequestContext(request))
     else:

@@ -5,13 +5,13 @@
 <article>
     <header >
         <div class="row-fluid">
-            <div class="span8">
+            <div class="span12">
                 <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-                <h3>{{group.name}}<strong> - {{group.description}}</strong></h3>
-                <!-- <a href="#" class="btn btn-link">Editar grupo</a> -->
-            </div>
-            <div class="span4 btnSup">
-                
+                <h3>{{group.name}}
+                    <span style="font-size:17px;color:gray"> -
+                    {%if group.description%}{{group.description}}{%else%}No description{%endif%}
+                    </span>
+                </h3>
             </div>
         </div>
     </header>
@@ -160,7 +160,7 @@
                     <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
                         #{{minute.code}} - 
                         <span>{{minute.id_extra_minutes.date_start|date}}</span>
-                        <span class="date-minute-created" style="display:none"> creada {{minute.date_created|date}}</span>
+                        <span class="date-minute-created" style="display:none"> creada el {{minute.date_created|date}}</span>
                     </a>
                 </li>
                 {%endfor%}
