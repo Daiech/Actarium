@@ -1022,15 +1022,15 @@ def newReunion(request, slug):
                 email_ctx = {'firstname': request.user.first_name,
                        'username': request.user.username,
                        'groupname': q.name,
-                       'titlereunion': str(df['title']),
+                       'titlereunion': str(df['title'].encode('utf8', 'replace')),
                        'datereunion': dateTimeFormatForm(df['date_reunion']),
-                       'locale': str(df['locale']),
-                       'agenda': str(df['agenda']),
+                       'locale': str(df['locale'].encode('utf8', 'replace')),
+                       'agenda': str(df['agenda'].encode('utf8', 'replace')),
                        'datereunionshort': str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")),
                        'id_reunion': id_reunion.pk,
                        'urlgravatar': showgravatar(request.user.email, 50)
                        }
-                sendEmailHtml(2,email_ctx,email_list)
+                sendEmailHtml(2, email_ctx, email_list)
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
