@@ -808,6 +808,7 @@ article header h3{
 .message-box{margin: 0 auto;width: 55%;margin-bottom: 20px;}
 .control-group{margin:10px auto;width: 70%;}
 .control-group input[type="checkbox"]{float: none;}
+.td-first{text-align: left;width: 45%;}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -967,7 +968,7 @@ only screen and (min-resolution: 144dpi) {
         width: 65%;
     }
     article{
-        width: auto;
+        width: 100%;
         /*        border: solid thin blue;*/
     }
     .columnaD{
@@ -985,128 +986,48 @@ only screen and (min-resolution: 144dpi) {
     #social-buttons{
         display: visible;
     }
-
-
+    #table-roles th div{width: auto;}
+    .th-name{display: none;width: auto;}
+    .td-first{width: 68%;}
 }
 
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     body {
-        padding-right: 0px;
-        padding-left: 0px;
+        padding-right: 0;
+        padding-left: 0;
     }
     .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-        margin-right: 0px;
-        margin-left: 0px;
+        margin-right: 0;
+        margin-left: 0;
     }
-    .columnaI{
-        width: 100%;
-    }.columnaD{
-        width: 100%;
-    }
-    .fix_btn{
-        padding:0 20px;
-    }
-    .margint30{
-        margin-top: 30px;
-    }
-    .alert-block{
-        width: 50%;
-    }
-
-    .navbar-fixed-top {
-        margin-bottom: 26px;
-    }
-    .info-pics {
-        width: 100%;
-    }
-     #left-bubble{
-        left: 109px;
-        top: -31px;
-
-     }
-     #right-bubble{
-        top: -30px;
-        left: -9px;
-     }
-     #social-buttons{
-        display: visible;
-    }
-    .white-bar{
-        width: 55%
-    }
-    #form-new-group{
-        width: 80%;
-    }
+    .white-bar{width: 55%}
+    #form-new-group{width: 80%;}
+    #table-roles th div{width: auto;}
+    .th-name{display: none;width: auto;}
+    .td-first{width: 55%;}
+    #settings-menu{margin-bottom: 20px;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
     .span6{margin: 6px auto;width: 96%;}
     body {
-        padding-right: 0px;
-        padding-left: 0px;
+        padding-right: 0;
+        padding-left: 0;
     }
     .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
-        margin-right: 0px;
-        margin-left: 0px;
-    }
-     #left-bubble{
-        left: 109px;
-        top: -31px;
-     }
-     #right-bubble{
-        top: -30px;
-        left: -9px;
-     }
-     .pic-log{
-        width: 166px;
-        position: absolute;
-     }
-     #pic-log-left{
-        
-        float:left;
-     }
-     #pic-log-right{
-        
-        float:right;
-     }
-    .navbar-element{
-        height: 47px;
-    }
-    .navbar-item{
-        height: 37px;
-    }
-    .ico-top{
-        top: 0px;
-    }
-    .navbar-item > span {
-        top: 19px;
-    }
-    #navbar-button-container > ul {
-        margin-top: 63px;
-    }
-    #social-buttons{
-        display: none;
+        margin-right: 0;
+        margin-left: 0;
     }
     .white-bar{
         width: 80%;
     }
-   
+   h3{font-size: 16px;}
 }
     /*==================================================*/
     /*                  Cierra Responsive               */                    
     /*==================================================*/
-
-
-
-    /*@media only screen and (max-width:1280px){
-        .columnaD{
-            margin-left: 380px;
-        }
-    }*/
-
-
 
     /* ==========================================================================
        Print styles.
