@@ -1022,8 +1022,9 @@ def newReunion(request, slug):
                        'urlgravatar': showgravatar(request.user.email, 50)
                        }
                 sendEmailHtml(2,email_ctx,email_list)
-                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
-                return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
+                return render_to_response('emailmodule/email_new_reunion.html', email_ctx, context_instance=RequestContext(request))
+#                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+#                return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
             form = newReunionForm()
         ctx = {'TITLE': "Actarium",
