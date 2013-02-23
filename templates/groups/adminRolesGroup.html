@@ -11,10 +11,29 @@
 			<table id="table-roles" class="table table-bordered table-hover">
 				<tr>
 					<th class="td-first" title="Lista de todos los miembros del grupo '{{group.name}}'">Usuarios del grupo</th>
-					<th title="Personas encargadas de redactar actas">Secretario</th>
-					<th title="Personas encargadas de aprobar actas">Aprobador</th>
-					<th title="Personas encargadas de administrar el grupo">Administrador</th>
-					<th  title="Elimina la persona de este grupo" class="th-delelte">Eliminar</th>
+					<th title="Personas encargadas de redactar actas">
+						<div>
+							<i class="icon-pencil"></i>
+							<span class="th-name">Secretario</span>
+						</div>
+					</th>
+					<th title="Personas encargadas de aprobar actas">
+						<div>
+							<i class="icon-thumbs-up"></i> 
+							<span class="th-name">Aprobador</span>
+						</div>
+					</th>
+					<th title="Personas encargadas de administrar el grupo">
+						<div>
+							<i class="icon-wrench"></i> 
+							<span class="th-name">Administrador</span>
+						</div>
+					</th>
+					<th  title="Elimina la persona de este grupo" class="th-delelte">
+						<div>
+							<span class="th-name">Eliminar</span>
+						</div>
+					</th>
 				</tr>
 				{%for m in members%}
 				<tr>
@@ -82,18 +101,21 @@
                 </tr>
                 {%endfor%}
 			</table>
-            <div class="icons-info t-a-r">
-                <span>Info:</span>
-                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
-                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
-            </div>
 			<div class="mt20">
 				<div class="dropdown">
 	                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
 	                    <i class="icon-plus icon-white"></i> Agregar miembro
 	                    <span class="caret"></span>
 	                </div>
+	                <a href="{%if is_admin and not is_member%}#{%else%}/groups/{{group.slug}}{%endif%}" class="btn {%if is_admin and not is_member%}disabled{%endif%}">
+	                	<i class="icon-arrow-left"></i> Volver al grupo
+	                </a>
+		            <div class="icons-info pull-right">
+		                <span>Info:</span>
+		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+		                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+		            </div>
 	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 	                    <li class="taling">
 	                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
@@ -126,13 +148,14 @@
 		padding: 9px;
 	}
 	.th-delelte{width: 9%;}
-	th{
-		width: 12.5%;
+	th div{
 		text-align: center;
-	}
-	.td-first{
-		text-align: left;
-	    width: 50%;
+		font-size: 14px;
+		height: 17px;
+		margin: 0;
+		overflow: hidden;
+		padding: 0px;
+		width: 115px;
 	}
 	.username-info{
 		padding: 8px;
@@ -217,6 +240,8 @@
     }
     #newmember{
         margin: 3px 10px;
+        padding: 10px;
+        width: 90%;
     }
     .dropdown#add-member-menu{
         text-decoration: none;
@@ -224,7 +249,7 @@
 
     }
     #add-member-menu{
-        width:280px;
+        /*width:280px;*/
     }
     .dropdownmenu  * li{
         list-style:none;

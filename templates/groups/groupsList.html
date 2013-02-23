@@ -10,7 +10,7 @@
                 <h3 class="">Grupos</h3>
             </div>
             <div class="offset2 btnSup">
-                <a href="/groups/new" class="btn btn-small">
+                <a href="/groups/new" class="btn">
                     <i class="icon-plus"></i> Crear Grupo
                 </a>
             </div>
@@ -22,29 +22,43 @@
                 <h4 class=" ml50" title="Pertenezco al grupo. Puedo ver actas, crear reuniones o tener permisos sobre el grupo." >Soy miembro</h4>
                 <hr>
                 <ul id="group-list" class="nav onOver">
-                    {% for group in groups %}
+                    {% for gr_rel in groups %}
                     <li class="">
-                        <a href="/groups/{{group.slug}}">
-                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
-                            {{group.name}}
+                        <a href="/groups/{{gr_rel.id_group.slug}}">
+                            <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
+                            {{gr_rel.id_group.name}}
+                            <div class="pull-right roles">
+                                {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
+                                {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                            </div>
                         </a>
                     </li>
                     {% endfor %}
                 </ul>
+                <div class="icons-info">
+                    <span>Info:</span>
+                    <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                    <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                    <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+                </div>
         </section>
         <section class="white-box-container span6">
                 <h4 title="Grupos que administro pero no pertenzco. Puedo administrar el grupo, pero no puedo ver las actas ni crear reuniones.">&Uacute;nicamente administro</h4>
                 <hr>
                 <ul id="group-list" class="nav onOver">
-                    {% for group in admin_groups %}
-                    {%if not group in groups %}
-                    <li class="">
-                        <a href="/groups/{{group.slug}}">
-                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
-                            {{group.name}}
-                        </a>
-                    </li>
-                    {%endif%}
+                    {% for gr_rel in admin_groups %}
+                        <li class="">
+                            <a href="/groups/{{gr_rel.id_group.slug}}">
+                                <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
+                                {{gr_rel.id_group.name}}
+                                <div class="pull-right roles">
+                                    {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                </div>
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
         </section>
@@ -71,14 +85,14 @@
         overflow: hidden;
         width: 50px;
     }
-    
+    .roles{margin-top: 8px;margin-right: 5px;}
 </style>
 {% endblock %}
 
 {% block js %}
 <script>
     $(document).on("ready",function() {
-        $("h4").tooltip();
+        $("h4, i").tooltip();
         $("#groups").addClass("menu-active")
         $("#groups .navbar-item").addClass("navbar-item-hover");
         $("#groups .navbar-button-propierties").css({"height":"15px"}, 100);

@@ -173,7 +173,7 @@
 {% block js %}
 <script>
     $(document).on("ready",function(){
-        $("i, a, span, .member-pic").tooltip();
+        $("i, .list-members a, span, .member-pic").tooltip();
         $("#show-more").on("click",function(e){
             e.preventDefault();
             $("ul.list-member-pics").fadeOut("fast",function(){

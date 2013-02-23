@@ -17,9 +17,7 @@ from account.templatetags.gravatartag import showgravatar
 from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
-from emailmodule.views import sendEmailHtml 
-# import locale
-# locale.setlocale(locale.LC_ALL, '')
+from emailmodule.views import sendEmailHtml
 
 
 @login_required(login_url='/account/login')
@@ -28,16 +26,19 @@ def groupsList(request):
     lista los grupos del usuario registrado
     '''
     try:
-        mygroups = groups.objects.filter(
-            rel_user_group__id_user=request.user,
-            rel_user_group__is_active=True,
-            rel_user_group__is_member=True)
-        my_admin_groups = groups.objects.filter(
-            rel_user_group__id_user=request.user,
-            rel_user_group__is_active=True,
-            rel_user_group__is_admin=True)
-    except groups.DoesNotExist:
+        mygroups = rel_user_group.objects.filter(
+            id_user=request.user,
+            is_active=True,
+            is_member=True
+            ).order_by("date_joined")
+        my_admin_groups = rel_user_group.objects.filter(
+            id_user=request.user,
+            is_member=False,
+            is_active=True,
+            is_admin=True).order_by("date_joined")
+    except rel_user_group.DoesNotExist:
         mygroups = "You Dont have any groups"
+        my_admin_groups = "You Dont administrate any groups"
 
     ctx = {"groups": mygroups, "admin_groups": my_admin_groups}
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
@@ -118,6 +119,10 @@ def groupSettings(request, slug_group):
     except groups.DoesNotExist:
         raise Http404
     is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
+    try:
+        is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
+    except Exception:
+        is_member = False
     if is_admin:
         members = rel_user_group.objects.filter(id_group=g.id, is_active=True).order_by("date_joined")
         _members = list()
@@ -132,7 +137,7 @@ def groupSettings(request, slug_group):
                         }
             })
         members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=True)
-        ctx = {"group": g, "is_admin": is_admin, "members": _members, "members_pend": members_pend}
+        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "members_pend": members_pend}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
@@ -326,8 +331,11 @@ def showGroup(request, slug):
     '''
     try:
         g = groups.objects.get(slug=slug, is_active=True)
-        is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
         is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
+        try:
+            is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
+        except Exception:
+            is_member = False
         if is_member:
             members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
             members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=True)
@@ -342,8 +350,10 @@ def showGroup(request, slug):
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
             return HttpResponseRedirect('/groups/#error-view-group')
     except groups.DoesNotExist:
+        print "groups Exception ", slug
         raise Http404
     except rel_user_group.DoesNotExist:
+        print "rel_user_group Exception ", slug
         raise Http404
 
 
@@ -837,7 +847,6 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
                         )
             myNewMinutes.save()
             id_user = request.user
-            print "id_user: %s group: %s, code: %s" % (id_user, group.name, df['code'])
             saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
             # registra los usuarios que asistieron a la reunión en la que se creó el acta
             setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
@@ -1096,8 +1105,8 @@ def calendarDate(request, slug=None):
             is_confirmed = False
             is_saved = 0
         json_array[i] = {"id_r": str(reunion.id),
-                         "group_slug": str(reunion.id_group.slug),
-                         "group_name": str(reunion.id_group.name),
+                         "group_slug": reunion.id_group.slug,
+                         "group_name": reunion.id_group.name,
                          "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")),
                          'is_confirmed': str(is_confirmed),
                          'is_saved': is_saved,
