@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 import re
 from django.utils.timezone import get_default_timezone, make_naive
-from groups.models import groups, invitations_groups, reunions, assistance
+from groups.models import invitations_groups, reunions, assistance, rel_user_group
 from django.utils import simplejson as json
 from website.models import feedBack, faq
 
@@ -14,10 +14,11 @@ def home(request):
     if request.user.is_authenticated():
 
         #-----------------</GRUPOS>-----------------
-        gr = groups.objects.filter(
-            rel_user_group__id_user=request.user,
-            rel_user_group__is_active=True,
-            rel_user_group__is_member=True)
+        gr = rel_user_group.objects.filter(
+            id_user=request.user,
+            is_active=True,
+            is_member=True
+            )
         #-----------------</GRUPOS>-----------------
 
         #-----------------<INVITACIONES>-----------------

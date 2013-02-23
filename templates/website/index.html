@@ -5,8 +5,116 @@
 
 
 {% if user.is_authenticated %}
-<article id="b-page">
-    <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
+    <article id="b-page">
+        <div id="content-container" class="row-fluid">
+            <section id="notifications" class="span6">
+                <div style="" class="white-box-container">
+                    <header class="row-fluid fix_btn">
+                        <h4 class="span7 ml50">Actividad Reciente</h4>
+                    </header>
+                    <hr>
+                    <div class="accordion " id="accordion">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
+                                    Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
+                                </a>
+                            </div>
+                            <div  id="Invitations" class="accordion-body collapse in">
+                                <ul class="accordion-inner">
+                                    {% for invitation in invitations %}
+                                    <li>
+                                        <span class="notification-text alpha60">
+                                            <strong>{{invitation.id_user_from.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
+                                            <br />
+                                            <time datetime="{{reunion.date_convened|date:'c'}}">El {{invitation.date_invited}}</time>
+                                        </span>
+                                        <div class="buttons">
+                                            <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
+                                                Aceptar 
+                                                <span class="load"></span>
+                                            </button>
+                                            <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
+                                                Cancelar
+                                                <span class="load"></span>
+                                            </button>
+                                            <div class="pull-right load"></div>
+                                        </div>
+                                        <hr>
+
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
+                                    Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
+                                </a>
+                            </div>
+                            <div  id="Reunions" class="accordion-body collapse in">
+                                <ul class="accordion-inner">
+
+                                    {% for reunion in reunions %}
+
+                                    <li data-group-name="{{reunion.group_name}}" data-date="{{reunion.date}}">
+                                        <span class="notification-text">
+                                            <strong>{{reunion.title}}</strong> (<a href="/groups/">{{reunion.group_name}}</a>)
+                                            <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
+                                        </span>
+                                        <div class="buttons">
+                                            <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
+                                            <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
+                                            <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="{{reunion.id_reunion}}">Ver m&aacute;s</a>
+                                        </div>
+                                        <hr>
+
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--cierra notifications-->
+
+                </div>
+            </section>
+            <section class="white-box-container span6">
+                    <header class="span3">
+                        <h4 class="">Tus grupos</h4>
+                    </header>
+                    <div class="t-a-r">
+                        <a href="/groups/new" class="btn btn-small">
+                            <i class="icon-plus"></i> Crear Grupo
+                        </a>
+                        <a href="/groups/calendar" class="btn btn-small">
+                            <i class="icon-calendar"></i> Reuniones
+                        </a>
+                        <a href="/settings/organizations" class="btn btn-small">
+                            <i class="icon-wrench"></i> Organizaciones
+                        </a>
+                    </div>
+                    <hr>
+                    <ul id="group-list" class="nav onOver">
+                        {% for gr_rel in groups %}
+                        <li class="">
+                            <a href="/groups/{{gr_rel.id_group.slug}}">
+                                <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
+                                {{gr_rel.id_group.name}}
+                                <div class="pull-right roles">
+                                    {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+            </section>
+        </div>
+    </article>
+    <div class="modal hide fade" id="myReunionModal">
+        <!-- Ventana Modal para visualizar informacion de reuniones -->
         <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Detalles de la Reuni&oacute;n</h3>
@@ -17,205 +125,100 @@
             </div>
         </div>
     </div>
-    <div id="content-container" class="row-fluid">
-        <section id="notifications" class="span6">
-            <div style="margin-left:60px;" class="white-box-container">
-                <header class="row-fluid fix_btn">
-                    <h4 class="span7 ml50">Actividad Reciente</h4>
-                </header>
-                <hr>
-                <div class="accordion " id="accordion">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
-                                Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
-                            </a>
-                        </div>
-                        <div  id="Invitations" class="accordion-body collapse in">
-                            <ul class="accordion-inner">
-                                {% for invitation in invitations %}
-                                <li>
-                                    <span class="notification-text alpha60">
-                                        <strong>{{invitation.id_user_from.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
-                                        <br />
-                                        <time datetime="{{reunion.date_convened|date:'c'}}">El {{invitation.date_invited}}</time>
-                                    </span>
-                                    <div class="buttons">
-                                        <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
-                                            Aceptar 
-                                            <span class="load"></span>
-                                        </button>
-                                        <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
-                                            Cancelar
-                                            <span class="load"></span>
-                                        </button>
-                                        <div class="pull-right load"></div>
-                                    </div>
-                                    <hr>
-
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
-                                Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
-                            </a>
-                        </div>
-                        <div  id="Reunions" class="accordion-body collapse in">
-                            <ul class="accordion-inner">
-
-                                {% for reunion in reunions %}
-
-                                <li data-group-name="{{reunion.group_name}}" data-date="{{reunion.date}}">
-                                    <span class="notification-text">
-                                        <strong>{{reunion.title}}</strong> (<a href="/groups/">{{reunion.group_name}}</a>)
-                                        <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
-                                    </span>
-                                    <div class="buttons">
-                                        <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
-                                        <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
-                                        <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="{{reunion.id_reunion}}">Ver m&aacute;s</a>
-                                    </div>
-                                    <hr>
-
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div><!--cierra notifications-->
-
-            </div>
-        </section>
-        <section class="white-box-container span5">
-                <header class="span3">
-                    <h4 class="">Tus grupos</h4>
-                </header>
-                <div class="t-a-r">
-                    <a href="/groups/new" class="btn btn-small">
-                        <i class="icon-plus"></i> Crear Grupo
-                    </a>
-                    <a href="/groups/calendar" class="btn btn-small">
-                        <i class="icon-calendar"></i> Reuniones
-                    </a>
-                    <a href="/settings/organizations" class="btn btn-small">
-                        <i class="icon-wrench"></i> Organizaciones
-                    </a>
-                </div>
-                <hr>
-                <ul id="group-list" class="nav onOver">
-                    {% for group in groups %}
-                    <li class="">
-                        <a href="/groups/{{group.slug}}">
-                            <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
-                            {{group.name}}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-        </section>
-    </div>
-</article>
 {% else %}
-<div id="new-container">
-    <img id="logo-act-big" src="/static/img/logo_grande.png" alt="Logo Actarium"/>
-    <p id="text-center"> la soluci&oacute;n empresarial para el registro de sus reuniones.</p>
-</div>
-
-<div id="middle-bar">
-    <div id="middle-down">
-        <div class="pic-down">
-            <a href="#" title="info">
-                <div id="arrow-down">
-
-                </div>
-            </a>
-        </div>
+    <div id="new-container">
+        <img id="logo-act-big" src="/static/img/logo_grande.png" alt="Logo Actarium"/>
+        <p id="text-center"> la soluci&oacute;n empresarial para el registro de sus reuniones.</p>
     </div>
-</div>
-<div class="info-containter">
-    <div class="info-pics">
-        <div id="left-panel">
-            <div id="register-form" class="hidden">
-                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
-                    {% csrf_token %}
-                    <label for="id_username-login">Nombre de usuario</label>
-                    <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
-                    <label for="id_password-login">Contrase&ntilde;a</label>
-                    <input type="password" name="password" id="id_password-login" />
-
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
-                            <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-            <div id="pic-log-left" class="pic-log">
-                <a href="/account/login" >
-                    <div id="left-bubble">
-                        <div class="bubble-text">
-                            Tengo una cuenta.<br>Iniciar Sesi&oacute;n
-                        </div>
+    <div id="middle-bar">
+        <div id="middle-down">
+            <div class="pic-down">
+                <a href="#" title="info">
+                    <div id="arrow-down">
 
                     </div>
                 </a>
-                <div id="login-pic">
-                    <div id="img-log">
-
-                    </div>
-                </div>
             </div>
         </div>
-
-        <div id="right-panel">
-            <div id="new-user" class="hidden">
-                <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
-                    {% csrf_token %}
-                    <label for="id_username-register">Nombre de usuario:</label>
-                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
-                    <label for="id_email">Correo Electr&oacute;nico:</label>
-                    <input type="text" name="email" id="id_email"  placeholder="Correo Electr&oacute;nico" />
-                    <label for="id_password1">Contraseña:</label>
-                    <input type="password" name="password1" id="id_pasword1" />
-                    <label for="id_password2">Contraseña(Confirmaci&oacute;n):</label>
-                    <input type="password" name="password2" id="id_pasword2" />
-
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech pull-right">Sign In</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>            
-
-            <div id="pic-log-right" class="pic-log">
-                <a href="/account/new">
-                    <div id="right-bubble">
-                        <div class="bubble-text">
-                            No tengo cuenta.<br>Registrarme
-                        </div>
-                    </div>
-                </a>
-                <div id="singup-pic">
-                    <div id="img-reg">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
     </div>
-</div>
+    <div class="info-containter">
+        <div class="info-pics">
+            <div id="left-panel">
+                <div id="register-form" class="hidden">
+                    <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
+                        {% csrf_token %}
+                        <label for="id_username-login">Nombre de usuario</label>
+                        <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                        <label for="id_password-login">Contrase&ntilde;a</label>
+                        <input type="password" name="password" id="id_password-login" />
+
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
+                                <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div id="pic-log-left" class="pic-log">
+                    <a href="/account/login" >
+                        <div id="left-bubble">
+                            <div class="bubble-text">
+                                Tengo una cuenta.<br>Iniciar Sesi&oacute;n
+                            </div>
+
+                        </div>
+                    </a>
+                    <div id="login-pic">
+                        <div id="img-log">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="right-panel">
+                <div id="new-user" class="hidden">
+                    <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
+                        {% csrf_token %}
+                        <label for="id_username-register">Nombre de usuario:</label>
+                        <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                        <label for="id_email">Correo Electr&oacute;nico:</label>
+                        <input type="text" name="email" id="id_email"  placeholder="Correo Electr&oacute;nico" />
+                        <label for="id_password1">Contraseña:</label>
+                        <input type="password" name="password1" id="id_pasword1" />
+                        <label for="id_password2">Contraseña(Confirmaci&oacute;n):</label>
+                        <input type="password" name="password2" id="id_pasword2" />
+
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech pull-right">Sign In</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>            
+
+                <div id="pic-log-right" class="pic-log">
+                    <a href="/account/new">
+                        <div id="right-bubble">
+                            <div class="bubble-text">
+                                No tengo cuenta.<br>Registrarme
+                            </div>
+                        </div>
+                    </a>
+                    <div id="singup-pic">
+                        <div id="img-reg">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
+        </div>
+    </div>
 {% endif %}
 
 {%endblock%}
@@ -227,10 +230,6 @@
     **************************************************************************** */
     #text-center{
         text-align: center;
-    }
-    
-    .container{
-        width:100%;
     }
     #middle-bar{
         height: 51px;
@@ -363,6 +362,7 @@
 {% block js %}
 <script>
     $(document).on("ready",function(){
+        $("i").tooltip();
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
     });
@@ -496,8 +496,6 @@
             });	
         }
         setButtons();
-    
-
     }
     $(".accept-inv").on("click",function(e){
         e.preventDefault();
@@ -580,8 +578,6 @@
                 }
         );
     }
-
-
     setButtons();
 </script>
 {% endif %}
