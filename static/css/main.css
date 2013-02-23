@@ -121,7 +121,7 @@ header #navbar-button-container > ul li a {
     float:left;
     display: block;
 }
-#logo-daiech-p{
+#logo-actarium-p{
     background-image: url('/static/img/texturas_menu2.png');
     background-position: -88px -32px;
     height: 45px;
@@ -129,8 +129,8 @@ header #navbar-button-container > ul li a {
 }
 .navbar-d{
     height: 70px;
-    margin: 0 auto;
-    width: 90%;
+    /*margin: 0 auto;*/
+    width: 95%;
 }
 #logo-button{
     margin-top:  0px;
@@ -168,6 +168,9 @@ header div > #top-menu-style li{
 }
 .logo-center{
     padding-top: 10px;
+    position: absolute;
+    right: 10px;
+    width: 131px;
 }
 .navbar-element{
     border-bottom-left-radius: 5px;
@@ -180,11 +183,10 @@ header div > #top-menu-style li{
     top:0px;
 }
 .navbar-item-logo{
-    padding-left: 20px;
-    padding-right: 30px;
     padding-bottom: 0;
     height: 53px;
 }
+#actarium-logo{width: 205px;}
 .navbar-item{
     background-image: url("/static/img/textura-menu.png");
     /*background-position: -42px 0;*/
@@ -293,6 +295,10 @@ header div > #top-menu-style li{
     background-position: -150px 0;
     width: 24px;
 }
+/* **************************************************************************** 
+Termina barra superior Daiech
+**************************************************************************** */
+
 .t-a-r{
     text-align:right;
 }
@@ -302,10 +308,6 @@ header div > #top-menu-style li{
 .t-a-c{
     text-align:center;
 }
-/* **************************************************************************** 
-Termina barra superior Daiech
-**************************************************************************** */
-
 .info-pics{
     margin: 0px;
 }
@@ -1009,7 +1011,15 @@ only screen and (min-resolution: 144dpi) {
     #table-roles th div{width: auto;}
     .th-name{display: none;width: auto;}
     .td-first{width: 55%;}
+    .button-group{display: inline;}
+    .container{width:95%}
     #settings-menu{margin-bottom: 20px;}
+    #actarium-logo{width: 150px}
+    .navbar-element{width: 65px;box-shadow: none;border-left: solid thin #dadada;}
+    .navbar-item > span{font-size:13px;}
+    header div > #top-menu-style > li{width: 65px;margin: -2px;}
+    header #navbar-button-container > ul li a{margin-top: -1px}
+
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -1026,6 +1036,19 @@ only screen and (min-resolution: 144dpi) {
         width: 80%;
     }
    h3{font-size: 16px;}
+   .container{width: 95%}
+   #actarium-logo{width: 150px}
+   #logo-actarium-p{margin-top: -9px;}
+   .navbar-element{width: 35px;height: 54px;box-shadow: none}
+   header div > #top-menu-style > li{width: 35px;}
+   .navbar-item{height: 51px;}
+   .navbar-item-logo{height: 48px;}
+   .top-text{display: none;}
+   .ico-top{top: 17px}
+   body > header {}
+   header.navbar{height: 48px;}
+   #social-buttons{display: block;}
+   #menu-login{margin-right: 0}
 }
     /*==================================================*/
     /*                  Cierra Responsive               */                    
