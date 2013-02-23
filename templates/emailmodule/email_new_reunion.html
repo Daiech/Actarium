@@ -1,0 +1,35 @@
+{% extends "emailmodule/email_layout.html" %}
+{% block emaildata%}
+<tr width="100%"> 
+	<td valign="top" align="left" style="border-bottom-left-radius:4px;border-bottom-right-radius:4px;background:#fff;padding:18px"> 
+		<h1 style="font-size:20px;margin:0"> Nueva reunion en <strong>Actarium</strong> </h1> 
+		<hr style="clear:both;min-height:1px;border:0;border:none;width:100%;background:#dcdcdc;color:#dcdcdc;margin:18px 0;padding:0"> 
+			<table >
+				<tr style="padding: 5px">
+					<td style="padding: 5px">
+						<span style="margin:0 2px 0 0"> 
+							<img src="{{ urlgravatar }}" alt="{{ username }}" title="{{ username }}" width="50" height="50" style="display:inline;vertical-align:top"> 
+						</span>
+					</td>
+					<td style="padding: 5px">
+						<h3 style="font-size:18px;margin:18px 0">{{ firstname }} ({{ username }}) Te ha invitado a una reuni&oacute;n del grupo {{groupname}}</h3>
+					</td>
+				</tr>
+			</table>
+			 
+		<div> 
+			<div style="margin-bottom:18px;font:15px/19px 'Helvetica Neue',Arial,Helvetica"> 
+				
+				Titulo de la reuni&oacute;n: <strong>{{ titlereunion}}</strong> <br><br>
+				La reunion se program&oacute; para el d&iacute;a <strong>{{ datereunion }}</strong> en <strong>{{ locale }}</strong><br><br>
+				Los objetivos propuestos por <strong>{{ firstname }}</strong> son: <br>
+				{{ agenda }}<br><br >
+				
+				Responde a la invitacion en: <a href='http://actarium.daiech.com/groups/calendar/{{datereunionshort}}?r={{id_reunion}}' >http://actarium.com/groups/calendar/{{datereunionshort}}?r={{id_reunion}}</a><br>
+			</div> 
+			
+		</div> 
+	</td> 
+</tr> 
+{% endblock %}	
+

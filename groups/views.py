@@ -17,6 +17,7 @@ from account.templatetags.gravatartag import showgravatar
 from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
+from emailmodule.views import sendEmailHtml
 
 
 @login_required(login_url='/account/login')
@@ -917,11 +918,20 @@ def newMinutes(request, slug_group, id_reunion):
                         url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
                         link = URL_BASE + url_new_minute
                         email_list = getEmailListByGroup(group)
-                        title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
-                        content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
-                        content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
-                        content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
-                        sendEmail(email_list, title, content)
+                        email_ctx = {
+                                     'firstname': request.user.first_name,
+                                     'username': request.user.username,
+                                     'groupname': group.name,
+                                     'link': link,
+                                     'urlgravatar': showgravatar(request.user.email, 50)
+                                     }
+                        #title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
+                        #content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
+                        #content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
+                        #content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
+                        #sendEmail(email_list, title, content)
+                        sendEmailHtml(3,email_ctx,email_list)
+                        #return render_to_response('emailmodule/email_new_minutes.html', email_ctx, context_instance=RequestContext(request))
                         return HttpResponseRedirect(url_new_minute)
                     else:
                         saved = False
@@ -1008,17 +1018,19 @@ def newReunion(request, slug):
                 relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
                 for relation in relations:
-                    #print "Nombre %s Correo %s, fecha %s"%(relation.id_user.username,relation.id_user.email,  str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d %I:%M %p")))
                     email_list.append(str(relation.id_user.email) + ",")
-                try:
-                    title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") Te ha invitado a una reunion del grupo " + str(q.name.encode('utf8', 'replace')) + " en Actarium"
-                    contenido = "Reunion: <strong>" + str(df['title']) + "</strong><br><br>La reunion se programó para el d&iacute;a <strong>" + dateTimeFormatForm(df['date_reunion']) + "</strong> en <strong>" + str(df['locale']) + "</strong><br><br>Los objetivos propuestos por <strong>" + str(request.user.first_name.encode('utf8', 'replace')) + "</strong> son: <br><div style='color:gray'>" + str(df['agenda']) + "</div><br>" + "Acepta o rechaza la reunion en: <a href='http://actarium.daiech.com/groups/calendar/"+ str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk)+"' >http://actarium.com/groups/calendar/"+ str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk)+"</a><br>"
-                    print contenido
-                    sendEmail(email_list, title, contenido)
-                except Exception, e:
-                    print "Exception mail: %s" % e
-
-                
+                email_ctx = {'firstname': request.user.first_name,
+                       'username': request.user.username,
+                       'groupname': q.name,
+                       'titlereunion': str(df['title']),
+                       'datereunion': dateTimeFormatForm(df['date_reunion']),
+                       'locale': str(df['locale']),
+                       'agenda': str(df['agenda']),
+                       'datereunionshort': str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")),
+                       'id_reunion': id_reunion.pk,
+                       'urlgravatar': showgravatar(request.user.email, 50)
+                       }
+                sendEmailHtml(2,email_ctx,email_list)
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
         else:
