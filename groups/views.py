@@ -64,46 +64,49 @@ def setRole(request, slug_group):
                     remove = bool(int(request.GET['remove']))
                     _user = get_user_or_email(request.GET['uid'])
                     u = _user['user']
-                    # mail = _user['email']
                     if u:
                         rel = getUserGroupRel(u, g)
-                    if role == 1 and u and not remove:
-                        rel.is_admin = True
-                        role_name = "Administrador"
-                    if role == 2 and u and not remove:
-                        rel.is_approver = True
-                        role_name = "Aprobador"
-                    if role == 3 and u and not remove:
-                        rel.is_secretary = True
-                        role_name = "Secretario"
-                    if role == 1 and u and remove:
-                        rel.is_admin = False
-                    if role == 2 and u and remove:
-                        rel.is_approver = False
-                    if role == 3 and u and remove:
-                        rel.is_secretary = False
-                    rel.save()
-                    saved = True
-                    try:
-                        if role_name:  # the rol has been assigned
-                            agrego = "agrego"
-                            link = URL_BASE + "/groups/" + str(g.slug)
-                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
-                            contenido = "<br>" + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a>. Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
-                            sendEmail([rel.id_user.email], title, contenido)
-                    except Exception, e:
-                        # saveAction
-                        print "Exception mail: %s" % e
+                    if rel:
+                        if role == 1 and u and not remove:
+                            rel.is_admin = True
+                            role_name = "Administrador"
+                        if role == 2 and u and not remove:
+                            rel.is_approver = True
+                            role_name = "Aprobador"
+                        if role == 3 and u and not remove:
+                            rel.is_secretary = True
+                            role_name = "Secretario"
+                        if role == 1 and u and remove:
+                            rel.is_admin = False
+                        if role == 2 and u and remove:
+                            rel.is_approver = False
+                        if role == 3 and u and remove:
+                            rel.is_secretary = False
+                        rel.save()
+                        saved = True
+                        # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
+                        try:
+                            if role_name:  # the rol has been assigned
+                                agrego = "agrego"
+                                link = URL_BASE + "/groups/" + str(g.slug)
+                                title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
+                                contenido = "<br>" + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a>. Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
+                                sendEmail([rel.id_user.email], title, contenido)
+                        except Exception, e:
+                            # saveAction Exception mail
+                            print "Exception mail: %s" % e
+                    else:
+                        error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
-                    error = True
+                    error = "No tienes permiso para hacer eso"
             except groups.DoesNotExist:
-                error = True
+                error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
-                error = True
+                error = "Error! no existe el usuario para este grupo"
             except Exception:
-                error = True
+                error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
-                return HttpResponse(json.dumps({"error": "Por favor recarga la p&aacute;gina e intenta de nuevo.", "saved": False}), mimetype="application/json")
+                return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
             response = {"saved": saved, "u": u.first_name, "role": role}
             return HttpResponse(json.dumps(response), mimetype="application/json")
     return True
@@ -930,7 +933,7 @@ def newMinutes(request, slug_group, id_reunion):
                         #content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
                         #content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
                         #sendEmail(email_list, title, content)
-                        sendEmailHtml(3,email_ctx,email_list)
+                        sendEmailHtml(3, email_ctx, email_list)
                         #return render_to_response('emailmodule/email_new_minutes.html', email_ctx, context_instance=RequestContext(request))
                         return HttpResponseRedirect(url_new_minute)
                     else:
@@ -1032,8 +1035,8 @@ def newReunion(request, slug):
                        }
                 sendEmailHtml(2, email_ctx, email_list)
                 return render_to_response('emailmodule/email_new_reunion.html', email_ctx, context_instance=RequestContext(request))
-#                saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
-#                return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
+                # saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
+                # return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
 
         else:
             form = newReunionForm()

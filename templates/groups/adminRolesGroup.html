@@ -276,6 +276,7 @@
 		$("#admin-roles").addClass("active")
 		$("th").tooltip()
 	    showIconCloseOnHover()
+	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
 	    	switch(op){
 	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
@@ -355,26 +356,26 @@
 	    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
 	        if(data["username"]){//es usuario de la base de datos
 	            user_to_invite = data['mail']+" ("+data['username']+")";
-	            if(user_to_invite.length > 27)
+	            if(user_to_invite.length > MAX_LENGTH)
 	                p="..."
 	            $("#search-result").html(
 	                "<li class='user-li'>"+
 	                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
 	                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-	                user_to_invite.substring(0,27)+p+
+	                user_to_invite.substring(0,MAX_LENGTH)+p+
 	                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
 	                "</a>"+
 	                "</li>"
 	                )
 	        }
 	        else{//No es usuario de la base de datos
-	            if(data['mail'].length > 27)
+	            if(data['mail'].length > MAX_LENGTH)
 	                p="..."
 	            $("#search-result").html(
 	                "<li class='user-li'>"+
 	                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
 	                "<img class='img20' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-	                data['mail'].substring(0,27)+p+
+	                data['mail'].substring(0,MAX_LENGTH)+p+
 	                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
 	                "</a>"+
 	                "</li>"
@@ -438,7 +439,7 @@
 	            }
 	            else{//el correo es invalido o no hay resultados de usuarios existentes
 	                $("#search-result").html("<li style='list-style:none'>"+
-	                                            "<a href='#'>"+("No hay resultados").substring(0,27)+
+	                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
 	                                            "</a>"+
 	                                        "</li>")
 	            }
