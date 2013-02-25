@@ -32,21 +32,23 @@
                 <ul class="unstyled list-members" style="display:none">
                     {%for member in members%}
                     <li class="list-item  {%if not member.is_active%}user-pend-r{%endif%}">
-                        <div class="list-item-next">
-                            <span>
-                                <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
-                            </span>
-                            <span class="">
-                                {{member.id_user.first_name}} {{member.id_user.last_name}}
-                                {%if member.id_user == user%}(yo){%else%}({{member.id_user}}){%endif%}
-                            </span>
-                            <span class="pull-right">
-                                {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
-                                {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
-                                {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                {% if not member.is_approver and not member.is_secretary and not member.is_admin and current_member.is_admin%}<a title="Agregar un rol a {{member.id_user.first_name}}" href="/groups/{{ group.slug}}/admin"><i class="icon-plus"></i> Rol</a>{%endif%}
-                            </span>
-                        </div>
+                        <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
+                            <div class="list-item-next">
+                                <span>
+                                    <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
+                                </span>
+                                <span class="color-name">
+                                    {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                    {%if member.id_user == user%}(yo){%else%}({{member.id_user}}){%endif%}
+                                </span>
+                                <span class="pull-right roles-buttons">
+                                    {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
+                                    {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if not member.is_approver and not member.is_secretary and not member.is_admin and current_member.is_admin%}<i class="icon-plus"></i> Agregar Rol{%endif%}
+                                </span>
+                            </div>
+                        </a>
                     </li>
                     {%endfor%}
                     <li>
@@ -65,15 +67,17 @@
                 <ul class="unstyled list-member-pics">
                     {%for member in members%}
                         <li style="display:inline" class="">
-                            <div class="member-pic {%if not member.is_active%}user-pend-b{%endif%}" title="{%if not member.is_active%}{{member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n{%else%}{{member.id_user.first_name}}{%endif%}">
-                                <div class="user-name-pic">{{member.id_user.username}}</div>
-                                <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
-                                <div class="w42">
-                                    {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
-                                    {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                    {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
+                            <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
+                                <div class="member-pic {%if not member.is_active%}user-pend-b{%endif%}" title="{%if not member.is_active%}{{member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n{%else%}{{member.id_user.first_name}}{%endif%}">
+                                    <div class="user-name-pic">{{member.id_user.username}}</div>
+                                    <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
+                                    <div class="w42">
+                                        {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
+                                        {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                        {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </li>
                     {%endfor%}
                     <li class="show-more">
@@ -174,18 +178,19 @@
 {%block style%}
 <style>
     .list-members{/*border-bottom: solid thin #ddd;*/margin-bottom: 0;}
-    .list-item{position: relative;margin: 4px 0;}
-    .list-item-next{padding: 8px;border-radius: 0px}
-    .list-item-next:hover{padding: 8px;border-radius: 3px}
+    .list-item{position: relative;margin: 3px 0;}
+    /*.list-item-next{padding: 8px;border-radius: 0px}*/
+    .list-item-next{border-radius: 0px}
     .list-item > a{border:solid thin #ddd;display:block;}
-    .list-item div{border:solid thin white;border-bottom: solid thin #ddd;}
+    /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
     .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
-    .list-item div:hover{border:solid thin #ddd;background-color: #eee}
+    /*.list-item div:hover{border:solid thin #ddd;background-color: #eee}*/
     .minutes-list{min-height: 200px;}
     #minutes-section{min-height: 354px;}
     .member-pic{display:inline;margin-right: 5px; display: inline-block;padding: 4px; border-radius: 2px;border:solid thin #eee;text-align: center;min-width: 55px;min-height: 77px;margin-bottom: 4px}
     .member-pic i{display: block;float: left;}
     .list-member-pics{padding: 5px;margin-bottom: -15px;/*border-bottom: solid 1px #ddd*/}
+    .list-member-pics a{color:#555;}
     .user-name-pic{font-size: 14px}
     .w42{width: 42px;margin: auto}
     #show-more, #show-minus{display: block;}
@@ -195,5 +200,7 @@
     .date-minute-created{color: #777;text-align: right;float:right}
     .icons-info{margin-bottom: -5px;margin-top: 20px}
     .user-pend-b{border-bottom: solid 4px #7bc779;}
+    .roles-buttons{font-size: 13px; margin: 10px 5px;}
+    .color-name{color: #555}
 </style>
 {%endblock%}

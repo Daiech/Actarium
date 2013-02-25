@@ -119,6 +119,12 @@ def groupSettings(request, slug_group):
         Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
     try:
+        if request.method == "GET":
+            u_selected = User.objects.get(username=str(request.GET['u'])).id
+    except Exception, e:
+        print e
+        u_selected = None
+    try:
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
         raise Http404
@@ -140,7 +146,7 @@ def groupSettings(request, slug_group):
                         "is_secretary": m.is_secretary
                         }
             })
-        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members}
+        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "user_selected": u_selected}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))

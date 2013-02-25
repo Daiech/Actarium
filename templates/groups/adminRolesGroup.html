@@ -36,7 +36,7 @@
 					</th>
 				</tr>
 				{%for m in members%}
-				<tr>
+				<tr {%if m.member.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
 						<div class="username-info {%if not m.member.is_active%}user-pend-r{%endif%}"
 						{%if not m.member.is_active%}title="{{m.member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
@@ -250,6 +250,9 @@
 	$(document).on("ready", function() {
 		$("#admin-roles").addClass("active")
 		$("th, .user-pend").tooltip()
+		{% if user_selected%}
+		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
+		{%endif%}
 	    showIconCloseOnHover()
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
