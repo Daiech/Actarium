@@ -1153,8 +1153,8 @@ def calendar(request):
             is_confirmed = False
             is_saved = 0
         json_array[i] = {"id_r": str(reunion.id),
-                         "group_slug": str(reunion.id_group.slug),
-                         "group_name": str(reunion.id_group.name),
+                         "group_slug": reunion.id_group.slug,
+                         "group_name": reunion.id_group.name,
                          "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")),
                          'is_confirmed': str(is_confirmed),
                          'is_saved': is_saved,
