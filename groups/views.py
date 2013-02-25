@@ -85,26 +85,17 @@ def setRole(request, slug_group):
                         rel.save()
                         saved = True
                         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
-#                        try:
                         if role_name:  # the rol has been assigned
-#                            agrego = "agrego"
                             link = URL_BASE + "/groups/" + str(g.slug)
                             ctx_email = {
-                                 'firstname':request.user.first_name,
-                                 'username':request.user.username, 
-                                 'rolename': role_name, 
-                                 'groupname': g.name, 
-                                 'grouplink':link, 
+                                 'firstname': request.user.first_name,
+                                 'username': request.user.username,
+                                 'rolename': role_name,
+                                 'groupname': g.name,
+                                 'grouplink': link,
                                  'urlgravatar': showgravatar(request.user.email, 50)
-                             } 
-#                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
-#                            contenido = "<br>" + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a>. Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
-#                            sendEmail([rel.id_user.email], title, contenido)
-                        sendEmailHtml(4,ctx_email,[rel.id_user.email])
-#                        return render_to_response('emailmodule/email_set_role.html', ctx_email, context_instance=RequestContext(request))
-#                        except Exception, e:
-#                            # saveAction Exception mail
-#                            print "Exception mail: %s" % e
+                             }
+                        sendEmailHtml(4, ctx_email, [rel.id_user.email])
                     else:
                         error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
@@ -137,7 +128,7 @@ def groupSettings(request, slug_group):
     except Exception:
         is_member = False
     if is_admin:
-        members = rel_user_group.objects.filter(id_group=g.id, is_active=True).order_by("date_joined")
+        members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
         _members = list()
         for m in members:
             _members.append({
@@ -149,8 +140,7 @@ def groupSettings(request, slug_group):
                         "is_secretary": m.is_secretary
                         }
             })
-        members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
-        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "members_pend": members_pend}
+        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
@@ -356,7 +346,7 @@ def showGroup(request, slug):
         except Exception:
             is_member = False
         if is_member:
-            members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
+            members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
             members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
             minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
             _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
@@ -440,19 +430,13 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
     except Exception, e:
         print e
     email = [id_user_invited.email]
-#    try:
-#        title = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + u") te agregó a un grupo en Actarium"
-#        contenido = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-#        sendEmail(email, title, contenido)
-#    except Exception, e:
-#        print "Exception mail: %s" % e
-    ctx_email={
-         'firstname':id_user_from.first_name,
-         'username':id_user_from.username,
-         'groupname':group.name,
-         'urlgravatar': showgravatar(id_user_from.email,50)
+    ctx_email = {
+         'firstname': id_user_from.first_name + id_user_from.last_name,
+         'username': id_user_from.username,
+         'groupname': group.name,
+         'urlgravatar': showgravatar(id_user_from.email, 50)
      }
-    sendEmailHtml(6,ctx_email,email)
+    sendEmailHtml(6, ctx_email, email)
     return _inv
 
 
@@ -473,19 +457,13 @@ def sendInvitationUser(email, user_invite, group):
             print e
         email = [email]
         if _user:
-#            try:
-#                title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-#                contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-#                sendEmail(email, title, contenido)
-#            except Exception, e:
-#                print "Exception mail: %s" % e
-            ctx_email={
-                     'firstname':user_invite.first_name,
-                     'username':user_invite.username,
-                     'groupname':group.name,
-                     'urlgravatar': showgravatar(user_invite.email,50)
+            ctx_email = {
+                     'firstname': user_invite.first_name,
+                     'username': user_invite.username,
+                     'groupname': group.name,
+                     'urlgravatar': showgravatar(user_invite.email, 50)
                  }
-            sendEmailHtml(6,ctx_email,email)
+            sendEmailHtml(6, ctx_email, email)
             return _inv
         else:
             return False
@@ -523,51 +501,53 @@ def isMemberOfGroupByEmail(email, id_group):
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 @login_required(login_url='/account/login')
 def newInvitationToGroup(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        try:
-            g = groups.objects.get(pk=request.GET['pk'])
-            if not isMemberOfGroup(request.user, g):
-                return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
-        except groups.DoesNotExist:
-            g = False
-            return HttpResponse(g)
-        except Exception, e:
-            print "Exception newInvitationToGroup: " % e
-            g = False
-            return HttpResponse(g)
-        if getRelUserGroup(request.user, g).is_admin:
-            email = str(request.GET['mail'])
-            if isMemberOfGroupByEmail(email, g):
-                invited = False
-                message = "El usuario ya es miembro del grupo"
-                iid = False
-                gravatar = False
-            else:
-                inv = sendInvitationUser(email, request.user, g)
-                saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                if inv and not (inv is 0):  # 0 is email failed
-                    invited = True
-                    iid = str(inv.id)
-                    gravatar = showgravatar(email, 30)
-                    message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
-                else:
-                    iid = False
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = groups.objects.get(pk=request.GET['pk'])
+                if not isMemberOfGroup(request.user, g):
+                    return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
+            except groups.DoesNotExist:
+                g = False
+                return HttpResponse(g)
+            except Exception, e:
+                print "Exception newInvitationToGroup: " % e
+                g = False
+                return HttpResponse(g)
+            if getRelUserGroup(request.user, g).is_admin:
+                email = str(request.GET['mail'])
+                if isMemberOfGroupByEmail(email, g):
                     invited = False
+                    message = "El usuario ya es miembro del grupo"
+                    iid = False
                     gravatar = False
-                    if not inv and not inv is 0:
-                        message = "El usuario tiene la invitación pendiente"
+                else:
+                    inv = sendInvitationUser(email, request.user, g)
+                    saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                    if inv and not (inv is 0):  # 0 is email failed
+                        try:
+                            invited = True
+                            iid = str(inv)  # get de id from invitation
+                            gravatar = showgravatar(email, 30)
+                            message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
+                        except Exception, e:
+                            print e
                     else:
-                        if inv == 0:
-                            message = "El correo electronico no es valido"
+                        iid = False
+                        invited = False
+                        gravatar = False
+                        if not inv and not inv is 0:
+                            message = "El usuario tiene la invitación pendiente"
                         else:
-                            message = "Error desconocido. Lo sentimos"
-            print message, "m"
-            response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+                            if inv == 0:
+                                message = "El correo electronico no es valido"
+                            else:
+                                message = "Error desconocido. Lo sentimos"
+                response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+            else:
+                response = {"error": "No tienes permiso para hacer eso"}
         else:
-            response = {"error": "No tienes permiso para hacer eso"}
-#    else:
-#        response = "Error invitacion, no puedes entrar desde aqui"
+            response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
@@ -729,18 +709,14 @@ def getMinutesByCode(group, code_id):
 def getPrevNextOfGroup(group, minutes_id):
     prev = None
     next = None
-    # print "GROUP: %s" % str(group)
-    # print "MINUTES: %s" % str(minutes_id)
     try:
         prev = minutes.get_previous_by_date_created(minutes_id, id_group=group)
-        # print "PREV: %s" % str(prev.code)
     except minutes.DoesNotExist:
         prev = False
     except Exception, e:
         print "Exception prev: " + str(e)
     try:
         next = minutes.get_next_by_date_created(minutes_id, id_group=group)
-        # print "NEXT: %s" % str(next)
     except minutes.DoesNotExist:
         next = False
     except Exception, e:
@@ -1012,13 +988,7 @@ def newMinutes(request, slug_group, id_reunion):
                                      'link': link,
                                      'urlgravatar': showgravatar(request.user.email, 50)
                                      }
-                        #title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
-                        #content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
-                        #content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
-                        #content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
-                        #sendEmail(email_list, title, content)
                         sendEmailHtml(3, email_ctx, email_list)
-                        #return render_to_response('emailmodule/email_new_minutes.html', email_ctx, context_instance=RequestContext(request))
                         return HttpResponseRedirect(url_new_minute)
                     else:
                         saved = False
@@ -1314,26 +1284,17 @@ def setAssistance(request):
             assis.save()
             email_list = []
             email_list.append(str(id_reunion.id_convener.email) + ",")
-    #            try:
-    #                title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") " + resp + " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
-    #                contenido = "Reuni&oacute;n: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>" + str(id_reunion.id_group.name.encode('utf8', 'replace')) + "</strong><br><br>Respuesta: <strong>" + resp + "</strong>"
-    #                sendEmail(email_list, title, contenido)
-    #            except Exception, e:
-    #                print "Exception mail: %s" % e
             ctx_email = {
-                 'firstname':request.user.first_name,
-                 'username':request.user.username, 
-                 'response':resp,
+                 'firstname': request.user.first_name,
+                 'username': request.user.username,
+                 'response': resp,
                  'groupname': id_reunion.id_group.name,
                  'titlereunion':  id_reunion.title,
                  'urlgravatar': showgravatar(request.user.email, 50)
              }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
-            #print assis
-            #print request.META['REMOTE_ADDR']
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
-            # print datos
-            sendEmailHtml(5,ctx_email,email_list)
+            sendEmailHtml(5, ctx_email, email_list)
         return HttpResponse(json.dumps(datos), mimetype="application/json")
     else:
         response = "Error Calendar"
@@ -1432,7 +1393,7 @@ def removeGMT(datetime_var):
     dt_s = dt[:19]
     return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
 
-
+''
 def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado autom&aacute;ticamente por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter<br> <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:
