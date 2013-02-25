@@ -66,7 +66,7 @@ class rel_user_group(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "%s  - is_admin: %s " % (self.id_user, self.is_admin)
+        return "%s, %s  - is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
 
 
 class admin_group(models.Model):

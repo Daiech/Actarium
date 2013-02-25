@@ -65,7 +65,7 @@ def setRole(request, slug_group):
                     _user = get_user_or_email(request.GET['uid'])
                     u = _user['user']
                     if u:
-                        rel = getUserGroupRel(u, g)
+                        rel = getRelUserGroup(u, g)
                     if rel:
                         if role == 1 and u and not remove:
                             rel.is_admin = True
@@ -139,7 +139,7 @@ def groupSettings(request, slug_group):
                         "is_secretary": m.is_secretary
                         }
             })
-        members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=True)
+        members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
         ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "members_pend": members_pend}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
@@ -175,36 +175,30 @@ def groupInfoSettings(request, slug_group):
         return HttpResponseRedirect('/groups/' + str(g.slug))
 
 
-def getUserGroupRel(_user, _group):
+def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1, is_active=True):
     try:
-        return rel_user_group.objects.get(id_user=_user, id_group=_group)
+        no_rel = False
+        relation = getRelUserGroup(_user, _group)
+        if relation:
+            relation.is_member = bool(is_member)
+            if is_superadmin:
+                relation.is_superadmin = bool(is_superadmin)
+            if is_admin:
+                relation.is_admin = bool(is_admin)
+            if is_secretary:
+                relation.is_secretary = bool(is_secretary)
+            if is_approver:
+                relation.is_approver
+            if is_active:
+                relation.is_active = bool(is_active)
+            relation.save()
+        else:
+            no_rel = True
     except rel_user_group.DoesNotExist:
-        return False
-    except Exception, e:
-        return False
-        raise e
-
-
-def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1):
-    try:
-        relation = rel_user_group.objects.get(id_user=_user, id_group=_group)
-        relation.is_member = bool(is_member)
-        if is_superadmin:
-            relation.is_superadmin = bool(is_superadmin)
-            print "super"
-        if is_admin:
-            relation.is_admin = bool(is_admin)
-            print "admin"
-        if is_secretary:
-            relation.is_secretary = bool(is_secretary)
-            print "Secretary"
-        if is_approver:
-            relation.is_approver = bool(is_approver)
-            print "Approver"
-    except rel_user_group.DoesNotExist:
-        relation = rel_user_group(id_user=_user, id_group=_group, is_member=bool(is_member),
+        no_rel = True
+    if no_rel:
+        setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active,
         is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
-    relation.save()
 
 
 def get_user_or_email(s):
@@ -236,20 +230,32 @@ def newBasicGroup(request, form, pro=False):
                        id_group_type=group_type.objects.get(pk=df['id_group_type']),
                      )
     myNewGroup.save()
-    if not pro:
-        setUserRoles(request.user, myNewGroup, is_superadmin=1, is_admin=1)
+    if not pro:  # new rel to: Create free group
+        setRelUserGroup(id_user=request.user, id_group=myNewGroup, is_superadmin=1, is_admin=1, is_active=True)
     else:
         try:
-            is_memb = int(request.POST['is_member'])
+            user_or_email = get_user_or_email(request.POST['id_admin'])
         except Exception:
-            is_memb = 0
-        setUserRoles(request.user, myNewGroup, is_member=is_memb)
-        user_or_email = get_user_or_email(request.POST['id_admin'])
-        if user_or_email['user']:
+            user_or_email = {"user": None}
+        if user_or_email['user']:  # <-- the admin
+            try:
+                is_memb = int(request.POST['is_member'])
+            except Exception:
+                is_memb = 0
+            if is_memb:  # new rel to: Create group. I'm member
+                setUserRoles(request.user, myNewGroup, is_member=1)
             if user_or_email['user'] != request.user:
-                setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1)
+                #send invitation to group
+                inv = sendInvitationToGroup(user_or_email['user'], request.user, myNewGroup)
+                if inv:
+                    # new rel to: Create group. Other is admin (other)
+                    setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
             else:
-                setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb)
+                # new rel to: Create group. I'm admin
+                setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb, is_active=1)
+                print getRelUserGroup(user_or_email['user'], myNewGroup).is_admin
+        else:
+            print "No hay un administrador para este grupo"  # error! se dio atras al crear new group y no se selecciono un admin
     return myNewGroup
 
 
@@ -341,7 +347,7 @@ def showGroup(request, slug):
             is_member = False
         if is_member:
             members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
-            members_pend = invitations_groups.objects.filter(id_group=g.id, is_active=True)
+            members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
             minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
             _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
             member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
@@ -414,6 +420,25 @@ def getMembers(request):
         return HttpResponse(message)
 
 
+def sendInvitationToGroup(id_user_invited, id_user_from, group):
+    '''
+        Enviar una invitacion de grupo a un usuario
+    '''
+    try:
+        #_inv, _created = invitations_groups.objects.get_or_create(id_user_invited=id_user_invited, id_user_from=id_user_from, id_group=group, is_active=True)
+        _inv = setRelUserGroup(id_user=id_user_invited, id_group=group, is_member=False, is_active=False)
+    except Exception, e:
+        print e
+    email = [id_user_invited.email]
+    try:
+        title = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + u") te agregó a un grupo en Actarium"
+        contenido = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
+        sendEmail(email, title, contenido)
+    except Exception, e:
+        print "Exception mail: %s" % e
+    return _inv
+
+
 def sendInvitationUser(email, user_invite, group):
     '''
         Enviar una invitacion a un usuario via email
@@ -423,13 +448,14 @@ def sendInvitationUser(email, user_invite, group):
             from account.views import newInvitedUser
             _user = newInvitedUser(email, user_invite.first_name + " " + user_invite.last_name)
             if _user:
-                _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=True)
+                # _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=True)
+                _inv = setRelUserGroup(id_user=_user, id_group=group, is_member=True, is_active=False)
             else:
                 return False
         except Exception, e:
             print e
         email = [email]
-        if _created:
+        if _user:
             try:
                 title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
                 contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
@@ -486,7 +512,7 @@ def newInvitationToGroup(request):
                 print "Exception newInvitationToGroup: " % e
                 g = False
                 return HttpResponse(g)
-            if getUserGroupRel(request.user, g).is_admin:
+            if getRelUserGroup(request.user, g).is_admin:
                 email = str(request.GET['mail'])
                 if isMemberOfGroupByEmail(email, g):
                     invited = False
@@ -496,7 +522,7 @@ def newInvitationToGroup(request):
                 else:
                     inv = sendInvitationUser(email, request.user, g)
                     saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                    if inv and not inv is 0:
+                    if inv and not (inv is 0):  # 0 is email failed
                         invited = True
                         iid = str(inv.id)
                         gravatar = showgravatar(email, 30)
@@ -512,12 +538,47 @@ def newInvitationToGroup(request):
                                 message = "El correo electronico no es valido"
                             else:
                                 message = "Error desconocido. Lo sentimos"
+                print message, "m"
                 response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
             else:
                 response = {"error": "No tienes permiso para hacer eso"}
     else:
         response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def getRelUserGroup(_user, _group):
+    try:
+        return rel_user_group.objects.get(id_user=_user, id_group=_group)
+    except rel_user_group.DoesNotExist:
+        return False
+    except Exception:
+        return False
+
+
+def setRelUserGroup(id_user, id_group,
+    is_superadmin=False,
+    is_admin=False,
+    is_approver=False,
+    is_secretary=False,
+    is_member=True,
+    is_active=False):
+    try:
+        rel = rel_user_group(
+            id_user=id_user,
+            id_group=id_group,
+            is_member=bool(is_member),
+            is_admin=is_admin,
+            is_approver=is_approver,
+            is_secretary=is_secretary,
+            is_superadmin=is_superadmin,
+            is_active=is_active)
+        rel.save()
+        # saveAction new Rel user group
+        return True
+    except Exception:
+        # error log
+        return False
 
 
 @login_required(login_url='/account/login')
@@ -538,18 +599,13 @@ def acceptInvitation(request):
                         return HttpResponse(False)  # error 1, peticion sin controlador s o n
                 iid = request.GET['i_id'][1:]
                 try:
-                    inv = invitations_groups.objects.get(id=iid, id_user_invited=request.user, is_active=True)
-                    user_from_is_member = isMemberOfGroup(inv.id_user_from, inv.id_group)  # el usuario que lo invito es miembro?
+                    inv = rel_user_group.objects.get(id=iid, id_user=request.user, is_active=False)
+                    user_from_is_member = True  # isMemberOfGroup(inv.id_user_from, inv.id_group)  # el usuario que lo invito es miembro?
                 except invitations_groups.DoesNotExist:
                     inv = False
                     user_from_is_member = False
                 if accept and user_from_is_member and inv:  # aprobar la invitacion
-                    rel = rel_user_group(id_user=inv.id_user_invited, id_group=inv.id_group)
-                    rel.save()
-                    print rel
-                    inv.is_active = False
-                    inv.save()
-                    print inv
+                    setUserRoles(inv.id_user, inv.id_group, is_active=1)
                     saveActionLog(request.user, 'SET_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, True, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                     accepted = True
                     group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
@@ -557,7 +613,11 @@ def acceptInvitation(request):
                 else:  # no aprobar la invitacion
                     if inv and not accept:
                         inv.is_active = False
+                        inv.is_member = False
                         inv.save()
+                        if inv.is_superadmin:
+                            print "El usuario era superadmin"
+                            # En
                         saveActionLog(request.user, 'DEL_INVITA', "id_group: %s, acept: %s, group_name: %s" % (inv.id_group.pk, False, inv.id_group.name), request.META['REMOTE_ADDR'])  # Accion de no aceptar invitacion a grupo
                         accepted = False
                         group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
@@ -819,7 +879,7 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
     '''
-    if getUserGroupRel(request.user, group).is_secretary:
+    if getRelUserGroup(request.user, group).is_secretary:
         df = {
         'code': form.cleaned_data['code'],
         'date_start': form.cleaned_data['date_start'],
@@ -893,7 +953,7 @@ def newMinutes(request, slug_group, id_reunion):
     group = groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
     if is_member:
-        if getUserGroupRel(request.user, group).is_secretary:
+        if getRelUserGroup(request.user, group).is_secretary:
             if request.method == "POST":
                 form = newMinutesForm(request.POST)
                 select = request.POST.getlist('members[]')

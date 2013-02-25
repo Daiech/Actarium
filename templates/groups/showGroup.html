@@ -52,10 +52,10 @@
                     {%for member in members_pend%}
                     <li class="list-item" ><!--Usuarios pendientes-->
                         <div class="list-item-next">
-                            <img style="width:20px" src="{{member.id_user_invited.email|showgravatar:'20'}}" alt="{{member.id_user_invited.username}}">
-                            <span>{{member.id_user_invited.first_name}}</span> (pendiente)
+                            <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
+                            <span>{{member.id_user.first_name}}</span> (pendiente)
                         </div>
-                        <span class="remove-invitation" data-invitation="{{member.id_user_invited.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
+                        <span class="remove-invitation" data-invitation="{{member.id_user.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
                     </li>
                     {%endfor%}
                     <li>
@@ -86,16 +86,16 @@
                     {%endfor%}
                     {%for member in members_pend%}
                         <li style="display:inline">
-                            <div class="member-pic" title="{{member.id_user_invited.first_name}}">
-                                <div class="user-name-pic">{{member.id_user_invited.username}}</div>
-                                <img class="w42" src="{{member.id_user_invited.email|showgravatar:'42'}}" alt="{{member.id_user}}">
+                            <div class="member-pic" title="{{member.id_user.first_name}}">
+                                <div class="user-name-pic">{{member.id_user.username}}</div>
+                                <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
                                 <div class="w42">
-                                    {% if member.is_admin%}<i title="{{member.id_user_invited.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
-                                    {% if member.is_approver%}<i title="{{member.id_user_invited.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                    {% if member.is_secretary%}<i title="{{member.id_user_invited.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
+                                    {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es secretario"  class="icon-pencil"></i> {%endif%}
 
                                 </div>
-                                <i title="El usuario no ha aceptado la invitaci&oacute;n a este grupo" style="font-size:12px;height:10px;">pendiente</i>
+                                <i title="El usuario no ha aceptado la invitaci&oacute;n a este grupo" style="font-size:12px;height:10px;margin-bottom:5px;">pendiente</i>
                             </div>
                         </li>
                     {%endfor%}

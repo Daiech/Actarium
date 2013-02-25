@@ -74,23 +74,23 @@
                 <tr><!--Usuarios pendientes-->
                 	<td class="td-first">
 						<div class="username-info">
-	                        <img style="width:20px" src="{{member.id_user_invited.email|showgravatar:'20'}}" alt="{{member.id_user_invited.username}}">
-	                        {{member.id_user_invited.first_name}} (pendiente)
+	                        <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
+	                        {{member.id_user.first_name}} (pendiente)
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<label for="secretary-{{member.id_user_invited.id}}">
-							<input id="secretary-{{member.id_user_invited.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.id_user_invited.id}}" >
+						<label for="secretary-{{member.id_user.id}}">
+							<input id="secretary-{{member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.id_user.id}}" >
 						</label>
 					</td>
 					<td class="t-a-c">
-						<label for="aprover-{{member.id_user_invited.id}}">
-							<input id="aprover-{{member.id_user_invited.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.id_user_invited.id}}" >
+						<label for="aprover-{{member.id_user.id}}">
+							<input id="aprover-{{member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.id_user.id}}" >
 						</label>
 					</td>
 					<td class="t-a-c">
-						<label for="admin-{{member.id_user_invited.id}}">
-							<input id="admin-{{member.id_user_invited.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.id_user_invited.id}}" >
+						<label for="admin-{{member.id_user.id}}">
+							<input id="admin-{{member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.id_user.id}}" >
 						</label>
 					</td>
 					<td class="t-a-c">
