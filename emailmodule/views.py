@@ -57,7 +57,7 @@ def sendEmailHtml(email_type,ctx, to):
     try:
         msg.send()
     except:
-        print "Error al enviar correo electronico."
+        print "Error al enviar correo electronico con plantilla HTML."
 
 
 # 4 title str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
@@ -92,14 +92,14 @@ def sendEmailHtml(email_type,ctx, to):
 #     'urlgravatar': showgravatar(user_invite.email,50)
 # }
 
-title = username_invited + u" te invitó a Actarium, La plataforma de gestión de Actas y reuniones."
-contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "/invited" + id_inv + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos Temporales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
-
-ctx_email = {
-    'username':username_invited,
-    'activation_key':activation_key,
-    'id_inv':id_inv,
-    'newuser_username':_username,
-    'pass': activation_key[:8],
-    'urlgravatar': showgravatar(???email,50)
-}
+#title = username_invited + u" te invitó a Actarium, La plataforma de gestión de Actas y reuniones."
+#contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "/invited" + id_inv + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos Temporales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
+#
+#ctx_email = {
+#    'username':username_invited,
+#    'activation_key':activation_key,
+#    'id_inv':id_inv,
+#    'newuser_username':_username,
+#    'pass': activation_key[:8],
+#    'urlgravatar': showgravatar(???email,50)
+#}
