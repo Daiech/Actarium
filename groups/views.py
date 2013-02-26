@@ -8,16 +8,14 @@ from django.http import Http404
 from groups.models import *
 from groups.forms import newGroupForm, newMinutesForm, newReunionForm
 from django.contrib.auth.models import User
-#from django.core.mail import EmailMessage
-import re
 import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
-from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
+from groups.validators import validateEmail
 
 
 def isProGroup(group):
@@ -33,6 +31,14 @@ def getProGroup(group):
         return groups_pro.objects.get(id_group=group, is_active=True)
     except groups_pro.DoesNotExist:
         return False
+
+
+def getUserByEmail(email):
+    try:
+        _user = User.objects.get(email=email)
+        return _user
+    except User.DoesNotExist:
+        return None
 
 
 @login_required(login_url='/account/login')
@@ -135,10 +141,11 @@ def groupSettings(request, slug_group):
         Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
     try:
+        u_selected = None
         if request.method == "GET":
-            u_selected = User.objects.get(username=str(request.GET['u'])).id
-    except Exception, e:
-        print e
+            u = str(request.GET['u'])
+            u_selected = User.objects.get(username=u).id
+    except Exception:
         u_selected = None
     try:
         g = groups.objects.get(slug=slug_group, is_active=True)
@@ -173,7 +180,6 @@ def groupInfoSettings(request, slug_group):
     '''
         Muestra la configuracion de un grupo
     '''
-    print "INFO GROUPS"
     try:
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
@@ -402,16 +408,6 @@ def showGroup(request, slug):
         raise Http404
 
 
-def validateEmail(email):
-    if len(email) > 4:
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email):
-            return True
-        else:
-            return False
-    else:
-        return False
-
-
 @login_required(login_url='/account/login')
 def getMembers(request):
     if request.is_ajax():
@@ -461,18 +457,19 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
         Enviar una invitacion de grupo a un usuario
     '''
     try:
-        _inv = setRelUserGroup(id_user=id_user_invited, id_group=group, is_member=False, is_active=False)
+        _inv = setRelUserGroup(id_user=id_user_invited, id_group=group, is_member=True, is_active=False)
     except Exception, e:
         print e
         return False
-    email = [id_user_invited.email]
-    ctx_email = {
-         'firstname': id_user_from.first_name + id_user_from.last_name,
-         'username': id_user_from.username,
-         'groupname': group.name,
-         'urlgravatar': showgravatar(id_user_from.email, 50)
-     }
-    sendEmailHtml(6, ctx_email, email)
+    if _inv:
+        email = [id_user_invited.email]
+        ctx_email = {
+             'firstname': id_user_from.first_name + id_user_from.last_name,
+             'username': id_user_from.username,
+             'groupname': group.name,
+             'urlgravatar': showgravatar(id_user_from.email, 50)
+         }
+        sendEmailHtml(6, ctx_email, email)
     return _inv
 
 
@@ -482,10 +479,13 @@ def newUserWithInvitation(email, id_user_from, group):
     '''
     if validateEmail(email):
         try:
-            from account.views import newInvitedUser
-            _user = newInvitedUser(email, id_user_from.first_name + " " + id_user_from.last_name)
-            if _user:
-                return _user
+            if not getUserByEmail(email):
+                from account.views import newInvitedUser
+                _user = newInvitedUser(email, id_user_from)
+                if _user:
+                    return _user
+                else:
+                    return False
             else:
                 return False
         except Exception, e:
@@ -497,9 +497,11 @@ def newUserWithInvitation(email, id_user_from, group):
 
 def isMemberOfGroup(id_user, id_group):
     try:
-        is_member = getRelUserGroup(id_user, id_group).is_member
-        if is_member:
+        _member = getRelUserGroup(id_user, id_group)
+        if _member:
             return True
+        else:
+            return False
     except rel_user_group.DoesNotExist:
         print "No hay este usuario en este grupo"
         return False
@@ -511,13 +513,15 @@ def isMemberOfGroup(id_user, id_group):
 def isMemberOfGroupByEmail(email, id_group):
     if validateEmail(str(email)):
         try:
-            ans = User.objects.get(email=email)
+            ans = getUserByEmail(email)
+            if ans:
+                return isMemberOfGroup(ans, id_group)
+            else:
+                return False
         except User.DoesNotExist:
             return False
         except Exception:
             return False
-        if ans:
-            return isMemberOfGroup(ans, id_group)
     else:
         return False
 
@@ -543,27 +547,32 @@ def newInvitationToGroup(request):
                 if isMemberOfGroupByEmail(email, g):
                     invited = False
                     message = "El usuario ya es miembro del grupo"
+                    print message
                     iid = False
                     gravatar = False
                 else:
-                    inv = newUserWithInvitation(email, request.user, g)
-                    saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                    if inv and not (inv is 0):  # 0 = is email failed
+                    _user = getUserByEmail(email)
+                    if not _user:
+                        _user = newUserWithInvitation(email, request.user, g)
+                    sendInvitationToGroup(_user, request.user, g)
+                    if _user and not (_user is 0):  # 0 = is email failed
                         try:
                             invited = True
-                            iid = str(inv.id)  # get de id from invitation
+                            iid = str(_user.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
                             message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
+                            saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                         except Exception, e:
                             print e
                     else:
                         iid = False
                         invited = False
                         gravatar = False
-                        if not inv and not inv is 0:
-                            message = "El usuario tiene la invitación pendiente"
+                        if not _user and not (_user is 0):
+                            message = "El email que estas tratando de registrar ya tiene una cuenta."
+                            # message = "El usuario tiene la invitación pendiente"
                         else:
-                            if inv == 0:
+                            if _user == 0:
                                 message = "El correo electronico no es valido"
                             else:
                                 message = "Error desconocido. Lo sentimos"
@@ -1416,13 +1425,3 @@ def removeGMT(datetime_var):
     dt = str(datetime_var)
     dt_s = dt[:19]
     return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
-
-''
-def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado autom&aacute;ticamente por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter<br> <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
-    try:
-        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
-        correo.content_subtype = "html"
-        correo.send()
-    except Exception, e:
-        print e

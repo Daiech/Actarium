@@ -13,9 +13,9 @@ from django.contrib.auth.views import password_reset, password_reset_done, passw
 from actions_log.views import saveActionLog
 from django.contrib.auth.models import User
 from django.utils.hashcompat import sha_constructor
-from django.core.mail import EmailMessage
 import random
-from emailmodule.views import sendEmailHtml 
+from emailmodule.views import sendEmailHtml
+from account.templatetags.gravatartag import showgravatar
 
 
 #------------------------------- <Normal User>---------------------------
@@ -56,7 +56,7 @@ def getActivationKey(email_user):
     return sha_constructor(sha_constructor(str(random.random())).hexdigest()[:5] + email_user).hexdigest()
 
 
-def newInvitedUser(email_to_invite, username_invited):
+def newInvitedUser(email_to_invite, _user_from):
     '''
     crea un nuevo usuario inactivo desde invitacion
     '''
@@ -83,25 +83,19 @@ def newInvitedUser(email_to_invite, username_invited):
     except Exception, e:
         print "Error: %s" % e
         return False
-#    try:
-#        
-#        title = username_invited + u" te invitó a Actarium, La plataforma de gestión de Actas y reuniones."
-#        contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "/invited" + id_inv + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos Temporales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
-#        print "localhost:8000/account/activate/" + activation_key + "/invited" + id_inv
-#        sendEmail([email_to_invite], title, contenido)
-#    except Exception, e:
-#        print "Exception mail: %s" % e
-    id_inv = activation_key[5:20]
-    ctx_email = {
-    'username':username_invited,
-    'activation_key':activation_key,
-    'id_inv':id_inv,
-    'newuser_username':_username,
-    'pass': activation_key[:8],
-#    'urlgravatar': showgravatar(???email,50)
-    }
-    sendEmailHtml(7,ctx_email,[email_to_invite])
-    return _user
+    if _user:
+        print "localhost:8000/account/actvate/", activation_key, "/invited1"
+        id_inv = activation_key[5:20]
+        ctx_email = {
+        'username': _user_from.username,
+        'activation_key': activation_key,
+        'id_inv': id_inv,
+        'newuser_username': _username,
+        'pass': activation_key[:8],
+        'urlgravatar': showgravatar(_user_from.email, 50)
+        }
+        sendEmailHtml(7, ctx_email, [email_to_invite])
+        return _user
 
 
 def log_in(request):
@@ -211,7 +205,7 @@ def password_reset2(request):
             print "entro a password_reset2"
             try:
                 return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
-            except Exception, e:
+            except Exception:
                 return HttpResponseRedirect("/account/password/reset/done/")
         else:
             print "no entro a password_reset2"
@@ -280,13 +274,3 @@ def activate_account_now(request, activation_key):
         return True
     else:
         return False
-
-
-def sendEmail(mail_to, titulo, contenido):
-    contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado autom&aacute;ticamente por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter<br> <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
-    try:
-        correo = EmailMessage(titulo, contenido, 'Actarium <no-reply@daiech.com>', mail_to)
-        correo.content_subtype = "html"
-        correo.send()
-    except Exception, e:
-        print e
