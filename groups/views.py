@@ -85,9 +85,7 @@ def setRole(request, slug_group):
                         rel.save()
                         saved = True
                         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
-#                        try:
                         if role_name:  # the rol has been assigned
-#                            agrego = "agrego"
                             link = URL_BASE + "/groups/" + str(g.slug)
                             ctx_email = {
                                  'firstname':request.user.first_name,
@@ -97,14 +95,7 @@ def setRole(request, slug_group):
                                  'grouplink':link, 
                                  'urlgravatar': showgravatar(request.user.email, 50)
                              } 
-#                            title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
-#                            contenido = "<br>" + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a>. Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
-#                            sendEmail([rel.id_user.email], title, contenido)
                         sendEmailHtml(4,ctx_email,[rel.id_user.email])
-#                        return render_to_response('emailmodule/email_set_role.html', ctx_email, context_instance=RequestContext(request))
-#                        except Exception, e:
-#                            # saveAction Exception mail
-#                            print "Exception mail: %s" % e
                     else:
                         error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
@@ -440,12 +431,12 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
     except Exception, e:
         print e
     email = [id_user_invited.email]
-#    try:
-#        title = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + u") te agregó a un grupo en Actarium"
-#        contenido = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-#        sendEmail(email, title, contenido)
-#    except Exception, e:
-#        print "Exception mail: %s" % e
+    #    try:
+    #        title = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + u") te agregó a un grupo en Actarium"
+    #        contenido = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
+    #        sendEmail(email, title, contenido)
+    #    except Exception, e:
+    #        print "Exception mail: %s" % e
     ctx_email={
          'firstname':id_user_from.first_name,
          'username':id_user_from.username,
@@ -473,12 +464,12 @@ def sendInvitationUser(email, user_invite, group):
             print e
         email = [email]
         if _user:
-#            try:
-#                title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-#                contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-#                sendEmail(email, title, contenido)
-#            except Exception, e:
-#                print "Exception mail: %s" % e
+        #            try:
+        #                title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
+        #                contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
+        #                sendEmail(email, title, contenido)
+        #            except Exception, e:
+        #                print "Exception mail: %s" % e
             ctx_email={
                      'firstname':user_invite.first_name,
                      'username':user_invite.username,
@@ -523,51 +514,51 @@ def isMemberOfGroupByEmail(email, id_group):
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 @login_required(login_url='/account/login')
 def newInvitationToGroup(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        try:
-            g = groups.objects.get(pk=request.GET['pk'])
-            if not isMemberOfGroup(request.user, g):
-                return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
-        except groups.DoesNotExist:
-            g = False
-            return HttpResponse(g)
-        except Exception, e:
-            print "Exception newInvitationToGroup: " % e
-            g = False
-            return HttpResponse(g)
-        if getRelUserGroup(request.user, g).is_admin:
-            email = str(request.GET['mail'])
-            if isMemberOfGroupByEmail(email, g):
-                invited = False
-                message = "El usuario ya es miembro del grupo"
-                iid = False
-                gravatar = False
-            else:
-                inv = sendInvitationUser(email, request.user, g)
-                saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                if inv and not (inv is 0):  # 0 is email failed
-                    invited = True
-                    iid = str(inv.id)
-                    gravatar = showgravatar(email, 30)
-                    message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
-                else:
-                    iid = False
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = groups.objects.get(pk=request.GET['pk'])
+                if not isMemberOfGroup(request.user, g):
+                    return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
+            except groups.DoesNotExist:
+                g = False
+                return HttpResponse(g)
+            except Exception, e:
+                print "Exception newInvitationToGroup: " % e
+                g = False
+                return HttpResponse(g)
+            if getRelUserGroup(request.user, g).is_admin:
+                email = str(request.GET['mail'])
+                if isMemberOfGroupByEmail(email, g):
                     invited = False
+                    message = "El usuario ya es miembro del grupo"
+                    iid = False
                     gravatar = False
-                    if not inv and not inv is 0:
-                        message = "El usuario tiene la invitación pendiente"
+                else:
+                    inv = sendInvitationUser(email, request.user, g)
+                    saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                    if inv and not (inv is 0):  # 0 is email failed
+                        invited = True
+                        iid = str(inv.id)
+                        gravatar = showgravatar(email, 30)
+                        message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
                     else:
-                        if inv == 0:
-                            message = "El correo electronico no es valido"
+                        iid = False
+                        invited = False
+                        gravatar = False
+                        if not inv and not inv is 0:
+                            message = "El usuario tiene la invitación pendiente"
                         else:
-                            message = "Error desconocido. Lo sentimos"
-            print message, "m"
-            response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
-        else:
-            response = {"error": "No tienes permiso para hacer eso"}
-#    else:
-#        response = "Error invitacion, no puedes entrar desde aqui"
+                            if inv == 0:
+                                message = "El correo electronico no es valido"
+                            else:
+                                message = "Error desconocido. Lo sentimos"
+                print message, "m"
+                response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+            else:
+                response = {"error": "No tienes permiso para hacer eso"}
+    else:
+        response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
@@ -1012,13 +1003,7 @@ def newMinutes(request, slug_group, id_reunion):
                                      'link': link,
                                      'urlgravatar': showgravatar(request.user.email, 50)
                                      }
-                        #title = request.user.first_name + " (" + request.user.username + ") registro un acta en el grupo '" + str(group.name) + "' de Actarium"
-                        #content = request.user.first_name + " (" + request.user.username + ") ha creado una nueva acta en Actarium"
-                        #content = content + "<br><br>El link de la nueva Acta del grupo <strong>" + str(group.name) + "</strong> es: <a href='" + link + "'>" + link + "</a><br><br>"
-                        #content = content + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a><br>"
-                        #sendEmail(email_list, title, content)
                         sendEmailHtml(3, email_ctx, email_list)
-                        #return render_to_response('emailmodule/email_new_minutes.html', email_ctx, context_instance=RequestContext(request))
                         return HttpResponseRedirect(url_new_minute)
                     else:
                         saved = False
@@ -1314,12 +1299,6 @@ def setAssistance(request):
             assis.save()
             email_list = []
             email_list.append(str(id_reunion.id_convener.email) + ",")
-    #            try:
-    #                title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") " + resp + " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
-    #                contenido = "Reuni&oacute;n: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>" + str(id_reunion.id_group.name.encode('utf8', 'replace')) + "</strong><br><br>Respuesta: <strong>" + resp + "</strong>"
-    #                sendEmail(email_list, title, contenido)
-    #            except Exception, e:
-    #                print "Exception mail: %s" % e
             ctx_email = {
                  'firstname':request.user.first_name,
                  'username':request.user.username, 
@@ -1329,10 +1308,7 @@ def setAssistance(request):
                  'urlgravatar': showgravatar(request.user.email, 50)
              }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
-            #print assis
-            #print request.META['REMOTE_ADDR']
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
-            # print datos
             sendEmailHtml(5,ctx_email,email_list)
         return HttpResponse(json.dumps(datos), mimetype="application/json")
     else:

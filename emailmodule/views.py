@@ -43,7 +43,7 @@ def sendEmailHtml(email_type,ctx, to):
     elif email_type == 7:
         subject =  ctx['username'] + u" te invitó a usar Actarium, La plataforma para la gestión de Actas y Reuniones."
         plaintext = get_template('emailmodule/emailtest.txt')
-        htmly     = get_template('emailmodule/email_group_invitation.html')
+        htmly     = get_template('emailmodule/email_actarium_invitation.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly     = get_template('emailmodule/emailtest.html')
@@ -58,48 +58,3 @@ def sendEmailHtml(email_type,ctx, to):
         msg.send()
     except:
         print "Error al enviar correo electronico con plantilla HTML."
-
-
-# 4 title str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te " + agrego + " como " + role_name + " en el grupo " + str(g.name)
-# contenido = "<br>" + str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") te ha agregado como <strong>" + role_name + "</strong> en el grupo <a href='" + link + "'>" + str(g.name.encode('utf8', 'replace')) + "</a>. Ahora tienes permisos especiales sobre este grupo.<br><br><br>Ingresa a Actarium en <a href='http://actarium.com' >Actarium.com</a> y ent&eacute;rate de lo que est&aacute; pasando."
-# ctx_email = {
-#     'firstname':request.user.first_name,
-#     'username':request.user.username, 
-#     'rolename': role_name, 
-#     'groupname': g.name, 
-#     'grouplink':link, 
-#     'urlgravatar': showgravatar(request.user.email, 50)
-# }
-
-# 5 title = str(request.user.first_name.encode('utf8', 'replace')) + " (" + str(request.user.username.encode('utf8', 'replace')) + ") " + resp + " a la reunion de " + str(id_reunion.id_group.name.encode('utf8', 'replace')) + " en Actarium"
-# contenido = "Reuni&oacute;n: <strong>" + id_reunion.title + "</strong><br><br>Grupo: <strong>" + str(id_reunion.id_group.name.encode('utf8', 'replace')) + "</strong><br><br>Respuesta: <strong>" + resp + "</strong>"
-# ctx_email = {
-#     'firstname':request.user.firstname,
-#     'username':request.user.username, 
-#     'response':resp,
-#     'groupname': id_reunion.id_group.name,
-#     'titlereunion':  id_reunion.title,
-#     'urlgravatar': showgravatar(request.user.email, 50)
-# }
-
-# 6 title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-# contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-
-# ctx_email={
-#     'firstname':user_invite.first_name,
-#     'username':user_invite.username,
-#     'groupname':group.name,
-#     'urlgravatar': showgravatar(user_invite.email,50)
-# }
-
-#title = username_invited + u" te invitó a Actarium, La plataforma de gestión de Actas y reuniones."
-#contenido = "Bienvenido a Actarium!<br><br><strong>" + username_invited + "</strong> te invit&oacute; a registrarte en Actarium.<br><br><br>Debes ingresar al siguiente link para activar tu cuenta: <a href='http://actarium.daiech.com/account/activate/" + activation_key + "/invited" + id_inv + "' >http://actarium.daiech.com/account/activate/" + activation_key + "</a>, si no lo haces, no se activar&aacute; tu cuenta<br><br>Datos Temporales:<br><ul><li>Nombre de usuario: <strong>" + _username + "</strong></li><li>Contrase&ntilde;a: <strong>" + activation_key[:8] + "</strong></li></ul><br><br><br>Qu&eacute; es Actarium? <br>Actarium es la plataforma para la gesti&oacute;n de cualquier tipo de actas y reuniones.<br><br>Ent&eacute;rate de Actarium en <a href='http://actarium.com/about'>http://actarium.com/about</a>"
-#
-#ctx_email = {
-#    'username':username_invited,
-#    'activation_key':activation_key,
-#    'id_inv':id_inv,
-#    'newuser_username':_username,
-#    'pass': activation_key[:8],
-#    'urlgravatar': showgravatar(???email,50)
-#}
