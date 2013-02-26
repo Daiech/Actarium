@@ -20,6 +20,21 @@ from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
 
 
+def isProGroup(group):
+    try:
+        groups_pro.objects.get(id_group=group, is_active=True)
+        return True
+    except groups_pro.DoesNotExist:
+        return False
+
+
+def getProGroup(group):
+    try:
+        return groups_pro.objects.get(id_group=group, is_active=True)
+    except groups_pro.DoesNotExist:
+        return False
+
+
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
@@ -88,23 +103,24 @@ def setRole(request, slug_group):
                         if role_name:  # the rol has been assigned
                             link = URL_BASE + "/groups/" + str(g.slug)
                             ctx_email = {
-                                 'firstname':request.user.first_name,
-                                 'username':request.user.username, 
-                                 'rolename': role_name, 
-                                 'groupname': g.name, 
-                                 'grouplink':link, 
+                                 'firstname': request.user.first_name,
+                                 'username': request.user.username,
+                                 'rolename': role_name,
+                                 'groupname': g.name,
+                                 'grouplink': link,
                                  'urlgravatar': showgravatar(request.user.email, 50)
-                             } 
-                        sendEmailHtml(4,ctx_email,[rel.id_user.email])
+                             }
+                            sendEmailHtml(4, ctx_email, [rel.id_user.email])
                     else:
                         error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
-                    error = "No tienes permiso para hacer eso"
+                    error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
             except groups.DoesNotExist:
                 error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
                 error = "Error! no existe el usuario para este grupo"
-            except Exception:
+            except Exception, e:
+                print e
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
@@ -119,6 +135,12 @@ def groupSettings(request, slug_group):
         Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
     try:
+        if request.method == "GET":
+            u_selected = User.objects.get(username=str(request.GET['u'])).id
+    except Exception, e:
+        print e
+        u_selected = None
+    try:
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
         raise Http404
@@ -128,7 +150,7 @@ def groupSettings(request, slug_group):
     except Exception:
         is_member = False
     if is_admin:
-        members = rel_user_group.objects.filter(id_group=g.id, is_active=True).order_by("date_joined")
+        members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
         _members = list()
         for m in members:
             _members.append({
@@ -140,8 +162,7 @@ def groupSettings(request, slug_group):
                         "is_secretary": m.is_secretary
                         }
             })
-        members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
-        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "members_pend": members_pend}
+        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "user_selected": u_selected}
         return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
@@ -251,6 +272,7 @@ def newBasicGroup(request, form, pro=False):
                 if inv:
                     # new rel to: Create group. Other is admin (other)
                     setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
+                    # this is the group than only i administer
             else:
                 # new rel to: Create group. I'm admin
                 setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb, is_active=1)
@@ -276,6 +298,7 @@ def newProGroup(request, form):
         new_group = newBasicGroup(request, form, pro=True)
         g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
         g_pro.save()
+        # consumir package
         return new_group
     else:
         return False
@@ -321,7 +344,7 @@ def newGroup(request):
             if resp:
                 # Guardar accion de crear reunion
                 saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
-                return HttpResponseRedirect("/groups/" + str(resp.slug))
+                return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")
     else:
         form = newGroupForm()
     orgs, billing_list = getProGroupDataForm(request)
@@ -341,24 +364,32 @@ def showGroup(request, slug):
     '''
     try:
         g = groups.objects.get(slug=slug, is_active=True)
-        is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
-        try:
-            is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
-        except Exception:
-            is_member = False
-        if is_member:
-            members = rel_user_group.objects.filter(id_group=g.id, is_member=True, is_active=True)
-            members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
-            minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
-            _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
-            member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
-            ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
-            "members_pend": members_pend, "reunions": _reunions, "now_": datetime.datetime.now()}
-            return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
-        else:
-            if is_admin:
+        _user = getRelUserGroup(request.user, g)
+        if _user:
+            if _user.is_member and _user.is_active:
+                members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
+                minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
+                _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
+                member = {"is_admin": _user.is_admin, "is_approver": _user.is_approver, "is_secretary": _user.is_secretary}
+                ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
+                "reunions": _reunions, "now_": datetime.datetime.now()}
+                return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
+            if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
-            return HttpResponseRedirect('/groups/#error-view-group')
+            if _user.is_superadmin and _user.is_active:
+                return HttpResponseRedirect("/settings/organizations")
+        # request.user is the org admin of this group? redirect to /settings/organizations
+        if isProGroup(g):
+            pro = getProGroup(g)
+            if pro.id_organization.id_admin == request.user:
+                saved = 0
+                if request.method == "GET":
+                    try:
+                        saved = request.GET['saved']
+                    except Exception:
+                        saved = 0
+                return HttpResponseRedirect("/settings/organizations?saved=" + str(saved))
+        return HttpResponseRedirect('/groups/#error-view-group')
     except groups.DoesNotExist:
         print "groups Exception ", slug
         raise Http404
@@ -431,19 +462,13 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
     except Exception, e:
         print e
     email = [id_user_invited.email]
-    #    try:
-    #        title = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + u") te agregó a un grupo en Actarium"
-    #        contenido = id_user_from.first_name + id_user_from.last_name + " (" + id_user_from.username + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-    #        sendEmail(email, title, contenido)
-    #    except Exception, e:
-    #        print "Exception mail: %s" % e
-    ctx_email={
-         'firstname':id_user_from.first_name,
-         'username':id_user_from.username,
-         'groupname':group.name,
-         'urlgravatar': showgravatar(id_user_from.email,50)
+    ctx_email = {
+         'firstname': id_user_from.first_name + id_user_from.last_name,
+         'username': id_user_from.username,
+         'groupname': group.name,
+         'urlgravatar': showgravatar(id_user_from.email, 50)
      }
-    sendEmailHtml(6,ctx_email,email)
+    sendEmailHtml(6, ctx_email, email)
     return _inv
 
 
@@ -457,27 +482,22 @@ def sendInvitationUser(email, user_invite, group):
             _user = newInvitedUser(email, user_invite.first_name + " " + user_invite.last_name)
             if _user:
                 # _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=True)
-                _inv = setRelUserGroup(id_user=_user, id_group=group, is_member=True, is_active=False)
+                setRelUserGroup(id_user=_user, id_group=group, is_member=True, is_active=False)
             else:
                 return False
         except Exception, e:
             print e
         email = [email]
         if _user:
-        #            try:
-        #                title = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te agrego a un grupo en Actarium"
-        #                contenido = str(user_invite.first_name.encode('utf8', 'replace')) + " (" + str(user_invite.username.encode('utf8', 'replace')) + ") te ha invitado al grupo <strong>" + str(group.name.encode('utf8', 'replace')) + "</strong><br><br>" + "Ingresa a Actarium en: <a href='http://actarium.com' >Actarium.com</a> y acepta o rechaza &eacute;sta invitaci&oacute;n."
-        #                sendEmail(email, title, contenido)
-        #            except Exception, e:
-        #                print "Exception mail: %s" % e
-            ctx_email={
-                     'firstname':user_invite.first_name,
-                     'username':user_invite.username,
-                     'groupname':group.name,
-                     'urlgravatar': showgravatar(user_invite.email,50)
+            ctx_email = {
+                     'firstname': user_invite.first_name,
+                     'username': user_invite.username,
+                     'groupname': group.name,
+                     'urlgravatar': showgravatar(user_invite.email, 50)
                  }
-            sendEmailHtml(6,ctx_email,email)
-            return _inv
+            sendEmailHtml(6, ctx_email, email)
+            print _user
+            return _user
         else:
             return False
     else:
@@ -486,7 +506,7 @@ def sendInvitationUser(email, user_invite, group):
 
 def isMemberOfGroup(id_user, id_group):
     try:
-        is_member = rel_user_group.objects.filter(id_user=id_user, id_group=id_group)
+        is_member = getRelUserGroup(id_user, id_group).is_member
         if is_member:
             return True
     except rel_user_group.DoesNotExist:
@@ -518,7 +538,7 @@ def newInvitationToGroup(request):
         if request.method == 'GET':
             try:
                 g = groups.objects.get(pk=request.GET['pk'])
-                if not isMemberOfGroup(request.user, g):
+                if not getRelUserGroup(request.user, g).is_admin:
                     return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
             except groups.DoesNotExist:
                 g = False
@@ -537,11 +557,14 @@ def newInvitationToGroup(request):
                 else:
                     inv = sendInvitationUser(email, request.user, g)
                     saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                    if inv and not (inv is 0):  # 0 is email failed
-                        invited = True
-                        iid = str(inv.id)
-                        gravatar = showgravatar(email, 30)
-                        message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
+                    if inv and not (inv is 0):  # 0 = is email failed
+                        try:
+                            invited = True
+                            iid = str(inv.id)  # get de id from invitation
+                            gravatar = showgravatar(email, 30)
+                            message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
+                        except Exception, e:
+                            print e
                     else:
                         iid = False
                         invited = False
@@ -553,12 +576,11 @@ def newInvitationToGroup(request):
                                 message = "El correo electronico no es valido"
                             else:
                                 message = "Error desconocido. Lo sentimos"
-                print message, "m"
                 response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
             else:
                 response = {"error": "No tienes permiso para hacer eso"}
-    else:
-        response = "Error invitacion, no puedes entrar desde aqui"
+        else:
+            response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
@@ -720,18 +742,14 @@ def getMinutesByCode(group, code_id):
 def getPrevNextOfGroup(group, minutes_id):
     prev = None
     next = None
-    # print "GROUP: %s" % str(group)
-    # print "MINUTES: %s" % str(minutes_id)
     try:
         prev = minutes.get_previous_by_date_created(minutes_id, id_group=group)
-        # print "PREV: %s" % str(prev.code)
     except minutes.DoesNotExist:
         prev = False
     except Exception, e:
         print "Exception prev: " + str(e)
     try:
         next = minutes.get_next_by_date_created(minutes_id, id_group=group)
-        # print "NEXT: %s" % str(next)
     except minutes.DoesNotExist:
         next = False
     except Exception, e:
@@ -1300,16 +1318,16 @@ def setAssistance(request):
             email_list = []
             email_list.append(str(id_reunion.id_convener.email) + ",")
             ctx_email = {
-                 'firstname':request.user.first_name,
-                 'username':request.user.username, 
-                 'response':resp,
+                 'firstname': request.user.first_name,
+                 'username': request.user.username,
+                 'response': resp,
                  'groupname': id_reunion.id_group.name,
                  'titlereunion':  id_reunion.title,
                  'urlgravatar': showgravatar(request.user.email, 50)
              }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
-            sendEmailHtml(5,ctx_email,email_list)
+            sendEmailHtml(5, ctx_email, email_list)
         return HttpResponse(json.dumps(datos), mimetype="application/json")
     else:
         response = "Error Calendar"
@@ -1408,7 +1426,7 @@ def removeGMT(datetime_var):
     dt_s = dt[:19]
     return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
 
-
+''
 def sendEmail(mail_to, titulo, contenido):
     contenido = contenido + "\n" + "<br><br><p style='color:gray'>Mensaje enviado autom&aacute;ticamente por <a style='color:gray' href='http://daiech.com'>Daiech</a>. <br><br> Escribenos en twitter<br> <a href='http://twitter.com/Actarium'>@Actarium</a> - <a href='http://twitter.com/Daiech'>@Daiech</a></p><br><br>"
     try:

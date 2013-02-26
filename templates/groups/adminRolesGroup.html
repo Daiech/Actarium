@@ -36,9 +36,10 @@
 					</th>
 				</tr>
 				{%for m in members%}
-				<tr>
+				<tr {%if m.member.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
-						<div class="username-info">
+						<div class="username-info {%if not m.member.is_active%}user-pend-r{%endif%}"
+						{%if not m.member.is_active%}title="{{m.member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
 	                        <img style="width:20px" src="{{m.member.id_user.email|showgravatar:'20'}}" alt="{{m.member.id_user}}">
 	                        {{m.member.id_user.first_name}} {{m.member.id_user.last_name}}
 	                        {%if m.member.id_user == user%}
@@ -70,37 +71,14 @@
 					</td>
 				</tr>
                 {%endfor%}
-                {%for member in members_pend%}
-                <tr><!--Usuarios pendientes-->
-                	<td class="td-first">
-						<div class="username-info">
-	                        <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user.username}}">
-	                        {{member.id_user.first_name}} (pendiente)
-	                    </div>
-					</td>
-					<td class="t-a-c">
-						<label for="secretary-{{member.id_user.id}}">
-							<input id="secretary-{{member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{member.id_user.id}}" >
-						</label>
-					</td>
-					<td class="t-a-c">
-						<label for="aprover-{{member.id_user.id}}">
-							<input id="aprover-{{member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{member.id_user.id}}" >
-						</label>
-					</td>
-					<td class="t-a-c">
-						<label for="admin-{{member.id_user.id}}">
-							<input id="admin-{{member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{member.id_user.id}}" >
-						</label>
-					</td>
-					<td class="t-a-c">
-						<div class="remove-invitation-container">
-							<a href="#" class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
-						</div>
-					</td>
-                </tr>
-                {%endfor%}
 			</table>
+			<div class="icons-info">
+                <span>Info:</span>
+                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+                <span class="user-pend-l"> Usuarios pendientes</span>
+            </div>
 			<div class="mt20">
 				<div class="dropdown">
 	                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
@@ -110,12 +88,7 @@
 	                <a href="{%if is_admin and not is_member%}#{%else%}/groups/{{group.slug}}{%endif%}" class="btn {%if is_admin and not is_member%}disabled{%endif%}">
 	                	<i class="icon-arrow-left"></i> Volver al grupo
 	                </a>
-		            <div class="icons-info pull-right">
-		                <span>Info:</span>
-		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-		                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
-		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
-		            </div>
+		            
 	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 	                    <li class="taling">
 	                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
@@ -148,6 +121,7 @@
 		padding: 9px;
 	}
 	.th-delelte{width: 9%;}
+	.td-first{position: relative;}
 	th div{
 		text-align: center;
 		font-size: 14px;
@@ -159,6 +133,7 @@
 	}
 	.username-info{
 		padding: 8px;
+		font-size: 13px;
 	}
 	.remove-invitation-container{margin-top: 7px;}
 	td input[type='checkbox']{margin-top: 0;}
@@ -274,7 +249,10 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#admin-roles").addClass("active")
-		$("th").tooltip()
+		$("th, .user-pend").tooltip()
+		{% if user_selected%}
+		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
+		{%endif%}
 	    showIconCloseOnHover()
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
@@ -284,7 +262,6 @@
 	    		case 3 : return "Secretario (Puede redactar Actas)"; break;
 	    	}
 	    }
-
 	    function callbackSetRole(data) {
 	    	if (data["saved"]){
 		    	setAlertMessage("Permiso agregado", data['u'] + " ahora es " + getRoleName(data['role']))
@@ -385,21 +362,29 @@
 	    }
 	    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
 	        if(data['invited']){    //USUARIO INVITADO
-	            setAlertMessage("Invitado",data['message'])
+	        	console.log(data)
 	            $("#table-roles").append(
 	            	'<tr><td>'+
-						'<div class="username-info">'+
+						'<div class="username-info user-pend">'+
 	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
 	                    '</div>'+
 					'</td>'+
-					'<td class="t-a-c"><label><input type="checkbox"></label></td>'+
-					'<td class="t-a-c"><label><input type="checkbox"></label</td>'+
-					'<td class="t-a-c"><label><input type="checkbox"></label</td>'+
+					'<td class="t-a-c"><label for="secretary'+data['iid']+'">'+
+					'<input  id="secretary'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="'+data['iid']+'">'+
+					'</label></td>'+
+					'<td class="t-a-c"><label for="aprover'+data['iid']+'">'+
+						'<input id="aprover'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="'+data['iid']+'">'+
+					'</label</td>'+
+					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
+						'<input id="admin'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
+					'</label</td>'+
 					'<td class="t-a-c">'+
 						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
 					'</td></tr>'
 	            )
+	            setAlertMessage("Invitado",data['message'])
 	            showIconCloseOnHover()
+				$("td input[type='checkbox']").on("click", setRole);
 	            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
 	            $("#newmember").val("")
 	        }else{//EL USUARIO YA ESTA INVITADO

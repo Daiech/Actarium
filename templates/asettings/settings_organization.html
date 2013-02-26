@@ -68,6 +68,12 @@
 		$("#settings-organization").addClass("active");
 		$('.button-action').tooltip()
 
+		{%ifequal group_saved '0' %}
+		setAlertMessage("Ups!", "No eres miembro, solo puedes verlo en la lista de su organizaci&oacute;n.")
+		{%endifequal%}
+		{%ifequal group_saved '1' %}
+		setAlertMessage("Grupo creado!", "Tu grupo ha sido creado satisfactoriamente, como no eres miembro, solo puedes verlo en la lista de la organizaci&oacute;nes.")
+		{%endifequal%}
 		if ($("#num-organizations").val() == 1){
 			$(".collapse").collapse({
 		        toggle: false
