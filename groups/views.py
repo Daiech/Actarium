@@ -218,6 +218,7 @@ def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_s
             no_rel = True
     except rel_user_group.DoesNotExist:
         no_rel = True
+    print "hay relacion? ", no_rel
     if no_rel:
         setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active,
         is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
@@ -257,24 +258,27 @@ def newBasicGroup(request, form, pro=False):
     else:
         try:
             user_or_email = get_user_or_email(request.POST['id_admin'])
+            print user_or_email
         except Exception:
             user_or_email = {"user": None}
-        if user_or_email['user']:  # <-- the admin
+        if user_or_email:  # <-- the admin
             try:
                 is_memb = int(request.POST['is_member'])
             except Exception:
                 is_memb = 0
             if is_memb:  # new rel to: Create group. I'm member
-                setUserRoles(request.user, myNewGroup, is_member=1)
+                setUserRoles(request.user, myNewGroup, is_member=1, is_active=True)
             if user_or_email['user'] != request.user:
-                #send invitation to group
-                inv = sendInvitationToGroup(user_or_email['user'], request.user, myNewGroup)
-                if inv:
-                    # new rel to: Create group. Other is admin (other)
-                    setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
-                    # this is the group than only i administer
-            else:
-                # new rel to: Create group. I'm admin
+                if user_or_email['user']:
+                    inv = sendInvitationToGroup(user_or_email['user'], request.user, myNewGroup)
+                    if inv:  # new rel to: Create group. Other is admin (other) # this is the group than only i administer
+                        setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
+                else:
+                    _user = newUserWithInvitation(user_or_email['email'], request.user, myNewGroup)
+                    if _user:  # new rel to: Create group. Other is admin (other)
+                        setUserRoles(_user, myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
+
+            else:  # new rel to: Create group. I'm admin
                 setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb, is_active=1)
                 print getRelUserGroup(user_or_email['user'], myNewGroup).is_admin
         else:
@@ -457,10 +461,10 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
         Enviar una invitacion de grupo a un usuario
     '''
     try:
-        #_inv, _created = invitations_groups.objects.get_or_create(id_user_invited=id_user_invited, id_user_from=id_user_from, id_group=group, is_active=True)
         _inv = setRelUserGroup(id_user=id_user_invited, id_group=group, is_member=False, is_active=False)
     except Exception, e:
         print e
+        return False
     email = [id_user_invited.email]
     ctx_email = {
          'firstname': id_user_from.first_name + id_user_from.last_name,
@@ -472,34 +476,21 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
     return _inv
 
 
-def sendInvitationUser(email, user_invite, group):
+def newUserWithInvitation(email, id_user_from, group):
     '''
-        Enviar una invitacion a un usuario via email
+        Crear un nuevo usuario y lo relaciona al grupo.
     '''
     if validateEmail(email):
         try:
             from account.views import newInvitedUser
-            _user = newInvitedUser(email, user_invite.first_name + " " + user_invite.last_name)
+            _user = newInvitedUser(email, id_user_from.first_name + " " + id_user_from.last_name)
             if _user:
-                # _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=True)
-                setRelUserGroup(id_user=_user, id_group=group, is_member=True, is_active=False)
+                return _user
             else:
                 return False
         except Exception, e:
             print e
-        email = [email]
-        if _user:
-            ctx_email = {
-                     'firstname': user_invite.first_name,
-                     'username': user_invite.username,
-                     'groupname': group.name,
-                     'urlgravatar': showgravatar(user_invite.email, 50)
-                 }
-            sendEmailHtml(6, ctx_email, email)
-            print _user
-            return _user
-        else:
-            return False
+        return False
     else:
         return 0  # Email Failed
 
@@ -555,7 +546,7 @@ def newInvitationToGroup(request):
                     iid = False
                     gravatar = False
                 else:
-                    inv = sendInvitationUser(email, request.user, g)
+                    inv = newUserWithInvitation(email, request.user, g)
                     saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                     if inv and not (inv is 0):  # 0 = is email failed
                         try:
