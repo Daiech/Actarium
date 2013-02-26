@@ -48,6 +48,11 @@ def settingsBilling(request):
 
 @login_required(login_url='/account/login')
 def settingsOrganizations(request):
+    if request.method == "GET":  # envia una variable para seleccionar una organizacion
+        try:
+            new_group = request.GET['saved']
+        except Exception:
+            new_group = False
     try:
         orgs = organizations.objects.filter(is_active=True, id_admin=request.user)
     except Exception, e:
@@ -56,7 +61,7 @@ def settingsOrganizations(request):
     groups = list()
     for org in orgs:
         groups.append({"org": org, "groups_org_list": groups_pro.objects.filter(id_organization=org.id)})
-    ctx = {"organizations": groups}
+    ctx = {"organizations": groups, "group_saved": new_group}
     return render_to_response('asettings/settings_organization.html', ctx, context_instance=RequestContext(request))
 
 

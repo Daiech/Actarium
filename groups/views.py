@@ -20,6 +20,21 @@ from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
 
 
+def isProGroup(group):
+    try:
+        groups_pro.objects.get(id_group=group, is_active=True)
+        return True
+    except groups_pro.DoesNotExist:
+        return False
+
+
+def getProGroup(group):
+    try:
+        return groups_pro.objects.get(id_group=group, is_active=True)
+    except groups_pro.DoesNotExist:
+        return False
+
+
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
@@ -257,6 +272,7 @@ def newBasicGroup(request, form, pro=False):
                 if inv:
                     # new rel to: Create group. Other is admin (other)
                     setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
+                    # this is the group than only i administer
             else:
                 # new rel to: Create group. I'm admin
                 setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb, is_active=1)
@@ -282,6 +298,7 @@ def newProGroup(request, form):
         new_group = newBasicGroup(request, form, pro=True)
         g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
         g_pro.save()
+        # consumir package
         return new_group
     else:
         return False
@@ -327,7 +344,7 @@ def newGroup(request):
             if resp:
                 # Guardar accion de crear reunion
                 saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
-                return HttpResponseRedirect("/groups/" + str(resp.slug))
+                return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")
     else:
         form = newGroupForm()
     orgs, billing_list = getProGroupDataForm(request)
@@ -347,24 +364,32 @@ def showGroup(request, slug):
     '''
     try:
         g = groups.objects.get(slug=slug, is_active=True)
-        is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
-        try:
-            is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
-        except Exception:
-            is_member = False
-        if is_member:
-            members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
-            members_pend = rel_user_group.objects.filter(id_group=g.id, is_active=False)
-            minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
-            _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
-            member = {"is_admin": is_member.is_admin, "is_approver": is_member.is_approver, "is_secretary": is_member.is_secretary}
-            ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
-            "members_pend": members_pend, "reunions": _reunions, "now_": datetime.datetime.now()}
-            return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
-        else:
-            if is_admin:
+        _user = getRelUserGroup(request.user, g)
+        if _user:
+            if _user.is_member and _user.is_active:
+                members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
+                minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
+                _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
+                member = {"is_admin": _user.is_admin, "is_approver": _user.is_approver, "is_secretary": _user.is_secretary}
+                ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
+                "reunions": _reunions, "now_": datetime.datetime.now()}
+                return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
+            if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
-            return HttpResponseRedirect('/groups/#error-view-group')
+            if _user.is_superadmin and _user.is_active:
+                return HttpResponseRedirect("/settings/organizations")
+        # request.user is the org admin of this group? redirect to /settings/organizations
+        if isProGroup(g):
+            pro = getProGroup(g)
+            if pro.id_organization.id_admin == request.user:
+                saved = 0
+                if request.method == "GET":
+                    try:
+                        saved = request.GET['saved']
+                    except Exception:
+                        saved = 0
+                return HttpResponseRedirect("/settings/organizations?saved=" + str(saved))
+        return HttpResponseRedirect('/groups/#error-view-group')
     except groups.DoesNotExist:
         print "groups Exception ", slug
         raise Http404
