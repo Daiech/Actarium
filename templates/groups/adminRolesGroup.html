@@ -262,7 +262,6 @@
 	    		case 3 : return "Secretario (Puede redactar Actas)"; break;
 	    	}
 	    }
-
 	    function callbackSetRole(data) {
 	    	if (data["saved"]){
 		    	setAlertMessage("Permiso agregado", data['u'] + " ahora es " + getRoleName(data['role']))
@@ -370,15 +369,22 @@
 	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
 	                    '</div>'+
 					'</td>'+
-					'<td class="t-a-c"><label><input type="checkbox"></label></td>'+
-					'<td class="t-a-c"><label><input type="checkbox"></label</td>'+
-					'<td class="t-a-c"><label><input type="checkbox"></label</td>'+
+					'<td class="t-a-c"><label for="secretary'+data['iid']+'">'+
+					'<input  id="secretary'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="'+data['iid']+'">'+
+					'</label></td>'+
+					'<td class="t-a-c"><label for="aprover'+data['iid']+'">'+
+						'<input id="aprover'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="'+data['iid']+'">'+
+					'</label</td>'+
+					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
+						'<input id="admin'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
+					'</label</td>'+
 					'<td class="t-a-c">'+
 						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
 					'</td></tr>'
 	            )
 	            setAlertMessage("Invitado",data['message'])
 	            showIconCloseOnHover()
+				$("td input[type='checkbox']").on("click", setRole);
 	            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
 	            $("#newmember").val("")
 	        }else{//EL USUARIO YA ESTA INVITADO

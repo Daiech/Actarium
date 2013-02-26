@@ -95,16 +95,17 @@ def setRole(request, slug_group):
                                  'grouplink': link,
                                  'urlgravatar': showgravatar(request.user.email, 50)
                              }
-                        sendEmailHtml(4, ctx_email, [rel.id_user.email])
+                            sendEmailHtml(4, ctx_email, [rel.id_user.email])
                     else:
                         error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
-                    error = "No tienes permiso para hacer eso"
+                    error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
             except groups.DoesNotExist:
                 error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
                 error = "Error! no existe el usuario para este grupo"
-            except Exception:
+            except Exception, e:
+                print e
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
@@ -456,7 +457,7 @@ def sendInvitationUser(email, user_invite, group):
             _user = newInvitedUser(email, user_invite.first_name + " " + user_invite.last_name)
             if _user:
                 # _inv, _created = invitations_groups.objects.get_or_create(id_user_invited=_user, id_user_from=user_invite, id_group=group, is_active=True)
-                _inv = setRelUserGroup(id_user=_user, id_group=group, is_member=True, is_active=False)
+                setRelUserGroup(id_user=_user, id_group=group, is_member=True, is_active=False)
             else:
                 return False
         except Exception, e:
@@ -470,7 +471,8 @@ def sendInvitationUser(email, user_invite, group):
                      'urlgravatar': showgravatar(user_invite.email, 50)
                  }
             sendEmailHtml(6, ctx_email, email)
-            return _inv
+            print _user
+            return _user
         else:
             return False
     else:
@@ -479,7 +481,7 @@ def sendInvitationUser(email, user_invite, group):
 
 def isMemberOfGroup(id_user, id_group):
     try:
-        is_member = rel_user_group.objects.filter(id_user=id_user, id_group=id_group)
+        is_member = getRelUserGroup(id_user, id_group).is_member
         if is_member:
             return True
     except rel_user_group.DoesNotExist:
@@ -511,7 +513,7 @@ def newInvitationToGroup(request):
         if request.method == 'GET':
             try:
                 g = groups.objects.get(pk=request.GET['pk'])
-                if not isMemberOfGroup(request.user, g):
+                if not getRelUserGroup(request.user, g).is_admin:
                     return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
             except groups.DoesNotExist:
                 g = False
@@ -530,10 +532,10 @@ def newInvitationToGroup(request):
                 else:
                     inv = sendInvitationUser(email, request.user, g)
                     saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                    if inv and not (inv is 0):  # 0 is email failed
+                    if inv and not (inv is 0):  # 0 = is email failed
                         try:
                             invited = True
-                            iid = str(inv)  # get de id from invitation
+                            iid = str(inv.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
                             message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
                         except Exception, e:
