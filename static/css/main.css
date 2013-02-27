@@ -558,12 +558,13 @@ margin-left: 0;
 #alert-message, #alert-error {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 5px;
+    margin-top: 8px;
     left:0;
     right:0;
     font-size: 14px;
     position: fixed;
     width:30%;
+    z-index: 10000;
 }
 .box{
     overflow:hidden;
@@ -1040,7 +1041,7 @@ only screen and (min-resolution: 144dpi) {
     .navbar-item > span{font-size:13px;}
     header div > #top-menu-style > li{width: 65px;margin: -2px;}
     header #navbar-button-container > ul li a{margin-top: -1px}
-
+    #alert-message, #alert-error {width:70%;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
