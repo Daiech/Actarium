@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 import re
 from django.utils.timezone import get_default_timezone, make_naive
-from groups.models import invitations_groups, reunions, assistance, rel_user_group
+from groups.models import reunions, assistance, rel_user_group
 from django.utils import simplejson as json
 from website.models import feedBack, faq
 
@@ -33,19 +33,21 @@ def home(request):
         for reunion in my_reu:
             try:
                 confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-#                is_confirmed = confirm.is_confirmed
-#                is_saved = 1
+                #is_confirmed = confirm.is_confirmed
+                #is_saved = 1
             except assistance.DoesNotExist:
-#                is_confirmed = False
-#                is_saved = 0
+                #is_confirmed = False
+                #is_saved = 0
                 json_array.append({"id_reunion": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), "title": reunion.title})
-#            i = i + 1
+                #i = i + 1
 
         ctx = {'TITLE': "Actarium", "groups": gr, "invitations": my_inv, "reunions": json_array}
+        template = 'website/index.html'
     else:
         ctx = {'TITLE': "Actarium by Daiech"}
+        template = 'website/landing.html'
 
-    return render_to_response('website/index.html', ctx, context_instance=RequestContext(request))
+    return render_to_response(template, ctx, context_instance=RequestContext(request))
 
 
 def sendFeedBack(request):

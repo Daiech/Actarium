@@ -833,6 +833,8 @@ span.user-pend-l{padding-left: 2px;}
 .btn-link:hover{color:#00aeaa;}
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a:hover{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
 /*.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{background-color:#dadada;}*/
+
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -1004,7 +1006,7 @@ only screen and (min-resolution: 144dpi) {
             display: none;
         }*/
     .navbar-fixed-top {
-        margin-bottom: 26px;
+        margin-bottom: 23px;
     }
     .white-bar{
         width: 40%

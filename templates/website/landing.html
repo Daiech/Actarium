@@ -1,0 +1,233 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones{% endblock %}
+
+{%block body%}
+<div id="actarium-slide" class="carousel slide">
+            <ol class="carousel-indicators">
+                <li data-target="#actarium-slide" data-slide-to="0" class="active"></li>
+                <li data-target="#actarium-slide" data-slide-to="1"></li>
+                <li data-target="#actarium-slide" data-slide-to="2"></li>
+                <li data-target="#actarium-slide" data-slide-to="3"></li>
+            </ol>
+            <!-- Carousel items -->
+            <div class="carousel-inner">
+                <div class="active item background-slide1">
+                	<div>
+                	</div>
+                </div>
+                <div class="item background-slide2">
+                	<div>
+                	</div>
+                </div>
+                <div class="item background-slide3">
+                	<div>
+                	</div>
+                </div>
+                <div class="item background-slide4">
+                	<div>
+                	</div>
+                </div>
+            </div>
+              <!-- Carousel nav -->
+              <!-- <a class="carousel-control left" href="#actarium-slide" data-slide="prev">&lsaquo;</a>
+              <a class="carousel-control right" href="#actarium-slide" data-slide="next">&rsaquo;</a> -->
+</div>
+
+<div class="info-containter">
+    <div class="info-pics">
+        <div id="left-panel">
+            <div id="register-form" class="hidden">
+                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
+                    {% csrf_token %}
+                    <label for="id_username-login">Nombre de usuario</label>
+                    <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                    <label for="id_password-login">Contrase&ntilde;a</label>
+                    <input type="password" name="password" id="id_password-login" />
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
+                            <a href="/account/password/reset/" class="btn btn-link">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div id="pic-log-left" class="pic-log">
+                <a href="/account/login" >
+                    <div id="left-bubble">
+                        <div class="bubble-text">
+                            Tengo una cuenta.<br>Iniciar Sesi&oacute;n
+                        </div>
+
+                    </div>
+                </a>
+                <div id="login-pic">
+                    <div id="img-log">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="right-panel">
+            <div id="new-user" class="hidden">
+                <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
+                    {% csrf_token %}
+                    <label for="id_username-register">Nombre de usuario:</label>
+                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                    <label for="id_email">Correo Electr&oacute;nico:</label>
+                    <input type="text" name="email" id="id_email"  placeholder="Correo Electr&oacute;nico" />
+                    <label for="id_password1">Contraseña:</label>
+                    <input type="password" name="password1" id="id_pasword1" />
+                    <label for="id_password2">Contraseña(Confirmaci&oacute;n):</label>
+                    <input type="password" name="password2" id="id_pasword2" />
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech pull-right">Sign In</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>            
+
+            <div id="pic-log-right" class="pic-log">
+                <a href="/account/new">
+                    <div id="right-bubble">
+                        <div class="bubble-text">
+                            No tengo cuenta.<br>Registrarme
+                        </div>
+                    </div>
+                </a>
+                <div id="singup-pic">
+                    <div id="img-reg">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{%endblock%}
+{% block style%}
+<style>
+    /* **************************************************************************** 
+    Index Website
+    **************************************************************************** */
+    .carousel-inner > div{height: 238px;width: 100%;}
+    .carousel-inner .item > div{height: 237px;margin: 0 auto;width: 100%;background-repeat:no-repeat;background-position:center top;}
+    .container{width: 100%}
+    .background-slide1{background-image: url({{STATIC_PREFIX}}img/landing-slide/background1.png);}
+    .background-slide2{background-image: url({{STATIC_PREFIX}}img/landing-slide/background2.png);}
+    .background-slide3{background-image: url({{STATIC_PREFIX}}img/landing-slide/background3.png);}
+    .background-slide4{background-image: url({{STATIC_PREFIX}}img/landing-slide/background4.png);}
+	.background-slide1 div{background-image: url({{STATIC_PREFIX}}img/landing-slide/slide1.png);}
+    .background-slide2 div{background-image: url({{STATIC_PREFIX}}img/landing-slide/slide2.png);}
+    .background-slide3 div{background-image: url({{STATIC_PREFIX}}img/landing-slide/slide3.png);}
+    .background-slide4 div{background-image: url({{STATIC_PREFIX}}img/landing-slide/slide4.png);}
+
+	.carousel-indicators{top:220px;left: 0;right: 0;margin-right: auto;margin-left: auto;width: 62px;}
+	.carousel-indicators .active{background-color: #000}
+	.carousel-indicators li{background-color: rgba(100, 100, 100, 0.5);}
+	.carousel-indicators li:hover{cursor: pointer;}
+
+    #text-center{text-align: center;}
+    #middle-bar{height: 51px;position: absolute;width: 100%;}
+    #middle-down{width:50px;margin: 0 auto;}
+    #left-panel{display: block;float: left;width:45%;}
+    #right-panel{
+        display: block;
+        float: right;
+        width: 45%;
+    }
+    #actarium-slide{
+        background-color: rgba(255,255,255,0.7);
+        height: 237px;
+        min-height: 237px;
+        width: 100%;
+        /*padding-bottom: 35px;*/
+    }
+    #new-container > img{
+        display: block;
+        margin: auto;       
+        padding-top: 30px;
+        width:350px;
+    }
+    #register-form{
+        width: 224px;
+        float: right;
+    }
+    #register-form > form{
+        padding: 25px;
+        width: auto;
+        border: none;
+    }
+    #new-user{
+        width: auto;
+        float: left;
+    }
+    #new-user > form{
+        padding: 25px;
+        width: auto;
+        border: none;
+    }
+    #id_submit{width: auto;}
+    .controls{margin-top: 15px;}
+    #content-container .white-box-container{min-height: 220px;}
+    #group-list{margin: 10px 0;}
+    /* **************************************************************************** 
+    Termina Index Website
+    **************************************************************************** */
+</style>
+{%endblock%}
+{% block js %}
+<script>
+    $(document).on("ready",function(){
+    	$(".carousel").carousel("cycle");
+        $("i").tooltip();
+        $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
+        $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
+    });
+    
+    function login(e){
+        /*  Muestra el formulario para iniciar sesion
+            Oculta el formulario de registro
+        */
+        e.preventDefault()
+        if($("#pic-log-right").hasClass("hidden"))
+        {
+            $("#pic-log-right").removeClass("hidden")
+            $("#pic-log-left").addClass("hidden")
+            $("#register-form").removeClass("hidden")
+            $("#new-user").addClass("hidden")
+            $("#register-form form input.first-input").focus()
+        }
+        else{
+            $("#pic-log-left").addClass("hidden")
+            $("#register-form").removeClass("hidden")
+        }
+    }
+
+    function register(e) {
+        /*  Muestra el formulario para registro
+            Oculta el formulario de login
+        */
+        e.preventDefault()
+        if($("#pic-log-left").hasClass("hidden"))
+        {
+            $("#pic-log-right").addClass("hidden")
+            $("#new-user").removeClass("hidden")
+            $("#pic-log-left").removeClass("hidden")
+            $("#register-form").addClass("hidden")
+            $("#new-user form input.first-input").focus()
+        }
+        else{
+            $("#pic-log-right").addClass("hidden")
+            $("#new-user").removeClass("hidden")
+        }
+    }
+</script>
+{% endblock %}
