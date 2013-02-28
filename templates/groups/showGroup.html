@@ -76,7 +76,9 @@
                             <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
                                 <div class="member-pic {%if not member.is_active%}user-pend-b{%endif%}" title="{%if not member.is_active%}{{member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n{%else%}{{member.id_user.first_name}}{%endif%}">
                                     <div class="user-name-pic">{{member.id_user.username}}</div>
-                                    <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
+                                    <div class="w42" style="height:44px;">
+                                        <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
+                                    </div>
                                     <div class="w42">
                                         {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
                                         {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
@@ -205,7 +207,7 @@
     .show-more:hover{background-color: #eee}
     .date-minute-created{color: #777;text-align: right;float:right}
     .icons-info{margin-bottom: -5px;margin-top: 20px}
-    .user-pend-b{border-bottom: solid 4px #7bc779;}
+    /*.user-pend-b{border-bottom: solid 4px #7bc779;}*/
     .roles-buttons{font-size: 13px; margin: 10px 5px;}
     .color-name{color: #555}
 </style>

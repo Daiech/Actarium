@@ -157,7 +157,7 @@ def groupSettings(request, slug_group):
     except Exception:
         is_member = False
     if is_admin:
-        members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
+        members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
         _members = list()
         for m in members:
             _members.append({
@@ -377,7 +377,7 @@ def showGroup(request, slug):
         _user = getRelUserGroup(request.user, g)
         if _user:
             if _user.is_member and _user.is_active:
-                members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_admin")
+                members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
                 minutes_group = minutes.objects.filter(id_group=g.id).order_by("-id")
                 _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
                 member = {"is_admin": _user.is_admin, "is_approver": _user.is_approver, "is_secretary": _user.is_secretary}

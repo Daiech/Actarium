@@ -820,10 +820,10 @@ h3 a:hover{text-decoration:underline;}
 .roles{margin-top: 8px;margin-right: 5px;}
 .container{width:90%;}
 
-.user-pend-b{border-bottom: solid 4px #7bc779;}
-.user-pend-r{border-right: solid 4px #7bc779;}
-.user-pend-l{border-left: solid 4px #7bc779;}
-.user-pend-t{border-top: solid 4px #7bc779;}
+.user-pend-b{border-bottom: solid 4px  #EBD438 !important;}
+.user-pend-r{border-right: solid 4px #EBD438 !important;}
+.user-pend-l{border-left: solid 4px #EBD438 !important;}
+.user-pend-t{border-top: solid 4px #EBD438 !important;}
 span.user-pend-l{padding-left: 2px;}
 
 

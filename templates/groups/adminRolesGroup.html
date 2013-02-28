@@ -10,27 +10,31 @@
 		<section class="">
 			<table id="table-roles" class="table table-bordered table-hover">
 				<tr>
-					<th class="td-first" title="Lista de todos los miembros del grupo '{{group.name}}'">Usuarios del grupo</th>
-					<th title="Personas encargadas de redactar actas">
-						<div>
+					<th class="td-first">
+						<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+							Usuarios del grupo
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="Personas encargadas de redactar actas">
 							<i class="icon-pencil"></i>
 							<span class="th-name">Secretario</span>
 						</div>
 					</th>
-					<th title="Personas encargadas de aprobar actas">
-						<div>
+					<th>
+						<div class="info-title" title="Personas encargadas de aprobar actas">
 							<i class="icon-thumbs-up"></i> 
 							<span class="th-name">Aprobador</span>
 						</div>
 					</th>
-					<th title="Personas encargadas de administrar el grupo">
-						<div>
+					<th>
+						<div class="info-title" title="Personas encargadas de administrar el grupo">
 							<i class="icon-wrench"></i> 
 							<span class="th-name">Administrador</span>
 						</div>
 					</th>
-					<th  title="Elimina la persona de este grupo" class="th-delelte">
-						<div>
+					<th>
+						<div class="info-title" title="Elimina la persona de este grupo" class="th-delelte">
 							<span class="th-name">Eliminar</span>
 						</div>
 					</th>
@@ -81,14 +85,13 @@
             </div>
 			<div class="mt20">
 				<div class="dropdown">
+					<a href="{%if is_admin and not is_member%}#{%else%}/groups/{{group.slug}}{%endif%}" class="btn {%if is_admin and not is_member%}disabled{%endif%}">
+	                	<i class="icon-arrow-left"></i> Volver al grupo
+	                </a>
 	                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
 	                    <i class="icon-plus icon-white"></i> Agregar miembro
 	                    <span class="caret"></span>
 	                </div>
-	                <a href="{%if is_admin and not is_member%}#{%else%}/groups/{{group.slug}}{%endif%}" class="btn {%if is_admin and not is_member%}disabled{%endif%}">
-	                	<i class="icon-arrow-left"></i> Volver al grupo
-	                </a>
-		            
 	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 	                    <li class="taling">
 	                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
@@ -122,7 +125,7 @@
 	}
 	.th-delelte{width: 9%;}
 	.td-first{position: relative;}
-	th div{
+	div.info-title{
 		text-align: center;
 		font-size: 14px;
 		height: 17px;
@@ -249,7 +252,7 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#admin-roles").addClass("active")
-		$("th, .user-pend").tooltip()
+		$(".icons-info span, .username-info, .info-title").tooltip();
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
@@ -449,15 +452,13 @@
 	            $(this).find("i.icon-remove").hide(30)
 	        })
 	    }
-	    function openDropDown (e) {
-    		//dar FOCO al input para buscar miembros
-	        $("#add-member").next("#add-member-menu").addClass("disblock");
-	        $("#newmember").focus()//give the focus to the input to search members
-	    }
 	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
 	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
 	    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
-	    $("#add-member").on('click focus', openDropDown);
+	    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
+	        $("#add-member").next("#add-member-menu").addClass("disblock");
+	        $("#newmember").focus()//give the focus to the input to search members
+	    });
 	    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
 	        $(this).parent().parent().removeClass("disblock");//Close the dropdown menu to add members
 	    });
