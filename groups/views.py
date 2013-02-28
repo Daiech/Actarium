@@ -785,10 +785,17 @@ def showMinutes(request, slug, minutes_code):
     '''
     Muestra toda la informacion de un Acta (minutes)
     '''
+    pdf_address = 'false'
+    if request.method == 'POST':
+        html_data = request.POST['minutes-html-data']
+        print html_data
+        from pdfmodule.views import minutesHtmlToPdf
+        pdf_address = minutesHtmlToPdf(html_data)
+        return HttpResponseRedirect(pdf_address)
     group = getGroupBySlug(slug)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
-
+    
     if isMemberOfGroup(request.user, group):
         minutes_current = getMinutesByCode(group, minutes_code)
         if not minutes_current:
@@ -821,7 +828,7 @@ def showMinutes(request, slug, minutes_code):
         ######## </PREV and NEXT> #########
 
         ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
-        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance,
+        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address":pdf_address
         # "my_attending": my_attending,
         # "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list
         }

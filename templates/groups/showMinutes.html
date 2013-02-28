@@ -17,6 +17,11 @@
 		    	<span>Fecha de creaci&oacute;n: {{minutes.date_created}}</span>
 		    	
         		<a href="/groups/{{group.slug}}/newMinutes" class="btn"><i class="icon-plus"></i> Crear acta</a>
+	    			<form method="post" class="minutes-form-btn">
+	    				{% csrf_token %}
+	    				<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
+	    				<button type='submit' class="btn" ><i class="icon-file"></i> Generar PDF</button>
+	    			</form>
 		    </div>
 	    </div>
     </header>
@@ -32,15 +37,19 @@
 			</li>
 		</ul>
     	<article id="minute" class="minute hoja">
+    		<div id="data-for-pdf">
     		<header>
-    			<h3>{{group.name}}  <a href="/pdf/minutestopdf/{{minutes.pk}}" class="btn" target="black">Generar PDF</a></h3>
+    			<h3>{{group.name}} </h3> 
     		</header>
     		<div class="">
+    			
     			<strong>Acta No.</strong> {{minutes.code}} de <i>{{minutes.id_extra_minutes.date_start|date:"M d Y"}}</i><hr>
     			<p><strong>Fecha/Hora de inicio:</strong> {{minutes.id_extra_minutes.date_start}} </p>
     			<p><strong>Fecha/Hora de finalizaci&oacute;n:</strong> {{minutes.id_extra_minutes.date_end}}</p>
+    			
     			<hr>
     			<strong>Lugar :</strong> {{minutes.id_extra_minutes.location}}<hr>
+    			
     			<div class="box">
     				<div class="span6">
     					<strong>Presentes:</strong> 
@@ -69,10 +78,12 @@
     			<strong>Orden del dia:</strong> {{minutes.id_extra_minutes.agenda|safe}}<hr>
     			<strong>Acuerdos :</strong> {{minutes.id_extra_minutes.agreement|safe}}
     			
-    		</div>
+    		
     		<footer>
     			<p><strong>Los miembros ausentes presentaron excusa de su inasistencia.</strong></p>
     		</footer>
+    		</div>
+    		</div>
     	</article>
     	<ul class="pager hoja">
 			<li class="previous {%if not prev %}disabled{%endif%}">
@@ -152,6 +163,20 @@
 <script>
 	$(document).on("ready",function(){
 		$(".btn-approve").on("click",setApprove)
+		$('#minutes-html-data').val($('#data-for-pdf').html());
+		/*$('#htmltopdf').click(function(e){
+			e.preventDefault();
+			console.log($('#minute').html());
+			$('#minutes-html-data').val($('#minute').html());
+			//window.location = "/pdf/miutesHtmltopdf/"+aaa;*/
+		//});
+		/*pdf_address= '{{ pdf_address }}';
+		
+		if (pdf_address != 'false') {
+			window.top.location=  pdf_address;
+			//console.log('entro')
+		}*/
+		
 	});
 	function callBackSign(data){
 		console.log(data)
@@ -232,5 +257,8 @@
 		position: relative;
 		top: 0;
 	}
+	.minutes-form-btn{
+		display:inline;
+	}
 </style>
-{%endblock%}
+{% endblock %}
