@@ -788,7 +788,6 @@ def showMinutes(request, slug, minutes_code):
     pdf_address = 'false'
     if request.method == 'POST':
         html_data = request.POST['minutes-html-data']
-        print html_data
         from pdfmodule.views import minutesHtmlToPdf
         pdf_address = minutesHtmlToPdf(html_data)
         return HttpResponseRedirect(pdf_address)
