@@ -72,7 +72,7 @@
 				</tr>
                 {%endfor%}
 			</table>
-			<div class="icons-info">
+			<div id="add-new-member" class="icons-info">
                 <span>Info:</span>
                 <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
                 <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
@@ -365,7 +365,7 @@
 	        	console.log(data)
 	            $("#table-roles").append(
 	            	'<tr><td>'+
-						'<div class="username-info user-pend">'+
+						'<div class="username-info user-pend-r">'+
 	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
 	                    '</div>'+
 					'</td>'+
@@ -434,9 +434,13 @@
 	    }
 	    function searchMember(e){//INVITACIONES MAIN 
 	        // if(e.keyCode==13){
-	            var user=$("#newmember").val()
+	        var key = String.fromCharCode(e.keyCode)
+	        var key = e.keyCode
+			if (key > 45 && key < 122) {
+	        	console.log(key)
+			    var user=$("#newmember").val()
 	            sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
-	        // }
+	        }
 	    }
 	    function showIconCloseOnHover(){
 	        $(".list-member-item").hover(function(){  
@@ -445,16 +449,22 @@
 	            $(this).find("i.icon-remove").hide(30)
 	        })
 	    }
+	    function openDropDown (e) {
+    		//dar FOCO al input para buscar miembros
+	        $("#add-member").next("#add-member-menu").addClass("disblock");
+	        $("#newmember").focus()//give the focus to the input to search members
+	    }
 	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
 	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
 	    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
-	    $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
-	        $(this).next("#add-member-menu").addClass("disblock");
-	        $("#newmember").focus()//give the focus to the input to search members
-	    });
+	    $("#add-member").on('click focus', openDropDown);
 	    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
 	        $(this).parent().parent().removeClass("disblock");//Close the dropdown menu to add members
 	    });
+		if(window.location.hash && window.location.hash == "#add-new-member"){
+			$("#add-member").click();
+			$("#newmember").focus();
+		}
 	});
 </script>
 {% endblock %}

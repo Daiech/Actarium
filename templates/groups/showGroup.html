@@ -5,13 +5,19 @@
 <article>
     <header >
         <div class="row-fluid">
-            <div class="span12">
+            <div class="span10">
                 <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
                 <h3>{{group.name}}
-                    <span style="font-size:17px;color:gray"> -
+                    <strong style="font-size:17px;color:gray"> -
                     {%if group.description%}{{group.description}}{%else%}No description{%endif%}
-                    </span>
+                    </strong>
                 </h3>
+            </div>
+            <div class="span2">
+                <a href="/groups/{{group.slug}}/admin" class="btn btn-info">
+                    <i class="icon-wrench icon-white"></i>
+                    Administrar grupo
+                </a>
             </div>
         </div>
     </header>
@@ -24,8 +30,8 @@
                 </header>
                 <div class="t-a-r button-group">
                     {%if current_member.is_admin%}
-                    <a href="/groups/{{ group.slug}}/admin" class="btn btn-small">
-                        <i class="icon-wrench"></i> Administrar miembros</a>
+                    <a href="/groups/{{ group.slug}}/admin#add-new-member" class="btn btn-small">
+                        <i class="icon-plus"></i> Agregar miembros</a>
                     {%endif%}
                 </div>
                 <hr style="margin-bottom:5px;">
