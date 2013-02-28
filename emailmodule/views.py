@@ -57,4 +57,4 @@ def sendEmailHtml(email_type,ctx, to):
     try:
         msg.send()
     except:
-        print "Error al enviar correo electronico con plantilla HTML."
+        print "Error al enviar correo electronico tipo: ",email_type," con plantilla HTML."
