@@ -826,6 +826,16 @@ h3 a:hover{text-decoration:underline;}
 .user-pend-t{border-top: solid 4px #EBD438 !important;}
 span.user-pend-l{padding-left: 2px;}
 
+i.icon-question-sign{background-image: url("/static/img/faq.png");background-position: 0 0;height: 19px; width: 17px;}
+
+
+
+
+
+
+
+
+
 
 .nav-list > .active > a, .nav-list > .active > a:hover{background-color:#00aeaa;}
 .btn-info{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
