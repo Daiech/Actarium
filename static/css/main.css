@@ -825,10 +825,16 @@ h3 a:hover{text-decoration:underline;}
 .user-pend-l{border-left: solid 4px #EBD438 !important;}
 .user-pend-t{border-top: solid 4px #EBD438 !important;}
 span.user-pend-l{padding-left: 2px;}
+.user-active-b{border-bottom: solid 4px #019DBF !important;}
+.user-active-r{border-right: solid 4px #019DBF !important;}
 
-i.icon-question-sign{background-image: url("/static/img/faq.png");background-position: 0 0;height: 19px; width: 17px;}
+i.icon-question-sign{background-image: url("/static/img/faq.png");background-position: 0 0;height:19px;width: 17px;}
+i.icon-wrench{background-image: url("/static/img/icon-admin.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
+i.icon-thumbs-up{background-image: url("/static/img/icon-approver.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
+i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
 
-
+.w42{width: 42px;margin: auto}
+.w48{width: 48px;margin: auto}
 
 
 
@@ -1066,23 +1072,29 @@ only screen and (min-resolution: 144dpi) {
         margin-right: 0;
         margin-left: 0;
     }
+    #body-container > article{margin-top: 0;}
+    .white-bar{width: 80%;}
+    h3{font-size: 16px;}
+    .container{width: 95%}
+    #actarium-logo{width: 60px}
+    #logo-actarium-p{margin-top: -9px;width: 35px;}
+    .logo-center{width: 38px;}
+    .navbar-element{width: 35px;height: 54px;box-shadow: none}
+    header div > #top-menu-style > li{width: 35px;}
+    .navbar-item{height: 51px;}
+    .navbar-item-logo{height: 48px;}
+    .top-text{display: none;}
+    .ico-top{top: 17px}
+    header.navbar{height: 48px;}
+    #social-buttons{display: block;}
+    #menu-login{margin-right: 0}
+    .btn{margin-top: 5px;}
+}
+
+@media (max-width: 380px) {
     .white-bar{
-        width: 80%;
+        width: 95%;
     }
-   h3{font-size: 16px;}
-   .container{width: 95%}
-   #actarium-logo{width: 150px}
-   #logo-actarium-p{margin-top: -9px;}
-   .navbar-element{width: 35px;height: 54px;box-shadow: none}
-   header div > #top-menu-style > li{width: 35px;}
-   .navbar-item{height: 51px;}
-   .navbar-item-logo{height: 48px;}
-   .top-text{display: none;}
-   .ico-top{top: 17px}
-   body > header {}
-   header.navbar{height: 48px;}
-   #social-buttons{display: block;}
-   #menu-login{margin-right: 0}
 }
     /*==================================================*/
     /*                  Cierra Responsive               */                    

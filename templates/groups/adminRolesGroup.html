@@ -2,8 +2,8 @@
 {% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
 {% block bodysettings %}
 {% load gravatartag %}
-<h3>Administraci&oacute;n de usuarios</h3>
-<p>Agrega usuarios y asigna roles</p>
+<h3>Roles de usuario</h3>
+<p>Agrega usuarios y asigna roles. Puedes cambiar roles cuando quieras.<br>Antes de crear un acta se pedir&aacute; confirmaci&oacute;n</p>
 <div class="mt20">
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
@@ -18,7 +18,7 @@
 					<th>
 						<div class="info-title" title="Personas encargadas de redactar actas">
 							<i class="icon-pencil"></i>
-							<span class="th-name">Secretario</span>
+							<span class="th-name">Redactor</span>
 						</div>
 					</th>
 					<th>
@@ -55,7 +55,7 @@
 					</td>
 					<td class="t-a-c">
 						<label for="secretary{{m.member.id_user.id}}">
-							<input id="secretary{{m.member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_secretary%}checked{%endif%}> 
+							<input id="secretary{{m.member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="{{m.member.id_user.id}}" {%if m.roles.is_secretary%}checked{%endif%}> 
 						</label>
 					</td>
 					<td class="t-a-c">
@@ -80,7 +80,7 @@
                 <span>Info:</span>
                 <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
                 <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
-                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Secretario</span>
+                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
                 <span class="user-pend-l"> Usuarios pendientes</span>
             </div>
 			<div class="mt20">
@@ -118,134 +118,42 @@
 {% endblock %}
 {%block settings_style%}
 <style type="text/css">
-	td label{
-		cursor: pointer;
-		margin: 0;
-		padding: 9px;
-	}
+	td label{cursor: pointer;margin: 0;padding: 9px;}
 	.th-delelte{width: 9%;}
 	.td-first{position: relative;}
-	div.info-title{
-		text-align: center;
-		font-size: 14px;
-		height: 17px;
-		margin: 0;
-		overflow: hidden;
-		padding: 0px;
-		width: 115px;
-	}
-	.username-info{
-		padding: 8px;
-		font-size: 13px;
-	}
+	div.info-title{text-align: center;font-size: 14px;
+		height: 18px;margin: 0;overflow: hidden;padding: 0px;width: 117px;}
+	.username-info{padding: 8px;font-size: 13px;}
 	.remove-invitation-container{margin-top: 7px;}
 	td input[type='checkbox']{margin-top: 0;}
-	#table-roles td{
-		padding: 0;
-	}
-	#table-roles td.t-a-c{
-		text-align: center;
-	}
-	.table{
-		margin-bottom: 0;
-	}
-	#t-a-cs{
-		text-align: center;
-	}
-	.form-horizontal label{
-		font-weight: bold;
-		/*margin-top: 10px;*/
-	}.list-member-item{
-        border: solid thin #eee;
-        border-bottom: solid thin #dadada;
-        border-radius: 3px;
-        padding: 8px;
-        margin: 2px 0;
-        position: relative;
-    }
-    .list-member-item:hover{
-        border: solid thin #dadada;
-    }
-    .list-member-item > div{
-        /*border: solid thin #dadada;*/
-        width: 80%;
-    }
-    .list-member-item > span{
-        cursor: pointer;
-        top: 0;
-        right: 5px;
-        position: absolute;
-    }
-    .span6{
-        border-right: solid thin #dadada;
-        padding: 0 20px;
-    }
-    ul#add-member-menu li{
-        margin-bottom: 10px;
-    }
-    .icon-remove{
-        margin: 5px;
-    }
-    ul#search-result{
-        margin-left: 0;
-    }
-    ul#search-result li span{
-        font-size: 13px;
-        margin-left: 13px;
-        color: gray;
-    }
-    .taling{
-        text-align: center;
-    }
-    .list-members span{
-        color: gray;
-    }
-    li a span{
-        /*color:black;*/
-    }
-    li p{
-        color:gray;
-        font-size: 12px;
-        line-height:  1;
-    }
-    article{
-        min-height: 500px;
-        overflow: visible;
-        padding-top: 1px;
-    }
-    #add-member{
-        position: static;
-    }
-    #newmember{
-        margin: 3px 10px;
-        padding: 10px;
-        width: 90%;
-    }
-    .dropdown#add-member-menu{
-        text-decoration: none;
-        margin: 5px 20px;
-
-    }
-    #add-member-menu{
-        /*width:280px;*/
-    }
-    .dropdownmenu  * li{
-        list-style:none;
-        text-decoration: none;
-    }
-    .btnSup{
-        margin-top: 8px;
-    }
-    div > section ul{
-        margin-left:0;
-    }
-    div > section ul li{
-        list-style: none;
-    }
-    .cancel-inv{
-        font-style: italic;
-        color: gray;
-    }
+	#table-roles td{padding: 0;}
+	#table-roles td.t-a-c{text-align: center;}
+	.table{margin-bottom: 0;}
+	.form-horizontal label{font-weight: bold;/*margin-top: 10px;*/}
+	.list-member-item{border: solid thin #eee;border-bottom: solid thin #dadada;border-radius: 3px;
+        padding: 8px;margin: 2px 0;position: relative; }
+    .list-member-item:hover{border: solid thin #dadada;}
+    .list-member-item > div{/*border: solid thin #dadada;*/width: 80%; }
+    .list-member-item > span{cursor: pointer;top: 0;right: 5px;position: absolute;}
+    .span6{border-right: solid thin #dadada;padding: 0 20px;}
+    ul#add-member-menu li{margin-bottom: 10px;}
+    .icon-remove{margin: 5px;}
+    ul#search-result{margin-left: 0;}
+    ul#search-result li span{font-size: 13px;margin-left: 13px;color: gray;}
+    .taling{text-align: center;}
+    .list-members span{color: gray;}
+    li a span{/*color:black;*/}
+    li p{color:gray;font-size: 12px;line-height:  1;}
+    article{min-height: 500px;overflow: visible;padding-top: 1px;}
+    #add-member{position: static;}
+    #newmember{margin: 3px 10px;padding: 10px;width: 90%;}
+    .dropdown#add-member-menu{text-decoration: none;margin: 5px 20px;}
+    #add-member-menu{/*width:280px;*/}
+    .dropdownmenu  * li{list-style:none;text-decoration: none;}
+    .btnSup{margin-top: 8px;}
+    div > section ul{margin-left:0; }
+    div > section ul li{list-style: none;}
+    .cancel-inv{font-style: italic;color: gray;}
 </style>
 {% endblock %}
 {% block settings_js %}
@@ -262,7 +170,7 @@
 	    	switch(op){
 	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
 	    		case 2 : return "Aprobador de actas"; break;
-	    		case 3 : return "Secretario (Puede redactar Actas)"; break;
+	    		case 3 : return "Redactor (Puede redactar Actas)"; break;
 	    	}
 	    }
 	    function callbackSetRole(data) {
@@ -373,7 +281,7 @@
 	                    '</div>'+
 					'</td>'+
 					'<td class="t-a-c"><label for="secretary'+data['iid']+'">'+
-					'<input  id="secretary'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Secretario" data-uid="'+data['iid']+'">'+
+					'<input  id="secretary'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="'+data['iid']+'">'+
 					'</label></td>'+
 					'<td class="t-a-c"><label for="aprover'+data['iid']+'">'+
 						'<input id="aprover'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="'+data['iid']+'">'+
