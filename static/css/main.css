@@ -825,8 +825,11 @@ h3 a:hover{text-decoration:underline;}
 .user-pend-l{border-left: solid 4px #EBD438 !important;}
 .user-pend-t{border-top: solid 4px #EBD438 !important;}
 span.user-pend-l{padding-left: 2px;}
-.user-active-b{border-bottom: solid 4px #019DBF !important;}
-.user-active-r{border-right: solid 4px #019DBF !important;}
+
+.user-active-t{border-top: solid 4px #7bc779 !important;}
+.user-active-r{border-right: solid 4px #7bc779 !important;}
+.user-active-l{border-left: solid 4px #7bc779 !important;}
+.user-active-b{border-bottom: solid 4px #7bc779 !important;}
 
 i.icon-question-sign{background-image: url("/static/img/faq.png");background-position: 0 0;height:19px;width: 17px;}
 i.icon-wrench{background-image: url("/static/img/icon-admin.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
