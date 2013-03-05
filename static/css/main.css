@@ -840,7 +840,9 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 .w48{width: 48px;margin: auto}
 
 
-
+.icons-page{margin-top: 17px;margin-right: 5px;}
+#message-box{margin: 10px auto;width: 70%}
+#more-info{min-height: 25px; margin: 10px auto;width: 70%;}
 
 
 
@@ -1063,6 +1065,7 @@ only screen and (min-resolution: 144dpi) {
     header div > #top-menu-style > li{width: 65px;margin: -2px;}
     header #navbar-button-container > ul li a{margin-top: -1px}
     #alert-message, #alert-error {width:70%;}
+    #message-box, #more-info{width: 85%;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -1092,6 +1095,7 @@ only screen and (min-resolution: 144dpi) {
     #social-buttons{display: block;}
     #menu-login{margin-right: 0}
     .btn{margin-top: 5px;}
+    #message-box, #more-info{width: 90%;}
 }
 
 @media (max-width: 380px) {

@@ -1,4 +1,5 @@
 # Create your views here.
+#encoding:utf-8
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
@@ -7,7 +8,7 @@ import re
 from django.utils.timezone import get_default_timezone, make_naive
 from groups.models import reunions, assistance, rel_user_group
 from django.utils import simplejson as json
-from website.models import feedBack, faq
+from website.models import *
 
 
 def home(request):
@@ -92,3 +93,23 @@ def help(request):
     except faq.DoesNotExist:
         faqs = None
     return render_to_response('website/help.html', {"faqs": faqs}, context_instance=RequestContext(request))
+
+
+def privacy_(request):
+    try:
+        p = privacy.objects.get(is_active=True)
+    except privacy.DoesNotExist:
+        p = None
+    title = u"Políticas de privacidad"
+    ctx = {"title": title, "content": p, "privacy": True, "terms": False}
+    return render_to_response('website/conditions_privacy.html', ctx, context_instance=RequestContext(request))
+
+
+def terms(request):
+    try:
+        t = conditions.objects.get(is_active=True)
+    except conditions.DoesNotExist:
+        t = None
+    title = u"Términos y condiciones"
+    ctx = {"title": title, "content": t, "privacy": False, "terms": True}
+    return render_to_response('website/conditions_privacy.html', ctx, context_instance=RequestContext(request))
