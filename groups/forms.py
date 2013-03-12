@@ -60,6 +60,6 @@ class newOrganizationForm(forms.Form):
     #     return user
 
 class uploadMinutesForm(forms.Form):
-    code = forms.CharField(label="Código de acta", widget=forms.TextInput(attrs={'placeholder': 'Código de acta', 'autofocus': 'autofocus'}))
-    minutesFile = forms.FileField(widget=forms.FileInput(attrs={'multiple':'multiple'}))
+    from groups.validators import validateExtention
+    minutesFile = forms.FileField(widget=forms.FileInput(attrs={'multiple':'multiple'}), validators=[validateExtention])
     

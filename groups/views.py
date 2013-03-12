@@ -1440,23 +1440,15 @@ def uploadMinutes(request, slug_group):
             if request.method == "POST":
                 form = uploadMinutesForm(request.POST,request.FILES)
                 if form.is_valid():
-#                    from somwhere import handle_uploaded_file
-#                    request.FILES['minutesFile'].name = form.cleaned_data['code']
-                    code_name =  form.cleaned_data['code']
-                    print ".........................."
                     for f in request.FILES.getlist('minutesFile'):
                         print f.name
                         minutes = last_minutes(
                             id_user = request.user,
                             id_group = group,
-                            code = code_name+f.name,
+                            code = f.name,
                             minutes_file = f
-                                               )
+                        )
                         minutes.save()
-                        print "________________________"
-                    print "------------------------------------"
-#                    print request.FILES
-#                    print request.FILES['minutesFile']
             else:
                 form = uploadMinutesForm()
     ctx={'uploadMinutesForm':form}

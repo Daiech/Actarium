@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 import datetime
 from django.utils.timezone import get_default_timezone, make_naive
+import os
 
 
 def validate_date(value):
@@ -18,3 +19,8 @@ def validateEmail(email):
             return False
     else:
         return False
+
+def validateExtention(value):
+    extentions_acepted = ['pdf','doc','docx']
+    if not (os.path.splitext(value.name)[1][1:].strip().lower() in extentions_acepted):
+        raise ValidationError(u'Formato de archivo no valido')

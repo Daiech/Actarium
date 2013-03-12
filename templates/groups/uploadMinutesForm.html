@@ -9,7 +9,7 @@
         <div class="row-fluid">
             <div class="span8">
                 <div class="menu-icons icons-page icon-reunions"></div>
-                <h3><a href="/groups/{{group.slug}}">{{group.name}}</a> - Crear nueva reuni&oacute;n</h3>
+                <h3><a href="/groups/{{group.slug}}">{{group.name}}</a> -Subir actas antiguas</h3>
             </div>
         </div>
     </header>
@@ -45,5 +45,6 @@
 {% block js %}
 <script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
 <script type="text/javascript" >
+    $("#groups").addClass("menu-active")
 </script>
 {% endblock %}
