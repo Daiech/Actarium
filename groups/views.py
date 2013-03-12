@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from groups.models import *
-from groups.forms import newGroupForm, newMinutesForm, newReunionForm
+from groups.forms import newGroupForm, newMinutesForm, newReunionForm, uploadMinutesForm
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
@@ -1432,3 +1432,25 @@ def removeGMT(datetime_var):
     dt = str(datetime_var)
     dt_s = dt[:19]
     return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
+
+def uploadMinutes(request, slug_group):
+    group = groups.objects.get(slug=slug_group, is_active=True)
+    is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
+    if is_member:
+        if getRelUserGroup(request.user, group).is_secretary:
+            if request.method == "POST":
+                form = uploadMinutesForm(request.POST,request.FILES)
+                if form.is_valid():
+                    for f in request.FILES.getlist('minutesFile'):
+                        print f.name
+                        minutes = last_minutes(
+                            id_user = request.user,
+                            id_group = group,
+                            code = f.name,
+                            minutes_file = f
+                        )
+                        minutes.save()
+            else:
+                form = uploadMinutesForm()
+    ctx={'uploadMinutesForm':form}
+    return render_to_response('groups/uploadMinutesForm.html', ctx, context_instance=RequestContext(request))

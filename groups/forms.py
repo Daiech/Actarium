@@ -59,3 +59,7 @@ class newOrganizationForm(forms.Form):
     #     user = super(newOrganizationForm, self).save()
     #     return user
 
+class uploadMinutesForm(forms.Form):
+    from groups.validators import validateExtention
+    minutesFile = forms.FileField(widget=forms.FileInput(attrs={'multiple':'multiple'}), validators=[validateExtention])
+    

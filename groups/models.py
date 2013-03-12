@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template import defaultfilters
+from Actarium import settings
 
 
 class group_type(models.Model):
@@ -242,3 +243,12 @@ class groups_pro(models.Model):
     id_organization = models.ForeignKey(organizations,  null=False, related_name='%(class)s_id_organization')
     id_billing = models.ForeignKey(billing,  null=False, related_name='%(class)s_id_billing')
     is_active = models.BooleanField(default=True)
+
+class last_minutes(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    code = models.CharField(max_length=350, verbose_name="name")
+    minutes_file = models.FileField(upload_to=settings.MEDIA_ROOT+"/lastMinutes",max_length = 400)
+    
+    def __unicode__(self):
+        return "Org: %s" % (self.name)
