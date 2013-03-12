@@ -59,3 +59,7 @@ class newOrganizationForm(forms.Form):
     #     user = super(newOrganizationForm, self).save()
     #     return user
 
+class uploadMinutesForm(forms.Form):
+    code = forms.CharField(label="Código de acta", widget=forms.TextInput(attrs={'placeholder': 'Código de acta', 'autofocus': 'autofocus'}))
+    minutesFile = forms.FileField(widget=forms.FileInput(attrs={'multiple':'multiple'}))
+    

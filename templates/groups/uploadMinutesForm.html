@@ -1,0 +1,49 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Subir Actas{% endblock %}
+
+
+
+{%block body%}
+<article>
+    <header >
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="menu-icons icons-page icon-reunions"></div>
+                <h3><a href="/groups/{{group.slug}}">{{group.name}}</a> - Crear nueva reuni&oacute;n</h3>
+            </div>
+        </div>
+    </header>
+    <hr/>
+    <div class="row-fluid">
+        <p>LLena el siguiente formulario para subir un acta en el grupo <strong>{{group.name}}</strong></p>
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <table>{{ uploadMinutesForm }} 
+
+                <tr><td></td><td><button type="submit" class="btn btn-info btn-large">Subir actas</button>
+                        </td></tr>
+            </table>
+
+
+        </form>
+    </div>
+</article>
+{%endblock%}
+{%block style%}
+<style>
+    .form-horizontal table{
+        margin: auto;
+        width: auto;
+    }
+
+    table td .btn{
+        margin-top:10px;
+    }
+</style>
+{%endblock%}
+
+{% block js %}
+<script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
+<script type="text/javascript" >
+</script>
+{% endblock %}
