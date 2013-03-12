@@ -18,7 +18,7 @@ from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
 #from actions_log.views import saveActionLog
-from Actarium.settings import MEDIA_ROOT
+from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR
 
 #def settings(request):
 #    ctx = {'TITLE': "Actarium by Daiech"}
@@ -89,10 +89,9 @@ def newOrganization(request):
                 url_file = None
             if url_file:
                 from django.template import defaultfilters
-                url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id))
+                url = save_file(url_file, ORGS_IMG_DIR + defaultfilters.slugify(org.name) + "-" + str(org.id))
                 org.logo_address = url
                 org.save()
-            print "req_ %s - ref_ %s" % (request.POST['ref'], ref_get)
             try:
                 ref = request.POST['ref'] + "?org=" + str(org.id)
             except Exception:
