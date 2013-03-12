@@ -79,8 +79,9 @@ def setRole(request, slug_group):
         if request.method == 'GET':
             try:
                 g = groups.objects.get(slug=slug_group, is_active=True)
-                is_admin = rel_user_group.objects.filter(id_group=g, id_user=request.user, is_admin=True, is_active=True)
-                if is_admin:
+                _user_rel = getRelUserGroup(request.user, g)
+
+                if _user_rel.is_admin or _user_rel.is_secretary:
                     role = int(request.GET['role'])
                     remove = bool(int(request.GET['remove']))
                     _user = get_user_or_email(request.GET['uid'])
@@ -88,9 +89,10 @@ def setRole(request, slug_group):
                     if u:
                         rel = getRelUserGroup(u, g)
                     if rel:
-                        if role == 1 and u and not remove:
-                            rel.is_admin = True
-                            role_name = "Administrador"
+                        if _user_rel.is_admin:
+                            if role == 1 and u and not remove:
+                                rel.is_admin = True
+                                role_name = "Administrador"
                         if role == 2 and u and not remove:
                             rel.is_approver = True
                             role_name = "Aprobador"
@@ -151,26 +153,16 @@ def groupSettings(request, slug_group):
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
         raise Http404
-    is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
-    try:
-        is_member = rel_user_group.objects.get(id_group=g.id, id_user=request.user, is_member=True, is_active=True)
-    except Exception:
-        is_member = False
-    if is_admin:
-        members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
-        _members = list()
-        for m in members:
-            _members.append({
-                "member": m,
-                "roles": {
-                        "is_admin": m.is_admin,
-                        "is_superadmin": m.is_superadmin,
-                        "is_approver": m.is_approver,
-                        "is_secretary": m.is_secretary
-                        }
-            })
-        ctx = {"group": g, "is_admin": is_admin, "is_member": is_member, "members": _members, "user_selected": u_selected}
-        return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
+
+    _user_rel = getRelUserGroup(request.user, g.id)
+    print "user rel:", _user_rel
+    if _user_rel.is_active:
+        if _user_rel.is_admin or _user_rel.is_secretary:
+            members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
+            ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
+            return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect('/groups/' + str(g.slug))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
 
@@ -184,8 +176,10 @@ def groupInfoSettings(request, slug_group):
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
         raise Http404
-    is_admin = rel_user_group.objects.filter(id_group=g.id, id_user=request.user, is_admin=True, is_active=True)
-    if is_admin:
+    _user_rel = getRelUserGroup(request.user, g)
+    if _user_rel.is_secretary:
+        return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
+    if _user_rel.is_admin and _user_rel.is_active:
         message = False
         if request.method == "POST":
             form = newGroupForm(request.POST)
@@ -197,7 +191,7 @@ def groupInfoSettings(request, slug_group):
             else:
                 message = "Hubo un error en los datos del grupo. Intenta de nuevo."
         form = newGroupForm(initial={"name": g.name, "description": g.description})
-        ctx = {"group": g, "is_admin": is_admin, "form": form, "message": message}
+        ctx = {"group": g, "is_admin": _user_rel.is_admin, "form": form, "message": message}
         return render_to_response('groups/adminInfoGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
@@ -533,16 +527,20 @@ def newInvitationToGroup(request):
         if request.method == 'GET':
             try:
                 g = groups.objects.get(pk=request.GET['pk'])
-                if not getRelUserGroup(request.user, g).is_admin:
+                _user_rel = getRelUserGroup(request.user, g)
+                print "Secretario", _user_rel.is_secretary
+                print "admin", _user_rel.is_admin
+                if not (_user_rel.is_admin or _user_rel.is_secretary):
                     return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
             except groups.DoesNotExist:
                 g = False
-                return HttpResponse(g)
+                return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo. Si el error persiste, comun&iacute;cate con el administrador de Actarium en <a href='mailto:soporte@daiech.com'>soporte@daiech.com</a>"}), mimetype="application/json")
             except Exception, e:
                 print "Exception newInvitationToGroup: " % e
                 g = False
-                return HttpResponse(g)
-            if getRelUserGroup(request.user, g).is_admin:
+                return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo."}), mimetype="application/json")
+            if _user_rel.is_admin or _user_rel.is_secretary:
+                print "se esta agregando"
                 email = str(request.GET['mail'])
                 if isMemberOfGroupByEmail(email, g):
                     invited = False
@@ -578,6 +576,7 @@ def newInvitationToGroup(request):
                                 message = "Error desconocido. Lo sentimos"
                 response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
             else:
+                print "no se agregó:", _user_rel
                 response = {"error": "No tienes permiso para hacer eso"}
         else:
             response = "Error invitacion, no puedes entrar desde aqui"
@@ -987,12 +986,14 @@ def newMinutes(request, slug_group, id_reunion):
     '''
     This function creates a minutes with the form for this.
     '''
+
     reunion = None
     hM = True
     group = groups.objects.get(slug=slug_group, is_active=True)
-    is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
-    if is_member:
-        if getRelUserGroup(request.user, group).is_secretary:
+    # go to the admin site to set the roles for this minutes
+    _user_rel = getRelUserGroup(request.user, group.id)
+    if _user_rel.is_member:
+        if _user_rel.is_secretary or _user_rel.is_admin:
             if request.method == "POST":
                 form = newMinutesForm(request.POST)
                 select = request.POST.getlist('members[]')
@@ -1021,12 +1022,12 @@ def newMinutes(request, slug_group, id_reunion):
                         link = URL_BASE + url_new_minute
                         email_list = getEmailListByGroup(group)
                         email_ctx = {
-                                     'firstname': request.user.first_name,
-                                     'username': request.user.username,
-                                     'groupname': group.name,
-                                     'link': link,
-                                     'urlgravatar': showgravatar(request.user.email, 50)
-                                     }
+                                    'firstname': request.user.first_name,
+                                    'username': request.user.username,
+                                    'groupname': group.name,
+                                    'link': link,
+                                    'urlgravatar': showgravatar(request.user.email, 50)
+                                    }
                         sendEmailHtml(3, email_ctx, email_list)
                         return HttpResponseRedirect(url_new_minute)
                     else:

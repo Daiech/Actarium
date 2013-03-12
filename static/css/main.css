@@ -846,6 +846,11 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 
 
 
+.btn-groups-admin{display: block;margin: 0 auto;width: 58%;}
+
+
+
+
 
 
 .nav-list > .active > a, .nav-list > .active > a:hover{background-color:#00aeaa;}
@@ -988,6 +993,7 @@ only screen and (min-resolution: 144dpi) {
         width: 30%;
     }
     .logo-center{right: 20px}
+    .btn-groups-admin{width: 470px;}
 }
 @media (min-width: 980px) and (max-width: 1280px) {
     #form-new-group{
@@ -1009,6 +1015,7 @@ only screen and (min-resolution: 144dpi) {
         width: 27%;
     }
     .logo-center{right: 20px}
+    .btn-groups-admin{width: 70%;}
 }
 
 /* Portrait tablet to landscape and desktop */
@@ -1038,6 +1045,7 @@ only screen and (min-resolution: 144dpi) {
     #table-roles th div{width: auto;}
     .th-name{display: none;width: auto;}
     .td-first{width: 68%;}
+    .btn-groups-admin{width: 90%;}
 }
 
 
@@ -1066,6 +1074,7 @@ only screen and (min-resolution: 144dpi) {
     header #navbar-button-container > ul li a{margin-top: -1px}
     #alert-message, #alert-error {width:70%;}
     #message-box, #more-info{width: 85%;}
+    .btn-groups-admin{width: 95%;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {

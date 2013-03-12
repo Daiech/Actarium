@@ -21,11 +21,13 @@
                             <i class="icon-chevron-right"></i>Usuarios y roles
                         </a>
                     </li>
+                    {% if is_admin %}
                     <li id="admin-info">
                         <a href="/groups/{{group.slug}}/admin/info">
                             <i class="icon-chevron-right"></i>Editar informaci&oacute;n
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
