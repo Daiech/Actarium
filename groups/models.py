@@ -252,3 +252,19 @@ class last_minutes(models.Model):
     
     def __unicode__(self):
         return "Org: %s" % (self.name)
+
+
+class rol_user_minutes(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_minutes = models.ForeignKey(minutes, blank=True, null=True, default=None, related_name='%(class)s_id_minutes')
+    is_president = models.BooleanField(default=False)
+    is_secretary = models.BooleanField(default=False)
+    is_approver = models.BooleanField(default=False)
+    is_assistant = models.BooleanField(default=False)
+    is_signer = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "user: %s is_active: %s" % (self.id_user, self.is_active)

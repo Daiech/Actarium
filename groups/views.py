@@ -65,6 +65,85 @@ def groupsList(request):
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url='/account/login')
+def setRolForMinute(request, slug_group):
+    """
+        Set or remove role to a user
+        Roles id:
+            1 = Signer
+            2 = Approver
+            3 = Assistance
+            4 = President
+            5 = Secretary
+    """
+    r1, r2, r3, r4, r5 = "Firmador", "Aprobador", "Asistente", "Presidente", "Secretario"
+    error = None
+    saved = True
+    role_name = ""
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = getGroupBySlug(slug=slug_group)
+                _user_rel = getRelUserGroup(request.user, g)
+
+                if _user_rel.is_secretary:
+                    role = int(request.GET['role'])
+                    remove = bool(int(request.GET['remove']))
+                    _user = get_user_or_email(request.GET['uid'])
+                    u = _user['user']
+                    if u:
+                        rel = getRolUserMinutes(u, g)
+                    if not rel:
+                        rel = setRolUserMinutes(u, g)
+                        if rel:
+                            rel = getRolUserMinutes(u, g)
+                        else:
+                            rel = False
+                    if rel:
+                        if role == 1 and u and not remove:
+                            rel.is_signer = True
+                            role_name = r1
+                        if role == 2 and u and not remove:
+                            rel.is_approver = True
+                            role_name = r2
+                        if role == 3 and u and not remove:
+                            rel.is_assistant = True
+                            role_name = r3
+                        if role == 4 and u and not remove:
+                            rel.is_president = True
+                            role_name = r4
+                        if role == 5 and u and not remove:
+                            rel.is_secretary = True
+                            role_name = r5
+                        if role == 1 and u and remove:
+                            rel.is_signer = False
+                        if role == 2 and u and remove:
+                            rel.is_approver = False
+                        if role == 3 and u and remove:
+                            rel.is_assistant = False
+                        if role == 4 and u and remove:
+                            rel.is_president = False
+                        if role == 5 and u and remove:
+                            rel.is_secretary = False
+                        rel.save()
+                        saved = True
+                        # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
+                else:
+                    error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
+            except groups.DoesNotExist:
+                error = "Este grupo no existe"
+            except rol_user_minutes.DoesNotExist:
+                error = "Error! no existe el usuario para esta acta"
+            except Exception, e:
+                print e
+                error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
+            if error:
+                return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
+            response = {"saved": saved, "u": u.first_name, "role": role_name}
+            return HttpResponse(json.dumps(response), mimetype="application/json")
+    return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
+
+
 def setRole(request, slug_group):
     """
         Set or remove role to a user
@@ -149,13 +228,8 @@ def groupSettings(request, slug_group):
             u_selected = User.objects.get(username=u).id
     except Exception:
         u_selected = None
-    try:
-        g = groups.objects.get(slug=slug_group, is_active=True)
-    except groups.DoesNotExist:
-        raise Http404
-
+    g = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, g.id)
-    print "user rel:", _user_rel
     if _user_rel.is_active:
         if _user_rel.is_admin or _user_rel.is_secretary:
             members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
@@ -617,6 +691,44 @@ def setRelUserGroup(id_user, id_group,
         return False
 
 
+def getRolUserMinutes(_user, id_group, id_minutes=None):
+    try:
+        return rol_user_minutes.objects.get(id_user=_user, id_group=id_group, id_minutes=id_minutes)
+    except rol_user_minutes.DoesNotExist:
+        return False
+    except Exception:
+        print "getRolUserMinutes Error"
+        return False
+
+
+def setRolUserMinutes(id_user, id_group,
+    id_minutes=None,
+    is_president=False,
+    is_approver=False,
+    is_secretary=False,
+    is_assistant=False,
+    is_signer=False,
+    is_active=False):
+    try:
+        rel = rol_user_minutes(
+            id_user=id_user,
+            id_group=id_group,
+            id_minutes=id_minutes,
+            is_president=is_president,
+            is_approver=is_approver,
+            is_secretary=is_secretary,
+            is_assistant=is_assistant,
+            is_signer=is_signer,
+            is_active=is_active)
+        rel.save()
+        # saveAction new Rol user minutes
+        return True
+    except Exception, e:
+        print "erroooor:", e
+        # error log
+        return False
+
+
 @login_required(login_url='/account/login')
 def acceptInvitation(request):
     """
@@ -758,7 +870,7 @@ def getPrevNextOfGroup(group, minutes_id):
 
 def getGroupBySlug(slug):
     try:
-        group = groups.objects.get(slug=slug)
+        group = groups.objects.get(slug=slug, is_active=True)
     except groups.DoesNotExist:
         group = False
         raise Http404
@@ -929,7 +1041,7 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
         try:
             minu = minutes.objects.get(id_group=group, code=form.cleaned_data['code'])
         except minutes.DoesNotExist, e:
-            print e
+            print "Save minutes error:", e
             minu = None
         if minu == None:
             myNewMinutes_type_1 = minutes_type_1(
@@ -982,18 +1094,37 @@ def getEmailListByGroup(group):
 
 
 @login_required(login_url='/account/login')
+def rolesForMinutes(request, slug_group):
+    '''
+    return the board to give roles for a new minutes
+    '''
+    g = getGroupBySlug(slug_group)
+    _user_rel = getRelUserGroup(request.user, g.id)
+    if _user_rel.is_secretary and _user_rel.is_active:
+        members = rel_user_group.objects.filter(id_group=g, is_member=True).order_by("-is_active")
+        _members = list()
+        for m in members:
+            try:
+                rel = rol_user_minutes.objects.get(id_group=g, id_user=m.id_user, id_minutes=None, is_active=False)
+            except rol_user_minutes.DoesNotExist:
+                rel = None
+            _members.append({"member": m, "rol": rel})
+
+        # members = rol_user_minutes.objects.filter(id_group=g, id_minutes=None, is_active=False)
+        ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary, "members": _members}
+        return render_to_response('groups/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")
+
+
+@login_required(login_url='/account/login')
 def newMinutes(request, slug_group, id_reunion):
     '''
     This function creates a minutes with the form for this.
     '''
-
     reunion = None
     hM = True
-    try:
-        group = groups.objects.get(slug=slug_group, is_active=True)
-    except Exception, e:
-        raise Http404
-
+    group = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_member:
         if _user_rel.is_secretary or _user_rel.is_admin:

@@ -3,7 +3,7 @@
 {% block bodysettings %}
 {% load gravatartag %}
 <h3>Roles de usuario</h3>
-<!-- <p>Agrega usuarios y asigna roles. Puedes cambiar roles cuando quieras.<br>Antes de crear un acta se pedir&aacute; confirmaci&oacute;n</p> -->
+<p>Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles.</p>
 <div class="mt20">
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
@@ -22,13 +22,6 @@
 						</div>
 					</th>
 					<th>
-						<div class="info-title" title="Personas encargadas de aprobar actas">
-							<i class="icon-thumbs-up"></i> 
-							<span class="th-name">Aprobador</span>
-						</div>
-					</th>
-					{% if is_admin %}
-					<th>
 						<div class="info-title" title="Personas encargadas de administrar el grupo">
 							<i class="icon-wrench"></i> 
 							<span class="th-name">Administrador</span>
@@ -39,7 +32,6 @@
 							<span class="th-name">Eliminar</span>
 						</div>
 					</th>
-					{%endif%}
 				</tr>
 				{%for m in members%}
 				<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
@@ -61,12 +53,6 @@
 						</label>
 					</td>
 					<td class="t-a-c">
-						<label for="aprover{{m.id_user.id}}">
-							<input id="aprover{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.id_user.id}}" {%if m.is_approver%}checked{%endif%}>
-						</label>
-					</td>
-					{% if is_admin %}
-					<td class="t-a-c">
 						<label for="admin{{m.id_user.id}}">
 							<input id="admin{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 						</label>
@@ -76,7 +62,6 @@
 							<a href="#" data-invitation="{{m.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 						</div>
 					</td>
-					{%endif%}
 				</tr>
                 {%endfor%}
 			</table>
@@ -92,15 +77,10 @@
 					<a href="{%if is_admin and not is_member%}#{%else%}/groups/{{group.slug}}{%endif%}" class="btn {%if is_admin and not is_member%}disabled{%endif%}">
 	                	<i class="icon-arrow-left"></i> Volver al grupo
 	                </a>
-	                <div class="btn dropdown-toggle" data-toggle="dropdown"  id="add-member">
-	                    <i class="icon-plus"></i> Agregar miembro
+	                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
+	                    <i class="icon-plus icon-white"></i> Agregar miembro
 	                    <span class="caret"></span>
 	                </div>
-	                {% if is_secretary or is_admin%}
-					<a href="/groups/{{group.slug}}/create-minutes" class="btn btn-info btn-new-minutes">
-						Crear Acta
-					</a>
-					{% endif%}
 	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 	                    <li class="taling">
 	                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
@@ -131,9 +111,8 @@
 	.btn-new-minutes{padding-left: 40px;padding-right: 40px;}
 	td label{cursor: pointer;margin: 0;padding: 9px;}
 	.th-delelte{width: 9%;}
-	.td-first{position: relative;}
 	div.info-title{text-align: center;font-size: 14px;
-		height: 18px;margin: 0;overflow: hidden;padding: 0px;width: 117px;}
+		height: 18px;margin: 0;overflow: hidden;padding: 0px;}
 	.username-info{padding: 8px;font-size: 13px;}
 	.remove-invitation-container{margin-top: 7px;}
 	td input[type='checkbox']{margin-top: 0;}
@@ -146,6 +125,8 @@
     .list-member-item:hover{border: solid thin #dadada;}
     .list-member-item > div{/*border: solid thin #dadada;*/width: 80%; }
     .list-member-item > span{cursor: pointer;top: 0;right: 5px;position: absolute;}
+	.td-first{position: relative;}
+	.td-first > div{text-align: left;}
     .span6{border-right: solid thin #dadada;padding: 0 20px;}
     ul#add-member-menu li{margin-bottom: 10px;}
     .icon-remove{margin: 5px;}
@@ -286,8 +267,7 @@
 	        if(data['invited']){    //USUARIO INVITADO
 	        	console.log(data)
 	        	var is_admin = "{{is_admin}}"
-	            var tr =
-	            	'<tr><td>'+
+	            var tr = '<tr><td>'+
 						'<div class="username-info user-pend-r">'+
 	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
 	                    '</div>'+
@@ -295,20 +275,12 @@
 					'<td class="t-a-c"><label for="secretary'+data['iid']+'">'+
 					'<input  id="secretary'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="'+data['iid']+'">'+
 					'</label></td>'+
-					'<td class="t-a-c"><label for="aprover'+data['iid']+'">'+
-						'<input id="aprover'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="'+data['iid']+'">'+
-					'</label></td>';
-	            if(is_admin==="True"){
-					tr = tr +
-						'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
-							'<input id="admin'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
-						'</label></td>'+
-						'<td class="t-a-c">'+
-							'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
-						'</td></tr>';
-				}else{
-					tr = tr +'</tr>';
-				}
+					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
+						'<input id="admin'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
+					'</label></td>'+
+					'<td class="t-a-c">'+
+						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
+					'</td></tr>';
 				$("#table-roles").append(tr);
 				setAlertMessage("Invitado",data['message'])
 	            showIconCloseOnHover()

@@ -1,0 +1,184 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
+{% block body %}
+{% load gravatartag %}
+
+<article class="message-box white-box-container">
+	<h3>Crear nueva Acta</h3>
+	<p><strong>Roles de usuario:</strong> Debes llenar la asistencia y definir roles antes de crear el acta</p>
+	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
+		{% csrf_token %}
+		<section class="">
+			<table id="table-roles" class="table table-bordered table-hover">
+				<tr>
+					<th class="td-first">
+						<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+							Usuarios del grupo
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="Personas que asistieron a la reuni&oacute;n">
+							<i class="icon-pencil"></i>
+							<span class="th-name">Asistentes</span>
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="Personas encargadas de aprobar actas">
+							<i class="icon-thumbs-up"></i> 
+							<span class="th-name">Aprobador</span>
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="Personas encargadas de firmar las actas">
+							<i class="icon-wrench"></i> 
+							<span class="th-name">Firmador</span>
+						</div>
+					</th>
+				</tr>
+				{%for m in members%}
+				<tr {%if m.member.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
+					<td class="td-first">
+						<div class="username-info {%if not m.member.is_active%}user-pend-r{%endif%}"
+						{%if not m.member.is_active%}title="{{m.member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
+	                        <img style="width:20px" src="{{m.member.id_user.email|showgravatar:'20'}}" alt="{{m.member.id_user}}">
+	                        {{m.member.id_user.first_name}} {{m.member.id_user.last_name}}
+	                        {%if m.member.id_user == user%}
+	                        (yo)
+	                        {%else%}
+	                        ({{m.member.id_user}})
+	                        {%endif%}
+	                    </div>
+					</td>
+					<td class="t-a-c">
+						<label for="assistant{{m.member.id_user.id}}">
+							<input id="assistant{{m.member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_assistant%}checked{%endif%}>
+						</label>
+					</td>
+					<td class="t-a-c">
+						<label for="aprover{{m.member.id_user.id}}">
+							<input id="aprover{{m.member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_approver%}checked{%endif%}>
+						</label>
+					</td>
+					<td class="t-a-c">
+						<label for="signer{{m.member.id_user.id}}">
+							<input id="signer{{m.member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.member.id_user.id}}" {%if m.member.is_signer%}checked{%endif%}>
+						</label>
+					</td>
+				</tr>
+                {%endfor%}
+			</table>
+			<div id="add-new-member" class="mt20 icons-info pull-left">
+                <span>Info:</span>
+                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Firmador</span>
+                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Asistente</span>
+                <span class="user-pend-l"> Usuarios pendientes</span>
+            </div>
+			<div class="mt20 pull-right">
+				<a href="/groups/{{group.slug}}" class="btn">
+                	<i class="icon-arrow-left"></i> Volver al grupo
+                </a>
+                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{%endif%}" class="btn btn-info">
+                    Siguiente <i class="icon-arrow-right icon-white"></i>
+                </a>
+			</div>
+		</section>
+	</form>
+</article>
+{% endblock %}
+{%block style%}
+<style type="text/css">
+	.message-box{width: 70%}
+	.btn-new-minutes{padding-left: 40px;padding-right: 40px;}
+	td label{cursor: pointer;margin: 0;padding: 9px;}
+	.th-delelte{width: 9%;}
+	.td-first{position: relative;}
+	div.info-title{text-align: center;font-size: 14px;
+		height: 18px;margin: 0;overflow: hidden;padding: 0px;width: 117px;}
+	.username-info{padding: 8px;font-size: 13px;}
+	.remove-invitation-container{margin-top: 7px;}
+	td input[type='checkbox']{margin-top: 0;}
+	#table-roles td{padding: 0;}
+	#table-roles td.t-a-c{text-align: center;}
+	.table{margin-bottom: 0;}
+	.form-horizontal label{font-weight: bold;/*margin-top: 10px;*/}
+	.list-member-item{border: solid thin #eee;border-bottom: solid thin #dadada;border-radius: 3px;
+        padding: 8px;margin: 2px 0;position: relative; }
+    .list-member-item:hover{border: solid thin #dadada;}
+    .list-member-item > div{/*border: solid thin #dadada;*/width: 80%; }
+    .list-member-item > span{cursor: pointer;top: 0;right: 5px;position: absolute;}
+    .span6{border-right: solid thin #dadada;padding: 0 20px;}
+    ul#add-member-menu li{margin-bottom: 10px;}
+    .icon-remove{margin: 5px;}
+    ul#search-result{margin-left: 0;}
+    ul#search-result li span{font-size: 13px;margin-left: 13px;color: gray;}
+    .taling{text-align: center;}
+    .list-members span{color: gray;}
+    li a span{/*color:black;*/}
+    li p{color:gray;font-size: 12px;line-height:  1;}
+    /*article{padding-top: 1px;}*/
+    #add-member{position: static;}
+    #newmember{margin: 3px 10px;padding: 10px;width: 90%;}
+    .dropdown#add-member-menu{text-decoration: none;margin: 5px 20px;}
+    #add-member-menu{/*width:280px;*/}
+    .dropdownmenu  * li{list-style:none;text-decoration: none;}
+    .btnSup{margin-top: 8px;}
+    div > section ul{margin-left:0; }
+    div > section ul li{list-style: none;}
+    .cancel-inv{font-style: italic;color: gray;}
+</style>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" ><!--
+	$(document).ready(function() {
+		$(".icons-info span, .username-info, .info-title").tooltip();
+		{% if user_selected%}
+		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
+		{%endif%}
+	    function getRoleName (op) {
+	    	switch(op){
+	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
+	    		case 2 : return "Aprobador de actas"; break;
+	    		case 3 : return "Redactor (Puede redactar Actas)"; break;
+	    	}
+	    }
+	    function callbackSetRole(data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+	    }
+	    function callbackRemoveRole(data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+	    }
+	    function setRole(e) {
+	    	var checkbox = $(this);
+	    	var role = checkbox.attr("data-role")
+	    	var role_name = checkbox.attr("data-role-name")
+	    	var uid = checkbox.attr("data-uid")
+	    	console.log(checkbox.is(":checked"))
+	    	if(checkbox.is(":checked")){
+	    		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+	    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
+	    	}
+	    	else{
+	    		if(confirm("Seguro que desea eliminarle este rol?")){
+	    			sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+	    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
+	    		}
+	    		else{
+	    			checkbox.attr("checked","checked")
+	    		}
+	    	}
+	    }
+	    $("td input[type='checkbox']").on("click", setRole);//roles MAIN
+	});
+</script>
+{% endblock %}
