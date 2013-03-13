@@ -1487,19 +1487,6 @@ def uploadMinutes(request, slug_group):
                 last_minutes_list.append({'i':i,'lm':last_minutes.objects.get(pk=m.id_extra_minutes).name_file,'lm_id':last_minutes.objects.get(pk=m.id_extra_minutes).pk})
                 i = i+1
             _minutes = minutes.objects.filter(id_group = group, is_valid= True).order_by('-code')
-#            minutes_list = []
-#            minutes_list_temp = []
-#            j=0;
-#            for m in _minutes:
-#                minutes_list_temp.append(m)
-#                if j < 2:
-#                    j = j+1             
-#                else:
-#                    minutes_list.append(minutes_list_temp)
-#                    minutes_list_temp = []
-#                    j=0
-#            if j <= 2:
-#                minutes_list.append(minutes_list_temp)
             ctx={'uploadMinutesForm':form, 'group':group, 'last_minutes':last_minutes_list, 'datasize': len(last_minutes_list), 'datos_validos':datos_validos, 'minutes': _minutes}
             return render_to_response('groups/uploadMinutesForm.html', ctx, context_instance=RequestContext(request))
         else:
@@ -1509,31 +1496,31 @@ def uploadMinutes(request, slug_group):
 
 @login_required(login_url='/account/login')
 def uploadMinutesAjax(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        last_minutes_get = request.GET['last_minutes']
-        a = json.loads(last_minutes_get)
-        group_id= a['group_id']
-        group = groups.objects.get(pk=group_id)
-        print "gurpo -------------------------------------------", group_id
-        a = a['values']
-        valid = True
-        for m in a:
-            if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
-                print a[m]['name'],a[m]['code'],a[m]['lmid']
-                lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_type = minutes_type.objects.get(pk=2))
-                lm_temp.code = a[m]['code']
-                lm_temp.is_valid = True
-                lm_temp.save()
+    if request.is_ajax():
+        if request.method == 'GET':
+            last_minutes_get = request.GET['last_minutes']
+            a = json.loads(last_minutes_get)
+            group_id= a['group_id']
+            group = groups.objects.get(pk=group_id)
+            print "gurpo -------------------------------------------", group_id
+            a = a['values']
+            valid = True
+            for m in a:
+                if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
+                    print a[m]['name'],a[m]['code'],a[m]['lmid']
+                    lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_type = minutes_type.objects.get(pk=2))
+                    lm_temp.code = a[m]['code']
+                    lm_temp.is_valid = True
+                    lm_temp.save()
+                else:
+                    valid = False
+                print "existe el codigo?", getMinutesByCode(group, a[m]['code'])
+            if valid:
+                response = {'data':"validos"}
             else:
-                valid = False
-            print "existe el codigo?", getMinutesByCode(group, a[m]['code'])
-        if valid:
-            response = {'data':"validos"}
+                response = {'data':"no_validos"}
         else:
-            response = {'data':"no_validos"}
+            response = {'data':"No es GET"}
     else:
-        response = {'data':"No es GET"}
-#    else:
-#        response = {'data':"No es AJAX"}
+        response = {'data':"No es AJAX"}
     return HttpResponse(json.dumps(response), mimetype="application/json")
