@@ -244,10 +244,27 @@ class groups_pro(models.Model):
     id_billing = models.ForeignKey(billing,  null=False, related_name='%(class)s_id_billing')
     is_active = models.BooleanField(default=True)
 
+
 class last_minutes(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    address_file = models.FileField(upload_to=settings.MEDIA_ROOT+"/lastMinutes",max_length = 400)
+    address_file = models.FileField(upload_to=settings.MEDIA_ROOT + "/lastMinutes", max_length=400)
     name_file = models.CharField(max_length=350, verbose_name="name_file")
-    
+
     def __unicode__(self):
         return "Minutes: %s" % (self.name_file)
+
+
+class rol_user_minutes(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_minutes = models.ForeignKey(minutes, blank=True, null=True, default=None, related_name='%(class)s_id_minutes')
+    is_president = models.BooleanField(default=False)
+    is_secretary = models.BooleanField(default=False)
+    is_approver = models.BooleanField(default=False)
+    is_assistant = models.BooleanField(default=False)
+    is_signer = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "user: %s is_active: %s" % (self.id_user, self.is_active)
