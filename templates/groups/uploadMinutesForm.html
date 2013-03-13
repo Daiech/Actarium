@@ -15,17 +15,66 @@
     </header>
     <hr/>
     <div class="row-fluid">
-        <p>LLena el siguiente formulario para subir un acta en el grupo <strong>{{group.name}}</strong></p>
-        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
-            {% csrf_token %}
-            <table>{{ uploadMinutesForm }} 
-
-                <tr><td></td><td><button type="submit" class="btn btn-info btn-large">Subir actas</button>
-                        </td></tr>
-            </table>
-
-
-        </form>
+    	<div class="span6">
+	    	<section  class="white-box-container">
+	    		<h3>Formulario para subir actas antiguas</h3>
+		        <p>LLena el siguiente formulario para subir un acta en el grupo <strong>{{group.name}}</strong></p>
+		        <p>Seran aceptados los archivos con las siguientes extenciones:  <strong>(.doc, .pdf, .docx)</strong>, los archivos con extensiones diferentes seran ignorados.</p>
+		        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+		            {% csrf_token %}
+		            <table>{{ uploadMinutesForm }} 
+		
+		                <tr><td></td><td><button type="submit" class="btn btn-info btn-large">Subir actas</button>
+		                        </td></tr>
+		            </table>
+		        </form>
+		     </section>
+		     <section class="white-box-container">
+		     	<h3> Actas guardadas en el grupo {{group.name}} </h3>
+		     	<ul class="unstyled minutes-list">
+		     	{% for m in minutes %}
+		     			<li class="list-item" style="margin-left:10px">
+		                    <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{m.code}}">
+		                    	{{m.code}}
+		                    	<span class="date-minute-created" style="float:right" >Creada el {{ m.date_created|date:"d F Y"}} </span>
+		                    </a>
+		                    
+		                </li>			 
+		     	{% endfor %}
+		     	</ul>
+		     </section>
+	     </div>
+	     <section class="white-box-container span6">
+	     	<h3>Actas sin c&oacute;digo</h3>
+	     	{% if datos_validos == '0' %}
+	     		<div class="alert alert-block">
+				  <button type="button" class="close" data-dismiss="alert">&times;</button>
+				  <h4>Revisa los nombres de los codigos</h4>
+				  Algunas actas no pudieron ser guardadas, esto puede deberse a que no se escribi&oacute un codigo en la casilla o ya existe una acta con el codigo ingresado. 
+				</div>
+	     	{% elif datos_validos == '1' %}
+	     		<div class="alert alert-success">
+				  <button type="button" class="close" data-dismiss="alert">&times;</button>
+				  <h4>Las actas se han guardado exitosamente</h4>
+				  Todas las actas subidas se han guardado correctamente 
+				</div>
+	     	{% endif %}
+	     	{% if datasize > 0 %}
+	     	<p>Ingresa el c&oacute;digo para cada acta y podras visualizarlas con el resto de actas creadas</p>
+	     	<table>
+	     	{% for minutes in last_minutes %}
+	     		<tr><td>{{minutes.lm}}</td><td><input id="minutes_{{ minutes.i }}" type='text' data-name='{{minutes.lm}}' data-lmid="{{minutes.lm_id}}"/></td></tr>
+	     	{% endfor %}
+	     	<tr><td></td><td><button id="set-minutes" class="btn btn-info btn-large" data-size="{{datasize}}">Guardar Actas</button>
+	                        </td></tr>
+	     	</table>
+	     	{% else %}
+	     	<p>Cuando subas un acta, aparecer&aacute; en este recuadro para que puedas asignarle un c&oacute;digo</p>
+	     	{% endif %}
+	     		
+	     </section>
+	     
+        
     </div>
 </article>
 {%endblock%}
@@ -39,12 +88,59 @@
     table td .btn{
         margin-top:10px;
     }
+    
+    table td{
+    	margin:5px;
+    	padding:5px;
+    }
+    .list-members{margin-top:20px;margin-bottom: 10px;}
+    .list-item{position: relative;margin: 3px 0;}
+    /*.list-item-next{padding: 8px;border-radius: 0px}*/
+    .list-item-next{border-radius: 0px}
+    .list-item > a{border:solid thin #fff;display:block;}
+    /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
+    .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
+    .minutes-list{min-height: 200px;}
 </style>
 {%endblock%}
 
 {% block js %}
 <script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
 <script type="text/javascript" >
+$(document).on("ready", function() {
     $("#groups").addClass("menu-active")
+    $("#set-minutes").click(function(e){
+		e.preventDefault();
+		//console.log('tamano: '+$(this).attr('data-size'))
+		values = {}
+		valores = {values: values, group_id: {{group.pk}}}
+		for (i=0;i<$(this).attr('data-size');i++)
+			values[i]={index:i,name:$("#minutes_"+i).attr('data-name'), code:$("#minutes_"+i).val(), lmid:$("#minutes_"+i).attr('data-lmid')}
+		console.log(values)
+	    setMinutesCode(valores);
+	});
+	function setMinutesCode(values){
+		console.log(values)
+		$.ajax({
+		    'type': 'GET',
+		    'url': '/groups/uploadMinutesAjax',
+		    'data': {last_minutes: JSON.stringify(values)},
+		    'contentType': "application/json",
+		    'success': function(data){
+				if (data.data == "no_validos"){
+					console.log('no')
+					window.location=  "/groups/{{group.slug}}/uploadMinutes?valid=0"}
+				else{
+					console.log('si')
+					window.location=  "/groups/{{group.slug}}/uploadMinutes?valid=1"}
+			},
+		    'error': function(data){
+				//console.log('Ha ocurrido un error')
+			}
+		});
+		
+	}
+	    
+});
 </script>
 {% endblock %}

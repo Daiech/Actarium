@@ -20,7 +20,8 @@ def validateEmail(email):
     else:
         return False
 
-def validateExtention(value):
+def validateExtension(value):
     extentions_acepted = ['pdf','doc','docx']
-    if not (os.path.splitext(value.name)[1][1:].strip().lower() in extentions_acepted):
-        raise ValidationError(u'Formato de archivo no valido')
+    if not (os.path.splitext(value)[1][1:].strip().lower() in extentions_acepted):
+        return False
+    return True

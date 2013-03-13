@@ -148,8 +148,7 @@
                 {%for minute in minutes%}
                 <li class="list-item">
                     <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
-                        #{{minute.code}} - 
-                        <span>{{minute.id_extra_minutes.date_start|date}}</span>
+                        {{minute.code}}
                         <span class="date-minute-created" style="display:none"> creada el {{minute.date_created|date}}</span>
                     </a>
                 </li>
@@ -181,6 +180,9 @@
         }, function(){
             $(this).find(".date-minute-created").fadeOut("fast");
         })
+        {% if no_redactor %}
+        	setAlertMessage("Permiso denegado", "No tienes permisos para subir actas, comun&iacute;cate con el administrador del grupo para solicitarlo")
+		{%endif%}
     });
 </script>
 {% endblock %}
