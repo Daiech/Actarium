@@ -99,7 +99,7 @@ class minutes_type(models.Model):
 class minutes(models.Model):
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
     date_created = models.DateTimeField(auto_now=True)
-    id_extra_minutes = models.ForeignKey(minutes_type_1,  null=True, related_name='%(class)s_id_extra_minutes')
+    id_extra_minutes = models.IntegerField(max_length=5)
     id_type = models.ForeignKey(minutes_type,  null=False, related_name='id_minutes_type')
     is_valid = models.BooleanField(default=True)
     is_full_signed = models.BooleanField(default=False)
@@ -246,9 +246,8 @@ class groups_pro(models.Model):
 
 class last_minutes(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
-    code = models.CharField(max_length=350, verbose_name="name")
-    minutes_file = models.FileField(upload_to=settings.MEDIA_ROOT+"/lastMinutes",max_length = 400)
+    address_file = models.FileField(upload_to=settings.MEDIA_ROOT+"/lastMinutes",max_length = 400)
+    name_file = models.CharField(max_length=350, verbose_name="name_file")
     
     def __unicode__(self):
-        return "Org: %s" % (self.name)
+        return "Minutes: %s" % (self.name_file)

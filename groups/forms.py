@@ -61,5 +61,5 @@ class newOrganizationForm(forms.Form):
 
 class uploadMinutesForm(forms.Form):
     from groups.validators import validateExtention
-    minutesFile = forms.FileField(widget=forms.FileInput(attrs={'multiple':'multiple'}), validators=[validateExtention])
+    minutesFile = forms.FileField(label="Archivos", widget=forms.FileInput(attrs={'multiple':'multiple','accept':'application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf'}), validators=[validateExtention])
     
