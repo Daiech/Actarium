@@ -47,11 +47,7 @@ def groupsList(request):
     lista los grupos del usuario registrado
     '''
     try:
-        mygroups = rel_user_group.objects.filter(
-            id_user=request.user,
-            is_active=True,
-            is_member=True
-            ).order_by("date_joined")
+        mygroups = rel_user_group.objects.filter(id_user=request.user, is_active=True, is_member=True).order_by("date_joined")
         my_admin_groups = rel_user_group.objects.filter(
             id_user=request.user,
             is_member=False,
@@ -292,10 +288,8 @@ def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_s
             no_rel = True
     except rel_user_group.DoesNotExist:
         no_rel = True
-    print "hay relacion? ", no_rel
     if no_rel:
-        setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active,
-        is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
+        setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active, is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
 
 
 def get_user_or_email(s):
@@ -1099,10 +1093,17 @@ def getEmailListByGroup(group):
 
 
 @login_required(login_url='/account/login')
-def rolesForMinutes(request, slug_group):
+def rolesForMinutes(request, slug_group, id_reunion):
     '''
     return the board to give roles for a new minutes
     '''
+    try:
+        if id_reunion:
+            reunion = reunions.objects.get(id=id_reunion).id
+        else:
+            reunion = ""
+    except reunions.DoesNotExist:
+        reunion = ""
     g = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, g.id)
     if _user_rel.is_secretary and _user_rel.is_active:
@@ -1116,7 +1117,7 @@ def rolesForMinutes(request, slug_group):
             _members.append({"member": m, "rol": rel})
 
         # members = rol_user_minutes.objects.filter(id_group=g, id_minutes=None, is_active=False)
-        ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary, "members": _members}
+        ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary, "members": _members, "id_reunion": reunion}
         return render_to_response('groups/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")
@@ -1131,100 +1132,91 @@ def newMinutes(request, slug_group, id_reunion):
     hM = True
     group = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, group.id)
-    if _user_rel.is_member:
-        if _user_rel.is_secretary or _user_rel.is_admin:
-            if request.method == "POST":
-                form = newMinutesForm(request.POST)
-                select = request.POST.getlist('members[]')
-                m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
-                if form.is_valid() and len(select) != 0:
-                    try:
-                        reunion_id = int(request.POST['reunion_id'])
-                        _reunion = reunions.objects.get(id=reunion_id)
-                        #  esta reunion pertenece a un grupo mio?
-                        hM = _reunion.hasMinutes()
-                        if hM:
-                            return HttpResponseRedirect("/#ya-existe-un-acta-para-esta-reunion")
-                    except rel_reunion_minutes.DoesNotExist:
-                        reunion_id = None
-                    except reunions.DoesNotExist:
-                        reunion_id = None
-                    except Exception:
-                        reunion_id = False
-                    _minute = saveMinute(request, group, form, m_selected, m_no_selected)
-                    if _minute:
-                        if not hM:
-                            rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
-                        saved = True
-                        error = False
-                        url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
-                        link = URL_BASE + url_new_minute
-                        email_list = getEmailListByGroup(group)
-                        email_ctx = {
-                                    'firstname': request.user.first_name,
-                                    'username': request.user.username,
-                                    'groupname': group.name,
-                                    'link': link,
-                                    'urlgravatar': showgravatar(request.user.email, 50)
-                                    }
-                        sendEmailHtml(3, email_ctx, email_list)
-                        return HttpResponseRedirect(url_new_minute)
-                    else:
-                        saved = False
-                        error = "e2"  # error, mismo código de acta, o error al guardar en la db
+    if _user_rel.is_secretary and _user_rel.is_active:
+        if request.method == "POST":
+            form = newMinutesForm(request.POST)
+            select = request.POST.getlist('members[]')
+            m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
+            if form.is_valid() and len(select) != 0:
+                try:
+                    reunion_id = int(request.POST['reunion_id'])
+                    _reunion = reunions.objects.get(id=reunion_id)
+                    #  esta reunion pertenece a un grupo mio?
+                    hM = _reunion.hasMinutes()
+                    if hM:
+                        return HttpResponseRedirect("/#ya-existe-un-acta-para-esta-reunion")
+                except rel_reunion_minutes.DoesNotExist:
+                    reunion_id = None
+                except reunions.DoesNotExist:
+                    reunion_id = None
+                except Exception:
+                    reunion_id = False
+                _minute = saveMinute(request, group, form, m_selected, m_no_selected)
+                if _minute:
+                    if not hM:
+                        rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
+                    saved = True
+                    error = False
+                    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
+                    link = URL_BASE + url_new_minute
+                    email_list = getEmailListByGroup(group)
+                    email_ctx = {
+                                'firstname': request.user.first_name,
+                                'username': request.user.username,
+                                'groupname': group.name,
+                                'link': link,
+                                'urlgravatar': showgravatar(request.user.email, 50)
+                                }
+                    sendEmailHtml(3, email_ctx, email_list)
+                    return HttpResponseRedirect(url_new_minute)
                 else:
                     saved = False
-                    error = "e0"  # error, el formulario no es valido
-                    if len(select) == 0:
-                        error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
+                    error = "e2"  # error, mismo código de acta, o error al guardar en la db
             else:
                 saved = False
-                error = False
-                if id_reunion:
-                    try:
-                        reunion = reunions.objects.get(id=id_reunion)
-                        print reunion.agenda
-                        form = newMinutesForm(initial={"agenda": reunion.agenda, "location": reunion.locale})
-                        print form
-                        form.code = 123
-                        confirm = assistance.objects.filter(id_reunion=reunion.pk, is_confirmed=True)
-                        reunion_list = []  # Lista de miembros que confirmaron la asistencia
-                        for user_confirmed in confirm:
-                            reunion_list.append(int(user_confirmed.id_user.id))
-                        m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, reunion_list)
-                    except reunions.DoesNotExist:
-                        reunion = None
-                    except Exception, e:
-                        reunion = None
-                        m_selected = None
-                        m_no_selected = None
-                        error = "e3"
-                        print "Exception newReunion: %s" % e
-                else:
-                    form = newMinutesForm(initial={"agenda": "<ol><li>Lectura del Acta anterior</li></ol>"})
-                    reunion = None
-                    try:
-                        m_selected = rel_user_group.objects.filter(id_group=group.id, is_active=True)
-                        m_no_selected = None
-                    except rel_user_group.DoesNotExist:
-                        m_selected = None
-                    except Exception, e:
-                        print "Exception members in newMinutes: %e" % e
-            last = getLastMinutes(group)
-            ctx = {'TITLE': "Actarium - Nueva Acta",
-                   "newMinutesForm": form,
-                   "group": group,
-                   "reunion": reunion,
-                   "members_selected": m_selected,
-                   "members_no_selected": m_no_selected,
-                   "minutes_saved": {"saved": saved, "error": error},
-                   "last": last
-                   }
-            return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
+                error = "e0"  # error, el formulario no es valido
+                if len(select) == 0:
+                    error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
         else:
-            return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
+            saved = False
+            error = False
+            if id_reunion:
+                try:
+                    reunion = reunions.objects.get(id=id_reunion)
+                    form = newMinutesForm(initial={"location": reunion.locale})
+                except reunions.DoesNotExist:
+                    reunion = None
+                except Exception, e:
+                    form = None
+                    reunion = None
+                    m_assistance = None
+                    m_no_assistance = None
+                    error = "e3"
+                    print "Exception newReunion: %s" % e
+            else:
+                form = newMinutesForm(initial={"agenda": ""})
+                reunion = None
+            try:
+                m_assistance = rol_user_minutes.objects.filter(id_group=group.id, is_assistant=True, is_active=False)
+                m_no_assistance = rol_user_minutes.objects.filter(id_group=group.id, is_assistant=False, is_active=False)
+            except rel_user_group.DoesNotExist:
+                m_assistance = None
+                m_no_assistance = None
+            except Exception, e:
+                print "Exception members in newMinutes: %e" % e
+        last = getLastMinutes(group)
+        ctx = {'TITLE': "Nueva Acta",
+               "newMinutesForm": form,
+               "group": group,
+               "reunion": reunion,
+               "members_selected": m_assistance,
+               "members_no_selected": m_no_assistance,
+               "minutes_saved": {"saved": saved, "error": error},
+               "last": last
+               }
+        return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect('/groups/#error-view-group')
+        return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
 
 
 @login_required(login_url='/account/login')

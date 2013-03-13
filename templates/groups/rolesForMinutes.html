@@ -78,7 +78,7 @@
 				<a href="/groups/{{group.slug}}" class="btn">
                 	<i class="icon-arrow-left"></i> Volver al grupo
                 </a>
-                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{%endif%}" class="btn btn-info">
+                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{%endif%}{{id_reunion}}" class="btn btn-info">
                     Siguiente <i class="icon-arrow-right icon-white"></i>
                 </a>
 			</div>
@@ -169,7 +169,7 @@
 	    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
 	    	}
 	    	else{
-	    		if(confirm("Seguro que desea eliminarle este rol?")){
+	    		if(confirm("Seguro que desea remover esta característica?")){
 	    			sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 	    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
 	    		}

@@ -3,16 +3,23 @@
 {% load gravatartag %}
 {%block body%}
 <article>
+    <header >
+        <div class="row-fluid">
+            <div class="span10">
+                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
+                <h3><a href="/groups/{{group.slug}}">{{group.name}}</a>
+                    <strong style="font-size:17px;color:gray"> -
+                    Crear nueva acta
+                        {%if reunion%}
+                            de la reuni&oacute;n de <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">{{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
+                        {%endif%}
+                    </strong>
+                </h3>
+            </div>
+        </div>
+    </header>
+    <hr>
     <div class="containterMargin">
-        <h2>
-            Crear nueva acta para el grupo <a href="/groups/{{group.slug}}">{{group.name}}</a>
-        </h2>
-        <strong>
-            {%if reunion%}
-                de la reuni&oacute;n de <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">{{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
-            {%endif%}
-        </strong>
-        <hr>
         <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
         {% if minutes_saved.error %}
             <div class="alert alert-error">
@@ -41,41 +48,45 @@
                             {{last.code}} del {{last.date_created}}
                         </a>
                         {% else%}
-                         Esta es tu primer Acta, recomendamos: 001, A001, etc.
+                         Esta es tu primer Acta, C&oacute;digos recomendados: AC001, A001, etc.
                         {% endif %}
                     </td>
                 </tr>
                 {{ newMinutesForm }}
                 <tr>
-                    <td>
-                        Confirmar Asistencia:
+                    <td class="t-a-r">
+                        Asistentes:
                     </td>
                     <td class="member-list">
-                         {%if reunion%}
-                            Miembros que confirmaron asistencia a la reuni&oacute;n: del 
-                            <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}" target="_blanck">{{reunion.date_reunion|date}}</a>
+                            {%if reunion%}
                             <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-                         {%endif%}
+                            {%endif%}
                             <ul class="unstyled">
                             {% for member in members_selected%}
                                 <li>
                                     <div class="">
-                                        <label for="user{{member.id_user}}">
-                                            <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
-                                            {{member.id_user.username}}
-                                            <input type="checkbox" id="user{{member.id_user}}" name="members[]" checked value="{{member.id_user.id}}" />
-                                        </label>
+                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
+                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
                                     </div>
                                 </li>
                             {% endfor%}
+                            </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="t-a-r">
+                        Ausentes:
+                    </td>
+                    <td class="member-list">
+                            {%if reunion%}
+                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+                            {%endif%}
+                            <ul class="unstyled">
                             {% for member in members_no_selected %}
                                 <li>
                                     <div class="">
-                                        <label for="user{{member.id_user}}">
-                                            <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
-                                            {{member.id_user.username}}
-                                            <input type="checkbox" id="user{{member.id_user}}" name="members[]" value="{{member.id_user.id}}" />
-                                        </label>
+                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
+                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
                                     </div>
                                 </li>
                             {% endfor%}
@@ -85,8 +96,10 @@
                 <tr>
                     <td></td>
                     <td>
+                        <a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn">
+                            <i class="icon-arrow-left"></i> Anterior
+                        </a>
                         <button type="submit" class="btn btn-info">Guardar</button>
-                        <a href="/groups/{{group.slug}}" class="btn btn-link">Volver a grupo</a>
                     </td>
                 </tr>
             </table>
@@ -113,7 +126,7 @@
         padding: 5px;
     }
     .member-list ul li:hover{
-        background-color: #dadada;
+        /*background-color: #dadada;*/
     }
     label{
         cursor: pointer;
