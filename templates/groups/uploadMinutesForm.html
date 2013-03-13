@@ -15,18 +15,35 @@
     </header>
     <hr/>
     <div class="row-fluid">
-    	<section  class="white-box-container span6">
-    		<h3>Formulario para subir actas antiguas</h3>
-	        <p>LLena el siguiente formulario para subir un acta en el grupo <strong>{{group.name}}</strong></p>
-	        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
-	            {% csrf_token %}
-	            <table>{{ uploadMinutesForm }} 
-	
-	                <tr><td></td><td><button type="submit" class="btn btn-info btn-large">Subir actas</button>
-	                        </td></tr>
-	            </table>
-	        </form>
-	     </section>
+    	<div class="span6">
+	    	<section  class="white-box-container">
+	    		<h3>Formulario para subir actas antiguas</h3>
+		        <p>LLena el siguiente formulario para subir un acta en el grupo <strong>{{group.name}}</strong></p>
+		        <p>Seran aceptados los archivos con las siguientes extenciones:  <strong>(.doc, .pdf, .docx)</strong>, los archivos con extensiones diferentes seran ignorados.</p>
+		        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+		            {% csrf_token %}
+		            <table>{{ uploadMinutesForm }} 
+		
+		                <tr><td></td><td><button type="submit" class="btn btn-info btn-large">Subir actas</button>
+		                        </td></tr>
+		            </table>
+		        </form>
+		     </section>
+		     <section class="white-box-container">
+		     	<h3> Actas guardadas en el grupo {{group.name}} </h3>
+		     	<ul class="unstyled minutes-list">
+		     	{% for m in minutes %}
+		     			<li class="list-item" style="margin-left:10px">
+		                    <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{m.code}}">
+		                    	{{m.code}}
+		                    	<span class="date-minute-created" style="float:right" >Creada el {{ m.date_created|date:"d F Y"}} </span>
+		                    </a>
+		                    
+		                </li>			 
+		     	{% endfor %}
+		     	</ul>
+		     </section>
+	     </div>
 	     <section class="white-box-container span6">
 	     	<h3>Actas sin c&oacute;digo</h3>
 	     	{% if datos_validos == '0' %}
@@ -42,7 +59,7 @@
 				  Todas las actas subidas se han guardado correctamente 
 				</div>
 	     	{% endif %}
-	     	{% if datasize > 0%}
+	     	{% if datasize > 0 %}
 	     	<p>Ingresa el c&oacute;digo para cada acta y podras visualizarlas con el resto de actas creadas</p>
 	     	<table>
 	     	{% for minutes in last_minutes %}
@@ -56,6 +73,7 @@
 	     	{% endif %}
 	     		
 	     </section>
+	     
         
     </div>
 </article>
@@ -75,6 +93,14 @@
     	margin:5px;
     	padding:5px;
     }
+    .list-members{margin-top:20px;margin-bottom: 10px;}
+    .list-item{position: relative;margin: 3px 0;}
+    /*.list-item-next{padding: 8px;border-radius: 0px}*/
+    .list-item-next{border-radius: 0px}
+    .list-item > a{border:solid thin #fff;display:block;}
+    /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
+    .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
+    .minutes-list{min-height: 200px;}
 </style>
 {%endblock%}
 
@@ -114,7 +140,7 @@ $(document).on("ready", function() {
 		});
 		
 	}
-    
+	    
 });
 </script>
 {% endblock %}
