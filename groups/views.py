@@ -989,8 +989,11 @@ def newMinutes(request, slug_group, id_reunion):
 
     reunion = None
     hM = True
-    group = groups.objects.get(slug=slug_group, is_active=True)
-    # go to the admin site to set the roles for this minutes
+    try:
+        group = groups.objects.get(slug=slug_group, is_active=True)
+    except Exception, e:
+        raise Http404
+
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_member:
         if _user_rel.is_secretary or _user_rel.is_admin:

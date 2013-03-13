@@ -18,7 +18,7 @@ from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
 #from actions_log.views import saveActionLog
-from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR
+from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL
 
 #def settings(request):
 #    ctx = {'TITLE': "Actarium by Daiech"}
@@ -89,7 +89,7 @@ def newOrganization(request):
                 url_file = None
             if url_file:
                 from django.template import defaultfilters
-                url = save_file(url_file, ORGS_IMG_DIR + defaultfilters.slugify(org.name) + "-" + str(org.id))
+                url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
                 org.logo_address = url
                 org.save()
             try:
@@ -106,12 +106,11 @@ def newOrganization(request):
 def save_file(file, slug, path=''):
     ''' Little helper to save a file
     '''
-    print '%s/%s' % (MEDIA_ROOT, str(path) + str(slug))
     fd = open('%s/%s' % (MEDIA_ROOT, str(path) + str(slug)), 'wb')
     for chunk in file.chunks():
         fd.write(chunk)
     fd.close()
-    return "/media/" + str(slug)
+    return MEDIA_URL + str(path) + str(slug)
 
 
 @login_required(login_url='/account/login')

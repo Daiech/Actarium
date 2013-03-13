@@ -96,8 +96,10 @@
 	                    <i class="icon-plus"></i> Agregar miembro
 	                    <span class="caret"></span>
 	                </div>
-	                {% if is_secretary %}
-					<a href="/groups/{{group.slug}}/newMinutes" class="btn btn-info btn-new-minutes">Crear Acta</a>
+	                {% if is_secretary or is_admin%}
+					<a href="/groups/{{group.slug}}/create-minutes" class="btn btn-info btn-new-minutes">
+						Crear Acta
+					</a>
 					{% endif%}
 	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 	                    <li class="taling">
@@ -297,7 +299,6 @@
 						'<input id="aprover'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="'+data['iid']+'">'+
 					'</label></td>';
 	            if(is_admin==="True"){
-	            	debugger;
 					tr = tr +
 						'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
 							'<input id="admin'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="'+data['iid']+'">'+

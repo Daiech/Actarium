@@ -248,6 +248,7 @@ header div > #top-menu-style li{
     background-position: -156px 0;
 }
 #social-buttons{
+    width: 104px;
 }
 .navbar-active-class{
     background-color: black;
