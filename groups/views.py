@@ -61,6 +61,22 @@ def groupsList(request):
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
+def removeUniqueRolGroup(group, role):
+    try:
+        if role == 4:
+            r = rol_user_minutes.objects.get(id_group=group, is_president=True, is_active=False)
+            r.is_president = False
+        if role == 5:
+            r = rol_user_minutes.objects.get(id_group=group, is_secretary=True, is_active=False)
+            r.is_secretary = False
+        r.save()
+        return True
+    except rol_user_minutes.DoesNotExist:
+        return True
+    except Exception:
+        return False
+
+
 @login_required(login_url='/account/login')
 def setRolForMinute(request, slug_group):
     """
@@ -106,21 +122,27 @@ def setRolForMinute(request, slug_group):
                             rel.is_assistant = True
                             role_name = r3
                         if role == 4 and u and not remove:
-                            rel.is_president = True
+                            if removeUniqueRolGroup(g, 4):
+                                rel.is_president = True
                             role_name = r4
                         if role == 5 and u and not remove:
-                            rel.is_secretary = True
+                            if removeUniqueRolGroup(g, 5):
+                                rel.is_secretary = True
                             role_name = r5
+
                         if role == 1 and u and remove:
                             rel.is_signer = False
                         if role == 2 and u and remove:
                             rel.is_approver = False
                         if role == 3 and u and remove:
                             rel.is_assistant = False
-                        if role == 4 and u and remove:
-                            rel.is_president = False
-                        if role == 5 and u and remove:
-                            rel.is_secretary = False
+
+                        # esto sobra
+                        # if role == 4 and u and remove:
+                        #     rel.is_president = False
+                        # if role == 5 and u and remove:
+                        #     rel.is_secretary = False
+
                         rel.save()
                         saved = True
                         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
