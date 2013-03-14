@@ -2,7 +2,7 @@
 #encoding:utf-8
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-from django.template import RequestContext
+from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from groups.models import *
@@ -1218,7 +1218,8 @@ def newMinutes(request, slug_group, id_reunion):
                    "members_selected": m_selected,
                    "members_no_selected": m_no_selected,
                    "minutes_saved": {"saved": saved, "error": error},
-                   "last": last
+                   "last": last,
+                   "minutesTemplateForm": loader.render_to_string('groups/minutesTemplate1.html', { 'form': form }),
                    }
             return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
         else:
@@ -1618,7 +1619,13 @@ def uploadMinutes(request, slug_group):
                 last_minutes_list.append({'i':i,'lm':last_minutes.objects.get(pk=m.id_extra_minutes).name_file,'lm_id':last_minutes.objects.get(pk=m.id_extra_minutes).pk})
                 i = i+1
             _minutes = minutes.objects.filter(id_group = group, is_valid= True).order_by('-code')
-            ctx={'uploadMinutesForm':form, 'group':group, 'last_minutes':last_minutes_list, 'datasize': len(last_minutes_list), 'datos_validos':datos_validos, 'minutes': _minutes}
+            ctx={
+                 'uploadMinutesForm':form, 
+                 'group':group, 
+                 'last_minutes':last_minutes_list, 
+                 'datasize': len(last_minutes_list), 
+                 'datos_validos':datos_validos, 
+                 'minutes': _minutes}
             return render_to_response('groups/uploadMinutesForm.html', ctx, context_instance=RequestContext(request))
         else:
             return HttpResponseRedirect("/groups/" + group.slug + "?no_redactor=true") 
