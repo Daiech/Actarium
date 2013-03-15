@@ -47,7 +47,7 @@
 					</div>
 				</div>
 		        <div class="center">
-		        	<div class="ml20"><h3> Proximas reuniones</h3></div>
+		        	<div class="ml20"><h3> Pr&oacute;ximas reuniones</h3></div>
 		        	<div id="next-reunions">
 		        	</div>
 		        </div>
@@ -181,7 +181,8 @@
 	}
 	.white-box-container{min-height: 454px;}
 	#datepicker{margin: 0 auto;width: 308px;text-align: center;}
-
+	.quote-text{padding: 10px 10px}
+	.text-sub{text-decoration: underline;}
 
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
@@ -196,6 +197,8 @@ $(document).on("ready", function() {
 	$("#menu-reunions .navbar-item").addClass("navbar-item-hover");
     $("#menu-reunions .navbar-button-propierties").css({"height":"15px"}, 100);
 
+    var COLOR_FROM = "#eee";
+    var COLOR_TO = "rgb(252,253,253)";
 	
 	var events = [
 		{% for reunion in reunions %}
@@ -211,7 +214,7 @@ $(document).on("ready", function() {
     	dateFormat: 'yy-mm-dd',
     	beforeShowDay: function(date) {
 	    	var current = $.datepicker.formatDate('yy-mm-dd', date);
-	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'aqui hay un evento!'];
+	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'Aqui hay una reunión!'];
     	},
 	    onSelect: function(dateText, inst) {
 	    	sendAjax("/groups/getReunions",
@@ -312,8 +315,8 @@ $(document).on("ready", function() {
             			setConfirmButton();
         			}
     				setMoreButton();
-    				$('#reunion_'+id_reunion).css('background-color',"#dadada");
-					$('#reunion_'+id_reunion).animate({'background-color': '#eeeeee'},3500,function(){ });		
+    				$('#reunion_'+id_reunion).css('background-color',COLOR_FROM);
+					$('#reunion_'+id_reunion).animate({'background-color': COLOR_TO},3500,function(){ });		
 					setNextReunions();	
     			}
     	)
@@ -325,18 +328,17 @@ $(document).on("ready", function() {
     			"#loading-reunion",
     			function(data){
     				reunion_list=
-    					"<strong>"+data.title+"</strong><br /><br />"+
-    					"Grupo: <a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br>"+
-						"Fecha de creaci&oacute;n: <strong>"+data.date_reunion+"</strong><br><br>"+
-						"<strong>"+data.convener+"</strong> convoc&oacute; a una reuni&oacute;n de "+
-						"<strong>"+data.group+"</strong> para el d&iacute;a "+
-						"<strong>"+data.date_convened+"</strong> en <strong>"+data.locale+"</strong> <br /><br />"+
-						"Los objetivos propuestos son: <br /> <strong>"+data.agenda+"</strong><br />"+
-						"Lista de asistentes: <table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
+    					"<strong>"+data.title+"</strong>, "+
+    					"<a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br><br>"+
+						"<strong>"+data.convener+"</strong> notifica la convocatoria a una reuni&oacute;n para el d&iacute;a "+
+						"<span class=''>"+data.date_reunion+"</span> en <strong>"+data.locale+"</strong> <br /><br />"+
+						"<strong>Los objetivos propuestos son</strong>: <br /> <div class='quote-text'>"+data.agenda+"</div><br />"+
+						"Respuestas:<table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
 						$.each(data.assistants,function(){
 							reunion_list = reunion_list+
 						"<tr><td><img class='img20' src='"+this.gravatar+"''> <strong>"+this.username+"</strong></td><td>"+this.is_confirmed+"</td></tr>"});
-						reunion_list = reunion_list +"</table> <br /> ";
+						reunion_list = reunion_list +"</table> <br /> "+
+						"<small>La invitaci&oacute;n fue creada el <span class=''>"+data.date_convened+"</span></small><br><br>";
     	    			if (data.is_done == false)
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
     	    			else
@@ -472,8 +474,17 @@ $(document).on("ready", function() {
 				window.location = "/groups/newReunion/"+group_slug;}
 		});
 		if( getUrlVars()["r"]){
-			$('#reunion_'+getUrlVars()["r"]).css('background-color',"#dadada");
-			$('#reunion_'+getUrlVars()["r"]).animate({'background-color': '#eeeeee'},3500,function(){ });
+			var reu = $('#reunion_'+getUrlVars()["r"]);
+			reu.css('background-color',COLOR_FROM);
+			reu.animate({'background-color': COLOR_TO},3500,function(){ });
+			console.log(reu)
+			switch(reu.parent()[0].id){
+				case "tab-pendientes": $(".reunion-tabs ul li a[href='#tab1']").click(); break;
+				case "tab-confirmadas": $(".reunion-tabs ul li a[href='#tab2']").click(); break;
+				case "tab-rechazadas": $(".reunion-tabs ul li a[href='#tab3']").click(); break;
+				case "tab-anteriores": $(".reunion-tabs ul li a[href='#tab4']").click(); break;
+			}
+			reu.find(".get-reunion").click();
 		}
 	}
 
