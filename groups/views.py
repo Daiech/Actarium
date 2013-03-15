@@ -947,7 +947,7 @@ def showMinutes(request, slug, minutes_code):
         if(id_minutes_type==2): #para actas antiguas
             data = last_minutes.objects.get(id=minutes_current.id_extra_minutes)
             list_newMinutesForm = {
-                "address_file": MEDIA_URL+"lastminutes/"+str(data.address_file).split("/")[len(str(data.address_file).split("/"))-1],
+                "address_file": MEDIA_URL+"lastMinutes/"+str(data.address_file).split("/")[len(str(data.address_file).split("/"))-1],
                 "name_file": data.name_file
                 }
         else:
