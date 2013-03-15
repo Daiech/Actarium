@@ -1575,7 +1575,7 @@ def getReunionData(request):
         if request.method == 'GET':
             id_reunion = str(request.GET['id_reunion'])
             reunion = reunions.objects.get(pk=id_reunion)
-            convener = reunion.id_convener.username
+            convener = reunion.id_convener.first_name + " " + reunion.id_convener.last_name + " (" + reunion.id_convener.username + ")"
             date_convened = reunion.date_convened
             date_convened = removeGMT(date_convened)
             date_reunion = reunion.date_reunion
@@ -1601,7 +1601,7 @@ def getReunionData(request):
                     is_confirmed = False
                     is_saved = 0
                 if is_saved == 1:
-                    if is_confirmed == True:  # reuniones confirmadas
+                    if is_confirmed:  # reuniones confirmadas
                         c = "Asistir&aacute;"
                     else:  # reuniones rechazadas
                         c = "No asistir&aacute;"
@@ -1613,10 +1613,10 @@ def getReunionData(request):
             try:
                 my_confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
                 my_confirmation = my_confirm.is_confirmed
-                if my_confirmation == True:
+                if my_confirmation:
                     iconf = 1
                 else:
-                    if my_confirmation == False:
+                    if not my_confirmation:
                         iconf = 2
             except assistance.DoesNotExist:
                     iconf = 3
