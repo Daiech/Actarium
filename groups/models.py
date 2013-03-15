@@ -106,6 +106,7 @@ class templates(models.Model):
     is_public = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
     slug = models.SlugField(max_length=150, unique=True)
+
     def __unicode__(self):
         return "Plantilla: %s " % (self.name)
 
@@ -113,7 +114,7 @@ class templates(models.Model):
         self.slug = "reemplazame"
         super(templates, self).save(*args, **kwargs)
         self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
-        super(templates, self).save(*args, **kwargs)  
+        super(templates, self).save(*args, **kwargs)
 
 
 class rel_user_private_templates(models.Model):
@@ -127,13 +128,13 @@ class private_templates(models.Model):
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
     date_joined = models.DateTimeField(auto_now=True)
-    
-    
+
+
 class minutes(models.Model):
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
     date_created = models.DateTimeField(auto_now=True)
     id_extra_minutes = models.IntegerField(max_length=5)
-    id_template = models.ForeignKey(templates,  null=False, related_name='id_minutes_type') 
+    id_template = models.ForeignKey(templates,  null=False, related_name='id_minutes_type')
     is_valid = models.BooleanField(default=True)
     is_full_signed = models.BooleanField(default=False)
     code = models.CharField(max_length=150, verbose_name="code")

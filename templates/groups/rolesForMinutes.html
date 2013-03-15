@@ -101,7 +101,7 @@
 				<a href="/groups/{{group.slug}}" class="btn">
                 	<i class="icon-arrow-left"></i> Volver al grupo
                 </a>
-                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{%endif%}{{id_reunion}}" class="btn btn-info">
+                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes/{%endif%}{{id_reunion}}" class="btn btn-info">
                     Siguiente <i class="icon-arrow-right icon-white"></i>
                 </a>
 			</div>
@@ -161,9 +161,11 @@
 		{%endif%}
 		{% if president%}
 		$("#sel-president").val({{president}})
+	    $(".president-ok").removeClass("hidden")
 		{%endif%}
 		{% if secretary%}
 		$("#sel-secretary").val({{secretary}})
+	    $(".secretary-ok").removeClass("hidden")
 		{%endif%}
 
 	    function getRoleName (op) {

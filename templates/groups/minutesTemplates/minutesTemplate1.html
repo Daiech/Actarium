@@ -6,7 +6,7 @@
     			<h3>Grupo {{group.name}} </h3> 
     		</header>
     		<div class="">
-    			
+    			<div class="hidden">{{newMinutesForm.type_reunion}}</div>
     			<strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span> <hr>
     			<p><strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span></p>
     			<p><strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span></p>
@@ -54,10 +54,10 @@
     			</div>
     			<hr>
     			<strong>Orden del dia:</strong> <hr>
-    			{{ newMinutesForm.agenda }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
+    			{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
     			<hr>
     			<strong>Acuerdos :</strong> <hr>
-    			{{ newMinutesForm.agreement }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+    			{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
     		
     		<footer>
     			

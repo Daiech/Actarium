@@ -34,7 +34,7 @@ class newMinutesForm3(forms.Form):
     
 
 class newMinutesForm(forms.Form):
-    TYPES = [('ORDINARIA','ORDINARIA'),('ORDINARIA','EXTRAORDINARIA')]
+    TYPES = [('ORDINARIA','ORDINARIA'),('EXTRAORDINARIA','EXTRAORDINARIA')]
     code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Codigo de acta','autofocus': 'autofocus'}))
     date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
     location = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))

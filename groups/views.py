@@ -287,8 +287,6 @@ def groupInfoSettings(request, slug_group):
     except groups.DoesNotExist:
         raise Http404
     _user_rel = getRelUserGroup(request.user, g)
-    if _user_rel.is_secretary:
-        return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
     if _user_rel.is_admin and _user_rel.is_active:
         message = False
         if request.method == "POST":
@@ -639,8 +637,6 @@ def newInvitationToGroup(request):
             try:
                 g = groups.objects.get(pk=request.GET['pk'])
                 _user_rel = getRelUserGroup(request.user, g)
-                print "Secretario", _user_rel.is_secretary
-                print "admin", _user_rel.is_admin
                 if not (_user_rel.is_admin or _user_rel.is_secretary):
                     return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
             except groups.DoesNotExist:
@@ -650,7 +646,7 @@ def newInvitationToGroup(request):
                 print "Exception newInvitationToGroup: " % e
                 g = False
                 return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo."}), mimetype="application/json")
-            if _user_rel.is_admin or _user_rel.is_secretary:
+            if _user_rel.is_admin:
                 print "se esta agregando"
                 email = str(request.GET['mail'])
                 if isMemberOfGroupByEmail(email, g):
@@ -669,7 +665,7 @@ def newInvitationToGroup(request):
                             invited = True
                             iid = str(_user.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
-                            message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + str(g.name) + "</strong>"
+                            message = "Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
                             saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                         except Exception, e:
                             print e
@@ -942,9 +938,23 @@ def showMinutes(request, slug, minutes_code):
     group = getGroupBySlug(slug)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
-    
+
     if isMemberOfGroup(request.user, group):
         minutes_current = getMinutesByCode(group, minutes_code)
+        address_template = minutes_current.id_template.address_template
+        try:
+            data = minutes_type_1.objects.get(id=minutes_current.id_extra_minutes)
+        except minutes_type_1.DoesNotExist:
+            data = None
+        list_newMinutesForm = {
+            "date_start": data.date_start,
+            "date_end": data.date_end,
+            "location": data.location,
+            "agreement": data.agreement,
+            "agenda": data.agenda,
+            "type_reunion": data.type_reunion,
+            "code": minutes_current.code
+            }
         if not minutes_current:
             return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
@@ -973,9 +983,10 @@ def showMinutes(request, slug, minutes_code):
         ######## <PREV and NEXT> #########
         prev, next = getPrevNextOfGroup(group, minutes_current)
         ######## </PREV and NEXT> #########
-
+        print "-----------", loader.render_to_string(address_template, list_newMinutesForm)
         ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
-        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address":pdf_address
+        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
+        "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm})
         # "my_attending": my_attending,
         # "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list
         }
@@ -1061,7 +1072,7 @@ def setMinuteAssistance(minutes_id, members_selected, members_no_selected):
 
 
 @login_required(login_url='/account/login')
-def saveMinute(request, group, form, m_selected, m_no_selected):
+def saveMinute(request, group, form, _template):
     '''
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
@@ -1074,32 +1085,34 @@ def saveMinute(request, group, form, m_selected, m_no_selected):
         'location': form.cleaned_data['location'],
         'agenda': form.cleaned_data['agenda'],
         'agreement': form.cleaned_data['agreement'],
+        'type_reunion': form.cleaned_data['type_reunion'],
         }
         try:
-            minu = minutes.objects.get(id_group=group, code=form.cleaned_data['code'])
+            minu = minutes.objects.get(id_group=group, code=df['code'])
         except minutes.DoesNotExist, e:
             print "Save minutes error:", e
             minu = None
-        if minu == None:
+        if not minu:
             myNewMinutes_type_1 = minutes_type_1(
                            date_start=df['date_start'],
                            date_end=df['date_end'],
                            location=df['location'],
                            agenda=df['agenda'],
                            agreement=df['agreement'],
+                           type_reunion=df['type_reunion']
                          )
             myNewMinutes_type_1.save()
             myNewMinutes = minutes(
                             code=df['code'],
                             id_extra_minutes=myNewMinutes_type_1.pk,
                             id_group=group,
-                            id_type=minutes_type.objects.get(pk=1)  # pk=1 ==> Reunion
+                            id_template=_template,
                         )
             myNewMinutes.save()
             id_user = request.user
             saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
             # registra los usuarios que asistieron a la reunión en la que se creó el acta
-            setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
+            # setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
             return myNewMinutes
         else:
             return False
@@ -1157,7 +1170,7 @@ def rolesForMinutes(request, slug_group, id_reunion):
                 _secretary = rol_user_minutes.objects.get(id_group=g, is_active=False, is_secretary=True).id_user.id
             except rol_user_minutes.DoesNotExist:
                 _secretary = None
-            except Exception, e:
+            except Exception:
                 _secretary = None
             try:
                 _president = rol_user_minutes.objects.get(id_group=g, is_active=False, is_president=True).id_user.id
@@ -1180,7 +1193,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
     reunion = None
     hM = True
     group = getGroupBySlug(slug_group)
-    print "slug_template: ",slug_template
+    print "slug_template: ", slug_template
     if slug_template:
         try:
             _template = templates.objects.get(slug=slug_template)
@@ -1188,7 +1201,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
             raise Http404
     else:
         _template = templates.objects.get(slug='basica-1')
-    
+
     list_templates = templates.objects.filter(is_public=True)
     list_private_templates = private_templates.objects.filter(id_group=group)
     _user_rel = getRelUserGroup(request.user, group.id)
@@ -1196,7 +1209,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         if request.method == "POST":
             form = newMinutesForm(request.POST)
             select = request.POST.getlist('members[]')
-#            m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
+            #  m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             m_assistance = None
             m_no_assistance = None
             if form.is_valid():
@@ -1213,10 +1226,20 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                     reunion_id = None
                 except Exception:
                     reunion_id = False
-                _minute = saveMinute(request, group, form, m_selected, m_no_selected)
+                _minute = saveMinute(request, group, form, _template)
                 if _minute:
                     if not hM:
                         rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
+                    try:
+                        rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
+                        for r in rols:
+                            print r.id_user.username
+                            r.is_active = True
+                            r.id_minutes = _minute
+                            r.save()
+                        # send email to the approvers
+                    except Exception, e:
+                        raise e
                     saved = True
                     error = False
                     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
@@ -1237,8 +1260,8 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
             else:
                 saved = False
                 error = "e0"  # error, el formulario no es valido
-                if len(select) == 0:
-                    error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
+                # if len(select) == 0:
+                #     error = "e1"  # error, al menos un (1) miembro debe ser seleccionado
         else:
             saved = False
             error = False

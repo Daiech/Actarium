@@ -1,6 +1,11 @@
 <section class="row-fluid">
 <article id="minutet" class="minute hoja white-box-container">
     		<div id="data-for-pdf">
+            <div class="hidden">{{newMinutesForm.type_reunion}}</div>
+           <div class="hidden">
+            <input type="text" placeholder="Lugar" name="location" id="id_location" value="default" /></div>
+            <div class="hidden">
+                <input id="id_date_end" type="text" class="date-pick" name="date_end" value="2000-01-01 03:00 am" /></div>
     		<table border="1" style="width:100%; margin-bottom:40px; text-align: center">
 	    		<tr>
 	    			<td style="padding:5px">Logo</td>
@@ -28,13 +33,13 @@
     				<td style="padding:5px">ORDEN DEL D&Iacute;A</td>
     			</tr>
     			<tr>
-    				<td>{{ newMinutesForm.agenda }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> </td>
+    				<td>{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> </td>
     			</tr>
     			<tr>
     				<td style="padding:5px">DESARROLLO ORDEN DEL D&Iacute;A</td>
     			</tr>
     			<tr>
-    				<td>{{ newMinutesForm.agreement }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span></td>
+    				<td>{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span></td>
     			</tr>
     			
     		</table>
