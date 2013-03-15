@@ -1,0 +1,53 @@
+{% load gravatartag %}
+<section class="row-fluid">
+<article id="minutet" class="minute hoja white-box-container">
+    		<div id="data-for-pdf">
+    		<div style="text-align:center; padding:90px 0 15px 0">
+    			<strong> Acta No. <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span></strong><br /><br />
+    			<strong>ASAMBLEA GENERAL <span style="display:inline-block; width:160px">{{ newMinutesForm.type_reunion }}</span><br /> PARQUESOFT PEREIRA</strong>
+    		</div>
+    		<div class="">
+    			<p style="text-align : justify;">
+    			En {{ newMinutesForm.location }}<span style="display:block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, siendo las {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>, se
+				reunieron los miembros de la asamblea general de la Fundaci&oacute;n Parque Tecnol&oacute;gico
+				de Software de Pereira por derecho propio, atendiendo a la convocatoria efectuada de
+				conformidad con los estatutos o la ley.
+				</p>
+				<p style="text-align : justify;">
+				Que el d&iacute;a <span id="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
+				miembros activos de la Asamblea General de la fundaci&oacute;n Parque Tecnol&oacute;gico de
+				Software de Pereira, dando cumplimiento al qu&oacute;rum necesario para iniciar, deliberar y
+				decidir, exigido en los estatutos.
+    			</p>
+    			<br />
+    			El siguiente fue el orden del d&iacute;a:<br /><br />
+    			<p>
+
+				{{ newMinutesForm.agenda }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
+
+    			
+    			</p>
+    			<p>
+    				{{ newMinutesForm.agreement }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+    			</p>
+				<br /><br />
+
+                   {%if reunion%}
+                   <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+                   {%endif%}
+                   <div id="assistance_hidden" style="display:none">
+                   <ul class="unstyled">
+                   {% for member in members_selected%}
+                       <li>
+                           <div class="">
+                               {{member.id_user.first_name}} {{member.id_user.last_name}}
+                           </div>
+                       </li>
+                   {% endfor%}
+                   </ul> 
+                   </div>
+				<br /><br />
+    		</div>
+    		</div>
+    	</article>
+</section>

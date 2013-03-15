@@ -2,7 +2,7 @@
 #encoding:utf-8
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-from django.template import RequestContext
+from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from groups.models import *
@@ -1173,20 +1173,33 @@ def rolesForMinutes(request, slug_group, id_reunion):
 
 
 @login_required(login_url='/account/login')
-def newMinutes(request, slug_group, id_reunion):
+def newMinutes(request, slug_group, id_reunion, slug_template):
     '''
     This function creates a minutes with the form for this.
     '''
     reunion = None
     hM = True
     group = getGroupBySlug(slug_group)
+    print "slug_template: ",slug_template
+    if slug_template:
+        try:
+            _template = templates.objects.get(slug=slug_template)
+        except templates.DoesNotExist:
+            raise Http404
+    else:
+        _template = templates.objects.get(slug='basica-1')
+    
+    list_templates = templates.objects.filter(is_public=True)
+    list_private_templates = private_templates.objects.filter(id_group=group)
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_secretary and _user_rel.is_active:
         if request.method == "POST":
             form = newMinutesForm(request.POST)
             select = request.POST.getlist('members[]')
-            m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
-            if form.is_valid() and len(select) != 0:
+#            m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
+            m_assistance = None
+            m_no_assistance = None
+            if form.is_valid():
                 try:
                     reunion_id = int(request.POST['reunion_id'])
                     _reunion = reunions.objects.get(id=reunion_id)
@@ -1243,7 +1256,7 @@ def newMinutes(request, slug_group, id_reunion):
                     error = "e3"
                     print "Exception newReunion: %s" % e
             else:
-                form = newMinutesForm(initial={"agenda": ""})
+                form = newMinutesForm()
                 reunion = None
             try:
                 m_assistance = rol_user_minutes.objects.filter(id_group=group.id, is_assistant=True, is_active=False)
@@ -1261,7 +1274,11 @@ def newMinutes(request, slug_group, id_reunion):
                "members_selected": m_assistance,
                "members_no_selected": m_no_assistance,
                "minutes_saved": {"saved": saved, "error": error},
-               "last": last
+               "last": last,
+               "minutesTemplateForm": _template.address_template,
+               "minutesTemplateJs": _template.address_js,
+               "list_templates": list_templates,
+               "list_private_templates": list_private_templates
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -1659,20 +1676,13 @@ def uploadMinutes(request, slug_group):
                 last_minutes_list.append({'i':i,'lm':last_minutes.objects.get(pk=m.id_extra_minutes).name_file,'lm_id':last_minutes.objects.get(pk=m.id_extra_minutes).pk})
                 i = i+1
             _minutes = minutes.objects.filter(id_group = group, is_valid= True).order_by('-code')
-#            minutes_list = []
-#            minutes_list_temp = []
-#            j=0;
-#            for m in _minutes:
-#                minutes_list_temp.append(m)
-#                if j < 2:
-#                    j = j+1             
-#                else:
-#                    minutes_list.append(minutes_list_temp)
-#                    minutes_list_temp = []
-#                    j=0
-#            if j <= 2:
-#                minutes_list.append(minutes_list_temp)
-            ctx={'uploadMinutesForm':form, 'group':group, 'last_minutes':last_minutes_list, 'datasize': len(last_minutes_list), 'datos_validos':datos_validos, 'minutes': _minutes}
+            ctx={
+                 'uploadMinutesForm':form, 
+                 'group':group, 
+                 'last_minutes':last_minutes_list, 
+                 'datasize': len(last_minutes_list), 
+                 'datos_validos':datos_validos, 
+                 'minutes': _minutes}
             return render_to_response('groups/uploadMinutesForm.html', ctx, context_instance=RequestContext(request))
         else:
             return HttpResponseRedirect("/groups/" + group.slug + "?no_redactor=true") 
@@ -1681,31 +1691,31 @@ def uploadMinutes(request, slug_group):
 
 @login_required(login_url='/account/login')
 def uploadMinutesAjax(request):
-#    if request.is_ajax():
-    if request.method == 'GET':
-        last_minutes_get = request.GET['last_minutes']
-        a = json.loads(last_minutes_get)
-        group_id= a['group_id']
-        group = groups.objects.get(pk=group_id)
-        print "gurpo -------------------------------------------", group_id
-        a = a['values']
-        valid = True
-        for m in a:
-            if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
-                print a[m]['name'],a[m]['code'],a[m]['lmid']
-                lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_type = minutes_type.objects.get(pk=2))
-                lm_temp.code = a[m]['code']
-                lm_temp.is_valid = True
-                lm_temp.save()
+    if request.is_ajax():
+        if request.method == 'GET':
+            last_minutes_get = request.GET['last_minutes']
+            a = json.loads(last_minutes_get)
+            group_id= a['group_id']
+            group = groups.objects.get(pk=group_id)
+            print "gurpo -------------------------------------------", group_id
+            a = a['values']
+            valid = True
+            for m in a:
+                if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
+                    print a[m]['name'],a[m]['code'],a[m]['lmid']
+                    lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_type = minutes_type.objects.get(pk=2))
+                    lm_temp.code = a[m]['code']
+                    lm_temp.is_valid = True
+                    lm_temp.save()
+                else:
+                    valid = False
+                print "existe el codigo?", getMinutesByCode(group, a[m]['code'])
+            if valid:
+                response = {'data':"validos"}
             else:
-                valid = False
-            print "existe el codigo?", getMinutesByCode(group, a[m]['code'])
-        if valid:
-            response = {'data':"validos"}
+                response = {'data':"no_validos"}
         else:
-            response = {'data':"no_validos"}
+            response = {'data':"No es GET"}
     else:
-        response = {'data':"No es GET"}
-#    else:
-#        response = {'data':"No es AJAX"}
+        response = {'data':"No es AJAX"}
     return HttpResponse(json.dumps(response), mimetype="application/json")

@@ -19,8 +19,17 @@
         </div>
     </header>
     <hr>
+    
     <div class="containterMargin">
         <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
+        <div style="padding-bottom:20px;">
+        {% for template in list_templates %}
+        	<button id="template_{{ template.pk }}" class="btn btn-success template_btn" data-slug={{ template.slug }}>{{ template.name }}</button>
+        {% endfor %}
+        {% for template in list_private_templates %}
+        	<button id="template_{{ template.id_template.pk }}" class="btn btn-primary template_btn" data-slug={{ template.id_template.slug }} >{{ template.id_template.name }}</button>
+        {% endfor %}
+        </div>
         {% if minutes_saved.error %}
             <div class="alert alert-error">
                 {%if minutes_saved.error == "e0"%}
@@ -39,60 +48,8 @@
         {% endif %}
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
+            {% include minutesTemplateForm %}
             <table>
-                <tr>
-                    <th><label>&Uacute;ltimo c&oacute;digo:</label></th>
-                    <td>
-                        {% if last != "---" %}
-                        <a href="/groups/{{group.slug}}/minutes/{{last.code}}" target="_blank">
-                            {{last.code}} del {{last.date_created}}
-                        </a>
-                        {% else%}
-                         Esta es tu primer Acta, C&oacute;digos recomendados: AC001, A001, etc.
-                        {% endif %}
-                    </td>
-                </tr>
-                {{ newMinutesForm }}
-                <tr>
-                    <td class="t-a-r">
-                        Asistentes:
-                    </td>
-                    <td class="member-list">
-                            {%if reunion%}
-                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-                            {%endif%}
-                            <ul class="unstyled">
-                            {% for member in members_selected%}
-                                <li>
-                                    <div class="">
-                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
-                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
-                                    </div>
-                                </li>
-                            {% endfor%}
-                            </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="t-a-r">
-                        Ausentes:
-                    </td>
-                    <td class="member-list">
-                            {%if reunion%}
-                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-                            {%endif%}
-                            <ul class="unstyled">
-                            {% for member in members_no_selected %}
-                                <li>
-                                    <div class="">
-                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
-                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
-                                    </div>
-                                </li>
-                            {% endfor%}
-                            </ul>
-                    </td>
-                </tr>
                 <tr>
                     <td></td>
                     <td>
@@ -104,6 +61,8 @@
                 </tr>
             </table>
         </form>
+        
+        
     </div>
 </article>
 {%endblock%}
@@ -155,7 +114,51 @@
     }
     #social-buttons{width: 104px;}
 </style>
-
+<style>
+	.hoja{
+		width: 70%;
+	}
+	#sign{
+		margin: 0 auto;
+		margin-top: 20px;
+		min-height: 100px;
+	}
+	#minute, .minute{
+		border: solid thin #ddd;
+		background-color: #fff;
+		box-shadow: 8px 8px 6px -6px gray;
+		border-radius: 3px;
+		/*position: relative;
+		top:-55px;*/
+	}
+	.minute header{
+		width: auto;
+		margin:0;
+		padding: 50px 80px 20px 80px;
+	}
+	.minute > div{
+		padding: 0 80px;
+		/*border: solid thin gray;*/
+	}
+	.minute footer{
+		border: none;
+		bottom: 0;
+		font-size: 14px;
+		left: 0;
+		margin:0;
+		padding: 20px 40px;
+		width: auto;
+	}
+	.pager{
+		margin: 5px auto;
+		padding: 0;
+		position: relative;
+		top: 0;
+	}
+	.minutes-form-btn{
+		display:inline;
+	}
+</style>
 {%endblock%}
 
 {% block js %}
@@ -172,5 +175,16 @@
         controlType: 'select',
         ampm: true
     }).css({"z-index":"1034"});
+   $(document).ready(function(){
+	   url_s = location.pathname.split("/")
+	   $(".template_btn").click(function(){
+			//console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
+			window.location = "/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug')
+	   });
+	});
+   {% include minutesTemplateJs %}
 </script>
+
+
+  
 {% endblock %}

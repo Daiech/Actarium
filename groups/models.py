@@ -83,6 +83,7 @@ class minutes_type_1(models.Model):
     location = models.TextField(blank=True)
     agreement = models.TextField(blank=True)
     agenda = models.TextField(blank=True)
+    type_reunion = models.CharField(max_length=150, blank=True)
 
 
 class minutes_type(models.Model):
@@ -97,11 +98,42 @@ class minutes_type(models.Model):
         return "minutes_type name: %s " % (self.name)
 
 
+class templates(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    address_template = models.CharField(max_length=150, verbose_name="address_template")
+    address_js = models.CharField(max_length=150, verbose_name="address_js")
+    id_type = models.ForeignKey(minutes_type,  null=False, related_name='id_minutes_type')
+    is_public = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(max_length=150, unique=True)
+    def __unicode__(self):
+        return "Plantilla: %s " % (self.name)
+
+    def save(self, *args, **kwargs):
+        self.slug = "reemplazame"
+        super(templates, self).save(*args, **kwargs)
+        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
+        super(templates, self).save(*args, **kwargs)  
+
+
+class rel_user_private_templates(models.Model):
+    id_user =  models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
+    id_template =  models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates')
+    date_joined = models.DateTimeField(auto_now=True)
+
+
+class private_templates(models.Model):
+    id_template = models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates')
+    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
+    date_joined = models.DateTimeField(auto_now=True)
+    
+    
 class minutes(models.Model):
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
     date_created = models.DateTimeField(auto_now=True)
     id_extra_minutes = models.IntegerField(max_length=5)
-    id_type = models.ForeignKey(minutes_type,  null=False, related_name='id_minutes_type')
+    id_template = models.ForeignKey(templates,  null=False, related_name='id_minutes_type') 
     is_valid = models.BooleanField(default=True)
     is_full_signed = models.BooleanField(default=False)
     code = models.CharField(max_length=150, verbose_name="code")
