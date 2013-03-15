@@ -817,7 +817,7 @@ h3 a:hover{text-decoration:underline;}
 .message-box{margin: 0 auto;width: 55%;margin-bottom: 20px;}
 .control-group{margin:10px auto;width: 70%;}
 .control-group input[type="checkbox"]{float: none;}
-.td-first{text-align: left;width: 45%;}
+.td-first{text-align: left;/*width: 45%;*/}
 .roles{margin-top: 8px;margin-right: 5px;}
 .container{width:90%;}
 

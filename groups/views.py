@@ -61,6 +61,22 @@ def groupsList(request):
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
+def removeUniqueRolGroup(group, role):
+    try:
+        if role == 4:
+            r = rol_user_minutes.objects.get(id_group=group, is_president=True, is_active=False)
+            r.is_president = False
+        if role == 5:
+            r = rol_user_minutes.objects.get(id_group=group, is_secretary=True, is_active=False)
+            r.is_secretary = False
+        r.save()
+        return True
+    except rol_user_minutes.DoesNotExist:
+        return True
+    except Exception:
+        return False
+
+
 @login_required(login_url='/account/login')
 def setRolForMinute(request, slug_group):
     """
@@ -106,21 +122,27 @@ def setRolForMinute(request, slug_group):
                             rel.is_assistant = True
                             role_name = r3
                         if role == 4 and u and not remove:
-                            rel.is_president = True
+                            if removeUniqueRolGroup(g, 4):
+                                rel.is_president = True
                             role_name = r4
                         if role == 5 and u and not remove:
-                            rel.is_secretary = True
+                            if removeUniqueRolGroup(g, 5):
+                                rel.is_secretary = True
                             role_name = r5
+
                         if role == 1 and u and remove:
                             rel.is_signer = False
                         if role == 2 and u and remove:
                             rel.is_approver = False
                         if role == 3 and u and remove:
                             rel.is_assistant = False
-                        if role == 4 and u and remove:
-                            rel.is_president = False
-                        if role == 5 and u and remove:
-                            rel.is_secretary = False
+
+                        # esto sobra
+                        # if role == 4 and u and remove:
+                        #     rel.is_president = False
+                        # if role == 5 and u and remove:
+                        #     rel.is_secretary = False
+
                         rel.save()
                         saved = True
                         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
@@ -140,60 +162,78 @@ def setRolForMinute(request, slug_group):
     return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
 
 
+def setRoltoUser(request, _user, _group, role, remove):
+    '''
+        rel is getRelUserGroup(u, g) where u is the user to set the rol
+        role is an int to the role:
+            Roles id:
+            1 = member
+            2 = writer
+            3 = convener
+            4 = admin
+        remove is a boolean
+    '''
+    rel = getRelUserGroup(_user, _group)
+    if rel:
+        role_name = False
+        r = ["Miembro", "Redactor", "Convocador", "Administrador"]
+        if not remove:
+            if role == 1:
+                rel.is_member = True
+                role_name = r[0]
+            if role == 2:
+                rel.is_secretary = True
+                role_name = r[1]
+            if role == 3:
+                rel.is_convener = True
+                role_name = r[2]
+            if role == 4:
+                rel.is_admin = True
+                role_name = r[3]
+        if remove:
+            if role == 1:
+                rel.is_member = False
+            if role == 2:
+                rel.is_secretary = False
+            if role == 3:
+                rel.is_convener = False
+            if role == 4 and not rel.is_superadmin:
+                rel.is_admin = False
+        rel.save()
+        # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
+        if role_name:  # the rol has been assigned
+            link = URL_BASE + "/groups/" + str(_group.slug)
+            ctx_email = {
+                 'firstname': request.user.first_name,
+                 'username': request.user.username,
+                 'rolename': role_name,
+                 'groupname': _group.name,
+                 'grouplink': link,
+                 'urlgravatar': showgravatar(request.user.email, 50)
+             }
+            sendEmailHtml(4, ctx_email, [rel.id_user.email])
+        return True
+    return False
+
+
 def setRole(request, slug_group):
     """
         Set or remove role to a user
-        Roles id:
-            1 = admin
-            2 = Approver
-            3 = Secretary
     """
     error = False
-    role_name = False
     if request.is_ajax():
         if request.method == 'GET':
             try:
                 g = groups.objects.get(slug=slug_group, is_active=True)
                 _user_rel = getRelUserGroup(request.user, g)
 
-                if _user_rel.is_admin or _user_rel.is_secretary:
+                if _user_rel.is_admin:
                     role = int(request.GET['role'])
                     remove = bool(int(request.GET['remove']))
                     _user = get_user_or_email(request.GET['uid'])
                     u = _user['user']
-                    if u:
-                        rel = getRelUserGroup(u, g)
-                    if rel:
-                        if _user_rel.is_admin:
-                            if role == 1 and u and not remove:
-                                rel.is_admin = True
-                                role_name = "Administrador"
-                        if role == 2 and u and not remove:
-                            rel.is_approver = True
-                            role_name = "Aprobador"
-                        if role == 3 and u and not remove:
-                            rel.is_secretary = True
-                            role_name = "Secretario"
-                        if role == 1 and u and remove:
-                            rel.is_admin = False
-                        if role == 2 and u and remove:
-                            rel.is_approver = False
-                        if role == 3 and u and remove:
-                            rel.is_secretary = False
-                        rel.save()
-                        saved = True
-                        # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
-                        if role_name:  # the rol has been assigned
-                            link = URL_BASE + "/groups/" + str(g.slug)
-                            ctx_email = {
-                                 'firstname': request.user.first_name,
-                                 'username': request.user.username,
-                                 'rolename': role_name,
-                                 'groupname': g.name,
-                                 'grouplink': link,
-                                 'urlgravatar': showgravatar(request.user.email, 50)
-                             }
-                            sendEmailHtml(4, ctx_email, [rel.id_user.email])
+                    if u:  # only if there are an user.
+                        saved = setRoltoUser(request, u, g, role, remove)
                     else:
                         error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
@@ -227,8 +267,8 @@ def groupSettings(request, slug_group):
     g = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, g.id)
     if _user_rel.is_active:
-        if _user_rel.is_admin or _user_rel.is_secretary:
-            members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
+        if _user_rel.is_admin:
+            members = rel_user_group.objects.filter(id_group=g.id).order_by("-is_active")
             ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
             return render_to_response('groups/adminRolesGroup.html', ctx, context_instance=RequestContext(request))
         else:
@@ -438,18 +478,16 @@ def showGroup(request, slug):
         g = groups.objects.get(slug=slug, is_active=True)
         _user = getRelUserGroup(request.user, g)
         if _user:
-            if _user.is_member and _user.is_active:
+            if _user.is_active:
                 members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
-                minutes_group = minutes.objects.filter(id_group=g.id, is_valid = True).order_by("-id")
+                minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-id")
                 _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
-                member = {"is_admin": _user.is_admin, "is_approver": _user.is_approver, "is_secretary": _user.is_secretary}
                 if request.method == "GET":
                     try:
                         no_redactor = request.GET['no_redactor']
                     except Exception:
                         no_redactor = 0
-                ctx = {"group": g, "current_member": member, "members": members, "minutes": minutes_group,
-                "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor':no_redactor}
+                ctx = {"group": g, "current_member": _user, "members": members, "minutes": minutes_group, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor}
                 return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
             if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")

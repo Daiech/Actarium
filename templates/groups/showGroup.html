@@ -28,9 +28,10 @@
                         <i class="icon-wrench"></i>
                         Administrar grupo
                     </a>
-                    <a href="/groups/{{ group.slug}}/admin#add-new-member" class="btn btn-small">
-                        <i class="icon-plus"></i> Agregar miembros</a>
                     {%endif%}
+
+                    <a href="{%if not current_member.is_admin%}#{%else%}/groups/{{ group.slug}}/admin#add-new-member{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_admin%}disabled{%endif%}" {%if not current_member.is_admin%}title="Necesitas ser administrador para habilitar esta opci&oacute;n"{%endif%}>
+                        <i class="icon-plus"></i> Agregar miembros</a>
                 </div>
                 <hr style="margin-bottom:5px;">
                 <ul class="unstyled list-members" style="display:none">
@@ -59,7 +60,7 @@
                         <div class="icons-info">
                             <span>Info:</span>
                             <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-                            <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                            <!-- <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span> -->
                             <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
                             <span class="user-pend-l"> Usuarios pendientes</span>
                         </div>
@@ -96,7 +97,7 @@
                     <h4>Reuniones</h4>
                 </header>
                 <div class="t-a-r button-group">
-                    <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-small">
+                    <a href="{%if current_member.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_convener%}disabled{%endif%}" {%if not current_member.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
                         <i class="icon-calendar"></i> Convocar Reuni&oacute;n
                     </a>
                 </div>
@@ -134,14 +135,12 @@
                 <h4 class="">Listado de Actas</h4>
             </header>
             <div class="t-a-r button-group">
-                {%if current_member.is_secretary or current_member.is_admin%}
-                    <a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn btn-small">
-                        <i class="icon-plus"></i> Crear acta
-                    </a>
-                    <a href="/groups/{{group.slug}}/uploadMinutes" class="btn btn-small">
-                        <i class="icon-upload"></i> Subir acta
-                    </a>
-                {%endif%}
+                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+                    <i class="icon-plus"></i> Crear acta
+                </a>
+                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+                    <i class="icon-upload"></i> Subir acta
+                </a>
             </div>
             <hr>
             <ul class="unstyled minutes-list">
@@ -162,7 +161,7 @@
 {% block js %}
 <script>
     $(document).on("ready",function(){
-        $("i, .list-members a, span, .member-pic").tooltip();
+        $("i, .list-members a, span, .member-pic, .title-on-disabled").tooltip();
         $("#show-more").on("click",function(e){
             e.preventDefault();
             $("ul.list-member-pics").fadeOut("fast",function(){

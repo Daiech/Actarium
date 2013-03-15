@@ -67,6 +67,28 @@
 				</tr>
                 {%endfor%}
 			</table>
+			<div class="row-fluid mt20">
+				<div class="span6">
+					<span>Presidente:</span>
+					<select id="sel-president">
+						<option value="0">Seleccione presidente</option>
+					{%for m in members%}
+						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
+                	{%endfor%}
+					</select>
+					<span class="president-ok hidden"><i class="icon-ok"></i></span>
+				</div>
+				<div class="span6">
+					<span>Secretario:</span>
+					<select id="sel-secretary">
+						<option value="0">Seleccione secretario</option>
+					{%for m in members%}
+						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
+                	{%endfor%}
+					</select>
+					<span class="secretary-ok hidden"><i class="icon-ok"></i></span>
+				</div>
+			</div>
 			<div id="add-new-member" class="mt20 icons-info pull-left">
                 <span>Info:</span>
                 <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Firmador</span>
@@ -107,7 +129,8 @@
     .list-member-item:hover{border: solid thin #dadada;}
     .list-member-item > div{/*border: solid thin #dadada;*/width: 80%; }
     .list-member-item > span{cursor: pointer;top: 0;right: 5px;position: absolute;}
-    .span6{border-right: solid thin #dadada;padding: 0 20px;}
+    /*.span6{border-right: solid thin #dadada;padding: 0 20px;}*/
+    .span6 label{display: inline;}
     ul#add-member-menu li{margin-bottom: 10px;}
     .icon-remove{margin: 5px;}
     ul#search-result{margin-left: 0;}
@@ -178,7 +201,39 @@
 	    		}
 	    	}
 	    }
+	    function callbackSetPresident (data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+	    		$(".president-ok").removeClass("hidden")
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+	    }
+	    function callbackSetSecretary (data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+	    		$(".secretary-ok").removeClass("hidden")
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+	    }
+	    function setPresident (e) {
+	    	$(".president-ok").addClass("hidden")
+	    	var uid = $(this).val();
+	    	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+	    		{"role":4, "uid": uid, "remove": 0},"",callbackSetPresident)	
+	    }
+	    function setSecretary (e) {
+	    	$(".secretary-ok").addClass("hidden")
+	    	var uid = $(this).val();
+	    	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+	    		{"role":5, "uid": uid, "remove": 0},"",callbackSetSecretary)
+	    }
 	    $("td input[type='checkbox']").on("click", setRole);//roles MAIN
+	    $("#sel-president").on("change", setPresident);//roles MAIN
+	    $("#sel-secretary").on("change", setSecretary);//roles MAIN
 	});
 </script>
 {% endblock %}
