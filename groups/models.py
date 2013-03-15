@@ -206,7 +206,7 @@ class feddback(models.Model):
 class rel_user_minutes_assistance(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
-    assistance = models.BooleanField()
+    assistance = models.IntegerField()
     date_assistance = models.DateTimeField(auto_now=True)
 
 

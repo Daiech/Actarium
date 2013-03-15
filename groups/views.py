@@ -963,32 +963,52 @@ def showMinutes(request, slug, minutes_code):
         ######## <ASISTENTES> #########
 
         ######## <ATTENDING> #########
-        # try:
-        #     my_attending = rel_user_minutes_assistance.objects.get(id_minutes=minutes_current, id_user=request.user)
-        #     my_attending = my_attending.assistance
-        # except Exception, e:
-        #     print e
-        #     my_attending = False
+        try:
+            my_attending = getRolUserMinutes(request.user, group, id_minutes=minutes_current)
+
+            my_attending = my_attending.is_approver
+        except Exception, e:
+            print e
+            my_attending = False
         ######## </ATTENDING> #########
 
         ######## <APPROVED LISTS> #########
-        # missing_approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
-        # missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
-        # approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
-        # approved_list = 0 if len(approved_list) == 0 else approved_list
-        # no_approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
-        # no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
+        try:
+            missing_approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=0)
+            missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
+        except rel_user_minutes_assistance.DoesNotExist:
+            print "NO HAY rel_user_minutes_assistance missing_approved_list"
+        except Exception, e:
+            print "error,", e
+
+        approved_list = None
+        no_approved_list = None
+        try:
+            approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=1)
+            approved_list = 0 if len(approved_list) == 0 else approved_list
+        except rel_user_minutes_assistance.DoesNotExist:
+            print "NO HAY rel_user_minutes_assistance APPROVED_LIST"
+        except Exception, e:
+            print "Error APPROVED_LIST,", e
+        try:
+            no_approved_list = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=2)
+            no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
+        except rel_user_minutes_assistance.DoesNotExist:
+            print "NO HAY rel_user_minutes_assistance NO_APPROVED_LIST"
+        except Exception, e:
+            print "Error NO_APPROVED_LIST:", e
+
         ######## </APPROVED LISTS> #########
 
         ######## <PREV and NEXT> #########
         prev, next = getPrevNextOfGroup(group, minutes_current)
         ######## </PREV and NEXT> #########
-        print "-----------", loader.render_to_string(address_template, list_newMinutesForm)
         ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
         "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
-        "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm})
-        # "my_attending": my_attending,
-        # "missing_approved_list": missing_approved_list, "approved_list": approved_list, "no_approved_list": no_approved_list
+        "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm}),
+        "my_attending": my_attending,
+        "missing_approved_list": missing_approved_list,
+        "approved_list": approved_list, "no_approved_list": no_approved_list
         }
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
@@ -1001,10 +1021,17 @@ def setApprove(request):
         if request.method == 'GET':
             minutes_id = str(request.GET['m_id'])
             approved = 1 if int(request.GET['approve']) == 1 else 2
+            print "m %s, a %s" % (minutes_id, approved)
             try:
-                sign = rel_user_minutes_assistance.objects.get(id_minutes=minutes_id, id_user=request.user)
-                sign.is_signed_approved = approved
+                _minutes = minutes.objects.get(id=minutes_id)
+                sign = rel_user_minutes_assistance(
+                    id_minutes=_minutes,
+                    id_user=request.user,
+                    assistance=approved)
                 sign.save()
+                rol = rol_user_minutes.objects.get(id_minutes=_minutes, id_user=request.user)
+                rol.is_active = True
+                rol.save()
             except Exception, e:
                 print "Error Al Firmar" % e
             response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
@@ -1233,18 +1260,23 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                     try:
                         rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
                         for r in rols:
-                            print r.id_user.username
                             r.is_active = True
                             r.id_minutes = _minute
                             r.save()
+                        email_list = list()
+                        for rol in rols:
+                            if rol.is_approver:
+                                email_list.append(rol.id_user.email)
+                                rel_user_minutes_assistance(id_user=rol.id_user, id_minutes=_minute, assistance=0).save()
                         # send email to the approvers
                     except Exception, e:
-                        raise e
+                        print "newMinutes Error", e
                     saved = True
                     error = False
                     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
                     link = URL_BASE + url_new_minute
-                    email_list = getEmailListByGroup(group)
+                    # email_list = getEmailListByGroup(group)
+                    print "EMAILS", email_list
                     email_ctx = {
                                 'firstname': request.user.first_name,
                                 'username': request.user.username,
