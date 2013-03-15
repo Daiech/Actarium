@@ -159,8 +159,8 @@ def minutesToPdfTest(request,id_minutes):
     else:
         return HttpResponseRedirect('/')
 
-def minutesHtmlToPdf(html_string):
-    pdf_address = "/pdf/reporteHTML%s.pdf"%(int(random.random()*100000))
+def minutesHtmlToPdf(html_string,name_pdf):
+    pdf_address = "/pdf/%s_Actarium%s.pdf"%(name_pdf,int(random.random()*100000))
     file_dir = "%s%s"%(MEDIA_ROOT,pdf_address)
     file_dir = file(file_dir,"wb")
     pdf = CreatePDF(html_string,file_dir)

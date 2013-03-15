@@ -13,7 +13,7 @@ from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
 from actions_log.views import saveActionLog
-from Actarium.settings import URL_BASE
+from Actarium.settings import URL_BASE, MEDIA_URL
 from emailmodule.views import sendEmailHtml
 from groups.validators import validateEmail
 
@@ -933,7 +933,7 @@ def showMinutes(request, slug, minutes_code):
     if request.method == 'POST':
         html_data = request.POST['minutes-html-data']
         from pdfmodule.views import minutesHtmlToPdf
-        pdf_address = minutesHtmlToPdf(html_data)
+        pdf_address = minutesHtmlToPdf(html_data,slug)
         return HttpResponseRedirect(pdf_address)
     group = getGroupBySlug(slug)
     if not group:
@@ -942,19 +942,28 @@ def showMinutes(request, slug, minutes_code):
     if isMemberOfGroup(request.user, group):
         minutes_current = getMinutesByCode(group, minutes_code)
         address_template = minutes_current.id_template.address_template
-        try:
-            data = minutes_type_1.objects.get(id=minutes_current.id_extra_minutes)
-        except minutes_type_1.DoesNotExist:
-            data = None
-        list_newMinutesForm = {
-            "date_start": data.date_start,
-            "date_end": data.date_end,
-            "location": data.location,
-            "agreement": data.agreement,
-            "agenda": data.agenda,
-            "type_reunion": data.type_reunion,
-            "code": minutes_current.code
-            }
+        
+        id_minutes_type = minutes_current.id_template.id_type.pk
+        if(id_minutes_type==2): #para actas antiguas
+            data = last_minutes.objects.get(id=minutes_current.id_extra_minutes)
+            list_newMinutesForm = {
+                "address_file": MEDIA_URL+"lastMinutes/"+str(data.address_file).split("/")[len(str(data.address_file).split("/"))-1],
+                "name_file": data.name_file
+                }
+        else:
+            try:
+                data = minutes_type_1.objects.get(id=minutes_current.id_extra_minutes)
+            except minutes_type_1.DoesNotExist:
+                data = None
+            list_newMinutesForm = {
+                "date_start": data.date_start,
+                "date_end": data.date_end,
+                "location": data.location,
+                "agreement": data.agreement,
+                "agenda": data.agenda,
+                "type_reunion": data.type_reunion,
+                "code": minutes_current.code
+                }
         if not minutes_current:
             return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
@@ -1708,7 +1717,7 @@ def uploadMinutes(request, slug_group):
                             _minutes = minutes(
                                 id_group = group,
                                 id_extra_minutes = _last_minutes.pk,
-                                id_type = minutes_type.objects.get(pk=2),
+                                id_template = templates.objects.get(pk=4),
                                 is_valid = False,
                                 is_full_signed = False,
                                 code = "%s-%s"%(int(random.random()*1000000),_last_minutes.pk)
@@ -1726,7 +1735,7 @@ def uploadMinutes(request, slug_group):
                     print ""
             last_minutes_list = []
             i = 0
-            lml = minutes.objects.filter(id_group = group, id_type = minutes_type.objects.get(pk=2),is_valid = False)
+            lml = minutes.objects.filter(id_group = group, id_template = templates.objects.get(pk=4),is_valid = False)
             for m in lml:
                 last_minutes_list.append({'i':i,'lm':last_minutes.objects.get(pk=m.id_extra_minutes).name_file,'lm_id':last_minutes.objects.get(pk=m.id_extra_minutes).pk})
                 i = i+1
@@ -1758,7 +1767,7 @@ def uploadMinutesAjax(request):
             for m in a:
                 if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
                     print a[m]['name'],a[m]['code'],a[m]['lmid']
-                    lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_type = minutes_type.objects.get(pk=2))
+                    lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_template =templates.objects.get(pk=4))
                     lm_temp.code = a[m]['code']
                     lm_temp.is_valid = True
                     lm_temp.save()
