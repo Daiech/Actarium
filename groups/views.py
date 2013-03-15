@@ -1153,9 +1153,20 @@ def rolesForMinutes(request, slug_group, id_reunion):
             except rol_user_minutes.DoesNotExist:
                 rel = None
             _members.append({"member": m, "rol": rel})
-
+            try:
+                _secretary = rol_user_minutes.objects.get(id_group=g, is_active=False, is_secretary=True).id_user.id
+            except rol_user_minutes.DoesNotExist:
+                _secretary = None
+            except Exception, e:
+                _secretary = None
+            try:
+                _president = rol_user_minutes.objects.get(id_group=g, is_active=False, is_president=True).id_user.id
+            except rol_user_minutes.DoesNotExist:
+                _president = None
+            except Exception:
+                _president = None
         # members = rol_user_minutes.objects.filter(id_group=g, id_minutes=None, is_active=False)
-        ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary, "members": _members, "id_reunion": reunion}
+        ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary, "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president}
         return render_to_response('groups/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")

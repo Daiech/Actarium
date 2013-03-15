@@ -67,7 +67,7 @@
 				</tr>
                 {%endfor%}
 			</table>
-			<div class="row-fluid mt20">
+			<div class="row-fluid mt20 mb50">
 				<div class="span6">
 					<span>Presidente:</span>
 					<select id="sel-president">
@@ -89,11 +89,12 @@
 					<span class="secretary-ok hidden"><i class="icon-ok"></i></span>
 				</div>
 			</div>
+			<hr>
 			<div id="add-new-member" class="mt20 icons-info pull-left">
                 <span>Info:</span>
-                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Firmador</span>
-                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
                 <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Asistente</span>
+                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                <span title="El usuario debe firmar el acta"><i class="icon-wrench"></i> Firmador</span>
                 <span class="user-pend-l"> Usuarios pendientes</span>
             </div>
 			<div class="mt20 pull-right">
@@ -158,6 +159,13 @@
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
+		{% if president%}
+		$("#sel-president").val({{president}})
+		{%endif%}
+		{% if secretary%}
+		$("#sel-secretary").val({{secretary}})
+		{%endif%}
+
 	    function getRoleName (op) {
 	    	switch(op){
 	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
