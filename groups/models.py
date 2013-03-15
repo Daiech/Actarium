@@ -63,6 +63,7 @@ class rel_user_group(models.Model):
     is_approver = models.BooleanField(default=False)
     is_secretary = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
+    is_convener = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 

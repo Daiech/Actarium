@@ -16,9 +16,21 @@
 						</div>
 					</th>
 					<th>
-						<div class="info-title" title="Personas encargadas de redactar actas">
+						<div class="info-title" title="Personas que aparecen en la lista de las actas">
+							<i class="icon-user"></i>
+							<span class="th-name">Miembro</span>
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="Personas encargadas de crear actas">
 							<i class="icon-pencil"></i>
 							<span class="th-name">Redactor</span>
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="Personas que pueden convocar reuniones">
+							<i class="icon-calendar"></i> 
+							<span class="th-name">Convocador</span>
 						</div>
 					</th>
 					<th>
@@ -29,6 +41,7 @@
 					</th>
 					<th>
 						<div class="info-title" title="Elimina la persona de este grupo" class="th-delelte">
+							<i class="icon-remove-circle"></i>
 							<span class="th-name">Eliminar</span>
 						</div>
 					</th>
@@ -48,13 +61,23 @@
 	                    </div>
 					</td>
 					<td class="t-a-c">
-						<label for="secretary{{m.id_user.id}}">
-							<input id="secretary{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
+						<label for="member{{m.id_user.id}}">
+							<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
+						</label>
+					</td>
+					<td class="t-a-c">
+						<label for="writer{{m.id_user.id}}">
+							<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
+						</label>
+					</td>
+					<td class="t-a-c">
+						<label for="convener{{m.id_user.id}}">
+							<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}>
 						</label>
 					</td>
 					<td class="t-a-c">
 						<label for="admin{{m.id_user.id}}">
-							<input id="admin{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
+							<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 						</label>
 					</td>
 					<td class="t-a-c">
@@ -67,14 +90,15 @@
 			</table>
 			<div id="add-new-member" class="icons-info">
                 <span>Info:</span>
-                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> Miembro</span>
                 <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> Convocador de reuniones</span>
+                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
                 <span class="user-pend-l"> Usuarios pendientes</span>
             </div>
 			<div class="mt20">
 				<div class="dropdown btn-groups-admin">
-					<a href="{%if is_admin and not is_member%}#{%else%}/groups/{{group.slug}}{%endif%}" class="btn {%if is_admin and not is_member%}disabled{%endif%}">
+					<a href="/groups/{{group.slug}}" class="btn">
 	                	<i class="icon-arrow-left"></i> Volver al grupo
 	                </a>
 	                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
@@ -160,9 +184,10 @@
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
 	    	switch(op){
-	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
-	    		case 2 : return "Aprobador de actas"; break;
-	    		case 3 : return "Redactor (Puede redactar Actas)"; break;
+	    		case 1 : return "Miembro. Los miembros aparecen en las actas"; break;
+	    		case 2 : return "Redactor de Actas"; break;
+	    		case 3 : return "Creador de reuniones para &eacute;ste grupo."; break;
+	    		case 4 : return "Administrador de &eacute;ste grupo"; break;
 	    	}
 	    }
 	    function callbackSetRole(data) {
@@ -269,14 +294,24 @@
 	        	var is_admin = "{{is_admin}}"
 	            var tr = '<tr><td>'+
 						'<div class="username-info user-pend-r">'+
-	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,30)+' (pendiente)'+
+	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,MAX_LENGTH)+
 	                    '</div>'+
 					'</td>'+
-					'<td class="t-a-c"><label for="secretary'+data['iid']+'">'+
-					'<input  id="secretary'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="'+data['iid']+'">'+
+					'<td class="t-a-c">\
+						<label for="member'+data['iid']+'">\
+							<input id="member'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="'+data['iid']+'" checked>\
+						</label>\
+					</td>'+
+					'<td class="t-a-c">\
+						<label for="writer{{m.id_user.id}}">\
+							<input id="writer'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="'+data['iid']+'">\
+						</label>\
+					</td>'+
+					'<td class="t-a-c"><label for="convener'+data['iid']+'">'+
+					'<input  id="convener'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="'+data['iid']+'" checked>'+
 					'</label></td>'+
 					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
-						'<input id="admin'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
+						'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
 					'</label></td>'+
 					'<td class="t-a-c">'+
 						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
