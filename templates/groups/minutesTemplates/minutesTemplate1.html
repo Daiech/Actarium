@@ -1,0 +1,68 @@
+{% load gravatartag %}
+<section class="row-fluid">
+<article id="minutet" class="minute hoja white-box-container">
+    		<div id="data-for-pdf">
+    		<header>
+    			<h3>Grupo {{group.name}} </h3> 
+    		</header>
+    		<div class="">
+    			
+    			<strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span> <hr>
+    			<p><strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span></p>
+    			<p><strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span></p>
+    			
+    			<hr>
+    			<strong>Lugar: </strong>{{ newMinutesForm.location }}<span style="display:block; float:right">{{ newMinutesForm.location.errors }}</span><hr>
+    			
+    			<div class="box">
+    				<div class="span6">
+    					<strong>Presentes: </strong> 
+		    			<div class="member-list">
+                            {%if reunion%}
+                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+                            {%endif%}
+                            <ul class="unstyled">
+                            {% for member in members_selected%}
+                                <li>
+                                    <div class="">
+                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
+                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                    </div>
+                                </li>
+                            {% endfor%}
+                            </ul>
+                   		 </div>
+    				</div>
+    				<div class="span6">
+    					<strong>Ausentes: </strong>
+		    			<div class="member-list">
+                            {%if reunion%}
+                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+                            {%endif%}
+                            <ul class="unstyled">
+                            {% for member in members_no_selected %}
+                                <li>
+                                    <div class="">
+                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
+                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                    </div>
+                                </li>
+                            {% endfor%}
+                            </ul>
+                    </div>
+    				</div>
+    			</div>
+    			<hr>
+    			<strong>Orden del dia:</strong> <hr>
+    			{{ newMinutesForm.agenda }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
+    			<hr>
+    			<strong>Acuerdos :</strong> <hr>
+    			{{ newMinutesForm.agreement }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+    		
+    		<footer>
+    			
+    		</footer>
+    		</div>
+    		</div>
+    	</article>
+</section>

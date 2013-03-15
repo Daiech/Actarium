@@ -61,7 +61,7 @@
 					</td>
 					<td class="t-a-c">
 						<label for="signer{{m.member.id_user.id}}">
-							<input id="signer{{m.member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.member.id_user.id}}" {%if m.member.is_signer%}checked{%endif%}>
+							<input id="signer{{m.member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_signer%}checked{%endif%}>
 						</label>
 					</td>
 				</tr>
@@ -78,7 +78,7 @@
 				<a href="/groups/{{group.slug}}" class="btn">
                 	<i class="icon-arrow-left"></i> Volver al grupo
                 </a>
-                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{%endif%}" class="btn btn-info">
+                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{%endif%}{{id_reunion}}" class="btn btn-info">
                     Siguiente <i class="icon-arrow-right icon-white"></i>
                 </a>
 			</div>
@@ -169,7 +169,7 @@
 	    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
 	    	}
 	    	else{
-	    		if(confirm("Seguro que desea eliminarle este rol?")){
+	    		if(confirm("Seguro que desea remover esta característica?")){
 	    			sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 	    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
 	    		}

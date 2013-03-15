@@ -1,0 +1,46 @@
+<section class="row-fluid">
+<article id="minutet" class="minute hoja white-box-container">
+    		<div id="data-for-pdf">
+    		<table border="1" style="width:100%; margin-bottom:40px; text-align: center">
+	    		<tr>
+	    			<td style="padding:5px">Logo</td>
+	    			<td style="padding:5px">&nbsp; &nbsp; &nbsp; &nbsp; ACTA COMIT&Eacute; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+	    			<td style="padding:5px">ACTA No. <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>
+	    		</tr>
+    		</table>
+    		
+    		<table border="1" style="width:100%; margin-bottom:10px">
+    			<tr>
+    				<td style="padding:5px">FECHA /HORA</td>
+    				<td style="padding:5px">{{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
+    			</tr>
+    			<tr>
+    				<td style="padding:5px">ASISTENTES</td>
+    				<td style="padding:5px">{% for member in members_selected%}
+                               {{member.id_user.first_name}} {{member.id_user.last_name}},
+                   		{% endfor%}
+                   </td>
+    			</tr>
+    		</table>
+    		
+    		<table border="1" style="width:100%; margin-bottom:10px">
+    			<tr>
+    				<td style="padding:5px">ORDEN DEL D&Iacute;A</td>
+    			</tr>
+    			<tr>
+    				<td>{{ newMinutesForm.agenda }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> </td>
+    			</tr>
+    			<tr>
+    				<td style="padding:5px">DESARROLLO ORDEN DEL D&Iacute;A</td>
+    			</tr>
+    			<tr>
+    				<td>{{ newMinutesForm.agreement }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span></td>
+    			</tr>
+    			
+    		</table>
+				<br /><br />
+    		</div>
+    		</div>
+    	</article>
+</section>
+

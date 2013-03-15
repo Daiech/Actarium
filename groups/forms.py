@@ -26,19 +26,23 @@ class newGroupForm(forms.Form):
     # class Meta:
     #     model = groups
 
+class newMinutesForm3(forms.Form):
+    code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Codigo de acta','autofocus': 'autofocus'}))
+    date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Orden del día'}))
+    agreement = forms.CharField(label="Acuerdos", widget=forms.Textarea(attrs={'placeholder': 'Acuerdos'}))
+    
 
 class newMinutesForm(forms.Form):
-    #formulario generico para cualquier tipo de acta
-    code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Codigo de acta'}))
-    #configuracion para campos de hora
-    # format_valid = ['%I:%M %p']
-    # time_widget = forms.widgets.TimeInput(attrs={'class': 'time-pick'})
-    #formulario personalizado para un tipo de acta especifico para esta version es el unico tipo
+    TYPES = [('ORDINARIA','ORDINARIA'),('ORDINARIA','EXTRAORDINARIA')]
+    code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Codigo de acta','autofocus': 'autofocus'}))
     date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
     location = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Orden del día'}))
     agreement = forms.CharField(label="Acuerdos", widget=forms.Textarea(attrs={'placeholder': 'Acuerdos'}))
     date_end = forms.DateTimeField(label="Fecha finalización", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    type_reunion = forms.ChoiceField( widget=forms.Select(), choices=TYPES)
+
 
 
 class newReunionForm(forms.Form):
