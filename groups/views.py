@@ -933,7 +933,7 @@ def showMinutes(request, slug, minutes_code):
     if request.method == 'POST':
         html_data = request.POST['minutes-html-data']
         from pdfmodule.views import minutesHtmlToPdf
-        pdf_address = minutesHtmlToPdf(html_data,slug)
+        pdf_address = minutesHtmlToPdf(html_data, slug)
         return HttpResponseRedirect(pdf_address)
     group = getGroupBySlug(slug)
     if not group:
@@ -942,14 +942,13 @@ def showMinutes(request, slug, minutes_code):
     if isMemberOfGroup(request.user, group):
         minutes_current = getMinutesByCode(group, minutes_code)
         address_template = minutes_current.id_template.address_template
-        
+
         id_minutes_type = minutes_current.id_template.id_type.pk
-        if(id_minutes_type==2): #para actas antiguas
+        if id_minutes_type == 2:  # para actas antiguas
             data = last_minutes.objects.get(id=minutes_current.id_extra_minutes)
             list_newMinutesForm = {
-                "address_file": MEDIA_URL+"lastMinutes/"+str(data.address_file).split("/")[len(str(data.address_file).split("/"))-1],
-                "name_file": data.name_file
-                }
+                "address_file": MEDIA_URL + "lastMinutes/" + str(data.address_file).split("/")[len(str(data.address_file).split("/")) - 1],
+                "name_file": data.name_file}
         else:
             try:
                 data = minutes_type_1.objects.get(id=minutes_current.id_extra_minutes)
@@ -962,8 +961,7 @@ def showMinutes(request, slug, minutes_code):
                 "agreement": data.agreement,
                 "agenda": data.agenda,
                 "type_reunion": data.type_reunion,
-                "code": minutes_current.code
-                }
+                "code": minutes_current.code}
         if not minutes_current:
             return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
@@ -1012,12 +1010,13 @@ def showMinutes(request, slug, minutes_code):
         ######## <PREV and NEXT> #########
         prev, next = getPrevNextOfGroup(group, minutes_current)
         ######## </PREV and NEXT> #########
-        ctx = {"group": group, "minutes": minutes_current, "prev": prev, "next": next,
-        "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
-        "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm}),
-        "my_attending": my_attending,
-        "missing_approved_list": missing_approved_list,
-        "approved_list": approved_list, "no_approved_list": no_approved_list
+        ctx = {
+            "group": group, "minutes": minutes_current, "prev": prev, "next": next,
+            "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
+            "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm}),
+            "my_attending": my_attending,
+            "missing_approved_list": missing_approved_list,
+            "approved_list": approved_list, "no_approved_list": no_approved_list
         }
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
@@ -1088,16 +1087,14 @@ def setMinuteAssistance(minutes_id, members_selected, members_no_selected):
             rel_user_minutes_assistance(
                 id_user=m.id_user,
                 id_minutes=minutes_id,
-                assistance=True
-                )
+                assistance=True)
         )
     for m in members_no_selected:
         b.append(
             rel_user_minutes_assistance(
                 id_user=m.id_user,
                 id_minutes=minutes_id,
-                assistance=False
-                )
+                assistance=False)
         )
     try:
         rel_user_minutes_assistance.objects.bulk_create(a)
@@ -1115,13 +1112,13 @@ def saveMinute(request, group, form, _template):
     '''
     if getRelUserGroup(request.user, group).is_secretary:
         df = {
-        'code': form.cleaned_data['code'],
-        'date_start': form.cleaned_data['date_start'],
-        'date_end': form.cleaned_data['date_end'],
-        'location': form.cleaned_data['location'],
-        'agenda': form.cleaned_data['agenda'],
-        'agreement': form.cleaned_data['agreement'],
-        'type_reunion': form.cleaned_data['type_reunion'],
+            'code': form.cleaned_data['code'],
+            'date_start': form.cleaned_data['date_start'],
+            'date_end': form.cleaned_data['date_end'],
+            'location': form.cleaned_data['location'],
+            'agenda': form.cleaned_data['agenda'],
+            'agreement': form.cleaned_data['agreement'],
+            'type_reunion': form.cleaned_data['type_reunion'],
         }
         try:
             minu = minutes.objects.get(id_group=group, code=df['code'])
@@ -1130,20 +1127,20 @@ def saveMinute(request, group, form, _template):
             minu = None
         if not minu:
             myNewMinutes_type_1 = minutes_type_1(
-                           date_start=df['date_start'],
-                           date_end=df['date_end'],
-                           location=df['location'],
-                           agenda=df['agenda'],
-                           agreement=df['agreement'],
-                           type_reunion=df['type_reunion']
-                         )
+                date_start=df['date_start'],
+                date_end=df['date_end'],
+                location=df['location'],
+                agenda=df['agenda'],
+                agreement=df['agreement'],
+                type_reunion=df['type_reunion']
+            )
             myNewMinutes_type_1.save()
             myNewMinutes = minutes(
-                            code=df['code'],
-                            id_extra_minutes=myNewMinutes_type_1.pk,
-                            id_group=group,
-                            id_template=_template,
-                        )
+                code=df['code'],
+                id_extra_minutes=myNewMinutes_type_1.pk,
+                id_group=group,
+                id_template=_template,
+            )
             myNewMinutes.save()
             id_user = request.user
             saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
@@ -1244,7 +1241,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
     if _user_rel.is_secretary and _user_rel.is_active:
         if request.method == "POST":
             form = newMinutesForm(request.POST)
-            select = request.POST.getlist('members[]')
+            # select = request.POST.getlist('members[]')
             #  m_selected, m_no_selected = getMembersOfGroupWithSelected(group.id, select)
             m_assistance = None
             m_no_assistance = None
@@ -1287,12 +1284,12 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                     # email_list = getEmailListByGroup(group)
                     print "EMAILS", email_list
                     email_ctx = {
-                                'firstname': request.user.first_name,
-                                'username': request.user.username,
-                                'groupname': group.name,
-                                'link': link,
-                                'urlgravatar': showgravatar(request.user.email, 50)
-                                }
+                        'firstname': request.user.first_name,
+                        'username': request.user.username,
+                        'groupname': group.name,
+                        'link': link,
+                        'urlgravatar': showgravatar(request.user.email, 50)
+                    }
                     sendEmailHtml(3, email_ctx, email_list)
                     return HttpResponseRedirect(url_new_minute)
                 else:
@@ -1364,30 +1361,31 @@ def newReunion(request, slug):
                     'agenda': form.cleaned_data['agenda'],
                 }
                 myNewReunion = reunions(
-                               id_convener=request.user,
-                               date_reunion=df['date_reunion'],
-                               title=df['title'],
-                               locale=df['locale'],
-                               id_group=q,
-                               agenda=df['agenda'],
-                             )
+                    id_convener=request.user,
+                    date_reunion=df['date_reunion'],
+                    title=df['title'],
+                    locale=df['locale'],
+                    id_group=q,
+                    agenda=df['agenda'],
+                )
                 myNewReunion.save()
                 id_reunion = myNewReunion
                 relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
                 for relation in relations:
                     email_list.append(str(relation.id_user.email) + ",")
-                email_ctx = {'firstname': request.user.first_name,
-                       'username': request.user.username,
-                       'groupname': q.name,
-                       'titlereunion': str(df['title'].encode('utf8', 'replace')),
-                       'datereunion': dateTimeFormatForm(df['date_reunion']),
-                       'locale': str(df['locale'].encode('utf8', 'replace')),
-                       'agenda': str(df['agenda'].encode('utf8', 'replace')),
-                       'datereunionshort': str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")),
-                       'id_reunion': id_reunion.pk,
-                       'urlgravatar': showgravatar(request.user.email, 50)
-                       }
+                email_ctx = {
+                    'firstname': request.user.first_name,
+                    'username': request.user.username,
+                    'groupname': q.name,
+                    'titlereunion': str(df['title'].encode('utf8', 'replace')),
+                    'datereunion': dateTimeFormatForm(df['date_reunion']),
+                    'locale': str(df['locale'].encode('utf8', 'replace')),
+                    'agenda': str(df['agenda'].encode('utf8', 'replace')),
+                    'datereunionshort': str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")),
+                    'id_reunion': id_reunion.pk,
+                    'urlgravatar': showgravatar(request.user.email, 50)
+                }
                 sendEmailHtml(2, email_ctx, email_list)
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
@@ -1433,11 +1431,11 @@ def calendar(request):
                          'is_last': is_last}
         i = i + 1
     response = json_array
-    ctx = {'TITLE': "Actarium",
-       "reunions_day": my_reu,
-       "reunions": my_reu,
-       "my_reu_day_json": json.dumps(response),
-       "groups": gr}
+    ctx = {
+        "reunions_day": my_reu,
+        "reunions": my_reu,
+        "my_reu_day_json": json.dumps(response),
+        "groups": gr}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
@@ -1473,11 +1471,11 @@ def calendarDate(request, slug=None):
                          'is_last': is_last}
         i = i + 1
     response = json_array
-    ctx = {'TITLE': "Actarium",
-       "reunions_day": my_reu_day,
-       "reunions": my_reu,
-       "my_reu_day_json": json.dumps(response),
-       "groups": gr}
+    ctx = {
+        "reunions_day": my_reu_day,
+        "reunions": my_reu,
+        "my_reu_day_json": json.dumps(response),
+        "groups": gr}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
@@ -1586,13 +1584,13 @@ def setAssistance(request):
             email_list = []
             email_list.append(str(id_reunion.id_convener.email) + ",")
             ctx_email = {
-                 'firstname': request.user.first_name,
-                 'username': request.user.username,
-                 'response': resp,
-                 'groupname': id_reunion.id_group.name,
-                 'titlereunion':  id_reunion.title,
-                 'urlgravatar': showgravatar(request.user.email, 50)
-             }
+                'firstname': request.user.first_name,
+                'username': request.user.username,
+                'response': resp,
+                'groupname': id_reunion.id_group.name,
+                'titlereunion':  id_reunion.title,
+                'urlgravatar': showgravatar(request.user.email, 50)
+            }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
             sendEmailHtml(5, ctx_email, email_list)
@@ -1659,20 +1657,21 @@ def getReunionData(request):
             else:
                 has_minute = 0
                 minute_code = 0
-            reunion_data = {"convener": convener,
-               "date_convened": str(dateTimeFormatDb(date_convened)),
-               "date_reunion": str(dateTimeFormatDb(date_reunion)),
-               "group": group,
-               "agenda": agenda,
-               "locale": locale,
-               "title": title,
-               "is_done": is_done,
-               "assistants": assis_list,
-               "group_slug": group_slug,
-               "iconf": iconf,
-               "has_minute": has_minute,
-               "minute_code": minute_code
-           }
+            reunion_data = {
+                "convener": convener,
+                "date_convened": str(dateTimeFormatDb(date_convened)),
+                "date_reunion": str(dateTimeFormatDb(date_reunion)),
+                "group": group,
+                "agenda": agenda,
+                "locale": locale,
+                "title": title,
+                "is_done": is_done,
+                "assistants": assis_list,
+                "group_slug": group_slug,
+                "iconf": iconf,
+                "has_minute": has_minute,
+                "minute_code": minute_code
+            }
     else:
         reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
@@ -1694,6 +1693,7 @@ def removeGMT(datetime_var):
     dt_s = dt[:19]
     return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
 
+
 @login_required(login_url='/account/login')
 def uploadMinutes(request, slug_group):
     group = groups.objects.get(slug=slug_group, is_active=True)
@@ -1702,25 +1702,25 @@ def uploadMinutes(request, slug_group):
     if is_member:
         if getRelUserGroup(request.user, group).is_secretary:
             if request.method == "POST":
-                form = uploadMinutesForm(request.POST,request.FILES)
+                form = uploadMinutesForm(request.POST, request.FILES)
                 if form.is_valid():
                     from groups.validators import validateExtension
                     for f in request.FILES.getlist('minutesFile'):
                         if validateExtension(f.name):
                             _last_minutes = last_minutes(
-                                id_user = request.user,
-                                address_file = f,
-                                name_file = f.name
+                                id_user=request.user,
+                                address_file=f,
+                                name_file=f.name
                             )
                             import random
                             _last_minutes.save()
                             _minutes = minutes(
-                                id_group = group,
-                                id_extra_minutes = _last_minutes.pk,
-                                id_template = templates.objects.get(pk=4),
-                                is_valid = False,
-                                is_full_signed = False,
-                                code = "%s-%s"%(int(random.random()*1000000),_last_minutes.pk)
+                                id_group=group,
+                                id_extra_minutes=_last_minutes.pk,
+                                id_template=templates.objects.get(pk=4),
+                                is_valid=False,
+                                is_full_signed=False,
+                                code="%s-%s" % (int(random.random() * 1000000), _last_minutes.pk)
                             )
                             _minutes.save()
                         else:
@@ -1735,23 +1735,24 @@ def uploadMinutes(request, slug_group):
                     print ""
             last_minutes_list = []
             i = 0
-            lml = minutes.objects.filter(id_group = group, id_template = templates.objects.get(pk=4),is_valid = False)
+            lml = minutes.objects.filter(id_group=group, id_template=templates.objects.get(pk=4), is_valid=False)
             for m in lml:
-                last_minutes_list.append({'i':i,'lm':last_minutes.objects.get(pk=m.id_extra_minutes).name_file,'lm_id':last_minutes.objects.get(pk=m.id_extra_minutes).pk})
+                last_minutes_list.append({'i': i, 'lm': last_minutes.objects.get(pk=m.id_extra_minutes).name_file, 'lm_id': last_minutes.objects.get(pk=m.id_extra_minutes).pk})
                 i = i+1
-            _minutes = minutes.objects.filter(id_group = group, is_valid= True).order_by('-code')
-            ctx={
-                 'uploadMinutesForm':form, 
-                 'group':group, 
-                 'last_minutes':last_minutes_list, 
-                 'datasize': len(last_minutes_list), 
-                 'datos_validos':datos_validos, 
-                 'minutes': _minutes}
+            _minutes = minutes.objects.filter(id_group=group, is_valid=True).order_by('-code')
+            ctx = {
+                'uploadMinutesForm': form,
+                'group': group,
+                'last_minutes': last_minutes_list,
+                'datasize': len(last_minutes_list),
+                'datos_validos': datos_validos,
+                'minutes': _minutes}
             return render_to_response('groups/uploadMinutesForm.html', ctx, context_instance=RequestContext(request))
         else:
-            return HttpResponseRedirect("/groups/" + group.slug + "?no_redactor=true") 
+            return HttpResponseRedirect("/groups/" + group.slug + "?no_redactor=true")
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
+
 
 @login_required(login_url='/account/login')
 def uploadMinutesAjax(request):
@@ -1759,15 +1760,13 @@ def uploadMinutesAjax(request):
         if request.method == 'GET':
             last_minutes_get = request.GET['last_minutes']
             a = json.loads(last_minutes_get)
-            group_id= a['group_id']
+            group_id = a['group_id']
             group = groups.objects.get(pk=group_id)
-            print "gurpo -------------------------------------------", group_id
             a = a['values']
             valid = True
             for m in a:
                 if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
-                    print a[m]['name'],a[m]['code'],a[m]['lmid']
-                    lm_temp = minutes.objects.get(id_extra_minutes = a[m]['lmid'], id_template =templates.objects.get(pk=4))
+                    lm_temp = minutes.objects.get(id_extra_minutes=a[m]['lmid'], id_template=templates.objects.get(pk=4))
                     lm_temp.code = a[m]['code']
                     lm_temp.is_valid = True
                     lm_temp.save()
@@ -1775,11 +1774,11 @@ def uploadMinutesAjax(request):
                     valid = False
                 print "existe el codigo?", getMinutesByCode(group, a[m]['code'])
             if valid:
-                response = {'data':"validos"}
+                response = {'data': "validos"}
             else:
-                response = {'data':"no_validos"}
+                response = {'data': "no_validos"}
         else:
-            response = {'data':"No es GET"}
+            response = {'data': "No es GET"}
     else:
-        response = {'data':"No es AJAX"}
+        response = {'data': "No es AJAX"}
     return HttpResponse(json.dumps(response), mimetype="application/json")
