@@ -1,23 +1,27 @@
 <section class="row-fluid">
-<article id="minutet" class="minute hoja white-box-container">
-    		<div id="data-for-pdf">
+    <article id="minutet" class="minute hoja white-box-container">
+    	<div id="data-for-pdf">
             <div class="hidden">{{newMinutesForm.type_reunion}}</div>
-           <div class="hidden">
-            <input type="text" placeholder="Lugar" name="location" id="id_location" value="default" /></div>
             <div class="hidden">
-                <input id="id_date_end" type="text" class="date-pick" name="date_end" value="2000-01-01 03:00 am" /></div>
+                <input type="text" placeholder="Lugar" name="location" id="id_location" value="default" />
+            </div>
+            <div class="hidden">
+                <input id="id_date_end" type="text" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
+            </div>
     		<table border="1" style="width:100%; margin-bottom:40px; text-align: center">
-	    		<tr>
-	    			<td style="padding:5px">Logo</td>
-	    			<td style="padding:5px">&nbsp; &nbsp; &nbsp; &nbsp; ACTA COMIT&Eacute; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-	    			<td style="padding:5px">ACTA No. <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>
-	    		</tr>
+        		<tr>
+        			<td style="padding:5px">Logo</td>
+        			<td style="padding:5px">&nbsp; &nbsp; &nbsp; &nbsp; ACTA COMIT&Eacute; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+        			<td style="padding:5px">ACTA No. <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>
+                    </td>
+        		</tr>
     		</table>
     		
     		<table border="1" style="width:100%; margin-bottom:10px">
     			<tr>
     				<td style="padding:5px">FECHA /HORA</td>
     				<td style="padding:5px">{{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
+                    </td>
     			</tr>
     			<tr>
     				<td style="padding:5px">ASISTENTES</td>
@@ -43,9 +47,8 @@
     			</tr>
     			
     		</table>
-				<br /><br />
-    		</div>
-    		</div>
-    	</article>
+    		<br /><br />
+    	</div>
+    </article>
 </section>
 

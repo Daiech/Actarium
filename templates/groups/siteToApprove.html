@@ -1,0 +1,66 @@
+{% load gravatartag %}
+	
+	{% if space_to_approve or is_secretary %}
+    <div id="sign" class="hoja">
+    	<p>Este es el espacio para ver quien ya ha aprobado el acta:</p>
+    	{% if my_attending%}
+    		<div id="div-sign">
+	    		<strong>Estas de acuerdo con la redacci&oacute;n de &eacute;sta Acta?</strong>
+		    	<a href="#" class="btn btn-success btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+					Aprobar <span></span>
+				</a>
+				<a href="#" class="btn btn-approve" data-minutes="{{minutes.id}}" data-approve="0">
+					No Aprobar <span></span>
+				</a>
+			</div>
+		{%endif%}
+		<hr>
+		<div class="box row-fluid">
+			<div class="span6">
+				<strong>Miembros que aprobaron:</strong>
+    			<ol id="approved-list">
+					{% if approved_list == 0 %}
+		    			0
+	    			{%else%}
+		    			{%for member in approved_list%}
+		    				<li id="approved-{{member.id_user.id}}">
+		    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+		    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+		    				</li>
+		    			{%endfor%}
+		    		{% endif %}
+	    		</ol>
+			</div>
+			<div class="span6">
+				<strong>Miembros que no aprobaron:</strong>
+				<ol id="no-approved-list">
+    				{% if no_approved_list == 0 %}
+		    			0
+	    			{%else%}
+	    				{%for member in no_approved_list%}
+		    				<li  id="no-approved-{{member.id_user.id}}">
+		    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+		    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+		    				</li>
+		    			{%endfor%}
+	    			{% endif %}
+	    		</ol>
+			</div>
+		</div>
+		<div class="">
+			<strong>Miembros faltantes por aprobar:</strong>
+			{% if missing_approved_list == 0 %}
+    			0
+			{%else%}
+			<ol id="missing-list">
+    			{%for member in missing_approved_list%}
+    				<li id="missing-{{member.id_user.id}}">
+    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+    				</li>
+    			{%endfor%}
+    		</ol>
+    		{% endif %}
+		</div>
+	</div>
+	{%endif%}

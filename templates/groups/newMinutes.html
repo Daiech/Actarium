@@ -48,6 +48,14 @@
         {% endif %}
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
+            <p class="t-a-c">
+                &Uacute;ltimo c&oacute;digo de Acta:
+                {%if last.code%}
+                <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
+                {%else%}
+                <small>No hay m&aacute;s actas</small>
+                {%endif%}
+            </p>
             {% include minutesTemplateForm %}
             <table>
                 <tr>

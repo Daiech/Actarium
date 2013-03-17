@@ -146,7 +146,7 @@
             <ul class="unstyled minutes-list">
                 {%for minute in minutes%}
                 <li class="list-item">
-                    <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
+                    <a class="list-item-next {%if minute.is_full_signed%}user-active-l{%else%}user-pend-l{%endif%}" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
                         {{minute.code}}
                         <span class="date-minute-created" style="display:none"> creada el {{minute.date_created|date}}</span>
                     </a>

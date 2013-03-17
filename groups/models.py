@@ -129,6 +129,9 @@ class private_templates(models.Model):
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
     date_joined = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return "%s => %s: by %s" % (self.id_group.name, self.id_template.name, self.id_user.username)
+
 
 class minutes(models.Model):
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
@@ -206,8 +209,15 @@ class feddback(models.Model):
 class rel_user_minutes_assistance(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
-    assistance = models.IntegerField()
+    assistance = models.BooleanField(default=False)
     date_assistance = models.DateTimeField(auto_now=True)
+
+
+class rel_user_minutes_signed(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
+    is_signed_approved = models.IntegerField()  # take 0, 1, or 2
+    date_joined = models.DateTimeField(auto_now=True)
 
 
 # Definicion del modelo para manerjo de roles de usuarios en grupos
