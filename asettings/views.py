@@ -188,7 +188,7 @@ def assignTemplateAjax(request):
                     except:
                         response = 'Error al guardar los datos, probablemente la plantilla que desea asignar ya se encuentra relacionada con el grupo seleccionado, por favor verifica los datos'
                 except:
-                    response = "Error: los datos no coinciden con los datos guardados"
+                    response = "Error: No se ha podido guardar la asignacion."
                 print id_template, id_group
             except:
                 response = "Problema con los parametros get"

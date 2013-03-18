@@ -377,7 +377,7 @@ def showGroup(request, slug):
         if _user:
             if _user.is_active:
                 members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
-                minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-id")
+                minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
                 _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
                 if request.method == "GET":
                     try:
