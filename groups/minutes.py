@@ -709,6 +709,8 @@ def showMinutes(request, slug, minutes_code):
                 }
             else:
                 return HttpResponseRedirect("/groups/" + slug + "#esta-acta-aun-no-ha-sido-aprobada")
+        else:
+            return HttpResponseRedirect("/groups/" + slug + "#no-tienes-rol")
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))

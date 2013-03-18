@@ -1,19 +1,12 @@
 {% load gravatartag %}
 	
 	{% if space_to_approve or is_secretary %}
-    <div id="sign" class="hoja">
-    	<p>Este es el espacio para ver quien ya ha aprobado el acta:</p>
-    	{% if my_attending%}
-    		<div id="div-sign">
-	    		<strong>Estas de acuerdo con la redacci&oacute;n de &eacute;sta Acta?</strong>
-		    	<a href="#" class="btn btn-success btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
-					Aprobar <span></span>
-				</a>
-				<a href="#" class="btn btn-approve" data-minutes="{{minutes.id}}" data-approve="0">
-					No Aprobar <span></span>
-				</a>
-			</div>
-		{%endif%}
+    <section id="sign" class="hoja white-box-container">
+    	<header>
+    		<!-- <div><img src="{{STATIC_PREFIX}}/img/icon-writter.png"></div> -->
+    		<div><img src="{{STATIC_PREFIX}}/img/groups/default.jpg"></div>
+    		<h3>Comisi&oacute;n aprobatoria</h3>
+    	</header>
 		<hr>
 		<div class="box row-fluid">
 			<div class="span6">
@@ -62,5 +55,5 @@
     		</ol>
     		{% endif %}
 		</div>
-	</div>
+	</section>
 	{%endif%}
