@@ -1077,6 +1077,7 @@ only screen and (min-resolution: 144dpi) {
     #alert-message, #alert-error {width:70%;}
     #message-box, #more-info{width: 85%;}
     .btn-groups-admin{width: 95%;}
+    .btn{margin-top: 5px;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {

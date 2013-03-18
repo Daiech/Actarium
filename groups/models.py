@@ -212,12 +212,18 @@ class rel_user_minutes_assistance(models.Model):
     assistance = models.BooleanField(default=False)
     date_assistance = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return "%s: assistance %s in %s" % (self.id_user.username, self.assistance, self.id_minutes.code)
+
 
 class rel_user_minutes_signed(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
     is_signed_approved = models.IntegerField()  # take 0, 1, or 2
     date_joined = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return "%s: assistance %s in %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
 
 
 # Definicion del modelo para manerjo de roles de usuarios en grupos
