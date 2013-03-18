@@ -48,10 +48,10 @@ def getMinutesByCode(group, code_id):
     try:
         return minutes.objects.get(id_group=group, code=code_id)
     except minutes.DoesNotExist:
-        raise Http404
+        return None
     except Exception, e:
         print "Error getMinutesByCode: %s" % e
-        raise Http404
+        return None
 
 
 def getPrevNextOfGroup(group, minutes_id):
@@ -714,3 +714,103 @@ def showMinutes(request, slug, minutes_code):
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
+
+
+
+@login_required(login_url='/account/login')
+def uploadMinutes(request, slug_group):
+    group = groups.objects.get(slug=slug_group, is_active=True)
+    is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
+    datos_validos = ""
+    if is_member:
+        from groups.forms import uploadMinutesForm
+        if getRelUserGroup(request.user, group).is_secretary:
+            if request.method == "POST":
+                form = uploadMinutesForm(request.POST, request.FILES)
+                if form.is_valid():
+                    from groups.validators import validateExtension
+                    for f in request.FILES.getlist('minutesFile'):
+                        if validateExtension(f.name):
+                            _last_minutes = last_minutes(
+                                id_user=request.user,
+                                address_file=f,
+                                name_file=f.name
+                            )
+                            import random
+                            _last_minutes.save()
+                            _minutes = minutes(
+                                id_group=group,
+                                id_extra_minutes=_last_minutes.pk,
+                                id_template=templates.objects.get(pk=4),
+                                is_valid=False,
+                                is_full_signed=False,
+                                code="%s-%s" % (int(random.random() * 1000000), _last_minutes.pk)
+                            )
+                            _minutes.save()
+                        else:
+                            print "invalid_extension in ", f.name
+                else:
+                    print "EL formulario no es valido"
+            else:
+                form = uploadMinutesForm()
+                try:
+                    datos_validos = request.GET['valid']
+                except:
+                    print ""
+            last_minutes_list = []
+            i = 0
+            lml = minutes.objects.filter(id_group=group, id_template=templates.objects.get(pk=4), is_valid=False)
+            for m in lml:
+                last_minutes_list.append({'i': i, 'lm': last_minutes.objects.get(pk=m.id_extra_minutes).name_file, 'lm_id': last_minutes.objects.get(pk=m.id_extra_minutes).pk})
+                i = i+1
+            _minutes = minutes.objects.filter(id_group=group, is_valid=True).order_by('-code')
+            ctx = {
+                'uploadMinutesForm': form,
+                'group': group,
+                'last_minutes': last_minutes_list,
+                'datasize': len(last_minutes_list),
+                'datos_validos': datos_validos,
+                'minutes': _minutes}
+            return render_to_response('groups/uploadMinutesForm.html', ctx, context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect("/groups/" + group.slug + "?no_redactor=true")
+    else:
+        return HttpResponseRedirect('/groups/#error-view-group')
+
+
+#@login_required(login_url='/account/login')
+def uploadMinutesAjax(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                last_minutes_get = request.GET['last_minutes']
+            except Exception, e:
+                last_minutes_get = False
+                print e
+            if last_minutes_get:    
+                print "last get", last_minutes_get
+                a = json.loads(last_minutes_get)
+                print "aaaaaaaaaaaa", a
+                group_id = a['group_id']
+                group = groups.objects.get(pk=group_id)
+                a = a['values']
+                valid = True
+                for m in a:
+                    if not(a[m]['code'] == "") and not(getMinutesByCode(group, a[m]['code'])):
+                        lm_temp = minutes.objects.get(id_extra_minutes=a[m]['lmid'], id_template=templates.objects.get(pk=4))
+                        lm_temp.code = a[m]['code']
+                        lm_temp.is_valid = True
+                        lm_temp.save()
+                    else:
+                        valid = False
+                if valid:
+                    response = {'data': "validos"}
+                else:
+                    response = {'data': "no_validos"}
+            else:
+                response = {'data': "Error"}
+        else:
+            response = {'data': "No es GET"}
+    else:
+        response = {'data': "No es AJAX"}
+    return HttpResponse(json.dumps(response), mimetype="application/json")

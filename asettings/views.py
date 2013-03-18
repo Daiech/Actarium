@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 # from django.http import Http404
-from groups.models import billing, packages, organizations, groups_pro
+from groups.models import billing, packages, organizations, groups_pro, templates, rel_user_private_templates, private_templates, rel_user_group
 # group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance
 from groups.forms import newOrganizationForm
 #from django.contrib.auth.models import User
@@ -41,7 +41,7 @@ def settingsBilling(request):
     except billing.DoesNotExist:
         billing_list = "No hay información disponible."
         for b in billing:
-            array_billing[b.id] = int(p.time) * int(p.id_package.price)
+            array_billing[b.id] = int(b.time) * int(b.id_package.price)
     ctx = {'TITLE': "Facturación - configuración", "packages_list": packages_list, "billing_list": billing_list, 'array_billing': array_billing}
     return render_to_response('asettings/settings_billing.html', ctx, context_instance=RequestContext(request))
 
@@ -160,3 +160,69 @@ def setReplyRequestPackage(request):
     else:
         is_billing_saved = "Error de servidor"
     return HttpResponse(json.dumps(is_billing_saved), mimetype="application/json")
+
+def settingsTemplates(request):
+    _templates = rel_user_private_templates.objects.filter(id_user=request.user)
+    _groups = rel_user_group.objects.filter(id_user=request.user, is_admin=True)
+    _private_templates = private_templates.objects.filter(id_user=request.user)
+    ctx = {
+            "templates":_templates,
+            "groups": _groups,
+            "private_templates_assigned": _private_templates
+    }
+    return render_to_response('asettings/settings_templates.html', ctx, context_instance=RequestContext(request))
+
+def assignTemplateAjax(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                id_template = str(request.GET['id_template'])
+                id_group = str(request.GET['id_group'])
+                try:
+                    from groups.models import groups
+                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template = templates.objects.get(pk=id_template))
+                    _group = rel_user_group.objects.get(id_user=request.user, id_group = groups.objects.get(pk=id_group), is_admin=True)
+                    try:
+                        response = "True"
+                        private_templates(id_template=_rel_user_private_templates.id_template, id_group = _group.id_group, id_user= request.user).save()
+                    except:
+                        response = 'Error al guardar los datos, probablemente la plantilla que desea asignar ya se encuentra relacionada con el grupo seleccionado, por favor verifica los datos'
+                except:
+                    response = "Error: los datos no coinciden con los datos guardados"
+                print id_template, id_group
+            except:
+                response = "Problema con los parametros get"
+        else:
+            response = "No se recibio una peticion get"
+    else:
+        response = "No ser recibio una consulta Ajax"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+    
+def unassignTemplateAjax(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                id_template = str(request.GET['id_template'])
+                id_group = str(request.GET['id_group'])
+                try:
+                    from groups.models import groups
+                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template = templates.objects.get(pk=id_template))
+                    _group = rel_user_group.objects.get(id_user=request.user, id_group = groups.objects.get(pk=id_group), is_admin=True)
+                    response = "True"
+                    try:
+                        response = "True"
+                        private_templates.objects.get(id_template=_rel_user_private_templates.id_template, id_group = _group.id_group, id_user= request.user).delete()
+                    except:
+                        response = 'La plantilla seleccionada no esta asignada al grupo seleccionado'
+                except:
+                    response = "Error: los datos no coinciden con los datos guardados"
+                print id_template, id_group
+            except:
+                response = "Problema con los parametros get"
+        else:
+            response = "No se recibio una peticion get"
+    else:
+        response = "No ser recibio una consulta Ajax"
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+    

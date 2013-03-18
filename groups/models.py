@@ -131,6 +131,9 @@ class private_templates(models.Model):
 
     def __unicode__(self):
         return "%s => %s: by %s" % (self.id_group.name, self.id_template.name, self.id_user.username)
+    
+    class Meta:
+        unique_together = ('id_template', 'id_group')
 
 
 class minutes(models.Model):
