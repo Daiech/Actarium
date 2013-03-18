@@ -153,6 +153,65 @@ def getLastMinutes(group):
         return "---"
 
 
+def getRelUserMinutesSigned(_user, _minutes):
+    try:
+        return rel_user_minutes_signed.objects.get(id_user=_user, id_minutes=_minutes)
+    except rel_user_minutes_signed.DoesNotExist:
+        return None
+    except Exception, e:
+        print "getRelUserMinutesSigned:", e
+        return False
+
+
+def getRelUserMinutesAssistance(id_minutes, id_user):
+    try:
+        return rel_user_minutes_assistance.objects.get(id_minutes=id_minutes, id_user=id_user)
+    except rel_user_minutes_assistance.DoesNotExist:
+        return None
+    except Exception, e:
+        print "ERROR minutes.getRelUserMinutesAssistance:", e
+        return None
+
+
+def getReunionById(id_reunion):
+    try:
+        _reunion = reunions.objects.get(id=id_reunion)  # esta reunion pertenece a un grupo mio?
+        if _reunion:
+            if _reunion.hasMinutes():
+                return False
+            return _reunion
+    except reunions.DoesNotExist:
+        return None
+    except Exception:
+        return None
+
+
+def getTemplateMinutes(slug_template):
+    try:
+        _template = templates.objects.get(slug=str(slug_template))
+    except templates.DoesNotExist:
+        _template = templates.objects.get(id=1)
+    return _template
+
+
+def getAllPrivateTemplates(id_group=None, id_user=False):
+    try:
+        if id_group:
+            return private_templates.objects.filter(id_group=id_group)
+        if id_user:
+            return private_templates.objects.filter(id_user=id_user)
+    except Exception:
+        return None
+    return None
+
+
+def getAllPublicTemplates():
+    try:
+        return templates.objects.filter(is_public=True)
+    except Exception:
+        return None
+
+
 def removeUniqueRolGroup(group, role):
     try:
         if role == 4:
@@ -167,6 +226,34 @@ def removeUniqueRolGroup(group, role):
         return True
     except Exception:
         return False
+
+
+def updateRolUserMinutes(request, group, _minute):
+    try:
+        rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
+
+        email_list = list()
+        for r in rols:
+            if r.is_approver:
+                email_list.append(r.id_user.email)
+                print "SET:", setRelUserMinutesSigned(r.id_user, _minute, 0)
+
+        rols.update(is_active=True, id_minutes=_minute)
+    except Exception, e:
+        print "newMinutes Error", e
+        # saveErrorLog
+    print "email_list", email_list
+    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
+    link = URL_BASE + url_new_minute
+    email_ctx = {
+        'firstname': request.user.first_name,
+        'username': request.user.username,
+        'groupname': group.name,
+        'link': link,
+        'urlgravatar': showgravatar(request.user.email, 50)
+    }
+    sendEmailHtml(3, email_ctx, email_list)
+    return url_new_minute
 
 
 def setRolUserMinutes(id_user, id_group, id_minutes=None, is_president=False,
@@ -203,16 +290,6 @@ def setRelUserMinutesSigned(_user, _minutes, is_signed_approved):
         return False
 
 
-def getRelUserMinutesSigned(_user, _minutes):
-    try:
-        return rel_user_minutes_signed.objects.get(id_user=_user, id_minutes=_minutes)
-    except rel_user_minutes_signed.DoesNotExist:
-        return None
-    except Exception, e:
-        print "getRelUserMinutesSigned:", e
-        return False
-
-
 def setMinuteAssistance(minutes_id, members_selected, members_no_selected):  # not called
     '''
     Stored in the database records all users attending a reunion.
@@ -239,16 +316,6 @@ def setMinuteAssistance(minutes_id, members_selected, members_no_selected):  # n
     except Exception, e:
         print "Minutes.setMinuteAssistance", e
         return False
-
-
-def getRelUserMinutesAssistance(id_minutes, id_user):
-    try:
-        return rel_user_minutes_assistance.objects.get(id_minutes=id_minutes, id_user=id_user)
-    except rel_user_minutes_assistance.DoesNotExist:
-        return None
-    except Exception, e:
-        print "ERROR minutes.getRelUserMinutesAssistance:", e
-        return None
 
 
 def setRelationReunionMinutes(_reunion, _minute):
@@ -645,70 +712,3 @@ def showMinutes(request, slug, minutes_code):
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
-
-
-def updateRolUserMinutes(request, group, _minute):
-    try:
-        rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
-
-        email_list = list()
-        for r in rols:
-            if r.is_approver:
-                email_list.append(r.id_user.email)
-                print "SET:", setRelUserMinutesSigned(r.id_user, _minute, 0)
-
-        rols.update(is_active=True, id_minutes=_minute)
-    except Exception, e:
-        print "newMinutes Error", e
-        # saveErrorLog
-    print "email_list", email_list
-    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
-    link = URL_BASE + url_new_minute
-    email_ctx = {
-        'firstname': request.user.first_name,
-        'username': request.user.username,
-        'groupname': group.name,
-        'link': link,
-        'urlgravatar': showgravatar(request.user.email, 50)
-    }
-    sendEmailHtml(3, email_ctx, email_list)
-    return url_new_minute
-
-
-def getReunionById(id_reunion):
-    try:
-        _reunion = reunions.objects.get(id=id_reunion)  # esta reunion pertenece a un grupo mio?
-        if _reunion:
-            if _reunion.hasMinutes():
-                return False
-            return _reunion
-    except reunions.DoesNotExist:
-        return None
-    except Exception:
-        return None
-
-
-def getTemplateMinutes(slug_template):
-    try:
-        _template = templates.objects.get(slug=str(slug_template))
-    except templates.DoesNotExist:
-        _template = templates.objects.get(id=1)
-    return _template
-
-
-def getAllPrivateTemplates(id_group=None, id_user=False):
-    try:
-        if id_group:
-            return private_templates.objects.filter(id_group=id_group)
-        if id_user:
-            return private_templates.objects.filter(id_user=id_user)
-    except Exception:
-        return None
-    return None
-
-
-def getAllPublicTemplates():
-    try:
-        return templates.objects.filter(is_public=True)
-    except Exception:
-        return None
