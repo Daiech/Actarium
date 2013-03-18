@@ -1,0 +1,142 @@
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Facturaci&oacute;n{% endblock %}
+{% block bodysettings %}
+<div class="modal hide fade" id="newBillingModal">  <!-- Ventana modal para contratar nuevo paquete -->
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Aquirir nuevo paquete (<span id="title-modal"></span>)</h3>
+		<hr>
+		<h4>Elige la cantidad de tiempo</h4>
+	</div>
+	<div class="modal-body">
+		<span id="gpa-modal" style="display:none;"></span>
+		<span id="id-package-modal" style="display:none;"></span>
+		Precio por mes= <strong>$<span id="price-modal"></span></strong><br />
+		Numero de meses= <select id="select-time"></select><br />
+		Total= <strong>$<span id="total-modal"></span></strong><br /><br />
+				
+		<a class="request-btn btn btn-success" >Solicitar paquete</a>
+	</div>
+</div>
+<h3> Plantillas PRO</h3>
+<p>Las plantillas PRO son plantillas personalizadas que el esquipo de Actarium se encarga de dise&ntilde;ar en base a las necesidades puntuales de un cliente, este es un servicio extra y por el momento solo se encuentra disponible mediante una solicitud al correo <strong>contacto@daiech.com</strong></strong></p>
+<p>Si tienes plantillas PRO a continuaci&oacute;n podras asignarlas a los grupos en los que quieres que aparezcan.</p>
+<br />
+<table class="table table-striped">
+<tr>
+	<th>
+		<select name='id_template' id='id_template'>
+		{% for template in templates %}
+			<option id="option_template_{{template.id_template.pk}}" value="{{template.id_template.pk}}">{{ template.id_template.name}}</option>
+		{% endfor %}
+		</select>
+	</th>
+	<th>
+		<select name='id_group' id='id_group'>
+		{% for g in groups %}
+			<option id="option_group_{{g.id_group.pk}}" value="{{g.id_group.pk}}" data-group-slug="{{ g.id_group.slug }}">{{ g.id_group.name}}</option>
+		{% endfor %}
+		</select>
+	</th>
+	<th>
+		<button id="btn_assign_template" class="btn btn-success">Asignar</button>
+	</th>
+
+	
+</tr>
+
+
+</table>
+
+<h3> Plantillas asignadas</h3>
+<p>A continuaci&oacute;n se muestra las plantillas que han sido asignadas</p>
+<br />
+<table class="table table-striped" id="private_templates">
+	<tr>
+		<th>Plantilla</th>
+		<th>Grupo</th>
+		<th>Eliminar</th>
+	</tr>
+	{% for l in private_templates_assigned %}
+		<tr id="id_template_{{l.id_template.pk}}_id_group_{{ l.id_group.pk}}">
+			<td>{{ l.id_template.name }}</td>
+			<td><a href="/groups/{{ l.id_group.slug }}">{{ l.id_group.name }}</a></td>
+			<td><button class="button-action btn_unassign_template no" data-id-template="{{ l.id_template.pk }}" data-id-group="{{ l.id_group.pk}}"><li class="icon-remove"></li></a></td>
+		</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}
+
+{% block settings_style %}
+<style>
+	#select-time{
+		width: 60px;
+	}
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-templates").addClass("active");
+
+		function chargeWindow(){
+		}
+	
+		$("#btn_assign_template").click(function(e){
+			e.preventDefault();
+			id_template=$("#id_template").val()
+			id_group=$("#id_group").val()
+	    	sendAjax("/settings/assignTemplate",
+	    			{id_template:id_template,id_group:id_group},
+	    			"#load_packages",
+	    			function(data){
+		    			if (data=="True"){
+			    			name_template = $("#option_template_"+id_template).html()
+			    			name_group = $("#option_group_"+id_group).html()
+			    			slug_group = $("#option_group_"+id_group).attr("data-group-slug")
+			    			$("#private_templates").append("<tr id='id_template_"+id_template+"_id_group_"+id_group+"'><td>"+name_template+
+					    			"</td><td><a href='/groups/"+slug_group+"'>"+name_group+"</a></td>"+
+					    			"<td><button class='button-action btn_unassign_template no' data-id-template='"+id_template+"' data-id-group='"+id_group+"'><li class='icon-remove'></li></button></td></tr>")
+					    	setButtons()
+					    	setAlertMessage("Plantilla asignada!", "La plantilla "+name_template+" a sido asignada correctamente al grupo "+name_group)
+			    		    
+		    			}
+		    			else
+		    				setAlertError("Ha ocurrido un error!", data)
+	    		}
+	    	)
+		
+		});
+		function setButtons(){
+			$(".btn_unassign_template.no").click(function(e){
+				e.preventDefault();
+				if (confirm("Estas seguro que deseas retirar la plantilla, si lo haces no podras crear actas con esta plantilla hasta que vuelvas a asignarla")){
+					id_template=$(this).attr("data-id-template")
+					id_group=$(this).attr("data-id-group")
+			    	sendAjax("/settings/unassignTemplate",
+			    			{id_template:id_template,id_group:id_group},
+			    			"#load_packages",
+			    			function(data){
+				    			if (data=="True"){
+					    			name_template = $("#option_template_"+id_template).html()
+					    			name_group = $("#option_group_"+id_group).html()
+					    			slug_group = $("#option_group_"+id_group).attr("data-group-slug")
+					    			$("#id_template_"+id_template+"_id_group_"+id_group).css('display','none').remove()
+							    	setAlertMessage("Plantilla retirada!", "Se ha retirado correctamente la plantilla "+name_template+" del grupo "+name_group)
+					    		    
+				    			}
+				    			else
+				    				setAlertError("Ha ocurrido un error!", data)
+			    		}
+			    	)
+				}
+			});
+			$(".btn_unassign_template.no").removeClass("no");
+		}
+		setButtons()
+		
+	});
+
+</script>
+{% endblock %}

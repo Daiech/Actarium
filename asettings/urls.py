@@ -2,6 +2,9 @@ from django.conf.urls import url, patterns
 
 asettings_urls = patterns('',
     url(r'^billing', 'asettings.views.settingsBilling', name='billing'),
+    url(r'^templates', 'asettings.views.settingsTemplates', name='templates'),
+    url(r'^assignTemplate', 'asettings.views.assignTemplateAjax', name='assign_templates'),
+    url(r'^unassignTemplate', 'asettings.views.unassignTemplateAjax', name='unassign_templates'),
     url(r'^organizations/new', 'asettings.views.newOrganization', name='New organization'),
     url(r'^organizations', 'asettings.views.settingsOrganizations', name='organization'),
     url(r'^requestPackage', 'asettings.views.requestPackage', name='requestPackage'),
