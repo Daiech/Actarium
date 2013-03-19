@@ -58,8 +58,8 @@
 <script>
 	$(document).on("ready",function(){
 		$(".btn-approve").on("click",setApprove)
-		$("#btn-no-approve").on("click",newAnotation)
-		$("#button-save").on("click",saveAnotation)
+		$("#btn-no-approve").on("click",newannotation)
+		$("#button-save").on("click",saveannotation)
 		$('#minutes-html-data').val($('#data-for-pdf').html());
 	});
 	function callBackSign(data){
@@ -101,7 +101,7 @@
 	        scrollTop: $(element).offset().top},
 	        'slow', callback);
 	}
-	function newAnotation(e){
+	function newannotation(e){
 		e.preventDefault(e);
 		tinyMCE.init({
 	        theme : "simple",
@@ -109,39 +109,39 @@
 	        height : "80",
 	        width : "70%"
 		});
-		$("#new-anotation").removeClass("hidden");
-		goToByScroll("#new-anotation", function(){
-			$("#new-anotation textarea").focus();
-			tinyMCE.get('textarea-new-anotation').focus()}
+		$("#new-annotation").removeClass("hidden");
+		goToByScroll("#new-annotation", function(){
+			$("#new-annotation textarea").focus();
+			tinyMCE.get('textarea-new-annotation').focus()}
 		);
 	}
-	function saveAnotation(e){
-		var t = tinymce.get('textarea-new-anotation').getContent();
+	function saveannotation(e){
+		var t = tinymce.get('textarea-new-annotation').getContent();
 		var username = "{{user.first_name}} {{user.last_name}}";
 		var gravatar = "{{ user.email|showgravatar:'32'}}";
-		var m = '<div class="anotation">\
+		var m = '<div class="annotation">\
 						<div class="user-gravatar pull-left">\
 							<img class="size32 avatar" src="' + gravatar + '" alt="' + username + '" />\
 						</div>\
-						<div class="name-user-anotation">\
+						<div class="name-user-annotation">\
 							<strong>' + username + '</strong>\
 						</div>\
-						<div class="content-anotation">'+
+						<div class="content-annotation">'+
 							t +
 						'</div>\
 					</div>';
-		$("#anotations").prepend("<li>" + m + "</li>");
-		tinymce.get('textarea-new-anotation').setContent("");
+		$("#annotations").prepend("<li>" + m + "</li>");
+		tinymce.get('textarea-new-annotation').setContent("");
 	}
 </script>
 {% endblock %}
 
 {% block style%}
 <style>
-	.content-anotation{margin-left: 40px}
-	.name-user-anotation{margin-left: 40px}
-	.anotation{padding: 10px;}
-	ul#anotations li{border-bottom: solid thin #dadada;margin-bottom: 20px;}
+	.content-annotation{margin-left: 40px}
+	.name-user-annotation{margin-left: 40px}
+	.annotation{padding: 10px;}
+	ul#annotations li{border-bottom: solid thin #dadada;margin-bottom: 20px;}
 	#button-save{margin-top: 5px;}
 	article header img{margin-top: 10px;}
 	.hoja{width: 70%;margin:auto;}
@@ -183,6 +183,6 @@
 	.minutes-form-btn{
 		display:inline;
 	}
-	#anotations-approve{margin-top: 20px;}
+	#annotations-approve{margin-top: 20px;}
 </style>
 {% endblock %}

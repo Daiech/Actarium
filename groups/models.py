@@ -321,3 +321,22 @@ class rol_user_minutes(models.Model):
 
     def __unicode__(self):
         return "user: %s is_active: %s" % (self.id_user, self.is_active)
+
+
+class annotations(models.Model):
+    """docstring for annotations"""
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_minutes = models.ForeignKey(minutes, blank=True, null=True, default=None, related_name='%(class)s_id_minutes')
+    annotation_text = models.TextField(blank=True)
+    id_minutes_annotation = models.IntegerField(max_length=5)
+    date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=False)
+
+
+class annotations_comments(models.Model):
+    """docstring for annotations_comments"""
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_annotation = models.ForeignKey(annotations, blank=True, null=True, default=None, related_name='%(class)s_id_minutes')
+    comment = models.TextField(blank=True)
+    date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=False)
