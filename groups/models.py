@@ -330,7 +330,7 @@ class annotations(models.Model):
     annotation_text = models.TextField(blank=True)
     id_minutes_annotation = models.IntegerField(max_length=5)
     date_joined = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
 
 class annotations_comments(models.Model):

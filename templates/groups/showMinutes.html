@@ -58,8 +58,8 @@
 <script>
 	$(document).on("ready",function(){
 		$(".btn-approve").on("click",setApprove)
-		$("#btn-no-approve").on("click",newannotation)
-		$("#button-save").on("click",saveannotation)
+		$("#btn-no-approve").on("click",newAnnotation)
+		$("#button-save").on("click",saveAnnotation)
 		$('#minutes-html-data').val($('#data-for-pdf').html());
 	});
 	function callBackSign(data){
@@ -101,7 +101,7 @@
 	        scrollTop: $(element).offset().top},
 	        'slow', callback);
 	}
-	function newannotation(e){
+	function newAnnotation(e){
 		e.preventDefault(e);
 		tinyMCE.init({
 	        theme : "simple",
@@ -115,23 +115,35 @@
 			tinyMCE.get('textarea-new-annotation').focus()}
 		);
 	}
-	function saveannotation(e){
+	function saveAnnotation(e){
 		var t = tinymce.get('textarea-new-annotation').getContent();
 		var username = "{{user.first_name}} {{user.last_name}}";
 		var gravatar = "{{ user.email|showgravatar:'32'}}";
-		var m = '<div class="annotation">\
-						<div class="user-gravatar pull-left">\
-							<img class="size32 avatar" src="' + gravatar + '" alt="' + username + '" />\
-						</div>\
-						<div class="name-user-annotation">\
-							<strong>' + username + '</strong>\
-						</div>\
-						<div class="content-annotation">'+
-							t +
-						'</div>\
-					</div>';
-		$("#annotations").prepend("<li>" + m + "</li>");
-		tinymce.get('textarea-new-annotation').setContent("");
+		/*
+		USAR TEMPLATES: MUSTACHE
+		*/
+		var params = {"annotation": t, "minutes_id": {{minutes.id}}}
+		sendAjax("/groups/{{group.slug}}/add-new-annotation",params,"", function(data){
+			if(data){
+				console.log(data)
+				var m = '<div class="annotation">\
+								<div class="user-gravatar pull-left">\
+									<img class="size32 avatar" src="' + gravatar + '" alt="' + username + '" />\
+								</div>\
+								<div class="name-user-annotation">\
+									<strong>' + username + '</strong>\
+								</div>\
+								<div class="content-annotation">'+
+									t +
+								'</div>\
+						</div>';
+				$("#annotations").prepend("<li>" + m + "</li>");
+				tinymce.get('textarea-new-annotation').setContent("");
+			}
+			else{
+				setAlertError("Error", "Algo ocurri&oacute;");
+			}
+		});
 	}
 </script>
 {% endblock %}

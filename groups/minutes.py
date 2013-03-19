@@ -346,6 +346,45 @@ def setMinutesApprove(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+def getLastMinutesAnnotation(id_minutes):
+    try:
+        a = annotations.objects.filter(id_minutes=id_minutes).order_by("-date_joined")[0]
+        return a.id_minutes_annotation
+    except annotations.DoesNotExist:
+        return 0
+    except Exception:
+        return 0
+
+
+# @login_required(login_url='/account/login')
+def newAnnotation(request, slug_group):
+    print "ENTRANDO!"
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = getGroupBySlug(slug_group)
+                annon_text = request.GET['annotation']
+                minutes_id = getMinutesById(request.GET['minutes_id'])
+                if minutes_id.id_group == g:
+                    last_annon = getLastMinutesAnnotation(minutes_id)
+                    annon = annotations(id_user=request.user,
+                        id_minutes=minutes_id,
+                        annotation_text=annon_text,
+                        id_minutes_annotation=last_annon + 1)
+                    annon.save()
+                    response = {"data": "success"}
+                else:
+                    print "else"
+            except Exception, e:
+                print "ERROR newAnnotation", e
+                response = {"error": "Error"}
+        else:
+            response = {"error": "Debe ser GET"}
+    else:
+        response = {"error": int(request.GET['minutes_id'])}
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
 @login_required(login_url='/account/login')
 def setRolForMinute(request, slug_group):
     """
@@ -700,7 +739,7 @@ def showMinutes(request, slug, minutes_code):
                 prev, next = getPrevNextOfGroup(group, minutes_current)
                 ######## </PREV and NEXT> #########
 
-                annon = annotations.objects.filter(id_user=request.user, id_minutes=minutes_current)
+                annon = annotations.objects.filter(id_minutes=minutes_current)
 
                 ctx = {
                     "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
@@ -718,7 +757,6 @@ def showMinutes(request, slug, minutes_code):
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
-
 
 
 @login_required(login_url='/account/login')
