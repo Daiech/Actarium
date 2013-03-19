@@ -966,6 +966,8 @@ def setAssistance(request):
                 'response': resp,
                 'groupname': id_reunion.id_group.name,
                 'titlereunion':  id_reunion.title,
+                'datereunion': id_reunion.date_reunion,
+                'idreunion': id_reunion.pk,
                 'urlgravatar': showgravatar(request.user.email, 50)
             }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
