@@ -1,5 +1,5 @@
 {% load gravatartag %}
-	
+{% load humanize %}
 	{% if space_to_approve or is_secretary %}
     <section id="sign" class="hoja white-box-container">
     	<header>
@@ -81,21 +81,41 @@
 			<textarea id="textarea-new-annotation" placeholder="Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una anotaci&oacute;n al redactor." autofocus></textarea>
 			<button class="btn btn-info" id="button-save">Publicar</button>
 		</div>
+		<hr>
 		<div class="mt20">
 			<ul id="annotations" class="mt20 unstyled">
 				{%for annon in annotations%}
-				<li>
-					<div class="annotation">
+				<li class="row-fluid bb">
+					<div class="annotation span70">
 						<div class="user-gravatar pull-left">
 							<img class="size32 avatar" src="{{ annon.id_user.email|showgravatar:'32'}}" alt="{{annon.id_user.first_name}}" />
 						</div>
 						<div class="name-user-annotation">
 							<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
+							·
+							<time datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
 						</div>
 						<div class="content-annotation">{{annon.annotation_text|safe}}
 						</div>
-						
+						<div>
+							<!-- <hr> -->
+							<!-- <textarea></textarea> -->
+						</div>
 					</div>
+						{%comment%}
+					<div class="span5 ">
+						<div class="user-gravatar pull-left">
+							<img style="width:28px" class="avatar" src="{{ annon.id_user.email|showgravatar:'28'}}" alt="{{annon.id_user.first_name}}" />
+						</div>
+						<div class="name-user-annotation">
+							<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
+							·
+							<time datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
+						</div>
+						<div class="comment-annotation">{{annon.annotation_text|safe}}
+						</div>
+					</div>
+						{%endcomment%}
 				</li>
 				{%endfor%}
 			</ul>

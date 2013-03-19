@@ -76,10 +76,10 @@ def getRolUserMinutes(_user, id_group, id_minutes=None):
     try:
         return rol_user_minutes.objects.get(id_user=_user, id_group=id_group, id_minutes=id_minutes)
     except rol_user_minutes.DoesNotExist:
-        return False
+        return None
     except Exception, e:
         print "getRolUserMinutes Error", e
-        return False
+        return None
 
 
 def getMembersSigned(group, minutes_current):  # not called
@@ -356,6 +356,26 @@ def getLastMinutesAnnotation(id_minutes):
         return 0
 
 
+def getApproversFromMinutes(id_minutes):
+    try:
+        return rol_user_minutes.objects.filter(id_minutes=id_minutes, is_approver=True, is_active=True)
+    except rol_user_minutes.DoesNotExist:
+        return None
+    except Exception, e:
+        print "ERROR getApproversFromMinutes", e
+        return None
+
+
+def getWritersOfGroup(id_group):
+    try:
+        return rel_user_group.objects.filter(id_mgroup=id_group, is_secretary=True, is_active=True)
+    except rel_user_group.DoesNotExist:
+        return None
+    except Exception, e:
+        print "ERROR getWritersOfGroup", e
+        return None
+
+
 # @login_required(login_url='/account/login')
 def newAnnotation(request, slug_group):
     print "ENTRANDO!"
@@ -367,12 +387,25 @@ def newAnnotation(request, slug_group):
                 minutes_id = getMinutesById(request.GET['minutes_id'])
                 if minutes_id.id_group == g:
                     last_annon = getLastMinutesAnnotation(minutes_id)
-                    annon = annotations(id_user=request.user,
-                        id_minutes=minutes_id,
-                        annotation_text=annon_text,
-                        id_minutes_annotation=last_annon + 1)
+                    annon = annotations(id_user=request.user, id_minutes=minutes_id, annotation_text=annon_text, id_minutes_annotation=last_annon + 1)
                     annon.save()
-                    response = {"data": "success"}
+                    # saveActionLog
+                    # sendEmail to the approvers # investigar sobre hilos en python para retornarle al usuario y quedarse enviando los correos
+
+                    ########### <uncomment to call the function:> ##################
+
+                    # writter_group = getWritersOfGroup(g)
+                    # approver_list = getApproversFromMinutes(minutes_id)
+                    # email_list = list()
+                    # for ap in writter_group:
+                    #     email_list.append(ap.id_user.email)
+                    # email_list = list()
+                    # for ap in approver_list:
+                    #     email_list.append(ap.id_user.email)
+                    # send Email HERE with email_list
+
+                    ########### </uncomment to call the function:> ##################
+                    response = {"data": "success, send a socket to say them to the other connected"}
                 else:
                     print "else"
             except Exception, e:
@@ -661,99 +694,102 @@ def showMinutes(request, slug, minutes_code):
         rel_group = getRelUserGroup(request.user, group)
         rol = getRolUserMinutes(request.user, group, id_minutes=minutes_current)
 
-        if rol or rel_group.is_secretary or rel_group.is_admin:
-            if rol.is_approver or rel_group.is_secretary:
+        rol_is_approver = False
+        rel_group_is_secretary = False
+        if rol:
+            rol_is_approver = rol.is_approver
+            rel_group_is_secretary = rel_group.is_secretary
+        if rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin:
+            if not minutes_current:
+                return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
-                if not minutes_current:
-                    return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
+            address_template = minutes_current.id_template.address_template
 
-                address_template = minutes_current.id_template.address_template
+            id_minutes_type = minutes_current.id_template.id_type.pk
 
-                id_minutes_type = minutes_current.id_template.id_type.pk
-
-                if id_minutes_type == 1:
-                    try:
-                        data = minutes_type_1.objects.get(id=minutes_current.id_extra_minutes)
-                    except minutes_type_1.DoesNotExist:
-                        data = None
-                    list_newMinutesForm = {
-                        "date_start": data.date_start,
-                        "date_end": data.date_end,
-                        "location": data.location,
-                        "agreement": data.agreement,
-                        "agenda": data.agenda,
-                        "type_reunion": data.type_reunion,
-                        "code": minutes_current.code}
-
-                if id_minutes_type == 2:  # para actas antiguas
-                    data = last_minutes.objects.get(id=minutes_current.id_extra_minutes)
-                    list_newMinutesForm = {
-                        "address_file": MEDIA_URL + "lastMinutes/" + str(data.address_file).split("/")[len(str(data.address_file).split("/")) - 1],
-                        "name_file": data.name_file}
-
-                if id_minutes_type == 3:
-                    print "NO hay tres tipos de actas todavia"
-
-                ######## <ASISTENTES> #########
-                m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
-                ######## <ASISTENTES> #########
-
-                ######## <ATTENDING> #########
-                space_to_approve = False
-                my_attending = False
-                sign = getRelUserMinutesSigned(request.user, minutes_current)
-                if sign:
-                    space_to_approve = True
-                    my_attending = True if sign.is_signed_approved == 0 else False
-                ######## </ATTENDING> #########
-
-                ######## <APPROVER LISTS> #########
+            if id_minutes_type == 1:
                 try:
-                    missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
-                    missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
-                except rel_user_minutes_signed.DoesNotExist:
-                    print "NO HAY rel_user_minutes_assistance missing_approved_list"
-                except Exception, e:
-                    print "error,", e
+                    data = minutes_type_1.objects.get(id=minutes_current.id_extra_minutes)
+                except minutes_type_1.DoesNotExist:
+                    data = None
+                list_newMinutesForm = {
+                    "date_start": data.date_start,
+                    "date_end": data.date_end,
+                    "location": data.location,
+                    "agreement": data.agreement,
+                    "agenda": data.agenda,
+                    "type_reunion": data.type_reunion,
+                    "code": minutes_current.code}
 
-                approved_list = None
-                no_approved_list = None
-                try:
-                    approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
-                    approved_list = 0 if len(approved_list) == 0 else approved_list
-                except rel_user_minutes_signed.DoesNotExist:
-                    print "NO HAY rel_user_minutes_assistance APPROVED_LIST"
-                except Exception, e:
-                    print "Error APPROVED_LIST,", e
-                try:
-                    no_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
-                    no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
-                except rel_user_minutes_signed.DoesNotExist:
-                    print "NO HAY rel_user_minutes_assistance NO_APPROVED_LIST"
-                except Exception, e:
-                    print "Error NO_APPROVED_LIST:", e
+            if id_minutes_type == 2:  # para actas antiguas
+                data = last_minutes.objects.get(id=minutes_current.id_extra_minutes)
+                list_newMinutesForm = {
+                    "address_file": MEDIA_URL + "lastMinutes/" + str(data.address_file).split("/")[len(str(data.address_file).split("/")) - 1],
+                    "name_file": data.name_file}
 
-                ######## </APPROVER LISTS> #########
+            if id_minutes_type == 3:
+                print "NO hay tres tipos de actas todavia"
 
-                ######## <PREV and NEXT> #########
-                prev, next = getPrevNextOfGroup(group, minutes_current)
-                ######## </PREV and NEXT> #########
+            ######## <ASISTENTES> #########
+            m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
+            ######## <ASISTENTES> #########
 
-                annon = annotations.objects.filter(id_minutes=minutes_current).order_by("-date_joined")
+            ######## <ATTENDING> #########
+            space_to_approve = False
+            my_attending = False
+            sign = getRelUserMinutesSigned(request.user, minutes_current)
+            if sign:
+                space_to_approve = True
+                my_attending = True if sign.is_signed_approved == 0 else False
+            ######## </ATTENDING> #########
 
-                ctx = {
-                    "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
-                    "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
-                    "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm, "group": group, "members_selected": m_assistance, "members_no_selected": m_assistance}),
-                    "space_to_approve": space_to_approve, "my_attending": my_attending,
-                    "missing_approved_list": missing_approved_list,
-                    "approved_list": approved_list, "no_approved_list": no_approved_list,
-                    "annotations": annon
-                }
-            else:
-                return HttpResponseRedirect("/groups/" + slug + "#esta-acta-aun-no-ha-sido-aprobada")
+            ######## <APPROVER LISTS> #########
+            try:
+                missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
+                missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
+            except rel_user_minutes_signed.DoesNotExist:
+                print "NO HAY rel_user_minutes_assistance missing_approved_list"
+            except Exception, e:
+                print "error,", e
+
+            approved_list = None
+            no_approved_list = None
+            try:
+                approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
+                approved_list = 0 if len(approved_list) == 0 else approved_list
+            except rel_user_minutes_signed.DoesNotExist:
+                print "NO HAY rel_user_minutes_assistance APPROVED_LIST"
+            except Exception, e:
+                print "Error APPROVED_LIST,", e
+            try:
+                no_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
+                no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
+            except rel_user_minutes_signed.DoesNotExist:
+                print "NO HAY rel_user_minutes_assistance NO_APPROVED_LIST"
+            except Exception, e:
+                print "Error NO_APPROVED_LIST:", e
+
+            ######## </APPROVER LISTS> #########
+
+            ######## <PREV and NEXT> #########
+            prev, next = getPrevNextOfGroup(group, minutes_current)
+            ######## </PREV and NEXT> #########
+
+            annon = annotations.objects.filter(id_minutes=minutes_current).order_by("-date_joined")
+
+            ctx = {
+                "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
+                "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
+                "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm, "group": group, "members_selected": m_assistance, "members_no_selected": m_assistance}),
+                "space_to_approve": space_to_approve, "my_attending": my_attending,
+                "missing_approved_list": missing_approved_list,
+                "approved_list": approved_list, "no_approved_list": no_approved_list,
+                "annotations": annon
+            }
         else:
-            return HttpResponseRedirect("/groups/" + slug + "#no-tienes-rol")
+            return HttpResponseRedirect("/groups/" + slug + "#esta-acta-aun-no-ha-sido-aprobada")
+        # else:
+        #     return HttpResponseRedirect("/groups/" + slug + "#no-tienes-rol")
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
     return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))

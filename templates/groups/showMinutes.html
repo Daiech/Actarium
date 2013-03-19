@@ -107,7 +107,8 @@
 	        theme : "simple",
 	        mode : "textareas",
 	        height : "80",
-	        width : "70%"
+	        width : "70%",
+	        content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
 		});
 		$("#new-annotation").removeClass("hidden");
 		goToByScroll("#new-annotation", function(){
@@ -125,13 +126,14 @@
 		var params = {"annotation": t, "minutes_id": {{minutes.id}}}
 		sendAjax("/groups/{{group.slug}}/add-new-annotation",params,"", function(data){
 			if(data){
-				console.log(data)
+				// console.log(data)
 				var m = '<div class="annotation">\
 								<div class="user-gravatar pull-left">\
 									<img class="size32 avatar" src="' + gravatar + '" alt="' + username + '" />\
 								</div>\
 								<div class="name-user-annotation">\
 									<strong>' + username + '</strong>\
+									· <time>Ahora mismo</time>\
 								</div>\
 								<div class="content-annotation">'+
 									t +
@@ -151,50 +153,13 @@
 {% block style%}
 <style>
 	.content-annotation{margin-left: 40px}
+	.comment-annotation p{font-size: 14px;}
 	.name-user-annotation{margin-left: 40px}
+	.name-user-annotation time{font-size: 14px;color: gray}
 	.annotation{padding: 10px;}
-	ul#annotations li{border-bottom: solid thin #dadada;margin-bottom: 20px;}
+	ul#annotations > li > div{margin-top: 25px;}
 	#button-save{margin-top: 5px;}
 	article header img{margin-top: 10px;}
-	.hoja{width: 70%;margin:auto;}
-	#sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
-	#minute, .minute{
-		border: solid thin #ddd;
-		background-color: #fff;
-		box-shadow: 8px 8px 6px -6px gray;
-		border-radius: 3px;
-		/*position: relative;
-		top:-55px;*/
-	}
-	.minute header{
-		width: auto;
-		margin:30px 0;
-		margin-top: 40px;
-		margin-left: 0;
-		/*padding: 40px;*/
-	}
-	.minute > div{
-		padding: 0 80px;
-		/*border: solid thin gray;*/
-	}
-	.minute footer{
-		border: none;
-		bottom: 0;
-		font-size: 14px;
-		left: 0;
-		margin:0;
-		padding: 20px 40px;
-		width: auto;
-	}
-	.pager{
-		margin: 5px auto;
-		padding: 0;
-		position: relative;
-		top: 0;
-	}
-	.minutes-form-btn{
-		display:inline;
-	}
 	#annotations-approve{margin-top: 20px;}
 </style>
 {% endblock %}

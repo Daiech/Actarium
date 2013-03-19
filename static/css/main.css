@@ -100,6 +100,10 @@ body{
 }
 a {color: #00aeaa;text-decoration: none;}
 .b{border: solid thin #dadada;}
+.bt{border-top: solid thin #dadada;}
+.br{border-right: solid thin #dadada;}
+.bb{border-bottom: solid thin #dadada;}
+.bl{border-left: solid thin #dadada;}
 
 
 
@@ -851,6 +855,57 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 .btn-groups-admin{display: block;margin: 0 auto;width: 58%;}
 
 
+/*
+Show Minutes 
+*/
+.hoja{width: 70%;margin:auto;}
+    #sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
+    #minute, .minute{
+        border: solid thin #ddd;
+        background-color: #fff;
+        box-shadow: 8px 8px 6px -6px gray;
+        border-radius: 3px;
+    }
+    .minute header{
+        width: auto;
+        margin:30px 0;
+        margin-top: 40px;
+        margin-left: 0;
+        /*padding: 40px;*/
+    }
+    .minute > div{
+        padding: 0 80px;
+        /*border: solid thin gray;*/
+    }
+    .minute footer{
+        border: none;
+        bottom: 0;
+        font-size: 14px;
+        left: 0;
+        margin:0;
+        padding: 20px 40px;
+        width: auto;
+    }
+    .pager{
+        margin: 5px auto;
+        padding: 0;
+        position: relative;
+        top: 0;
+    }
+    .minutes-form-btn{
+        display:inline;
+    }
+
+
+/*
+cierra Show Minutes 
+*/
+
+
+
+
+
+
 
 
 
@@ -1048,6 +1103,9 @@ only screen and (min-resolution: 144dpi) {
     .th-name{display: none;width: auto;}
     .td-first{width: 68%;}
     .btn-groups-admin{width: 90%;}
+    #minute, .minute{width: 80%}
+    .minute > div{padding: 15px}
+    .hoja{width: 95%}
 }
 
 
@@ -1078,6 +1136,9 @@ only screen and (min-resolution: 144dpi) {
     #message-box, #more-info{width: 85%;}
     .btn-groups-admin{width: 95%;}
     .btn{margin-top: 5px;}
+    #minute, .minute{width: 90%}
+    .minute > div{padding: 5px}
+    .hoja{width: 90%}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
