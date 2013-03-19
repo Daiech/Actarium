@@ -58,7 +58,7 @@
 <script>
 	$(document).on("ready",function(){
 		$(".btn-approve").on("click",setApprove)
-		$("#btn-no-approve").on("click",newAnnotation)
+		$(".btn-no-approve").on("click",newAnnotation)
 		$("#button-save").on("click",saveAnnotation)
 		$('#minutes-html-data').val($('#data-for-pdf').html());
 	});
@@ -98,7 +98,7 @@
 	}
 	function goToByScroll(element, callback){// Scroll
 	    $('html,body').animate({
-	        scrollTop: $(element).offset().top},
+	        scrollTop: $(element).offset().top - 100},
 	        'slow', callback);
 	}
 	function newAnnotation(e){

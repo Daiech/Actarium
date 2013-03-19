@@ -661,7 +661,7 @@ def showMinutes(request, slug, minutes_code):
         rel_group = getRelUserGroup(request.user, group)
         rol = getRolUserMinutes(request.user, group, id_minutes=minutes_current)
 
-        if rol:
+        if rol or rel_group.is_secretary or rel_group.is_admin:
             if rol.is_approver or rel_group.is_secretary:
 
                 if not minutes_current:
@@ -739,7 +739,7 @@ def showMinutes(request, slug, minutes_code):
                 prev, next = getPrevNextOfGroup(group, minutes_current)
                 ######## </PREV and NEXT> #########
 
-                annon = annotations.objects.filter(id_minutes=minutes_current)
+                annon = annotations.objects.filter(id_minutes=minutes_current).order_by("-date_joined")
 
                 ctx = {
                     "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
@@ -829,7 +829,7 @@ def uploadMinutesAjax(request):
             except Exception, e:
                 last_minutes_get = False
                 print e
-            if last_minutes_get:    
+            if last_minutes_get:
                 print "last get", last_minutes_get
                 a = json.loads(last_minutes_get)
                 print "aaaaaaaaaaaa", a
