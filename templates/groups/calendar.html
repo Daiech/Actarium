@@ -332,13 +332,13 @@ $(document).on("ready", function() {
     					"<a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br><br>"+
 						"<strong>"+data.convener+"</strong> notifica la convocatoria a una reuni&oacute;n para el d&iacute;a "+
 						"<span class=''>"+data.date_reunion+"</span> en <strong>"+data.locale+"</strong> <br /><br />"+
-						"<strong>Los objetivos propuestos son</strong>: <br /> <div class='quote-text'>"+data.agenda+"</div><br />"+
+						"<strong>Descripci&oacute;n</strong>: <br /> <div class='quote-text'>"+data.agenda+"</div><br />"+
 						"Respuestas:<table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
 						$.each(data.assistants,function(){
 							reunion_list = reunion_list+
 						"<tr><td><img class='img20' src='"+this.gravatar+"''> <strong>"+this.username+"</strong></td><td>"+this.is_confirmed+"</td></tr>"});
 						reunion_list = reunion_list +"</table> <br /> "+
-						"<small>La invitaci&oacute;n fue creada el <span class=''>"+data.date_convened+"</span></small><br><br>";
+						"<small>La invitaci&oacute;n fue creada y enviada el <span class=''>"+data.date_convened+"</span></small><br><br>";
     	    			if (data.is_done == false)
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
     	    			else

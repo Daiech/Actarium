@@ -68,7 +68,7 @@ class rel_user_group(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "%s, %s  - is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
+        return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
 
 
 class admin_group(models.Model):
@@ -118,8 +118,8 @@ class templates(models.Model):
 
 
 class rel_user_private_templates(models.Model):
-    id_user =  models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
-    id_template =  models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates')
+    id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
+    id_template = models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates')
     date_joined = models.DateTimeField(auto_now=True)
 
 
@@ -131,7 +131,7 @@ class private_templates(models.Model):
 
     def __unicode__(self):
         return "%s => %s: by %s" % (self.id_group.name, self.id_template.name, self.id_user.username)
-    
+
     class Meta:
         unique_together = ('id_template', 'id_group')
 
@@ -181,7 +181,7 @@ class reunions(models.Model):
             return False
 
     def __unicode__(self):
-        return "%s , del %s" % (self.date_reunion, self.id_group)
+        return "'%s' del '%s'" % (self.date_reunion, self.id_group.name)
 
 
 class rel_reunion_minutes(models.Model):

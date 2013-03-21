@@ -1071,4 +1071,3 @@ def removeGMT(datetime_var):
     dt = str(datetime_var)
     dt_s = dt[:19]
     return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))
-

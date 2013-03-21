@@ -3,10 +3,9 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
-import datetime
 import re
-from django.utils.timezone import get_default_timezone, make_naive
 from groups.models import reunions, assistance, rel_user_group
+from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
 from website.models import *
 
@@ -19,7 +18,10 @@ def home(request):
             id_user=request.user,
             is_active=True,
             is_member=True
-            )
+        )
+        _groups_list = list()
+        for g in gr:
+            _groups_list.append(g.id_group.id)
         #-----------------</GRUPOS>-----------------
 
         #-----------------<INVITACIONES>-----------------
@@ -28,21 +30,21 @@ def home(request):
         #-----------------</INVITACIONES>-----------------
 
         #-----------------<REUNIONES>-----------------
-        my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
-        #-----------------</REUNIONES>-----------------
-        json_array = []
+        # my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
+        my_reu = reunions.objects.filter(id_group__in=_groups_list).order_by("-date_convened")
+        json_array = list()
         for reunion in my_reu:
             try:
-                confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-                #is_confirmed = confirm.is_confirmed
-                #is_saved = 1
+                assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
             except assistance.DoesNotExist:
-                #is_confirmed = False
-                #is_saved = 0
-                json_array.append({"id_reunion": str(reunion.id), "group_name": reunion.id_group.name, "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")), "title": reunion.title})
-                #i = i + 1
+                json_array.append({
+                    "id_reunion": str(reunion.id),
+                    "group_name": reunion.id_group.name,
+                    "date": dateTimeFormatForm(reunion.date_reunion),
+                    "title": reunion.title})
+        #-----------------</REUNIONES>-----------------
 
-        ctx = {'TITLE': "Actarium", "groups": gr, "invitations": my_inv, "reunions": json_array}
+        ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array}
         template = 'website/index.html'
     else:
         ctx = {'TITLE': "Actarium by Daiech"}
