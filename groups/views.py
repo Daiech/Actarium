@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from groups.models import *
-from groups.forms import newGroupForm, newReunionForm, uploadMinutesForm
+from groups.forms import newGroupForm, newReunionForm
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
@@ -103,13 +103,13 @@ def setRoltoUser(request, _user, _group, role, remove):
         if role_name:  # the rol has been assigned
             link = URL_BASE + "/groups/" + str(_group.slug)
             ctx_email = {
-                 'firstname': request.user.first_name,
-                 'username': request.user.username,
-                 'rolename': role_name,
-                 'groupname': _group.name,
-                 'grouplink': link,
-                 'urlgravatar': showgravatar(request.user.email, 50)
-             }
+                'firstname': request.user.first_name,
+                'username': request.user.username,
+                'rolename': role_name,
+                'groupname': _group.name,
+                'grouplink': link,
+                'urlgravatar': showgravatar(request.user.email, 50)
+            }
             sendEmailHtml(4, ctx_email, [rel.id_user.email])
         return True
     return False
@@ -252,11 +252,12 @@ def newBasicGroup(request, form, pro=False):
         # 'id_group_type': form.cleaned_data['id_group_type']  # Se omite para no pedir tipo de grupo
         'id_group_type': 1
     }
-    myNewGroup = groups(name=df['name'],
-                       description=df['description'],
-                       id_creator=df['id_creator'],
-                       id_group_type=group_type.objects.get(pk=df['id_group_type']),
-                     )
+    myNewGroup = groups(
+        name=df['name'],
+        description=df['description'],
+        id_creator=df['id_creator'],
+        id_group_type=group_type.objects.get(pk=df['id_group_type']),
+    )
     myNewGroup.save()
     if not pro:  # new rel to: Create free group
         setRelUserGroup(id_user=request.user, id_group=myNewGroup, is_superadmin=1, is_admin=1, is_active=True)
@@ -296,19 +297,26 @@ def newProGroup(request, form):
     # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
     try:
         org = organizations.objects.get(id=request.POST['sel-organization'], id_admin=request.user, is_active=True)
+    except organizations.DoesNotExist:
+        org = None
     except Exception:
         org = False
     try:
         bill = billing.objects.get(id=request.POST['sel-billing'], id_user=request.user, state='1')
+    except billing.DoesNotExist:
+        bill = None
     except Exception:
         bill = False
     if org and bill:
-        # crear pro
-        new_group = newBasicGroup(request, form, pro=True)
-        g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
-        g_pro.save()
-        # consumir package
-        return new_group
+        if bill.groups_pro_available >= 1:
+            new_group = newBasicGroup(request, form, pro=True)
+            g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
+            g_pro.save()
+            bill.groups_pro_available = bill.groups_pro_available - 1
+            bill.save()
+            return new_group
+        else:
+            return False
     else:
         return False
 
@@ -323,7 +331,7 @@ def getProGroupDataForm(request):
         orgs = None
         raise e
     try:
-        billing_list = billing.objects.filter(state='1', id_user=request.user)
+        billing_list = billing.objects.filter(state='1', id_user=request.user, groups_pro_available__gte=1)
     except billing.DoesNotExist:
         billing_list = u"No hay información disponible."
     return (orgs, billing_list)
@@ -336,6 +344,7 @@ def newGroup(request):
     '''
     orgs = None
     billing_list = None
+    no_billing_avalaible = False  # indica si se intento crear un grupo pro sin paquetes disponibles
     sel_org = False
     if request.method == "GET":  # envia una variable para seleccionar una organizacion
         try:
@@ -351,9 +360,11 @@ def newGroup(request):
             else:
                 resp = newProGroup(request, form)
             if resp:
-                # Guardar accion de crear reunion
                 saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
                 return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")
+            else:
+                print "No tienes paquetes disponibles"
+                no_billing_avalaible = True
     else:
         form = newGroupForm()
     orgs, billing_list = getProGroupDataForm(request)
@@ -361,7 +372,8 @@ def newGroup(request):
            "organizations": orgs,
            "billing": billing_list,
            "sel_org": sel_org,
-           "full_path": request.get_full_path()
+           "full_path": request.get_full_path(),
+           "no_billing_avalaible": no_billing_avalaible
            }
     return render_to_response('groups/newGroup.html', ctx, context_instance=RequestContext(request))
 

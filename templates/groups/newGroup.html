@@ -40,32 +40,42 @@
                     </div>
                 </div>
                 <div class="data-pro hidden">
-                    <label for="sel-org">Organizaci&oacute;n:</label>
-                    <select name="sel-organization" id="sel-org">
-                        {% for org in organizations%}
-                        <option value="{{org.id}}" >
-                            {{org.name}}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <a href="/settings/organizations/new?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
-                </div>
-                <div class="data-pro hidden">
-                    <label for="sel-billing">Paquete:</label>
-                    <select name="sel-billing" id="sel-billing">
-                        {% for bill in billing%}
-                        <option value="{{bill.id}}">{{bill.id_package.name}}</option>
-                        {% endfor %}
-                    </select>
-                    <a href="/settings/billing"> + Adquirir paquete</a>
-                </div>
-                <div id="is-memeber" class="data-pro hidden">
-                    <label data-original-title="Accede al grupo. Puede crear actas, reuniones, etc." for="is_member">
-                        <input type="checkbox" id="is_member" name="is_member" value="1" checked>
-                        Ser miembro del grupo
-                    </label>
-                </div>
-                <div id="administrator" class="data-pro hidden">
+                    <div class="">
+                        <span class="pull-left">
+                            <label for="sel-org">Organizaci&oacute;n:</label>
+                        </span>
+                        <span class="pull-right">
+                            <a href="/settings/organizations/new?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
+                        </span>
+                        <select name="sel-organization" id="sel-org">
+                            {% for org in organizations%}
+                            <option value="{{org.id}}" >
+                                {{org.name}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="">
+                        <span class="pull-left">
+                            <label for="sel-billing">Paquete:</label>
+                        </span>
+                        <span class="pull-right">
+                            <a href="/settings/billing"> + Adquirir paquete</a>
+                        </span>
+                        <select name="sel-billing" id="sel-billing">
+                            {% for bill in billing%}
+                            <option value="{{bill.id}}">{{bill.id_package.name}} ({{bill.groups_pro_available}} disponible)</option>
+                            {% endfor %}
+                            {%if not billing%}<option>No tienes paquetes disponibles</option>{%endif%}
+                        </select>
+                    </div>
+                    <div id="is-memeber" class="">
+                        <label data-original-title="Accede al grupo. Puede crear actas, reuniones, etc." for="is_member">
+                            <input type="checkbox" id="is_member" name="is_member" value="1" checked>
+                            Ser miembro del grupo
+                        </label>
+                    </div>
+                    <div id="administrator" class="">
                     <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">Administrador principal de grupo:</label>
                     <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ Cambiar administrador</a>
                     <ul id="admin-list" class="unstyled">
@@ -81,7 +91,7 @@
                     <ul id="search-result" class="unstyled">
                         
                     </ul>
-                    
+                </div>
                 </div>
                 <div>
                     <ul class="unstyled">
@@ -106,6 +116,7 @@
     #is-memeber{margin-bottom: 20px;font-weight: normal;}
     #administrator label:first{margin-bottom: 10px;}
     #admin-box{margin-top: 20px;}
+    select{width: 100%;}
     #form-new-group input[type="text"], #form-new-group input[type="text"]{
         padding: 10px;
         width: 95%;
@@ -152,10 +163,12 @@
     ul.btn-group{
         margin: 0;
     }
-    .data-pro{
+    .data-pro{margin-top: 20px;}
+    .data-pro > div{
         margin-bottom: 20px;
         margin-left: 22px;
     }
+    .data-pro span{margin: 5px 0}
     input[type="checkbox"]{margin-top: 0;}
     .icon-remove{
         margin: 5px;
@@ -171,14 +184,17 @@
 
 {% block js %}
 <script>
-    $(document).on("ready",function(){
-        $("#menu-organizations").addClass("active")
+    $(document).ready(function(){
+        $("#menu-organizations").addClass("active");
         $('label').tooltip();
-        var selected = $("#org-selected").val()
-        var len = 35
+        var selected = $("#org-selected").val();
+        var len = 35;
         $("#sel-org").val(selected)
+        {%if no_billing_avalaible%}
+        setAlertMessage("Grupos Pro no disponibles", "Por ahora no tienes grupos Pro disponibles. Ingresa a nuestra secci&oacute;n de <a href='/settings/billing'>facturaci&oacute;n</a> y adquiere uno ahora mismo. :)");
+        {%endif%}
         {%if sel_org%}
-            $("#pro").click()
+            $("#pro").click();
             $(".data-pro").removeClass("hidden");
         {%endif%}
         // $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
