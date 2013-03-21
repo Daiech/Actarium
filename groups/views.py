@@ -16,6 +16,7 @@ from actions_log.views import saveActionLog
 from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
 from groups.validators import validateEmail
+from django.contrib.humanize.templatetags import humanize
 
 
 def isProGroup(group):
@@ -813,7 +814,8 @@ def calendar(request):
         json_array[i] = {"id_r": str(reunion.id),
                          "group_slug": reunion.id_group.slug,
                          "group_name": reunion.id_group.name,
-                         "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")),
+                         "date": humanize.naturaltime(reunion.date_reunion),
+                         "date_normal": dateTimeFormatForm(reunion.date_reunion),
                          'is_confirmed': str(is_confirmed),
                          'is_saved': is_saved,
                          "title": reunion.title,
@@ -853,7 +855,8 @@ def calendarDate(request, slug=None):
         json_array[i] = {"id_r": str(reunion.id),
                          "group_slug": reunion.id_group.slug,
                          "group_name": reunion.id_group.name,
-                         "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")),
+                         "date": humanize.naturaltime(reunion.date_reunion),
+                         "date_normal": dateTimeFormatForm(reunion.date_reunion),
                          'is_confirmed': str(is_confirmed),
                          'is_saved': is_saved,
                          'title': reunion.title,
@@ -895,7 +898,8 @@ def getReunions(request):
                 json_array[i] = {"id_r": str(reunion.id),
                                  "group_slug": reunion.id_group.slug,
                                  "group_name": reunion.id_group.name,
-                                 "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")),
+                                 "date": humanize.naturaltime(reunion.date_reunion),
+                                 "date_normal": dateTimeFormatForm(reunion.date_reunion),
                                  'is_confirmed': is_confirmed,
                                  'is_saved': is_saved,
                                  "title": reunion.title,
@@ -927,7 +931,8 @@ def getNextReunions(request):
                         json_array[i] = {"id_r": str(reunion.id),
                                          "group_slug": reunion.id_group.slug,
                                          "group_name": reunion.id_group.name,
-                                         "date": (datetime.datetime.strftime(make_naive(reunion.date_reunion, get_default_timezone()), "%d de %B de %Y a las %I:%M %p")),
+                                         "date": humanize.naturaltime(reunion.date_reunion),
+                                         "date_normal": dateTimeFormatForm(reunion.date_reunion),
                                          'is_confirmed': is_confirmed,
                                          'is_saved': is_saved,
                                          "title": reunion.title}
