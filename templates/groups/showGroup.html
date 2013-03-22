@@ -10,7 +10,7 @@
                 <h3>{{group.name}}
                     <strong style="font-size:17px;color:gray"> -
                     {%if group.description%}{{group.description}}{%else%}No description{%endif%}
-                    </strong> {%if not is_pro%}· Grupo Free{%endif%}
+                    </strong> {%if not is_pro%}<span class="free-group pull-right">Este es un <a href="/help/faq">Grupo Free</a></span>{%endif%}
                 </h3>
             </div>
         </div>
@@ -189,6 +189,7 @@
 {% endblock %}
 {%block style%}
 <style>
+    .free-group{font-size: 14px;color: #555}
     .list-members{margin-top:20px;margin-bottom: 10px;}
     .list-item{position: relative;margin: 3px 0;}
     /*.list-item-next{padding: 8px;border-radius: 0px}*/

@@ -360,6 +360,9 @@ def newGroup(request):
                 resp = newBasicGroup(request, form)
             else:
                 resp = newProGroup(request, form)
+                if resp:
+                    resp.is_pro = True
+                    resp.save()
             if resp:
                 saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
                 return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")

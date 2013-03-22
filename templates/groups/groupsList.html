@@ -24,15 +24,16 @@
                 <ul id="group-list" class="nav onOver">
                     {% for gr_rel in groups %}
                     <li class="">
-                        <a href="/groups/{{gr_rel.id_group.slug}}">
-                            <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
-                            {{gr_rel.id_group.name}}
-                            <div class="pull-right roles">
-                                {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
-                                {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
-                            </div>
-                        </a>
+                            <a href="/groups/{{gr_rel.id_group.slug}}" class="">
+                                <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
+                                {{gr_rel.id_group.name}}
+                                <span class="pull-right roles">
+                                    {%if not gr_rel.id_group.is_pro%}<span class="free-group">Grupo Free</span>{%endif%}
+                                    {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                </span>
+                            </a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -68,6 +69,7 @@
 
 {%block style%}
 <style>
+    .free-group{font-size: 14px;color: #555}
     .btnSup{
         margin-top: 10px;
     }
