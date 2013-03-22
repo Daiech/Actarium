@@ -397,7 +397,11 @@ def showGroup(request, slug):
                         no_redactor = request.GET['no_redactor']
                     except Exception:
                         no_redactor = 0
-                ctx = {"group": g, "current_member": _user, "members": members, "minutes": minutes_group, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor}
+                is_pro = False
+                if isProGroup(g):
+                    pro = getProGroup(g)
+                    is_pro = True
+                ctx = {"group": g, "current_member": _user, "members": members, "minutes": minutes_group, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": is_pro}
                 return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
             if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
@@ -406,20 +410,18 @@ def showGroup(request, slug):
         # request.user is the org admin of this group? redirect to /settings/organizations
         if isProGroup(g):
             pro = getProGroup(g)
-            if pro.id_organization.id_admin == request.user:
-                saved = 0
-                if request.method == "GET":
-                    try:
-                        saved = request.GET['saved']
-                    except Exception:
-                        saved = 0
+        if pro.id_organization.id_admin == request.user:
+            saved = 0
+            if request.method == "GET":
+                try:
+                    saved = request.GET['saved']
+                except Exception:
+                    saved = 0
                 return HttpResponseRedirect("/settings/organizations?saved=" + str(saved))
         return HttpResponseRedirect('/groups/#error-view-group')
     except groups.DoesNotExist:
-        print "groups Exception ", slug
         raise Http404
     except rel_user_group.DoesNotExist:
-        print "rel_user_group Exception ", slug
         raise Http404
 
 

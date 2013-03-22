@@ -779,7 +779,11 @@ def showMinutes(request, slug, minutes_code):
             ctx = {
                 "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
                 "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
-                "minute_template": loader.render_to_string(address_template, {"newMinutesForm": list_newMinutesForm, "group": group, "members_selected": m_assistance, "members_no_selected": m_assistance}),
+                "minute_template": loader.render_to_string(address_template, {
+                    "newMinutesForm": list_newMinutesForm,
+                    "group": group,
+                    "members_selected": m_assistance,
+                    "members_no_selected": m_no_assistance}),
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
                 "missing_approved_list": missing_approved_list,
                 "approved_list": approved_list, "no_approved_list": no_approved_list,
