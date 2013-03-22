@@ -10,7 +10,7 @@
                 <h3>{{group.name}}
                     <strong style="font-size:17px;color:gray"> -
                     {%if group.description%}{{group.description}}{%else%}No description{%endif%}
-                    </strong>
+                    </strong> {%if not is_pro%}· Grupo Free{%endif%}
                 </h3>
             </div>
         </div>
@@ -138,9 +138,11 @@
                 <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
                     <i class="icon-plus"></i> Crear acta
                 </a>
+                {%if is_pro%}
                 <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
                     <i class="icon-upload"></i> Subir acta
                 </a>
+                {%endif%}
             </div>
             <hr>
             <ul class="unstyled minutes-list">
