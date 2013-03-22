@@ -17,7 +17,7 @@ import datetime
 from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
-#from actions_log.views import saveActionLog
+from actions_log.views import saveActionLog
 from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL
 
 #def settings(request):
@@ -83,6 +83,7 @@ def newOrganization(request):
                 description=form.cleaned_data['description'],
                 logo_address=url)
             org.save()
+            saveActionLog(request.user,'NEW_ORG',"name: %s"%(form.cleaned_data['name']),request.META['REMOTE_ADDR'])
             try:
                 url_file = request.FILES['logo_address']
             except Exception:
@@ -140,7 +141,7 @@ def replyRequestPackage(request):
     else:
         return HttpResponseRedirect('/')
 
-
+@login_required(login_url="/account/login")
 def setReplyRequestPackage(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -161,6 +162,7 @@ def setReplyRequestPackage(request):
         is_billing_saved = "Error de servidor"
     return HttpResponse(json.dumps(is_billing_saved), mimetype="application/json")
 
+@login_required(login_url="/account/login")
 def settingsTemplates(request):
     _templates = rel_user_private_templates.objects.filter(id_user=request.user)
     _groups = rel_user_group.objects.filter(id_user=request.user, is_admin=True)
@@ -172,6 +174,7 @@ def settingsTemplates(request):
     }
     return render_to_response('asettings/settings_templates.html', ctx, context_instance=RequestContext(request))
 
+@login_required(login_url="/account/login")
 def assignTemplateAjax(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -198,6 +201,7 @@ def assignTemplateAjax(request):
         response = "No ser recibio una consulta Ajax"
     return HttpResponse(json.dumps(response), mimetype="application/json")
     
+@login_required(login_url="/account/login")
 def unassignTemplateAjax(request):
     if request.is_ajax():
         if request.method == 'GET':

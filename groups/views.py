@@ -578,7 +578,7 @@ def newInvitationToGroup(request):
                             iid = str(_user.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
                             message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
-                            saveActionLog(request.user, 'SET_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                            saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                         except Exception, e:
                             print e
                     else:
