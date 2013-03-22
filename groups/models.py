@@ -146,7 +146,7 @@ class minutes(models.Model):
     code = models.CharField(max_length=150, verbose_name="code")
 
     def __unicode__(self):
-        return "id_group: %s, %s, %s" % (self.id_group, self.date_created, self.id_extra_minutes)
+        return "id_group: %s, %s, %s" % (self.id_group.name, self.date_created, self.id_extra_minutes)
 
     class Meta:
         unique_together = ('id_group', 'code')
