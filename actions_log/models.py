@@ -10,7 +10,7 @@ class actions(models.Model):
     date_created = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
-        return "Action: %s " % (self.name)
+        return "%s - %s " % (self.code,self.name)
 
 
 class rel_user_action(models.Model):

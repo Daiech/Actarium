@@ -2,7 +2,9 @@
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/account/login')
 def sendEmailHtml(email_type,ctx, to):
     """
         Este modulo esta en proceso de construccion, por el momento se utilizara este metodo que recibe 
