@@ -8,7 +8,8 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 #from django.core.mail import EmailMessage
 
-@login_required(login_url='/account/login')
+
+#@login_required(login_url='/account/login')
 def saveActionLog(id_user, code, extra, ip_address):
     try:
         action = actions.objects.get(code=code)
@@ -25,6 +26,7 @@ def saveActionLog(id_user, code, extra, ip_address):
         print "Error al registrar accion: %s" % e
         return False
 
+
 @login_required(login_url='/account/login')
 def showActions(request):
     if request.user.is_staff:
@@ -33,6 +35,7 @@ def showActions(request):
     else:
         return HttpResponseRedirect('/')
 
+
 @login_required(login_url='/account/login')
 def showAction(request, id_action):
     if request.user.is_staff:
@@ -40,6 +43,7 @@ def showAction(request, id_action):
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
+
 
 @login_required(login_url='/account/login')
 def showUserActions(request, username):
@@ -50,6 +54,7 @@ def showUserActions(request, username):
     else:
         return HttpResponseRedirect('/')
 
+
 @login_required(login_url='/account/login')
 def showOrderActions(request, field):
     if request.user.is_staff:
@@ -57,6 +62,7 @@ def showOrderActions(request, field):
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
+
 
 @login_required(login_url='/account/login')
 def showUserActionsOrder(request, username, field):
@@ -70,4 +76,3 @@ def showUserActionsOrder(request, username, field):
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
-
