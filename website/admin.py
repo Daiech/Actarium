@@ -9,6 +9,7 @@ class Tiny_MCE(admin.ModelAdmin):
         js = ('%sjs/vendor/tiny_mce/tiny_mce.js' % settings.STATIC_URL, '%sjs/textareas2.js' % settings.STATIC_URL)
 
 
+admin.site.register(globalVars)
 admin.site.register(feedBack)
 admin.site.register(faq)
 admin.site.register(conditions, Tiny_MCE)

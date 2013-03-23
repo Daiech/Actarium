@@ -42,3 +42,13 @@ class privacy(models.Model):
 
     def __unicode__(self):
         return "%s. is_active: %s" % (self.title, self.is_active)
+
+
+class globalVars(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name", unique=True)
+    url = models.CharField(max_length=150, verbose_name="URL")
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return "%s : %s " % (self.name, self.url)

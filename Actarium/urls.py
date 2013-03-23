@@ -5,6 +5,7 @@ from actions_log.urls import actions_log_urls
 from asettings.urls import asettings_urls
 from pdfmodule.urls import pdfmodule_urls
 from django.conf import settings
+from website.views import getGlobalVar
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -16,8 +17,8 @@ urlpatterns = patterns('',
     url(r'^about', 'website.views.about'),
     url(r'^help/faq', 'website.views.help'),
     url(r'^feed-back', 'website.views.sendFeedBack'),
-    url(r'^politicas-de-privacidad$', 'website.views.privacy_'),
-    url(r'^terminos-y-condiciones-de-uso$', 'website.views.terms'),
+    url(r'^' + getGlobalVar("URL_PRIVACY") + '$', 'website.views.privacy_'),
+    url(r'^' + getGlobalVar("URL_TERMS") + '$', 'website.views.terms'),
 
     url(r'^blog', 'website.views.about'),
     url(r'^update', 'github.views.update'),

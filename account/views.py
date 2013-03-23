@@ -47,8 +47,8 @@ def newUser(request):
             # return userLogin(request, user_name, formulario['password1'].data)
     else:
         formulario = RegisterForm()
-    from Actarium.settings import URL_PRIVACY, URL_TERMS
-    ctx = {'formNewUser': formulario, 'url_terms': URL_TERMS, 'url_privacy': URL_PRIVACY}
+    from website.views import getGlobalVar
+    ctx = {'formNewUser': formulario, 'url_terms': getGlobalVar("URL_TERMS"), 'url_privacy': getGlobalVar("URL_PRIVACY")}
     return render_to_response('account/newUser.html', ctx, context_instance=RequestContext(request))
 #    return render_to_response('account/newUser.html',{}, context_instance = RequestContext(request))
 

@@ -47,8 +47,7 @@ def home(request):
         ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array}
         template = 'website/index.html'
     else:
-        from Actarium.settings import URL_PRIVACY, URL_TERMS
-        ctx = {'url_terms': URL_TERMS, 'url_privacy': URL_PRIVACY}
+        ctx = {}
         template = 'website/landing.html'
 
     return render_to_response(template, ctx, context_instance=RequestContext(request))
@@ -116,3 +115,12 @@ def terms(request):
     title = u"Términos y condiciones"
     ctx = {"title": title, "content": t, "privacy": False, "terms": True}
     return render_to_response('website/conditions_privacy.html', ctx, context_instance=RequestContext(request))
+
+
+def getGlobalVar(name):
+    try:
+        return globalVars.objects.get(name=name).url
+    except globalVars.DoesNotExist:
+        return None
+    except Exception:
+        return None
