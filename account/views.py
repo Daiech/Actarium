@@ -121,7 +121,7 @@ def log_out(request):
     '''
         Finaliza una sesion activa
     '''
-    saveActionLog(request.user,  "LOG_OUT", "username: %s" % (request.user), request.META['REMOTE_ADDR'])  # Guarda la accion de cerrar sesion
+    # saveActionLog(request.user,  "LOG_OUT", "username: %s" % (request.user), request.META['REMOTE_ADDR'])  # Guarda la accion de cerrar sesion
     logout(request)
     return HttpResponseRedirect('/')
 
@@ -140,7 +140,7 @@ def userLogin(request, user_name, password):
         if acceso.is_active:
             login(request, acceso)
             user_id = User.objects.get(username=user_name)
-            saveActionLog(user_id, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
+            # saveActionLog(user_id, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
             return HttpResponseRedirect(next)
         else:
             return render_to_response('account/noactivo.html', context_instance=RequestContext(request))
