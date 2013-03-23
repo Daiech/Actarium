@@ -457,13 +457,6 @@ $(document).on("ready", function() {
 			'</li>';
 		return li;
 	}
-	function getUrlVars() {
-	    var vars = {};
-	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-	        vars[key] = value;
-	    });
-	    return vars;
-	}
 		
 	function chargeWindow(){
 		{% for group in groups %}

@@ -246,41 +246,7 @@
                         "Haz rechazado la invitaci&oacute;n")
                 }
             }
-        })
-
-        function confirm(id_reunion, is_confirmed, group_name, date){
-            //console.log(id_reunion+" "+is_confirmed);
-            sendAjax("/groups/setAssistance",
-            {id_reunion:id_reunion, is_confirmed: is_confirmed},
-            "#load_reunions",
-            function(data){
-                    
-            }
-        )
-        }
-        function setList(e,btn, op){
-            var t = 500;
-            e.preventDefault();
-            li= btn.parent().parent();
-            li.animate({'height': 0},t,function(){
-                confirm(btn.attr("data-id_reunion"),op, $(this).attr("data-group-name"), $(this).attr("data-date"));
-                $(this).remove();
-                l = $("#length-reunion").html();
-                $("#length-reunion").html(l-1);
-            });
-            //console.log(btn.attr("data-id_reunion"));
-        }
-        function setButtons(){
-            $('.confirmed2-true').click(function(e){
-                setList(e,$(this), true);
-                //console.log($(this).attr("data-id_reunion"))
-            });
-            $('.confirmed2-false').click(function(e){
-                setList(e,$(this),false);
-                //console.log($(this).attr("data-id_reunion"))
-            });	
-        }
-        setButtons();
+        }); // send Ajax
     }
     $(".accept-inv").on("click",function(e){
         e.preventDefault();

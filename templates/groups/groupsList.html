@@ -17,6 +17,34 @@
         </div>
     </header>
     <hr>
+    {% if invitations %}
+    <section id="invitations" class="white-box-container">
+        <h4>Invitaciones pendientes a Grupos</h4>
+        <hr>
+        <ul class="unstyled">
+            {% for inv in invitations %}
+            <li class="bb" id="group-{{inv.id_group.slug}}" >
+                <span class="notification-text">
+                    <strong>{{inv.id_user.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{inv.id_group.slug}}">{{inv.id_group.name|lower|capfirst}}</a> · 
+                    <time datetime="{{reunion.date_joined|date:'c'}}">El {{inv.date_joined}}</time>
+                </span>
+                <div class="buttons">
+                    <button type="button" data-invitation="s{{inv.id}}" class="accept-inv btn btn-small btn-info">
+                        Aceptar 
+                        <span class="load"></span>
+                    </button>
+                    <button type="button" data-invitation="n{{inv.id}}" class="accept-inv btn btn-small">
+                        Cancelar
+                        <span class="load"></span>
+                    </button>
+                    <div class="pull-right load"></div>
+                </div>
+
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
     <div id="content-container" class="row-fluid">
         <section id="notifications" class="span6 white-box-container">
                 <h4 class=" ml50" title="Pertenezco al grupo. Puedo ver actas, crear reuniones o tener permisos sobre el grupo." >Soy miembro</h4>
@@ -69,11 +97,13 @@
 
 {%block style%}
 <style>
+    #invitations li{height: auto;padding: 6px;}
     .free-group{font-size: 14px;color: #555}
+    .buttons{display: inline;}
     .btnSup{
         margin-top: 10px;
     }
-    section > ul li a{
+    div > section > ul li a{
         display: block;
     }
     section > ul li{
@@ -94,10 +124,15 @@
 <script>
     $(document).on("ready",function() {
         $("h4, i").tooltip();
-        $("#groups").addClass("menu-active")
+        $("#groups").addClass("menu-active");
         $("#groups .navbar-item").addClass("navbar-item-hover");
         $("#groups .navbar-button-propierties").css({"height":"15px"}, 100);
-              
+        
+        if (getUrlVars()){
+            var group = getUrlVars()['group']
+            $("#group-" + group).css({"background-color":"rgba(255,252,185, 0.7)"})
+        }
+
         $("#menu-organizations").addClass("active")
         $(".button button").click(function(e){
             e.preventDefault()
@@ -107,7 +142,72 @@
                     setAlertMessage("Grupo eliminado","" )
                 }
             }
-        )
+        );
+
+        function acceptInvitation(element, accept){
+            sendAjax(
+                "/groups/acceptInvitation",
+                {"i_id":accept},
+                "",
+                function(data){
+                    if (data["accepted"]){
+                        $("#group-list").prepend(
+                            '<li class="">\
+                                <a href="'+data["group"]["slug"]+'">\
+                                    <img src="{{ STATIC_PREFIX }}'+data["group"]["img_group"]+'" alt=""/>'+
+                                    data["group"]["name"]+
+                                '</a>\
+                            </li>'
+                            );
+                        $(element).parent().parent().slideUp(900,function(){
+                            $(this).empty().html(
+                            "Ahora perteneces al grupo "+
+                                "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"
+                            ).fadeIn();
+                        });
+                        setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                        "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+                    }
+                    else{
+                        var actual2 = parseInt($("#inv-count").text())
+                        actual2--
+                        $("#inv-count").text(""+actual2)
+                        if(data["canceled"]){
+                            $(element).parent().parent().slideUp(900,function(){
+                                $(this).empty()
+                            })
+                            setAlertError("Error", data['message'])
+                        }else{
+                            $(element).parent().parent().slideUp(900,function(){
+                                $(this).empty().html(
+                                "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                                    "<br>"+
+                                    "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                                    "obtener una nueva invitaci&oacute;n."+
+                                    "<hr>"
+                            ).fadeIn()
+                            })
+                            setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                                "Haz rechazado la invitaci&oacute;n")
+                        }
+                    }
+                }); // send Ajax
+        }
+        $(".accept-inv").on("click",function(e){
+            e.preventDefault();
+            $(this).attr("disabled", "disabled");
+            var accept = $(this).attr("data-invitation")
+            if(accept.substring(0,1)=="n"){
+                if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                    acceptInvitation($(this), accept)
+                }
+                else{
+                    $(this).attr("disabled", false);
+                }
+            }else{
+                acceptInvitation($(this), accept)
+            }
+        })
     });
 
 </script>

@@ -122,6 +122,15 @@ function main(){
     //----------------</feedback>-------------------/
 }
 
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
 function setAlert(tittle, message, type){
     var l = message.length;
     var t=0;
@@ -133,7 +142,6 @@ function setAlert(tittle, message, type){
     $(type+" h4").html(tittle);
     $(type+" p").html(message);
     $(type).fadeIn().delay(t).fadeOut(1500);
-    
 }
 function setAlertError(t, m){
     setAlert(t, m, '#alert-error');

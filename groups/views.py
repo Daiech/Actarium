@@ -48,6 +48,10 @@ def groupsList(request):
     lista los grupos del usuario registrado
     '''
     try:
+        #-----------------<INVITACIONES>-----------------
+        # my_inv = invitations_groups.objects.filter(id_user_invited=request.user, is_active=True)
+        my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
+        #-----------------</INVITACIONES>-----------------
         mygroups = rel_user_group.objects.filter(id_user=request.user, is_active=True, is_member=True).order_by("date_joined")
         my_admin_groups = rel_user_group.objects.filter(
             id_user=request.user,
@@ -58,7 +62,7 @@ def groupsList(request):
         mygroups = "You Dont have any groups"
         my_admin_groups = "You Dont administrate any groups"
 
-    ctx = {"groups": mygroups, "admin_groups": my_admin_groups}
+    ctx = {"groups": mygroups, "admin_groups": my_admin_groups, "invitations": my_inv}
     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
@@ -390,6 +394,7 @@ def showGroup(request, slug):
     try:
         g = groups.objects.get(slug=slug, is_active=True)
         _user = getRelUserGroup(request.user, g)
+        print "USER", _user
         if _user:
             if _user.is_active:
                 members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
@@ -410,17 +415,20 @@ def showGroup(request, slug):
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
             if _user.is_superadmin and _user.is_active:
                 return HttpResponseRedirect("/settings/organizations")
+            if not _user.is_active:
+                return HttpResponseRedirect('/groups/' + "?group=" + str(g.slug))
         # request.user is the org admin of this group? redirect to /settings/organizations
+
         if isProGroup(g):
             pro = getProGroup(g)
-        if pro.id_organization.id_admin == request.user:
-            saved = 0
-            if request.method == "GET":
-                try:
-                    saved = request.GET['saved']
-                except Exception:
-                    saved = 0
-                return HttpResponseRedirect("/settings/organizations?saved=" + str(saved))
+            if pro.id_organization.id_admin == request.user:
+                saved = 0
+                if request.method == "GET":
+                    try:
+                        saved = request.GET['saved']
+                    except Exception:
+                        saved = 0
+                    return HttpResponseRedirect("/settings/organizations?saved=" + str(saved))
         return HttpResponseRedirect('/groups/#error-view-group')
     except groups.DoesNotExist:
         raise Http404
@@ -482,6 +490,7 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
         print "EROROR views.sendInvitationToGroup", e
         return False
     if _inv:
+        print "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", _inv
         email = [id_user_invited.email]
         ctx_email = {
             'firstname': id_user_from.first_name + id_user_from.last_name,
@@ -489,6 +498,7 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
             'groupname': group.name,
             'urlgravatar': showgravatar(id_user_from.email, 50)
         }
+        print "INVITADO _inv:", _inv
         sendEmailHtml(6, ctx_email, email)
     return _inv
 
@@ -576,17 +586,21 @@ def newInvitationToGroup(request):
                     _user = getUserByEmail(email)
                     if not _user:
                         _user = newUserWithInvitation(email, request.user, g)
+                    print "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
                     sendInvitationToGroup(_user, request.user, g)
+                    print "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU"
                     if _user and not (_user is 0):  # 0 = is email failed
                         try:
+                            print "INVITADO!"
                             invited = True
                             iid = str(_user.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
                             message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
-                            saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                            #saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                         except Exception, e:
                             print e
                     else:
+                        print "NO INVITADO!"
                         iid = False
                         invited = False
                         gravatar = False
