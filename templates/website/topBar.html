@@ -81,13 +81,13 @@
                 </a>   
             </div>
             <div id="menu-login" class="btn-group mt20 pull-right">
-                    <a id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" href="#" title="Configuraci&oacute;n de cuenta">
+                    <span id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
                         <img src="/static/img/user_default.png" alt="ico-usuario" /> 
                         <div class="dinline">
-                            {% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
+                            {% if user.is_authenticated %}{{user.username}}{% else %}Iniciar sesi&oacute;n{% endif %}
                             <span class="caret"></span>
                         </div>
-                    </a>
+                    </span>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
                         <li class="current-user">
@@ -99,16 +99,21 @@
                                 </div>
                             </a>
                         </li>
-                        <li><a href="#">Privacidad</a></li>
+                        <li><a href="/politicas-de-privacidad">Privacidad</a></li>
                         <li class="divider"></li>
                         <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
                         {% else %}
                         <form method ="post" action="/account/login">
                             <li>{% csrf_token %}</li>
-                            <li><p>Inicia sesi&oacute;n</p></li>
+                            <li>
+                                <p>
+                                    Inicia sesi&oacute;n <a id="close-login-menu" class="pull-right" href="#"><i class="icon-remove"></i></a>
+                                </p>
+                            </li>
                             <li><input id="username"  name="username" class="input-small next-li" type="text" placeholder="Usuario" autofocus></li>
                             <li><input id="password"  name="password" class="input-small next-li" type="password" placeholder="Contrase&ntilde;a" ></li>
-                            <a id="close-login-menu" class="pull-left" href="#">cerrar</a><input id="btn-login" class="input-small btn btn-primary next-li pull-right" type="submit" value="Entrar" >
+                            <a href="#" class="pull-left" id="register-link">registrarse</a>
+                            <input id="btn-login" class="input-small btn btn-info next-li pull-right" type="submit" value="Entrar" >
                         </form>
                         {% endif %}
                     </ul>

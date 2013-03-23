@@ -181,6 +181,8 @@
     /* **************************************************************************** 
     Termina Index Website
     **************************************************************************** */
+
+    #register-link{padding: 5px 15px}
 </style>
 {%endblock%}
 {% block js %}
@@ -190,6 +192,7 @@
         $("i").tooltip();
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
+        $("#register-link").on("click",register);
     });
     
     function login(e){

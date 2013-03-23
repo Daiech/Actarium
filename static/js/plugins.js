@@ -24,7 +24,7 @@ function main(){
         }
     );
     //-------------------</letra blanca del perfil on hover>-------------------------//
-    
+
     //------<No cierra el Menú de login al dar click>---------------/
     $(".next-li").focus(function(e){
         $("ul.dropdown-menu").addClass("disblock");
