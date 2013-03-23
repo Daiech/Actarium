@@ -47,7 +47,8 @@ def home(request):
         ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array}
         template = 'website/index.html'
     else:
-        ctx = {'TITLE': "Actarium by Daiech"}
+        from Actarium.settings import URL_PRIVACY, URL_TERMS
+        ctx = {'url_terms': URL_TERMS, 'url_privacy': URL_PRIVACY}
         template = 'website/landing.html'
 
     return render_to_response(template, ctx, context_instance=RequestContext(request))
