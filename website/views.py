@@ -121,6 +121,6 @@ def getGlobalVar(name):
     try:
         return globalVars.objects.get(name=name).url
     except globalVars.DoesNotExist:
-        return None
+        return ""
     except Exception:
-        return None
+        return ""
