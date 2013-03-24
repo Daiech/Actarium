@@ -1106,6 +1106,7 @@ only screen and (min-resolution: 144dpi) {
     #minute, .minute{width: 80%}
     .minute > div{padding: 15px}
     .hoja{width: 95%}
+    .modal.fade.in{top: 10%;}
 }
 
 
@@ -1139,6 +1140,7 @@ only screen and (min-resolution: 144dpi) {
     #minute, .minute{width: 90%}
     .minute > div{padding: 5px}
     .hoja{width: 90%}
+    .modal.fade.in{top: 10%;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -1169,6 +1171,7 @@ only screen and (min-resolution: 144dpi) {
     #menu-login{margin-right: 0}
     .btn{margin-top: 5px;}
     #message-box, #more-info{width: 90%;}
+    .modal.fade.in{top: 10%;}
 }
 
 @media (max-width: 380px) {
@@ -1176,6 +1179,21 @@ only screen and (min-resolution: 144dpi) {
         width: 95%;
     }
 }
+   /*==================================================*/
+    /*                  Modal for view in mobile       */                    
+    /*==================================================*/
+@media (max-height: 480px) {
+    .modal.fade.in{top: 10%;height: 370px}
+    .modal-body{max-height: 291px}
+}
+@media (max-height: 380px) {
+    .modal.fade.in{top: 10%;height: 270px}
+    .modal-body{max-height: 191px}
+}
+   /*==================================================*/
+    /*                  Cierra Modal               */                    
+    /*==================================================*/
+
     /*==================================================*/
     /*                  Cierra Responsive               */                    
     /*==================================================*/
