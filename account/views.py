@@ -57,9 +57,35 @@ def getActivationKey(email_user):
     return sha_constructor(sha_constructor(str(random.random())).hexdigest()[:5] + email_user).hexdigest()
 
 
+def getNextUsername(username):
+    """
+    the entry username is already exists.
+    then, search a new username.
+    """
+    num = username.split("_")[-1]
+    if num.isdigit():
+        num = int(num) + 1
+        username = "_".join(username.split("_")[:-1]) + "_" + str(num)
+    else:
+        username = username + "_1"
+    try:
+        User.objects.get(username=username)
+        return getNextUsername(username)
+    except User.DoesNotExist:
+        return username
+
+
+def validateUsername(username):
+    try:
+        User.objects.get(username=username)
+        return getNextUsername(username)
+    except User.DoesNotExist:
+        return username
+
+
 def newInvitedUser(email_to_invite, _user_from):
     '''
-    crea un nuevo usuario inactivo desde invitacion
+    crea un nuevo usuario inactivo desde invitacion y lo retorna
     '''
     try:
         _user = User.objects.get(email=email_to_invite)
@@ -67,11 +93,7 @@ def newInvitedUser(email_to_invite, _user_from):
     except User.DoesNotExist:
         _user = None
     _username = email_to_invite.split("@")[0]
-    try:
-        _user = User.objects.get(username=_username)
-        return _user
-    except User.DoesNotExist:
-        _user = None
+    _username = validateUsername(_username)
     try:
         _user = User(username=_username, first_name=_username, email=email_to_invite, is_active=False)
         activation_key = getActivationKey(email_to_invite)
@@ -79,21 +101,23 @@ def newInvitedUser(email_to_invite, _user_from):
         _user.save()
         from models import activation_keys
         activation_keys(id_user=_user, email=email_to_invite, activation_key=activation_key).save()
+        #save invitation to group
     except activation_keys.DoesNotExist:
         return False
     except Exception, e:
         print "Error: %s" % e
         return False
     if _user:
-        print "localhost:8000/account/actvate/", activation_key, "/invited1"
+        # saveAction Log: new user invited by _user_from
+        print "localhost:8000/account/activate/", activation_key, "/invited1"
         id_inv = activation_key[5:20]
         ctx_email = {
-        'username': _user_from.username,
-        'activation_key': activation_key,
-        'id_inv': id_inv,
-        'newuser_username': _username,
-        'pass': activation_key[:8],
-        'urlgravatar': showgravatar(_user_from.email, 50)
+            'username': _user_from.username,
+            'activation_key': activation_key,
+            'id_inv': id_inv,
+            'newuser_username': _username,
+            'pass': activation_key[:8],
+            'urlgravatar': showgravatar(_user_from.email, 50)
         }
         sendEmailHtml(7, ctx_email, [email_to_invite])
         return _user
@@ -255,8 +279,54 @@ def password_reset_complete2(request):
 # ---------------------------------<activacion de cuenta>----------------------------
 
 
-def activate_account(request, activation_key, is_invited=False):
-    if not(activate_account_now(request, activation_key) == False):
+def activationKeyIsValid(activation_key):
+    from account.models import activation_keys
+    try:
+        return activation_keys.objects.get(activation_key=activation_key, is_expired=False)
+    except activation_keys.DoesNotExist:
+        return False
+    except Exception:
+        return False
+
+
+def confirm_account(request, activation_key, is_invited=False):
+    ak = activationKeyIsValid(activation_key)
+    if ak:
+        from groups.models import rel_user_group
+        try:
+            rels = rel_user_group.objects.filter(id_user=ak.id_user, is_active=False)
+        except rel_user_group.DoesNotExist:
+            return False
+        except Exception:
+            return False
+        update = False
+        if request.method == "POST":
+            form = UserForm(request.POST, instance=ak.id_user)
+            if form.is_valid():
+                form.save()
+                update = True
+                return HttpResponseRedirect("/account/activate/" + activation_key + "?is_invited=1")
+            else:
+                update = False
+        else:
+            form = UserForm(initial={
+                "username": ak.id_user.username,
+                "first_name": ak.id_user.first_name,
+                "last_name": ak.id_user.last_name,
+                "email": ak.id_user.email
+            })
+        ctx = {"invitations": rels, "invited": True, "form": form, "update": update}
+        return render_to_response('account/confirm_account.html', ctx, context_instance=RequestContext(request))
+    else:
+        return render_to_response('account/invalid_link.html', {}, context_instance=RequestContext(request))
+
+
+def activate_account(request, activation_key):
+    if activate_account_now(request, activation_key):
+        try:
+            is_invited = request.GET['is_invited']
+        except Exception:
+            is_invited = False
         return render_to_response('account/account_actived.html', {"invited": is_invited}, context_instance=RequestContext(request))
     else:
         return render_to_response('account/invalid_link.html', {}, context_instance=RequestContext(request))
@@ -266,16 +336,18 @@ def activate_account_now(request, activation_key):
     from models import activation_keys
     try:
         activation_obj = activation_keys.objects.get(activation_key=activation_key)
-    except Exception:
+        if not activation_obj.is_expired:
+            user = User.objects.get(id=activation_obj.id_user.pk)
+            user.is_active = True
+            user.save()
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+            activation_obj.is_expired = True
+            activation_obj.save()
+            return True
+        else:
+            return False
+    except activation_keys.DoesNotExist:
         return False
-    if not(activation_obj.is_expired):
-        user = User.objects.get(id=activation_obj.id_user.pk)
-        user.is_active = True
-        user.save()
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(request, user)
-        activation_obj.is_expired = True
-        activation_obj.save()
-        return True
-    else:
+    except Exception:
         return False

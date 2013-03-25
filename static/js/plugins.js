@@ -120,6 +120,16 @@ function main(){
         }
     });
     //----------------</feedback>-------------------/
+
+    //terms cheched
+    $("#term_privacy").on("change", function(){
+        if($(this).is(':checked')){
+            $("#btn-submit").attr("disabled", false)
+        } else {
+            $("#btn-submit").attr("disabled", true)
+        }
+    });
+
 }
 
 

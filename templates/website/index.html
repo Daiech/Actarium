@@ -25,7 +25,7 @@
                                     {% for invitation in invitations %}
                                     <li>
                                         <span class="notification-text alpha60">
-                                            <strong>{{invitation.id_user.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
+                                            <strong>{{invitation.id_user_invited.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
                                             <br />
                                             <time datetime="{{reunion.date_joined|date:'c'}}">El {{invitation.date_joined}}</time>
                                         </span>

@@ -231,7 +231,7 @@ def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_s
     except rel_user_group.DoesNotExist:
         no_rel = True
     if no_rel:
-        setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active, is_admin=is_admin, is_approver=is_approver, is_secretary=is_secretary, is_superadmin=is_superadmin)
+        setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active, is_admin=is_admin, is_secretary=is_secretary, is_superadmin=is_superadmin)
 
 
 def get_user_or_email(s):
@@ -485,12 +485,11 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
         Enviar una invitacion de grupo a un usuario
     '''
     try:
-        _inv = setRelUserGroup(id_user=id_user_invited, id_group=group, is_member=True, is_active=False)
+        _inv = setRelUserGroup(id_user=id_user_invited, id_user_invited=id_user_from, id_group=group, is_member=True, is_active=False)
     except Exception, e:
         print "EROROR views.sendInvitationToGroup", e
         return False
     if _inv:
-        print "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", _inv
         email = [id_user_invited.email]
         ctx_email = {
             'firstname': id_user_from.first_name + id_user_from.last_name,
@@ -498,7 +497,6 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
             'groupname': group.name,
             'urlgravatar': showgravatar(id_user_from.email, 50)
         }
-        print "INVITADO _inv:", _inv
         sendEmailHtml(6, ctx_email, email)
     return _inv
 
@@ -586,12 +584,9 @@ def newInvitationToGroup(request):
                     _user = getUserByEmail(email)
                     if not _user:
                         _user = newUserWithInvitation(email, request.user, g)
-                    print "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
                     sendInvitationToGroup(_user, request.user, g)
-                    print "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU"
                     if _user and not (_user is 0):  # 0 = is email failed
                         try:
-                            print "INVITADO!"
                             invited = True
                             iid = str(_user.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
@@ -600,7 +595,6 @@ def newInvitationToGroup(request):
                         except Exception, e:
                             print e
                     else:
-                        print "NO INVITADO!"
                         iid = False
                         invited = False
                         gravatar = False
@@ -630,27 +624,28 @@ def getRelUserGroup(_user, _group):
 
 
 def setRelUserGroup(id_user, id_group,
+    id_user_invited=None,
     is_superadmin=False,
     is_admin=False,
-    is_approver=False,
     is_secretary=False,
     is_member=True,
     is_active=False):
     try:
         rel = rel_user_group(
             id_user=id_user,
+            id_user_invited=id_user_invited,
             id_group=id_group,
             is_member=bool(is_member),
             is_admin=is_admin,
-            is_approver=is_approver,
             is_secretary=is_secretary,
             is_superadmin=is_superadmin,
             is_active=is_active)
         rel.save()
         # saveAction new Rel user group
         return True
-    except Exception:
+    except Exception, e:
         # error log
+        print "EROROR en setRelUserGroup", e
         return False
 
 

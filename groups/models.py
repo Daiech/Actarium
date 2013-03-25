@@ -57,10 +57,10 @@ class invitations_groups(models.Model):
 
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_user_invited = models.ForeignKey(User, blank=True, null=True, default=None, related_name='%(class)s_id_user_invited')
     id_group = models.ForeignKey(groups)
     is_member = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    is_approver = models.BooleanField(default=False)
     is_secretary = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
     is_convener = models.BooleanField(default=True)

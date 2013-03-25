@@ -46,7 +46,7 @@
                     <input type="password" name="password" id="id_password-login" placeholder="Contrase&ntilde;a" />
 
                     <div class="box mt20">
-                        <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
+                        <button type="submit" name="submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
                         <label>
                         <a href="/account/password/reset/" class="">&iquest;Olvidaste tu contrase&ntilde;a?</a></label>
                     </div>
@@ -87,7 +87,7 @@
                         <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>
                     </label>
                     <div class="box mt20">
-                        <button type="submit" name="submit" id="id_submit" class="btn btn-success link-daiech pull-right">Registrarme</button>
+                        <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">Registrarme</button>
                     </div>
                 </form>
             </section>            
@@ -178,7 +178,7 @@
         width: auto;
         border: none;
     }
-    #id_submit{width: auto;}
+    #btn-submit{width: auto;}
     .controls{margin-top: 15px;}
     #content-container .white-box-container{min-height: 220px;}
     #group-list{margin: 10px 0;}

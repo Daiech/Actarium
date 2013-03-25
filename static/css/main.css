@@ -1107,6 +1107,7 @@ only screen and (min-resolution: 144dpi) {
     .minute > div{padding: 15px}
     .hoja{width: 95%}
     .modal.fade.in{top: 10%;}
+    .message-box{width: 70%}
 }
 
 
@@ -1141,6 +1142,7 @@ only screen and (min-resolution: 144dpi) {
     .minute > div{padding: 5px}
     .hoja{width: 90%}
     .modal.fade.in{top: 10%;}
+    .message-box{width: 75%}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -1172,6 +1174,8 @@ only screen and (min-resolution: 144dpi) {
     .btn{margin-top: 5px;}
     #message-box, #more-info{width: 90%;}
     .modal.fade.in{top: 10%;}
+    .message-box{width: 85%}
+    #feed-modal{width: 100%}
 }
 
 @media (max-width: 380px) {
