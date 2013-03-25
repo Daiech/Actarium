@@ -523,7 +523,7 @@ FEED
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     left: auto;
-    top: 200px;
+    top: 50px;
     right: -505px;
     width: 500px;
     margin: auto;
@@ -820,7 +820,7 @@ h3 a:hover{text-decoration:underline;}
 .icons-info {margin-top:20px;margin-bottom: -5px;}
 .icons-info span{font-size: 12px;margin-right: 15px;}
 .message-box{margin: 0 auto;width: 55%;margin-bottom: 20px;}
-.control-group{margin:10px auto;width: 70%;}
+.control-group{width: 70%;}
 .control-group input[type="checkbox"]{float: none;}
 .td-first{text-align: left;/*width: 45%;*/}
 .roles{margin-top: 8px;margin-right: 5px;}
