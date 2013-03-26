@@ -25,7 +25,6 @@ def home(request):
         #-----------------</GRUPOS>-----------------
 
         #-----------------<INVITACIONES>-----------------
-        # my_inv = invitations_groups.objects.filter(id_user_invited=request.user, is_active=True)
         my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
         #-----------------</INVITACIONES>-----------------
 

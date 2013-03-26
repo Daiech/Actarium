@@ -49,10 +49,9 @@ def groupsList(request):
     '''
     try:
         #-----------------<INVITACIONES>-----------------
-        # my_inv = invitations_groups.objects.filter(id_user_invited=request.user, is_active=True)
         my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
         #-----------------</INVITACIONES>-----------------
-        mygroups = rel_user_group.objects.filter(id_user=request.user, is_active=True, is_member=True).order_by("date_joined")
+        mygroups = rel_user_group.objects.filter(id_user=request.user, is_active=True, is_member=True)
         my_admin_groups = rel_user_group.objects.filter(
             id_user=request.user,
             is_member=False,

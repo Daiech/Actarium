@@ -11,7 +11,7 @@ class RegisterForm(UserCreationForm):
         label="Nombre de usuario",
         widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario'}),
         help_text="Requerido. 30 caracteres o menos. Letras, dígitos y @/./+/-/_ solamente."
-        )
+    )
 
     class Meta:
         model = User

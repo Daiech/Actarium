@@ -79,7 +79,7 @@
 
                 </div>
             </section>
-            <section class="white-box-container span6">
+            <section class="white-box-container span6 box">
                     <header class="span3">
                         <h4 class="">Tus grupos</h4>
                     </header>
@@ -102,6 +102,7 @@
                                 <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
                                 {{gr_rel.id_group.name}}
                                 <div class="pull-right roles">
+                                    {%if not gr_rel.id_group.is_pro%}<span class="free-group"><i class="icon-flag"></i></span>{%endif%}
                                     {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
                                     {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
                                     {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
@@ -110,6 +111,12 @@
                         </li>
                         {% endfor %}
                     </ul>
+                    <div class="icons-info pull-right">
+                        <span>Info:</span>
+                        <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                        <span title="Tiene permisos de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                        <span title="Grupo Free"><i class="icon-flag"></i> Grupo Free</span>
+                    </div>
             </section>
         </div>
     </article>

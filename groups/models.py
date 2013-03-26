@@ -70,6 +70,9 @@ class rel_user_group(models.Model):
     def __unicode__(self):
         return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
 
+    class Meta:
+        ordering = ['-id_group__is_pro', 'id']
+
 
 class admin_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
