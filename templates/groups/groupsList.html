@@ -51,12 +51,15 @@
                 <hr>
                 <ul id="group-list" class="nav onOver">
                     {% for gr_rel in groups %}
-                    <li class="">
+                    <li class="{%if gr_rel.id_group.is_pro%}selected-group{%endif%}">
                             <a href="/groups/{{gr_rel.id_group.slug}}" class="">
                                 <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
                                 {{gr_rel.id_group.name}}
                                 <span class="pull-right roles">
-                                    {%if not gr_rel.id_group.is_pro%}<span class="free-group"><i class="icon-flag"></i></span>{%endif%}
+                                    {%if not gr_rel.id_group.is_pro%}
+                                    <span class="free-group"><i class="icon-flag"></i></span>
+                                    {%else%}<span class="label label-info">Pro</span>
+                                    {%endif%}
                                     {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
                                     {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
                                     {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
@@ -131,7 +134,7 @@
         if (getUrlVars()){
             var group = getUrlVars()['group']
             // $("#group-" + group).css({"background-color":"rgba(255,252,185, 0.7)"})
-            $("#group-" + group).css({"background-color":"#fffef1"})
+            $("#group-" + group).addClass("selected-group")
         }
 
         $("#menu-organizations").addClass("active")

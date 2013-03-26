@@ -842,6 +842,8 @@ i.icon-wrench{background-image: url("/static/img/icon-admin.png"); background-po
 i.icon-thumbs-up{background-image: url("/static/img/icon-approver.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
 i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
 
+.w22{width: 22px;margin: auto}
+.w32{width: 32px;margin: auto}
 .w42{width: 42px;margin: auto}
 .w48{width: 48px;margin: auto}
 
@@ -853,7 +855,7 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 
 
 .btn-groups-admin{display: block;margin: 0 auto;width: 58%;}
-
+.selected-group{background-color:#fffef1}
 
 /*
 Show Minutes 

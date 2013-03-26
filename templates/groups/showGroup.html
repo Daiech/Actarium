@@ -6,11 +6,21 @@
     <header >
         <div class="row-fluid">
             <div class="span10">
-                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-                <h3>{{group.name}}
-                    <strong style="font-size:17px;color:gray"> -
-                    {%if group.description%}{{group.description}}{%else%}No description{%endif%}
-                    </strong> {%if not is_pro%}<span class="free-group pull-right">Este es un <a href="/help/faq">Grupo Free</a></span>{%endif%}
+                {%if group.is_pro%}
+                <!-- <div class="icons-page"><span class="label label-info">Pro</span></div> -->
+                <div class="icons-page img-organization">
+                    {%if is_pro%}
+                    <img class="w32 group-img-organization" src="{{is_pro.id_organization.logo_address}}" />&nbsp;
+                    {%endif%}
+                </div>
+                {%else%}
+                <div class="menu-icons icons-page"></div>
+                {%endif%}
+                <h3>
+                    <a href="/groups/{{ group.slug}}">{{group.name}}</a>
+                    <strong style="font-size:17px;color:gray">
+                    {%if group.description%} - {{group.description}}{%else%}{%endif%}
+                    </strong> {%if not group.is_pro%}<span class="free-group pull-right">Este es un <a href="/help/faq">Grupo Free</a></span>{%else%}<span class="label label-info">Pro</span>{%endif%}
                 </h3>
             </div>
         </div>
@@ -138,7 +148,7 @@
                 <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
                     <i class="icon-plus"></i> Crear acta
                 </a>
-                {%if is_pro%}
+                {%if group.is_pro%}
                 <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
                     <i class="icon-upload"></i> Subir acta
                 </a>
@@ -189,6 +199,9 @@
 {% endblock %}
 {%block style%}
 <style>
+    .img-organization{width: 40px;}
+    #pro-label{position:relative;/*top: 22px;left: -43px;*/}
+    .group-img-organization{position: relative;top: -5px}
     .free-group{font-size: 14px;color: #555}
     .list-members{margin-top:20px;margin-bottom: 10px;}
     .list-item{position: relative;margin: 3px 0;}

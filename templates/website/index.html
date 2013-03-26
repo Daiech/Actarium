@@ -20,7 +20,7 @@
                                     Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
                                 </a>
                             </div>
-                            <div  id="Invitations" class="accordion-body collapse in">
+                            <div id="Invitations" class="accordion-body collapse in">
                                 <ul class="accordion-inner">
                                     {% for invitation in invitations %}
                                     <li>
@@ -97,12 +97,12 @@
                     <hr>
                     <ul id="group-list" class="nav onOver">
                         {% for gr_rel in groups %}
-                        <li class="">
+                        <li class="{%if gr_rel.id_group.is_pro%}selected-group{%endif%}">
                             <a href="/groups/{{gr_rel.id_group.slug}}">
                                 <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
                                 {{gr_rel.id_group.name}}
                                 <div class="pull-right roles">
-                                    {%if not gr_rel.id_group.is_pro%}<span class="free-group"><i class="icon-flag"></i></span>{%endif%}
+                                    {%if not gr_rel.id_group.is_pro%}<span class="free-group"><i class="icon-flag"></i></span>{%else%}<span class="label label-info">Pro</span>{%endif%}
                                     {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
                                     {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
                                     {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
@@ -200,7 +200,7 @@
 {% if user.is_authenticated%}
 <script>
     $(".collapse").collapse({
-        toggle: false
+        // toggle: false
     })
     function acceptInvitation(element, accept){
         sendAjax(

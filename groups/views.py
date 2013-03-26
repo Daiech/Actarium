@@ -404,11 +404,10 @@ def showGroup(request, slug):
                         no_redactor = request.GET['no_redactor']
                     except Exception:
                         no_redactor = 0
-                is_pro = False
+                pro = False
                 if isProGroup(g):
                     pro = getProGroup(g)
-                    is_pro = True
-                ctx = {"group": g, "current_member": _user, "members": members, "minutes": minutes_group, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": is_pro}
+                ctx = {"group": g, "current_member": _user, "members": members, "minutes": minutes_group, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": pro}
                 return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
             if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
