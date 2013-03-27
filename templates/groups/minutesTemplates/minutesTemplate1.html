@@ -1,26 +1,26 @@
 {% load gravatartag %}
 <section class="row-fluid">
-<article id="minute" class="minute hoja white-box-container">
-    		<div id="data-for-pdf">
-    		<div style="margin-top:30px;margin-bottom:25px">
-                
-                        <img style="height:50px;display:inline-block" src="{{ url_logo }}" title="Logo" /><br /><br />
-                        <h3> <strong>{{group.name}}</strong> </h3>
-
-    		</div>
-    		<div class="">
-    			<div class="hidden" style="display:none">{{newMinutesForm.type_reunion}}</div>
-    			<strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span> <hr>
-    			<p><strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span></p>
-    			<p><strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span></p>
-    			
-    			<hr>
-    			<strong>Lugar: </strong>{{ newMinutesForm.location }}<span style="display:block; float:right">{{ newMinutesForm.location.errors }}</span><hr>
-    			
-    			<div class="box">
-    				<div class="span6">
-    					<strong>Presentes: </strong> 
-		    			<div class="member-list">
+    <article id="minute" class="minute hoja white-box-container">
+        <header></header>
+    	<div id="data-for-pdf">
+        	<div style="margin-top:30px;margin-bottom:25px">
+                <img style="height:50px;display:inline-block" src="{{ url_logo }}" title="Logo" />
+                <br><br>
+                <h3><strong>{{group.name}}</strong></h3>
+        	</div>
+        	<div class="">
+        		<div class="hidden" style="display:none">{{newMinutesForm.type_reunion}}</div>
+        		<strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span> <hr>
+        		<p><strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span></p>
+        		<p><strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span></p>
+        		
+        		<hr>
+        		<strong>Lugar: </strong>{{ newMinutesForm.location }}<span style="display:block; float:right">{{ newMinutesForm.location.errors }}</span><hr>
+        		
+        		<div class="box">
+        			<div class="span6">
+        				<strong>Presentes: </strong> 
+            			<div class="member-list">
                             {%if reunion%}
                             <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
                             {%endif%}
@@ -35,10 +35,10 @@
                             {% endfor%}
                             </ul>
                    		 </div>
-    				</div>
-    				<div class="span6">
-    					<strong>Ausentes: </strong>
-		    			<div class="member-list">
+        			</div>
+        			<div class="span6">
+        				<strong>Ausentes: </strong>
+            			<div class="member-list">
                             {%if reunion%}
                             <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
                             {%endif%}
@@ -53,15 +53,15 @@
                             {% endfor%}
                             </ul>
                     </div>
-    				</div>
-    			</div>
-    			<hr>
-    			<strong>Orden del dia:</strong>
-    			{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
-    			<hr>
-    			<strong>Acuerdos :</strong>
-    			{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span><br /><br />
-    		      
+        			</div>
+        		</div>
+        		<hr>
+        		<strong>Orden del dia:</strong>
+        		{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
+        		<hr>
+        		<strong>Acuerdos :</strong>
+        		{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span><br /><br />
+        	      
                 <div id="firmas">
                     <table>
                         <tr>
@@ -92,10 +92,9 @@
                         {% endfor%}
                     </table>
                 </div>
-    		<footer>
-    			
-    		</footer>
-    		</div>
-    		</div>
-    	</article>
+            </div>
+    	</div>
+        <footer style="min-height:50px;">
+        </footer>
+    </article>
 </section>

@@ -607,27 +607,27 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
         ######## <MEMBER SIGNERS LISTS> #########
         m_signers = getSignersFromRolUserMinutes(group)
-        list_ms=[]
-        list_temp=[]
-        i=0
+        list_ms = []
+        list_temp = []
+        i = 0
         for m in m_signers:
             list_temp.append(m)
-            if i>=1:
-                i=0
+            if i >= 1:
+                i = 0
                 list_ms.append(list_temp)
-                list_temp=[]
+                list_temp = []
             else:
-                i=i+1            
-        if i==1:
+                i = i + 1
+        if i == 1:
             list_ms.append(list_temp)
         ######## </MEMBER SIGNER LISTS> #########
 
         ######## <LOGO> #########
         if group.is_pro:
-            url_logo = groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
+            url_logo = URL_BASE + groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
         else:
-            url_logo = 'http://actarium.com/static/img/logo_email.png'
-        ######## </LOGO> #########        
+            url_logo = URL_BASE + '/static/img/logo_email.png'
+        ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########
         if request.method == "POST":
@@ -808,30 +808,30 @@ def showMinutes(request, slug, minutes_code):
             ######## <SIGNERS> #########
             m_signers = getMembersSigners(group, minutes_current)
             # print m_signers
-            list_ms=[]
-            list_temp=[]
-            i=0
+            list_ms = []
+            list_temp = []
+            i = 0
             for m in m_signers:
                 list_temp.append(m)
-                if i>=1:
-                    i=0
+                if i >= 1:
+                    i = 0
                     list_ms.append(list_temp)
-                    list_temp=[]
+                    list_temp = []
                 else:
-                    i=i+1
-            if i==1:
+                    i = i + 1
+            if i == 1:
                 list_ms.append(list_temp)
             ######## </SIGNERS> #########
 
             ######## </PRESIDENT SECRETARY> #########
-            member_president, member_secretary = getPresidentAndSecretary(group,minutes_current)
+            member_president, member_secretary = getPresidentAndSecretary(group, minutes_current)
             ######## </PRESIDENT SECRETARY> #########
 
             ######## <LOGO> #########
             if group.is_pro:
-                url_logo = groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
+                url_logo = URL_BASE + groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
             else:
-                url_logo = 'http://actarium.com/static/img/logo_email.png'
+                url_logo = URL_BASE + '/static/img/logo_email.png'
             ######## </LOGO> #########
 
             ######## <ATTENDING> #########
