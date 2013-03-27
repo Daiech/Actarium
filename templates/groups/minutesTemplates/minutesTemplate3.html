@@ -1,7 +1,7 @@
 <section class="row-fluid">
     <article id="minutet" class="minute hoja white-box-container">
     	<div id="data-for-pdf">
-            <div class="hidden">{{newMinutesForm.type_reunion}}</div>
+            <div class="hidden" style="display:none">{{newMinutesForm.type_reunion}}</div>
             <div class="hidden">
                 <input type="text" placeholder="Lugar" name="location" id="id_location" value="default" />
             </div>
@@ -10,7 +10,7 @@
             </div>
     		<table border="1" style="width:100%; margin-bottom:40px; text-align: center">
         		<tr>
-        			<td style="padding:5px">Logo</td>
+        			<td style="padding:5px"><img style="height:30px" src="{{ url_logo }}" title="Logo" /></td>
         			<td style="padding:5px">&nbsp; &nbsp; &nbsp; &nbsp; ACTA COMIT&Eacute; &nbsp; &nbsp; &nbsp; &nbsp;</td>
         			<td style="padding:5px">ACTA No. <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>
                     </td>
@@ -20,12 +20,15 @@
     		<table border="1" style="width:100%; margin-bottom:10px">
     			<tr>
     				<td style="padding:5px">FECHA /HORA</td>
-    				<td style="padding:5px">{{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
+    				<td style="padding:5px">
+                        {{ newMinutesForm.date_start}}
+                        <span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
                     </td>
     			</tr>
     			<tr>
     				<td style="padding:5px">ASISTENTES</td>
-    				<td style="padding:5px">{% for member in members_selected%}
+    				<td style="padding:5px">
+                        {% for member in members_selected%}
                                {{member.id_user.first_name}} {{member.id_user.last_name}},
                    		{% endfor%}
                    </td>
@@ -37,17 +40,54 @@
     				<td style="padding:5px">ORDEN DEL D&Iacute;A</td>
     			</tr>
     			<tr>
-    				<td>{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> </td>
+    				<td style="padding:10px">
+                        {{ newMinutesForm.agenda|safe }}
+                        <span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> 
+                    </td>
     			</tr>
     			<tr>
     				<td style="padding:5px">DESARROLLO ORDEN DEL D&Iacute;A</td>
     			</tr>
     			<tr>
-    				<td>{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span></td>
+    				<td style="padding:10px">
+                        {{ newMinutesForm.agreement|safe }}
+                        <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+                    </td>
     			</tr>
     			
     		</table>
     		<br /><br />
+            <div id="firmas">
+                <table>
+                    <tr>
+                    {% if president %}
+                        <td style="padding-left:10px;padding-top:20px;">
+                            _______________________________ <br />
+                            {{president.id_user.first_name}} {{president.id_user.last_name}}<br />
+                            Presidente
+                        </td>
+                    {% endif %}
+                    {% if secretary %}
+                        <td style="padding-left:10px;padding-top:20px;">
+                            _______________________________ <br />
+                            {{secretary.id_user.first_name}} {{secretary.id_user.last_name}}<br />
+                            Secretario
+                        </td>
+                    {% endif %}
+                    </tr>
+                    {% for members in members_signers%}
+                        <tr>
+                            {% for m in members %}
+                            <td style="padding-left:10px;padding-top:20px;">
+                                    _______________________________ <br />
+                                    {{m.id_user.first_name}} {{m.id_user.last_name}}
+                            </td>
+                            {% endfor %}
+                       </tr>
+                    {% endfor%}
+                </table>
+            </div>
+            <br /><br /><br /><br />
     	</div>
     </article>
 </section>

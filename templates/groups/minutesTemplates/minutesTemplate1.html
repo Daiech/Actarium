@@ -2,11 +2,14 @@
 <section class="row-fluid">
 <article id="minute" class="minute hoja white-box-container">
     		<div id="data-for-pdf">
-    		<header>
-    			<h2>{{group.name}} </h2> 
-    		</header>
+    		<div style="margin-top:30px;margin-bottom:25px">
+                
+                        <img style="height:50px;display:inline-block" src="{{ url_logo }}" title="Logo" /><br /><br />
+                        <h3> <strong>{{group.name}}</strong> </h3>
+
+    		</div>
     		<div class="">
-    			<div class="hidden">{{newMinutesForm.type_reunion}}</div>
+    			<div class="hidden" style="display:none">{{newMinutesForm.type_reunion}}</div>
     			<strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span> <hr>
     			<p><strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span></p>
     			<p><strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span></p>
@@ -23,10 +26,10 @@
                             {%endif%}
                             <ul class="unstyled">
                             {% for member in members_selected%}
-                                <li>
+                                <li style="padding:3px;">
                                     <div class="">
-                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
-                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                        <span><img style="width:20px;margin:5px"  src="{{member.id_user.email|showgravatar:'20'}}"></span> 
+                                        <span style="padding-left:5px;">&nbsp;&nbsp; {{member.id_user.first_name}} {{member.id_user.last_name}}</span>
                                     </div>
                                 </li>
                             {% endfor%}
@@ -41,10 +44,10 @@
                             {%endif%}
                             <ul class="unstyled">
                             {% for member in members_no_selected %}
-                                <li>
+                                <li  style="padding:3px;">
                                     <div class="">
-                                        <img style="width:20px"  src="{{member.id_user.email|showgravatar:'20'}}">
-                                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                        <span><img style="width:20px;margin:5px"  src="{{member.id_user.email|showgravatar:'20'}}"></span>
+                                        <span style="padding-left:5px;"> &nbsp;&nbsp; {{member.id_user.first_name}} {{member.id_user.last_name}}</span>
                                     </div>
                                 </li>
                             {% endfor%}
@@ -57,8 +60,38 @@
     			{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
     			<hr>
     			<strong>Acuerdos :</strong>
-    			{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
-    		
+    			{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span><br /><br />
+    		      
+                <div id="firmas">
+                    <table>
+                        <tr>
+                        {% if president %}
+                            <td style="padding-left:10px;padding-top:20px;">
+                                _______________________________ <br />
+                                {{president.id_user.first_name}} {{president.id_user.last_name}}<br />
+                                Presidente
+                            </td>
+                        {% endif %}
+                        {% if secretary %}
+                            <td style="padding-left:10px;padding-top:20px;">
+                                _______________________________ <br />
+                                {{secretary.id_user.first_name}} {{secretary.id_user.last_name}}<br />
+                                Secretario
+                            </td>
+                        {% endif %}
+                        </tr>
+                        {% for members in members_signers%}
+                            <tr>
+                                {% for m in members %}
+                                <td style="padding-left:10px;padding-top:20px;">
+                                        _______________________________ <br />
+                                        {{m.id_user.first_name}} {{m.id_user.last_name}}
+                                </td>
+                                {% endfor %}
+                           </tr>
+                        {% endfor%}
+                    </table>
+                </div>
     		<footer>
     			
     		</footer>

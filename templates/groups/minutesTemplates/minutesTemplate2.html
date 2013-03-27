@@ -3,54 +3,96 @@
 <article id="minutet" class="minute hoja white-box-container">
     		<div id="data-for-pdf">
             <div class="hidden">
-                <input id="id_date_end" type="text" class="date-pick" name="date_end" value="2000-01-01 03:00 am" /></div>
-    		<div style="text-align:center; padding:15px 0 15px 0"><br /><br /><br />
-    			<strong> Acta No. <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span></strong><br /><br />
-    			<strong>ASAMBLEA GENERAL <span style="display:inline-block; width:160px">{{ newMinutesForm.type_reunion }}</span><br /> PARQUESOFT PEREIRA</strong>
-    			<br /><br /><br />
-    		</div>
-    		<div class="">
-    			<p style="text-align : justify;">
-    			En {{ newMinutesForm.location }}<span style="display:block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, siendo las {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>, se
-				reunieron los miembros de la asamblea general de la Fundaci&oacute;n Parque Tecnol&oacute;gico
-				de Software de Pereira por derecho propio, atendiendo a la convocatoria efectuada de
-				conformidad con los estatutos o la ley.
-				</p>
-				<p style="text-align : justify;">
-				Que el d&iacute;a <span id="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
-				miembros activos de la Asamblea General de la fundaci&oacute;n Parque Tecnol&oacute;gico de
-				Software de Pereira, dando cumplimiento al qu&oacute;rum necesario para iniciar, deliberar y
-				decidir, exigido en los estatutos.
-    			</p>
-    			<br />
-    			El siguiente fue el orden del d&iacute;a:<br /><br />
-    			<p>
-
-				{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
-
-    			
-    			</p>
-    			<p>
-    				{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
-    			</p>
-				<br /><br />
-
-                   {%if reunion%}
-                   <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-                   {%endif%}
-                   <div id="assistance_hidden" style="display:none">
-                   <ul class="unstyled">
-                   {% for member in members_selected%}
-                       <li>
-                           <div class="">
-                               {{member.id_user.first_name}} {{member.id_user.last_name}}
-                           </div>
-                       </li>
-                   {% endfor%}
-                   </ul> 
-                   </div>
-				<br /><br />
-    		</div>
+                <input id="id_date_end" type="text" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
+            </div>
+        		<div style="text-align:center; padding:15px 0 15px 0">
+              <br /><br />
+        			<strong>
+                Acta No. 
+                <span id="id_code_title"title="El ultimo codigo de acta asignado es: {{last.code}}">
+                  {{ newMinutesForm.code }}
+                </span>
+                <br /> 
+                <span style="display:inline-block; float:right">{{ newMinutesForm.code.errors }}</span>
+        			  ASAMBLEA GENERAL 
+                <span style="display:inline-block;">{{ newMinutesForm.type_reunion }}</span>
+                <br /> 
+                PARQUESOFT PEREIRA
+              </strong>
+              <br /><br />
+        		</div>
+        		<div class="">
+        			<p style="text-align : justify;">
+          			En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, siendo las {{ newMinutesForm.date_start}}<span style="display:inline-block; float:right">{{ newMinutesForm.date_start.errors }}</span>, se
+        				reunieron los miembros de la asamblea general de la Fundaci&oacute;n Parque Tecnol&oacute;gico
+        				de Software de Pereira por derecho propio, atendiendo a la convocatoria efectuada de
+        				conformidad con los estatutos o la ley.
+      				</p>
+      				<p style="text-align : justify;">
+        				Que el d&iacute;a <span id="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
+        				miembros activos de la Asamblea General de la fundaci&oacute;n Parque Tecnol&oacute;gico de
+        				Software de Pereira, dando cumplimiento al qu&oacute;rum necesario para iniciar, deliberar y
+        				decidir, exigido en los estatutos.
+          		</p>
+          		<br />
+          		El siguiente fue el orden del d&iacute;a:<br /><br />
+          		<p>
+        				{{ newMinutesForm.agenda|safe }}
+                <span style="display:inline-block; float:right">{{ newMinutesForm.agenda.errors }}</span>	
+          		</p>
+              <br />
+          		<p>
+          			{{ newMinutesForm.agreement|safe }}
+                <span style="display:inline-block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+          		</p>
+      				<br /><br />
+              {%if reunion%}
+                <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+              {%endif%}
+              <div id="assistance_hidden" style="display:none">
+                <ul class="unstyled">
+                  {% for member in members_selected%}
+                    <li>
+                      <div class="">
+                        {{member.id_user.first_name}} {{member.id_user.last_name}}
+                      </div>
+                    </li>
+                  {% endfor%}
+                </ul> 
+              </div>
+      				<br />
+              <div id="firmas">
+                  <table>
+                      <tr>
+                      {% if president %}
+                          <td style="padding-left:10px;padding-top:20px;">
+                              _______________________________ <br />
+                              {{president.id_user.first_name}} {{president.id_user.last_name}}<br />
+                              Presidente
+                          </td>
+                      {% endif %}
+                      {% if secretary %}
+                          <td style="padding-left:10px;padding-top:20px;">
+                              _______________________________ <br />
+                              {{secretary.id_user.first_name}} {{secretary.id_user.last_name}}<br />
+                              Secretario
+                          </td>
+                      {% endif %}
+                      </tr>
+                      {% for members in members_signers%}
+                          <tr>
+                              {% for m in members %}
+                              <td style="padding-left:10px;padding-top:20px;">
+                                _______________________________ <br />
+                                {{m.id_user.first_name}} {{m.id_user.last_name}}
+                              </td>
+                              {% endfor %}
+                         </tr>
+                      {% endfor%}
+                  </table>
+              </div>
+              <br /><br />
+        		</div>
     		</div>
     	</article>
 </section>

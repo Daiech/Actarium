@@ -101,6 +101,13 @@ def getMembersAssistance(group, minutes_current):
         print e
         return None
 
+def getMembersSigners(group, minutes_current):
+    try:
+        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, id_minutes=minutes_current)
+        return selected
+    except Exception, e:
+        print e
+        return None
 
 def getAssistanceFromRolUserMinutes(group):
     try:
@@ -109,6 +116,14 @@ def getAssistanceFromRolUserMinutes(group):
         for m in selected:
             a.append(m.id_user.id)
         return getMembersOfGroupWithSelected(group, a)
+    except Exception, e:
+        print e
+        return None
+
+def getSignersFromRolUserMinutes(group):
+    try:
+        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, is_active=False)
+        return selected
     except Exception, e:
         print e
         return None
@@ -374,6 +389,31 @@ def getWritersOfGroup(id_group):
         print "ERROR getWritersOfGroup", e
         return None
 
+def getPresidentAndSecretary(group,minutes_current=None):
+    if minutes_current:
+        try:
+            member_president = rol_user_minutes.objects.get(id_group=group, id_minutes=minutes_current, is_president=True)
+        except Exception, e:
+            print "ERROR no hay presidente", e
+            member_president = None
+        try:
+            member_secretary = rol_user_minutes.objects.get(id_group=group, id_minutes=minutes_current, is_secretary=True)
+        except Exception, e:
+            print "ERROR no hay Secretario", e
+            member_secretary = None
+    else:
+        try:
+            member_president = rol_user_minutes.objects.get(id_group=group, is_active=False, is_president=True)
+        except Exception, e:
+            print "ERROR no hay presidente", e
+            member_president = None
+        try:
+            member_secretary = rol_user_minutes.objects.get(id_group=group, is_active=False, is_secretary=True)
+        except Exception, e:
+            print "ERROR no hay Secretario", e
+            member_secretary = None
+    return (member_president, member_secretary)
+    
 
 # @login_required(login_url='/account/login')
 def newAnnotation(request, slug_group):
@@ -561,6 +601,34 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         members_assistant, members_no_assistant = getAssistanceFromRolUserMinutes(group)
         ######## </MEMBER ASSISTANCE LISTS> #########
 
+        ######## <MEMBER ASSISTANCE LISTS> #########
+        member_president, member_secretary = getPresidentAndSecretary(group)
+        ######## </MEMBER ASSISTANCE LISTS> #########
+
+        ######## <MEMBER SIGNERS LISTS> #########
+        m_signers = getSignersFromRolUserMinutes(group)
+        list_ms=[]
+        list_temp=[]
+        i=0
+        for m in m_signers:
+            list_temp.append(m)
+            if i>=1:
+                i=0
+                list_ms.append(list_temp)
+                list_temp=[]
+            else:
+                i=i+1            
+        if i==1:
+            list_ms.append(list_temp)
+        ######## </MEMBER SIGNER LISTS> #########
+
+        ######## <LOGO> #########
+        if group.is_pro:
+            url_logo = groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
+        else:
+            url_logo = 'http://actarium.com/static/img/logo_email.png'
+        ######## </LOGO> #########        
+
         ######## <SAVE_THE_MINUTE> #########
         if request.method == "POST":
             form = newMinutesForm(request.POST)
@@ -618,7 +686,11 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "minutesTemplateForm": _template.address_template,
                "minutesTemplateJs": _template.address_js,
                "list_templates": list_templates,
-               "list_private_templates": list_private_templates
+               "list_private_templates": list_private_templates,
+               "members_signers": list_ms,
+               "url_logo": url_logo,
+               "president": member_president,
+               "secretary": member_secretary
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -733,6 +805,35 @@ def showMinutes(request, slug, minutes_code):
             m_assistance, m_no_assistance = getMembersAssistance(group, minutes_current)
             ######## <ASISTENTES> #########
 
+            ######## <SIGNERS> #########
+            m_signers = getMembersSigners(group, minutes_current)
+            # print m_signers
+            list_ms=[]
+            list_temp=[]
+            i=0
+            for m in m_signers:
+                list_temp.append(m)
+                if i>=1:
+                    i=0
+                    list_ms.append(list_temp)
+                    list_temp=[]
+                else:
+                    i=i+1
+            if i==1:
+                list_ms.append(list_temp)
+            ######## </SIGNERS> #########
+
+            ######## </PRESIDENT SECRETARY> #########
+            member_president, member_secretary = getPresidentAndSecretary(group,minutes_current)
+            ######## </PRESIDENT SECRETARY> #########
+
+            ######## <LOGO> #########
+            if group.is_pro:
+                url_logo = groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
+            else:
+                url_logo = 'http://actarium.com/static/img/logo_email.png'
+            ######## </LOGO> #########
+
             ######## <ATTENDING> #########
             space_to_approve = False
             my_attending = False
@@ -783,7 +884,11 @@ def showMinutes(request, slug, minutes_code):
                     "newMinutesForm": list_newMinutesForm,
                     "group": group,
                     "members_selected": m_assistance,
-                    "members_no_selected": m_no_assistance}),
+                    "members_no_selected": m_no_assistance,
+                    "members_signers":list_ms,
+                    "url_logo":url_logo,
+                    "president": member_president,
+                    "secretary": member_secretary}),
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
                 "missing_approved_list": missing_approved_list,
                 "approved_list": approved_list, "no_approved_list": no_approved_list,
