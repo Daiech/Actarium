@@ -3,18 +3,23 @@
 {% block bodysettings %}
 
 <h3> Edici&oacute;n de informaci&oacute;n</h3>
-<p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funci&oacute;n es personalizar una organizaci&oacute;n para una acta.</p>
+<p>Edita la informaci&oacute;n del grupo. &Eacute;ste c&aacute;mbio no afectar&aacute; el funcionamiento del mismo.</p>
 <div>
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
 		{{form}}
 		<hr>
-		<input type="submit" class="btn btn-large db" value="Guardar" >
+		<a href="#" class="btn btn-large"><i class="icon-arrow-left"></i> Volver al grupo</a>
+		<input type="submit" class="btn btn-large btn-info db" value="Actualizar" >
 	</form>
 </div>
 {% endblock %}
 {%block settings_style%}
 <style type="text/css">
+	.form-horizontal input[type='text']{
+		font-size: 16px;
+		padding: 10px;
+	}
 	.form-horizontal label{
 		font-weight: bold;
 		margin-top: 10px;

@@ -12,9 +12,9 @@
 		    <div class="accordion-heading">
 		      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{data.org.id}}" href="#organization{{data.org.id}}">
 		        <img class="org-img" src="{{data.org.logo_address}}"> {{data.org.name}} <small class="muted hidden">- {{data.org.description}}</small>
-				<div class="pull-right buttons-edit hidden">
-                    <button data-action="editar" class="btn_block"><i class="icon-wrench"></i></button>
-                    <button data-action="eliminar" class="btn_block"><i class="icon-remove"></i></button>
+				<div class="pull-right buttons-edit hidden" data-id-org="{{data.org.id}}" >
+                    <button data-action="1" class="btn_block"><i class="icon-wrench"></i></button>
+                    <button data-action="2" class="btn_block"><i class="icon-remove"></i></button>
                 </div>
 		      </a>
 		    </div>
@@ -23,6 +23,7 @@
 		      		<div class="span6">
 		      			<a href="/groups/new?org={{data.org.id}}" class="btn btn-small"><i class="icon-plus"></i> Crear grupo Pro</a>
 		      		</div>
+		      		{% if data.groups_org_list%}
 		      		<div class="db">
 			        	<ul class="nav nav-tabs nav-stacked">
 			        			<li class="title-groups">
@@ -45,6 +46,7 @@
 			        		{% endfor %}
 						</ul>
 					</div>
+		      		{%endif%}
 		      </div>
 		    </div>
 		  </div>
@@ -66,14 +68,15 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#settings-organization").addClass("active");
-		$('.button-action').tooltip()
+		$('.button-action').tooltip();
 
-		{%ifequal group_saved '0' %}
+		{% ifequal group_saved '0' %}
 		setAlertMessage("Ups!", "No eres miembro, solo puedes verlo en la lista de su organizaci&oacute;n.")
-		{%endifequal%}
-		{%ifequal group_saved '1' %}
+		{% endifequal%}
+		{% ifequal group_saved '1' %}
 		setAlertMessage("Grupo creado!", "Tu grupo ha sido creado satisfactoriamente, como no eres miembro, solo puedes verlo en la lista de la organizaci&oacute;nes.")
 		{%endifequal%}
+
 		if ($("#num-organizations").val() == 1){
 			$(".collapse").collapse({
 		        toggle: false
@@ -83,7 +86,7 @@
 		        toggle: true
 		    });
 		}
-		$('.title-groups a').on('click', function (e) {
+		$('.title-groups a').on('click', function (e){
 		  e.preventDefault();
 		});
 		$('.collapse').on('show', function () {
@@ -102,16 +105,32 @@
 		},function(){
 			$(this).children("span").addClass("hidden");
 		});
-		$("button.button-action").on("click",function(e){
+		$("button.button-action").on("click",function (e){
 			e.preventDefault();
 			var action = parseInt($(this).attr("data-action"));
 			if(action==1){
-				var description = $(this).parent().parent().next("div.description-group")
+				var description = $(this).parent().parent().next("div.description-group");
 				description.slideToggle()
 				description.find("#search-member").focus();
 			}
 			if(action==2){
 				alert("Opción temporalmente no disponible")
+			}
+		});
+		$("button.btn_block").on("click", function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			var action = parseInt($(this).attr("data-action"));
+			var id_org = $(this).parent().attr("data-id-org");
+			if(action==1){
+				console.log("editar "+id_org);
+				top.location = "/settings/organizations/edit/"+id_org
+			}
+			if(action==2){
+				alert("Opción temporalmente no disponible :(\n\nNo te preocupes, estamos en desarrollo, te avisaremos cuando podrás hacerlo :)")
+				// if(confirm("Seguro que desea eliminar ésta organización?")){
+				// 	console.log("eliminar "+id_org);
+				// }
 			}
 		})
 	});

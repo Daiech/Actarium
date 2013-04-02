@@ -12,13 +12,13 @@ from groups.forms import newOrganizationForm
 # from django.core.mail import EmailMessage
 #import re
 import datetime
-# from dateutil.relativedelta import * 
+# from dateutil.relativedelta import *
 #from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
-from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL
+from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
 
 #def settings(request):
 #    ctx = {'TITLE': "Actarium by Daiech"}
@@ -83,7 +83,7 @@ def newOrganization(request):
                 description=form.cleaned_data['description'],
                 logo_address=url)
             org.save()
-            saveActionLog(request.user,'NEW_ORG',"name: %s"%(form.cleaned_data['name']),request.META['REMOTE_ADDR'])
+            saveActionLog(request.user, 'NEW_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
             try:
                 url_file = request.FILES['logo_address']
             except Exception:
@@ -91,8 +91,10 @@ def newOrganization(request):
             if url_file:
                 from django.template import defaultfilters
                 url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-                org.logo_address = url
-                org.save()
+                createThumbnail(url)
+                org.logo_address = MEDIA_URL + url + "-thumbnail.jpg"
+                deleteRealImage(url)
+            org.save()
             try:
                 ref = request.POST['ref'] + "?org=" + str(org.id)
             except Exception:
@@ -104,6 +106,118 @@ def newOrganization(request):
     return render_to_response('asettings/settings_new_organization.html', ctx, context_instance=RequestContext(request))
 
 
+def createThumbnail(buf):
+    from PIL import Image
+    import glob, os
+
+    size = 128, 128
+    for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
+        file, ext = os.path.splitext(infile)
+        im = Image.open(infile)
+        im.thumbnail(size, Image.ANTIALIAS)
+        im.save(file + "-thumbnail.jpg", "JPEG")
+        print "RETURNING:" + file + "-thumbnail.jpg"
+        return file + "-thumbnail.jpg"
+        # print "IMAGEN", im
+
+
+def resize_uploaded_image(buf):
+    print "------ URL ------:", buf
+    import Image
+    from cStringIO import StringIO
+    try:
+        image = Image.open(buf)
+
+        (width, height) = image.size
+        print "ANCHO ALTO", width, height
+        (width, height) = scale_dimensions(width, height, longest_side=240)
+        print "NEW ANCHO ALTO", width, height
+        resizedImage = image.resize((width, height))
+        print "-------------IMAGEN-----------", resizedImage
+
+        # Turn back into file-like object
+        resizedImageFile = StringIO.StringIO()
+        print "VA BIEN 0", resizedImageFile
+        resizedImage.save(resizedImageFile, 'PNG', optimize=True)
+        print "VA BIEN 1", resizedImage
+        resizedImageFile.seek(0)    # So that the next read starts at the beginning
+        print "VA BIEN 2"
+        buf = resizedImageFile
+        print "VA BIEN 3"
+        return resizedImageFile
+    except Exception, e:
+        print "------ ERROR AL CREAR thumbnail", e
+    return buf
+
+
+def scale_dimensions(width, height, longest_side):
+    if width > height:
+        if width > longest_side:
+            ratio = longest_side*1./width
+            return (int(width*ratio), int(height*ratio))
+        elif height > longest_side:
+            ratio = longest_side*1./height
+            return (int(width*ratio), int(height*ratio))
+    return (width, height)
+
+
+def resize_uploaded_image2(buf):
+    try:
+        import Image
+        from cStringIO import StringIO
+
+        image = Image.open(buf)
+
+        maxSize = (240, 240)
+        resizedImage = image.thumbnail(maxSize, Image.ANTIALIAS)
+        print "-------------IMAGEN-----------", resizedImage
+        # Turn back into file-like object
+        resizedImageFile = StringIO()
+        resizedImage.save(resizedImageFile, 'PNG', optimize=True)
+        resizedImageFile.seek(0)    # So that the next read starts at the beginning
+        buf = resizedImageFile
+    except Exception, e:
+        print "ERROR AL CREAR thumbnail", e
+    return buf
+
+
+@login_required(login_url='/account/login')
+def editOrganization(request, id_org):
+    if request.method == "POST":
+        form = newOrganizationForm(request.POST, request.FILES)
+        if form.is_valid() and form.is_multipart():
+            org = organizations.objects.get(id=id_org)
+            org.name = form.cleaned_data['name']
+            org.description = form.cleaned_data['description']
+            org.save()
+            try:
+                url_file = request.FILES['logo_address']
+            except Exception:
+                url_file = None
+            if url_file:
+                # if url_file._size > 4*1024*1024:
+                #     raise ValidationError("Image file too large ( > 4mb )")
+                from django.template import defaultfilters
+                url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
+                org.logo_address = url
+                org.save()
+            return HttpResponseRedirect("/settings/organizations/?org=" + id_org)
+    try:
+        org = organizations.objects.get(id=id_org)
+        initial = {"name": org.name, "logo_address": org.logo_address, "description": org.description}
+    except Exception:
+        org = None
+        initial = {}
+    form = newOrganizationForm(initial=initial)
+    ctx = {"form_org": form, "org": org}
+    return render_to_response('asettings/settings_edit_organization.html', ctx, context_instance=RequestContext(request))
+
+
+def deleteRealImage(url):
+    import os
+    os.remove(MEDIA_ROOT + url)
+
+
 def save_file(file, slug, path=''):
     ''' Little helper to save a file
     '''
@@ -111,7 +225,7 @@ def save_file(file, slug, path=''):
     for chunk in file.chunks():
         fd.write(chunk)
     fd.close()
-    return MEDIA_URL + str(path) + str(slug)
+    return "/" + str(path) + str(slug)
 
 
 @login_required(login_url='/account/login')

@@ -14,7 +14,7 @@ class newGroupForm(forms.Form):
     #     CHOICES.append((gt.id, gt.name))
     #     i = i + 1
     name = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre del grupo', 'autofocus': 'autofocus'}))
-    description = forms.CharField(label="Descripción", required=False, widget=forms.TextInput(attrs={'placeholder': 'Descripción'}))
+    description = forms.CharField(label="Descripción (opcional)", required=False, widget=forms.TextInput(attrs={'placeholder': 'Descripción'}))
     # id_group_type = forms.ChoiceField(label="Tipo de Grupo", choices=CHOICES, widget=forms.RadioSelect(attrs={'class': 'hidden group-type'}))
 
 #    class Meta:
@@ -56,8 +56,8 @@ class newReunionForm(forms.Form):
 
 class newOrganizationForm(forms.Form):
     name = forms.CharField(label="Nombre de Organización", widget=forms.TextInput(attrs={'placeholder': 'Nombre de organización', 'autofocus': 'autofocus'}))
-    logo_address = forms.FileField(label="Logo", required=False, widget=forms.FileInput(attrs={'placeholder': 'URL del logo'}))
-    description = forms.CharField(label="Descripción", required=False, widget=forms.TextInput(attrs={'class': '', 'placeholder': 'Descripción'}))
+    description = forms.CharField(label="Descripción (opcional)", required=False, widget=forms.TextInput(attrs={'class': '', 'placeholder': 'Descripción'}))
+    logo_address = forms.FileField(label="Logo (opcional)", required=False, widget=forms.FileInput(attrs={'placeholder': 'URL del logo'}))
 
     # def save(self):
     #     user = super(newOrganizationForm, self).save()

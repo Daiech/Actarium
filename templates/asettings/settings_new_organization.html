@@ -2,15 +2,16 @@
 {% block TITLE %}Organizaciones{% endblock %}
 {% block bodysettings %}
 
-<h3> Configuraci&oacute;n de Organizaciones </h3>
-<p>En esta parte se administra las organizaciones y se pueden crear grupos pro, la principal funci&oacute;n es personalizar una organizaci&oacute;n para una acta.</p>
+<h3>Crear organizaci&oacute;n</h3>
+<p>Las organizaciones sirven para agrupar tus grupos Pro en un solo lugar. Estandariza la visualización de tus actas para todos los grupos de tu organizaci&oacute;n</p>
 
 <div>
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
 		{{form_org}}<br><br>
 		<input type="hidden" value="{{ref}}" name="ref" >
-		<input type="submit" class="btn btn db" >
+		<a href="/settings/organizations/" class="btn btn-large"><i class="icon-arrow-left"></i> Volver</a>
+		<input type="submit" class="btn btn-large btn-info db" value="Crear" >
 	</form>
 </div>
 {% endblock %}
@@ -18,7 +19,11 @@
 <style type="text/css">
 	.form-horizontal label{
 		font-weight: bold;
-		margin-top: 10px;
+		margin-top: 20px;
+	}
+	.form-horizontal input[type='text']{
+		font-size: 16px;
+		padding: 10px;
 	}
 </style>
 {% endblock %}
@@ -26,7 +31,6 @@
 <script type="text/javascript" ><!--
 	$(document).on("ready", function() {
 		$("#settings-organization").addClass("active");
-		$
 	});
 </script>
 {% endblock %}
