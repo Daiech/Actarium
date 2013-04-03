@@ -6,19 +6,23 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 #from django.core.mail import EmailMessage
-from reportlab.pdfgen import canvas
-from reportlab.platypus import Table
-from Actarium.settings import MEDIA_ROOT
 import random
-from reportlab.platypus import Paragraph
-from reportlab.platypus import Image
-from reportlab.platypus import SimpleDocTemplate
-from reportlab.platypus import Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import inch
-from reportlab.platypus import Frame
-from xhtml2pdf.pisa import CreatePDF
+from Actarium.settings import MEDIA_ROOT
+try:
+    from reportlab.pdfgen import canvas
+    from reportlab.platypus import Table
+    from reportlab.platypus import Paragraph
+    from reportlab.platypus import Image
+    from reportlab.platypus import SimpleDocTemplate
+    from reportlab.platypus import Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import inch
+    from reportlab.platypus import Frame
+    from xhtml2pdf.pisa import CreatePDF    
+except ImportError:
+    # raise e
+    print "ImportError"
 
 
 def minutesToPdf(request,id_minutes):
