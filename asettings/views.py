@@ -92,10 +92,10 @@ def newOrganization(request):
             if url_file:
                 from django.template import defaultfilters
                 url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-                createThumbnail(url)
-                org.logo_address = MEDIA_URL[:-1] + url + "-thumbnail.jpg"
-                deleteRealImage(url)
-                # org.logo_address = MEDIA_URL[:-1] + url
+                # createThumbnail(url)
+                # org.logo_address = MEDIA_URL[:-1] + url + "-thumbnail.jpg"
+                # deleteRealImage(url)
+                org.logo_address = MEDIA_URL[:-1] + url
             org.save()
             try:
                 ref = request.POST['ref'] + "?org=" + str(org.id)
