@@ -19,6 +19,7 @@ from django.utils import simplejson as json
 #from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
+from PIL import Image
 
 #def settings(request):
 #    ctx = {'TITLE': "Actarium by Daiech"}
@@ -107,18 +108,19 @@ def newOrganization(request):
 
 
 def createThumbnail(buf):
-    from PIL import Image
-    import glob, os
+    try:
+        import glob
+        import os
 
-    size = 128, 128
-    for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
-        file, ext = os.path.splitext(infile)
-        im = Image.open(infile)
-        im.thumbnail(size, Image.ANTIALIAS)
-        im.save(file + "-thumbnail.jpg", "JPEG")
-        print "RETURNING:" + file + "-thumbnail.jpg"
-        return file + "-thumbnail.jpg"
-        # print "IMAGEN", im
+        size = 128, 128
+        for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
+            file, ext = os.path.splitext(infile)
+            im = Image.open(infile)
+            im.thumbnail(size, Image.ANTIALIAS)
+            im.save(file + "-thumbnail.jpg", "JPEG")
+            return file + "-thumbnail.jpg"
+    except Exception, e:
+        raise e
 
 
 def resize_uploaded_image(buf):
