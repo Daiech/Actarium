@@ -126,7 +126,8 @@ def createThumbnail(buf):
             im.save(file + "-thumbnail.jpg", "JPEG")
             return file + "-thumbnail.jpg"
     except Exception, e:
-        raise e
+        print e
+        return False
 
 
 def resize_uploaded_image(buf):
