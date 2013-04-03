@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 #from django.core.mail import EmailMessage
-
+import datetime
 
 #@login_required(login_url='/account/login')
 def saveActionLog(id_user, code, extra, ip_address):
@@ -30,6 +30,7 @@ def saveActionLog(id_user, code, extra, ip_address):
 @login_required(login_url='/account/login')
 def showActions(request):
     if request.user.is_staff:
+        saveErrorLog('(%s) ingreso al actionlog' % request.user.username)
         ctx = {"actions": rel_user_action.objects.all().order_by("-date_done")}
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
@@ -76,3 +77,13 @@ def showUserActionsOrder(request, username, field):
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
+
+def saveErrorLog(errordata):
+    try:
+        logfile = open("error.log", "a")
+        try:
+            logfile.write('%s %s \n'%(datetime.datetime.now(),errordata))
+        finally:
+            logfile.close()
+    except IOError:
+        pass

@@ -2,6 +2,7 @@
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
+from actions_log.views import saveErrorLog
 
 
 def sendEmailHtml(email_type, ctx, to):
@@ -59,3 +60,4 @@ def sendEmailHtml(email_type, ctx, to):
         msg.send()
     except:
         print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
+        saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s'%(email_type,to))
