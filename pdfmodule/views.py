@@ -1,51 +1,48 @@
 #encoding:utf-8
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from groups.models import minutes
-from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
+# from django.contrib.auth.models import User
+# from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
-from django.template import RequestContext
+# from django.template import RequestContext
 #from django.core.mail import EmailMessage
 import random
 from Actarium.settings import MEDIA_ROOT
-try:
-    from reportlab.pdfgen import canvas
-    from reportlab.platypus import Table
-    from reportlab.platypus import Paragraph
-    from reportlab.platypus import Image
-    from reportlab.platypus import SimpleDocTemplate
-    from reportlab.platypus import Spacer
-    from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.lib.pagesizes import A4
-    from reportlab.lib.units import inch
-    from reportlab.platypus import Frame
-    from xhtml2pdf.pisa import CreatePDF    
-except ImportError:
-    # raise e
-    print "ImportError"
+
+from reportlab.platypus import Table
+from reportlab.platypus import Paragraph
+from reportlab.platypus import Image
+# from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+# from reportlab.lib.pagesizes import A4
+# from reportlab.lib.units import inch
+from reportlab.platypus import Frame
+from xhtml2pdf.pisa import CreatePDF
 
 
-def minutesToPdf(request,id_minutes):
+def minutesToPdf(request, id_minutes):
     if request.user.is_staff:
 
-    	_minutes = minutes.objects.get(pk=id_minutes)
+        _minutes = minutes.objects.get(pk=id_minutes)
 
-    	# Datos del acta
-    	m_group = _minutes.id_group.name
-    	m_code =  _minutes.code
-    	m_date_created = _minutes.date_created
-    	m_date_start = _minutes.id_extra_minutes.date_start
-    	m_date_end = _minutes.id_extra_minutes.date_end
-    	m_location = _minutes.id_extra_minutes.location
-    	m_agenda = _minutes.id_extra_minutes.agenda
-    	m_agreement = _minutes.id_extra_minutes.agreement
+        # Datos del acta
+        m_group = _minutes.id_group.name
+        m_code = _minutes.code
+        m_date_created = _minutes.date_created
+        m_date_start = _minutes.id_extra_minutes.date_start
+        m_date_end = _minutes.id_extra_minutes.date_end
+        m_location = _minutes.id_extra_minutes.location
+        m_agenda = _minutes.id_extra_minutes.agenda
+        m_agreement = _minutes.id_extra_minutes.agreement
 
-    	# --------------------------------------------------------------
-    	# Creacion del PDF
-        pdf_address = "/pdf/reporte%s.pdf"%(int(random.random()*100000))
+        # --------------------------------------------------------------
+        # Creacion del PDF
+        pdf_address = "/pdf/reporte%s.pdf" % (int(random.random() * 100000))
 
         #Generar el objeto canvas (documento PDF)
-        canvas_obj = canvas.Canvas("%s%s"%(MEDIA_ROOT,pdf_address))
+        from reportlab.pdfgen import canvas
+        canvas_obj = canvas.Canvas("%s%s" % (MEDIA_ROOT, pdf_address))
 
         #Definiendo estilos basicos
         estiloHoja = getSampleStyleSheet()
@@ -54,19 +51,16 @@ def minutesToPdf(request,id_minutes):
 
         # Inicializamos story (Listas de objetos flowables)
         story = []
-        
 
         # Añadimos algunos flowables.
-        p1 = Paragraph(u"Grupo: %s"%(m_group), estilo1)
-        p2 = Paragraph(u"Codigo de acta: %s Creada el: %s"%(m_code,m_date_created),estilo1)
-        p3 = Paragraph(u"La reunion inicio el: %s Y finalizo el: %s"%(m_date_start,m_date_end),estilo1)
-        p4 = Paragraph(u"Lugar de encuentro: %s"%(m_location),estilo1)
-        p5 = Paragraph(u"Orden de dia",estilo1)
-        p6 = Paragraph(u"%s"%(m_agenda),estilo1)
-        p7 = Paragraph(u"Conclusiones",estilo1)
-        p8 = Paragraph(u"%s"%(m_agreement),estilo1)
-
-
+        p1 = Paragraph(u"Grupo: %s" % (m_group), estilo1)
+        p2 = Paragraph(u"Codigo de acta: %s Creada el: %s" % (m_code, m_date_created), estilo1)
+        p3 = Paragraph(u"La reunion inicio el: %s Y finalizo el: %s" % (m_date_start, m_date_end), estilo1)
+        p4 = Paragraph(u"Lugar de encuentro: %s" % (m_location), estilo1)
+        p5 = Paragraph(u"Orden de dia", estilo1)
+        p6 = Paragraph(u"%s" % (m_agenda), estilo1)
+        p7 = Paragraph(u"Conclusiones", estilo1)
+        p8 = Paragraph(u"%s" % (m_agreement), estilo1)
 
         # Añadimos los flowables a la lista story.
 
@@ -80,26 +74,26 @@ def minutesToPdf(request,id_minutes):
         story.append(p8)
 
         #creo los frames
-        f1 = Frame(50,600,500,200,showBoundary=1)
+        f1 = Frame(50, 600, 500, 200, showBoundary=1)
 
         # agregando los frames al objeto canvas
-        f1.addFromList(story,canvas_obj)
+        f1.addFromList(story, canvas_obj)
 
         canvas_obj.save()
-    
-        return HttpResponseRedirect('/media%s'%(pdf_address))
+
+        return HttpResponseRedirect('/media%s' % (pdf_address))
     else:
         return HttpResponseRedirect('/')
 
 
-
-def minutesToPdfTest(request,id_minutes):
+def minutesToPdfTest(request, id_minutes):
     if request.user.is_staff:
-        pdf_address = "/pdf/reporte%s.pdf"%(int(random.random()*100000))
+        pdf_address = "/pdf/reporte%s.pdf" % (int(random.random()*100000))
     # try:
         # _actions= rel_user_action.objects.all().order_by("-date_done")
-        
-        canvas_obj = canvas.Canvas("%s%s"%(MEDIA_ROOT,pdf_address))
+
+        from reportlab.pdfgen import canvas
+        canvas_obj = canvas.Canvas("%s%s" % (MEDIA_ROOT, pdf_address))
         # c.drawString(50,700,"700 Primera prueba de reportlab con django")
         # c.showPage()
         # c.save()
@@ -114,8 +108,8 @@ def minutesToPdfTest(request,id_minutes):
 
         # Añadimos algunos flowables.
 
-        parrafo1 = Paragraph('Id de Acta: %s'%(id_minutes),estilo1)
-        parrafo2 = Paragraph('España, Murcia, Lorca',estilo2)
+        parrafo1 = Paragraph('Id de Acta: %s' % (id_minutes),estilo1)
+        parrafo2 = Paragraph('España, Murcia, Lorca', estilo2)
 
         # Agregamos una tabla
         list_data = [ ["Esto","Es","Una","Tabla"],
