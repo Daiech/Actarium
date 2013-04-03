@@ -92,10 +92,10 @@ def newOrganization(request):
             if url_file:
                 from django.template import defaultfilters
                 url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-                # createThumbnail(url)
-                # org.logo_address = MEDIA_URL[:-1] + url + "-thumbnail.jpg"
-                # deleteRealImage(url)
-                org.logo_address = MEDIA_URL[:-1] + url
+                createThumbnail(url)
+                org.logo_address = MEDIA_URL[:-1] + url + "-thumbnail.jpg"
+                deleteRealImage(url)
+                # org.logo_address = MEDIA_URL[:-1] + url
             org.save()
             try:
                 ref = request.POST['ref'] + "?org=" + str(org.id)
@@ -123,9 +123,9 @@ def createThumbnail(buf):
             im.save(file + "-thumbnail.jpg", "JPEG")
         return file + "-thumbnail.jpg"
     except ImportError, e:
-        saveErrorLog("ImportError: def createThumbnail: " + e)
+        saveErrorLog("ImportError: def createThumbnail: %s" % e)
     except Exception, e:
-        saveErrorLog("Exception def createThumbnail: " + e)
+        saveErrorLog("Exception def createThumbnail: %s" % e)
         return False
 
 
