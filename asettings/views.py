@@ -17,7 +17,7 @@ import datetime
 from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
-from actions_log.views import saveActionLog
+from actions_log.views import saveActionLog, saveErrorLog
 from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
 
 
@@ -110,25 +110,22 @@ def newOrganization(request):
 
 def createThumbnail(buf):
     try:
-        try:
-            import Image
-            import glob
-            import os
+        import Image
+        import glob
+        import os
 
-            size = 128, 128
-            for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
-                file, ext = os.path.splitext(infile)
-                print "Extension", ext
-                im = Image.open(infile)
-                im.thumbnail(size, Image.ANTIALIAS)
-                im.save(file + "-thumbnail.jpg", "JPEG")
-            return file + "-thumbnail.jpg"
-        except Exception, e:
-            # raise e
-            print e
-            return False
+        size = 128, 128
+        for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
+            file, ext = os.path.splitext(infile)
+            print "Extension", ext
+            im = Image.open(infile)
+            im.thumbnail(size, Image.ANTIALIAS)
+            im.save(file + "-thumbnail.jpg", "JPEG")
+        return file + "-thumbnail.jpg"
+    except ImportError, e:
+        saveErrorLog("ImportError: def createThumbnail: " + e)
     except Exception, e:
-        print e
+        saveErrorLog("Exception def createThumbnail: " + e)
         return False
 
 

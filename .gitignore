@@ -5,3 +5,4 @@ media/*
 .pydevproject
 .settings/
 static/js/vendor/tiny_mce/
+error.log
