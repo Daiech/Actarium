@@ -19,7 +19,11 @@ from django.utils import simplejson as json
 #from django.core.mail import EmailMessage
 from actions_log.views import saveActionLog
 from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
-from PIL import Image
+try:
+    from PIL import Image
+except Exception, e:
+    # raise e
+    print e
 
 #def settings(request):
 #    ctx = {'TITLE': "Actarium by Daiech"}
