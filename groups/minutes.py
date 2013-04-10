@@ -12,7 +12,7 @@ from Actarium.settings import URL_BASE, MEDIA_URL
 from account.templatetags.gravatartag import showgravatar
 
 # Imports from views.py
-from groups.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email
+from groups.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email, isProGroup, getProGroup
 from actions_log.views import saveActionLog
 # from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
@@ -101,6 +101,7 @@ def getMembersAssistance(group, minutes_current):
         print e
         return None
 
+
 def getMembersSigners(group, minutes_current):
     try:
         selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, id_minutes=minutes_current)
@@ -108,6 +109,7 @@ def getMembersSigners(group, minutes_current):
     except Exception, e:
         print e
         return None
+
 
 def getAssistanceFromRolUserMinutes(group):
     try:
@@ -119,6 +121,7 @@ def getAssistanceFromRolUserMinutes(group):
     except Exception, e:
         print e
         return None
+
 
 def getSignersFromRolUserMinutes(group):
     try:
@@ -389,7 +392,8 @@ def getWritersOfGroup(id_group):
         print "ERROR getWritersOfGroup", e
         return None
 
-def getPresidentAndSecretary(group,minutes_current=None):
+
+def getPresidentAndSecretary(group, minutes_current=None):
     if minutes_current:
         try:
             member_president = rol_user_minutes.objects.get(id_group=group, id_minutes=minutes_current, is_president=True)
@@ -413,7 +417,7 @@ def getPresidentAndSecretary(group,minutes_current=None):
             print "ERROR no hay Secretario", e
             member_secretary = None
     return (member_president, member_secretary)
-    
+
 
 # @login_required(login_url='/account/login')
 def newAnnotation(request, slug_group):
@@ -623,10 +627,12 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ######## </MEMBER SIGNER LISTS> #########
 
         ######## <LOGO> #########
-        if group.is_pro:
-            url_logo = URL_BASE + groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
-        else:
-            url_logo = URL_BASE + '/static/img/logo_email.png'
+        url_logo = URL_BASE + '/static/img/logo_email.png'
+        if isProGroup(group):
+            _pro = getProGroup(group)
+            if _pro:
+                url_logo = URL_BASE + _pro.id_organization.logo_address
+
         ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########
