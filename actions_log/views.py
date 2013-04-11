@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from pymongo import MongoClient, DESCENDING as pymongo_DESCENDING
 #from django.core.mail import EmailMessage
 import datetime
-
+import sys
 #@login_required(login_url='/account/login')
 def saveActionLog(id_user, code, extra, ip_address):
     try:
@@ -87,3 +88,54 @@ def saveErrorLog(errordata):
             logfile.close()
     except IOError:
         pass
+    
+def saveViewsLog(request,page):
+    try:
+        connection = MongoClient('localhost',27017)
+        db = connection.actarium
+        views = db.views
+        try:
+            if request.user.is_authenticated():
+                id_user = request.user.pk
+                username = request.user.username
+            else:
+                print "usuario anonimo"
+                id_user = 0
+                username = "Anonymous User"
+            data = {
+                    'id_user':id_user,
+                    'username':username,
+                    'page': page,
+                    'date': datetime.datetime.now(),
+                    'ip': request.META['REMOTE_ADDR']
+                    }
+            views.insert(data)
+        except:
+            print "Error: %s"%(sys.exc_info()[0])
+        
+        return True
+    except:
+        saveErrorLog("Error: conexion a MongoDB")
+        print "Error saveViewsLog"
+        return False
+    
+@login_required(login_url='/account/login')
+def showViewsLog(request):
+    if request.user.is_staff:
+        try:
+            connection = MongoClient('localhost',27017)
+            db = connection.actarium
+            views = db.views
+            views_data = views.find().sort([("date", pymongo_DESCENDING)])
+#            data = []
+#            print " \n ------------Data------------------ \n"
+#            for v in views_data:
+#                print v
+#            print "\n------------------------------------------------\n"
+            ctx = {"views": views_data}
+        except:
+            ctx = {"views": []}
+        return render_to_response('actions/views.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/')
+    

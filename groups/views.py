@@ -12,7 +12,7 @@ import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.utils import simplejson as json
 from account.templatetags.gravatartag import showgravatar
-from actions_log.views import saveActionLog
+from actions_log.views import saveActionLog, saveViewsLog
 from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
 from groups.validators import validateEmail
@@ -193,6 +193,7 @@ def groupInfoSettings(request, slug_group):
     '''
         Muestra la configuracion de un grupo
     '''
+    saveViewsLog(request,"groups.views.groupInfoSettings")
     try:
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
@@ -257,6 +258,7 @@ def get_user_or_email(s):
 
 @login_required(login_url='/account/login')
 def newBasicGroup(request, form, pro=False):
+    saveViewsLog(request,"groups.views.newBasicGroup")
     df = {
         'name': form.cleaned_data['name'],
         'description': form.cleaned_data['description'],
@@ -306,6 +308,7 @@ def newBasicGroup(request, form, pro=False):
 
 @login_required(login_url='/account/login')
 def newProGroup(request, form):
+    saveViewsLog(request,"groups.views.newProGroup")
     # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
     try:
         org = organizations.objects.get(id=request.POST['sel-organization'], id_admin=request.user, is_active=True)
@@ -335,6 +338,7 @@ def newProGroup(request, form):
 
 @login_required(login_url='/account/login')
 def getProGroupDataForm(request):
+    saveViewsLog(request,"groups.views.getProGroupDataForm")
     orgs = None
     billing_list = None
     try:
@@ -354,6 +358,7 @@ def newGroup(request):
     '''
         crea una nuevo grupo
     '''
+    saveViewsLog(request,"groups.views.newGroup")
     orgs = None
     billing_list = None
     no_billing_avalaible = False  # indica si se intento crear un grupo pro sin paquetes disponibles
@@ -398,6 +403,7 @@ def showGroup(request, slug):
     '''
         Muestra la informacion de un grupo
     '''
+    saveViewsLog(request,"groups.views.showGroup")
     try:
         g = groups.objects.get(slug=slug, is_active=True)
         _user = getRelUserGroup(request.user, g)
@@ -444,6 +450,7 @@ def showGroup(request, slug):
 
 @login_required(login_url='/account/login')
 def getMembers(request):
+    saveViewsLog(request,"groups.views.getMembers")
     if request.is_ajax():
         if request.method == "GET":
             try:
@@ -563,6 +570,7 @@ def isMemberOfGroupByEmail(email, id_group):
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 @login_required(login_url='/account/login')
 def newInvitationToGroup(request):
+    saveViewsLog(request,"groups.views.newInvitationToGroup")
     if request.is_ajax():
         if request.method == 'GET':
             _user_rel = False
@@ -660,6 +668,7 @@ def acceptInvitation(request):
     """
         Acepta invitaciones a grupos
     """
+    saveViewsLog(request,"groups.views.acceptInvitation")
     noHasPerms = False
     if request.is_ajax():
         if request.method == 'GET':
@@ -712,6 +721,7 @@ def acceptInvitation(request):
 
 @login_required(login_url='/account/login')
 def deleteInvitation(request, slug_group):
+    saveViewsLog(request,"groups.views.deleteInvitation")
     if request.is_ajax():
         if request.method == 'GET':
             group = getGroupBySlug(slug_group)
@@ -757,6 +767,7 @@ def getGroupBySlug(slug):
 
 @login_required(login_url='/account/login')
 def newReunion(request, slug):
+    saveViewsLog(request,"groups.views.newReunion")
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
@@ -812,6 +823,7 @@ def newReunion(request, slug):
 
 @login_required(login_url='/account/login')
 def calendar(request):
+    saveViewsLog(request,"groups.views.calendar")
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     my_reu_day = reunions.objects.filter(id_group__in=gr).order_by("-date_convened")  # reuniones para un dia
@@ -851,6 +863,7 @@ def calendar(request):
 
 @login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
+    saveViewsLog(request,"groups.views.calendarDate")
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
@@ -892,6 +905,7 @@ def calendarDate(request, slug=None):
 
 @login_required(login_url='/account/login')
 def getReunions(request):
+    saveViewsLog(request,"groups.views.getReunions")
     if request.is_ajax():
         if request.method == 'GET':
             date = str(request.GET['date'])
@@ -935,6 +949,7 @@ def getNextReunions(request):
     """
         Se muestra debajo del calendario las proximas 3 reuniones a las cuales ya ha sido confirmada la asistencia.
     """
+    saveViewsLog(request,"groups.views.getNextReunions")
     if request.is_ajax():
         gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
         my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
@@ -977,6 +992,7 @@ def getAssistance(id_minutes):
 
 @login_required(login_url='/account/login')
 def setAssistance(request):
+    saveViewsLog(request,"groups.views.setAssistance")
     if request.is_ajax():
         if request.method == 'GET':
             id_reunion = reunions.objects.get(pk=request.GET['id_reunion'])
@@ -1017,6 +1033,7 @@ def setAssistance(request):
 
 @login_required(login_url='/account/login')
 def getReunionData(request):
+    saveViewsLog(request,"groups.views.getReunionData")
     if request.is_ajax():
         if request.method == 'GET':
             id_reunion = str(request.GET['id_reunion'])

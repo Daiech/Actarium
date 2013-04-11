@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 import re
 from groups.models import reunions, assistance, rel_user_group
+from actions_log.views import saveActionLog, saveViewsLog
 from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
 from website.models import *
@@ -12,7 +13,7 @@ from website.models import *
 
 def home(request):
     if request.user.is_authenticated():
-
+        saveViewsLog(request,"Home_authenticated")
         #-----------------</GRUPOS>-----------------
         gr = rel_user_group.objects.filter(
             id_user=request.user,
@@ -46,6 +47,7 @@ def home(request):
         ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array}
         template = 'website/index.html'
     else:
+        saveViewsLog(request,"Home_anonymous")
         ctx = {}
         template = 'website/landing.html'
 
