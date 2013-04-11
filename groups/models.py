@@ -300,6 +300,9 @@ class groups_pro(models.Model):
     id_billing = models.ForeignKey(billing,  null=False, related_name='%(class)s_id_billing')
     is_active = models.BooleanField(default=True)
 
+    def __unicode__(self):
+        return "Group: %s (%s)" % (self.id_group.name, self.id_group.id_creator)
+
 
 class last_minutes(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
