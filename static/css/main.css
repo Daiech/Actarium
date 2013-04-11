@@ -308,6 +308,7 @@ header div > #top-menu-style li{
     background-position: -150px 0;
     width: 24px;
 }
+#close-login-menu{position: relative;left: 0}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */

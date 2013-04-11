@@ -14,8 +14,13 @@ if (!(window.console && console.log)) {
 // Place any jQuery/helper plugins in here.
 
 function main(){
+    $("#log-sup").on("click", function(e){
+        e.preventDefault();
+        $("#username").focus();
+    })
+
     //-------------------<letra blanca del perfil on hover>-------------------------//
-    $("ul.dropdown-menu li.current-user").hover(
+    $(".dropdown-menu li.current-user").hover(
         function(e){
             $(".content-box *").addClass("color-fff");
         },
@@ -27,16 +32,16 @@ function main(){
 
     //------<No cierra el Menú de login al dar click>---------------/
     $(".next-li").focus(function(e){
-        $("ul.dropdown-menu").addClass("disblock");
+        $(".dropdown-menu").addClass("disblock");
     }).blur(function(e){
-        // $("ul.dropdown-menu").removeClass("disblock")
+        // $(".dropdown-menu").removeClass("disblock")
     });
     //------ </No cierra el Menú de login al dar click>--------------/
 
     //------ <On Login Submit >--------------/
     $("#close-login-menu").on("click",function(e){
         e.preventDefault();
-        $("ul.dropdown-menu").removeClass("disblock");
+        $(".dropdown-menu").removeClass("disblock");
     });
     //------ </On Login Submit >--------------/
 
