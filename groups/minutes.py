@@ -834,11 +834,14 @@ def showMinutes(request, slug, minutes_code):
             ######## </PRESIDENT SECRETARY> #########
 
             ######## <LOGO> #########
-            if group.is_pro:
-                url_logo = URL_BASE + groups_pro.objects.get(id_group=group, is_active=True).id_organization.logo_address
-            else:
-                url_logo = URL_BASE + '/static/img/logo_email.png'
+            url_logo = URL_BASE + '/static/img/logo_email.png'
+            if isProGroup(group):
+                _pro = getProGroup(group)
+                if _pro:
+                    url_logo = URL_BASE + _pro.id_organization.logo_address
+
             ######## </LOGO> #########
+
 
             ######## <ATTENDING> #########
             space_to_approve = False
