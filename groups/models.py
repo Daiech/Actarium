@@ -27,7 +27,7 @@ class groups(models.Model):
     slug = models.SlugField(max_length=150, unique=True)
 
     def __unicode__(self):
-        return "Group name: %s " % (self.name)
+        return "Group name: %s (%s)" % (self.name, self.id_creator)
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"
