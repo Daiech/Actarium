@@ -139,3 +139,63 @@ def showViewsLog(request):
     else:
         return HttpResponseRedirect('/')
     
+def showViewsStats(request):
+    if request.user.is_staff:
+        try:
+            connection = MongoClient('localhost',27017)
+            db = connection.actarium
+            views = db.views
+            views_data = views.find().sort([("date", pymongo_DESCENDING)])
+            
+            from bson.code import Code
+            map = Code("function () {"
+                    "var key = this.page;"
+                    "var values = {'id':key, count: 1 };"
+                    "    emit(key,values);"
+                   "}")
+            reduce = Code("function (key, values) {"
+                       "  var reducedValue = {'id':key,'count':0};"
+                       "  for (var i = 0; i < values.length; i++) {"
+                       "    reducedValue['count'] += parseInt(values[i].count);"
+                       "  }"
+                       "  return reducedValue;"
+                      "}")
+            result_views = db.views.map_reduce(map, reduce, "result_views")
+            mr = result_views.find()
+            data = []
+            print " \n ------------MapReduce------------------ \n"
+            for i in mr:
+                data.append(i)
+                print "\n------------------------------------------------\n",i    
+            
+#            data = []
+#            print " \n ------------Data------------------ \n"
+#            for v in views_data:
+#                print v
+#            print "\n------------------------------------------------\n"
+            ctx = {"views": data}
+        except:
+            ctx = {"views": []}
+        return render_to_response('actions/views_stats.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/')
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
