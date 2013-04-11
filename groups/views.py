@@ -258,7 +258,7 @@ def get_user_or_email(s):
 
 @login_required(login_url='/account/login')
 def newBasicGroup(request, form, pro=False):
-    saveViewsLog(request,"groups.views.newBasicGroup")
+    saveViewsLog(request, "groups.views.newBasicGroup")
     df = {
         'name': form.cleaned_data['name'],
         'description': form.cleaned_data['description'],
@@ -308,7 +308,7 @@ def newBasicGroup(request, form, pro=False):
 
 @login_required(login_url='/account/login')
 def newProGroup(request, form):
-    saveViewsLog(request,"groups.views.newProGroup")
+    saveViewsLog(request, "groups.views.newProGroup")
     # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
     try:
         org = organizations.objects.get(id=request.POST['sel-organization'], id_admin=request.user, is_active=True)
@@ -338,7 +338,7 @@ def newProGroup(request, form):
 
 @login_required(login_url='/account/login')
 def getProGroupDataForm(request):
-    saveViewsLog(request,"groups.views.getProGroupDataForm")
+    saveViewsLog(request, "groups.views.getProGroupDataForm")
     orgs = None
     billing_list = None
     try:
@@ -358,7 +358,7 @@ def newGroup(request):
     '''
         crea una nuevo grupo
     '''
-    saveViewsLog(request,"groups.views.newGroup")
+    saveViewsLog(request, "groups.views.newGroup")
     orgs = None
     billing_list = None
     no_billing_avalaible = False  # indica si se intento crear un grupo pro sin paquetes disponibles
@@ -403,7 +403,7 @@ def showGroup(request, slug):
     '''
         Muestra la informacion de un grupo
     '''
-    saveViewsLog(request,"groups.views.showGroup")
+    saveViewsLog(request, "groups.views.showGroup")
     try:
         g = groups.objects.get(slug=slug, is_active=True)
         _user = getRelUserGroup(request.user, g)
@@ -450,7 +450,7 @@ def showGroup(request, slug):
 
 @login_required(login_url='/account/login')
 def getMembers(request):
-    saveViewsLog(request,"groups.views.getMembers")
+    saveViewsLog(request, "groups.views.getMembers")
     if request.is_ajax():
         if request.method == "GET":
             try:
@@ -570,7 +570,7 @@ def isMemberOfGroupByEmail(email, id_group):
 #@requires_csrf_token  # pilas con esto, es para poder enviar los datos via POST
 @login_required(login_url='/account/login')
 def newInvitationToGroup(request):
-    saveViewsLog(request,"groups.views.newInvitationToGroup")
+    saveViewsLog(request, "groups.views.newInvitationToGroup")
     if request.is_ajax():
         if request.method == 'GET':
             _user_rel = False
@@ -605,7 +605,7 @@ def newInvitationToGroup(request):
                             iid = str(_user.id)  # get de id from invitation
                             gravatar = showgravatar(email, 30)
                             message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
-                            #saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                            saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                         except Exception, e:
                             print e
                     else:
@@ -668,7 +668,7 @@ def acceptInvitation(request):
     """
         Acepta invitaciones a grupos
     """
-    saveViewsLog(request,"groups.views.acceptInvitation")
+    saveViewsLog(request, "groups.views.acceptInvitation")
     noHasPerms = False
     if request.is_ajax():
         if request.method == 'GET':
@@ -721,7 +721,7 @@ def acceptInvitation(request):
 
 @login_required(login_url='/account/login')
 def deleteInvitation(request, slug_group):
-    saveViewsLog(request,"groups.views.deleteInvitation")
+    saveViewsLog(request, "groups.views.deleteInvitation")
     if request.is_ajax():
         if request.method == 'GET':
             group = getGroupBySlug(slug_group)
@@ -733,12 +733,17 @@ def deleteInvitation(request, slug_group):
                         return HttpResponse(False)
                     _user = getUserById(iid)
                     rel = getRelUserGroup(_user, group)
-                    rel.delete()
-
-                    saveActionLog(request.user, 'DEL_INVITA', "user: %s, grupo: %s" % (_user, group), request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
-                    deleted = True
-                    message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
-                    response = {"deleted": deleted, "message": message}
+                    if rel:
+                        saveActionLog(
+                            request.user, 'DEL_INVITA',
+                            "user: %s, grupo: %s, id_user_invited=%s,  is_superadmin=%s, is_admin=%s, is_secretary=%s, is_member=%s, is_active=%s, is_convener=%s, date_joined=%s" % (_user, group, rel.id_user_invited, rel.is_superadmin, rel.is_admin, rel.is_secretary, rel.is_member, rel.is_active, rel.is_convener, rel.date_joined),
+                            request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
+                        rel.delete()
+                        deleted = True
+                        message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
+                        response = {"deleted": deleted, "message": message}
+                    else:
+                        response = "Error de relación"
                 except Exception, e:
                     print "error ", e
                     return HttpResponse(False)
