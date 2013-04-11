@@ -42,6 +42,14 @@ def getUserByEmail(email):
         return None
 
 
+def getUserById(id_user):
+    try:
+        _user = User.objects.get(id=id_user)
+        return _user
+    except User.DoesNotExist:
+        return None
+
+
 @login_required(login_url='/account/login')
 def groupsList(request):
     '''
@@ -703,33 +711,32 @@ def acceptInvitation(request):
 
 
 @login_required(login_url='/account/login')
-def deleteInvitation(request):
+def deleteInvitation(request, slug_group):
     if request.is_ajax():
         if request.method == 'GET':
-            try:
-                iid = request.GET['id_inv']
-                if iid == "" or iid == None:
-                    return HttpResponse(False)
+            group = getGroupBySlug(slug_group)
+            _user_rel = getRelUserGroup(request.user, group)
+            if _user_rel.is_admin and _user_rel.is_active:
                 try:
-                    inv = invitations_groups.objects.get(id=iid, is_active=True)
-                except invitations_groups.DoesNotExist:
-                    inv = False
-                    print "inv ", inv
-                if inv:  # si eliminar la invitacion
-                    inv.is_active = False
-                    print "iid ", iid
-                    inv.save()
-                    saveActionLog(request.user, 'DEL_INVITA', "id_invitacion: %s, grupo: %s, email_invited: %s" % (iid, inv.id_group.name, inv.id_user_invited.email), request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
+                    iid = request.GET['id_inv']
+                    if iid == "" or not iid:
+                        return HttpResponse(False)
+                    _user = getUserById(iid)
+                    rel = getRelUserGroup(_user, group)
+                    rel.delete()
+
+                    saveActionLog(request.user, 'DEL_INVITA', "user: %s, grupo: %s" % (_user, group), request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
                     deleted = True
-                    message = "El usuario (" + inv.id_user_invited.username + ") ya no podr&aacute; acceder a este grupo"
+                    message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
                     response = {"deleted": deleted, "message": message}
-                else:  # no eliminar la invitacion
-                    return HttpResponse(inv)
-            except Exception, e:
-                print "error ", e
-                return HttpResponse(False)
+                except Exception, e:
+                    print "error ", e
+                    return HttpResponse(False)
+            else:
+                response = "No tienes permisos para hacer eso."
         if request.method == 'POST':
             print "POST"
+            response = "Error invitacion"
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")

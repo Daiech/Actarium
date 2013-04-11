@@ -82,7 +82,7 @@
 					</td>
 					<td class="t-a-c">
 						<div class="remove-invitation-container">
-							<a href="#" data-invitation="{{m.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
+							<a href="#" class="remove-invitation" data-invitation="{{m.id_user.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
 						</div>
 					</td>
 				</tr>
@@ -231,12 +231,12 @@
 	        {
 	            elem = $(this)
 	            sendAjax(
-	                "/groups/deleteInvitation",
+	                "/groups/{{group.slug}}/deleteInvitation",
 	                {"id_inv":$(this).attr("data-invitation")},
-	                "#load-member-actions",
+	                "",
 	                function(data){
 	                    if(data['deleted']){
-	                        $(elem).parent().animate({"height":0},"slow",function(e){
+	                        $(elem).parent().parent().animate({"height":0},"slow",function(e){
 	                            $(this).parent().fadeOut()
 	                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
 	                        });
@@ -314,7 +314,8 @@
 						'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
 					'</label></td>'+
 					'<td class="t-a-c">'+
-						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>'+
+						'<div>'+
+						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a></div>'+
 					'</td></tr>';
 				$("#table-roles").append(tr);
 				setAlertMessage("Invitado",data['message'])
