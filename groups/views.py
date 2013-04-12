@@ -722,7 +722,7 @@ def acceptInvitation(request):
                     'groupslug': q.slug,
                     'urlgravatar': showgravatar(request.user.email, 50)
                 }
-                sendEmailHtml(2, email_ctx, email_list)
+                sendEmailHtml(8, email_ctx, email_list)
                 response = {"accepted": accepted, "message": message, "group": group, "canceled": noHasPerms}
             except Exception, e:
                 print e
