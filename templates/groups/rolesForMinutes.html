@@ -9,6 +9,28 @@
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
 		<section class="">
+			<div class="row-fluid mt40 mb50">
+				<div class="span6">
+					<span>Presidente:</span>
+					<select id="sel-president">
+						<option value="0">Seleccione presidente</option>
+					{%for m in members%}
+						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
+                	{%endfor%}
+					</select>
+					<span class="president-ok hidden"><i class="icon-ok"></i></span>
+				</div>
+				<div class="span6">
+					<span>Secretario:</span>
+					<select id="sel-secretary">
+						<option value="0">Seleccione secretario</option>
+					{%for m in members%}
+						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
+                	{%endfor%}
+					</select>
+					<span class="secretary-ok hidden"><i class="icon-ok"></i></span>
+				</div>
+			</div>
 			<table id="table-roles" class="table table-bordered table-hover">
 				<tr>
 					<th class="td-first">
@@ -55,8 +77,8 @@
 						</label>
 					</td>
 					<td class="t-a-c">
-						<label for="aprover{{m.member.id_user.id}}">
-							<input id="aprover{{m.member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_approver%}checked{%endif%}>
+						<label for="approver{{m.member.id_user.id}}">
+							<input id="approver{{m.member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_approver%}checked{%endif%}>
 						</label>
 					</td>
 					<td class="t-a-c">
@@ -67,35 +89,32 @@
 				</tr>
                 {%endfor%}
 			</table>
-			<div class="row-fluid mt20 mb50">
-				<div class="span6">
-					<span>Presidente:</span>
-					<select id="sel-president">
-						<option value="0">Seleccione presidente</option>
-					{%for m in members%}
-						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
-                	{%endfor%}
-					</select>
-					<span class="president-ok hidden"><i class="icon-ok"></i></span>
-				</div>
-				<div class="span6">
-					<span>Secretario:</span>
-					<select id="sel-secretary">
-						<option value="0">Seleccione secretario</option>
-					{%for m in members%}
-						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
-                	{%endfor%}
-					</select>
-					<span class="secretary-ok hidden"><i class="icon-ok"></i></span>
-				</div>
-			</div>
 			<hr>
-			<div id="add-new-member" class="mt20 icons-info pull-left">
-                <span>Info:</span>
-                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Asistente</span>
-                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
-                <span title="El usuario debe firmar el acta"><i class="icon-wrench"></i> Firmador</span>
-                <span class="user-pend-l"> Usuarios pendientes</span>
+			<div id="add-new-member" class="mt20 pull-left">
+				<div class="icons-info">
+	                <span>Info:</span>
+	                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Asistente</span>
+	                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
+	                <span title="El usuario debe firmar el acta"><i class="icon-wrench"></i> Firmador</span>
+	                <span class="user-pend-l"> Usuarios pendientes</span>
+				</div>
+            	<div id="show-more-info" class="btn btn-link">
+            		M&aacute;s informaci&oacute;n...
+            	</div>
+            	<div class="more-info">
+            		<div>
+            			<strong><i class="icon-pencil"></i> Asistente</strong>: Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de asistentes del Acta.
+            		</div>
+            		<div>
+           				<strong><i class="icon-thumbs-up"></i> Aprobador</strong>: Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su totalidad.
+            		</div>
+            		<div>
+            			<strong><i class="icon-wrench"></i> Firmador</strong>: Persona encargada de firmar el Acta. Al final del Acta, solo aparece el listado de firmadores, no de aprobadores.
+            		</div>
+            		<div>
+            			<strong class="user-pend-l">&nbsp;Usuarios pendientes</strong>: Usuarios que no han aceptado la solicitud de ingreso al grupo.
+            		</div>
+            	</div>
             </div>
 			<div class="mt20 pull-right">
 				<a href="/groups/{{group.slug}}" class="btn">
@@ -111,7 +130,8 @@
 {% endblock %}
 {%block style%}
 <style type="text/css">
-	.message-box{width: 70%}
+	.more-info{font-size: 14px;line-height: 24px;display: none}
+	.message-box{width: 70%;min-height: 250px}
 	.btn-new-minutes{padding-left: 40px;padding-right: 40px;}
 	td label{cursor: pointer;margin: 0;padding: 9px;}
 	.th-delelte{width: 9%;}
@@ -168,6 +188,9 @@
 	    $(".secretary-ok").removeClass("hidden")
 		{%endif%}
 
+		$("#show-more-info").on("click", function (e){
+			$(".icons-info, .more-info").toggle();
+		})
 	    function getRoleName (op) {
 	    	switch(op){
 	    		case 1 : return "Administrador de &eacute;ste grupo"; break;
@@ -214,26 +237,37 @@
 	    function callbackSetPresident (data) {
 	    	if (data["saved"]){
 		    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
-	    		$(".president-ok").removeClass("hidden")
+	    		$(".president-ok").removeClass("hidden");
+	    		//show all options for to set a secretary
+	    		$("#sel-secretary option").show();
+	    		//hide the president in the secretary select
+	    		$("#sel-secretary option[value=" + data['uid'] +"]").hide();
+	    		//Put checked the President checkbox: approver & signer
+	    		// $("#signer"+data['uid']).attr("disabled","disabled");
 		    }
 		    else{
 		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    	$("#sel-president").val(0);
 		    }
 	    }
 	    function callbackSetSecretary (data) {
 	    	if (data["saved"]){
 		    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
-	    		$(".secretary-ok").removeClass("hidden")
+	    		$(".secretary-ok").removeClass("hidden");
+	    		$("#sel-president option").show();
+	    		$("#sel-president option[value=" + data['uid'] +"]").hide();
+	    		// $("#signer"+data['uid']).attr("disabled","disabled");
 		    }
 		    else{
-		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    	setAlertError("Ocurri&oacute; un error", data['error']);
+		    	$("#sel-secretary").val(0);
 		    }
 	    }
 	    function setPresident (e) {
 	    	$(".president-ok").addClass("hidden")
 	    	var uid = $(this).val();
 	    	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
-	    		{"role":4, "uid": uid, "remove": 0},"",callbackSetPresident)	
+	    		{"role":4, "uid": uid, "remove": 0},"",callbackSetPresident)
 	    }
 	    function setSecretary (e) {
 	    	$(".secretary-ok").addClass("hidden")

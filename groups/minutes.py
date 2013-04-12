@@ -104,7 +104,7 @@ def getMembersAssistance(group, minutes_current):
 
 def getMembersSigners(group, minutes_current):
     try:
-        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, id_minutes=minutes_current)
+        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, is_secretary=False, is_president=False, id_minutes=minutes_current)
         return selected
     except Exception, e:
         print e
@@ -125,7 +125,7 @@ def getAssistanceFromRolUserMinutes(group):
 
 def getSignersFromRolUserMinutes(group):
     try:
-        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, is_active=False)
+        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, is_secretary=False, is_president=False, is_active=False)
         return selected
     except Exception, e:
         print e
@@ -234,9 +234,11 @@ def removeUniqueRolGroup(group, role):
         if role == 4:
             r = rol_user_minutes.objects.get(id_group=group, is_president=True, is_active=False)
             r.is_president = False
+            # r.is_signer = False
         if role == 5:
             r = rol_user_minutes.objects.get(id_group=group, is_secretary=True, is_active=False)
             r.is_secretary = False
+            # r.is_signer = False
         r.save()
         return True
     except rol_user_minutes.DoesNotExist:
@@ -507,11 +509,17 @@ def setRolForMinute(request, slug_group):
                             role_name = r3
                         if role == 4 and u and not remove:
                             if removeUniqueRolGroup(g, 4):
-                                rel.is_president = True
+                                if not rel.is_secretary:
+                                    rel.is_president = True
+                                else:
+                                    error = "No se puede ser Secretario y Presidente al mismo tiempo"
                             role_name = r4
                         if role == 5 and u and not remove:
                             if removeUniqueRolGroup(g, 5):
-                                rel.is_secretary = True
+                                if not rel.is_president:
+                                    rel.is_secretary = True
+                                else:
+                                    error = "No se puede ser Presidente y Secretario al mismo tiempo"
                             role_name = r5
 
                         if role == 1 and u and remove:
@@ -534,7 +542,7 @@ def setRolForMinute(request, slug_group):
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
-            response = {"saved": saved, "u": u.first_name, "role": role_name}
+            response = {"saved": saved, "u": u.first_name, "role": role_name, "uid": u.id}
             return HttpResponse(json.dumps(response), mimetype="application/json")
     return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
 

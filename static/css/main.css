@@ -261,11 +261,10 @@ header div > #top-menu-style li{
     margin-right: 20px;
     margin-top: 20px;
 }
-.mb50{margin-bottom: 50px;}
-.mt20{
-    margin-top: 20px;
-}
 .ml10{margin-left: 10px;}
+.mt20{margin-top: 20px;}
+.mt40{margin-top: 40px;}
+.mb50{margin-bottom: 50px;}
 #log-sup img{
     width: 14px;
 }
