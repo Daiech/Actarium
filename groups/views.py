@@ -670,6 +670,7 @@ def acceptInvitation(request):
     """
     saveViewsLog(request, "groups.views.acceptInvitation")
     noHasPerms = False
+    my_response = u"algo pasó y no sabemos si"
     if request.is_ajax():
         if request.method == 'GET':
             try:
@@ -693,6 +694,7 @@ def acceptInvitation(request):
                     accepted = True
                     group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                     message = "Aceptar la solicitud"
+                    my_response = "Si"
                 else:  # no aprobar la invitacion
                     if inv and not accept:
                         inv.is_active = False
@@ -705,11 +707,22 @@ def acceptInvitation(request):
                         accepted = False
                         group = {"id": inv.id_group.id, "name": inv.id_group.name, "slug": "/groups/" + inv.id_group.slug, "img_group": inv.id_group.img_group}
                         message = "NO Aceptar la solicitud"
+                        my_response = "No"
                     else:
                         accepted = False
                         message = "El administrador del grupo ha cancelado tu invitaci&oacute;n"
                         group = ""
                         noHasPerms = True
+                # send email message
+                email_ctx = {
+                    'firstname': request.user.first_name + " " + request.user.last_name,
+                    'username': request.user.username,
+                    'response': my_response,
+                    'groupname': q.name,
+                    'groupslug': q.slug,
+                    'urlgravatar': showgravatar(request.user.email, 50)
+                }
+                sendEmailHtml(2, email_ctx, email_list)
                 response = {"accepted": accepted, "message": message, "group": group, "canceled": noHasPerms}
             except Exception, e:
                 print e
@@ -772,7 +785,7 @@ def getGroupBySlug(slug):
 
 @login_required(login_url='/account/login')
 def newReunion(request, slug):
-    saveViewsLog(request,"groups.views.newReunion")
+    saveViewsLog(request, "groups.views.newReunion")
     q = groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
@@ -828,7 +841,7 @@ def newReunion(request, slug):
 
 @login_required(login_url='/account/login')
 def calendar(request):
-    saveViewsLog(request,"groups.views.calendar")
+    saveViewsLog(request, "groups.views.calendar")
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     my_reu_day = reunions.objects.filter(id_group__in=gr).order_by("-date_convened")  # reuniones para un dia
@@ -868,7 +881,7 @@ def calendar(request):
 
 @login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
-    saveViewsLog(request,"groups.views.calendarDate")
+    saveViewsLog(request, "groups.views.calendarDate")
     gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
@@ -910,7 +923,7 @@ def calendarDate(request, slug=None):
 
 @login_required(login_url='/account/login')
 def getReunions(request):
-    saveViewsLog(request,"groups.views.getReunions")
+    saveViewsLog(request, "groups.views.getReunions")
     if request.is_ajax():
         if request.method == 'GET':
             date = str(request.GET['date'])
@@ -954,7 +967,7 @@ def getNextReunions(request):
     """
         Se muestra debajo del calendario las proximas 3 reuniones a las cuales ya ha sido confirmada la asistencia.
     """
-    saveViewsLog(request,"groups.views.getNextReunions")
+    saveViewsLog(request, "groups.views.getNextReunions")
     if request.is_ajax():
         gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
         my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
@@ -997,7 +1010,7 @@ def getAssistance(id_minutes):
 
 @login_required(login_url='/account/login')
 def setAssistance(request):
-    saveViewsLog(request,"groups.views.setAssistance")
+    saveViewsLog(request, "groups.views.setAssistance")
     if request.is_ajax():
         if request.method == 'GET':
             id_reunion = reunions.objects.get(pk=request.GET['id_reunion'])
@@ -1038,7 +1051,7 @@ def setAssistance(request):
 
 @login_required(login_url='/account/login')
 def getReunionData(request):
-    saveViewsLog(request,"groups.views.getReunionData")
+    saveViewsLog(request, "groups.views.getReunionData")
     if request.is_ajax():
         if request.method == 'GET':
             id_reunion = str(request.GET['id_reunion'])

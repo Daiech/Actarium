@@ -17,6 +17,7 @@ def sendEmailHtml(email_type, ctx, to):
         5- Correo de confirmacion de asistencia a reunion
         6- Correo de invitacion a un grupo
         7- Correo de invitacion a actarium
+        8- Correo de notificacion de aceptacion de grupo
     """
     if email_type == 1:
         subject = ctx['username']+" Bienvenido a Actarium"
@@ -46,6 +47,10 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['username'] + u" te invitó a usar Actarium, La plataforma para la gestión de Actas y Reuniones."
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_actarium_invitation.html')
+    elif email_type == 8:
+        subject = ctx['username'] + u" " + ctx['response'] + u" ha aceptado la invitación al grupo " + ctx['groupname'] + " en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_response_group_invitation.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
@@ -60,4 +65,4 @@ def sendEmailHtml(email_type, ctx, to):
         msg.send()
     except:
         print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
-        saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s'%(email_type,to))
+        saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
