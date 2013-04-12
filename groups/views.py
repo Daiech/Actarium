@@ -714,12 +714,15 @@ def acceptInvitation(request):
                         group = ""
                         noHasPerms = True
                 # send email message
+                email_list = []
+                email_list.append(str(inv.id_user_invited.email) + ",")
+                print email_list
                 email_ctx = {
                     'firstname': request.user.first_name + " " + request.user.last_name,
                     'username': request.user.username,
                     'response': my_response,
-                    'groupname': q.name,
-                    'groupslug': q.slug,
+                    'groupname': inv.id_group.name,
+                    'groupslug': inv.id_group.slug,
                     'urlgravatar': showgravatar(request.user.email, 50)
                 }
                 sendEmailHtml(8, email_ctx, email_list)
