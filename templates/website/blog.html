@@ -1,0 +1,95 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Blog{% endblock %}
+
+{%block body%}
+<article id='blog-container'>
+        <section  class="row-fluid post">
+        	<div class="span4 post-img">
+        		<img src="/static/img/actarium_blog.png" class="img-polaroid" />
+        	</div>
+        	<div class="span8">
+        		<header>
+        			<h3 class="post-title">Presentaci&oacute;n del blog</h3>
+        		</header>
+        		<section>
+        		<p>En el transcurso del tiempo iremos implementando nuevas caracter&iacute;sticas en Actarium para ofrecer cada vez un mejor servicio, agregando nuevas 
+        		funcionalidades o mejorando y optimizando las actuales.</p>
+        		<p>Es por eso que hemos decidido implementar un blog interno en donde estaremos publicando noticias de lo que pasa en Actarium para que est&eacute;s al 
+        		d&iacute;a en las funcionalidades y puedas aprovechar al m&aacute;ximo la plataforma que te facilitara la tediosa labor de llevar actas de reuniones.</p>
+        		<section>
+        		<footer>
+        			por: edwinfmesa el 16 de Abril de 2013
+        		</footer>
+        	</div>
+        </section>
+        <hr>
+        <section  class="row-fluid post">
+        	<div class="span4 post-img">
+        		<img src="/static/img/actarium_blog.png" class="img-polaroid" />
+        	</div>
+        	<div class="span8">
+        		<header>
+        			<h3 class="post-title" >Presentaci&oacute;n del blog</h3>
+        		</header>
+        		<section>
+        		<p>En el transcurso del tiempo iremos implementando nuevas caracter&iacute;sticas en Actarium para ofrecer cada vez un mejor servicio, agregando nuevas 
+        		funcionalidades o mejorando y optimizando las actuales.</p>
+        		<p>Es por eso que hemos decidido implementar un blog interno en donde estaremos publicando noticias de lo que pasa en Actarium para que est&eacute;s al 
+        		d&iacute;a en las funcionalidades y puedas aprovechar al m&aacute;ximo la plataforma que te facilitara la tediosa labor de llevar actas de reuniones.</p>
+        		<section>
+        		<footer>
+        			por: edwinfmesa el 16 de Abril de 2013
+        		</footer>
+        	</div>
+        </section>
+</article>
+{%endblock%}
+
+{%block style %}
+<style type="text/css">
+	#blog-container{
+		max-width: 1000px;
+		background-color: #FFF;
+		margin: auto;	
+		border: 1px solid #79B632;
+		-moz-border-radius: 3px;
+	    -webkit-border-radius: 3px;
+	    -khtml-border-radius: 3px;
+	    border-radius: 3px;
+	    padding:10px 100px 40px 10px;
+	}
+	.post{
+		padding: 10px;
+	}
+	.post-img{
+		text-align:center;
+	}
+	.post-title{
+		color: #79B632;
+		padding-bottom: 10px;
+		margin-left:0px
+		
+	}
+	.post p{
+		line-height: 1.5em;
+		margin: 0 0 1em;
+		font-size: 1.1em;
+		font-family: "Lucida Grande",Tahoma,Arial,Verdana,sans-serif;
+		font-weight: normal;
+		text-align : justify;;
+		color: #333333;
+	}
+	
+</style>
+{%endblock%}
+
+
+{% block js %}
+<script>
+    $(document).on("ready",function(e){
+        $("#blog").addClass("menu-active");
+        $("#blog .navbar-item").addClass("navbar-item-hover");
+        $("#blog .navbar-button-propierties").css({"height":"15px"}, 100);
+    });
+</script>
+{% endblock %}

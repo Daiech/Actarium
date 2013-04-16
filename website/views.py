@@ -89,6 +89,8 @@ def validateEmail(email):
 def about(request):
     return render_to_response('website/about.html', {}, context_instance=RequestContext(request))
 
+def blog(request):
+    return render_to_response('website/blog.html', {}, context_instance=RequestContext(request))
 
 def help(request):
     try:

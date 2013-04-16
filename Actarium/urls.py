@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^' + getGlobalVar("URL_PRIVACY") + '$', 'website.views.privacy_'),
     url(r'^' + getGlobalVar("URL_TERMS") + '$', 'website.views.terms'),
 
-    url(r'^blog', 'website.views.about'),
+    url(r'^blog', 'website.views.blog'),
     url(r'^update', 'github.views.update'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
