@@ -132,7 +132,12 @@ def showViewsLog(request):
             connection = MongoClient('localhost',27017)
             db = connection.actarium
             views = db.views
-            views_data = views.find().sort([("date", pymongo_DESCENDING)])
+            try: 
+                if request.method == "GET":
+                    u = str(request.GET['u'])
+                    views_data = views.find({'username':u}).sort([("date", pymongo_DESCENDING)])
+            except:
+                views_data = views.find().sort([("date", pymongo_DESCENDING)])
 #            data = []
 #            print " \n ------------Data------------------ \n"
 #            for v in views_data:
@@ -152,7 +157,13 @@ def showViewsStats(request):
             connection = MongoClient('localhost',27017)
             db = connection.actarium
             views = db.views
-            views_data = views.find().sort([("date", pymongo_DESCENDING)])
+            
+            try: 
+                if request.method == "GET":
+                    u = str(request.GET['u'])
+                    views_data = views.find({'username':u}).sort([("date", pymongo_DESCENDING)])
+            except:
+                views_data = views.find().sort([("date", pymongo_DESCENDING)])
             
             from bson.code import Code
             map = Code("function () {"
