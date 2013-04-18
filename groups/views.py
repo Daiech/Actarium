@@ -55,6 +55,7 @@ def groupsList(request):
     '''
     lista los grupos del usuario registrado
     '''
+    saveViewsLog(request,"groups.views.groupList")
     try:
         #-----------------<INVITACIONES>-----------------
         my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
@@ -84,6 +85,7 @@ def setRoltoUser(request, _user, _group, role, remove):
             4 = admin
         remove is a boolean
     '''
+    saveViewsLog(request,"groups.views.setRoltoUser")
     rel = getRelUserGroup(_user, _group)
     if rel:
         role_name = False
@@ -131,6 +133,7 @@ def setRole(request, slug_group):
     """
         Set or remove role to a user
     """
+    saveViewsLog(request,"groups.views.setRole")
     error = False
     if request.is_ajax():
         if request.method == 'GET':
@@ -168,6 +171,7 @@ def groupSettings(request, slug_group):
     '''
         Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
+    saveViewsLog(request,"groups.views.groupSettings")
     try:
         u_selected = None
         if request.method == "GET":

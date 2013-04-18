@@ -17,7 +17,7 @@ import datetime
 from django.utils import simplejson as json
 #from account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
-from actions_log.views import saveActionLog, saveErrorLog
+from actions_log.views import saveActionLog, saveErrorLog, saveViewsLog
 from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
 
 
@@ -32,6 +32,7 @@ from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
 
 @login_required(login_url='/account/login')
 def settingsBilling(request):
+    saveViewsLog(request, "asettings.views.settingsBilling")
     array_billing = []
     try:
         packages_list = packages.objects.filter(is_visible=True)
@@ -49,6 +50,7 @@ def settingsBilling(request):
 
 @login_required(login_url='/account/login')
 def settingsOrganizations(request):
+    saveViewsLog(request, "asettings.views.settingsOrganizations")
     if request.method == "GET":  # envia una variable para seleccionar una organizacion
         try:
             new_group = request.GET['saved']
@@ -68,6 +70,7 @@ def settingsOrganizations(request):
 
 @login_required(login_url='/account/login')
 def newOrganization(request):
+    saveViewsLog(request, "asettings.views.newOrganization")
     ref_get = ""
     if request.method == "GET":
         try:
@@ -194,6 +197,7 @@ def resize_uploaded_image2(buf):
 
 @login_required(login_url='/account/login')
 def editOrganization(request, id_org):
+    saveViewsLog(request, "asettings.views.editOrganization")
     if request.method == "POST":
         form = newOrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
@@ -241,6 +245,7 @@ def save_file(file, slug, path=''):
 
 @login_required(login_url='/account/login')
 def requestPackage(request):
+    saveViewsLog(request, "asettings.views.requestPackage")
     if request.is_ajax():
         if request.method == 'GET':
             id_pack = str(request.GET['id_package'])
@@ -258,6 +263,7 @@ def requestPackage(request):
 
 @login_required(login_url="/account/login")
 def replyRequestPackage(request):
+    saveViewsLog(request, "asettings.views.replyRequestPackage")
     if request.user.is_staff:
         ctx = {"billing_list": billing.objects.exclude(state=0).order_by("-date_request"),
                 "billing_list2": billing.objects.filter(state='0').order_by("-date_request")
@@ -268,6 +274,7 @@ def replyRequestPackage(request):
 
 @login_required(login_url="/account/login")
 def setReplyRequestPackage(request):
+    saveViewsLog(request, "asettings.views.setReplyRequestPackage")
     if request.is_ajax():
         if request.method == 'GET':
             id_billing = str(request.GET['id_billing'])
@@ -289,6 +296,7 @@ def setReplyRequestPackage(request):
 
 @login_required(login_url="/account/login")
 def settingsTemplates(request):
+    saveViewsLog(request, "asettings.views.settingsTemplates")
     _templates = rel_user_private_templates.objects.filter(id_user=request.user)
     _groups = rel_user_group.objects.filter(id_user=request.user, is_admin=True)
     _private_templates = private_templates.objects.filter(id_user=request.user)
@@ -301,6 +309,7 @@ def settingsTemplates(request):
 
 @login_required(login_url="/account/login")
 def assignTemplateAjax(request):
+    saveViewsLog(request, "asettings.views.assignTemplateAjax")
     if request.is_ajax():
         if request.method == 'GET':
             try:
@@ -328,6 +337,7 @@ def assignTemplateAjax(request):
     
 @login_required(login_url="/account/login")
 def unassignTemplateAjax(request):
+    saveViewsLog(request, "asettings.views.unassignTemplateAjax")
     if request.is_ajax():
         if request.method == 'GET':
             try:

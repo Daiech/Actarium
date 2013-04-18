@@ -10,7 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_complete, password_reset_confirm
-from actions_log.views import saveActionLog
+from actions_log.views import saveActionLog, saveViewsLog
 from django.contrib.auth.models import User
 from django.utils.hashcompat import sha_constructor
 import random
@@ -23,6 +23,7 @@ def newUser(request):
     '''
     crea un nuevo usuario usando un formulario propio
     '''
+    saveViewsLog(request, "account.views.newUser")
     if not request.user.is_anonymous():
         return HttpResponseRedirect('/account/')
     if request.method == "POST":
@@ -128,6 +129,7 @@ def log_in(request):
         Inicia session de un usuario que usa el formulario propio del sistema.
         Retorna y crea una sesion de usuario
     '''
+    saveViewsLog(request, "account.views.log_in")
     if not request.user.is_anonymous():
         return HttpResponseRedirect('/account/')
     if request.method == 'POST':
@@ -146,6 +148,7 @@ def log_out(request):
     '''
         Finaliza una sesion activa
     '''
+    saveViewsLog(request, "account.views.log_out")
     try:
         _user = request.user
         saveActionLog(_user,  "LOG_OUT", "username: %s" % (_user.username), request.META['REMOTE_ADDR'])  # Guarda la accion de cerrar sesion
@@ -160,6 +163,7 @@ def userLogin(request, user_name, password):
         Autentica a un usuario con los parametros recibidos
         actualmente solo se loguea con username, se espera autenticar con mail
     '''
+    saveViewsLog(request, "account.views.userLogin")
     try:
         next = request.GET['next']
     except Exception:
@@ -187,6 +191,7 @@ def myAccount(request):
         Control para usuarios logueados.
         se consultan los datos y se los envia al template para imprimirlos
     '''
+    saveViewsLog(request, "account.views.myAccount")
     last_data = "last=> username: %s, name: %s, last_name: %s, email %s" % (request.user.username, request.user.first_name, request.user.last_name, request.user.email)
     if request.method == "POST":
         form = UserForm(request.POST, instance=request.user)
@@ -206,6 +211,7 @@ def myAccount(request):
 
 
 def PasswordChange(request):
+    saveViewsLog(request, "account.views.PasswordChange")
     passUpdate = False
     if request.method == "POST":
         passUpdate = False
@@ -230,6 +236,7 @@ def password_reset2(request):
         """
         django.contrib.auth.views.password_reset view (forgotten password)
         """
+        saveViewsLog(request, "account.views.password_reset2")
         if not request.user.is_authenticated():
             print "entro a password_reset2"
             try:
@@ -245,6 +252,7 @@ def password_reset_done2(request):
         """
         django.contrib.auth.views.password_reset_done - after password reset view
         """
+        saveViewsLog(request, "account.views.password_reset_done2")
         if not request.user.is_authenticated():
             return password_reset_done(request, template_name='account/password_reset_done.html')
         else:
@@ -255,6 +263,7 @@ def password_reset_confirm2(request, uidb36, token):
         """
         django.contrib.auth.views.password_reset_done - after password reset view
         """
+        saveViewsLog(request, "account.views.password_reset_confirm2")
         if not request.user.is_authenticated():
                 print "entro a password_reset_confirm2"
                 return password_reset_confirm(request, uidb36, token, template_name='account/password_reset_confirm.html', post_reset_redirect='/account/password/done/')
@@ -267,6 +276,7 @@ def password_reset_complete2(request):
         """
         django.contrib.auth.views.password_reset_done - after password reset view
         """
+        saveViewsLog(request, "account.views.password_reset_complete2")
         if not request.user.is_authenticated():
                 print "entro a password_reset_complete2"
                 return password_reset_complete(request, template_name='account/password_reset_complete.html')
@@ -290,6 +300,7 @@ def activationKeyIsValid(activation_key):
 
 
 def confirm_account(request, activation_key, is_invited=False):
+    saveViewsLog(request, "account.views.confirm_account")
     ak = activationKeyIsValid(activation_key)
     if ak:
         from groups.models import rel_user_group
@@ -322,6 +333,7 @@ def confirm_account(request, activation_key, is_invited=False):
 
 
 def activate_account(request, activation_key):
+    saveViewsLog(request, "account.views.activate_account")
     if activate_account_now(request, activation_key):
         try:
             is_invited = request.GET['is_invited']
@@ -333,6 +345,7 @@ def activate_account(request, activation_key):
 
 
 def activate_account_now(request, activation_key):
+    saveViewsLog(request, "account.views.activate_account_now")
     from models import activation_keys
     try:
         activation_obj = activation_keys.objects.get(activation_key=activation_key)

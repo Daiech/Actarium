@@ -13,7 +13,7 @@ from account.templatetags.gravatartag import showgravatar
 
 # Imports from views.py
 from groups.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email, isProGroup, getProGroup
-from actions_log.views import saveActionLog
+from actions_log.views import saveActionLog, saveViewsLog
 # from Actarium.settings import URL_BASE
 from emailmodule.views import sendEmailHtml
 
@@ -248,6 +248,7 @@ def removeUniqueRolGroup(group, role):
 
 
 def updateRolUserMinutes(request, group, _minute):
+    saveViewsLog(request, "groups.minutes.updateRolUserMinutes")
     try:
         rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
 
@@ -347,6 +348,7 @@ def setRelationReunionMinutes(_reunion, _minute):
 
 @login_required(login_url='/account/login')
 def setMinutesApprove(request):
+    saveViewsLog(request, "groups.minutes.setMinutesApprove")
     if request.is_ajax():
         if request.method == 'GET':
             try:
@@ -423,6 +425,7 @@ def getPresidentAndSecretary(group, minutes_current=None):
 
 # @login_required(login_url='/account/login')
 def newAnnotation(request, slug_group):
+    saveViewsLog(request, "groups.minutes.newAnnotation")
     print "ENTRANDO!"
     if request.is_ajax():
         if request.method == 'GET':
@@ -474,6 +477,7 @@ def setRolForMinute(request, slug_group):
             4 = President
             5 = Secretary
     """
+    saveViewsLog(request, "groups.minutes.setRolForMinute")
     r1, r2, r3, r4, r5 = "Firmador", "Aprobador", "Asistente", "Presidente", "Secretario"
     error = None
     saved = True
@@ -552,6 +556,7 @@ def rolesForMinutes(request, slug_group, id_reunion):
     '''
     return the board to give roles for a new minutes
     '''
+    saveViewsLog(request, "groups.minutes.rolesForMinutes")
     try:
         if id_reunion:
             reunion = reunions.objects.get(id=id_reunion).id
@@ -594,7 +599,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
     '''
     This function creates a minutes with the form for this.
     '''
-
+    saveViewsLog(request, "groups.minutes.newMinutes")
     group = getGroupBySlug(slug_group)
 
     _user_rel = getRelUserGroup(request.user, group.id)
@@ -717,6 +722,7 @@ def saveMinute(request, group, form, _template):
     Save the minutes in the tables of data base: minutes_type_1, minutes
     return:
     '''
+    saveViewsLog(request, "groups.minutes.saveMinute")
     if getRelUserGroup(request.user, group).is_secretary:
         df = {
             'code': form.cleaned_data['code'],
@@ -764,6 +770,7 @@ def showMinutes(request, slug, minutes_code):
     '''
     Muestra toda la informacion de un Acta (minutes)
     '''
+    saveViewsLog(request, "groups.minutes.showMinutes")
     pdf_address = 'false'
     if request.method == 'POST':
         html_data = request.POST['minutes-html-data']
@@ -922,6 +929,7 @@ def showMinutes(request, slug, minutes_code):
 
 @login_required(login_url='/account/login')
 def uploadMinutes(request, slug_group):
+    saveViewsLog(request, "groups.minutes.uploadMinutes")
     group = groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
     datos_validos = ""
@@ -983,6 +991,7 @@ def uploadMinutes(request, slug_group):
 
 #@login_required(login_url='/account/login')
 def uploadMinutesAjax(request):
+    saveViewsLog(request, "groups.minutes.uploadMinutesAjax")
     if request.is_ajax():
         if request.method == 'GET':
             try:
