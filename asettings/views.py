@@ -95,9 +95,12 @@ def newOrganization(request):
             if url_file:
                 from django.template import defaultfilters
                 url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-                createThumbnail(url)
-                org.logo_address = MEDIA_URL[:-1] + url + "-thumbnail.jpg"
-                deleteRealImage(url)
+                thumbnail = createThumbnail(url)
+                if thumbnail:
+                    org.logo_address = thumbnail
+                    deleteRealImage(url)
+                else:
+                    org.logo_address = MEDIA_URL[:-1] + url
                 # org.logo_address = MEDIA_URL[:-1] + url
             org.save()
             try:
@@ -113,20 +116,20 @@ def newOrganization(request):
 
 def createThumbnail(buf):
     try:
-        import Image
+        from PIL import Image
         import glob
         import os
 
         size = 128, 128
         for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
             file, ext = os.path.splitext(infile)
-            print "Extension", ext
             im = Image.open(infile)
             im.thumbnail(size, Image.ANTIALIAS)
             im.save(file + "-thumbnail.jpg", "JPEG")
-        return file + "-thumbnail.jpg"
+        return file[file.find('/media'):] + "-thumbnail.jpg"
     except ImportError, e:
         saveErrorLog("ImportError: def createThumbnail: %s" % e)
+        return False
     except Exception, e:
         saveErrorLog("Exception def createThumbnail: %s" % e)
         return False
