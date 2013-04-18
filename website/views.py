@@ -58,6 +58,7 @@ def sendFeedBack(request):
     '''
     Formulario para feedback
     '''
+    saveViewsLog(request,"website.views.sendFeedBack")
     if request.is_ajax():
         if request.method == 'GET':
             print request.GET
@@ -87,12 +88,15 @@ def validateEmail(email):
 
 
 def about(request):
+    saveViewsLog(request,"website.views.about")
     return render_to_response('website/about.html', {}, context_instance=RequestContext(request))
 
 def blog(request):
+    saveViewsLog(request,"website.views.blog")
     return render_to_response('website/blog.html', {}, context_instance=RequestContext(request))
 
 def help(request):
+    saveViewsLog(request,"website.views.help")
     try:
         faqs = faq.objects.filter(is_active=True)
     except faq.DoesNotExist:
@@ -101,6 +105,7 @@ def help(request):
 
 
 def privacy_(request):
+    saveViewsLog(request,"website.views.privacy_")
     try:
         p = privacy.objects.get(is_active=True)
     except privacy.DoesNotExist:
@@ -111,6 +116,7 @@ def privacy_(request):
 
 
 def terms(request):
+    saveViewsLog(request,"website.views.terms")
     try:
         t = conditions.objects.get(is_active=True)
     except conditions.DoesNotExist:

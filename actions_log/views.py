@@ -30,6 +30,7 @@ def saveActionLog(id_user, code, extra, ip_address):
 
 @login_required(login_url='/account/login')
 def showActions(request):
+    saveViewsLog(request,'actions_log.views.showActions')
     if request.user.is_staff:
         saveErrorLog('(%s) ingreso al actionlog' % request.user.username)
         ctx = {"actions": rel_user_action.objects.all().order_by("-date_done")}
@@ -40,6 +41,7 @@ def showActions(request):
 
 @login_required(login_url='/account/login')
 def showAction(request, id_action):
+    saveViewsLog(request,'actions_log.views.showAction')
     if request.user.is_staff:
         ctx = {"actions": rel_user_action.objects.filter(id_action=id_action).order_by("-date_done")}
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
@@ -49,6 +51,7 @@ def showAction(request, id_action):
 
 @login_required(login_url='/account/login')
 def showUserActions(request, username):
+    saveViewsLog(request,'actions_log.views.showUserActions')
     if request.user.is_staff:
         user = User.objects.get(username=username)
         ctx = {"actions": rel_user_action.objects.filter(id_user=user).order_by("-date_done")}
@@ -59,6 +62,7 @@ def showUserActions(request, username):
 
 @login_required(login_url='/account/login')
 def showOrderActions(request, field):
+    saveViewsLog(request,'actions_log.views.showOrderActions')
     if request.user.is_staff:
         ctx = {"actions": rel_user_action.objects.filter().order_by("-%s" % (field))}
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
@@ -68,6 +72,7 @@ def showOrderActions(request, field):
 
 @login_required(login_url='/account/login')
 def showUserActionsOrder(request, username, field):
+    saveViewsLog(request,'actions_log.views.showUserActionsOrder')
     if request.user.is_staff:
         if username == "ALL":
             action = rel_user_action.objects.filter().order_by("-%s" % (field))
@@ -121,6 +126,7 @@ def saveViewsLog(request,page):
     
 @login_required(login_url='/account/login')
 def showViewsLog(request):
+    saveViewsLog(request,'actions_log.views.showViewsLog')
     if request.user.is_staff:
         try:
             connection = MongoClient('localhost',27017)
@@ -140,6 +146,7 @@ def showViewsLog(request):
         return HttpResponseRedirect('/')
     
 def showViewsStats(request):
+    saveViewsLog(request,'actions_log.views.showViewsStats')
     if request.user.is_staff:
         try:
             connection = MongoClient('localhost',27017)
@@ -168,11 +175,6 @@ def showViewsStats(request):
                 data.append(i)
                 print "\n------------------------------------------------\n",i    
             
-#            data = []
-#            print " \n ------------Data------------------ \n"
-#            for v in views_data:
-#                print v
-#            print "\n------------------------------------------------\n"
             ctx = {"views": data}
         except:
             ctx = {"views": []}

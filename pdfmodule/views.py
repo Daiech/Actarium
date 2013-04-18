@@ -19,9 +19,11 @@ from reportlab.lib.styles import getSampleStyleSheet
 # from reportlab.lib.units import inch
 from reportlab.platypus import Frame
 from xhtml2pdf.pisa import CreatePDF
+from actions_log.views import saveActionLog, saveViewsLog
 
 
 def minutesToPdf(request, id_minutes):
+    saveViewsLog(request, "pdfmodule.views.minutesToPdf")
     if request.user.is_staff:
 
         _minutes = minutes.objects.get(pk=id_minutes)
@@ -87,6 +89,7 @@ def minutesToPdf(request, id_minutes):
 
 
 def minutesToPdfTest(request, id_minutes):
+    saveViewsLog(request, "pdfmodule.views.minutesToPdfTest")
     if request.user.is_staff:
         pdf_address = "/pdf/reporte%s.pdf" % (int(random.random()*100000))
     # try:
