@@ -80,33 +80,8 @@ def newOrganization(request):
     if request.method == "POST":
         form = newOrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
-            url = "/static/img/groups/default.jpg"
-            org = organizations(
-                id_admin=request.user,
-                name=form.cleaned_data['name'],
-                description=form.cleaned_data['description'],
-                logo_address=url)
-            org.save()
+            ref = saveOrganization(request, form)
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
-            try:
-                url_file = request.FILES['logo_address']
-            except Exception:
-                url_file = None
-            if url_file:
-                from django.template import defaultfilters
-                url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-                thumbnail = createThumbnail(url)
-                if thumbnail:
-                    org.logo_address = thumbnail
-                    deleteRealImage(url)
-                else:
-                    org.logo_address = MEDIA_URL[:-1] + url
-                # org.logo_address = MEDIA_URL[:-1] + url
-            org.save()
-            try:
-                ref = request.POST['ref'] + "?org=" + str(org.id)
-            except Exception:
-                ref = ref_get
             return HttpResponseRedirect(ref)
     else:
         form = newOrganizationForm()
@@ -114,19 +89,63 @@ def newOrganization(request):
     return render_to_response('asettings/settings_new_organization.html', ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url='/account/login')
+def saveOrganization(request, form, id_org=False):
+    url = "/static/img/groups/default.jpg"
+    if id_org:
+        org = organizations.objects.get(id=id_org)
+        if org:
+            org.name = form.cleaned_data['name']
+            org.description = form.cleaned_data['description']
+        else:
+            return None
+    else:
+        org = organizations(
+            id_admin=request.user,
+            name=form.cleaned_data['name'],
+            description=form.cleaned_data['description'],
+            logo_address=url)
+    org.save()
+    try:
+        url_file = request.FILES['logo_address']
+    except Exception:
+        url_file = None
+    if url_file:
+        from django.template import defaultfilters
+        url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
+        thumbnail = createThumbnail(url)
+        if thumbnail:
+            org.logo_address = thumbnail
+            deleteRealImage(url)
+        else:
+            org.logo_address = MEDIA_URL[:-1] + url
+    org.save()
+    try:
+        ref = request.POST['ref'] + "?org=" + str(org.id)
+    except Exception:
+        ref = "/settings/organizations"
+    return ref
+
+
 def createThumbnail(buf):
     try:
-        from PIL import Image
+        import Image
         import glob
         import os
 
         size = 128, 128
         for infile in glob.glob(PROJECT_PATH + MEDIA_URL[:-1] + buf):
             file, ext = os.path.splitext(infile)
+            print "FILE: %s, EXT:%s" % (file, ext)
             im = Image.open(infile)
             im.thumbnail(size, Image.ANTIALIAS)
-            im.save(file + "-thumbnail.jpg", "JPEG")
-        return file[file.find('/media'):] + "-thumbnail.jpg"
+            format = "JPEG"
+            if ext == ".png" or ext == ".PNG":
+                format = "PNG"
+            elif ext == ".jpg" or ext == ".JPG":
+                format = "JPEG"
+            im.save(file + "-thumbnail" + ext, format)
+        return file[file.find('/media'):] + "-thumbnail" + ext
     except ImportError, e:
         saveErrorLog("ImportError: def createThumbnail: %s" % e)
         return False
@@ -135,87 +154,14 @@ def createThumbnail(buf):
         return False
 
 
-def resize_uploaded_image(buf):
-    print "------ URL ------:", buf
-    import Image
-    from cStringIO import StringIO
-    try:
-        image = Image.open(buf)
-
-        (width, height) = image.size
-        print "ANCHO ALTO", width, height
-        (width, height) = scale_dimensions(width, height, longest_side=240)
-        print "NEW ANCHO ALTO", width, height
-        resizedImage = image.resize((width, height))
-        print "-------------IMAGEN-----------", resizedImage
-
-        # Turn back into file-like object
-        resizedImageFile = StringIO.StringIO()
-        print "VA BIEN 0", resizedImageFile
-        resizedImage.save(resizedImageFile, 'PNG', optimize=True)
-        print "VA BIEN 1", resizedImage
-        resizedImageFile.seek(0)    # So that the next read starts at the beginning
-        print "VA BIEN 2"
-        buf = resizedImageFile
-        print "VA BIEN 3"
-        return resizedImageFile
-    except Exception, e:
-        print "------ ERROR AL CREAR thumbnail", e
-    return buf
-
-
-def scale_dimensions(width, height, longest_side):
-    if width > height:
-        if width > longest_side:
-            ratio = longest_side*1./width
-            return (int(width*ratio), int(height*ratio))
-        elif height > longest_side:
-            ratio = longest_side*1./height
-            return (int(width*ratio), int(height*ratio))
-    return (width, height)
-
-
-def resize_uploaded_image2(buf):
-    try:
-        import Image
-        from cStringIO import StringIO
-
-        image = Image.open(buf)
-
-        maxSize = (240, 240)
-        resizedImage = image.thumbnail(maxSize, Image.ANTIALIAS)
-        print "-------------IMAGEN-----------", resizedImage
-        # Turn back into file-like object
-        resizedImageFile = StringIO()
-        resizedImage.save(resizedImageFile, 'PNG', optimize=True)
-        resizedImageFile.seek(0)    # So that the next read starts at the beginning
-        buf = resizedImageFile
-    except Exception, e:
-        print "ERROR AL CREAR thumbnail", e
-    return buf
-
-
 @login_required(login_url='/account/login')
 def editOrganization(request, id_org):
     saveViewsLog(request, "asettings.views.editOrganization")
     if request.method == "POST":
         form = newOrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
-            org = organizations.objects.get(id=id_org)
-            org.name = form.cleaned_data['name']
-            org.description = form.cleaned_data['description']
-            org.save()
-            try:
-                url_file = request.FILES['logo_address']
-            except Exception:
-                url_file = None
-            if url_file:
-                # if url_file._size > 4*1024*1024:
-                #     raise ValidationError("Image file too large ( > 4mb )")
-                from django.template import defaultfilters
-                url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-                org.logo_address = url
-                org.save()
+            if saveOrganization(request, form, id_org):
+                saveActionLog(request.user, 'EDIT_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect("/settings/organizations/?org=" + id_org)
     try:
         org = organizations.objects.get(id=id_org)
@@ -236,11 +182,14 @@ def deleteRealImage(url):
 def save_file(file, slug, path=''):
     ''' Little helper to save a file
     '''
-    fd = open('%s/%s' % (MEDIA_ROOT, str(path) + str(slug)), 'wb')
+    import os
+    ext = "."
+    ext = os.path.splitext(path + str(file))[1]
+    fd = open('%s/%s' % (MEDIA_ROOT, str(path) + str(slug) + ext), 'wb')
     for chunk in file.chunks():
         fd.write(chunk)
     fd.close()
-    return "/" + str(path) + str(slug)
+    return "/" + str(path) + str(slug) + ext
 
 
 @login_required(login_url='/account/login')
@@ -265,12 +214,14 @@ def requestPackage(request):
 def replyRequestPackage(request):
     saveViewsLog(request, "asettings.views.replyRequestPackage")
     if request.user.is_staff:
-        ctx = {"billing_list": billing.objects.exclude(state=0).order_by("-date_request"),
-                "billing_list2": billing.objects.filter(state='0').order_by("-date_request")
+        ctx = {
+            "billing_list": billing.objects.exclude(state=0).order_by("-date_request"),
+            "billing_list2": billing.objects.filter(state='0').order_by("-date_request")
         }
         return render_to_response('asettings/settings_replyRequest.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
+
 
 @login_required(login_url="/account/login")
 def setReplyRequestPackage(request):
@@ -294,6 +245,7 @@ def setReplyRequestPackage(request):
         is_billing_saved = "Error de servidor"
     return HttpResponse(json.dumps(is_billing_saved), mimetype="application/json")
 
+
 @login_required(login_url="/account/login")
 def settingsTemplates(request):
     saveViewsLog(request, "asettings.views.settingsTemplates")
@@ -301,11 +253,12 @@ def settingsTemplates(request):
     _groups = rel_user_group.objects.filter(id_user=request.user, is_admin=True)
     _private_templates = private_templates.objects.filter(id_user=request.user)
     ctx = {
-            "templates":_templates,
-            "groups": _groups,
-            "private_templates_assigned": _private_templates
+        "templates": _templates,
+        "groups": _groups,
+        "private_templates_assigned": _private_templates
     }
     return render_to_response('asettings/settings_templates.html', ctx, context_instance=RequestContext(request))
+
 
 @login_required(login_url="/account/login")
 def assignTemplateAjax(request):
@@ -317,11 +270,11 @@ def assignTemplateAjax(request):
                 id_group = str(request.GET['id_group'])
                 try:
                     from groups.models import groups
-                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template = templates.objects.get(pk=id_template))
-                    _group = rel_user_group.objects.get(id_user=request.user, id_group = groups.objects.get(pk=id_group), is_admin=True)
+                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
+                    _group = rel_user_group.objects.get(id_user=request.user, id_group=groups.objects.get(pk=id_group), is_admin=True)
                     try:
                         response = "True"
-                        private_templates(id_template=_rel_user_private_templates.id_template, id_group = _group.id_group, id_user= request.user).save()
+                        private_templates(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).save()
                     except:
                         response = 'Error al guardar los datos, probablemente la plantilla que desea asignar ya se encuentra relacionada con el grupo seleccionado, por favor verifica los datos'
                 except:
@@ -334,7 +287,8 @@ def assignTemplateAjax(request):
     else:
         response = "No ser recibio una consulta Ajax"
     return HttpResponse(json.dumps(response), mimetype="application/json")
-    
+
+
 @login_required(login_url="/account/login")
 def unassignTemplateAjax(request):
     saveViewsLog(request, "asettings.views.unassignTemplateAjax")
@@ -345,12 +299,12 @@ def unassignTemplateAjax(request):
                 id_group = str(request.GET['id_group'])
                 try:
                     from groups.models import groups
-                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template = templates.objects.get(pk=id_template))
-                    _group = rel_user_group.objects.get(id_user=request.user, id_group = groups.objects.get(pk=id_group), is_admin=True)
+                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
+                    _group = rel_user_group.objects.get(id_user=request.user, id_group=groups.objects.get(pk=id_group), is_admin=True)
                     response = "True"
                     try:
                         response = "True"
-                        private_templates.objects.get(id_template=_rel_user_private_templates.id_template, id_group = _group.id_group, id_user= request.user).delete()
+                        private_templates.objects.get(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).delete()
                     except:
                         response = 'La plantilla seleccionada no esta asignada al grupo seleccionado'
                 except:
@@ -363,5 +317,3 @@ def unassignTemplateAjax(request):
     else:
         response = "No ser recibio una consulta Ajax"
     return HttpResponse(json.dumps(response), mimetype="application/json")
-
-    
