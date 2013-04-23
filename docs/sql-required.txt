@@ -1,0 +1,47 @@
+-- this data is required to run actarium.
+
+INSERT INTO `actions_log_actions` (`id`, `name`, `code`, `description`) VALUES
+(1, 'Iniciar sesión', 'LOG_IN', 'Un usuario inicia sesión en la plataforma.'),
+(2, 'Registro de usuarios', 'SIGN_IN', 'Acción de registrar un usuario en la plataforma.'),
+(3, 'Cerrar sesión', 'LOG_OUT', 'Acción de cerrar sesion, solo se ejecuta cuando se da clic en el botón "cerrar sesión" no cuando cierran el navegador o apagan el computador'),
+(4, 'Nueva reunión', 'NEW_REUNION', 'Convocación de una reunión, se almacena el id de la reunión y el grupo al que pertenece.'),
+(5, 'Nueva acta', 'NEW_MINUTE', 'Creación de una nueva acta, guarda el grupo al que pertenece y su codigo correpondiente.'),
+(6, 'Confirmar asistencia', 'SET_ASSIST', 'Confirmara asistencia indicando el id de la reunión y el valor, True: aceptar y False: rechazar'),
+(7, 'Nuevo Grupo', 'NEW_GROUP', 'Creación de un nuevo grupo, guarda el nombre del grupo y el nombre del administrador'),
+(8, 'Aceptar invitación', 'SET_INVITA', 'Acción de aceptar o rechazar una invitación a un grupo'),
+(9, 'Eliminar invitación', 'DEL_INVITA', 'Elimina la invitación que se ha hecho a un usuario para participar en un grupo'),
+(10, 'Actualizar datos', 'CHG_USDATA', 'Actualizar datos de usuario, se guarda la información anterior del usuario'),
+(11, 'Cambiar Contraseña', 'CHG_PASS', 'Notificación de cambio de contraseña'), 
+(12, 'Enviar Invitación', 'SEN_INVITA', 'Acción de enviar invitación a participar en un grupo, guarda el email al cual se envio la invitación.'),
+(13, 'Nueva organizacion', 'NEW_ORG', 'Crear nueva organizacion'),
+(14, 'Editar organización', 'EDIT_ORG', 'Editar organizacion');
+
+
+INSERT INTO `groups_minutes_type` (`id`, `name`, `description`, `id_creator_id`, `is_public`, `is_customized`) VALUES
+(1, 'Reunión', 'Formato de acta para reuniones', 1, 1, 0),
+(2, 'Last Minutes', 'Formato de acta para reuniones', 1, 1, 0);
+
+
+INSERT INTO `groups_group_type` (`id`, `name`, `description`) VALUES
+(1, 'Reunión', 'Tipo de grupo que se reúne para tomar decisiones.'),
+(2, 'Junta Directiva', 'junta directiva de cualquier organización'),
+(3, 'Comité', 'Grupo para las reuniones de comité'),
+(4, 'Proyecto', 'Grupo para las reuniones de proyectos');
+
+
+INSERT INTO `groups_packages` (`id`, `name`, `number_groups_pro`, `price`, `is_visible`, `date_joined`,`time`) VALUES
+(1, 'Grupo Pro Individual', 1, '6000', 1, '2013-01-31 21:00:12',6),
+(2, 'Promoción Pro x3', 3, '16000', 1, '2013-01-31 20:59:28',12),
+(3, 'Promoción Pro x6', 6, '30000', 1, '2013-01-31 20:58:12',12);
+
+
+INSERT INTO `groups_templates` (`id`, `name`, `address_template`, `address_js`, `id_type_id`, `is_public`, `date_joined`, `slug`) VALUES
+(1, 'basica', 'groups/minutesTemplates/minutesTemplate1.html', 'groups/minutesTemplates/minutesTemplate1js.html', 1, 1, '2013-03-15 02:37:31', 'basica-1'),
+(2, 'Asamblea General Parquesoft Pereira', 'groups/minutesTemplates/minutesTemplate2.html', 'groups/minutesTemplates/minutesTemplate2js.html', 1, 0, '2013-03-15 01:04:51', 'asamblea-general-parquesoft-pereira-2'),
+(3, 'Comité Parquesoft Pereira', 'groups/minutesTemplates/minutesTemplate3.html', 'groups/minutesTemplates/minutesTemplate3js.html', 1, 0, '2013-03-15 02:37:57', 'comite-parquesoft-pereira-3'),
+(4, 'Actas subidas', 'groups/minutesTemplates/minutesTemplate4.html', 'groups/minutesTemplates/minutesTemplateJsEmpty.html', 2, 0, '2013-03-15 13:55:52', 'actas-subidas-4');
+
+
+INSERT INTO `website_globalvars` (`id`, `name`, `url`, `description`, `date_created`) VALUES
+(1, 'URL_TERMS', 'terminos-y-condiciones-de-uso', 'Url de los términos y condiciones', '2013-03-23 19:22:44'),
+(2, 'URL_PRIVACY', 'politicas-de-privacidad', 'Url de las politicas-de-privacidad', '2013-03-23 19:55:08');
