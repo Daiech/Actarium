@@ -158,12 +158,14 @@
             <hr>
             <ul class="unstyled minutes-list">
                 {%for minute in minutes%}
-                <li class="list-item-minutes {%if minute.is_full_signed%}user-active-l{%else%}user-pend-l{%endif%}">
-                    <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
-                        {{minute.code}}
-                        <span class="date-minute-created" style="display:none"> creada el {{minute.date_created|date}}</span>
-                    </a>
-                </li>
+                    {%if minute.rol.is_approver or minute.minutes.is_full_signed%}
+                    <li title="{%if not minute.minutes.is_full_signed%}Debes aprobar esta Acta para ser publicada{%else%}Esta Acta ha sido aprobada y es visible a todo el grupo {{group.name}}{%endif%}" class="list-item-minutes {%if minute.minutes.is_full_signed%}user-active-l{%else%}user-pend-l{%endif%}">
+                        <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.minutes.code}}">
+                            {{minute.minutes.code}}
+                            <span class="date-minute-created" style="display:none"> creada el {{minute.minutes.date_created|date}}</span>
+                        </a>
+                    </li>
+                    {% endif %}
                 {%endfor%}
                 {%if minutes%}
                 <div class="icons-info">
@@ -182,7 +184,7 @@
 {% block js %}
 <script>
     $(document).on("ready",function(){
-        $("i, .list-members a, span, .member-pic, .title-on-disabled").tooltip();
+        $("i, .list-members a, span, .member-pic, .title-on-disabled, .minutes-list li").tooltip();
         $("#show-more").on("click",function(e){
             e.preventDefault();
             $("ul.list-member-pics").fadeOut("fast",function(){

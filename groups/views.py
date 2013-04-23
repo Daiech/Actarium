@@ -411,12 +411,18 @@ def showGroup(request, slug):
     try:
         g = groups.objects.get(slug=slug, is_active=True)
         _user = getRelUserGroup(request.user, g)
-        print "USER", _user
         if _user:
             if _user.is_active:
                 members = rel_user_group.objects.filter(id_group=g.id, is_member=True).order_by("-is_active")
-                minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
                 _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
+                minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
+                m = list()
+                from groups.minutes import getRolUserMinutes
+                for _minutes in minutes_group:
+                    m.append({
+                        "minutes": _minutes,
+                        "rol": getRolUserMinutes(request.user, g, id_minutes=_minutes)
+                    })
                 if request.method == "GET":
                     try:
                         no_redactor = request.GET['no_redactor']
@@ -425,7 +431,7 @@ def showGroup(request, slug):
                 pro = False
                 if isProGroup(g):
                     pro = getProGroup(g)
-                ctx = {"group": g, "current_member": _user, "members": members, "minutes": minutes_group, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": pro}
+                ctx = {"group": g, "current_member": _user, "members": members, "minutes": m, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": pro}
                 return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
             if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
