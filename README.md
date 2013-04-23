@@ -29,3 +29,18 @@ En nuestra [Wiki](https://github.com/MaoAiz/Actarium/wiki) tenemos un manual de 
 
 ###Más productos
 Conoce más de nuestros productos en [Daiech.com](http://daiech.com)
+
+
+##Dependencias
+
+	PIL [Habilitar soporte para JPG](https://jamiecurle.co.uk/blog/webfaction-installing-pil/)
+	reportlab
+	xhtml2pdf
+
+##Carpetas
+Se deben crear las siguientes carpetas
+	
+	/media
+	/media/pdf
+	/media/orgs_img
+	/media/lastMinutes
