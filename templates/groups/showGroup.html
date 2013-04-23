@@ -72,7 +72,8 @@
                             <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
                             <!-- <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span> -->
                             <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
-                            <span class="user-pend-l"> Usuarios pendientes</span>
+                            <span title="Usuarios que no han aceptado la invitaci&oacute;n a &eacute;ste grupo" class="user-pend-l"> Usuarios pendientes</span>
+                            <span title="Usuarios que aceptaron la invitaci&oacute;n a &eacute;ste grupo" class="user-active-l"> Usuarios activos</span>
                         </div>
                     </li>
                     <li class="show-more show-minus">
@@ -157,14 +158,22 @@
             <hr>
             <ul class="unstyled minutes-list">
                 {%for minute in minutes%}
-                <li class="list-item">
-                    <a class="list-item-next {%if minute.is_full_signed%}user-active-l{%else%}user-pend-l{%endif%}" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
+                <li class="list-item-minutes {%if minute.is_full_signed%}user-active-l{%else%}user-pend-l{%endif%}">
+                    <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.code}}">
                         {{minute.code}}
                         <span class="date-minute-created" style="display:none"> creada el {{minute.date_created|date}}</span>
                     </a>
                 </li>
                 {%endfor%}
-                {%if not minutes%}<li>Este grupo no tiene actas</li>{%endif%}
+                {%if minutes%}
+                <div class="icons-info">
+                    <span>Info:</span>
+                    <span class="user-active-l">Actas aprobadas y publicadas</span>
+                    <span class="user-pend-l">Actas sin aprobar</span>
+                </div>
+                {%else%}
+                <li>Este grupo no tiene actas</li>
+                {%endif%}
             </ul>
         </section>
     </div>
@@ -186,7 +195,7 @@
                 $("ul.list-member-pics").fadeIn();
             });
         })//79B632 verde
-        $(".list-item").hover(function(){
+        $(".list-item-minutes").hover(function(){
             $(this).find(".date-minute-created").fadeIn("fast");
         }, function(){
             $(this).find(".date-minute-created").fadeOut("fast");
@@ -205,6 +214,9 @@
     .free-group{font-size: 14px;color: #555}
     .list-members{margin-top:20px;margin-bottom: 10px;}
     .list-item{position: relative;margin: 3px 0;}
+    .list-item-minutes{position: relative;margin: 1px 0;padding: 5px;background-color: rgb(252, 252, 252)}
+    .list-item-minutes > a{display: block;}
+    .list-item-minutes:hover{background-color: #eee}
     /*.list-item-next{padding: 8px;border-radius: 0px}*/
     .list-item-next{border-radius: 0px}
     .list-item > a{border:solid thin #fff;display:block;}
