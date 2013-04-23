@@ -33,9 +33,9 @@ Conoce más de nuestros productos en [Daiech.com](http://daiech.com)
 
 ##Dependencias
 
-	PIL [Habilitar soporte para JPG](https://jamiecurle.co.uk/blog/webfaction-installing-pil/)
-	reportlab
-	xhtml2pdf
+* PIL [Habilitar soporte para JPG](https://jamiecurle.co.uk/blog/webfaction-installing-pil/)
+* reportlab
+* xhtml2pdf
 
 ##Carpetas
 Se deben crear las siguientes carpetas
