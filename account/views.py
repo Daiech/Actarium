@@ -168,11 +168,18 @@ def userLogin(request, user_name, password):
         next = request.GET['next']
     except Exception:
         next = '/'
+
     acceso = authenticate(username=user_name, password=password)
+    print '---------login-----------\n',acceso
     if acceso is not None:
         if acceso.is_active:
-            login(request, acceso)
-            user_id = User.objects.get(username=user_name)
+            print '------acceso is active-------------'
+            print login(request, acceso)
+            try: 
+                user_id = User.objects.get(username=user_name)
+            except:
+                user_id = User.objects.get(email = user_name)
+            print '---------userid------\n', user_id
             saveActionLog(user_id, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
             return HttpResponseRedirect(next)
         else:
