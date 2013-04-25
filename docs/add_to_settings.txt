@@ -1,0 +1,11 @@
+
+
+
+
+
+AUTHENTICATION_BACKENDS = (
+'account.backends.EmailOrUsernameModelBackend',
+'django.contrib.auth.backends.ModelBackend'
+)
+
+PROJECT_PATH = os.path.realpath(".") 

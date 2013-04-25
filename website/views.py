@@ -9,7 +9,7 @@ from actions_log.views import saveActionLog, saveViewsLog
 from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
 from website.models import *
-
+import datetime
 
 def home(request):
     if request.user.is_authenticated():
@@ -31,7 +31,7 @@ def home(request):
 
         #-----------------<REUNIONES>-----------------
         # my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
-        my_reu = reunions.objects.filter(id_group__in=_groups_list).order_by("-date_convened")
+        my_reu = reunions.objects.filter(id_group__in=_groups_list, date_reunion__gt=datetime.date.today()).order_by("-date_convened")
         json_array = list()
         for reunion in my_reu:
             try:
