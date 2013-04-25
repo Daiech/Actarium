@@ -135,17 +135,19 @@ def showViewsLog(request):
             try: 
                 if request.method == "GET":
                     u = str(request.GET['u'])
+                    count = views_data = views.find({'username':u}).count()
                     views_data = views.find({'username':u}).sort([("date", pymongo_DESCENDING)])
             except:
+                count = views.find().count()
                 views_data = views.find().sort([("date", pymongo_DESCENDING)])
 #            data = []
 #            print " \n ------------Data------------------ \n"
 #            for v in views_data:
 #                print v
 #            print "\n------------------------------------------------\n"
-            ctx = {"views": views_data}
+            ctx = {"views": views_data, "count": count}
         except:
-            ctx = {"views": []}
+            ctx = {"views": [], 'count': 0}
         return render_to_response('actions/views.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
