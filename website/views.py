@@ -8,7 +8,10 @@ from groups.models import reunions, assistance, rel_user_group
 from actions_log.views import saveActionLog, saveViewsLog
 from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
+from emailmodule.views import sendEmailHtml
+from account.templatetags.gravatartag import showgravatar
 from website.models import *
+from django.contrib.auth.models import User
 import datetime
 
 def home(request):
@@ -69,6 +72,18 @@ def sendFeedBack(request):
                 feed = feedBack(type_feed=rate, email=mail, comment=comment)
                 feed.save()
                 response = {"feed_id": feed.id}
+                # Send Email to staff
+                _users = User.objects.filter(is_staff=True)
+                staff_emails = []
+                for i in _users:
+                    staff_emails.append(i.email)
+                ctx_email = {
+                    'type_feed': rate,
+                    'email': mail,
+                    'comment': comment,
+                    
+                }
+                sendEmailHtml(9, ctx_email, staff_emails)
             else:
                 response = {"error": "Correo invalido"}
             return HttpResponse(json.dumps(response), mimetype="application/json")

@@ -19,6 +19,7 @@ def sendEmailHtml(email_type, ctx, to):
         6- Correo de invitacion a un grupo
         7- Correo de invitacion a actarium
         8- Correo de notificacion de aceptacion de grupo
+        9- Correo notificacion de feedback al staff de Actarium
     """
 
     if email_type == 1:
@@ -54,6 +55,12 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['username'] + u" " + ctx['response'] + u" ha aceptado la invitación al grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_response_group_invitation.html')
+    elif email_type == 9:
+        subject = ctx['email'] + " Dejo un comentario tipo: "+ctx['type_feed']+" en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_feedback_notification.html')
+        print "Staff email to:      ----------\n", to
+        to = ['emesa@daiech.com']
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
