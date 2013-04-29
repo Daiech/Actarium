@@ -77,8 +77,19 @@ def sendFeedBack(request):
                 staff_emails = []
                 for i in _users:
                     staff_emails.append(i.email)
+                if rate == '0':
+                    type_feed = 'General'
+                elif rate == '1':
+                    type_feed = 'Sugerencia'
+                elif rate == '2':
+                    type_feed = 'Error'
+                elif rate == '3':
+                    type_feed = 'Pregunta'
+                else:
+                    type_feed = 'No definido'
+                
                 ctx_email = {
-                    'type_feed': rate,
+                    'type_feed': type_feed,
                     'email': mail,
                     'comment': comment,
                     

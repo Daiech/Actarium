@@ -31,7 +31,6 @@ def sendEmailHtml(email_type, ctx, to):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_reunion.html')
     elif email_type == 3: # colocar restriccioin
-
         subject = ctx['firstname']+" (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes.html')
@@ -59,8 +58,6 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['email'] + " Dejo un comentario tipo: "+ctx['type_feed']+" en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_feedback_notification.html')
-        print "Staff email to:      ----------\n", to
-        to = ['emesa@daiech.com']
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
@@ -73,19 +70,19 @@ def sendEmailHtml(email_type, ctx, to):
     if email_type == 3 or email_type == 4 or email_type == 6:
         to = activeFilter(to)
 
-    print 'se enviara un correo a las siguientes direcciones ', to
+        #    print 'se enviara un correo a las siguientes direcciones ', to
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, "text/html")
     try:
         msg.send()
     except:
-        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
+        #        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
         saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
 
 def activeFilter(email_list):
     new_email_list = []
-    print '----------Active filter----------------------------------------'
+    #    print '----------Active filter----------------------------------------'
     for email in email_list:
         _user = User.objects.get(email=email)
         if _user.is_active == True:
