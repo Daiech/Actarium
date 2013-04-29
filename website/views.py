@@ -12,6 +12,7 @@ from emailmodule.views import sendEmailHtml
 from account.templatetags.gravatartag import showgravatar
 from website.models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 import datetime
 
 def home(request):
@@ -102,6 +103,18 @@ def sendFeedBack(request):
         return HttpResponseRedirect("/")
     return True
 
+@login_required(login_url='/account/login')
+def showFeedBack(request):
+    '''
+    Visualizacion de comentarios ingresados en Actarium (feedback)
+    '''
+    saveViewsLog(request,"website.views.showFeedBack")
+    if request.user.is_staff:
+        _feedBack = feedBack.objects.all().order_by("-date_added")
+        return render_to_response('website/feedback.html', {'feeds': _feedBack }, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect("/")
+    
 
 def validateEmail(email):
     if len(email) > 7:
