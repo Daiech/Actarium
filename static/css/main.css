@@ -862,7 +862,7 @@ Show Minutes
 */
 .hoja{width: 70%;margin:auto;}
     #sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
-    #minute, .minute{
+    .minute{
         border: solid thin #ddd;
         background-color: #fff;
         box-shadow: 8px 8px 6px -6px gray;
@@ -875,6 +875,13 @@ Show Minutes
         margin-top: 40px;
         margin-left: 0;
         /*padding: 40px;*/
+        padding: 0 80px;
+    }
+    .minute header img{
+        margin-top: 0;
+    }
+    .minute header h3{
+        margin: 0;
     }
     .minute > div{
         padding: 0 80px;

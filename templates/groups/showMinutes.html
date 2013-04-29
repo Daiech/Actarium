@@ -57,11 +57,17 @@
 <!-- <script src="{{STATIC_PREFIX}}js/textareas.js"></script> -->
 <script>
 	$(document).on("ready",function(){
-		$(".btn-approve").on("click",setApprove)
-		$(".btn-no-approve").on("click",newAnnotation)
-		$("#button-save").on("click",saveAnnotation)
-		$('#minutes-html-data').val($('#data-for-pdf').html());
+		$(".btn-approve").on("click",setApprove);
+		$(".btn-no-approve").on("click",newAnnotation);
+		$("#button-save").on("click",saveAnnotation);
+		$('#minutes-html-data').val($('#minute').html());
+		// resizeIframe($("#minutes-iframe"));
+		// $("#minutes-iframe").height(contentWindow.document.body.scrollHeight + 'px')
 	});
+	function resizeIframe(obj) {
+	    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+		var html = $('#minutes-html-data').val($('#minutes-iframe').contents().find("html").html());
+	}
 	function callBackSign(data){
 		console.log(data)
 		$("#div-sign").fadeOut(300,function(){$(this).empty()})
@@ -113,7 +119,8 @@
 		$("#new-annotation").removeClass("hidden");
 		goToByScroll("#new-annotation", function(){
 			$("#new-annotation textarea").focus();
-			tinyMCE.get('textarea-new-annotation').focus()}
+			tinyMCE.get('textarea-new-annotation').focus();
+		}
 		);
 	}
 	function saveAnnotation(e){
@@ -127,7 +134,7 @@
 		sendAjax("/groups/{{group.slug}}/add-new-annotation",params,"", function(data){
 			if(data){
 				// console.log(data)
-				var m = '<div class="annotation">\
+				var m = '<div class="annotation bb">\
 								<div class="user-gravatar pull-left">\
 									<img class="size32 avatar" src="' + gravatar + '" alt="' + username + '" />\
 								</div>\
