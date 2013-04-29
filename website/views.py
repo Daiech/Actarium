@@ -8,8 +8,12 @@ from groups.models import reunions, assistance, rel_user_group
 from actions_log.views import saveActionLog, saveViewsLog
 from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
+from emailmodule.views import sendEmailHtml
+from account.templatetags.gravatartag import showgravatar
 from website.models import *
-
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+import datetime
 
 def home(request):
     if request.user.is_authenticated():
@@ -31,7 +35,7 @@ def home(request):
 
         #-----------------<REUNIONES>-----------------
         # my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
-        my_reu = reunions.objects.filter(id_group__in=_groups_list).order_by("-date_convened")
+        my_reu = reunions.objects.filter(id_group__in=_groups_list, date_reunion__gt=datetime.date.today()).order_by("-date_convened")
         json_array = list()
         for reunion in my_reu:
             try:
@@ -69,6 +73,29 @@ def sendFeedBack(request):
                 feed = feedBack(type_feed=rate, email=mail, comment=comment)
                 feed.save()
                 response = {"feed_id": feed.id}
+                # Send Email to staff
+                _users = User.objects.filter(is_staff=True)
+                staff_emails = []
+                for i in _users:
+                    staff_emails.append(i.email)
+                if rate == '0':
+                    type_feed = 'General'
+                elif rate == '1':
+                    type_feed = 'Sugerencia'
+                elif rate == '2':
+                    type_feed = 'Error'
+                elif rate == '3':
+                    type_feed = 'Pregunta'
+                else:
+                    type_feed = 'No definido'
+                
+                ctx_email = {
+                    'type_feed': type_feed,
+                    'email': mail,
+                    'comment': comment,
+                    
+                }
+                sendEmailHtml(9, ctx_email, staff_emails)
             else:
                 response = {"error": "Correo invalido"}
             return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -76,6 +103,18 @@ def sendFeedBack(request):
         return HttpResponseRedirect("/")
     return True
 
+@login_required(login_url='/account/login')
+def showFeedBack(request):
+    '''
+    Visualizacion de comentarios ingresados en Actarium (feedback)
+    '''
+    saveViewsLog(request,"website.views.showFeedBack")
+    if request.user.is_staff:
+        _feedBack = feedBack.objects.all().order_by("-date_added")
+        return render_to_response('website/feedback.html', {'feeds': _feedBack }, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect("/")
+    
 
 def validateEmail(email):
     if len(email) > 7:

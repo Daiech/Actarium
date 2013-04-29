@@ -3,6 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 from actions_log.views import saveErrorLog
+from django.contrib.auth.models import User
 
 
 def sendEmailHtml(email_type, ctx, to):
@@ -18,20 +19,22 @@ def sendEmailHtml(email_type, ctx, to):
         6- Correo de invitacion a un grupo
         7- Correo de invitacion a actarium
         8- Correo de notificacion de aceptacion de grupo
+        9- Correo notificacion de feedback al staff de Actarium
     """
+
     if email_type == 1:
         subject = ctx['username']+" Bienvenido a Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_activate_account.html')
-    elif email_type == 2:
+    elif email_type == 2: # no necesary
         subject = ctx['firstname']+" (" + ctx['username'] + u") Te ha invitado a una reunión del grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_reunion.html')
-    elif email_type == 3:
+    elif email_type == 3: # colocar restriccioin
         subject = ctx['firstname']+" (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes.html')
-    elif email_type == 4:
+    elif email_type == 4: # colocar restriccion
         subject = ctx['firstname'] + " (" + ctx['username'] + u") te asignó como " + ctx['rolename'] + " en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_set_role.html')
@@ -39,7 +42,7 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['firstname'] + " (" + ctx['username'] + ") " + ctx['response'] + u" a la reunión de " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_confirm_assistance.html')
-    elif email_type == 6:
+    elif email_type == 6: # colocar restriccoin
         subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u" te invitó a unirte al grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_group_invitation.html')
@@ -51,6 +54,10 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['username'] + u" " + ctx['response'] + u" ha aceptado la invitación al grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_response_group_invitation.html')
+    elif email_type == 9:
+        subject = ctx['email'] + " Dejo un comentario tipo: "+ctx['type_feed']+" en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_feedback_notification.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
@@ -59,10 +66,26 @@ def sendEmailHtml(email_type, ctx, to):
     d = Context(ctx)
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
+
+    if email_type == 3 or email_type == 4 or email_type == 6:
+        to = activeFilter(to)
+
+        #    print 'se enviara un correo a las siguientes direcciones ', to
+
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, "text/html")
     try:
         msg.send()
     except:
-        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
+        #        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
         saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
+
+def activeFilter(email_list):
+    new_email_list = []
+    #    print '----------Active filter----------------------------------------'
+    for email in email_list:
+        _user = User.objects.get(email=email)
+        if _user.is_active == True:
+            new_email_list.append(email)
+            # print 'Se ha evitado enviar correo a: ', email
+    return new_email_list

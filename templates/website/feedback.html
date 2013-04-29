@@ -2,26 +2,39 @@
 {% block TITLE %}Acciones{% endblock %}
 {% load gravatartag %}
 {% block bodysettings %}
-<h3> Views Log</h3>
-<p>Registro de Paginas visitadas en Actarium </p>
-<h4>Numero de registros: {{ count }}</h4>
+<h3> Feedback</h3>
+<p>Registro de comentarios que han dejado los usuarios en Actarium</p>
 <br />
 <table id="table" >
  	<tr>
  		<th><a href="">ID</a></th>
- 		<th><a href="">Username</a></th>
- 		<th class=""><a href="/actions/order/extra">Page</a></th>
+ 		<th><a href="">Email</a></th>
+ 		<th><a href="">Type</a></th>
+ 		<th class='peque' ><a href="">Comment</a></th>
  		<th><a href="">Date</a></th>
- 		<th><a href="">IP</a></th>
  	</tr>
  	
-      {% for v in views %}
+      {% for f in feeds %}
       <tr>
-		<td>{{ v.id_user }}</td>
-		<td><a href="/actions/views?u={{ v.username}}">{{ v.username}}</a></td>
-		<td><a href="">{{ v.page}}</a></td>
-		<td><a href="">{{ v.date }}</a></td>
-		<td><a href="http://www.elhacker.net/geolocalizacion.html?host={{ v.ip}}" target="_blank">{{ v.ip}}</a></td>
+		<td>{{ f.pk }}</td>
+		<td><a href="">{{ f.email}}</a></td>
+		<td><a href="">
+		{% if f.type_feed == 0 %}
+                General
+        {% elif f.type_feed == 1 %}
+                Sugerencia
+        {% elif f.type_feed == 2 %}
+                Error
+        {% elif f.type_feed == 3 %}
+                Pregunta
+        {% else %}
+                No definido
+        {% endif %}
+		
+		
+		</a></td>
+		<td class='peque' ><a href="">{{ f.comment }}</a></td>
+		<td><a href="" target="_blank">{{ f.date_added}}</a></td>
 	  </tr>
       {% endfor %}
  
@@ -130,9 +143,11 @@ table tr:hover td{
 }
 
 .peque{
-	max-width: 150px;
+	max-width: 300px;
 
 }
+
+
 
 </style>
 {% endblock %}
@@ -140,7 +155,7 @@ table tr:hover td{
 {% block settings_js %}
 <script>
 $(document).on("ready", function() {
-		$("#settings-views").addClass("active");
+		$("#settings-feedback").addClass("active");
 	});
 </script>
 {% endblock %}
