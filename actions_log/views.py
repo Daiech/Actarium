@@ -104,7 +104,6 @@ def saveViewsLog(request,page):
                 id_user = request.user.pk
                 username = request.user.username
             else:
-                print "usuario anonimo"
                 id_user = 0
                 username = "Anonymous User"
             data = {
@@ -140,11 +139,6 @@ def showViewsLog(request):
             except:
                 count = views.find().count()
                 views_data = views.find().sort([("date", pymongo_DESCENDING)])
-#            data = []
-#            print " \n ------------Data------------------ \n"
-#            for v in views_data:
-#                print v
-#            print "\n------------------------------------------------\n"
             ctx = {"views": views_data, "count": count}
         except:
             ctx = {"views": [], 'count': 0}
@@ -158,36 +152,24 @@ def showViewsStats(request):
         try:
             connection = MongoClient('localhost',27017)
             db = connection.actarium
-            views = db.views
-            
-            try: 
-                if request.method == "GET":
-                    u = str(request.GET['u'])
-                    views_data = views.find({'username':u}).sort([("date", pymongo_DESCENDING)])
-            except:
-                views_data = views.find().sort([("date", pymongo_DESCENDING)])
-            
             from bson.code import Code
-            map = Code("function () {"
+            _map = Code("function () {"
                     "var key = this.page;"
                     "var values = {'id':key, count: 1 };"
                     "    emit(key,values);"
                    "}")
-            reduce = Code("function (key, values) {"
+            _reduce = Code("function (key, values) {"
                        "  var reducedValue = {'id':key,'count':0};"
                        "  for (var i = 0; i < values.length; i++) {"
                        "    reducedValue['count'] += parseInt(values[i].count);"
                        "  }"
                        "  return reducedValue;"
                       "}")
-            result_views = db.views.map_reduce(map, reduce, "result_views")
+            result_views = db.views.map_reduce(_map, _reduce, "result_views")
             mr = result_views.find()
             data = []
-            print " \n ------------MapReduce------------------ \n"
             for i in mr:
                 data.append(i)
-                print "\n------------------------------------------------\n",i    
-            
             ctx = {"views": data}
         except:
             ctx = {"views": []}

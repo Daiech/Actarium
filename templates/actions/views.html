@@ -18,7 +18,7 @@
       {% for v in views %}
       <tr>
 		<td>{{ v.id_user }}</td>
-		<td><a href="">{{ v.username}}</a></td>
+		<td><a href="/actions/views?u={{ v.username}}">{{ v.username}}</a></td>
 		<td><a href="">{{ v.page}}</a></td>
 		<td><a href="">{{ v.date }}</a></td>
 		<td><a href="http://www.elhacker.net/geolocalizacion.html?host={{ v.ip}}" target="_blank">{{ v.ip}}</a></td>
