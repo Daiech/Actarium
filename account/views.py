@@ -201,16 +201,44 @@ def myAccount(request):
         form = UserForm(request.POST, instance=request.user)
 
         if form.is_valid():
-            form.save()
-            saveActionLog(request.user, "CHG_USDATA", last_data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
-            update = True
+            _email = form.cleaned_data['email']
+            print "Correo a cambiar", _email
+            try:
+                _user = User.objects.get(email=_email)
+                if request.user.username == _user.username:
+                    print "Si se puede cambiar el correo, el usuario que lo tiene es el mismo."
+                    saveActionLog(request.user, "CHG_USDATA", last_data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
+                    form.save()
+                    update = True
+                    error_email = None
+                else:
+                    print "El correo no se puede cambiar, otro usuario tiene el este correo ya asignado"
+                    error_email = True
+                    update = False
+            except User.DoesNotExist:
+                print "No existe un usuario con ese correo, el correo puede ser asignado"
+                saveActionLog(request.user, "CHG_USDATA", last_data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
+                form.save()
+                update = True
+                error_email = None
+            except User.MultipleObjectsReturned:
+                print "Multiples objetos retornados, error en la base de datos, se debe revizar"
+                error_email = True
+                update = False
+            except:
+                print "Error desconocido"
+                error_email = True
+                update = False
         else:
             update = False
+            error_email = None
     else:
         form = UserForm(instance=request.user)
         update = False
+        error_email = None
     passForm = PasswordChangeForm(user=request.user)
-    ctx = {"formUser": form, "passForm": passForm, "dataUpdate": update, "passwordUpdate": False}
+    print "update: ", update
+    ctx = {"formUser": form, "passForm": passForm, "dataUpdate": update, "passwordUpdate": False, "error_email": error_email}
     return render_to_response('account/index.html', ctx, context_instance=RequestContext(request))
 
 
@@ -228,7 +256,7 @@ def PasswordChange(request):
         passForm = PasswordChangeForm(user=request.user)
         passUpdate = False
     form = UserForm(instance=request.user)
-    ctx = {"formUser": form, "passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate}
+    ctx = {"formUser": form, "passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate, "error_email": False}
     return render_to_response('account/index.html', ctx, context_instance=RequestContext(request))
 
 # --------------------------------</Cuenta de Usuario>----------------------

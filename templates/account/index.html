@@ -120,7 +120,9 @@
 	$(document).on("ready", function() {
 		$("#settings-account").addClass("active");
 	});
-
+	{% if error_email %}
+    setAlertError("Error al actualizar correo","Tu correo electronico no pudo ser actualizado")
+    {% endif %}
     {% if dataUpdate %}
     setAlertMessage("Datos Actualizados","Tus datos fueron actualizados correctamente")
     {% endif %}
