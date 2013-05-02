@@ -55,7 +55,7 @@ def groupsList(request):
     '''
     lista los grupos del usuario registrado
     '''
-    saveViewsLog(request,"groups.views.groupList")
+    saveViewsLog(request, "groups.views.groupList")
     try:
         #-----------------<INVITACIONES>-----------------
         my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
@@ -85,7 +85,7 @@ def setRoltoUser(request, _user, _group, role, remove):
             4 = admin
         remove is a boolean
     '''
-    saveViewsLog(request,"groups.views.setRoltoUser")
+    saveViewsLog(request, "groups.views.setRoltoUser")
     rel = getRelUserGroup(_user, _group)
     if rel:
         role_name = False
@@ -133,7 +133,7 @@ def setRole(request, slug_group):
     """
         Set or remove role to a user
     """
-    saveViewsLog(request,"groups.views.setRole")
+    saveViewsLog(request, "groups.views.setRole")
     error = False
     if request.is_ajax():
         if request.method == 'GET':
@@ -171,7 +171,7 @@ def groupSettings(request, slug_group):
     '''
         Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
-    saveViewsLog(request,"groups.views.groupSettings")
+    saveViewsLog(request, "groups.views.groupSettings")
     try:
         u_selected = None
         if request.method == "GET":
@@ -197,7 +197,7 @@ def groupInfoSettings(request, slug_group):
     '''
         Muestra la configuracion de un grupo
     '''
-    saveViewsLog(request,"groups.views.groupInfoSettings")
+    saveViewsLog(request, "groups.views.groupInfoSettings")
     try:
         g = groups.objects.get(slug=slug_group, is_active=True)
     except groups.DoesNotExist:
@@ -425,18 +425,24 @@ def showGroup(request, slug):
                     })
                 if request.method == "GET":
                     try:
+                        # Say if the user can upload minutes
                         no_redactor = request.GET['no_redactor']
                     except Exception:
                         no_redactor = 0
                 pro = False
                 if isProGroup(g):
                     pro = getProGroup(g)
-                ctx = {"group": g, "current_member": _user, "members": members, "minutes": m, "reunions": _reunions, "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": pro}
+                ctx = {
+                    "group": g, "current_member": _user, "members": members, "minutes": m, "reunions": _reunions,
+                    "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": pro}
                 return render_to_response('groups/showGroup.html', ctx, context_instance=RequestContext(request))
+
             if _user.is_admin and _user.is_active:
                 return HttpResponseRedirect('/groups/' + str(g.slug) + "/admin")
+
             if _user.is_superadmin and _user.is_active:
                 return HttpResponseRedirect("/settings/organizations")
+
             if not _user.is_active:
                 return HttpResponseRedirect('/groups/' + "?group=" + str(g.slug))
         # request.user is the org admin of this group? redirect to /settings/organizations

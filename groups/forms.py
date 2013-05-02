@@ -37,8 +37,8 @@ class newMinutesForm3(forms.Form):
 
 class newMinutesForm(forms.Form):
     TYPES = [('ORDINARIA', 'ORDINARIA'), ('EXTRAORDINARIA', 'EXTRAORDINARIA')]
-    code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Codigo de acta', 'autofocus': 'autofocus'}))
-    date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Código de acta', 'autofocus': 'autofocus'}))
+    date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick', 'placeholder': 'Fecha/Hora de la reunión'}), input_formats=['%Y-%m-%d %I:%M %p'])
     location = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Orden del día'}))
     agreement = forms.CharField(label="Acuerdos", widget=forms.Textarea(attrs={'placeholder': 'Acuerdos'}))

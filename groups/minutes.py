@@ -904,13 +904,15 @@ def showMinutes(request, slug, minutes_code):
             ctx = {
                 "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
                 "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
+                "url_minute": request.get_full_path(),
                 "minute_template": loader.render_to_string(address_template, {
+                    "URL_BASE": URL_BASE,
                     "newMinutesForm": list_newMinutesForm,
                     "group": group,
                     "members_selected": m_assistance,
                     "members_no_selected": m_no_assistance,
-                    "members_signers":list_ms,
-                    "url_logo":url_logo,
+                    "members_signers": list_ms,
+                    "url_logo": url_logo,
                     "president": member_president,
                     "secretary": member_secretary}),
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
@@ -924,7 +926,16 @@ def showMinutes(request, slug, minutes_code):
         #     return HttpResponseRedirect("/groups/" + slug + "#no-tienes-rol")
     else:
         return HttpResponseRedirect('/groups/#error-its-not-your-group')
-    return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
+
+    if request.method == 'GET':
+        try:
+            only_minutes = request.GET['only']
+        except Exception, e:
+            only_minutes = False
+    if only_minutes:
+        return render_to_response('groups/onlyShowMinutes.html', ctx, context_instance=RequestContext(request))
+    else:
+        return render_to_response('groups/showMinutes.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')
@@ -1026,3 +1037,7 @@ def uploadMinutesAjax(request):
     else:
         response = {'data': "No es AJAX"}
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def deleteMinute(request):
+    pass

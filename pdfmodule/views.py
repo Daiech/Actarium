@@ -18,7 +18,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 # from reportlab.lib.pagesizes import A4
 # from reportlab.lib.units import inch
 from reportlab.platypus import Frame
-from xhtml2pdf.pisa import CreatePDF
+from xhtml2pdf.pisa import CreatePDF, startViewer
 from actions_log.views import saveActionLog, saveViewsLog
 
 
@@ -160,10 +160,13 @@ def minutesToPdfTest(request, id_minutes):
     else:
         return HttpResponseRedirect('/')
 
-def minutesHtmlToPdf(html_string,name_pdf):
-    pdf_address = "/pdf/%s_Actarium%s.pdf"%(name_pdf,int(random.random()*100000))
-    file_dir = "%s%s"%(MEDIA_ROOT,pdf_address)
-    file_dir = file(file_dir,"wb")
-    pdf = CreatePDF(html_string,file_dir)
+
+def minutesHtmlToPdf(html_string, name_pdf):
+    pdf_address = "/pdf/%s_Actarium%s.pdf" % (name_pdf, int(random.random() * 100000))
+    file_dir = "%s%s" % (MEDIA_ROOT, pdf_address)
+    file_dir = file(file_dir, "wb")
+    pdf = CreatePDF(html_string, file_dir)  #, default_css="#minute{margin:200px}")
+    if not pdf.err:
+        startViewer(name_pdf)
     file_dir.close()
-    return '/media%s'%(pdf_address)
+    return '/media%s' % (pdf_address)

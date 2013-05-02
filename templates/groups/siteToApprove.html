@@ -1,6 +1,8 @@
 {% load gravatartag %}
 {% load humanize %}
 	{% if space_to_approve or is_secretary %}
+	{%comment%}
+	{%endcomment%}
     <section id="sign" class="hoja white-box-container">
     	<header>
     		<!-- <div><img src="{{STATIC_PREFIX}}/img/icon-writter.png"></div> -->
@@ -68,9 +70,7 @@
 		<header>
     		<div><img src="{{STATIC_PREFIX}}/img/icon-writter.png" width="25px"></div>
     		<h3>Anotaciones</h3>
-    		<p>
-    			<small>Anotaciones y correcciones de la comisi&oacute;n aprobatoria.</small>
-    		</p>
+    		<small>Anotaciones y correcciones de la comisi&oacute;n aprobatoria.</small>
     	</header>
 		<hr>
 		<div>
@@ -85,15 +85,15 @@
 		<div class="mt20">
 			<ul id="annotations" class="mt20 unstyled">
 				{%for annon in annotations%}
-				<li class="row-fluid bb">
-					<div class="annotation span70">
+				<li class="row-fluid">
+					<div class="annotation bb span70">
 						<div class="user-gravatar pull-left">
 							<img class="size32 avatar" src="{{ annon.id_user.email|showgravatar:'32'}}" alt="{{annon.id_user.first_name}}" />
 						</div>
 						<div class="name-user-annotation">
 							<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
 							·
-							<time datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
+							<time title="{{annon.date_joined|date}}" datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
 						</div>
 						<div class="content-annotation">{{annon.annotation_text|safe}}
 						</div>

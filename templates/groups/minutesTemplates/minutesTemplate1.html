@@ -1,100 +1,169 @@
 {% load gravatartag %}
 <section class="row-fluid">
     <article id="minute" class="minute hoja white-box-container">
-        <header></header>
-    	<div id="data-for-pdf">
-        	<div style="margin-top:30px;margin-bottom:25px">
-                <img style="height:50px;display:inline-block" src="{{ url_logo }}" title="Logo" />
-                <br><br>
-                <h3><strong>{{group.name}}</strong></h3>
-        	</div>
-        	<div class="">
-        		<div class="hidden" style="display:none">{{newMinutesForm.type_reunion}}</div>
-        		<strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span> <hr>
-        		<p><strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span></p>
-        		<p><strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span></p>
-        		
-        		<hr>
-        		<strong>Lugar: </strong>{{ newMinutesForm.location }}<span style="display:block; float:right">{{ newMinutesForm.location.errors }}</span><hr>
-        		
-        		<div class="box">
-        			<div class="span6">
-        				<strong>Presentes: </strong> 
-            			<div class="member-list">
-                            {%if reunion%}
-                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-                            {%endif%}
-                            <ul class="unstyled">
-                            {% for member in members_selected%}
-                                <li style="padding:3px;">
-                                    <div class="">
-                                        <span><img style="width:20px;margin:5px"  src="{{member.id_user.email|showgravatar:'20'}}"></span> 
-                                        <span style="padding-left:5px;">&nbsp;&nbsp; {{member.id_user.first_name}} {{member.id_user.last_name}}</span>
-                                    </div>
-                                </li>
-                            {% endfor%}
-                            </ul>
-                   		 </div>
-        			</div>
-        			<div class="span6">
-        				<strong>Ausentes: </strong>
-            			<div class="member-list">
-                            {%if reunion%}
-                            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-                            {%endif%}
-                            <ul class="unstyled">
-                            {% for member in members_no_selected %}
-                                <li  style="padding:3px;">
-                                    <div class="">
-                                        <span><img style="width:20px;margin:5px"  src="{{member.id_user.email|showgravatar:'20'}}"></span>
-                                        <span style="padding-left:5px;"> &nbsp;&nbsp; {{member.id_user.first_name}} {{member.id_user.last_name}}</span>
-                                    </div>
-                                </li>
-                            {% endfor%}
-                            </ul>
-                    </div>
-        			</div>
-        		</div>
-        		<hr>
-        		<strong>Orden del dia:</strong>
-        		{{ newMinutesForm.agenda|safe }}<span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
-        		<hr>
-        		<strong>Acuerdos :</strong>
-        		{{ newMinutesForm.agreement|safe }}<span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span><br /><br />
-        	      
-                <div id="firmas">
-                    <table>
-                        <tr>
-                        {% if president %}
-                            <td style="padding-left:10px;padding-top:20px;">
-                                _______________________________ <br />
-                                {{president.id_user.first_name}} {{president.id_user.last_name}}<br />
-                                Presidente
-                            </td>
-                        {% endif %}
-                        {% if secretary %}
-                            <td style="padding-left:10px;padding-top:20px;">
-                                _______________________________ <br />
-                                {{secretary.id_user.first_name}} {{secretary.id_user.last_name}}<br />
-                                Secretario
-                            </td>
-                        {% endif %}
-                        </tr>
-                        {% for members in members_signers%}
-                            <tr>
-                                {% for m in members %}
-                                <td style="padding-left:10px;padding-top:20px;">
-                                        _______________________________ <br />
-                                        {{m.id_user.first_name}} {{m.id_user.last_name}}
-                                </td>
-                                {% endfor %}
-                           </tr>
-                        {% endfor%}
-                    </table>
-                </div>
+        <style type="text/css">
+            body{font-family:Helvetica;color: #555;}
+            .minute{
+                border: solid thin #ddd;
+                background-color: #fff;
+                box-shadow: 8px 8px 6px -6px gray;
+                border-radius: 3px;
+                padding-top: 40px;
+                width: 915px;
+                margin: 0 auto;
+            }
+            .minute header{
+                width: auto;
+                margin:30px 0;
+                margin-top: 40px;
+                margin-left: 0;
+                padding: 0 80px;
+            }
+            .minute header img{
+                margin-top: 0;
+            }
+            .minute header h3{
+                margin: 0;
+            }
+            #footerContent{
+                margin: 20px 0;
+                margin-top: 45px;
+            }
+            .list-of-members{margin:0;}
+            .box{overflow: hidden;}
+            .box > div{float: left;width: 50%}
+            ul{list-style-type: none;}
+            #headerContent{margin: 0}
+            #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
+            .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
+            #minutesContent{line-height: 1.8;margin: 0}
+            #firmas td{padding-top: 60px;width: 100%;}
+            #firmas table{width: 100%}
+            #table-list-members{margin-bottom: 20px;width: 100%;}
+            @page {
+              margin: 2.5cm;
+              margin-top: 3cm;
+              margin-bottom: 2.5cm;
+              font-size: 26px;
+              colordisplay:#555;
+              @frame header {
+                -pdf-frame-content: headerContent;
+                top: 1cm;
+                margin-left: 2.1cm;
+                margin-right: 1cm;
+                height: 2.5cm;
+              }
+              @frame footer {
+                -pdf-frame-content: footerContent;
+                bottom: 1cm;
+                margin-left: 2.5cm;
+                margin-right: 1cm;
+                margin-top: 1.5cm;
+                height: 2cm;
+              }
+            }
+        </style>
+        <div id="headerContent">
+            <div class="div-header">
+                <img src="{{ url_logo }}" title="Logo" alt="Logo" />
             </div>
-    	</div>
-        <footer style="min-height:50px;">
-        </footer>
+        </div>
+        <div id="minutesContent">
+            <div style="margin-top:0;margin-bottom:25px">
+                <h3 style="margin:0;">{{group.name}}</h3>
+            </div>
+    		<div class="hidden" style="display:none">
+                {{newMinutesForm.type_reunion}}
+                {%if reunion%}
+                <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+                {%endif%}
+            </div>
+            <p>
+                <strong>Acta No. </strong>{{ newMinutesForm.code }} <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>
+            </p>
+    		<p>
+                <strong>Fecha/Hora de inicio: </strong> {{ newMinutesForm.date_start}}<span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
+            </p>
+    		<p>
+                <strong>Fecha/Hora de finalizaci&oacute;n: </strong> {{ newMinutesForm.date_end}}<span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span>
+            </p>
+            <p>
+                <strong>Lugar: </strong> {{ newMinutesForm.location }} <span style="display:block; float:right">{{ newMinutesForm.location.errors }}</span>
+            </p>
+            <table id="table-list-members" border="0" width="100%">
+                <tr>
+                    <th style="text-align:left">Presentes:</th>
+                    <th style="text-align:left">Ausentes:</th>
+                </tr>
+                <tr>
+                    <td valign="top">
+                        <ul class="list-of-members">
+                        {% for member in members_selected%}
+                            <li style="padding:3px;">
+                                <div class="">
+                                    <span><img style="width:20px;margin:5px"  src="{{member.id_user.email|showgravatar:'20'}}"></span> 
+                                    <span style="padding-left:5px;">&nbsp;{{member.id_user.first_name}} {{member.id_user.last_name}}</span>
+                                </div>
+                            </li>
+                        {% endfor%}
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul class="list-of-members">
+                        {% for member in members_no_selected %}
+                            <li style="padding:3px;">
+                                <div class="">
+                                    <span><img style="width:20px;margin:5px"  src="{{member.id_user.email|showgravatar:'20'}}"></span>
+                                    <span style="padding-left:5px;"> &nbsp;{{member.id_user.first_name}} {{member.id_user.last_name}}</span>
+                                </div>
+                            </li>
+                        {% endfor%}
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            
+            <p><strong>Orden del dia:</strong></p>
+            {{ newMinutesForm.agenda|safe }}
+            <span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span>
+            
+            <strong>Acuerdos :</strong>
+            {{ newMinutesForm.agreement|safe }}
+            <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+              
+            <div id="firmas" style="margin-bottom:30px;">
+                <table>
+                    <tr>
+                    {% if president %}
+                        <td style="padding-left:10px;padding-top:60px;">
+                            _______________________________ <br />
+                            {{president.id_user.first_name}} {{president.id_user.last_name}}<br />
+                            Presidente
+                        </td>
+                    {% endif %}
+                    {% if secretary %}
+                        <td style="padding-left:10px;padding-top:60px;">
+                            _______________________________ <br />
+                            {{secretary.id_user.first_name}} {{secretary.id_user.last_name}}<br />
+                            Secretario
+                        </td>
+                    {% endif %}
+                    </tr>
+                    {% for members in members_signers%}
+                        <tr>
+                            {% for m in members %}
+                            <td style="padding-left:10px;padding-top:60px;">
+                                _______________________________ <br />
+                                {{m.id_user.first_name}} {{m.id_user.last_name}}
+                            </td>
+                            {% endfor %}
+                       </tr>
+                    {% endfor%}
+                </table>
+            </div>
+        </div>
+        <div id="footerContent">
+            <a href="http://actarium.com">Actarium.com</a>{%comment%} - p&aacute;g. #<pdf:pagenumber>{%endcomment%}
+        </div>
     </article>
 </section>

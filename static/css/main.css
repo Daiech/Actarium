@@ -818,7 +818,7 @@ h3 a{color: #3b5998}
 h3 a:hover{text-decoration:underline;}
 .button-group{min-height: 25px;}
 .icons-info {margin-top:20px;margin-bottom: -5px;}
-.icons-info span{font-size: 12px;margin-right: 15px;}
+.icons-info span{font-size: 12px;margin-right: 15px;padding-left: 2px;}
 .message-box{margin: 0 auto;width: 55%;margin-bottom: 20px;}
 .control-group{width: 70%;}
 .control-group input[type="checkbox"]{float: none;}
@@ -836,6 +836,11 @@ span.user-pend-l{padding-left: 2px;}
 .user-active-r{border-right: solid 4px #7bc779 !important;}
 .user-active-l{border-left: solid 4px #7bc779 !important;}
 .user-active-b{border-bottom: solid 4px #7bc779 !important;}
+
+.minute-no-approver-t{border-top: solid 4px rgb(202, 202, 202) !important;}
+.minute-no-approver-r{border-right: solid 4px rgb(202, 202, 202) !important;}
+.minute-no-approver-l{border-left: solid 4px rgb(202, 202, 202) !important;}
+.minute-no-approver-b{border-bottom: solid 4px rgb(202, 202, 202) !important;}
 
 i.icon-question-sign{background-image: url("/static/img/faq.png");background-position: 0 0;height:19px;width: 17px;}
 i.icon-wrench{background-image: url("/static/img/icon-admin.png"); background-position: 0 0;height:16px;width:16px;background-size: 16px 16px}
@@ -855,14 +860,15 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 
 
 .btn-groups-admin{display: block;margin: 0 auto;width: 58%;}
-.selected-group{background-color:#fffef1}
+/*.selected-group{background-color:#fffef1}*/
+.selected-group{background-color: rgb(248, 248, 248)}
 
 /*
 Show Minutes 
 */
 .hoja{width: 70%;margin:auto;}
     #sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
-    #minute, .minute{
+    .minute{
         border: solid thin #ddd;
         background-color: #fff;
         box-shadow: 8px 8px 6px -6px gray;
@@ -875,6 +881,13 @@ Show Minutes
         margin-top: 40px;
         margin-left: 0;
         /*padding: 40px;*/
+        padding: 0 80px;
+    }
+    .minute header img{
+        margin-top: 0;
+    }
+    .minute header h3{
+        margin: 0;
     }
     .minute > div{
         padding: 0 80px;
