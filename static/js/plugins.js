@@ -119,7 +119,7 @@ function main(){
                     comment.val("");
                     mail.parent().removeClass("error");
                     $("#feed-imput > button.btn").removeClass("active");
-                    closeFeedBack();  
+                    closeFeedBack(e);  
                 }
             });//sendAjax
         }
