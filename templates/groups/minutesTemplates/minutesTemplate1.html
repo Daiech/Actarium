@@ -32,7 +32,7 @@
             .list-of-members{margin:0;}
             .box{overflow: hidden;}
             .box > div{float: left;width: 50%}
-            ul{list-style-type: none;}
+            #minute ul{list-style-type: none;}
             #headerContent{margin: 0}
             #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
             .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
@@ -137,14 +137,14 @@
                     {% if president %}
                         <td style="padding-left:10px;padding-top:60px;">
                             _______________________________ <br />
-                            {{president.id_user.first_name}} {{president.id_user.last_name}}<br />
+                            {{president.id_user.first_name|upper}} {{president.id_user.last_name|upper}}<br />
                             Presidente
                         </td>
                     {% endif %}
                     {% if secretary %}
                         <td style="padding-left:10px;padding-top:60px;">
                             _______________________________ <br />
-                            {{secretary.id_user.first_name}} {{secretary.id_user.last_name}}<br />
+                            {{secretary.id_user.first_name|upper}} {{secretary.id_user.last_name|upper}}<br />
                             Secretario
                         </td>
                     {% endif %}
@@ -154,7 +154,7 @@
                             {% for m in members %}
                             <td style="padding-left:10px;padding-top:60px;">
                                 _______________________________ <br />
-                                {{m.id_user.first_name}} {{m.id_user.last_name}}
+                                {{m.id_user.first_name|upper}} {{m.id_user.last_name|upper}}
                             </td>
                             {% endfor %}
                        </tr>

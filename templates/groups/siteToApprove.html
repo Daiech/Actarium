@@ -24,46 +24,31 @@
 				</a>
 			</div>
 		{%endif%}
-		<div class="box row-fluid mt20">
-			<div class="span6">
-				<strong>Lista de aprobación:</strong>
-    			<ol id="approved-list" class="mt20">
-					{% if approved_list == 0 %}0{%else%}
-		    			{%for member in approved_list%}
-		    				<li id="approved-{{member.id_user.id}}">
-		    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
-		    					{{member.id_user.first_name}} {{member.id_user.last_name}}
-		    				</li>
-		    			{%endfor%}
-		    		{% endif %}
-	    		</ol>
-			</div>
-			<div class="span6">
-				<strong>Lista de miembros que no aprobaron:</strong>
-				<ol id="no-approved-list" class="mt20">
-    				{% if no_approved_list == 0 %}0{%else%}
-	    				{%for member in no_approved_list%}
-		    				<li  id="no-approved-{{member.id_user.id}}">
-		    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
-		    					{{member.id_user.first_name}} {{member.id_user.last_name}}
-		    				</li>
-		    			{%endfor%}
-	    			{% endif %}
-	    		</ol>
-			</div>
-		</div>
 		<div class="mt20">
-			<strong class="mt20">Miembros faltantes por aprobar:</strong>
-			{% if missing_approved_list == 0 %}0{%else%}
-			<ol id="missing-list" class="mt20">
-    			{%for member in missing_approved_list%}
+			<strong class="mt20">Comisi&oacute;n aprobatoria:</strong>
+			<ol id="commission-approving-list" class="mt20">
+    			{%for member in commission_approving%}
     				<li id="missing-{{member.id_user.id}}">
-    					<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+    					<div>
+    						<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+    					</div>
+    					<div>
     					{{member.id_user.first_name}} {{member.id_user.last_name}}
+    					</div>
+    					<div class="icon-approver-status">
+    						{%ifequal member.is_signed_approved 0%}
+    						<i class="icon-time"></i>
+    						{%endifequal%}
+    						{%ifequal member.is_signed_approved 1%}
+    						<i class="icon-ok"></i>
+    						{%endifequal%}
+    						{%ifequal member.is_signed_approved 2%}
+    						<i class="icon-remove-circle"></i>
+    						{%endifequal%}
+    					</div>
     				</li>
     			{%endfor%}
     		</ol>
-    		{% endif %}
 		</div>
 	</section>
 	<section class="hoja white-box-container" id="annotations-approve">

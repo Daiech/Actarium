@@ -869,29 +869,12 @@ def showMinutes(request, slug, minutes_code):
 
             ######## <APPROVER LISTS> #########
             try:
-                missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=0)
+                missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
                 missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
             except rel_user_minutes_signed.DoesNotExist:
                 print "NO HAY rel_user_minutes_assistance missing_approved_list"
             except Exception, e:
                 print "error,", e
-
-            approved_list = None
-            no_approved_list = None
-            try:
-                approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=1)
-                approved_list = 0 if len(approved_list) == 0 else approved_list
-            except rel_user_minutes_signed.DoesNotExist:
-                print "NO HAY rel_user_minutes_assistance APPROVED_LIST"
-            except Exception, e:
-                print "Error APPROVED_LIST,", e
-            try:
-                no_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current, is_signed_approved=2)
-                no_approved_list = 0 if len(no_approved_list) == 0 else no_approved_list
-            except rel_user_minutes_signed.DoesNotExist:
-                print "NO HAY rel_user_minutes_assistance NO_APPROVED_LIST"
-            except Exception, e:
-                print "Error NO_APPROVED_LIST:", e
 
             ######## </APPROVER LISTS> #########
 
@@ -916,8 +899,7 @@ def showMinutes(request, slug, minutes_code):
                     "president": member_president,
                     "secretary": member_secretary}),
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
-                "missing_approved_list": missing_approved_list,
-                "approved_list": approved_list, "no_approved_list": no_approved_list,
+                "commission_approving": missing_approved_list,
                 "annotations": annon
             }
         else:

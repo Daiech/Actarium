@@ -54,52 +54,31 @@
 {%endblock%}
 {% block js %}
 <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
-<!-- <script src="{{STATIC_PREFIX}}js/textareas.js"></script> -->
 <script>
 	$(document).on("ready",function(){
-		$(".btn-approve").on("click",setApprove);
-		$(".btn-no-approve").on("click",newAnnotation);
-		$("#button-save").on("click",saveAnnotation);
+		$(".btn-approve").on("click", setApprove);
+		$(".btn-no-approve").on("click", newAnnotation);
+		$("#button-save").on("click", saveAnnotation);
 		$('#minutes-html-data').val($('#minute').html());
-		// resizeIframe($("#minutes-iframe"));
-		// $("#minutes-iframe").height(contentWindow.document.body.scrollHeight + 'px')
 	});
-	function resizeIframe(obj) {
-	    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-		var html = $('#minutes-html-data').val($('#minutes-iframe').contents().find("html").html());
-	}
-	function callBackSign(data){
-		console.log(data)
-		$("#div-sign").fadeOut(300,function(){$(this).empty()})
-		var u = $("#missing-"+data["user-id"]).html()
-		$("#missing-"+data["user-id"]).fadeOut(300,function(){$(this).empty()})
+	function callBackApprove(data){
+		$("#div-sign").fadeOut(300,function(){$(this).empty()});
+		var u = $("#missing-"+data["user-id"]);
 		if(data['approved']==1){
-			var l = $("#approved-list")
-			if (l.html() == 0){
-				l.empty()
-			}
-			l.append("<li>"+u+"</li>")
-			setAlertMessage("Aprobado!", "Haz aprobado esta acta.")
-		}
-		if(data['approved']==2){
-			var l = $("#no-approved-list")
-			if(l.html()==0){
-				l.empty()
-			}
-			l.append("<li>"+u+"</li>")
-			setAlertMessage("No Aprobado!", "No haz aprobado esta acta.")
+			u.find("div.icon-approver-status").html('<i class="icon-ok"></i>');
+			setAlertMessage("Aprobado!", "Haz aprobado esta acta.");
 		}
 	}
 	function setApprove(e){
 		e.preventDefault();
-		$(this).attr({"disabled":"disabled"})
+		$(this).attr({"disabled":"disabled"});
 		var minutes_id = $(this).attr("data-minutes");
-		var approved = parseInt($(this).attr("data-approve"));
+		var is_approved = parseInt($(this).attr("data-approve"));
 		sendAjax(
 			"/groups/setApprove",
-			{"m_id":minutes_id, "approve": approved},
+			{"m_id":minutes_id, "approve": is_approved},
 			"#btn-sign span",
-			callBackSign
+			callBackApprove
 			)
 	}
 	function goToByScroll(element, callback){// Scroll
@@ -113,7 +92,7 @@
 	        theme : "simple",
 	        mode : "textareas",
 	        height : "80",
-	        width : "70%",
+	        width : "100%",
 	        content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
 		});
 		$("#new-annotation").removeClass("hidden");
@@ -168,5 +147,7 @@
 	#button-save{margin-top: 5px;}
 	article header img{margin-top: 10px;}
 	#annotations-approve{margin-top: 20px;}
+	#commission-approving-list > li > div{display: inline;}
+	.icon-approver-status i{margin-top: 5px}
 </style>
 {% endblock %}
