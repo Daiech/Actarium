@@ -141,6 +141,7 @@ class private_templates(models.Model):
 
 class minutes(models.Model):
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_creator = models.ForeignKey(User, null=False, related_name='%(class)s_id_creator')
     date_created = models.DateTimeField(auto_now=True)
     id_extra_minutes = models.IntegerField(max_length=5)
     id_template = models.ForeignKey(templates,  null=False, related_name='id_minutes_type')
@@ -200,16 +201,6 @@ class assistance(models.Model):
 
     class Meta:
         unique_together = ('id_user', 'id_reunion')
-
-
-class feddback(models.Model):
-    id_user = models.ForeignKey(User, null=True, related_name='%(class)s_id_user')
-    title = models.CharField(max_length=150, verbose_name="title")
-    comment = models.TextField(blank=True)
-    date = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return "feedback: %s " % (self.title)
 
 
 class rel_user_minutes_assistance(models.Model):

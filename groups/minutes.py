@@ -636,6 +636,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         _reunion = None
 
         ######## <SLUG TEMPLATE> #########
+        print "SLUG TEMPLATE:", slug_template
         _template = getTemplateMinutes(slug_template)
         list_templates = getAllPublicTemplates()
         list_private_templates = getAllPrivateTemplates(id_group=group)
@@ -696,18 +697,18 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
         ######## <SHOW_THE_MINUTE_FORM> #########
         else:
+            form = newMinutesForm()
+            _reunion = None
             if id_reunion:
                 _reunion = getReunionById(id_reunion)
-                form = newMinutesForm(initial={"location": _reunion.locale})
-            else:
-                form = newMinutesForm()
-                _reunion = None
+                if _reunion:
+                    form = newMinutesForm(initial={"location": _reunion.locale})
         ######## <SHOW_THE_MINUTE_FORM> #########
 
         ######## <GET_LAST_MINUTES> #########
         last = getLastMinutes(group)
         ######## <GET_LAST_MINUTES> #########
-
+        print _template.address_template
         ctx = {'TITLE': "Nueva Acta",
                "newMinutesForm": form,
                "group": group,
@@ -766,6 +767,7 @@ def saveMinute(request, group, form, _template):
                 id_extra_minutes=myNewMinutes_type_1.pk,
                 id_group=group,
                 id_template=_template,
+                id_creator=request.user
             )
             myNewMinutes.save()
             id_user = request.user

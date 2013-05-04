@@ -40,6 +40,7 @@
             #firmas td{padding-top: 60px;width: 100%;}
             #firmas table{width: 100%}
             #table-list-members{margin-bottom: 20px;width: 100%;}
+            .tinymce-textareas{padding: 5px;}
             @page {
               margin: 2.5cm;
               margin-top: 3cm;
@@ -105,7 +106,7 @@
     				<td style="padding:5px"><strong>ORDEN DEL D&Iacute;A</strong></td>
     			</tr>
     			<tr>
-    				<td style="padding:10px">
+    				<td class="tinymce-textareas">
                         {{ newMinutesForm.agenda|safe }}
                         <span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> 
                     </td>
@@ -114,7 +115,7 @@
     				<td style="padding:5px"><strong>DESARROLLO ORDEN DEL D&Iacute;A</strong></td>
     			</tr>
     			<tr>
-    				<td style="padding:10px">
+    				<td class="tinymce-textareas">
                         {{ newMinutesForm.agreement|safe }}
                         <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
                     </td>
