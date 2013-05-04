@@ -389,7 +389,7 @@ def getApproversFromMinutes(id_minutes):
 
 def getWritersOfGroup(id_group):
     try:
-        return rel_user_group.objects.filter(id_mgroup=id_group, is_secretary=True, is_active=True)
+        return rel_user_group.objects.filter(id_group=id_group, is_secretary=True, is_active=True)
     except rel_user_group.DoesNotExist:
         return None
     except Exception, e:
@@ -423,7 +423,6 @@ def getPresidentAndSecretary(group, minutes_current=None):
     return (member_president, member_secretary)
 
 
-# @login_required(login_url='/account/login')
 def newAnnotation(request, slug_group):
     saveViewsLog(request, "groups.minutes.newAnnotation")
     print "ENTRANDO!"
@@ -442,14 +441,15 @@ def newAnnotation(request, slug_group):
 
                     ########### <uncomment to call the function:> ##################
 
-                    # writter_group = getWritersOfGroup(g)
-                    # approver_list = getApproversFromMinutes(minutes_id)
-                    # email_list = list()
-                    # for ap in writter_group:
-                    #     email_list.append(ap.id_user.email)
-                    # email_list = list()
-                    # for ap in approver_list:
-                    #     email_list.append(ap.id_user.email)
+                    writter_group = getWritersOfGroup(g)
+                    approver_list = getApproversFromMinutes(minutes_id)
+                    email_list = list()
+                    for ap in writter_group:
+                        email_list.append(ap.id_user.email)
+                    email_list = list()
+                    for ap in approver_list:
+                        email_list.append(ap.id_user.email)
+
                     # send Email HERE with email_list
 
                     ########### </uncomment to call the function:> ##################
@@ -636,7 +636,6 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         _reunion = None
 
         ######## <SLUG TEMPLATE> #########
-        print "SLUG TEMPLATE:", slug_template
         _template = getTemplateMinutes(slug_template)
         list_templates = getAllPublicTemplates()
         list_private_templates = getAllPrivateTemplates(id_group=group)
@@ -708,7 +707,6 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ######## <GET_LAST_MINUTES> #########
         last = getLastMinutes(group)
         ######## <GET_LAST_MINUTES> #########
-        print _template.address_template
         ctx = {'TITLE': "Nueva Acta",
                "newMinutesForm": form,
                "group": group,
