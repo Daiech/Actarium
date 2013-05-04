@@ -95,7 +95,8 @@
     				<td style="padding:5px"><strong>ASISTENTES</strong></td>
     				<td style="padding:5px">
                         {% for member in members_selected%}
-                               {{member.id_user.first_name}} {{member.id_user.last_name}},
+                               {{member.id_user.first_name}} {{member.id_user.last_name}}
+                               {% if not forloop.last %},{%endif%}
                    		{% endfor%}
                    </td>
     			</tr>
