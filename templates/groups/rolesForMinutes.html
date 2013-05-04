@@ -4,7 +4,7 @@
 {% load gravatartag %}
 
 <article class="message-box white-box-container">
-	<h3>Crear nueva Acta</h3>
+	<h3><a href="/groups/{{group.slug}}">{{group.name}}</a> - Crear nueva Acta</h3>
 	<p><strong>Roles de usuario:</strong> Debes llenar la asistencia y definir roles antes de crear el acta</p>
 	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 		{% csrf_token %}
@@ -89,7 +89,7 @@
 				</tr>
                 {%endfor%}
 			</table>
-			<hr>
+			<br>
 			<div id="add-new-member" class="mt20 pull-left">
 				<div class="icons-info">
 	                <span>Info:</span>
@@ -120,7 +120,7 @@
 				<a href="/groups/{{group.slug}}" class="btn">
                 	<i class="icon-arrow-left"></i> Volver al grupo
                 </a>
-                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{{id_reunion}}/{%endif%}" class="btn btn-info">
+                <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{{id_reunion}}/{{template}}{%endif%}" class="btn btn-info">
                     Siguiente <i class="icon-arrow-right icon-white"></i>
                 </a>
 			</div>

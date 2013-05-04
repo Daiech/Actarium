@@ -125,7 +125,7 @@ def getAssistanceFromRolUserMinutes(group):
 
 def getSignersFromRolUserMinutes(group):
     try:
-        selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, is_secretary=False, is_president=False, is_active=False)
+        selected = rol_user_minutes.objects.filter(id_group=group, is_active=False, is_signer=True, is_secretary=False, is_president=False)
         return selected
     except Exception, e:
         print e
@@ -554,7 +554,7 @@ def setRolForMinute(request, slug_group):
 @login_required(login_url='/account/login')
 def rolesForMinutes(request, slug_group, id_reunion):
     '''
-    return the board to give roles for a new minutes
+    return the board to set the roles for a new Minutes
     '''
     saveViewsLog(request, "groups.minutes.rolesForMinutes")
     try:
@@ -587,11 +587,38 @@ def rolesForMinutes(request, slug_group, id_reunion):
                 _president = None
             except Exception:
                 _president = None
-        # members = rol_user_minutes.objects.filter(id_group=g, id_minutes=None, is_active=False)
-        ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary, "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president}
+        # get last template used
+        try:
+            template = minutes.objects.filter(id_group=g, is_valid=True).order_by("-code")[0]
+            template = template.id_template.slug
+        except Exception:
+            template = ""
+        ctx = {
+            "group": g, "template": template, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary,
+            "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president}
         return render_to_response('groups/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")
+
+
+def getSignersList(m_signers):
+    """
+    edwin please document this
+    """
+    list_ms = []
+    list_temp = []
+    i = 0
+    for m in m_signers:
+        list_temp.append(m)
+        if i >= 1:
+            i = 0
+            list_ms.append(list_temp)
+            list_temp = []
+        else:
+            i = i + 1
+    if i == 1:
+        list_ms.append(list_temp)
+    return (list_ms, list_temp)
 
 
 @login_required(login_url='/account/login')
@@ -618,25 +645,13 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         members_assistant, members_no_assistant = getAssistanceFromRolUserMinutes(group)
         ######## </MEMBER ASSISTANCE LISTS> #########
 
-        ######## <MEMBER ASSISTANCE LISTS> #########
+        ######## <PRESIDENT AND SECRETARY> #########
         member_president, member_secretary = getPresidentAndSecretary(group)
-        ######## </MEMBER ASSISTANCE LISTS> #########
+        ######## </PRESIDENT AND SECRETARY> #########
 
         ######## <MEMBER SIGNERS LISTS> #########
         m_signers = getSignersFromRolUserMinutes(group)
-        list_ms = []
-        list_temp = []
-        i = 0
-        for m in m_signers:
-            list_temp.append(m)
-            if i >= 1:
-                i = 0
-                list_ms.append(list_temp)
-                list_temp = []
-            else:
-                i = i + 1
-        if i == 1:
-            list_ms.append(list_temp)
+        list_ms, list_temp = getSignersList(m_signers)
         ######## </MEMBER SIGNER LISTS> #########
 
         ######## <LOGO> #########
@@ -645,7 +660,6 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
             _pro = getProGroup(group)
             if _pro:
                 url_logo = URL_BASE + _pro.id_organization.logo_address
-
         ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########
