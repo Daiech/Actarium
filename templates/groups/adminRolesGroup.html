@@ -50,7 +50,7 @@
 				<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
 						<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
-						{%if not m.is_active%}title="{{m.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
+						{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
 	                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
 	                        {{m.id_user.first_name}} {{m.id_user.last_name}}
 	                        {%if m.id_user == user%}
