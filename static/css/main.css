@@ -133,8 +133,9 @@ header #navbar-button-container > ul li a {
     display: block;
 }
 #logo-actarium-p{
-    background-image: url('/static/img/texturas_menu2.png');
-    background-position: -88px -32px;
+    /*background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -32px;*/
+    background-image: url('/static/img/actarium-beta.png');
     height: 45px;
     width: 131px;
 }
