@@ -84,7 +84,7 @@
                     {%for member in members%}
                         <li style="display:inline" class="">
                             <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
-                                <div class="member-pic {%if not member.is_active%}user-pend-b{%else%}user-active-b{%endif%}" title="{%if not member.is_active%}{{member.id_user.username}} a&uacute;n no ha aceptado la invitaci&oacute;n{%else%}{{member.id_user.first_name}}{%endif%}">
+                                <div class="member-pic {%if not member.is_active%}user-pend-b{%else%}user-active-b{%endif%}" title="{%if not member.is_active%}{{member.id_user.username}} ({{member.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n{%else%}{{member.id_user.first_name}}{%endif%}">
                                     <div class="user-name-pic">{{member.id_user.username}}</div>
                                     <div class="w42" style="height:44px;">
                                         <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
