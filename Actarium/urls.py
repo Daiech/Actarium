@@ -27,6 +27,9 @@ urlpatterns = patterns('',
     url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
+
+    url(r'^ads/(?P<id_ads>[-\w]+)$', 'ads.views.home'),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
