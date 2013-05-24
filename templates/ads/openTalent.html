@@ -12,6 +12,7 @@
 		body {
 			background-image: url("/static/img/debut_light.png");
 			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			/*color: #00aeaa;*/
 		}
 		.white-box-container{
 		    background-color: #fff;
@@ -19,7 +20,60 @@
 		    border: 1px solid #79B632;
 		    font-size: 1em;
 		    /*margin-bottom: 20px;*/
+		    overflow: hidden;
 		    padding: 15px 15px;
+		}
+		.texto p{margin: 8px;}
+		a,
+	    a:visited {
+	        text-decoration: none;
+	        color:#00aeaa;padding: 0;margin: 0;
+	    }
+	    #time-counter p span{color: #555;font-size: 18px;}
+	    /*OPEN TALENT BBVA*/
+	    .blueButton{
+	        background:#6da952 url(/static/img/btt-bg.png) no-repeat 0px -48px;
+	        border:1px solid #29447e;
+	        border-bottom-color:#1a356e;
+	        box-shadow:0 1px 0 rgba(0, 0, 0, .1);
+	        cursor:pointer;
+	        display:-moz-inline-box;
+	        display:inline-block;
+	        font-size: 11px;
+	        font-weight:bold;
+	        line-height:normal !important;
+	        padding:2px 6px;
+	        text-align:center;
+	        text-decoration:none;
+	        vertical-align:top;
+	        white-space:nowrap;
+	        color:#fff; 
+	    }
+	    .blueButton:active{
+	        background:#4f6aa3;
+	        border-bottom-color:#999;
+	    }
+	    .blueButton .blueButtonText,.blueButton input{
+	        background:none;
+	        border:0;
+	        color:#fff;
+	        cursor:pointer;
+	        display:-moz-inline-box;
+	        display:inline-block;
+	        font-family:'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+	        font-size: 11px;
+	        font-weight:bold;
+	        margin:0;
+	        outline:none;
+	        padding:1px 0 2px;
+	        white-space:nowrap
+	    }
+	    /*OPEN TALENT BBVA*/
+		@media (min-width: 768px) and (max-width: 979px) {
+		}
+		@media (max-width: 767px) {
+		}
+		@media (max-width: 480px) {
 		}
 	</style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -40,6 +94,7 @@
 			$('#horas').text(horas);
 			$('#minutos').text(minutos);
 			$('#segundos').text(segundos);
+			$('#milisegundos').text(milisegundos);
 
 			setTimeout("changeDateTime()", 100);
 		}
@@ -49,11 +104,32 @@
 	</script>
 </head>
 <body>
-	<div id="time-counter" class="white-box-container">
-		<div style="float:left">
-			<img src="/static/img/actarium-beta.png">
+	<!-- <a href="#"> -->
+		<div id="time-counter" class="white-box-container">
+			<div style="float:left">
+				<img src="/static/img/actarium-beta.png">
+			</div>
+			<div style="float:left">
+				<img src="/static/img/opentalent.png">
+			</div>
+			<div style="float:left;" class="texto">
+				<p>
+					Ay&uacute;danos con tu voto para nuestro proyecto <a href="https://www.centrodeinnovacionbbva.com/opentalent/votaciones/1766-actarium" target="_blank">Actarium</a>.
+				</p>
+				<p style="color:#78B632">
+					Quedan <span id="dias"></span> dias y <span id="horas"></span>:<span id="minutos"></span>:<span id="segundos"></span> horas para votar!
+				</p>
+				<p>
+				</p>
+					<a href="https://www.facebook.com/centrodeinnovacionbbva/app_182548865230257" target="_blank" class="blueButton">
+			            <span style="top: 4px;position: relative;"><img src="/static/img/facebook.png" width="16px"></span>
+			            <span class="blueButtonText" style="padding: 4px;">Votar con Facebook</span>
+			        </a>
+			        <span>
+				        &oacute; <a target="_blank" href="https://www.centrodeinnovacionbbva.com/opentalent/votaciones/1766-actarium">con correo electr&oacute;nico</a>
+				    </span>
+			</div>
 		</div>
-		<p>Ya casi se acaba el tiempo, quedan <span id="dias"></span> dias, <span id="horas"></span> horas, <span id="minutos"></span> minutos, <span id="segundos"></span> segundos para votar! ay&uacute;danos con tu voto </p>
-	</div>
+	<!-- </a> -->
 </body>
 </html>
