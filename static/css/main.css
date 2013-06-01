@@ -309,6 +309,9 @@ header div > #top-menu-style li{
     width: 24px;
 }
 #close-login-menu{position: relative;left: 0}
+#li-register-link:hover{background-color: white}
+#register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}
+#register-link:hover{text-decoration: underline;background-color: white;background-image:none;}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */

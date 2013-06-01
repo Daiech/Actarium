@@ -174,4 +174,4 @@ function sendAjax(url, params, load_elem, myCallback){
         }
     );
 }
-$(document).on("ready",main);
+$(document).ready(main);

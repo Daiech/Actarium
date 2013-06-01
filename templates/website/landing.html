@@ -189,21 +189,16 @@
     Termina Index Website
     **************************************************************************** */
 
-    #register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}
-    #register-link:hover{text-decoration: underline;}
 </style>
 {%endblock%}
 {% block js %}
 <script>
-    $(document).on("ready",function(){
+    $(document).ready(function(){
     	$(".carousel").carousel("cycle");
         $("i").tooltip();
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
         $("#register-link").on("click",register);
-
-        // Open Talen BBVA
-        $('#bbva').modal();
     });
     
     function login(e){
