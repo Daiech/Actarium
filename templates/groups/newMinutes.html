@@ -7,18 +7,29 @@
         <div class="row-fluid">
             <div class="">
                 <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-                <h3>
+                <h3 style="display:inline;member-list">
                     <a href="/groups/{{group.slug}}">{{group.name}}</a>
-                    <strong style="font-size:17px;color:gray"> -
-                    Crear nueva acta
+                    <strong style="font-size:17px;color:gray">
                         {%comment%}
+                    -
+                    Crear nueva acta
                             {%if reunion%}
                                 de la reuni&oacute;n de <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">{{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
                             {%endif%}
                         {%endcomment%}
                     </strong>
-                    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#template-list"><i class="icon-list-alt icon-white"></i> Plantillas</button>
                 </h3>
+                    ·
+                    <span class="">
+                        &Uacute;ltimo c&oacute;digo de Acta:
+                        {%if last.code%}
+                        <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
+                        {%else%}
+                        <small>No hay m&aacute;s actas</small>
+                        {%endif%}
+                    </span>
+                    ·
+                    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#template-list"><i class="icon-list-alt icon-white"></i> Cambiar Plantilla</button>
             </div>
             <div id="template-list" class="modal hide fade">
                 <div class="modal-header">
@@ -26,11 +37,11 @@
                     <h3>Seleccionar plantilla</h3>
                 </div>
                 <div class="modal-body">
-                    <span>Plantilla:</span>
+                    <span>Selecciona una plantilla:</span>
                     <ul class="unstyled">
                         {% for template in list_templates %}
-                        <li class="template-item">
-                            <div class="template-item-child">
+                        <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
+                            <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
                                 <a href="{{ template.slug }}" class="">{{ template.name }}</a>
                                 <div class="template-thumbnail" data-href="{{ template.slug }}">
                                     <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
@@ -39,9 +50,10 @@
                         </li>
                         {% endfor %}
                         {% for template in list_private_templates %}
-                        <li class="template-item">
-                            <div class="template-item-child">
+                        <li class="template-item {%ifequal slug_template template.id_template.slug%}template-item-selected{%endifequal%}">
+                            <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
                                 <a href="{{ template.id_template.slug }}" class="">{{ template.id_template.name }}</a>
+                                <span style="font-size:10px;" class="label label-info">Pro</span>
                                 <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
                                     <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
                                 </div>
@@ -54,7 +66,7 @@
                     <a href="#" class="btn" id="close-template-list">Cerrar</a>
                     <a id="change-template" href="#" class="btn btn-info">Aplicar Plantilla</a>
                 </div>
-            </div>
+            </div> <!-- close template-list -->
         </div>
     </header>
     <hr>
@@ -89,14 +101,6 @@
         {% endif %}
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-            <p class="t-a-c">
-                &Uacute;ltimo c&oacute;digo de Acta:
-                {%if last.code%}
-                <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
-                {%else%}
-                <small>No hay m&aacute;s actas</small>
-                {%endif%}
-            </p>
             {% include minutesTemplateForm %}
             <table>
                 <tr>
@@ -127,7 +131,6 @@
 </article>
 {%endblock%}
 {%block style%}
-
 <style>
     .form-horizontal table{margin: auto;width: auto;}
     table td .btn{margin-top:10px;}
@@ -140,10 +143,13 @@
     /*#template-list ul{display:inline-table;width: 100%}*/
     #template-list ul li{border:solid thin #ccc;display:inline-block;font-size: 14px;margin-bottom:5px;text-align: center; width: 167px;}
     #template-list ul li a{display: inline-block;}
+    .template-item{position: relative;}
     .template-item-child{border: solid thin white; padding: 5px;}
     .template-thumbnail{height: 160px;margin:0 auto;}
     .template-thumbnail img{margin-top: 0}
     .template-thumbnail:hover{cursor: pointer;}
+    .template-item-selected{background-color:rgb(240,255,240);border:solid thin #7bc779;}
+    .template-item-child-selected{border:solid thin #7bc779}
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
@@ -257,12 +263,14 @@
 
        function setTemplateSelectedColors (elem) {
            //reset selected items
-            $(".template-item").css({"border": "solid thin #ccc", "background-color":"white"});
-            $(".template-item-child").css({"border": "solid thin white"});
+            $(".template-item").removeClass("template-item-selected");
+            // $(".template-item").css({"border": "solid thin #ccc", "background-color":"white"});
+            $(".template-item-child").removeClass("template-item-child-selected");
+            // $(".template-item-child").css({"border": "solid thin white"});
 
             //set border and background to selected item
-            $(elem).parent().parent().css({"border": "solid thin #7bc779", "background-color": "rgb(240,255,240)"});
-            $(elem).parent().css({"border": "solid thin #7bc779"});
+            $(elem).parent().parent().addClass("template-item-selected");
+            $(elem).parent().addClass("template-item-child-selected");
        }
 
        $(".template-thumbnail").on("click",function(e){
@@ -274,7 +282,5 @@
 	});
    {% include minutesTemplateJs %}
 </script>
-
-
-  
+ 
 {% endblock %}

@@ -715,6 +715,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "last": last,
                "members_selected": members_assistant,
                "members_no_selected":  members_no_assistant,
+               "slug_template": slug_template,
                "minutesTemplateForm": _template.address_template,
                "minutesTemplateJs": _template.address_js,
                "list_templates": list_templates,
