@@ -13,39 +13,34 @@
 		        	- Acta: {{minutes.code}}
 		        </h3>
 		    </div>
-		    <div>
-		    	<span>Fecha de creaci&oacute;n: {{minutes.date_created}}</span>
-		    	
-        		<a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn"><i class="icon-plus"></i> Crear acta</a>
-	    			<form method="post" class="minutes-form-btn">
-	    				{% csrf_token %}
-	    				<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
-	    				<button type='submit' class="btn" ><i class="icon-file"></i> Generar PDF</button>
-	    			</form>
-		    </div>
 	    </div>
     </header>
-	<hr>
-    <section class="row-fluid">
-    	<ul class="pager hoja">
-			<li class="previous {%if not prev %}disabled{%endif%}">
-				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
-			</li>
-			<li><a href="/groups/{{group.slug}}">Ver listado</a></li>
-			<li class="next {%if not next %}disabled{%endif%}">
-				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
-			</li>
-		</ul>
-		{{minute_template}}
-    	<ul class="pager hoja">
-			<li class="previous {%if not prev %}disabled{%endif%}">
-				<a href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}">&larr; Anterior</a>
-			</li>
-			<li><a href="/groups/{{group.slug}}">Ver listado</a></li>
-			<li class="next {%if not next %}disabled{%endif%}">
-				<a href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}">Siguiente &rarr;</a>
-			</li>
-		</ul>
+	<!-- <hr> -->
+	<div id="minutes-bar-point"></div>
+    <div id="minutes-bar" class="mb20 b">
+    	<div class="hoja row-fluid">
+			<div class="pull-left">
+		    	<!-- <span>Fecha de creaci&oacute;n: {{minutes.date_created}}</span> -->
+		    	
+				<a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn"><i class="icon-plus"></i> Crear acta</a>
+				<form method="post" class="minutes-form-btn">
+					{% csrf_token %}
+					<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
+					<button type='submit' class="btn" ><i class="icon-file"></i> Generar PDF</button>
+				</form>
+				<button class="btn"><i class="icon-pencil"></i> Editar Acta</button>
+			</div>
+			<div class="pull-right">
+				<!-- <span class="b">1-1</span> -->
+				<div class="btn-group">
+					<a class="btn {%if not prev %}disabled{%endif%}" href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}"><i class="icon-arrow-left"></i></a>
+					<a class="btn {%if not next %}disabled{%endif%}" href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}"><i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+    	</div>
+    </div>
+    <section class="mt50 row-fluid">
+    	{{minute_template}}
     </section>
     
 	{% include "groups/siteToApprove.html" %}
@@ -54,12 +49,21 @@
 {%endblock%}
 {% block js %}
 <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/waypoints.min.js"></script>
 <script>
 	$(document).on("ready",function(){
 		$(".btn-approve").on("click", setApprove);
 		$(".btn-no-approve").on("click", newAnnotation);
 		$("#button-save").on("click", saveAnnotation);
 		$('#minutes-html-data').val($('#minute').html());
+		$('#minutes-bar-point').waypoint(function() {
+			if($("#minutes-bar").hasClass("minutes-bar-static")){
+				$("#minutes-bar").removeClass("minutes-bar-static").css({"position": "absolute"});
+			}
+			else{
+				$("#minutes-bar").addClass("minutes-bar-static").css({"position": "fixed"});
+			}
+		});
 	});
 	function callBackApprove(data){
 		$("#div-sign").fadeOut(300,function(){$(this).empty()});
@@ -149,5 +153,8 @@
 	#annotations-approve{margin-top: 20px;}
 	#commission-approving-list > li > div{display: inline;}
 	.icon-approver-status i{margin-top: 5px}
+
+	#minutes-bar{background-color: rgb(238, 238, 238); padding: 5px;position: absolute;left: 0;width: 99%;margin: 0;}
+	.minutes-bar-static{position: fixed;top: 70px;left: 0;}
 </style>
 {% endblock %}
