@@ -5,31 +5,72 @@
 <article>
     <header >
         <div class="row-fluid">
-            <div class="span10">
+            <div class="">
                 <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-                <h3><a href="/groups/{{group.slug}}">{{group.name}}</a>
+                <h3>
+                    <a href="/groups/{{group.slug}}">{{group.name}}</a>
                     <strong style="font-size:17px;color:gray"> -
                     Crear nueva acta
-                        {%if reunion%}
-                            de la reuni&oacute;n de <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">{{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
-                        {%endif%}
+                        {%comment%}
+                            {%if reunion%}
+                                de la reuni&oacute;n de <a href="/groups/calendar/{{reunion.date_convened|date:"Y-m-d"}}">{{reunion.date_convened|date}}</a> del grupo <a href="/groups/{{group.slug}}">{{reunion.id_group.name}}</a>
+                            {%endif%}
+                        {%endcomment%}
                     </strong>
+                    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#template-list"><i class="icon-list-alt icon-white"></i> Plantillas</button>
                 </h3>
+            </div>
+            <div id="template-list" class="modal hide fade">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Seleccionar plantilla</h3>
+                </div>
+                <div class="modal-body">
+                    <span>Plantilla:</span>
+                    <ul class="unstyled">
+                        {% for template in list_templates %}
+                        <li class="template-item">
+                            <div class="template-item-child">
+                                <a href="{{ template.slug }}" class="">{{ template.name }}</a>
+                                <div class="template-thumbnail" data-href="{{ template.slug }}">
+                                    <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% for template in list_private_templates %}
+                        <li class="template-item">
+                            <div class="template-item-child">
+                                <a href="{{ template.id_template.slug }}" class="">{{ template.id_template.name }}</a>
+                                <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
+                                    <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn" id="close-template-list">Cerrar</a>
+                    <a id="change-template" href="#" class="btn btn-info">Aplicar Plantilla</a>
+                </div>
             </div>
         </div>
     </header>
     <hr>
     
     <div class="containterMargin">
-        <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
+        <!-- <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p> -->
+        {%comment%}
         <div style="padding-bottom:20px;">
         {% for template in list_templates %}
-        	<button id="template_{{ template.pk }}" class="btn btn-success template_btn" data-slug={{ template.slug }}>{{ template.name }}</button>
+            <button id="template_{{ template.pk }}" class="btn btn-success template_btn" data-slug={{ template.slug }}>{{ template.name }}</button>
         {% endfor %}
         {% for template in list_private_templates %}
-        	<button id="template_{{ template.id_template.pk }}" class="btn btn-primary template_btn" data-slug={{ template.id_template.slug }} >{{ template.id_template.name }}</button>
+            <button id="template_{{ template.id_template.pk }}" class="btn btn-primary template_btn" data-slug={{ template.id_template.slug }} >{{ template.id_template.name }}</button>
         {% endfor %}
         </div>
+        {%endcomment%}
         {% if minutes_saved.error %}
             <div class="alert alert-error">
                 {%if minutes_saved.error == "e0"%}
@@ -88,27 +129,21 @@
 {%block style%}
 
 <style>
-    .form-horizontal table{
-        margin: auto;
-        width: auto;
-    }
+    .form-horizontal table{margin: auto;width: auto;}
+    table td .btn{margin-top:10px;}
+    .member-list{padding: 10px 0;}
+    .member-list ul li{padding: 5px;}
+    .member-list ul li:hover{/*background-color: #dadada;*/}
+    label{cursor: pointer;}
 
-    table td .btn{
-        margin-top:10px;
-    }
-    .member-list{
-        /*border: solid thin;*/
-        padding: 10px 0;
-    }
-    .member-list ul li{
-        padding: 5px;
-    }
-    .member-list ul li:hover{
-        /*background-color: #dadada;*/
-    }
-    label{
-        cursor: pointer;
-    }
+    #template-list{}
+    /*#template-list ul{display:inline-table;width: 100%}*/
+    #template-list ul li{border:solid thin #ccc;display:inline-block;font-size: 14px;margin-bottom:5px;text-align: center; width: 167px;}
+    #template-list ul li a{display: inline-block;}
+    .template-item-child{border: solid thin white; padding: 5px;}
+    .template-thumbnail{height: 160px;margin:0 auto;}
+    .template-thumbnail img{margin-top: 0}
+    .template-thumbnail:hover{cursor: pointer;}
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
@@ -189,12 +224,13 @@
 <!-- <script src="{{STATIC_PREFIX}}js/textareas.js"></script> -->
 
 <script type="text/javascript" >
-   $('.date-pick').datetimepicker({
-        dateFormat: 'yy-mm-dd',
-        controlType: 'select',
-        ampm: true
-    }).css({"z-index":"1034"});
    $(document).ready(function(){
+       $('.date-pick').datetimepicker({
+            dateFormat: 'yy-mm-dd',
+            controlType: 'select',
+            ampm: true
+        }).css({"z-index":"1034"});
+
 	   url_s = location.pathname.split("/")
 	   $(".template_btn").click(function(){
 			//console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
@@ -213,6 +249,28 @@
             width : "100%",
             content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
         });
+       // $("#template-list").modal("show");
+       $("#close-template-list").on("click",function(e){
+            e.preventDefault();
+            $("#template-list").modal("hide");
+       })
+
+       function setTemplateSelectedColors (elem) {
+           //reset selected items
+            $(".template-item").css({"border": "solid thin #ccc", "background-color":"white"});
+            $(".template-item-child").css({"border": "solid thin white"});
+
+            //set border and background to selected item
+            $(elem).parent().parent().css({"border": "solid thin #7bc779", "background-color": "rgb(240,255,240)"});
+            $(elem).parent().css({"border": "solid thin #7bc779"});
+       }
+
+       $(".template-thumbnail").on("click",function(e){
+            e.preventDefault();
+            setTemplateSelectedColors($(this));
+            var href = $(this).attr("data-href");
+            $("#change-template").attr("href",href);
+       })
 	});
    {% include minutesTemplateJs %}
 </script>
