@@ -425,7 +425,6 @@ def getPresidentAndSecretary(group, minutes_current=None):
 
 def newAnnotation(request, slug_group):
     saveViewsLog(request, "groups.minutes.newAnnotation")
-    print "ENTRANDO!"
     if request.is_ajax():
         if request.method == 'GET':
             try:
@@ -439,8 +438,6 @@ def newAnnotation(request, slug_group):
                     # saveActionLog
                     # sendEmail to the approvers # investigar sobre hilos en python para retornarle al usuario y quedarse enviando los correos
 
-                    ########### <uncomment to call the function:> ##################
-
                     writter_group = getWritersOfGroup(g)
                     approver_list = getApproversFromMinutes(minutes_id)
                     email_list = list()
@@ -450,9 +447,10 @@ def newAnnotation(request, slug_group):
                     for ap in approver_list:
                         email_list.append(ap.id_user.email)
 
-                    # send Email HERE with email_list
-
-                    ########### </uncomment to call the function:> ##################
+                    print "\nEMAIL to:", email_list
+                    print "subjet:" + annon.id_user.first_name + " wrote an anotation in Minutes with code " + annon.id_minutes.code + " (" + g.name + ")"
+                    print "content: " + annon.id_user.first_name + " wrote an anotation:\n\n" + annon.annotation_text
+                    # send Email HERE with email_list, annon, g. In annon var is all information. See  https://www.lucidchart.com/documents/edit/4853-1dd4-506e2365-bf06-76620ad6e19c
                     response = {"data": "success, send a socket to say them to the other connected"}
                 else:
                     print "else"
