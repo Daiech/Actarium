@@ -133,8 +133,9 @@ header #navbar-button-container > ul li a {
     display: block;
 }
 #logo-actarium-p{
-    background-image: url('/static/img/texturas_menu2.png');
-    background-position: -88px -32px;
+    /*background-image: url('/static/img/texturas_menu2.png');
+    background-position: -88px -32px;*/
+    background-image: url('/static/img/actarium-beta.png');
     height: 45px;
     width: 131px;
 }
@@ -264,6 +265,9 @@ header div > #top-menu-style li{
 .ml10{margin-left: 10px;}
 .mt20{margin-top: 20px;}
 .mt40{margin-top: 40px;}
+.mt50{margin-top: 50px;}
+.mb10{margin-bottom: 10px;}
+.mb20{margin-bottom: 20px;}
 .mb50{margin-bottom: 50px;}
 #log-sup img{
     width: 14px;
@@ -308,6 +312,9 @@ header div > #top-menu-style li{
     width: 24px;
 }
 #close-login-menu{position: relative;left: 0}
+#li-register-link:hover{background-color: white}
+#register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}
+#register-link:hover{text-decoration: underline;background-color: white;background-image:none;}
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */

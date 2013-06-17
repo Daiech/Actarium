@@ -199,144 +199,146 @@
 {% block js %}
 {% if user.is_authenticated%}
 <script>
-    $(".collapse").collapse({
-        // toggle: false
-    })
-    function acceptInvitation(element, accept){
-        sendAjax(
-        "/groups/acceptInvitation",
-        {"i_id":accept},
-        $(element).find(".load"),
-        function(data){
-            if (data["accepted"]){
-                var actual = parseInt($("#inv-count").text());
-                actual--;
-                $("#inv-count").text(""+actual);
-                $("#group-list").append(
-                "<li class=''>"+
-                    "<a href='"+data["group"]["slug"]+"'>"+
-                    "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
-                    data["group"]["name"]+
-                    "</a>"+
-                    "</li>")
-                $(element).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Ahora perteneces al grupo "+
-                        "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
-                        "<hr>"
-                    ).fadeIn()
-                    }
-                )
-                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
-            }
-            else{
-                var actual2 = parseInt($("#inv-count").text())
-                actual2--
-                $("#inv-count").text(""+actual2)
-                if(data["canceled"]){
-                    $(element).parent().parent().slideUp(900,function(){
-                        $(this).empty()
-                    })
-                    setAlertError("Error", data['message'])
-                }else{
-                    $(element).parent().parent().slideUp(900,function(){
-                        $(this).empty().html(
-                        "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
-                            "<br>"+
-                            "Si lo hiciste por error comunicate con el administrador del grupo para "+
-                            "obtener una nueva invitaci&oacute;n."+
-                            "<hr>"
-                    ).fadeIn()
-                    })
-                    setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                        "Haz rechazado la invitaci&oacute;n")
+    $(document).ready(function(){
+        $(".collapse").collapse({
+            // toggle: false
+        });
+        $(".accept-inv").on("click",function(e){
+            e.preventDefault();
+            $(this).attr("disabled", "disabled");
+            var accept = $(this).attr("data-invitation")
+            if(accept.substring(0,1)=="n"){
+                if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                    acceptInvitation($(this), accept)
                 }
-            }
-        }); // send Ajax
-    }
-    $(".accept-inv").on("click",function(e){
-        e.preventDefault();
-        $(this).attr("disabled", "disabled");
-        var accept = $(this).attr("data-invitation")
-        if(accept.substring(0,1)=="n"){
-            if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                else{
+                    $(this).attr("disabled", false);
+                }
+            }else{
                 acceptInvitation($(this), accept)
             }
-            else{
-                $(this).attr("disabled", false);
-            }
-        }else{
-            acceptInvitation($(this), accept)
-        }
-    })
-    function confirmar(id_reunion, is_confirmed, group_name, date){
-        sendAjax("/groups/setAssistance",
-        {id_reunion:id_reunion, is_confirmed: is_confirmed},
-        "#load_reunions",
-        function(data){
-            console.log(data)
-            setAlertMessage("Reuniones", "Puedes ver la actividad de tus reuniones en el men&uacute; <a href='/groups/calendar'>Reuniones</a>")
-        }
-    )
-    }
-    function setList(e,btn, op){
-        var t = 500;
-        e.preventDefault();
-        li= btn.parent().parent();
-        li.animate({'height': 0},t,function(){
-            confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group-name"), $(this).attr("data-date"));
-            $(this).remove();
-            l = $("#length-reunion").html();
-            $("#length-reunion").html(l-1);
-        });
-    }
-    function setButtons(){
-        $('.confirmed2-true').click(function(e){
-            $(this).attr("disabled", "disabled");
-            setList(e,$(this), true);
-        });
-        $('.confirmed2-false').click(function(e){
-            $(this).attr("disabled", "disabled");
-            setList(e,$(this),false);
-        });	
-        $('.get-reunion').click(function(e){
-            e.preventDefault();
-            getReunionData($(this).attr("data-id-reunion"));
-        });
-    }
-    function getReunionData(id_reunion){
-        //console.log('dame una reunion');
-        sendAjax("/groups/getReunion",
-                {id_reunion:id_reunion},
-                "#loading-reunion",
-                function(data){
-                    reunion_list=
-                        "<strong>"+data.title+"</strong><br /><br />"+
-                        "Grupo: <a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br>"+
-                        "Fecha de creaci&oacute;n: <strong>"+data.date_reunion+"</strong><br><br>"+
-                        "<strong>"+data.convener+"</strong> convoc&oacute; a una reuni&oacute;n de "+
-                        "<strong>"+data.group+"</strong> para el d&iacute;a "+
-                        "<strong>"+data.date_convened+"</strong> en <strong>"+data.locale+"</strong> <br /><br />"+
-                        "Los objetivos propuestos son: <br /> <strong>"+data.agenda+"</strong><br />"+
-                        "Lista de asistentes: <table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
-                        $.each(data.assistants,function(){
-                            reunion_list = reunion_list+
-                        "<tr><td><img class='img20' src='"+this.gravatar+"''> <strong>"+this.username+"</strong></td><td>"+this.is_confirmed+"</td></tr>"});
-                        reunion_list = reunion_list +"</table> <br /> ";
-                        if (data.is_done == false)
-                            reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
-                        else
-                            reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
-                        if (data.iconf == 1)
-                            reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
-                        
-                    //console.log(reunion_list)
-                    $('#reunion-data').html(reunion_list);
+        })
+        function acceptInvitation(element, accept){
+            sendAjax(
+            "/groups/acceptInvitation",
+            {"i_id":accept},
+            $(element).find(".load"),
+            function(data){
+                if (data["accepted"]){
+                    var actual = parseInt($("#inv-count").text());
+                    actual--;
+                    $("#inv-count").text(""+actual);
+                    $("#group-list").append(
+                    "<li class=''>"+
+                        "<a href='"+data["group"]["slug"]+"'>"+
+                        "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
+                        data["group"]["name"]+
+                        "</a>"+
+                        "</li>")
+                    $(element).parent().parent().slideUp(900,function(){
+                        $(this).empty().html(
+                        "Ahora perteneces al grupo "+
+                            "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
+                            "<hr>"
+                        ).fadeIn()
+                        }
+                    )
+                    setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                    "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
                 }
-        );
-    }
-    setButtons();
+                else{
+                    var actual2 = parseInt($("#inv-count").text())
+                    actual2--
+                    $("#inv-count").text(""+actual2)
+                    if(data["canceled"]){
+                        $(element).parent().parent().slideUp(900,function(){
+                            $(this).empty()
+                        })
+                        setAlertError("Error", data['message'])
+                    }else{
+                        $(element).parent().parent().slideUp(900,function(){
+                            $(this).empty().html(
+                            "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                                "<br>"+
+                                "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                                "obtener una nueva invitaci&oacute;n."+
+                                "<hr>"
+                        ).fadeIn()
+                        })
+                        setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                            "Haz rechazado la invitaci&oacute;n")
+                    }
+                }
+            }); // send Ajax
+        }
+        function confirmar(id_reunion, is_confirmed, group_name, date){
+            sendAjax("/groups/setAssistance",
+                {id_reunion:id_reunion, is_confirmed: is_confirmed},
+                "#load_reunions",
+                function(data){
+                    console.log(data)
+                    setAlertMessage("Reuniones", "Puedes ver la actividad de tus reuniones en el men&uacute; <a href='/groups/calendar'>Reuniones</a>")
+                }
+            )
+        }
+        function setList(e,btn, op){
+            var t = 500;
+            e.preventDefault();
+            li= btn.parent().parent();
+            li.animate({'height': 0},t,function(){
+                confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group-name"), $(this).attr("data-date"));
+                $(this).remove();
+                l = $("#length-reunion").html();
+                $("#length-reunion").html(l-1);
+            });
+        }
+        function setButtons(){
+            $('.confirmed2-true').click(function(e){
+                $(this).attr("disabled", "disabled");
+                setList(e,$(this), true);
+            });
+            $('.confirmed2-false').click(function(e){
+                $(this).attr("disabled", "disabled");
+                setList(e,$(this),false);
+            });	
+            $('.get-reunion').click(function(e){
+                e.preventDefault();
+                getReunionData($(this).attr("data-id-reunion"));
+            });
+        }
+        function getReunionData(id_reunion){
+            //console.log('dame una reunion');
+            sendAjax("/groups/getReunion",
+                    {id_reunion:id_reunion},
+                    "#loading-reunion",
+                    function(data){
+                        reunion_list=
+                            "<strong>"+data.title+"</strong><br /><br />"+
+                            "Grupo: <a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br>"+
+                            "Fecha de creaci&oacute;n: <strong>"+data.date_reunion+"</strong><br><br>"+
+                            "<strong>"+data.convener+"</strong> convoc&oacute; a una reuni&oacute;n de "+
+                            "<strong>"+data.group+"</strong> para el d&iacute;a "+
+                            "<strong>"+data.date_convened+"</strong> en <strong>"+data.locale+"</strong> <br /><br />"+
+                            "Los objetivos propuestos son: <br /> <strong>"+data.agenda+"</strong><br />"+
+                            "Lista de asistentes: <table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
+                            $.each(data.assistants,function(){
+                                reunion_list = reunion_list+
+                            "<tr><td><img class='img20' src='"+this.gravatar+"''> <strong>"+this.username+"</strong></td><td>"+this.is_confirmed+"</td></tr>"});
+                            reunion_list = reunion_list +"</table> <br /> ";
+                            if (data.is_done == false)
+                                reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
+                            else
+                                reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
+                            if (data.iconf == 1)
+                                reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+                            
+                        //console.log(reunion_list)
+                        $('#reunion-data').html(reunion_list);
+                    }
+            );
+        }
+        setButtons();
+    });
 </script>
 {% endif %}
 {% endblock %}

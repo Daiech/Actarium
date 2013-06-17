@@ -109,74 +109,11 @@
         </div>
     </div>
 </div>
-<!-- Button to trigger modal -->
- 
-<!-- Modal -->
-<div id="bbva" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Ayudanos en el Open Talent BBVA 2013</h3>
-  </div>
-  <div class="modal-body">
-    <p>Ay&uacute;danos con tu voto en el <a href="https://twitter.com/search?q=%23OpenTalent" target="_blank">#OpenTalent</a>.<br>Busca <a href="https://www.centrodeinnovacionbbva.com/opentalent/votaciones/1766-actarium" target="_blank">Actarium</a> en <a href="https://www.facebook.com/centrodeinnovacionbbva/app_182548865230257">&eacute;sta p&aacute;gina de Facebook</a> y vota por nosotros.</p>
-    <iframe frameborder="0" height="338px" src="https://www.centrodeinnovacionbbva.com/widget/ot_projects/1766-actarium" width="280px"></iframe>
-    <div class="pull-right" style="position: relative;top: 140px;left:-55px;">
-        <a href="https://www.facebook.com/centrodeinnovacionbbva/app_182548865230257" target="_blank" class="blueButton">
-            <span><img src="/static/img/facebook.png" width="16px"></span>
-            <span class="blueButtonText" style="padding: 4px;">Votar con Facebook</span>
-        </a>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Entrar a Actarium</button>
-    <a href="https://www.facebook.com/centrodeinnovacionbbva/app_182548865230257" class="btn btn-info">Votar por Actarium</a>
-  </div>
-</div>
+
+
 {%endblock%}
 {% block style%}
 <style>
-
-    /*OPEN TALENT BBVA*/
-    .blueButton{
-        background:#6da952 url(/static/img/btt-bg.png) no-repeat 0px -48px;
-        border:1px solid #29447e;
-        border-bottom-color:#1a356e;
-        box-shadow:0 1px 0 rgba(0, 0, 0, .1);
-        cursor:pointer;
-        display:-moz-inline-box;
-        display:inline-block;
-        font-size: 11px;
-        font-weight:bold;
-        line-height:normal !important;
-        padding:2px 6px;
-        text-align:center;
-        text-decoration:none;
-        vertical-align:top;
-        white-space:nowrap;
-        color:#fff; 
-    }
-    .blueButton:active{
-        background:#4f6aa3;
-        border-bottom-color:#999;
-    }
-    .blueButton .blueButtonText,.blueButton input{
-        background:none;
-        border:0;
-        color:#fff;
-        cursor:pointer;
-        display:-moz-inline-box;
-        display:inline-block;
-        font-family:'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
-        font-size: 11px;
-        font-weight:bold;
-        margin:0;
-        outline:none;
-        padding:1px 0 2px;
-        white-space:nowrap
-    }
-    /*OPEN TALENT BBVA*/
-
-
 
     /* **************************************************************************** 
     Index Website
@@ -252,21 +189,16 @@
     Termina Index Website
     **************************************************************************** */
 
-    #register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}
-    #register-link:hover{text-decoration: underline;}
 </style>
 {%endblock%}
 {% block js %}
 <script>
-    $(document).on("ready",function(){
+    $(document).ready(function(){
     	$(".carousel").carousel("cycle");
         $("i").tooltip();
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
         $("#register-link").on("click",register);
-
-        // Open Talen BBVA
-        $('#bbva').modal();
     });
     
     function login(e){
