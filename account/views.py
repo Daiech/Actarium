@@ -2,7 +2,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
-from account.forms import RegisterForm, UserForm
+from account.forms import RegisterForm, UserForm , NewDNI
 from django.template import RequestContext  # para hacer funcionar {% csrf_token %}
 
 #Django Auth
@@ -16,6 +16,7 @@ from django.utils.hashcompat import sha_constructor
 import random
 from emailmodule.views import sendEmailHtml
 from account.templatetags.gravatartag import showgravatar
+from groups.models import DNI, DNI_type
 
 
 #------------------------------- <Normal User>---------------------------
@@ -190,12 +191,12 @@ def userLogin(request, user_name, password):
 
 #--------------------------------<Cuenta de Usuario>----------------------
 @login_required(login_url='/account/login')
-def myAccount(request):
+def personalData(request):
     '''
         Control para usuarios logueados.
         se consultan los datos y se los envia al template para imprimirlos
     '''
-    saveViewsLog(request, "account.views.myAccount")
+    saveViewsLog(request, "account.views.personalData")
     last_data = "last=> username: %s, name: %s, last_name: %s, email %s" % (request.user.username, request.user.first_name, request.user.last_name, request.user.email)
     if request.method == "POST":
         form = UserForm(request.POST, instance=request.user)
@@ -236,14 +237,16 @@ def myAccount(request):
         form = UserForm(instance=request.user)
         update = False
         error_email = None
-    passForm = PasswordChangeForm(user=request.user)
     print "update: ", update
-    ctx = {"formUser": form, "passForm": passForm, "dataUpdate": update, "passwordUpdate": False, "error_email": error_email}
-    return render_to_response('account/index.html', ctx, context_instance=RequestContext(request))
+    ctx = {"formUser": form, "dataUpdate": update, "passwordUpdate": False, "error_email": error_email}
+    return render_to_response('account/personal_data.html', ctx, context_instance=RequestContext(request))
 
 
-def PasswordChange(request):
-    saveViewsLog(request, "account.views.PasswordChange")
+def changePassword(request):
+    '''
+        Opcion para cambiar password
+    '''
+    saveViewsLog(request, "account.views.savePassword")
     passUpdate = False
     if request.method == "POST":
         passUpdate = False
@@ -255,10 +258,40 @@ def PasswordChange(request):
     else:
         passForm = PasswordChangeForm(user=request.user)
         passUpdate = False
-    form = UserForm(instance=request.user)
-    ctx = {"formUser": form, "passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate, "error_email": False}
-    return render_to_response('account/index.html', ctx, context_instance=RequestContext(request))
+    ctx = { "passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate, "error_email": False}
+    return render_to_response('account/password.html', ctx, context_instance=RequestContext(request))
 
+
+def dni(request):
+    saveViewsLog(request, "account.views.dni")
+    
+    if request.method == "POST":
+        formDNI = NewDNI(request.POST)
+        if formDNI.is_valid():
+            dni = formDNI.cleaned_data['dni']
+            dni_type = DNI_type.objects.get(pk=formDNI.cleaned_data['dni_type'])
+            try:
+                _DNI = DNI.objects.get(id_user=request.user)
+                _DNI.dni_value = dni
+                _DNI.dni_type = dni_type 
+            except:    
+                _DNI = DNI(dni_value = dni,
+                           dni_type = dni_type,
+                           id_user = request.user)
+            _DNI.save()
+            dataSaved=True
+        else:
+            dataSaved=False
+    else:
+        dataSaved=False
+        try:
+            _DNI = DNI.objects.get(id_user=request.user)
+            formDNI = NewDNI(initial = {"dni":_DNI.dni_value, "dni_type": _DNI.dni_type.pk})
+        except:
+            formDNI = NewDNI()
+    ctx = {'formDNI':formDNI, 'dataSaved': dataSaved}
+    return render_to_response('account/dni.html', ctx, context_instance=RequestContext(request))
+    
 # --------------------------------</Cuenta de Usuario>----------------------
 
 # --------------------------------<Recuperacion de contrasena>----------------------

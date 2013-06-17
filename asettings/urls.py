@@ -12,5 +12,4 @@ asettings_urls = patterns('',
     url(r'^replyRequest', 'asettings.views.replyRequestPackage', name='requestPackage'),
     url(r'^feedback', 'website.views.showFeedBack', name='feedback'),
     url(r'^setReplyRequest', 'asettings.views.setReplyRequestPackage', name='requestPackage'),
-    url(r'^$', 'account.views.myAccount', name='account'),
 )

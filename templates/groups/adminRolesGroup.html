@@ -46,7 +46,7 @@
 						</div>
 					</th>
 				</tr>
-				{%for m in members%}
+				{% for m in members %}
 				<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
 						<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"

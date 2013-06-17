@@ -219,6 +219,70 @@ def groupInfoSettings(request, slug_group):
         return render_to_response('groups/adminInfoGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
+    
+@login_required(login_url='/account/login')
+def groupDNISettings(request, slug_group):
+    '''
+        Muestra la configuracion de DNI de los integrantes de un grupo
+    '''
+#    gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+#    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
+#    dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
+#    dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
+#    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
+    saveViewsLog(request, "groups.views.groupDNISettings")
+    try:
+        g = groups.objects.get(slug=slug_group, is_active=True)
+        _user_rel = getRelUserGroup(request.user, g)
+        members_dni = DNI_permissions.objects.filter(id_group=g)
+        users_dni=[]
+        for m in members_dni:
+            users_dni.append(m.id_user)      
+        members = rel_user_group.objects.filter(id_group = g, is_member = True, is_active=True).exclude(id_user__in =users_dni)
+        ctx = {"group": g,"is_admin": _user_rel.is_admin, 'members':members,'members_dni':members_dni}
+        return render_to_response('groups/adminDNIGroup.html', ctx, context_instance=RequestContext(request))
+    except groups.DoesNotExist:
+        return HttpResponseRedirect('/groups/')
+
+def requestDNI(request, slug_group):
+    """
+        Sen request for DNI
+    """
+    saveViewsLog(request, "groups.views.requestDNI")
+    error= False
+    saved = False
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = groups.objects.get(slug=slug_group, is_active=True)
+                _user_rel = getRelUserGroup(request.user, g)
+
+                if _user_rel.is_admin:
+                    try:
+                        id_user =  User.objects.get(pk=int(request.GET['pk_user']))
+                        DNI_per = DNI_permissions(id_group=g, id_user=id_user)
+                        DNI_per.save()
+                        saved = True
+                    except:
+                        saved=False
+                        error = "Ha ocurrido un error inesperado al enviar la solicitud, por favor intentalo de nuevo mas tarde"
+                else:
+                    error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
+            except groups.DoesNotExist:
+                error = "Este grupo no existe"
+            except rel_user_group.DoesNotExist:
+                error = "Error! no existe el usuario para este grupo"
+            except Exception, e:
+                print e
+                error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
+            if error:
+                return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
+            response = {"saved": saved, "error":error}
+            return HttpResponse(json.dumps(response), mimetype="application/json")
+        else:
+            return "Ha ocurrido un error"
+    return True
+
 
 
 def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1, is_active=True):

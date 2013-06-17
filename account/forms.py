@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from account.validators import validate_email_unique
+from groups.models import DNI_type
 
 
 class RegisterForm(UserCreationForm):
@@ -41,3 +42,24 @@ class UserForm(forms.ModelForm):
         print self.cleaned_data["email"]
         user = super(UserForm, self).save()
         return user
+
+class NewDNI(forms.Form):
+    dni_type = DNI_type.objects.all()
+    i = 0
+    CHOICES = []
+    for gt in dni_type:
+        CHOICES.append((gt.id, gt.short_name+" ("+gt.long_name+")"))
+        i = i + 1
+    dni = forms.CharField(label="DNI", widget=forms.TextInput(attrs={'placeholder': 'DNI'}))
+    dni_type = forms.ChoiceField(label="Tipo de DNI", choices=CHOICES)
+
+        
+        
+    
+    
+    
+    
+    
+    
+    
+    

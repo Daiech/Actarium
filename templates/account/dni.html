@@ -1,0 +1,97 @@
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Cuenta de Usuario{% endblock %}
+{% load gravatartag %}
+{% block bodysettings %}
+<div>
+    <div class="uTop">
+        <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+        Hola
+        <strong>
+            <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
+                {{ user.first_name }} ({{user.username}})
+            </a>
+        </strong>
+    </div>
+    <hr>
+    <form method="POST"  action="/account/dni">
+        {% csrf_token %}
+        <table class="">
+            <tr>
+                <th colspan="2" class="title">Tu informaci&oacute;n de DNI</th>
+            </tr>
+            {{ formDNI }}
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="btn btn-success btn-large">
+                       	Guardar
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr>
+</div>
+
+{% endblock%}
+
+
+
+{% block settings_style %}
+<style>
+    .uTop{
+        /*padding:10px;*/
+    }
+    article p{
+        font-size: 12px;
+        line-height: 1;
+        margin: 5px;
+    }
+
+    li hr{
+        margin:20px;
+    }
+    article form table tr th{
+        width: 40%;
+    }article form table tr td{
+        text-align: left;
+    }
+    table tr th label{
+        font-size: 16px;
+        margin-top: 5px;
+    }
+    table tr td input[type=password],table tr td input[type=text]{
+        /*height: 30px;*/
+        padding: 10px;
+        font-size: 16px;
+    }
+    article form table{
+        margin: 0 auto;
+        text-align: center;
+        width: 100%;
+    }
+    .title{
+        text-align: center;
+    }
+    input{
+    	width: 280px;
+    }
+	select{
+		width: 300px;
+	}
+	
+</style>
+{% endblock %}
+
+{% block settings_js %}
+<script>
+	$(document).on("ready", function() {
+		$("#settings-account").addClass("active");
+	});
+    {% if dataSaved %}
+    setAlertMessage("Datos guardados","Se ha guardado correctamente la informaci&oacute;n de DNI")
+    {% endif %}
+
+
+</script>
+{% endblock %}

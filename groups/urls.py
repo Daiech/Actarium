@@ -4,6 +4,8 @@ groups_urls = patterns(
     '',
     url(r'^new$', 'groups.views.newGroup', name='something'),
     url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groups.views.groupInfoSettings', name='Admin Info Groups'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groups.views.groupDNISettings', name='Admin DNI Groups'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/request_dni', 'groups.views.requestDNI', name='Request DNI ajax'),
     url(r'^(?P<slug_group>[-\w]+)/admin', 'groups.views.groupSettings', name='Admin Groups'),
     url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'groups.minutes.rolesForMinutes', name='New minutes with reunion'),
     url(r'^(?P<slug_group>[-\w]+)/setRole', 'groups.views.setRole', name='Set Role'),

@@ -2,12 +2,13 @@ from django.conf.urls import patterns  # , url
 
 account_urls = patterns(
     '',
-    (r'^$', 'account.views.myAccount'),
+    (r'^$', 'account.views.personalData'),
     (r'^new', 'account.views.newUser'),
     (r'^newInvited', 'account.views.newInvitedUser'),
     (r'^login', 'account.views.log_in'),
     (r'^logout', 'account.views.log_out'),
-    (r'^PasswordChange', 'account.views.PasswordChange'),
+    (r'^changePassword', 'account.views.changePassword'),
+    (r'^dni', 'account.views.dni'),
     #(r'^PasswordRestore', 'account.views.PasswordRestore'),
     (r'^password/reset/$', 'account.views.password_reset2'),
     # {'post_reset_redirect' : '/account/password/reset/done/'}),
