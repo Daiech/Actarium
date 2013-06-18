@@ -9,6 +9,7 @@ account_urls = patterns(
     (r'^logout', 'account.views.log_out'),
     (r'^changePassword', 'account.views.changePassword'),
     (r'^dni', 'account.views.dni'),
+    (r'^set_dni', 'account.views.setDNIPermissions'),
     #(r'^PasswordRestore', 'account.views.PasswordRestore'),
     (r'^password/reset/$', 'account.views.password_reset2'),
     # {'post_reset_redirect' : '/account/password/reset/done/'}),

@@ -1,6 +1,6 @@
 #encoding:utf-8
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from account.forms import RegisterForm, UserForm , NewDNI
 from django.template import RequestContext  # para hacer funcionar {% csrf_token %}
@@ -16,8 +16,8 @@ from django.utils.hashcompat import sha_constructor
 import random
 from emailmodule.views import sendEmailHtml
 from account.templatetags.gravatartag import showgravatar
-from groups.models import DNI, DNI_type
-
+from groups.models import DNI, DNI_type, DNI_permissions
+from django.utils import simplejson as json
 
 #------------------------------- <Normal User>---------------------------
 def newUser(request):
@@ -289,9 +289,57 @@ def dni(request):
             formDNI = NewDNI(initial = {"dni":_DNI.dni_value, "dni_type": _DNI.dni_type.pk})
         except:
             formDNI = NewDNI()
-    ctx = {'formDNI':formDNI, 'dataSaved': dataSaved}
+
+    
+    _dni_permissions = DNI_permissions.objects.filter(id_user=request.user)
+    if len( _dni_permissions) > 0:
+        permissions = True
+    else:
+        permissions = False
+
+    # print "hay permissions? ", permissions, len(_dni_permissions)
+    ctx = {'formDNI':formDNI, 'dataSaved': dataSaved, 'dni_permissions':_dni_permissions, 'permissions': permissions}
     return render_to_response('account/dni.html', ctx, context_instance=RequestContext(request))
     
+
+def setDNIPermissions(request):
+    """
+        Set permissions for DNI
+    """
+    saveViewsLog(request, "groups.views.setDNIPermissions")
+    error= False
+    saved = False
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                pk_dni =  int(request.GET['pk_dni'])
+                state = int(request.GET['status'])
+                _dni_permissions = DNI_permissions.objects.get(pk=pk_dni)
+                _dni_permissions.state = state
+                try:
+                    _dni = DNI.objects.get(id_user= _dni_permissions.id_user)
+                    _dni_permissions.save()
+                    print "pk_dni: ",pk_dni," status: ",state 
+                    saved = True
+                except DNI.DoesNotExist:
+                    error = "Aun no se ha guardado un DNI, debes agregar primero la informaci&oacute;n del DNI"
+                    saved = False
+                except:
+                    error = "Ha ocurrido un error"
+                    saved = False
+            except DNI_permissions.DoesNotExist:
+                error = "No hay permisos asgnados"
+                saved = False
+            except Exception, e:
+                print e
+                error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
+            if error:
+                return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
+            response = {"saved": saved, "error":error}
+            return HttpResponse(json.dumps(response), mimetype="application/json")
+        else:
+            return "Ha ocurrido un error"
+    return True
 # --------------------------------</Cuenta de Usuario>----------------------
 
 # --------------------------------<Recuperacion de contrasena>----------------------
