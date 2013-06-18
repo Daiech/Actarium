@@ -1129,6 +1129,7 @@ def uploadMinutes(request, slug_group):
                             _last_minutes.save()
                             _minutes = minutes(
                                 id_group=group,
+                                id_creator=request.user,
                                 id_extra_minutes=_last_minutes.pk,
                                 id_template=templates.objects.get(pk=4),
                                 is_valid=False,
@@ -1151,7 +1152,7 @@ def uploadMinutes(request, slug_group):
             lml = minutes.objects.filter(id_group=group, id_template=templates.objects.get(pk=4), is_valid=False)
             for m in lml:
                 last_minutes_list.append({'i': i, 'lm': last_minutes.objects.get(pk=m.id_extra_minutes).name_file, 'lm_id': last_minutes.objects.get(pk=m.id_extra_minutes).pk})
-                i = i+1
+                i = i + 1
             _minutes = minutes.objects.filter(id_group=group, is_valid=True).order_by('-code')
             ctx = {
                 'uploadMinutesForm': form,
