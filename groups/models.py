@@ -356,5 +356,18 @@ class DNI_permissions(models.Model):
 
 
 
+class minutes_version(models.Model):
+    id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
+    id_user_creator = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    full_html = models.TextField()
+    date_created = models.DateTimeField(auto_now=True)
+
+
+class minutes_approver_version(models.Model):
+    id_user_approver = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
+    date_created = models.DateTimeField(auto_now=True)
+
+
 
 

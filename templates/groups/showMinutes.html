@@ -25,7 +25,12 @@
 						<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
 						<button type='submit' class="btn" ><i class="icon-file"></i> Generar PDF</button>
 					</form>
-					<button disabled class="btn"><i class="icon-pencil"></i> Editar Acta</button>
+					{% if is_secretary%}
+					<button class="btn" id="minutes-edit"><i class="icon-pencil"></i> Editar Acta</button>
+					{%endif%}
+					{%if minutes_version%}
+					<a href="#" id="history" class="btn btn-link">Ver historial de cambios ({{minutes_version|length}})</a>
+					{%endif%}
 				</div>
 				<div class="pull-right">
 					<!-- <span class="b">1-1</span> -->
@@ -37,6 +42,13 @@
 	    	</div>
 	    </div>
     </header>
+    <div id="minutes-version" style="margin-top:80px;background-color:rgb(251,251,251);display:none">
+    	<p>versiones:</p>
+    	{%for minutes in minutes_version%}
+    		{{minutes.full_html|safe}}
+    		<hr>
+    	{%endfor%}
+    </div>
     <div id="minutes-container">
     {{minute_template}}
     </div>
@@ -62,6 +74,19 @@
 				$("#minutes-bar").addClass("minutes-bar-static").css({"position": "fixed"});
 			}
 		});
+
+		$("#history").on("click", function (e) {
+			e.preventDefault();
+			$("#minutes-version").slideToggle();
+		})
+
+		{% if is_secretary %}
+		$("#minutes-edit").on("click", function (e) {
+			if(confirm("Seguro que deseas editar esta Acta?")){
+				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/"
+			}
+		})
+		{% endif %}
 	});
 	function callBackApprove(data){
 		$("#div-sign").fadeOut(300,function(){$(this).empty()});
@@ -152,7 +177,7 @@
 	#commission-approving-list > li > div{display: inline;}
 	.icon-approver-status i{margin-top: 5px}
 	#body-container > article{margin-top:0;padding-top: 0;}
-	#minutes-bar{background-color: rgb(238, 238, 238); padding: 5px 0;position: absolute;left: 0;width:100%;margin-top: 0px;}
+	#minutes-bar{background-color: rgb(251, 251, 251); padding: 5px 0;position: absolute;left: 0;width:100%;margin-top: 0px;}
 	#minutes-bar-hoja{width: 75%;}
 	.header-minutes{background-color: rgb(251, 251, 251); padding: 15px 0;position: absolute;left: 0;width: 100%;margin: 0;}
 	.header-minutes > div{margin: 0 auto;margin-bottom: 8px;width: 90%;}
