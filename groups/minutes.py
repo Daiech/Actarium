@@ -979,6 +979,7 @@ def showMinutes(request, slug, minutes_code):
 
             address_template = minutes_current.id_template.address_template
 
+            print "MINUTE", minutes_current.id_template
             id_minutes_type = minutes_current.id_template.id_type.pk
 
             if id_minutes_type == 1:
@@ -1052,7 +1053,7 @@ def showMinutes(request, slug, minutes_code):
             ######## <APPROVER LISTS> #########
             try:
                 missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
-                missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
+                # missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
             except rel_user_minutes_signed.DoesNotExist:
                 print "NO HAY rel_user_minutes_assistance missing_approved_list"
             except Exception, e:
