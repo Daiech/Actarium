@@ -754,6 +754,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
         error = False
         _reunion = None
         _minute = getMinutesByCode(group, minutes_code)
+        _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
         if _minute:
             ######## <SLUG TEMPLATE> #########
             _template = getTemplateMinutes(slug_template)
@@ -787,6 +788,27 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                 form = newMinutesForm(request.POST)
                 if form.is_valid():
                     #guardad version
+                    list_newMinutesForm = {
+                        "date_start": _extra_minutes.date_start,
+                        "date_end": _extra_minutes.date_end,
+                        "location": _extra_minutes.location,
+                        "agreement": _extra_minutes.agreement,
+                        "agenda": _extra_minutes.agenda,
+                        "type_reunion": _extra_minutes.type_reunion,
+                        "code": _minute.code}
+                    full_html = loader.render_to_string(_minute.id_template.address_template, {
+                        "URL_BASE": URL_BASE,
+                        "newMinutesForm": list_newMinutesForm,
+                        "group": group,
+                        "members_selected": members_assistant,
+                        "members_no_selected": members_no_assistant,
+                        "members_signers": list_ms,
+                        "url_logo": url_logo,
+                        "president": member_president,
+                        "secretary": member_secretary}
+                    )
+                    minutes_version(id_minutes=_minute, id_user_creator=request.user, full_html=full_html).save()
+                    # guardar versión de los aprovadores
                     _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  #actualizar
 
                     if _minute:
@@ -807,7 +829,6 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
             else:
                 form = newMinutesForm()
                 try:
-                    _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
                     if _extra_minutes:
                         import datetime
                         form = newMinutesForm(
@@ -917,6 +938,13 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
             return False
     else:
         return False
+
+
+def getMinutesVersions(id_minutes):
+    try:
+        return minutes_version.objects.filter(id_minutes=id_minutes)
+    except minutes_version.DoesNotExist:
+        return None
 
 
 @login_required(login_url='/account/login')
@@ -1038,6 +1066,8 @@ def showMinutes(request, slug, minutes_code):
 
             annon = annotations.objects.filter(id_minutes=minutes_current).order_by("-date_joined")
 
+            minutes_version = getMinutesVersions(minutes_current)
+
             ctx = {
                 "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
                 "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
@@ -1054,7 +1084,8 @@ def showMinutes(request, slug, minutes_code):
                     "secretary": member_secretary}),
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
                 "commission_approving": missing_approved_list,
-                "annotations": annon
+                "annotations": annon,
+                "minutes_version": minutes_version
             }
         else:
             return HttpResponseRedirect("/groups/" + slug + "#esta-acta-aun-no-ha-sido-aprobada")

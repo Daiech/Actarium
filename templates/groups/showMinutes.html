@@ -28,6 +28,9 @@
 					{% if is_secretary%}
 					<button class="btn" id="minutes-edit"><i class="icon-pencil"></i> Editar Acta</button>
 					{%endif%}
+					{%if minutes_version%}
+					<a href="#" id="history" class="btn btn-link">Ver historial de cambios ({{minutes_version|length}})</a>
+					{%endif%}
 				</div>
 				<div class="pull-right">
 					<!-- <span class="b">1-1</span> -->
@@ -39,6 +42,13 @@
 	    	</div>
 	    </div>
     </header>
+    <div id="minutes-version" style="margin-top:80px;background-color:rgb(251,251,251);display:none">
+    	<p>versiones:</p>
+    	{%for minutes in minutes_version%}
+    		{{minutes.full_html|safe}}
+    		<hr>
+    	{%endfor%}
+    </div>
     <div id="minutes-container">
     {{minute_template}}
     </div>
@@ -64,14 +74,20 @@
 				$("#minutes-bar").addClass("minutes-bar-static").css({"position": "fixed"});
 			}
 		});
+
+		$("#history").on("click", function (e) {
+			e.preventDefault();
+			$("#minutes-version").slideToggle();
+		})
+
+		{% if is_secretary %}
+		$("#minutes-edit").on("click", function (e) {
+			if(confirm("Seguro que deseas editar esta Acta?")){
+				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/"
+			}
+		})
+		{% endif %}
 	});
-	{% if is_secretary %}
-	$("#minutes-edit").on("click", function (e) {
-		if(confirm("Seguro que deseas editar esta Acta?")){
-			top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/"
-		}
-	})
-	{% endif %}
 	function callBackApprove(data){
 		$("#div-sign").fadeOut(300,function(){$(this).empty()});
 		var u = $("#missing-"+data["user-id"]);
