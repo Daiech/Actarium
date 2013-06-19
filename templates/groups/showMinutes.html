@@ -52,7 +52,7 @@
     <div id="minutes-container">
     {{minute_template}}
     </div>
-    
+
 	{% include "groups/siteToApprove.html" %}
 	
 </article>
@@ -82,8 +82,8 @@
 
 		{% if is_secretary %}
 		$("#minutes-edit").on("click", function (e) {
-			if(confirm("Seguro que deseas editar esta Acta?")){
-				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/"
+			if(confirm("Seguro que desea editar esta Acta?")){
+				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/{{minutes.id_template.slug}}"
 			}
 		})
 		{% endif %}

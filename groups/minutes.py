@@ -809,7 +809,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                     )
                     minutes_version(id_minutes=_minute, id_user_creator=request.user, full_html=full_html).save()
                     # guardar versión de los aprovadores
-                    _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  #actualizar
+                    _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  # actualizar
 
                     if _minute:
                         ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
@@ -899,6 +899,7 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
             if _minu and _extra_minutes:
                 _minu.code = df['code']
                 _minu.is_full_signed = False
+                _minu.id_template = _template
                 _extra_minutes.date_start = df['date_start']
                 _extra_minutes.date_end = df['date_end']
                 _extra_minutes.location = df['location']
@@ -1039,7 +1040,6 @@ def showMinutes(request, slug, minutes_code):
                     url_logo = URL_BASE + _pro.id_organization.logo_address
 
             ######## </LOGO> #########
-
 
             ######## <ATTENDING> #########
             space_to_approve = False

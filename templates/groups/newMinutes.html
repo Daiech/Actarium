@@ -31,7 +31,7 @@
                     ·
                     <button class="btn btn-info" type="button" data-toggle="modal" data-target="#template-list"><i class="icon-list-alt icon-white"></i> Cambiar Plantilla</button>
             </div>
-            <div id="template-list" class="modal hide fade">
+            <div id="template-list" class="modal hide fade"> <!--  -->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3>Seleccionar plantilla</h3>
@@ -42,7 +42,7 @@
                         {% for template in list_templates %}
                         <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
                             <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
-                                <a href="{{ template.slug }}" class="">{{ template.name }}</a>
+                                <a href="{{ template.slug }}" style="width:90%">{{ template.name }}</a>
                                 <div class="template-thumbnail" data-href="{{ template.slug }}">
                                     <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
                                 </div>
@@ -52,8 +52,10 @@
                         {% for template in list_private_templates %}
                         <li class="template-item {%ifequal slug_template template.id_template.slug%}template-item-selected{%endifequal%}">
                             <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
-                                <a href="{{ template.id_template.slug }}" class="">{{ template.id_template.name }}</a>
-                                <span style="font-size:10px;" class="label label-info">Pro</span>
+                                <a href="{{ template.id_template.slug }}" class="">
+                                    {{ template.id_template.name }}
+                                    <span style="font-size:10px;" class="label label-info">Pro</span>
+                                </a>
                                 <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
                                     <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
                                 </div>
