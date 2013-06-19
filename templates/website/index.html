@@ -75,6 +75,33 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#dni_request">
+                                    Tienes <span id="length-reunion" class="badge badge-info">{{dni_permissions|length}}</span> solicitudes de DNI
+                                </a>
+                            </div>
+                            <div  id="dni_request" class="accordion-body collapse in">
+                                <ul class="accordion-inner">
+									{% for dni_p in dni_permissions %}
+						            <li>
+						            	<span class="notification-text alpha60">
+                                            <strong>{{dni_p.id_requester.first_name|lower|capfirst}}</strong> Solicita acceder a la informaci&oacute;n de DNI para el grupo <a href="/groups/{{dni_p.id_group.slug}}">{{dni_p.id_group.name|lower|capfirst}}</a>
+                                            <br />
+                                            <time datetime="{{dni_p.date_added|date:'c'}}">El {{dni_p.date_added}}</time>
+                                        </span>
+						                <div class="buttons">
+						                        
+                        					<button class="dni-btn-option  btn-small btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Asignar DNI</button>
+                    
+                                        </div>
+						            </li>
+						            {% endfor %}
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        
                     </div><!--cierra notifications-->
 
                 </div>
@@ -218,6 +245,42 @@
                 acceptInvitation($(this), accept)
             }
         })
+        
+        $(".dni-btn-option").on("click",function() {
+            console.log("DNI: "+$(this).attr("data-dni")+" opcion "+$(this).attr("data-option"))
+            btn = $(this) 
+            var pk_dni = btn.attr("data-dni")
+            var status = btn.attr("data-option")
+            var group_name = btn.attr("data-name-group")
+            sendAjax("/account/set_dni",
+                    {pk_dni:pk_dni, status:status},
+                    "#loading-reunion",
+                    function(data){
+                        if (data.saved){
+                            setAlertMessage("Operaci&oacute;n realizada", "Se ha modificado el estado de solicitud de DNI para el grupo: <strong>"+group_name+"</strong>")
+                            if (status == 1){
+                                console.log("1"+btn.html())
+                                btn.removeClass("btn-info")
+                                btn.addClass("btn-warning")
+                                btn.attr("data-option",'2')
+                                btn.html("Retirar DNI")
+                            }
+                            else if (status == 2){
+                                console.log("2"+btn.html())
+                                btn.removeClass("btn-warning")
+                                btn.addClass("btn-info")
+                                btn.attr("data-option",'1')
+                                btn.html("Asignar DNI")
+                            }
+                            //console.log("id: "+id_user+" Nombre: "+nombre )
+                        }
+                        else{
+                            setAlertError("Ocurri&oacute; un error", data.error)
+                        }
+                    } 
+            );
+        });
+        
         function acceptInvitation(element, accept){
             sendAjax(
             "/groups/acceptInvitation",

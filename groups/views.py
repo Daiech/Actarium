@@ -260,7 +260,7 @@ def requestDNI(request, slug_group):
                 if _user_rel.is_admin:
                     try:
                         id_user =  User.objects.get(pk=int(request.GET['pk_user']))
-                        DNI_per = DNI_permissions(id_group=g, id_user=id_user)
+                        DNI_per = DNI_permissions(id_group=g, id_user=id_user, id_requester=request.user)
                         DNI_per.save()
                         saved = True
                     except:

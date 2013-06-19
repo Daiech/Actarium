@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 import re
-from groups.models import reunions, assistance, rel_user_group
+from groups.models import reunions, assistance, rel_user_group, DNI_permissions
 from actions_log.views import saveActionLog, saveViewsLog
 from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
@@ -33,6 +33,8 @@ def home(request):
         my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
         #-----------------</INVITACIONES>-----------------
 
+        _dni_permissions = DNI_permissions.objects.filter(id_user=request.user, state=0)
+        
         #-----------------<REUNIONES>-----------------
         # my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
         my_reu = reunions.objects.filter(id_group__in=_groups_list, date_reunion__gt=datetime.date.today()).order_by("-date_convened")
@@ -48,7 +50,7 @@ def home(request):
                     "title": reunion.title})
         #-----------------</REUNIONES>-----------------
 
-        ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array}
+        ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array, 'dni_permissions': _dni_permissions}
         template = 'website/index.html'
     else:
         saveViewsLog(request,"Home_anonymous")

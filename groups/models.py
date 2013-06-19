@@ -353,6 +353,7 @@ class DNI_permissions(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     date_added = models.DateTimeField(auto_now=True)
     state = models.CharField(max_length=1, verbose_name="state", default="0") #0: Sin responder,  1:Aceptado, 2:rechazado
+    id_requester = models.ForeignKey(User,  null=False, related_name='%(class)s_id_requester')
 
 
 
