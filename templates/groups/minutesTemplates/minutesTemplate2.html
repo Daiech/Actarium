@@ -70,7 +70,7 @@
               <input id="id_date_end" type="hidden" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
             </div>
             <strong>
-              Acta No. 
+              ACTA No. 
               <span id="id_code_title" title="El &uacute;ltimo c&oacute;digo de acta asignado es: {{last.code}}">
                 {{ newMinutesForm.code }}
               </span>
@@ -96,12 +96,13 @@
       			decidir, exigido en los estatutos.
       		</p>
       		<br />
-      		El siguiente fue el orden del d&iacute;a:<br /><br />
+      		<p>El siguiente fue el orden del d&iacute;a:</p>
       		<p>
       			{{ newMinutesForm.agenda|safe }}
             <span style="display:inline-block; float:right">{{ newMinutesForm.agenda.errors }}</span>	
       		</p>
           <br />
+          <p>Desarrollo del orden del d&iacute;a:</p>
       		<p>
       			{{ newMinutesForm.agreement|safe }}
             <span style="display:inline-block; float:right">{{ newMinutesForm.agreement.errors }}</span>
