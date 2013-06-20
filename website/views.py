@@ -45,7 +45,7 @@ def home(request):
             except assistance.DoesNotExist:
                 json_array.append({
                     "id_reunion": str(reunion.id),
-                    "group_name": reunion.id_group.name,
+                    "id_group": reunion.id_group,
                     "date": dateTimeFormatForm(reunion.date_reunion),
                     "title": reunion.title})
         #-----------------</REUNIONES>-----------------

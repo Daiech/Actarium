@@ -60,7 +60,7 @@
 
                                     <li data-group-name="{{reunion.group_name}}" data-date="{{reunion.date}}">
                                         <span class="notification-text">
-                                            <strong>{{reunion.title}}</strong> (<a href="/groups/">{{reunion.group_name}}</a>)
+                                            <strong>{{reunion.title}}</strong> (<a href="/groups/{{ reunion.id_group.slug}}">{{reunion.id_group.name}}</a>)
                                             <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
                                         </span>
                                         <div class="buttons">
