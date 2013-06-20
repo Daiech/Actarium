@@ -307,35 +307,35 @@ def setDNIPermissions(request):
         Set permissions for DNI
     """
     saveViewsLog(request, "groups.views.setDNIPermissions")
-    error= False
+    error = False
     saved = False
     if request.is_ajax():
         if request.method == 'GET':
             try:
-                pk_dni =  int(request.GET['pk_dni'])
+                pk_dni = int(request.GET['pk_dni'])
                 state = int(request.GET['status'])
                 _dni_permissions = DNI_permissions.objects.get(pk=pk_dni)
                 _dni_permissions.state = state
                 try:
-                    _dni = DNI.objects.get(id_user= _dni_permissions.id_user)
+                    _dni = DNI.objects.get(id_user=_dni_permissions.id_user)
                     _dni_permissions.save()
-                    print "pk_dni: ",pk_dni," status: ",state 
+                    # print "pk_dni: ",pk_dni," status: ",state
                     saved = True
                 except DNI.DoesNotExist:
-                    error = "Aun no se ha guardado un DNI, debes agregar primero la informaci&oacute;n del DNI"
+                    error = "Aun no se has guardado un DNI, debes agregar primero tu informaci&oacute;n del DNI en <a href='/account/dni'>configuraci&oacute;n de DNI</a>"
                     saved = False
                 except:
                     error = "Ha ocurrido un error"
                     saved = False
             except DNI_permissions.DoesNotExist:
-                error = "No hay permisos asgnados"
+                error = "No hay permisos asignados"
                 saved = False
             except Exception, e:
                 print e
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
-            response = {"saved": saved, "error":error}
+            response = {"saved": saved, "error": error}
             return HttpResponse(json.dumps(response), mimetype="application/json")
         else:
             return "Ha ocurrido un error"

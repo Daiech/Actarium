@@ -1,5 +1,5 @@
 {% extends "asettings/settings_menu.html" %}
-{% block TITLE %}Cuenta de Usuario{% endblock %}
+{% block TITLE %}Configuraci&oacute;n de DNI{% endblock %}
 {% load gravatartag %}
 {% block bodysettings %}
 <div>
@@ -30,6 +30,10 @@
             </tr>
         </table>
     </form>
+    <strong>Qu&eacute; es el DNI?</strong>
+    <p>
+        El documento nacional de identidad, tambi&eacute;n conocido como C&eacute;dula de Ciudadanía (CC), Carn&eacute; de Identidad (CI), C&eacute;dula de Identidad (CI) o Documento Nacional de Identidad (DNI) o identificaci&oacute;n oficial o simplemente identificaci&oacute;n, es un documento privado (individual) que contiene datos personales de car&aacute;cter p&uacute;blico emitido por una autoridad administrativa competente para permitir la identificaci&oacute;n personal de los ciudadanos. <a href="http://es.wikipedia.org/wiki/Documento_de_identidad" target="_blank">Leer m&aacute;s</a>
+    </p>
     <hr>
     {% if permissions %}
     <div id="dni_request">
