@@ -122,7 +122,7 @@
 		                    </div>	
 	                    </li>
 	                    <li>
-	                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
+	                        <p id="message-search"></p>
 	                    </li>
 	                    <li>
 	                        <ul id="search-result">
@@ -133,6 +133,16 @@
 			</div>
 		</section>
 	</form>
+</div>
+<div id="new-user-template" style="display:none">
+	{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+	<li class='user-li'>
+		<a href='#' data-email='[[mail]]' data-username='[[username]]'>
+		    <img class='img20' src='[[gravatar]]' alt='[[mail]]' />
+	         [[mail]] [[p]]
+	    	<i class="icon-accept pull-right icon-ok icon-white hidden"></i>
+		</a>
+	</li>
 </div>
 
 {% endblock %}
@@ -164,7 +174,7 @@
     .taling{text-align: center;}
     .list-members span{color: gray;}
     li a span{/*color:black;*/}
-    .dropdown-menu li p{color:gray;font-size: 14px;line-height:1;margin: 0}
+    .dropdown-menu li p{color:gray;font-size: 14px;line-height:1.5;margin: 0}
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
     #add-member{position: static;}
     #add-member-menu{padding: 10px;}
@@ -180,10 +190,12 @@
     .cancel-inv{font-style: italic;color: gray;}
 
 	@media (min-width: 480px) {
-		#newmember{width: 80%;}
+		#newmember{width: 74%;}
+		#add-member-menu{width: 70%}
 	}
 	@media (min-width: : 380px) {
 		#newmember{width: 60%;}
+		#add-member-menu{width: 90%}
 	}
 </style>
 {% endblock %}
@@ -191,7 +203,8 @@
 <script src="{{STATIC_PREFIX}}js/vendor/mustache.js"></script>
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
-		console.log(Mustache.to_html("<h1>{{s}}</h1>",{"s":"s"}))
+		var message = "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.";
+		$("#message-search").text(message);
 		$("#admin-roles").addClass("active")
 		$(".icons-info span, .username-info, .info-title").tooltip();
 		{% if user_selected%}
@@ -293,15 +306,14 @@
 	        else{//No es usuario de la base de datos
 	            if(data['mail'].length > MAX_LENGTH)
 	                p="..."
-	            $("#search-result").html(
-	                "<li class='user-li'>"+
-	                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-	                "<img class='img20' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-	                data['mail'].substring(0,MAX_LENGTH)+p+
-	                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-	                "</a>"+
-	                "</li>"
-	                )
+	            var view = {
+	            	"mail": data['mail'],
+	            	"gravatar": 'http://www.gravatar.com/avatar/' + data['mail'],
+	            	"username": data['username'],
+	            	"p": p
+	            }
+	            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
+	            $("#search-result").html(Mustache.to_html($("#new-user-template").html(),view));
 	        }
 	        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
 	    }
@@ -364,8 +376,9 @@
 	            var group_name = $("#group_name").val();
 	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},
 	                     "",invitationResult);
-	            $(this).parent().fadeOut()
-	            $("#newmember").focus()
+	            $(this).parent().fadeOut();
+	            $("#newmember").focus();
+	            $("#message-search").html(message)
 	        })
 	    }
 	    function listMembers(data){//lista los usuarios disponibles a invitar
