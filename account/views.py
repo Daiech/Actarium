@@ -19,6 +19,7 @@ from account.templatetags.gravatartag import showgravatar
 from groups.models import DNI, DNI_type, DNI_permissions
 from django.utils import simplejson as json
 
+
 #------------------------------- <Normal User>---------------------------
 def newUser(request):
     '''
@@ -85,7 +86,7 @@ def validateUsername(username):
         return username
 
 
-def newInvitedUser(email_to_invite, _user_from):
+def newInvitedUser(email_to_invite, _user_from, first_name=False, last_name=False):
     '''
     crea un nuevo usuario inactivo desde invitacion y lo retorna
     '''
@@ -96,19 +97,24 @@ def newInvitedUser(email_to_invite, _user_from):
         _user = None
     _username = email_to_invite.split("@")[0]
     _username = validateUsername(_username)
+    if not first_name:
+        first_name = _username
+    if not last_name:
+        last_name = ""
     try:
-        _user = User(username=_username, first_name=_username, email=email_to_invite, is_active=False)
+        _user = User(username=_username, first_name=first_name, last_name=last_name, email=email_to_invite, is_active=False)
         activation_key = getActivationKey(email_to_invite)
         _user.set_password(activation_key[:8])
         _user.save()
+    except Exception, e:
+        print "Error newInvitedUser: %s" % e
+        return False
+    try:
         from models import activation_keys
         activation_keys(id_user=_user, email=email_to_invite, activation_key=activation_key).save()
-        #save invitation to group
-    except activation_keys.DoesNotExist:
-        return False
     except Exception, e:
-        print "Error: %s" % e
-        return False
+        print "Error in activation_keys:", e
+        #ERROR log
     if _user:
         # saveAction Log: new user invited by _user_from
         print "localhost:8000/account/activate/", activation_key, "/invited1"
@@ -174,10 +180,10 @@ def userLogin(request, user_name, password):
     if acceso is not None:
         if acceso.is_active:
             login(request, acceso)
-            try: 
+            try:
                 user_id = User.objects.get(username=user_name)
             except:
-                user_id = User.objects.get(email = user_name)
+                user_id = User.objects.get(email=user_name)
             saveActionLog(user_id, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
             return HttpResponseRedirect(next)
         else:
@@ -258,13 +264,13 @@ def changePassword(request):
     else:
         passForm = PasswordChangeForm(user=request.user)
         passUpdate = False
-    ctx = { "passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate, "error_email": False}
+    ctx = {"passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate, "error_email": False}
     return render_to_response('account/password.html', ctx, context_instance=RequestContext(request))
 
 
 def dni(request):
     saveViewsLog(request, "account.views.dni")
-    
+
     if request.method == "POST":
         formDNI = NewDNI(request.POST)
         if formDNI.is_valid():
@@ -273,34 +279,33 @@ def dni(request):
             try:
                 _DNI = DNI.objects.get(id_user=request.user)
                 _DNI.dni_value = dni
-                _DNI.dni_type = dni_type 
-            except:    
-                _DNI = DNI(dni_value = dni,
-                           dni_type = dni_type,
-                           id_user = request.user)
+                _DNI.dni_type = dni_type
+            except:
+                _DNI = DNI(dni_value=dni,
+                           dni_type=dni_type,
+                           id_user=request.user)
             _DNI.save()
-            dataSaved=True
+            dataSaved = True
         else:
-            dataSaved=False
+            dataSaved = False
     else:
-        dataSaved=False
+        dataSaved = False
         try:
             _DNI = DNI.objects.get(id_user=request.user)
-            formDNI = NewDNI(initial = {"dni":_DNI.dni_value, "dni_type": _DNI.dni_type.pk})
+            formDNI = NewDNI(initial={"dni": _DNI.dni_value, "dni_type": _DNI.dni_type.pk})
         except:
             formDNI = NewDNI()
 
-    
     _dni_permissions = DNI_permissions.objects.filter(id_user=request.user)
-    if len( _dni_permissions) > 0:
+    if len(_dni_permissions) > 0:
         permissions = True
     else:
         permissions = False
 
     # print "hay permissions? ", permissions, len(_dni_permissions)
-    ctx = {'formDNI':formDNI, 'dataSaved': dataSaved, 'dni_permissions':_dni_permissions, 'permissions': permissions}
+    ctx = {'formDNI': formDNI, 'dataSaved': dataSaved, 'dni_permissions': _dni_permissions, 'permissions': permissions}
     return render_to_response('account/dni.html', ctx, context_instance=RequestContext(request))
-    
+
 
 def setDNIPermissions(request):
     """

@@ -219,17 +219,18 @@ def groupInfoSettings(request, slug_group):
         return render_to_response('groups/adminInfoGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
-    
+
+
 @login_required(login_url='/account/login')
 def groupDNISettings(request, slug_group):
     '''
         Muestra la configuracion de DNI de los integrantes de un grupo
     '''
-#    gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-#    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
-#    dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
-#    dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
-#    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
+    #    gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+    #    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
+    #    dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
+    #    dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
+    #    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
     saveViewsLog(request, "groups.views.groupDNISettings")
     try:
         g = groups.objects.get(slug=slug_group, is_active=True)
@@ -244,12 +245,13 @@ def groupDNISettings(request, slug_group):
     except groups.DoesNotExist:
         return HttpResponseRedirect('/groups/')
 
+
 def requestDNI(request, slug_group):
     """
         Sen request for DNI
     """
     saveViewsLog(request, "groups.views.requestDNI")
-    error= False
+    error = False
     saved = False
     if request.is_ajax():
         if request.method == 'GET':
@@ -259,12 +261,12 @@ def requestDNI(request, slug_group):
 
                 if _user_rel.is_admin:
                     try:
-                        id_user =  User.objects.get(pk=int(request.GET['pk_user']))
+                        id_user = User.objects.get(pk=int(request.GET['pk_user']))
                         DNI_per = DNI_permissions(id_group=g, id_user=id_user, id_requester=request.user)
                         DNI_per.save()
                         saved = True
                     except:
-                        saved=False
+                        saved = False
                         error = "Ha ocurrido un error inesperado al enviar la solicitud, por favor intentalo de nuevo mas tarde"
                 else:
                     error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
@@ -277,12 +279,11 @@ def requestDNI(request, slug_group):
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
-            response = {"saved": saved, "error":error}
+            response = {"saved": saved, "error": error}
             return HttpResponse(json.dumps(response), mimetype="application/json")
         else:
             return "Ha ocurrido un error"
     return True
-
 
 
 def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1, is_active=True):
@@ -550,13 +551,14 @@ def getMembers(request):
                         "user_id": ans.id,
                         "mail_is_valid": True,
                         "username": ans.username,
+                        "is_user": True,
                         "mail": ans.email,
                         "gravatar": showgravatar(ans.email, 20)}
                 else:
                     if ans == 1:  # email valido, pero no es usuario
                         message = {"user_id": search, "mail_is_valid": True,
-                                    "mail": search, "username": False,
-                                    "gravatar": showgravatar(search, 20)}
+                                    "mail": search, "username": search.split("@")[0].title(),
+                                    "gravatar": showgravatar(search, 20), "is_user": False}
                     else:
                         if ans == 2:  # no existe el usuario
                             message = {"mail_is_valid": False}
@@ -594,7 +596,7 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
     return _inv
 
 
-def newUserWithInvitation(email, id_user_from, group):
+def newUserWithInvitation(email, id_user_from, group, first_name=False, last_name=False):
     '''
         Crear un nuevo usuario y lo relaciona al grupo.
     '''
@@ -602,7 +604,7 @@ def newUserWithInvitation(email, id_user_from, group):
         try:
             if not getUserByEmail(email):
                 from account.views import newInvitedUser
-                _user = newInvitedUser(email, id_user_from)
+                _user = newInvitedUser(email, id_user_from, first_name=first_name, last_name=last_name)
                 if _user:
                     return _user
                 else:
@@ -668,6 +670,15 @@ def newInvitationToGroup(request):
                 return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo."}), mimetype="application/json")
             if _user_rel.is_admin:
                 email = str(request.GET['mail'])
+                firstname = None
+                lastname = None
+                try:
+                    if request.GET['new'] == "1":
+                        firstname = str(request.GET['firstname'])
+                        lastname = str(request.GET['lastname'])
+                except Exception:
+                    firstname = None
+                    lastname = None
                 if isMemberOfGroupByEmail(email, g):
                     invited = False
                     message = "El usuario ya es miembro del grupo"
@@ -677,7 +688,7 @@ def newInvitationToGroup(request):
                 else:
                     _user = getUserByEmail(email)
                     if not _user:
-                        _user = newUserWithInvitation(email, request.user, g)
+                        _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
                     sendInvitationToGroup(_user, request.user, g)
                     if _user and not (_user is 0):  # 0 = is email failed
                         try:
