@@ -107,13 +107,19 @@
 	                </div>
 	                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 	                    <li class="taling">
-	                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
+	                    	<div class="header-title">
+	                        	<span>Miembros</span>
+	                        	<div id="close-add-member" class="close pull-right icon-remove"></div>
+	                    	</div>
 	                    </li>
 	                    <li>
 	                        <input type="hidden" id="group_name" value="{{group.name}}">
 	                        <input type="hidden" id="group_id" value="{{group.id}}">
-	                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-	                        <span id="load-member"></span>
+	                    	<div class="prelative">
+		                        <button id="button-search" class="btn btn-info"><i class="icon-search icon-white"></i> </button>
+		                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+		                        <span id="load-member"></span>
+		                    </div>	
 	                    </li>
 	                    <li>
 	                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
@@ -152,29 +158,40 @@
 	.td-first{position: relative;}
 	.td-first > div{text-align: left;}
     .span6{border-right: solid thin #dadada;padding: 0 20px;}
-    ul#add-member-menu li{margin-bottom: 10px;}
     .icon-remove{margin: 5px;}
     ul#search-result{margin-left: 0;}
     ul#search-result li span{font-size: 13px;margin-left: 13px;color: gray;}
     .taling{text-align: center;}
     .list-members span{color: gray;}
     li a span{/*color:black;*/}
-    li p{color:gray;font-size: 12px;line-height:  1;}
+    .dropdown-menu li p{color:gray;font-size: 14px;line-height:1;margin: 0}
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
     #add-member{position: static;}
-    #newmember{margin: 3px 10px;padding: 10px;width: 90%;}
-    .dropdown#add-member-menu{text-decoration: none;margin: 5px 20px;}
-    #add-member-menu{/*width:280px;*/}
+    #add-member-menu{padding: 10px;}
+    .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;}
+    ul#add-member-menu li{margin-bottom: 7px;}
+    ul#add-member-menu li a:hover, ul#add-member-menu li a:active{color: white}
     .dropdownmenu  * li{list-style:none;text-decoration: none;}
+    #newmember{margin: 3px;padding: 10px;width: 68%;}
+    #button-search{margin: 3px;padding: 10px;padding-left: 20px;padding-right: 20px;position: absolute;right: 0;}
     .btnSup{margin-top: 8px;}
     div > section ul{margin-left:0; }
     div > section ul li{list-style: none;}
     .cancel-inv{font-style: italic;color: gray;}
+
+	@media (min-width: 480px) {
+		#newmember{width: 80%;}
+	}
+	@media (min-width: : 380px) {
+		#newmember{width: 60%;}
+	}
 </style>
 {% endblock %}
 {% block settings_js %}
+<script src="{{STATIC_PREFIX}}js/vendor/mustache.js"></script>
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
+		console.log(Mustache.to_html("<h1>{{s}}</h1>",{"s":"s"}))
 		$("#admin-roles").addClass("active")
 		$(".icons-info span, .username-info, .info-title").tooltip();
 		{% if user_selected%}
@@ -252,10 +269,10 @@
 	        // mostrar flecha sobre usuario
 	        $(".user-li").hover(
 	            function(){
-	                $(this).find("i").removeClass("hidden")
+	                $(this).find("i").removeClass("hidden");
 	            },
 	            function(){
-	                $(this).find("i").addClass("hidden")
+	                $(this).find("i").addClass("hidden");
 	        })
 	    }
 	    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
@@ -368,14 +385,17 @@
 	            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
 	        }
 	    }
-	    function searchMember(e){//INVITACIONES MAIN 
+	    function getSearch () {
+	    	var user=$("#newmember").val()
+	        sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
+	    }
+	    function searchMember(e){//INVITACIONES MAIN
+	    	e.preventDefault();
 	        // if(e.keyCode==13){
 	        var key = String.fromCharCode(e.keyCode)
 	        var key = e.keyCode
 			if (key > 45 && key < 122) {
-	        	console.log(key)
-			    var user=$("#newmember").val()
-	            sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
+			    getSearch();
 	        }
 	    }
 	    function showIconCloseOnHover(){
@@ -386,6 +406,11 @@
 	        })
 	    }
 	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
+	    $("#button-search").on("click", function (e) {
+	    	e.preventDefault();
+	    	getSearch();
+	    	$("#newmember").focus();
+	    })
 	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
 	    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
 	    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
