@@ -126,6 +126,7 @@
 	                    </li>
 	                    <li>
 	                        <ul id="search-result">
+	                        	
 	                        </ul>
 	                    </li>
 	                </ul>
@@ -136,13 +137,19 @@
 </div>
 <div id="new-user-template" style="display:none">
 	{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-	<li class='user-li'>
-		<a href='#' data-email='[[mail]]' data-username='[[username]]'>
-		    <img class='img20' src='[[gravatar]]' alt='[[mail]]' />
-	         [[mail]] [[p]]
-	    	<i class="icon-accept pull-right icon-ok icon-white hidden"></i>
-		</a>
+	<li>
+		<div class="">
+			<label for="new-user-firstname">Nombres y Apellidos</label>
+			<input id="new-user-firstname" type="text" placeholder="Nombres" value="[[username]]">
+			<input id="new-user-lastname" type="text" placeholder="Apellidos">
+			<input id="new-user-email" type="hidden" value="[[mail]]">
+			<input id="new-user-uname" type="hidden" value="[[username]]">
+		</div>
 	</li>
+	<li>
+		<button id="add-new-user" class="btn btn-info btn-large">Enviar invitaci&oacute;n</button>
+	</li>
+
 </div>
 
 {% endblock %}
@@ -188,6 +195,7 @@
     div > section ul{margin-left:0; }
     div > section ul li{list-style: none;}
     .cancel-inv{font-style: italic;color: gray;}
+    #new-user-firstname{margin-bottom: 2px;}
 
 	@media (min-width: 480px) {
 		#newmember{width: 74%;}
@@ -204,7 +212,7 @@
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
 		var message = "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.";
-		$("#message-search").text(message);
+		$("#message-search").html(message);
 		$("#admin-roles").addClass("active")
 		$(".icons-info span, .username-info, .info-title").tooltip();
 		{% if user_selected%}
@@ -289,33 +297,36 @@
 	        })
 	    }
 	    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
-	        if(data["username"]){//es usuario de la base de datos
-	            user_to_invite = data['mail']+" ("+data['username']+")";
-	            if(user_to_invite.length > MAX_LENGTH)
-	                p="..."
-	            $("#search-result").html(
-	                "<li class='user-li'>"+
-	                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-	                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-	                user_to_invite.substring(0,MAX_LENGTH)+p+
-	                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-	                "</a>"+
-	                "</li>"
-	                )
-	        }
-	        else{//No es usuario de la base de datos
-	            if(data['mail'].length > MAX_LENGTH)
-	                p="..."
-	            var view = {
-	            	"mail": data['mail'],
-	            	"gravatar": 'http://www.gravatar.com/avatar/' + data['mail'],
-	            	"username": data['username'],
-	            	"p": p
-	            }
-	            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
-	            $("#search-result").html(Mustache.to_html($("#new-user-template").html(),view));
-	        }
-	        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
+	    	if(data.mail_is_valid){
+		        if(data.is_user){//es usuario de la base de datos
+		            user_to_invite = data['mail']+" ("+data['username']+")";
+		            if(user_to_invite.length > MAX_LENGTH)
+		                p="..."
+		            $("#search-result").html(
+		                "<li class='user-li'>"+
+		                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+		                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+		                user_to_invite.substring(0,MAX_LENGTH)+p+
+		                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+		                "</a>"+
+		                "</li>"
+		                )
+		        }
+		        else{//No es usuario de la base de datos
+		            if(data['mail'].length > MAX_LENGTH)
+		                p="..."
+		            var view = {
+		            	"mail": data['mail'],
+		            	"gravatar": data['gravatar'],
+		            	"username": data['username'],
+		            	"p": p
+		            }
+		            $("#search-result").html(Mustache.to_html($("#new-user-template").html(),view));
+		            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
+		            $("#add-new-user").on("click", sendInvitationToNewUser);
+		        }
+		        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
+		    }
 	    }
 	    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
 	        if(data['invited']){    //USUARIO INVITADO
@@ -366,6 +377,23 @@
 	                }
 	            }
 	        }
+	    }
+	    function sendInvitationToNewUser(e){
+	    	e.preventDefault();
+	    	var ctx = {
+	    		"new": 1,
+	    		"pk": $("#group_id").val(),
+	    		"mail": $("#new-user-email").val(),
+	    		"uname": $("#new-user-uname").val(),
+	    		"firstname": $("#new-user-firstname").val(),
+	    		"lastname": $("#new-user-lastname").val(),
+	    		}
+			sendAjax("/groups/setInvitation",ctx,"",invitationResult);
+			$("#search-result").fadeOut(300,function (argument) {
+				$(this).empty();
+			});
+            $("#newmember").focus();
+            $("#message-search").html(message);
 	    }
 	    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
 	        $(".user-li > a").on("click",function(e){
@@ -431,7 +459,7 @@
 	        $("#newmember").focus()//give the focus to the input to search members
 	    });
 	    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
-	        $(this).parent().parent().removeClass("disblock");//Close the dropdown menu to add members
+	        $("#add-member-menu").removeClass("disblock");//Close the dropdown menu to add members
 	    });
 		if(window.location.hash && window.location.hash == "#add-new-member"){
 			$("#add-member").click();
