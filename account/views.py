@@ -38,6 +38,7 @@ def newUser(request):
             activation_key = getActivationKey(email_user)
             new_user = formulario.save()
             new_user.is_active = False
+            new_user.username = new_user.username.replace(" ", "-")
             try:
                 new_user.save()
                 from models import activation_keys
@@ -83,7 +84,7 @@ def validateUsername(username):
         User.objects.get(username=username)
         return getNextUsername(username)
     except User.DoesNotExist:
-        return username
+        return username.replace(" ", "-")
 
 
 def newInvitedUser(email_to_invite, _user_from, first_name=False, last_name=False):
