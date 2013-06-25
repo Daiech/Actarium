@@ -236,11 +236,11 @@ def groupDNISettings(request, slug_group):
         g = groups.objects.get(slug=slug_group, is_active=True)
         _user_rel = getRelUserGroup(request.user, g)
         members_dni = DNI_permissions.objects.filter(id_group=g)
-        users_dni=[]
+        users_dni = []
         for m in members_dni:
-            users_dni.append(m.id_user)      
-        members = rel_user_group.objects.filter(id_group = g, is_member = True, is_active=True).exclude(id_user__in =users_dni)
-        ctx = {"group": g,"is_admin": _user_rel.is_admin, 'members':members,'members_dni':members_dni}
+            users_dni.append(m.id_user)
+        members = rel_user_group.objects.filter(id_group=g, is_member=True, is_active=True).exclude(id_user__in=users_dni)
+        ctx = {"group": g, "is_admin": _user_rel.is_admin, 'members': members, 'members_dni': members_dni}
         return render_to_response('groups/adminDNIGroup.html', ctx, context_instance=RequestContext(request))
     except groups.DoesNotExist:
         return HttpResponseRedirect('/groups/')
@@ -752,6 +752,37 @@ def setRelUserGroup(id_user, id_group,
         # error log
         print "EROROR en setRelUserGroup", e
         return False
+
+
+def resendInvitation(request, slug_group):
+    if request.is_ajax():
+        if request.method == "GET":
+            try:
+                group = getGroupBySlug(slug_group)
+                _user_rel = getRelUserGroup(request.user, group)
+                if _user_rel.is_admin and _user_rel.is_active:
+                    try:
+                        uid = str(request.GET['uid'])
+                    except Exception:
+                        uid = None
+                    if uid == "" or not uid:
+                        return HttpResponse(False)
+                    _user = getUserById(uid)
+                    rel = getRelUserGroup(_user, group)
+                    if rel:
+                        # resend email
+                        message = {"user": _user.username, "resent": True}
+                    else:
+                        message = {"error": "Ocurrio un error", "resent": False}
+                else:
+                    message = "No tienes permisos para hacer eso."
+            except Exception:
+                message = False
+        else:
+            message = False
+    else:
+        message = False
+    return HttpResponse(json.dumps(message), mimetype="application/json")
 
 
 @login_required(login_url='/account/login')

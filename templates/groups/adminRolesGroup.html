@@ -49,16 +49,57 @@
 				{% for m in members %}
 				<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
-						<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
-						{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
-	                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
-	                        {{m.id_user.first_name}} {{m.id_user.last_name}}
-	                        {%if m.id_user == user%}
-	                        (yo)
-	                        {%else%}
-	                        ({{m.id_user}})
-	                        {%endif%}
-	                    </div>
+						<div>
+							<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
+							{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
+		                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
+		                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
+		                        {%if m.id_user == user%}
+		                        (yo)
+		                        {%else%}
+		                        ({{m.id_user}})
+		                        {%endif%}
+		                    </div>
+		                    {%if not m.is_active%}
+		                    <div class="user-config" title="Reenviar invitaci&oacute;n a {{m.id_user}} ({{m.id_user.email}})">
+		                    	<a href="#">
+		                    		<i class="icon-cog"></i>
+		                    	</a>
+		                    </div>
+		                    <div class="dropdown-container">
+	                    		<div class="header-title">
+		                        	<span>Configuraci&oacute;n</span>
+		                        	<div class="close close-popover icon-remove"></div>
+		                    	</div>
+		                    	<div class="dropdown-body">
+		                    		<div>
+		                    			<strong>
+		                    				{{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}} ({{m.id_user}}):
+		                    			</strong>
+		                    		</div>
+		                    		<div class="">	
+		                    			<ul class="configuration-list">
+		                    				<li>
+		                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
+		                    						<i class="icon-refresh"></i> Reenviar invitaci&oacute;n
+		                    					</a>
+		                    				</li>
+		                    				<li>
+		                    					<a href="#change-names">
+		                    						<i class="icon-edit"></i> Cambiar nombres
+		                    					</a>
+		                    				</li>
+		                    				<li>
+		                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
+		                    						<i class="icon-remove"></i> Eliminar de grupo
+		                    					</a>
+		                    				</li>
+		                    			</ul>
+		                    		</div>
+		                    	</div>
+		                    </div>
+		                    {%endif%}
+						</div>
 					</td>
 					<td class="t-a-c">
 						<label for="member{{m.id_user.id}}">
@@ -175,7 +216,7 @@
 	.td-first{position: relative;}
 	.td-first > div{text-align: left;}
     .span6{border-right: solid thin #dadada;padding: 0 20px;}
-    .icon-remove{margin: 5px;}
+    .remove-invitation > .icon-remove{margin: 5px;}
     ul#search-result{margin-left: 0;}
     ul#search-result li span{font-size: 13px;margin-left: 13px;color: gray;}
     .taling{text-align: center;}
@@ -185,7 +226,7 @@
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
     #add-member{position: static;}
     #add-member-menu{padding: 10px;}
-    .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;}
+    .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}
     ul#add-member-menu li{margin-bottom: 7px;}
     ul#add-member-menu li a:hover, ul#add-member-menu li a:active{color: white}
     .dropdownmenu  * li{list-style:none;text-decoration: none;}
@@ -196,6 +237,19 @@
     div > section ul li{list-style: none;}
     .cancel-inv{font-style: italic;color: gray;}
     #new-user-firstname{margin-bottom: 2px;}
+    .user-config{position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
+    .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
+    
+    /*Dropdown Actarium*/
+    .dropdown-container{display:none;position:absolute;right:0;top:30px;z-index:2;background-color:rgb(253,253,253);width:90%;border:solid thin #ccc;-webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.15);box-shadow: 0 1px 5px rgba(0,0,0,0.15);border-radius:3px;padding:10px;}
+    .header-title{border-bottom: 1px solid #dcdcdc;height:26px;text-align:center;color:#939393;font-weight: bold;font-size:14px;}
+    .close-popover{position:absolute;right: 5px;top: 7px;}
+    .dropdown-body{margin-top: 10px;}
+    .dropdown-body *{font-size: 14px;}
+    .dropdown-body ul{margin-bottom: 0;}
+    .dropdown-body ul li a{display: block; padding: 5px;}
+    .dropdown-body ul li a:hover{background-color: #00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;}
+    /*Close Dropdown Actarium*/
 
 	@media (min-width: 480px) {
 		#newmember{width: 74%;}
@@ -214,7 +268,7 @@
 		var message = "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.";
 		$("#message-search").html(message);
 		$("#admin-roles").addClass("active")
-		$(".icons-info span, .username-info, .info-title").tooltip();
+		$(".icons-info span, .username-info, .info-title, .resend").tooltip();
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
@@ -284,6 +338,27 @@
 	                    }
 	                }
 	                )
+	        }
+	    }
+	    function deleteInvitationDropdown(elem){
+	        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
+	        {
+	            sendAjax(
+	                "/groups/{{group.slug}}/deleteInvitation",
+	                {"id_inv":elem.attr("data-invitation")},
+	                "",
+	                function(data){
+	                    if(data['deleted']){
+	                        elem.closest("tr").animate({"height":0},"slow",function(e){
+	                            $(this).fadeOut();
+	                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
+	                        });
+	                    }
+	                    else{
+	                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
+	                    }
+	                }
+                );
 	        }
 	    }
 	    function showIconAddMemberOnHover(){
@@ -446,6 +521,27 @@
 	            $(this).find("i.icon-remove").hide(30)
 	        })
 	    }
+	    function reSendInvitation (elem) {
+	    	var uid = $(elem).attr("data-uid");
+	    	console.log("Reenviar "+uid);
+	    	sendAjax("/groups/{{group.slug}}/admin/resend-invitation/",{"uid":uid},"",function (data){
+	    		console.log(data);
+	    	})
+	    }
+	    $(".configuration-list a").on("click", function (e){
+	    	e.preventDefault();
+	    	e.stopPropagation();
+	    	if($(this).attr("href") === "#resend-invitation"){
+	    		reSendInvitation(this);
+	    	}
+	    	if($(this).attr("href") === "#change-names"){
+	    		console.log("Cambiando nombres");
+	    	}
+	    	if($(this).attr("href") === "#delete-from-group"){
+	    		deleteInvitationDropdown($(this));
+	    		$(this).closest(".dropdown-container").hide();
+	    	}
+	    })
 	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
 	    $("#button-search").on("click", function (e) {
 	    	e.preventDefault();
@@ -465,6 +561,28 @@
 			$("#add-member").click();
 			$("#newmember").focus();
 		}
+		/*Dropdown Actarium*/
+		$(".user-config").on("click", function (e){
+			e.preventDefault();
+			var this_dropdown = $(this).parent().find(".dropdown-container");
+			$(".dropdown-container").not(this_dropdown).hide();//hide every .dropdown-container except this_dropdown
+			this_dropdown.slideToggle(100);
+		});
+		$(".close-popover").on("click", function (e){
+			/*Close dropdown container*/
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).closest(".dropdown-container").hide();
+		});
+		/*Close Dropdown Actarium*/
+		$(".dropdown-body ul li a").hover(
+			function (){
+				$(this).find("i").addClass("icon-white");
+			},
+			function (){
+				$(this).find("i").removeClass("icon-white");
+			}
+		);
 	});
 </script>
 {% endblock %}

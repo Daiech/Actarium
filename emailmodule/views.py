@@ -23,18 +23,18 @@ def sendEmailHtml(email_type, ctx, to):
     """
 
     if email_type == 1:
-        subject = ctx['username']+" Bienvenido a Actarium"
+        subject = ctx['username'] + " Bienvenido a Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_activate_account.html')
-    elif email_type == 2: # no necesary
-        subject = ctx['firstname']+" (" + ctx['username'] + u") Te ha invitado a una reunión del grupo " + ctx['groupname'] + " en Actarium"
+    elif email_type == 2:  # no necesary
+        subject = ctx['firstname'] + " (" + ctx['username'] + u") Te ha invitado a una reunión del grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_reunion.html')
-    elif email_type == 3: # colocar restriccioin
-        subject = ctx['firstname']+" (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
+    elif email_type == 3:  # colocar restriccioin
+        subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes.html')
-    elif email_type == 4: # colocar restriccion
+    elif email_type == 4:  # colocar restriccion
         subject = ctx['firstname'] + " (" + ctx['username'] + u") te asignó como " + ctx['rolename'] + " en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_set_role.html')
@@ -42,7 +42,7 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['firstname'] + " (" + ctx['username'] + ") " + ctx['response'] + u" a la reunión de " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_confirm_assistance.html')
-    elif email_type == 6: # colocar restriccoin
+    elif email_type == 6:  # colocar restriccoin
         subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u" te invitó a unirte al grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_group_invitation.html')
@@ -55,7 +55,7 @@ def sendEmailHtml(email_type, ctx, to):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_response_group_invitation.html')
     elif email_type == 9:
-        subject = ctx['email'] + " Dejo un comentario tipo: "+ctx['type_feed']+" en Actarium"
+        subject = ctx['email'] + " Dejo un comentario tipo: " + ctx['type_feed'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_feedback_notification.html')
     else:
@@ -79,6 +79,7 @@ def sendEmailHtml(email_type, ctx, to):
     except:
         #        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
         saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
+
 
 def activeFilter(email_list):
     new_email_list = []
