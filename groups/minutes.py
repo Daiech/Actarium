@@ -554,6 +554,48 @@ def setRolForMinute(request, slug_group):
     return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
 
 
+
+@login_required(login_url='/account/login')
+def setShowDNI(request, slug_group):
+    """
+        Ajax to set show-dni on table rel_group_dni
+        
+    """
+    saveViewsLog(request, "groups.minutes.setShowDNI")
+    error = None
+    saved = True
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                g = getGroupBySlug(slug=slug_group)
+                _user_rel = getRelUserGroup(request.user, g)
+
+                if _user_rel.is_admin:
+                    try:
+                        rel = rel_group_dni.objects.get(id_group=g)
+                        s_dni = rel.show_dni
+                        if s_dni:
+                            rel.show_dni=False
+                        else:
+                            rel.show_dni=True
+                    except rel_group_dni.DoesNotExist:
+                        rel = rel_group_dni(id_group=g, id_admin=request.user, show_dni=True)
+                    rel.save()
+                    saved = True
+                else:
+                    error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
+            except groups.DoesNotExist:
+                error = "Este grupo no existe"
+            except rol_user_minutes.DoesNotExist:
+                error = "Error! no existe el usuario para esta acta"
+            except Exception, e:
+                error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
+            if error:
+                return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
+            response = {"saved": saved}
+            return HttpResponse(json.dumps(response), mimetype="application/json")
+    return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
+
 @login_required(login_url='/account/login')
 def rolesForMinutes(request, slug_group, id_reunion):
     '''
@@ -596,9 +638,19 @@ def rolesForMinutes(request, slug_group, id_reunion):
             template = template.id_template.slug
         except Exception:
             template = ""
+        try:
+            rel = rel_group_dni.objects.get(id_group=g) 
+            print "que hay?", rel.show_dni
+            if rel.show_dni== True:
+                show_dni=True
+            else:
+                show_dni=False
+        except rel_group_dni.DoesNotExist:
+            show_dni=False
+        print show_dni
         ctx = {
             "group": g, "template": template, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary,
-            "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president}
+            "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president, "show_dni":show_dni}
         return render_to_response('groups/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")
