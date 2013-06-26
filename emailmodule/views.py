@@ -58,6 +58,14 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['email'] + " Dejo un comentario tipo: " + ctx['type_feed'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_feedback_notification.html')
+    elif email_type == 10:
+        subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"está solicitando tu precencia en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_resend_activate_account.html')
+    elif email_type == 11:
+        subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"quiere que hacerte parte de su grupo " + ctx['groupname'] + " en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_group_reinvitation.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')

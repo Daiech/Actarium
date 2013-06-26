@@ -770,10 +770,74 @@ def resendInvitation(request, slug_group):
                     _user = getUserById(uid)
                     rel = getRelUserGroup(_user, group)
                     if rel:
-                        # resend email
-                        message = {"user": _user.username, "resent": True}
+                        if not rel.is_active:
+                            ctx_email = {
+                                "firstname": request.user.first_name,
+                                "username": request.user.username,
+                                "groupname": group.name,
+                                "urlgravatar": showgravatar(request.user.email, 50)
+                            }
+                            type_email = 11
+                            if not _user.is_active:
+                                type_email = 10
+                                try:
+                                    from account.models import activation_keys
+                                    ak = activation_keys.objects.get(id_user=_user)
+                                    ctx_email["activation_key"] = ak.activation_key
+                                    ctx_email["id_inv"] = request.user.pk
+                                    ctx_email["newuser_username"] = _user.username
+                                    ctx_email["pass"] = ak.activation_key[:8]
+                                except Exception, e:
+                                    print e
+                            print ctx_email
+                            message = {"email": _user.email, "sent": True}
+                            sendEmailHtml(type_email, ctx_email, [_user.email])  # activate account
+                        else:
+                            message = {"error": "el usuario ya está activo"}
                     else:
-                        message = {"error": "Ocurrio un error", "resent": False}
+                        message = {"error": "El usuario no pertenece a este grupo", "sent": False}
+                else:
+                    message = "No tienes permisos para hacer eso."
+            except Exception:
+                message = False
+        else:
+            message = False
+    else:
+        message = False
+    return HttpResponse(json.dumps(message), mimetype="application/json")
+
+
+def changeNames(request, slug_group):
+    if request.is_ajax():
+        if request.method == "GET":
+            try:
+                group = getGroupBySlug(slug_group)
+                _user_rel = getRelUserGroup(request.user, group)
+                if _user_rel.is_admin and _user_rel.is_active:
+                    try:
+                        uid = str(request.GET['uid'])
+                    except Exception:
+                        uid = None
+                    try:
+                        first_name = str(request.GET['first_name'])
+                    except Exception:
+                        first_name = ""
+                    try:
+                        last_name = str(request.GET['last_name'])
+                    except Exception:
+                        last_name = ""
+                    if uid == "" or not uid:
+                        return HttpResponse(False)
+                    _user = getUserById(uid)
+                    rel = getRelUserGroup(_user, group)
+                    if rel:
+                        # change Names
+                        _user.first_name = first_name
+                        _user.last_name = last_name
+                        _user.save()
+                        message = {"fname": _user.first_name, "lname": _user.last_name, "changed": True}
+                    else:
+                        message = {"error": "El usuario no pertenece a este grupo", "changed": False}
                 else:
                     message = "No tienes permisos para hacer eso."
             except Exception:

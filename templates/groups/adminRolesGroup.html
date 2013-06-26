@@ -39,32 +39,21 @@
 							<span class="th-name">Administrador</span>
 						</div>
 					</th>
-					<th>
-						<div class="info-title" title="Elimina la persona de este grupo" class="th-delelte">
-							<i class="icon-remove-circle"></i>
-							<span class="th-name">Eliminar</span>
-						</div>
-					</th>
 				</tr>
 				{% for m in members %}
 				<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
-						<div>
+						<div class="td-info-user">
 							<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
 							{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
 		                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
+		                        <span class="names">
 		                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
-		                        {%if m.id_user == user%}
-		                        (yo)
-		                        {%else%}
-		                        ({{m.id_user}})
-		                        {%endif%}
+		                        </span>
+		                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
 		                    </div>
-		                    {%if not m.is_active%}
-		                    <div class="user-config" title="Reenviar invitaci&oacute;n a {{m.id_user}} ({{m.id_user.email}})">
-		                    	<a href="#">
-		                    		<i class="icon-cog"></i>
-		                    	</a>
+		                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
+		                    	<a href="#"><i class="icon-cog"></i></a>
 		                    </div>
 		                    <div class="dropdown-container">
 	                    		<div class="header-title">
@@ -77,11 +66,12 @@
 		                    				{{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}} ({{m.id_user}}):
 		                    			</strong>
 		                    		</div>
-		                    		<div class="">	
+		                    		<div class="first-menu">	
 		                    			<ul class="configuration-list">
+		                    				{%if not m.is_active%}
 		                    				<li>
 		                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
-		                    						<i class="icon-refresh"></i> Reenviar invitaci&oacute;n
+		                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> Reenviar invitaci&oacute;n
 		                    					</a>
 		                    				</li>
 		                    				<li>
@@ -89,6 +79,7 @@
 		                    						<i class="icon-edit"></i> Cambiar nombres
 		                    					</a>
 		                    				</li>
+		                    				{%endif%}
 		                    				<li>
 		                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
 		                    						<i class="icon-remove"></i> Eliminar de grupo
@@ -96,9 +87,22 @@
 		                    				</li>
 		                    			</ul>
 		                    		</div>
+                					<div class="second-menu">
+                						<div class="">
+                							<label>
+                								Nombres:
+                								<input class="first-element first-name" type="text" placeholder="Nombres" value="{{m.id_user.first_name|capfirst}}">
+                							</label>
+                							<label>
+                								Apellidos:
+                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
+                							</label>
+				                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> Regresar</a>
+                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
+                						</div>
+                					</div>
 		                    	</div>
 		                    </div>
-		                    {%endif%}
 						</div>
 					</td>
 					<td class="t-a-c">
@@ -120,11 +124,6 @@
 						<label for="admin{{m.id_user.id}}">
 							<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 						</label>
-					</td>
-					<td class="t-a-c">
-						<div class="remove-invitation-container">
-							<a href="#" class="remove-invitation" data-invitation="{{m.id_user.id}}" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a>
-						</div>
 					</td>
 				</tr>
                 {%endfor%}
@@ -237,18 +236,26 @@
     div > section ul li{list-style: none;}
     .cancel-inv{font-style: italic;color: gray;}
     #new-user-firstname{margin-bottom: 2px;}
-    .user-config{position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
+    .user-config{background-color: white; position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
     
     /*Dropdown Actarium*/
-    .dropdown-container{display:none;position:absolute;right:0;top:30px;z-index:2;background-color:rgb(253,253,253);width:90%;border:solid thin #ccc;-webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.15);box-shadow: 0 1px 5px rgba(0,0,0,0.15);border-radius:3px;padding:10px;}
+    .dropdown-container{display:none;position:absolute;right:0;top:30px;z-index:1001;background-color:rgb(253,253,253);border:solid thin #ccc;box-shadow: 0 5px 10px rgba(0,0,0,0.15);border-radius:3px;padding:10px;width:200px;}
     .header-title{border-bottom: 1px solid #dcdcdc;height:26px;text-align:center;color:#939393;font-weight: bold;font-size:14px;}
-    .close-popover{position:absolute;right: 5px;top: 7px;}
+    .close-popover{position:absolute;right: 10px;top: 10px;}
     .dropdown-body{margin-top: 10px;}
     .dropdown-body *{font-size: 14px;}
     .dropdown-body ul{margin-bottom: 0;}
     .dropdown-body ul li a{display: block; padding: 5px;}
     .dropdown-body ul li a:hover{background-color: #00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;}
+    .second-menu{display: none;width:100%}
+    .second-menu label {margin:0;padding: 0;}
+    .second-menu input {width: auto;}
+    .back{margin-top: 5px;padding: 5px;border-radius: 3px;}
+    .back:hover{background-color: #dadada}
+	@media (max-width: 768px) {
+		.dropdown-container{right: auto;left: 0;}
+	}
     /*Close Dropdown Actarium*/
 
 	@media (min-width: 480px) {
@@ -316,29 +323,6 @@
 	    			checkbox.attr("checked","checked")
 	    		}
 	    	}
-	    }
-	    function deleteInvitation(e){
-	    	e.preventDefault()
-	        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-	        {
-	            elem = $(this)
-	            sendAjax(
-	                "/groups/{{group.slug}}/deleteInvitation",
-	                {"id_inv":$(this).attr("data-invitation")},
-	                "",
-	                function(data){
-	                    if(data['deleted']){
-	                        $(elem).parent().parent().animate({"height":0},"slow",function(e){
-	                            $(this).parent().fadeOut()
-	                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
-	                        });
-	                    }
-	                    else{
-	                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
-	                    }
-	                }
-	                )
-	        }
 	    }
 	    function deleteInvitationDropdown(elem){
 	        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
@@ -428,10 +412,7 @@
 					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
 						'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
 					'</label></td>'+
-					'<td class="t-a-c">'+
-						'<div>'+
-						'<a href="#" class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i class="icon-remove"></i></a></div>'+
-					'</td></tr>';
+					'</tr>';
 				$("#table-roles").append(tr);
 				setAlertMessage("Invitado",data['message'])
 	            showIconCloseOnHover()
@@ -523,19 +504,63 @@
 	    }
 	    function reSendInvitation (elem) {
 	    	var uid = $(elem).attr("data-uid");
-	    	console.log("Reenviar "+uid);
 	    	sendAjax("/groups/{{group.slug}}/admin/resend-invitation/",{"uid":uid},"",function (data){
-	    		console.log(data);
+	    		if(data.sent){
+	    			console.log("Reenviado "+data.sent);
+		    		setAlertMessage("Invitaci&oacute; reenviada", "Se ha enviado nuevamente una invitac&oacute;n por correo electr&oacute;nico a "+data.email);
+    			}
+    			else{
+    				console.log(data);
+    			}
 	    	})
 	    }
-	    $(".configuration-list a").on("click", function (e){
+	    function changeNames(elem){
+	    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
+	    	var first_menu = elem.closest(".first-menu");
+
+	    	second_menu.slideDown(150);
+	    	first_menu.slideUp(200, function(){$(".first-element").focus();});
+
+	    	second_menu.find(".back").on("click", function (e) {
+	    		e.preventDefault();
+	    		e.stopPropagation();
+	    		first_menu.slideDown(150);
+	    		second_menu.slideUp(200);
+	    	});
+	    }
+	    function setNewNames(uid, fname, lname){
+	    	
+	    }
+    	$(".save-names").on("click", function (e){
+    		e.preventDefault();
+    		e.stopPropagation();
+    		var fname = $(this).closest(".second-menu").find(".first-name").val();
+    		var lname = $(this).closest(".second-menu").find(".last-name").val();
+    		var uid = $(this).attr("data-uid");
+    		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
+			console.log(uid);
+			var elem = $(this);
+    		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
+    			if(data.changed){
+    				console.log(data);
+    				console.log(elem.closest(".td-info-user").find(".names"));
+    				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
+    				restartMenus();
+    				setAlertMessage("Nombres Cambiados", "Los nombres se han actualizado con &eacute;xito.");
+    			}else{
+    				console.log("No se pudo guardar los nuevos nombres");
+    				setAlertError("Error", "No se pudo guardar los nuevos nombres. Recarga la p&aacute;gina e intenta de nuevo.");
+    			}
+    		});
+    	});
+	    $(".configuration-list a").on("click", function (e){  {%comment%} listen events on menu{%endcomment%}
 	    	e.preventDefault();
 	    	e.stopPropagation();
 	    	if($(this).attr("href") === "#resend-invitation"){
 	    		reSendInvitation(this);
 	    	}
 	    	if($(this).attr("href") === "#change-names"){
-	    		console.log("Cambiando nombres");
+	    		changeNames($(this));
 	    	}
 	    	if($(this).attr("href") === "#delete-from-group"){
 	    		deleteInvitationDropdown($(this));
@@ -549,7 +574,6 @@
 	    	$("#newmember").focus();
 	    })
 	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
-	    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
 	    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
 	        $("#add-member-menu").addClass("disblock");
 	        $("#newmember").focus()//give the focus to the input to search members
@@ -562,17 +586,23 @@
 			$("#newmember").focus();
 		}
 		/*Dropdown Actarium*/
+	    function restartMenus(){
+	    	$(".second-menu").slideUp(200);
+    		$(".first-menu").slideDown(150);
+	    }
 		$(".user-config").on("click", function (e){
 			e.preventDefault();
 			var this_dropdown = $(this).parent().find(".dropdown-container");
 			$(".dropdown-container").not(this_dropdown).hide();//hide every .dropdown-container except this_dropdown
 			this_dropdown.slideToggle(100);
+			restartMenus();
 		});
 		$(".close-popover").on("click", function (e){
 			/*Close dropdown container*/
 			e.preventDefault();
 			e.stopPropagation();
 			$(this).closest(".dropdown-container").hide();
+    		restartMenus();
 		});
 		/*Close Dropdown Actarium*/
 		$(".dropdown-body ul li a").hover(

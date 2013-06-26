@@ -15,9 +15,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import datetime
 
+
 def home(request):
     if request.user.is_authenticated():
-        saveViewsLog(request,"Home_authenticated")
+        saveViewsLog(request, "Home_authenticated")
         #-----------------</GRUPOS>-----------------
         gr = rel_user_group.objects.filter(
             id_user=request.user,
@@ -34,7 +35,7 @@ def home(request):
         #-----------------</INVITACIONES>-----------------
 
         _dni_permissions = DNI_permissions.objects.filter(id_user=request.user, state=0)
-        
+
         #-----------------<REUNIONES>-----------------
         # my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
         my_reu = reunions.objects.filter(id_group__in=_groups_list, date_reunion__gt=datetime.date.today()).order_by("-date_convened")
@@ -53,7 +54,7 @@ def home(request):
         ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array, 'dni_permissions': _dni_permissions}
         template = 'website/index.html'
     else:
-        saveViewsLog(request,"Home_anonymous")
+        saveViewsLog(request, "Home_anonymous")
         ctx = {}
         template = 'website/landing.html'
 
@@ -64,7 +65,7 @@ def sendFeedBack(request):
     '''
     Formulario para feedback
     '''
-    saveViewsLog(request,"website.views.sendFeedBack")
+    saveViewsLog(request, "website.views.sendFeedBack")
     if request.is_ajax():
         if request.method == 'GET':
             print request.GET
@@ -90,12 +91,11 @@ def sendFeedBack(request):
                     type_feed = 'Pregunta'
                 else:
                     type_feed = 'No definido'
-                
+
                 ctx_email = {
                     'type_feed': type_feed,
                     'email': mail,
                     'comment': comment,
-                    
                 }
                 sendEmailHtml(9, ctx_email, staff_emails)
             else:
@@ -105,18 +105,19 @@ def sendFeedBack(request):
         return HttpResponseRedirect("/")
     return True
 
+
 @login_required(login_url='/account/login')
 def showFeedBack(request):
     '''
     Visualizacion de comentarios ingresados en Actarium (feedback)
     '''
-    saveViewsLog(request,"website.views.showFeedBack")
+    saveViewsLog(request, "website.views.showFeedBack")
     if request.user.is_staff:
         _feedBack = feedBack.objects.all().order_by("-date_added")
-        return render_to_response('website/feedback.html', {'feeds': _feedBack }, context_instance=RequestContext(request))
+        return render_to_response('website/feedback.html', {'feeds': _feedBack}, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/")
-    
+
 
 def validateEmail(email):
     if len(email) > 7:
@@ -129,15 +130,17 @@ def validateEmail(email):
 
 
 def about(request):
-    saveViewsLog(request,"website.views.about")
+    saveViewsLog(request, "website.views.about")
     return render_to_response('website/about.html', {}, context_instance=RequestContext(request))
 
+
 def blog(request):
-    saveViewsLog(request,"website.views.blog")
+    saveViewsLog(request, "website.views.blog")
     return render_to_response('website/blog.html', {}, context_instance=RequestContext(request))
 
+
 def help(request):
-    saveViewsLog(request,"website.views.help")
+    saveViewsLog(request, "website.views.help")
     try:
         faqs = faq.objects.filter(is_active=True)
     except faq.DoesNotExist:
@@ -146,7 +149,7 @@ def help(request):
 
 
 def privacy_(request):
-    saveViewsLog(request,"website.views.privacy_")
+    saveViewsLog(request, "website.views.privacy_")
     try:
         p = privacy.objects.get(is_active=True)
     except privacy.DoesNotExist:
@@ -157,7 +160,7 @@ def privacy_(request):
 
 
 def terms(request):
-    saveViewsLog(request,"website.views.terms")
+    saveViewsLog(request, "website.views.terms")
     try:
         t = conditions.objects.get(is_active=True)
     except conditions.DoesNotExist:
