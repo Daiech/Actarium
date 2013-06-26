@@ -73,22 +73,31 @@
 					</td>
 					<td class="t-a-c">
 						<label for="assistant{{m.member.id_user.id}}">
-							<input id="assistant{{m.member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_assistant%}checked{%endif%}>
+							<input class ="set-role" id="assistant{{m.member.id_user.id}}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_assistant%}checked{%endif%}>
 						</label>
 					</td>
 					<td class="t-a-c">
 						<label for="approver{{m.member.id_user.id}}">
-							<input id="approver{{m.member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_approver%}checked{%endif%}>
+							<input class ="set-role" id="approver{{m.member.id_user.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_approver%}checked{%endif%}>
 						</label>
 					</td>
 					<td class="t-a-c">
 						<label for="signer{{m.member.id_user.id}}">
-							<input id="signer{{m.member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_signer%}checked{%endif%}>
+							<input class ="set-role" id="signer{{m.member.id_user.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.member.id_user.id}}" {%if m.rol.is_signer%}checked{%endif%}>
 						</label>
 					</td>
 				</tr>
                 {%endfor%}
 			</table>
+			<br />
+			<label for="show-dni">
+				<table><tr>
+				<td><input id="show-dni" type="checkbox" {%if show_dni %}checked{%endif%} > &nbsp;&nbsp;</td>
+				<td><span id="show-dni-message" >Mostrar el DNI de los encargados de firmar</span></td>
+				</tr>
+				</table>
+			</label>
+			
 			<br>
 			<div id="add-new-member" class="mt20 pull-left">
 				<div class="icons-info">
@@ -275,9 +284,23 @@
 	    	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 	    		{"role":5, "uid": uid, "remove": 0},"",callbackSetSecretary)
 	    }
-	    $("td input[type='checkbox']").on("click", setRole);//roles MAIN
+	    function setShowDNI(e){
+	    	sendAjax("/groups/{{group.slug}}/set-show-dni",
+	    		{},"", 
+	    		function(data){
+	    			if (data["saved"]){
+				    	setAlertMessage("Configuraci&oacute;n realizada", "Se ha guardado correctamente la configuraci&oacute;n de visualizaci&oacute;n de DNI en las actas")
+				    }
+				    else{
+				    	setAlertError("Ocurri&oacute; un error", data['error'])
+				    }
+				}
+	    	);
+	    }
+	    $(".set-role").on("click", setRole);//roles MAIN
 	    $("#sel-president").on("change", setPresident);//roles MAIN
 	    $("#sel-secretary").on("change", setSecretary);//roles MAIN
+	    $("#show-dni").on('change', setShowDNI);
 	});
 </script>
 {% endblock %}

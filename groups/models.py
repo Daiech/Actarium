@@ -355,7 +355,11 @@ class DNI_permissions(models.Model):
     state = models.CharField(max_length=1, verbose_name="state", default="0") #0: Sin responder,  1:Aceptado, 2:rechazado
     id_requester = models.ForeignKey(User,  null=False, related_name='%(class)s_id_requester')
 
-
+class rel_group_dni(models.Model):
+    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    show_dni = models.BooleanField()
+    id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    date_added = models.DateTimeField(auto_now=True)
 
 class minutes_version(models.Model):
     id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')

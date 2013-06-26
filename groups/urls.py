@@ -11,6 +11,7 @@ groups_urls = patterns(
     url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'groups.minutes.rolesForMinutes', name='New minutes with reunion'),
     url(r'^(?P<slug_group>[-\w]+)/setRole', 'groups.views.setRole', name='Set Role'),
     url(r'^(?P<slug_group>[-\w]+)/set-rol-for-minute', 'groups.minutes.setRolForMinute', name='Set Role'),
+    url(r'^(?P<slug_group>[-\w]+)/set-show-dni', 'groups.minutes.setShowDNI', name='Set Show DNI'),
     url(r'^(?P<slug_group>[-\w]+)/add-new-annotation', 'groups.minutes.newAnnotation', name='Set annotation'),
     url(r'^(?P<slug_group>[-\w]+)/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'groups.minutes.newMinutes', name='New minutes with reunion'),
     url(r'^(?P<slug_group>[-\w]+)/uploadMinutes', 'groups.minutes.uploadMinutes', name='uploadMinutes'),
