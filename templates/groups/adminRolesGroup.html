@@ -74,11 +74,13 @@
 		                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> Reenviar invitaci&oacute;n
 		                    					</a>
 		                    				</li>
+		                    				{%if not m.id_user.is_active%}
 		                    				<li>
 		                    					<a href="#change-names">
 		                    						<i class="icon-edit"></i> Cambiar nombres
 		                    					</a>
 		                    				</li>
+		                    				{%endif%}
 		                    				{%endif%}
 		                    				<li>
 		                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
