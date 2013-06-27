@@ -186,6 +186,16 @@ def getRelUserMinutesSigned(_user, _minutes):
         return False
 
 
+def getAllMinutesSigned(_minutes):
+    try:
+        return rel_user_minutes_signed.objects.filter(id_minutes=_minutes)
+    except rel_user_minutes_signed.DoesNotExist:
+        return None
+    except Exception, e:
+        print "ERROR minutes.getAllMinutesSigned:", e
+        return False
+
+
 def getRelUserMinutesAssistance(id_minutes, id_user):
     try:
         return rel_user_minutes_assistance.objects.get(id_minutes=id_minutes, id_user=id_user)
@@ -364,6 +374,14 @@ def setMinutesApprove(request):
                 if sign.is_signed_approved == 0:
                     sign.is_signed_approved = approved
                     sign.save()
+                signs = getAllMinutesSigned(_minutes)
+                is_full_signed = 1
+                for s in signs:
+                    if s.is_signed_approved == 0:
+                        is_full_signed = 0
+                if is_full_signed == 1:
+                    _minutes.is_full_signed = 1
+                    _minutes.save()
             except Exception, e:
                 print "Error Al Firmar" % e
             response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
@@ -560,12 +578,10 @@ def setRolForMinute(request, slug_group):
     return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
 
 
-
 @login_required(login_url='/account/login')
 def setShowDNI(request, slug_group):
     """
         Ajax to set show-dni on table rel_group_dni
-        
     """
     saveViewsLog(request, "groups.minutes.setShowDNI")
     error = None
@@ -601,6 +617,7 @@ def setShowDNI(request, slug_group):
             response = {"saved": saved}
             return HttpResponse(json.dumps(response), mimetype="application/json")
     return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
+
 
 @login_required(login_url='/account/login')
 def rolesForMinutes(request, slug_group, id_reunion):
@@ -1032,13 +1049,12 @@ def showMinutes(request, slug, minutes_code):
         if rol:
             rol_is_approver = rol.is_approver
             rel_group_is_secretary = rel_group.is_secretary
-        if rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin:
+        if rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin or minutes_current.is_full_signed:
             if not minutes_current:
                 return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
             address_template = minutes_current.id_template.address_template
 
-            print "MINUTE", minutes_current.id_template
             id_minutes_type = minutes_current.id_template.id_type.pk
 
             if id_minutes_type == 1:

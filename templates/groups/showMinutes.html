@@ -25,7 +25,7 @@
 						<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
 						<button type='submit' id="btn-generate-pdf" class="btn" {%if not minutes.is_full_signed%}disabled title="Los PDF solo son generados para actas aprobadas."{%endif%} ><i class="icon-file"></i> Generar PDF</button>
 					</form>
-					{% if is_secretary%}
+					{% if is_secretary and not minutes.is_full_signed%}
 					<button class="btn" id="minutes-edit"><i class="icon-pencil"></i> Editar Acta</button>
 					{%endif%}
 					{%if minutes_version%}
@@ -94,6 +94,7 @@
 		}
 	});
 	function callBackApprove(data){
+		console.log(data.signs)
 		$("#div-sign").fadeOut(300,function(){$(this).empty()});
 		var u = $("#missing-"+data["user-id"]);
 		if(data['approved']==1){
@@ -111,7 +112,7 @@
 			{"m_id":minutes_id, "approve": is_approved},
 			"#btn-sign span",
 			callBackApprove
-			)
+		);
 	}
 	function goToByScroll(element, callback){// Scroll
 	    $('html,body').animate({
