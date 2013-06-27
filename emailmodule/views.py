@@ -70,6 +70,10 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"publicó una anotación en un Acta del grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_annotation.html')
+    elif email_type == 13:  # colocar restriccioin
+        subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')

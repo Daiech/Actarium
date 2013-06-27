@@ -338,22 +338,26 @@ class annotations_comments(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=False)
 
+
 class DNI_type(models.Model):
     short_name = models.CharField(max_length=20, verbose_name="Short Name")
     long_name = models.CharField(max_length=150, verbose_name="Long Name")
-    
+
+
 class DNI(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     dni_type = models.ForeignKey(DNI_type,  null=False, related_name='%(class)s_dni_type')
     dni_value = models.CharField(max_length=150, verbose_name="dni_value")
     date_added = models.DateTimeField(auto_now=True)
-    
+
+
 class DNI_permissions(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     date_added = models.DateTimeField(auto_now=True)
-    state = models.CharField(max_length=1, verbose_name="state", default="0") #0: Sin responder,  1:Aceptado, 2:rechazado
+    state = models.CharField(max_length=1, verbose_name="state", default="0")  # 0: Sin responder,  1:Aceptado, 2:rechazado
     id_requester = models.ForeignKey(User,  null=False, related_name='%(class)s_id_requester')
+
 
 class rel_group_dni(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
@@ -361,10 +365,12 @@ class rel_group_dni(models.Model):
     id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     date_added = models.DateTimeField(auto_now=True)
 
+
 class rel_minutes_dni(models.Model):
     id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
     show_dni =  models.BooleanField()
     date_added = models.DateTimeField(auto_now=True)
+
 
 class minutes_version(models.Model):
     id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
@@ -375,9 +381,6 @@ class minutes_version(models.Model):
 
 class minutes_approver_version(models.Model):
     id_user_approver = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
+    id_minutes_version = models.ForeignKey(minutes_version, null=False, related_name='%(class)s_id_minutes')
     date_created = models.DateTimeField(auto_now=True)
-
-
-
-
+    is_signed_approved = models.IntegerField()  # take 0, 1, or 2

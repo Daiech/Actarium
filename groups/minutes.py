@@ -263,7 +263,7 @@ def removeUniqueRolGroup(group, role):
         return False
 
 
-def updateRolUserMinutes(request, group, _minute):
+def updateRolUserMinutes(request, group, _minute, for_approvers=False):
     saveViewsLog(request, "groups.minutes.updateRolUserMinutes")
     try:
         rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
@@ -287,7 +287,10 @@ def updateRolUserMinutes(request, group, _minute):
         'link': link,
         'urlgravatar': showgravatar(request.user.email, 50)
     }
-    sendEmailHtml(3, email_ctx, email_list)
+    if for_approvers:
+        sendEmailHtml(13, email_ctx, email_list)
+    # else:
+    #     sendEmailHtml(3, email_ctx, getEmailListByGroup(group))
     return url_new_minute
 
 
@@ -382,6 +385,16 @@ def setMinutesApprove(request):
                 if is_full_signed == 1:
                     _minutes.is_full_signed = 1
                     _minutes.save()
+                url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minutes.code)
+                link = URL_BASE + url_new_minute
+                email_ctx = {
+                    'firstname': request.user.first_name,
+                    'username': request.user.username,
+                    'groupname': group.name,
+                    'link': link,
+                    'urlgravatar': showgravatar(request.user.email, 50)
+                }
+                sendEmailHtml(3, email_ctx, getEmailListByGroup(group))
             except Exception, e:
                 print "Error Al Firmar" % e
             response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
@@ -762,17 +775,11 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                 url_logo = URL_BASE + _pro.id_organization.logo_address
         ######## </LOGO> #########
 
-        
-
         ######## <SAVE_THE_MINUTE> #########
         if request.method == "POST":
             form = newMinutesForm(request.POST)
             if form.is_valid():
                 _minute = saveMinute(request, group, form, _template)
-
-                ######## <asign DNI state> #######
-                rel_minutes_dni(id_minutes=_minute, show_dni= show_dni).save()  
-                ######## <asign DNI state> #######
 
                 ######## <Create a relation into reunion and the new minutes> #########
                 try:
@@ -787,9 +794,13 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                 ######## </Create a relation into reunion and the new minutes> #########
 
                 if _minute:
+                    ######## <asign DNI state> #######
+                    rel_minutes_dni(id_minutes=_minute, show_dni=show_dni).save()
+                    ######## <asign DNI state> #######
+
                     ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
                     setMinuteAssistance(_minute, members_assistant, members_no_assistant)
-                    url_new_minute = updateRolUserMinutes(request, group, _minute)
+                    url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True)
                     ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
                     return HttpResponseRedirect(url_new_minute)
                 else:
@@ -875,22 +886,22 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
             ######## </PRESIDENT AND SECRETARY> #########
 
             ######## <PRESIDENT AND SECRETARY> #########
-            member_president, member_secretary = getPresidentAndSecretary(group, minutes_current = _minute)
+            member_president, member_secretary = getPresidentAndSecretary(group, minutes_current=_minute)
             try:
                 _dni_president = DNI.objects.get(id_user=member_president.id_user)
-                president = {"user":member_president,"dni":_dni_president.dni_value, "dni_type":_dni_president.dni_type.short_name}
+                president = {"user": member_president, "dni": _dni_president.dni_value, "dni_type": _dni_president.dni_type.short_name}
             except:
-                president = {"user":member_president,"dni":"", "dni_type":""}
+                president = {"user": member_president, "dni": "", "dni_type": ""}
             try:
                 _dni_secretary = DNI.objects.get(id_user=member_secretary.id_user)
-                secretary = {"user":member_secretary,"dni":_dni_secretary.dni_value, "dni_type":_dni_secretary.dni_type.short_name}
+                secretary = {"user": member_secretary, "dni": _dni_secretary.dni_value, "dni_type": _dni_secretary.dni_type.short_name}
             except:
-                secretary = {"user":member_secretary,"dni":"", "dni_type":""}
+                secretary = {"user": member_secretary, "dni": "", "dni_type": ""}
             ######## </PRESIDENT AND SECRETARY> #########
 
-            ######## <DNI> ########   
+            ######## <DNI> ########
             try:
-                rgd = rel_group_dni.objects.get(id_group= group)
+                rgd = rel_group_dni.objects.get(id_group=group)
                 show_dni = rgd.show_dni
             except:
                 show_dni = False
@@ -935,15 +946,35 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                         "show_dni": show_dni
                         }
                     )
-                    minutes_version(id_minutes=_minute, id_user_creator=request.user, full_html=full_html).save()
+                    _minutes_version = minutes_version(id_minutes=_minute, id_user_creator=request.user, full_html=full_html)
+                    _minutes_version.save()
+                    signs = getAllMinutesSigned(_minute)
+                    a = list()
+                    for s in signs:
+                        a.append(
+                            minutes_approver_version(
+                                id_user_approver=s.id_user,
+                                id_minutes_version=_minutes_version,
+                                is_signed_approved=s.is_signed_approved)
+                        )
+                    try:
+                        print "aprovadores", a
+                        minutes_approver_version.objects.bulk_create(a)
+                    except Exception, e:
+                        print "Minutes.editMinute coping the approvers", e
+                    for s2 in signs:
+                        s2.is_signed_approved = 0
+                        s2.save()
                     # guardar versión de los aprovadores
                     _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  # actualizar
 
                     if _minute:
                         ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
                         # setMinuteAssistance(_minute, members_assistant, members_no_assistant)
-                        url_new_minute = updateRolUserMinutes(request, group, _minute)
+                        url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True)
                         ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
+
+                        # send Email
                         return HttpResponseRedirect(url_new_minute)
                     else:
                         saved = False
