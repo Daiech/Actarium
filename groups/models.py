@@ -361,6 +361,11 @@ class rel_group_dni(models.Model):
     id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     date_added = models.DateTimeField(auto_now=True)
 
+class rel_minutes_dni(models.Model):
+    id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
+    show_dni =  models.BooleanField()
+    date_added = models.DateTimeField(auto_now=True)
+
 class minutes_version(models.Model):
     id_minutes = models.ForeignKey(minutes, null=False, related_name='%(class)s_id_minutes')
     id_user_creator = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
