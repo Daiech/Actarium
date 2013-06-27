@@ -126,27 +126,36 @@
           <div id="firmas">
               <table>
                   <tr>
-                  {% if president %}
-                      <td style="padding-left:10px;padding-top:20px;">
-                          _______________________________ <br />
-                          {{president.id_user.first_name|upper}} {{president.id_user.last_name|upper}}<br />
-                          Presidente
-                      </td>
-                  {% endif %}
-                  {% if secretary %}
-                      <td style="padding-left:10px;padding-top:20px;">
-                          _______________________________ <br />
-                          {{secretary.id_user.first_name|upper}} {{secretary.id_user.last_name|upper}}<br />
-                          Secretario
-                      </td>
-                  {% endif %}
+                  {% if president.user %}
+                        <td style="padding-left:10px;padding-top:60px;">
+                            _______________________________ <br />
+                            {{president.user.id_user.first_name|upper}} {{president.user.id_user.last_name|upper}}<br />
+                            Presidente
+                            {% if show_dni %}
+                                </br>{{ president.dni_type }} {{ president.dni }}
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    {% if secretary.user %}
+                        <td style="padding-left:10px;padding-top:60px;">
+                            _______________________________ <br />
+                            {{secretary.user.id_user.first_name|upper}} {{secretary.user.id_user.last_name|upper}}<br />
+                            Secretario
+                            {% if show_dni %}
+                                </br>{{ secretary.dni_type }} {{ secretary.dni }}
+                            {% endif %}
+                        </td>
+                    {% endif %}
                   </tr>
                   {% for members in members_signers%}
                     <tr>
                         {% for m in members %}
                         <td style="padding-left:10px;padding-top:40px;">
                           _______________________________ <br />
-                          {{m.id_user.first_name|upper}} {{m.id_user.last_name|upper}}
+                          {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper}}
+                          {% if show_dni %}
+                              </br>{{ m.dni_type }} {{ m.dni }}
+                          {% endif %}
                         </td>
                         {% endfor %}
                    </tr>
