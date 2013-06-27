@@ -385,16 +385,16 @@ def setMinutesApprove(request):
                 if is_full_signed == 1:
                     _minutes.is_full_signed = 1
                     _minutes.save()
-                url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minutes.code)
+                url_new_minute = "/groups/" + str(_minutes.id_group.slug) + "/minutes/" + str(_minutes.code)
                 link = URL_BASE + url_new_minute
                 email_ctx = {
                     'firstname': request.user.first_name,
                     'username': request.user.username,
-                    'groupname': group.name,
+                    'groupname': _minutes.id_group.name,
                     'link': link,
                     'urlgravatar': showgravatar(request.user.email, 50)
                 }
-                sendEmailHtml(3, email_ctx, getEmailListByGroup(group))
+                sendEmailHtml(3, email_ctx, getEmailListByGroup(_minutes.id_group))
             except Exception, e:
                 print "Error Al Firmar" % e
             response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
