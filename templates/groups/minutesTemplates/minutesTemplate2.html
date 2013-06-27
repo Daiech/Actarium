@@ -76,7 +76,7 @@
               </span>
               <br /> 
               <span style="display:inline-block; float:right">{{ newMinutesForm.code.errors }}</span>
-        		  ASAMBLEA GENERAL 
+        		  {{ group.name|upper }} 
               <span style="display:inline-block;">{{ newMinutesForm.type_reunion }}</span>
               <br /> 
               PARQUESOFT PEREIRA
@@ -84,13 +84,13 @@
             <br /><br />
         	</div>
       		<p style="text-align : justify;">
-      			En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, siendo las {{ newMinutesForm.date_start}}<span style="display:inline-block; float:right">{{ newMinutesForm.date_start.errors }}</span>, se
-      			reunieron los miembros de la asamblea general de la Fundaci&oacute;n Parque Tecnol&oacute;gico
+      			En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, el d&iacute;a <span id="first_date">{{ newMinutesForm.date_start}}</span><span style="display:inline-block; float:right">{{ newMinutesForm.date_start.errors }}</span>, se
+      			reunieron los miembros de la {{ group.name }}  de la Fundaci&oacute;n Parque Tecnol&oacute;gico
       			de Software de Pereira por derecho propio, atendiendo a la convocatoria efectuada de
       			conformidad con los estatutos o la ley.
       		</p>
       		<p style="text-align : justify;">
-      			Que el d&iacute;a <span id="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
+      			Que el d&iacute;a <span class ="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
       			miembros activos de la Asamblea General de la fundaci&oacute;n Parque Tecnol&oacute;gico de
       			Software de Pereira, dando cumplimiento al qu&oacute;rum necesario para iniciar, deliberar y
       			decidir, exigido en los estatutos.

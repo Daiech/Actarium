@@ -841,7 +841,8 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "url_logo": url_logo,
                "president": president,
                "secretary": secretary,
-               "show_dni": show_dni
+               "show_dni": show_dni,
+               "is_form": 1
                }
         return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -943,7 +944,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                         "url_logo": url_logo,
                         "president": president,
                         "secretary": secretary,
-                        "show_dni": show_dni
+                        "show_dni": show_dni,
                         }
                     )
                     _minutes_version = minutes_version(id_minutes=_minute, id_user_creator=request.user, full_html=full_html)
@@ -1027,7 +1028,8 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                    "url_logo": url_logo,
                    "president": president,
                    "secretary": secretary,
-                   "show_dni": show_dni
+                   "show_dni": show_dni,
+                   "is_form": 1
                    }
             return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
         else:
@@ -1139,6 +1141,7 @@ def showMinutes(request, slug, minutes_code):
                 return HttpResponseRedirect('/groups/' + slug + '/#error-there-is-not-that-minutes')
 
             address_template = minutes_current.id_template.address_template
+            address_js_template = minutes_current.id_template.address_js
 
             id_minutes_type = minutes_current.id_template.id_type.pk
 
@@ -1268,7 +1271,10 @@ def showMinutes(request, slug, minutes_code):
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
                 "commission_approving": missing_approved_list,
                 "annotations": annon,
-                "minutes_version": minutes_version
+                "minutes_version": minutes_version,
+                "minutesTemplateJs": address_js_template,
+                "is_form": 0
+                
             }
         else:
             return HttpResponseRedirect("/groups/" + slug + "#esta-acta-aun-no-ha-sido-aprobada")
