@@ -88,6 +88,10 @@
 			}
 		})
 		{% endif %}
+		if(window.location.hash){
+			console.log(window.location.hash);
+			$(window.location.hash+" > div").addClass("selected-annontation");
+		}
 	});
 	function callBackApprove(data){
 		$("#div-sign").fadeOut(300,function(){$(this).empty()});
@@ -166,6 +170,7 @@
 
 {% block style%}
 <style>
+	.selected-annontation{background-color: rgb(240, 240, 240);;}
 	.content-annotation{margin-left: 40px}
 	.comment-annotation p{font-size: 14px;}
 	.name-user-annotation{margin-left: 40px}

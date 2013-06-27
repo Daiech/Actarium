@@ -66,6 +66,10 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"quiere que hacerte parte de su grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_group_reinvitation.html')
+    elif email_type == 12:
+        subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"publicó una anotación en un Acta del grupo " + ctx['groupname'] + " en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_new_annotation.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
