@@ -451,11 +451,17 @@ def newAnnotation(request, slug_group):
                     email_list = list()
                     for ap in approver_list:
                         email_list.append(ap.id_user.email)
-
-                    print "\nEMAIL to:", email_list
-                    print "subjet:" + annon.id_user.first_name + " wrote an anotation in Minutes with code " + annon.id_minutes.code + " (" + g.name + ")"
-                    print "content: " + annon.id_user.first_name + " wrote an anotation:\n\n" + annon.annotation_text
-                    # send Email HERE with email_list, annon, g. In annon var is all information. See  https://www.lucidchart.com/documents/edit/4853-1dd4-506e2365-bf06-76620ad6e19c
+                   # send Email HERE with email_list, annon, g. In annon var is all information. See  https://www.lucidchart.com/documents/edit/4853-1dd4-506e2365-bf06-76620ad6e19c
+                    ctx_email = {
+                        "firstname": request.user.first_name,
+                        "username": request.user.username,
+                        "groupname": g.name,
+                        "minutes_code": annon.id_minutes.code,
+                        "link": "/groups/" + g.slug + "/minutes/" + annon.id_minutes.code + "#annotation-" + str(annon.id_minutes_annotation),
+                        "annotation": annon.annotation_text,
+                        "urlgravatar": showgravatar(request.user.email, 50)
+                    }
+                    sendEmailHtml(12, ctx_email, email_list)
                     response = {"data": "success, send a socket to say them to the other connected"}
                 else:
                     print "else"
