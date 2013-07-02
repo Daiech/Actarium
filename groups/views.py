@@ -265,6 +265,14 @@ def requestDNI(request, slug_group):
                         DNI_per = DNI_permissions(id_group=g, id_user=id_user, id_requester=request.user)
                         DNI_per.save()
                         saved = True
+                        email = [id_user.email]
+                        ctx_email = {
+                            'firstname': request.user.first_name + request.user.last_name,
+                            'username': request.user.username,
+                            'groupname': g.name,
+                            'urlgravatar': showgravatar(request.user.email, 50)
+                        }
+                        sendEmailHtml(14, ctx_email, email)
                     except:
                         saved = False
                         error = "Ha ocurrido un error inesperado al enviar la solicitud, por favor intentalo de nuevo mas tarde"
