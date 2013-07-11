@@ -27,7 +27,7 @@ class groups(models.Model):
     slug = models.SlugField(max_length=150, unique=True)
 
     def __unicode__(self):
-        return "Group name: %s (%s)" % (self.name, self.id_creator)
+        return "%s (%s)" % (self.name, self.id_creator)
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"
@@ -72,12 +72,6 @@ class rel_user_group(models.Model):
 
     class Meta:
         ordering = ['-id_group__is_pro', 'id']
-
-
-class admin_group(models.Model):
-    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
-    date_assigned = models.DateTimeField(auto_now=True)
 
 
 class minutes_type_1(models.Model):
@@ -150,7 +144,19 @@ class minutes(models.Model):
     code = models.CharField(max_length=150, verbose_name="code")
 
     def __unicode__(self):
-        return "id_group: %s, %s, %s" % (self.id_group.name, self.date_created, self.id_extra_minutes)
+        return "%s,  Extra Minutes: %s" % (self.id_group.name, self.id_extra_minutes)
+
+    def minutesIsValid(self):
+        return self.is_valid
+    minutesIsValid.admin_order_field = 'date_created'
+    minutesIsValid.boolean = True
+    minutesIsValid.short_description = 'is valid?'
+
+    def minutesIsFullSigned(self):
+        return self.is_full_signed
+    minutesIsFullSigned.admin_order_field = 'date_created'
+    minutesIsFullSigned.boolean = True
+    minutesIsFullSigned.short_description = 'is full signed?'
 
     class Meta:
         unique_together = ('id_group', 'code')
