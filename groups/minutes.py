@@ -605,7 +605,7 @@ def setShowDNI(request, slug_group):
                 g = getGroupBySlug(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, g)
 
-                if _user_rel.is_admin:
+                if _user_rel.is_secretary:
                     try:
                         rel = rel_group_dni.objects.get(id_group=g)
                         s_dni = rel.show_dni

@@ -74,6 +74,10 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
+    elif email_type == 14:  # colocar restriccioin
+        subject = ctx['firstname'] + " (" + ctx['username'] + u") Solicita acceso a tu DNI para el grupo " + ctx['groupname'] + " en Actarium"
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_dni_request.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
@@ -83,7 +87,8 @@ def sendEmailHtml(email_type, ctx, to):
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
 
-    if email_type == 3 or email_type == 4 or email_type == 6:
+    actives_required_list = [3,4,6,14] # This list contains the number of email_type that requires the user is active in actarium
+    if email_type in  actives_required_list:
         to = activeFilter(to)
 
         #    print 'se enviara un correo a las siguientes direcciones ', to

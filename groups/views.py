@@ -239,7 +239,7 @@ def groupDNISettings(request, slug_group):
         users_dni = []
         for m in members_dni:
             users_dni.append(m.id_user)
-        members = rel_user_group.objects.filter(id_group=g, is_member=True, is_active=True).exclude(id_user__in=users_dni)
+        members = rel_user_group.objects.filter(id_group=g, is_member=True).exclude(id_user__in=users_dni)
         ctx = {"group": g, "is_admin": _user_rel.is_admin, 'members': members, 'members_dni': members_dni}
         return render_to_response('groups/adminDNIGroup.html', ctx, context_instance=RequestContext(request))
     except groups.DoesNotExist:
@@ -265,6 +265,14 @@ def requestDNI(request, slug_group):
                         DNI_per = DNI_permissions(id_group=g, id_user=id_user, id_requester=request.user)
                         DNI_per.save()
                         saved = True
+                        email = [id_user.email]
+                        ctx_email = {
+                            'firstname': request.user.first_name + request.user.last_name,
+                            'username': request.user.username,
+                            'groupname': g.name,
+                            'urlgravatar': showgravatar(request.user.email, 50)
+                        }
+                        sendEmailHtml(14, ctx_email, email)
                     except:
                         saved = False
                         error = "Ha ocurrido un error inesperado al enviar la solicitud, por favor intentalo de nuevo mas tarde"
