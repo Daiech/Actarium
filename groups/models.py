@@ -300,6 +300,12 @@ class groups_pro(models.Model):
     def __unicode__(self):
         return "Group: %s (%s)" % (self.id_group.name, self.id_group.id_creator)
 
+    def dateOff(self):
+        from groups.views import dateTimeFormatForm
+        import datetime
+        return datetime.datetime.now() - self.id_billing.date_end
+        # return dateTimeFormatForm(self.id_billing.date_end)
+
 
 class last_minutes(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')

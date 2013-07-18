@@ -27,6 +27,10 @@ class organizationsAdmin(admin.ModelAdmin):
     list_display = ('name', 'id_admin', 'description', 'date_joined', 'is_active')
 
 
+class groupsProAdmin(admin.ModelAdmin):
+    list_display = ('id_group', 'id_organization', 'id_billing', 'is_active', 'dateOff')
+
+
 admin.site.register(groups, groupsAdmin)  # aca registramos nuestro modelo con el admin de django
 admin.site.register(minutes, minutesAdmin)
 admin.site.register(packages, packagesAdmin)
@@ -44,7 +48,7 @@ admin.site.register(rel_user_minutes_signed)
 admin.site.register(user_role)
 admin.site.register(groups_permissions)
 admin.site.register(rel_role_group_permissions)
-admin.site.register(groups_pro)
+admin.site.register(groups_pro, groupsProAdmin)
 admin.site.register(rol_user_minutes)
 admin.site.register(templates)
 admin.site.register(rel_user_private_templates)
