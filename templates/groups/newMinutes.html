@@ -1,5 +1,5 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Crear Acta{% endblock %}
+{% block TITLE %}{% if title_edit %}{{title_edit}}{%else%}Crear Acta{%endif%}{% endblock %}
 {% load gravatartag %}
 {%block body%}
 <article>
@@ -76,14 +76,14 @@
     <div class="containterMargin">
         <!-- <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p> -->
         {%comment%}
-        <div style="padding-bottom:20px;">
-        {% for template in list_templates %}
-            <button id="template_{{ template.pk }}" class="btn btn-success template_btn" data-slug={{ template.slug }}>{{ template.name }}</button>
-        {% endfor %}
-        {% for template in list_private_templates %}
-            <button id="template_{{ template.id_template.pk }}" class="btn btn-primary template_btn" data-slug={{ template.id_template.slug }} >{{ template.id_template.name }}</button>
-        {% endfor %}
-        </div>
+            <div style="padding-bottom:20px;">
+            {% for template in list_templates %}
+                <button id="template_{{ template.pk }}" class="btn btn-success template_btn" data-slug={{ template.slug }}>{{ template.name }}</button>
+            {% endfor %}
+            {% for template in list_private_templates %}
+                <button id="template_{{ template.id_template.pk }}" class="btn btn-primary template_btn" data-slug={{ template.id_template.slug }} >{{ template.id_template.name }}</button>
+            {% endfor %}
+            </div>
         {%endcomment%}
         {% if minutes_saved.error %}
             <div class="alert alert-error">

@@ -610,9 +610,9 @@ def setShowDNI(request, slug_group):
                         rel = rel_group_dni.objects.get(id_group=g)
                         s_dni = rel.show_dni
                         if s_dni:
-                            rel.show_dni=False
+                            rel.show_dni = False
                         else:
-                            rel.show_dni=True
+                            rel.show_dni = True
                     except rel_group_dni.DoesNotExist:
                         rel = rel_group_dni(id_group=g, id_admin=request.user, show_dni=True)
                     rel.save()
@@ -623,7 +623,7 @@ def setShowDNI(request, slug_group):
                 error = "Este grupo no existe"
             except rol_user_minutes.DoesNotExist:
                 error = "Error! no existe el usuario para esta acta"
-            except Exception, e:
+            except Exception:
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
@@ -675,17 +675,17 @@ def rolesForMinutes(request, slug_group, id_reunion):
         except Exception:
             template = ""
         try:
-            rel = rel_group_dni.objects.get(id_group=g) 
-            if rel.show_dni== True:
-                show_dni=True
+            rel = rel_group_dni.objects.get(id_group=g)
+            if rel.show_dni == True:
+                show_dni = True
             else:
-                show_dni=False
+                show_dni = False
         except rel_group_dni.DoesNotExist:
-            show_dni=False
+            show_dni = False
         # print show_dni
         ctx = {
             "group": g, "template": template, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary,
-            "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president, "show_dni":show_dni}
+            "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president, "show_dni": show_dni}
         return render_to_response('groups/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")
@@ -700,11 +700,10 @@ def getSignersList(m_signers):
     i = 0
     for m in m_signers:
         try:
-            _dni = DNI.objects.get(id_user=m.id_user) 
-            print "usuario: ", m, "dni: ", _dni.dni_value
-            list_temp.append({"signer": m,"dni":_dni.dni_value,"dni_type":_dni.dni_type.short_name})
+            _dni = DNI.objects.get(id_user=m.id_user)
+            list_temp.append({"signer": m, "dni": _dni.dni_value, "dni_type": _dni.dni_type.short_name})
         except:
-            list_temp.append({"signer": m, "dni": "","dni_type":""})
+            list_temp.append({"signer": m, "dni": "", "dni_type": ""})
         if i >= 1:
             i = 0
             list_ms.append(list_temp)
@@ -744,14 +743,14 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         member_president, member_secretary = getPresidentAndSecretary(group)
         try:
             _dni_president = DNI.objects.get(id_user=member_president.id_user)
-            president = {"user":member_president,"dni":_dni_president.dni_value, "dni_type":_dni_president.dni_type.short_name}
+            president = {"user": member_president, "dni": _dni_president.dni_value, "dni_type": _dni_president.dni_type.short_name}
         except:
-            president = {"user":member_president,"dni":"", "dni_type":""}
+            president = {"user": member_president, "dni": "", "dni_type": ""}
         try:
             _dni_secretary = DNI.objects.get(id_user=member_secretary.id_user)
-            secretary = {"user":member_secretary,"dni":_dni_secretary.dni_value, "dni_type":_dni_secretary.dni_type.short_name}
+            secretary = {"user": member_secretary, "dni": _dni_secretary.dni_value, "dni_type": _dni_secretary.dni_type.short_name}
         except:
-            secretary = {"user":member_secretary,"dni":"", "dni_type":""}
+            secretary = {"user": member_secretary, "dni": "", "dni_type": ""}
         ######## </PRESIDENT AND SECRETARY> #########
 
         ######## <DNI> ########
@@ -1011,7 +1010,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
             ######## <GET_LAST_MINUTES> #########
             last = getLastMinutes(group)
             ######## <GET_LAST_MINUTES> #########
-            ctx = {'TITLE': "Nueva Acta",
+            ctx = {'title_edit': "Editar Acta",
                    "newMinutesForm": form,
                    "group": group,
                    "reunion": _reunion,
@@ -1174,7 +1173,7 @@ def showMinutes(request, slug, minutes_code):
 
             ######## <DNI> ########
             try:
-                rgd = rel_minutes_dni.objects.get(id_minutes= minutes_current)
+                rgd = rel_minutes_dni.objects.get(id_minutes=minutes_current)
                 show_dni = rgd.show_dni
             except:
                 show_dni = False
@@ -1187,10 +1186,10 @@ def showMinutes(request, slug, minutes_code):
             i = 0
             for m in m_signers:
                 try:
-                    _dni = DNI.objects.get(id_user=m.id_user) 
-                    list_temp.append({"signer": m,"dni":_dni.dni_value,"dni_type":_dni.dni_type.short_name})
+                    _dni = DNI.objects.get(id_user=m.id_user)
+                    list_temp.append({"signer": m, "dni": _dni.dni_value, "dni_type": _dni.dni_type.short_name})
                 except:
-                    list_temp.append({"signer": m, "dni": "","dni_type":""})
+                    list_temp.append({"signer": m, "dni": "", "dni_type": ""})
                 if i >= 1:
                     i = 0
                     list_ms.append(list_temp)
@@ -1205,14 +1204,14 @@ def showMinutes(request, slug, minutes_code):
             member_president, member_secretary = getPresidentAndSecretary(group, minutes_current)
             try:
                 _dni_president = DNI.objects.get(id_user=member_president.id_user)
-                president = {"user":member_president,"dni":_dni_president.dni_value, "dni_type":_dni_president.dni_type.short_name}
+                president = {"user": member_president, "dni": _dni_president.dni_value, "dni_type": _dni_president.dni_type.short_name}
             except:
-                president = {"user":member_president,"dni":"", "dni_type":""}
+                president = {"user": member_president, "dni": "", "dni_type": ""}
             try:
                 _dni_secretary = DNI.objects.get(id_user=member_secretary.id_user)
-                secretary = {"user":member_secretary,"dni":_dni_secretary.dni_value, "dni_type":_dni_secretary.dni_type.short_name}
+                secretary = {"user": member_secretary, "dni": _dni_secretary.dni_value, "dni_type": _dni_secretary.dni_type.short_name}
             except:
-                secretary = {"user":member_secretary,"dni":"", "dni_type":""}
+                secretary = {"user": member_secretary, "dni": "", "dni_type": ""}
             ######## </PRESIDENT AND SECRETARY> #########
 
             ######## <LOGO> #########
@@ -1274,7 +1273,6 @@ def showMinutes(request, slug, minutes_code):
                 "minutes_version": minutes_version,
                 "minutesTemplateJs": address_js_template,
                 "is_form": 0
-                
             }
         else:
             return HttpResponseRedirect("/groups/" + slug + "#esta-acta-aun-no-ha-sido-aprobada")

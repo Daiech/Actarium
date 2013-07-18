@@ -1,4 +1,5 @@
-if ($("#is_form").html() == 1){
+{% if not title_edit %}
+function newMinutesText(){
 	$("#id_agenda").val("<ol><li>Verificaci&oacute;n de qu&oacute;rum</li>"+
 				"<li>Designaci&oacute;n de presidente y secretario de la reuni&oacute;n.</li>"+
 				"<li>Lectura y aprobaci&oacute;n del orden del d&iacute;a.</li>"+
@@ -16,12 +17,20 @@ if ($("#is_form").html() == 1){
 					"<li>Proposiciones y varios.<br><br></li>"+
 					"<li>Nombramiento de la comisi&oacute;n aprobatoria del acta.<br><br></li>"+
 	                "</ol>");
-
-
+}
+{% endif%}
+if ($("#is_form").html() == 1){
+	{% if not title_edit %}
+	newMinutesText();
+	{% endif%}
+	$(".date_mirror").text(""+$("#first_date input").text());
+	{% if title_edit %}
+	$(".date_mirror").text(""+$("#first_date").text());
+	{% endif%}
 	$("#id_date_start").blur(function(){
 		$(".date_mirror").empty();
 		$(".date_mirror").append(""+$("#id_date_start").val());
-	})
+	});
 
 
 	$("#id_location").css('width','130px');
@@ -31,7 +40,7 @@ if ($("#is_form").html() == 1){
 	console.log("this is a form")
 }
 else{
-	$(".date_mirror").html($("#first_date").html())
-	console.log("this is Not a form")
+	$(".date_mirror").html(""+$("#first_date").text())
+	console.log("this is Not a form");
 }
 

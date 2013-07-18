@@ -82,6 +82,9 @@ class minutes_type_1(models.Model):
     agenda = models.TextField(blank=True)
     type_reunion = models.CharField(max_length=150, blank=True)
 
+    def __unicode__(self):
+        return "%s en %s" % (self.date_start, self.location)
+
 
 class minutes_type(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
