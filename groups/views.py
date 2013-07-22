@@ -797,7 +797,6 @@ def resendInvitation(request, slug_group):
                                     ctx_email["pass"] = ak.activation_key[:8]
                                 except Exception, e:
                                     print e
-                            print ctx_email
                             message = {"email": _user.email, "sent": True}
                             sendEmailHtml(type_email, ctx_email, [_user.email])  # activate account
                         else:
@@ -822,30 +821,37 @@ def changeNames(request, slug_group):
                 group = getGroupBySlug(slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if _user_rel.is_admin and _user_rel.is_active:
+                    error = False
                     try:
                         uid = str(request.GET['uid'])
                     except:
                         uid = None
-                    try:
-                        first_name = request.GET.get('first_name')
-                    except:
-                        first_name = ""
-                    try:
-                        last_name = request.GET.get('last_name')
-                    except Exception:
-                        last_name = ""
                     if uid == "" or not uid:
                         return HttpResponse(False)
                     _user = getUserById(uid)
-                    rel = getRelUserGroup(_user, group)
-                    if rel:
-                        # change Names
-                        _user.first_name = first_name
-                        _user.last_name = last_name
-                        _user.save()
-                        message = {"fname": _user.first_name, "lname": _user.last_name, "changed": True}
+                    try:
+                        first_name = request.GET.get('first_name')
+                    except:
+                        first_name = _user.first_name if _user else ""
+                        error = True
+                    try:
+                        last_name = request.GET.get('last_name')
+                    except Exception:
+                        last_name = _user.last_name if _user else ""
+                        error = True
+                    if _user:
+                        rel = getRelUserGroup(_user, group)
+                        if rel and not error:
+                            # change Names
+                            _user.first_name = first_name
+                            _user.last_name = last_name
+                            _user.save()
+                            message = {"fname": _user.first_name, "lname": _user.last_name, "changed": True}
+                        else:
+                            error = "El usuario no pertenece a este grupo" if not rel else "No se pudo editar los nombres."
+                            message = {"error": error, "changed": False}
                     else:
-                        message = {"error": "El usuario no pertenece a este grupo", "changed": False}
+                        message = {"error": "No pudes cambiar los nombres de este usuario", "changed": False}
                 else:
                     message = "No tienes permisos para hacer eso."
             except Exception:
