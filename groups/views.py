@@ -824,14 +824,14 @@ def changeNames(request, slug_group):
                 if _user_rel.is_admin and _user_rel.is_active:
                     try:
                         uid = str(request.GET['uid'])
-                    except Exception:
+                    except:
                         uid = None
                     try:
-                        first_name = str(request.GET['first_name'])
-                    except Exception:
+                        first_name = request.GET.get('first_name')
+                    except:
                         first_name = ""
                     try:
-                        last_name = str(request.GET['last_name'])
+                        last_name = request.GET.get('last_name')
                     except Exception:
                         last_name = ""
                     if uid == "" or not uid:
