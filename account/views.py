@@ -248,7 +248,7 @@ def personalData(request):
     ctx = {"formUser": form, "dataUpdate": update, "passwordUpdate": False, "error_email": error_email}
     return render_to_response('account/personal_data.html', ctx, context_instance=RequestContext(request))
 
-
+@login_required(login_url='/account/login')
 def changePassword(request):
     '''
         Opcion para cambiar password
@@ -268,10 +268,10 @@ def changePassword(request):
     ctx = {"passForm": passForm, "dataUpdate": False, "passwordUpdate": passUpdate, "error_email": False}
     return render_to_response('account/password.html', ctx, context_instance=RequestContext(request))
 
-
+@login_required(login_url='/account/login')
 def dni(request):
     saveViewsLog(request, "account.views.dni")
-
+    
     if request.method == "POST":
         formDNI = NewDNI(request.POST)
         if formDNI.is_valid():
