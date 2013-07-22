@@ -52,6 +52,7 @@
 		                        </span>
 		                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
 		                    </div>
+		                    <!-- comienza -->
 		                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
 		                    	<a href="#"><i class="icon-cog"></i></a>
 		                    </div>
@@ -89,6 +90,7 @@
 		                    				</li>
 		                    			</ul>
 		                    		</div>
+		                    		{%if not m.is_active%}
                 					<div class="second-menu">
                 						<div class="">
                 							<label>
@@ -103,8 +105,10 @@
                 							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
                 						</div>
                 					</div>
+                					{%endif%}
 		                    	</div>
 		                    </div>
+		                    <!-- termina -->
 						</div>
 					</td>
 					<td class="t-a-c">
@@ -419,7 +423,6 @@
 				setAlertMessage("Invitado",data['message'])
 	            showIconCloseOnHover()
 				$("td input[type='checkbox']").on("click", setRole);
-	            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
 	            $("#newmember").val("")
 	        }else{//EL USUARIO YA ESTA INVITADO
 	            if(data["message"]){
@@ -540,7 +543,7 @@
     		var lname = $(this).closest(".second-menu").find(".last-name").val();
     		var uid = $(this).attr("data-uid");
     		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
-			console.log(uid);
+			console.log(fname);
 			var elem = $(this);
     		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
     			if(data.changed){
@@ -575,7 +578,7 @@
 	    	getSearch();
 	    	$("#newmember").focus();
 	    })
-	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
+	    // $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
 	    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
 	        $("#add-member-menu").addClass("disblock");
 	        $("#newmember").focus()//give the focus to the input to search members
