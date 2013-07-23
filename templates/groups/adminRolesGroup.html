@@ -367,6 +367,7 @@
 		            user_to_invite = data['mail']+" ("+data['username']+")";
 		            if(user_to_invite.length > MAX_LENGTH)
 		                p="..."
+		            $("#message-search").html("<strong>" + data.username + "</strong> hace parte de Actarium, haz click en el nombre para invitar.");
 		            $("#search-result").html(
 		                "<li class='user-li'>"+
 		                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
@@ -375,7 +376,7 @@
 		                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
 		                "</a>"+
 		                "</li>"
-		                )
+		                );
 		        }
 		        else{//No es usuario de la base de datos
 		            if(data['mail'].length > MAX_LENGTH)
@@ -478,6 +479,7 @@
 	                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
 	            }
 	            else{//el correo es invalido o no hay resultados de usuarios existentes
+	            	$("#message-search").html("Asegurate de escribir correctamente el correo electr&oacute;nico.");
 	                $("#search-result").html("<li style='list-style:none'>"+
 	                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
 	                                            "</a>"+
@@ -543,12 +545,9 @@
     		var lname = $(this).closest(".second-menu").find(".last-name").val();
     		var uid = $(this).attr("data-uid");
     		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
-			console.log(fname);
 			var elem = $(this);
     		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
     			if(data.changed){
-    				console.log(data);
-    				console.log(elem.closest(".td-info-user").find(".names"));
     				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
     				restartMenus();
     				setAlertMessage("Nombres Cambiados", "Los nombres se han actualizado con &eacute;xito.");

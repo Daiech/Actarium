@@ -1,5 +1,7 @@
 from django import template
-import urllib, hashlib
+import urllib
+import hashlib
+from Actarium.settings import URL_BASE
 # from django.template import Context, loader
 
 register = template.Library()
@@ -10,12 +12,12 @@ register = template.Library()
 
 def showgravatar(email, size):
     #default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
-    default = "actarium.daiech.com/static/img/user_default.png"
+    default = URL_BASE + "/static/img/user_default.png"
 
     url = "http://www.gravatar.com/avatar.php?"
     url += urllib.urlencode({
         'gravatar_id': hashlib.md5(email).hexdigest(),
-        'default': default,
+        # 'default': default,
         'size': str(size)
     })
     return url
@@ -36,5 +38,5 @@ register.filter('showgravatar', showgravatar)
 #
 #    url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
 #    url += urllib.urlencode({'d':default, 's':str(size)})
-#    
+
 #    return {'gravatar': {'url': url, 'size': size}}
