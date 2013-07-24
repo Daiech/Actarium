@@ -1,6 +1,6 @@
 {% extends "website/layout.html" %}
 {% block TITLE %}Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones{% endblock %}
-
+{% load i18n %}
 {%block body%}
 <div id="actarium-slide" class="carousel slide">
             <ol class="carousel-indicators">
@@ -37,18 +37,18 @@
     <div class="info-pics">
         <div id="left-panel">
             <section id="login-form" class="hidden white-box-container">
-                <h4>Formulario de Inicio</h4>
+                <h4>{% trans "Formulario de Inicio" %}</h4>
                 <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
-                    <label for="id_username-login">Nombre de usuario:</label>
+                    <label for="id_username-login">{% trans "Nombre de usuario" %}:</label>
                     <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
-                    <label for="id_password-login">Contrase&ntilde;a:</label>
+                    <label for="id_password-login">{% trans "Contrase&ntilde;a:" %}</label>
                     <input type="password" name="password" id="id_password-login" placeholder="Contrase&ntilde;a" />
 
                     <div class="box mt20">
-                        <button type="submit" name="submit" class="btn btn-success link-daiech">Inciar Sesi&oacute;n</button>
+                        <button type="submit" name="submit" class="btn btn-success link-daiech">{% trans "Inciar Sesi&oacute;n" %}</button>
                         <label>
-                        <a href="/account/password/reset/" class="">&iquest;Olvidaste tu contrase&ntilde;a?</a></label>
+                        <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
                     </div>
                 </form>
 
@@ -57,7 +57,7 @@
                 <a href="/account/login" >
                     <div id="left-bubble">
                         <div class="bubble-text">
-                            Tengo una cuenta.<br>Iniciar Sesi&oacute;n
+                            {% trans "Tengo una cuenta" %}.<br>{% trans "Iniciar Sesi&oacute;n" %}
                         </div>
 
                     </div>
@@ -72,22 +72,22 @@
 
         <div id="right-panel">
             <section id="register-form" class="hidden white-box-container">
-                <h4>Formulario de registro</h4>
+                <h4>{% trans "Formulario de registro" %}</h4>
                 <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
-                    <label for="id_username-register">Nombre de usuario:</label>
+                    <label for="id_username-register">{% trans "Nombre de usuario" %}:</label>
                     <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
-                    <label for="id_email">Correo Electr&oacute;nico:</label>
+                    <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label>
                     <input type="text" name="email" id="id_email"  placeholder="Correo Electr&oacute;nico" />
-                    <label for="id_password1">Contrase&ntilde;a:</label>
+                    <label for="id_password1">{% trans "Contrase&ntilde;a" %}:</label>
                     <input type="password" name="password1" id="id_password1" placeholder="Contrase&ntilde;a" />
-                    <label for="id_password2">Contrase&ntilde;a (Confirmaci&oacute;n):</label>
+                    <label for="id_password2">{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}:</label>
                     <input type="password" name="password2" id="id_password2" placeholder="Contrase&ntilde;a" />
                     <label class="checkbox">
                         <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>
                     </label>
                     <div class="box mt20">
-                        <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">Registrarme</button>
+                        <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">{% trans "Registrarme" %}</button>
                     </div>
                 </form>
             </section>            
@@ -96,7 +96,7 @@
                 <a href="/account/new">
                     <div id="right-bubble">
                         <div class="bubble-text">
-                            No tengo cuenta.<br>Registrarme
+                            {% trans "No tengo cuenta" %}.<br>{% trans "Registrarme" %}
                         </div>
                     </div>
                 </a>

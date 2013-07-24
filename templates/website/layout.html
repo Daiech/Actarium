@@ -1,5 +1,5 @@
 {% load static %} {% get_static_prefix as STATIC_PREFIX %}
-
+{% load i18n %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -87,7 +87,7 @@
         <footer id="daiech-footer">
             <div id="footer-bar">
                 <div class="white-bar">
-                    <p>Powered By:</p>
+                    <p>{% trans "Powered By" %}:</p>
                     <div>
                         <div class="footer-pic pull-left">
                             <a href="http://www.daiech.com" target="_blank">
@@ -110,7 +110,7 @@
                 <p>
                     <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
                 </p>
-                <p>Todos los derechos reservados</p>
+                <p>{% trans "Todos los derechos reservados" %}</p>
                 <p><script>
                     var f = new Date();
                     document.write(f.getFullYear());
