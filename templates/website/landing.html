@@ -1,5 +1,5 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones{% endblock %}
+{% block TITLE %} {% trans "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones" %}  {% endblock %}
 {% load i18n %}
 {%block body%}
 <div id="actarium-slide" class="carousel slide">
@@ -41,9 +41,9 @@
                 <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
                     <label for="id_username-login">{% trans "Nombre de usuario" %}:</label>
-                    <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                    <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
                     <label for="id_password-login">{% trans "Contrase&ntilde;a:" %}</label>
-                    <input type="password" name="password" id="id_password-login" placeholder="Contrase&ntilde;a" />
+                    <input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" />
 
                     <div class="box mt20">
                         <button type="submit" name="submit" class="btn btn-success link-daiech">{% trans "Inciar Sesi&oacute;n" %}</button>
@@ -76,9 +76,9 @@
                 <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
                     {% csrf_token %}
                     <label for="id_username-register">{% trans "Nombre de usuario" %}:</label>
-                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="Nombre de usuario" autofocus class="first-input" />
+                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
                     <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label>
-                    <input type="text" name="email" id="id_email"  placeholder="Correo Electr&oacute;nico" />
+                    <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
                     <label for="id_password1">{% trans "Contrase&ntilde;a" %}:</label>
                     <input type="password" name="password1" id="id_password1" placeholder="Contrase&ntilde;a" />
                     <label for="id_password2">{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}:</label>
