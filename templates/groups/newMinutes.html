@@ -235,12 +235,20 @@
 <script type="text/javascript" >
    $(document).ready(function(){
        $('.date-pick').datetimepicker({
+            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            nextText: 'Siguiente',
+            prevText: 'Anterior',
+            currentText: "Ahora",
+            closeText: "Hecho",
+            changeMonth: true,
+            changeYear: true,
             dateFormat: 'yy-mm-dd',
             controlType: 'select',
             ampm: true
         }).css({"z-index":"1034"});
-
-	   url_s = location.pathname.split("/")
+       // $('.date-pick').datetimepicker( "option", "currentText", "Ahora" );
+       url_s = location.pathname.split("/")
 	   $(".template_btn").click(function(){
 			//console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
 			window.location = "/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug')
@@ -283,7 +291,7 @@
             $("#change-template").attr("href",href);
        })
 	});
-   {% include minutesTemplateJs %}
 </script>
+{% include minutesTemplateJs %}
  
 {% endblock %}

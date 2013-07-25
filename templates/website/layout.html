@@ -1,5 +1,5 @@
 {% load static %} {% get_static_prefix as STATIC_PREFIX %}
-
+{% load i18n %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -87,7 +87,7 @@
         <footer id="daiech-footer">
             <div id="footer-bar">
                 <div class="white-bar">
-                    <p>Powered By:</p>
+                    <p>{% trans "Powered By" %}:</p>
                     <div>
                         <div class="footer-pic pull-left">
                             <a href="http://www.daiech.com" target="_blank">
@@ -110,12 +110,26 @@
                 <p>
                     <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
                 </p>
-                <p>Todos los derechos reservados</p>
+                <p>{% trans "Todos los derechos reservados" %}</p>
                 <p><script>
                     var f = new Date();
                     document.write(f.getFullYear());
                     </script>
                 </p>
+            </div>
+            <div style="display:none">
+                <form action="/i18n/setlang/" method="post" id="language-form">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="/" />
+                    <select id="switch-language" name="language">
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                        {{ language.name_local }} ({{ language.code }})
+                    </option>
+                    {% endfor %}
+                    </select>
+                </form>
             </div>
         </footer>
 
@@ -128,6 +142,7 @@
         {% endblock%}
         <script>
         $(document).ready(twitter);
+        $("#switch-language").on("change", function (e){$("#language-form").submit();})
         function twitter () {
              !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");   
         }

@@ -156,8 +156,7 @@ def setRole(request, slug_group):
                 error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
                 error = "Error! no existe el usuario para este grupo"
-            except Exception, e:
-                print e
+            except Exception:
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
@@ -282,8 +281,7 @@ def requestDNI(request, slug_group):
                 error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
                 error = "Error! no existe el usuario para este grupo"
-            except Exception, e:
-                print e
+            except Exception:
                 error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
@@ -354,8 +352,7 @@ def newBasicGroup(request, form, pro=False):
         setRelUserGroup(id_user=request.user, id_group=myNewGroup, is_superadmin=1, is_admin=1, is_active=True)
     else:
         try:
-            user_or_email = get_user_or_email(request.POST['id_admin'])
-            print user_or_email
+            user_or_email = get_user_or_email(request.POST.get('id_admin'))
         except Exception:
             user_or_email = {"user": None}
         if user_or_email:  # <-- the admin
@@ -460,7 +457,6 @@ def newGroup(request):
                 saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
                 return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")
             else:
-                print "No tienes paquetes disponibles"
                 no_billing_avalaible = True
     else:
         form = newGroupForm()
@@ -543,8 +539,9 @@ def getMembers(request):
     if request.is_ajax():
         if request.method == "GET":
             try:
-                search = str(request.GET['search'])
-                if validateEmail(search):
+                search = request.GET.get('search')
+                valid_email = validateEmail(search)
+                if valid_email:
                     try:
                         ans = User.objects.get(email=search)
                     except User.DoesNotExist:
@@ -561,14 +558,14 @@ def getMembers(request):
                         "username": ans.username,
                         "is_user": True,
                         "mail": ans.email,
-                        "gravatar": showgravatar(ans.email, 20)}
+                        "gravatar": showgravatar(ans.email, 30)}
                 else:
                     if ans == 1:  # email valido, pero no es usuario
                         message = {"user_id": search, "mail_is_valid": True,
                                     "mail": search, "username": search.split("@")[0].title(),
-                                    "gravatar": showgravatar(search, 20), "is_user": False}
+                                    "gravatar": showgravatar(search, 30), "is_user": False}
                     else:
-                        if ans == 2:  # no existe el usuario
+                        if ans == 2:  # no existe el usuario e email invalido
                             message = {"mail_is_valid": False}
                         else:
                             message = False
@@ -690,7 +687,6 @@ def newInvitationToGroup(request):
                 if isMemberOfGroupByEmail(email, g):
                     invited = False
                     message = "El usuario ya es miembro del grupo"
-                    print message
                     iid = False
                     gravatar = False
                 else:
@@ -797,7 +793,7 @@ def resendInvitation(request, slug_group):
                                     ctx_email["pass"] = ak.activation_key[:8]
                                 except Exception, e:
                                     print e
-                            print ctx_email
+                                    # Error log e
                             message = {"email": _user.email, "sent": True}
                             sendEmailHtml(type_email, ctx_email, [_user.email])  # activate account
                         else:
@@ -822,30 +818,37 @@ def changeNames(request, slug_group):
                 group = getGroupBySlug(slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if _user_rel.is_admin and _user_rel.is_active:
+                    error = False
                     try:
                         uid = str(request.GET['uid'])
-                    except Exception:
+                    except:
                         uid = None
-                    try:
-                        first_name = str(request.GET['first_name'])
-                    except Exception:
-                        first_name = ""
-                    try:
-                        last_name = str(request.GET['last_name'])
-                    except Exception:
-                        last_name = ""
                     if uid == "" or not uid:
                         return HttpResponse(False)
                     _user = getUserById(uid)
-                    rel = getRelUserGroup(_user, group)
-                    if rel:
-                        # change Names
-                        _user.first_name = first_name
-                        _user.last_name = last_name
-                        _user.save()
-                        message = {"fname": _user.first_name, "lname": _user.last_name, "changed": True}
+                    try:
+                        first_name = request.GET.get('first_name')
+                    except:
+                        first_name = _user.first_name if _user else ""
+                        error = True
+                    try:
+                        last_name = request.GET.get('last_name')
+                    except Exception:
+                        last_name = _user.last_name if _user else ""
+                        error = True
+                    if _user:
+                        rel = getRelUserGroup(_user, group)
+                        if rel and not error:
+                            # change Names
+                            _user.first_name = first_name
+                            _user.last_name = last_name
+                            _user.save()
+                            message = {"fname": _user.first_name, "lname": _user.last_name, "changed": True}
+                        else:
+                            error = "El usuario no pertenece a este grupo" if not rel else "No se pudo editar los nombres."
+                            message = {"error": error, "changed": False}
                     else:
-                        message = {"error": "El usuario no pertenece a este grupo", "changed": False}
+                        message = {"error": "No pudes cambiar los nombres de este usuario", "changed": False}
                 else:
                     message = "No tienes permisos para hacer eso."
             except Exception:
@@ -910,7 +913,6 @@ def acceptInvitation(request):
                 # send email message
                 email_list = []
                 email_list.append(str(inv.id_user_invited.email) + ",")
-                print email_list
                 email_ctx = {
                     'firstname': request.user.first_name + " " + request.user.last_name,
                     'username': request.user.username,
@@ -960,7 +962,6 @@ def deleteInvitation(request, slug_group):
             else:
                 response = "No tienes permisos para hacer eso."
         if request.method == 'POST':
-            print "POST"
             response = "Error invitacion"
     else:
         response = "Error invitacion"

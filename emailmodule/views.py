@@ -18,16 +18,20 @@ def sendEmailHtml(email_type, ctx, to):
         Este modulo esta en proceso de construccion, por el momento se utilizara este metodo que recibe
         el tipo de correo que se envia y el contexto con las variables que se trasmitiran a cada template.
         La siguiente lista define los valores perimitidos para la variable type y su respectivo significado.
-        1- Correo de validacion.
-        2- Correo de nueva reunion
-        3- Correo de nueva Acta
-        4- Correo de asignacion de rol
-        5- Correo de confirmacion de asistencia a reunion
-        6- Correo de invitacion a un grupo
-        7- Correo de invitacion a actarium
-        8- Correo de notificacion de aceptacion de grupo
-        9- Correo notificacion de feedback al staff de Actarium
-        14 - Correo para solicitr acceso a DNI
+        1- Correo de validacion.                                   (Siempre es necesario)
+        2- Correo de nueva reunion                                 (Depende del grupo)
+        3- Correo de nueva Acta                                    (Depende del grupo)
+        4- Correo de asignacion de rol                             (Depende del grupo)
+        5- Correo de confirmacion de asistencia a reunion          (Depende del grupo)
+        6- Correo de invitacion a un grupo                         (Por definir)
+        7- Correo de invitacion a actarium                         (Siempre es necesario)
+        8- Correo de notificacion de aceptacion de grupo           (Depende del grupo)
+        9- Correo notificacion de feedback al staff de Actarium    (Siempre es necesario)
+        10-    (Por definir)
+        11-    (Depende del grupo)
+        12-    (Depende del grupo)    
+        13-    (Depende del grupo)
+        14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)
     """
 
     if email_type == 1:
@@ -71,7 +75,7 @@ def sendEmailHtml(email_type, ctx, to):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_resend_activate_account.html')
     elif email_type == 11:
-        subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"quiere que hacerte parte de su grupo " + ctx['groupname'] + " en Actarium"
+        subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u"quiere que hacerte de su grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_group_reinvitation.html')
     elif email_type == 12:

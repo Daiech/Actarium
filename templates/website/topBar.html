@@ -1,4 +1,5 @@
 {% load gravatartag %}
+{% load i18n %}
 <div class="navbar-d">
 
         <a href="/" class="" id="logo-sup">
@@ -84,7 +85,7 @@
                     <div id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
                         <img src="/static/img/user_default.png" alt="ico-usuario" /> 
                         <div class="dinline">
-                            {% if user.is_authenticated %}{{user.username}}{% else %}Iniciar sesi&oacute;n{% endif %}
+                            {% if user.is_authenticated %}{{user.username}}{% else %}{% trans "Iniciar Sesi&oacute;n" %}{% endif %}
                             <span class="caret"></span>
                         </div>
                     </div>
@@ -109,14 +110,14 @@
                             <li>{% csrf_token %}</li>
                             <li>
                                 <p>
-                                    Inicia sesi&oacute;n <a id="close-login-menu" class="pull-right" href="#"><i class="icon-remove"></i></a>
+                                    {% trans "Iniciar Sesi&oacute;n" %} <a id="close-login-menu" class="pull-right" href="#"><i class="icon-remove"></i></a>
                                 </p>
                             </li>
                             <li><input id="username"  name="username" class="input-small next-li" type="text" placeholder="Usuario" autofocus></li>
                             <li><input id="password"  name="password" class="input-small next-li" type="password" placeholder="Contrase&ntilde;a" ></li>
                             <li id="li-register-link">
-                                <a href="/account/new" class="pull-left" id="register-link">registrarse</a>
-                                <input id="btn-login" class="input-small btn btn-info next-li pull-right" type="submit" value="Entrar" >
+                                <a href="/account/new" class="pull-left" id="register-link">{% trans "Registrarme" %}</a>
+                                <input id="btn-login" class="input-small btn btn-info next-li pull-right" type="submit" value="{% trans 'Entrar' %}" >
                             </li>
                         </ul>
                     </form>
