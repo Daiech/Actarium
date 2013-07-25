@@ -2,71 +2,82 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 11:56-0500\n"
-"PO-Revision-Date: 2013-07-24 13:26-0500\n"
-"Last-Translator: Lina  Aguirre <laguirre@daiech.com>\n"
+"POT-Creation-Date: 2013-07-25 11:21-0500\n"
+"PO-Revision-Date: 2013-07-25 11:20-0500\n"
+"Last-Translator: Mauricio Aizaga <maizaga@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.2\n"
+
+#: templates/landing.html:3
+msgid ""
+"Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones"
+msgstr "Actarium - The ideal platform for managing Minutes and Meeting"
 
 #: templates/landing.html:40
 msgid "Formulario de Inicio"
 msgstr "Login Form"
 
-#: templates/landing.html:43 templates/landing.html.py:78
+#: templates/landing.html:43 templates/landing.html.py:44
+#: templates/landing.html:79 templates/landing.html.py:80
 msgid "Nombre de usuario"
 msgstr "Username"
 
-#: templates/landing.html:45
-msgid "Contrase&ntilde;a:"
-msgstr "Password"
-
-#: templates/landing.html:49
-msgid "Inciar Sesi&oacute;n"
-msgstr "Login"
-
-#: templates/landing.html:51
-msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
-msgstr "Forgot your password?"
-
-#: templates/landing.html:60
-msgid "Tengo una cuenta"
-msgstr "I have an account"
-
-#: templates/landing.html:60
-msgid "Iniciar Sesi&oacute;n"
-msgstr "Login"
-
-#: templates/landing.html:75
-msgid "Formulario de registro"
-msgstr "Sign Up Form"
-
-#: templates/landing.html:80
-msgid "Correo Electr&oacute;nico"
-msgstr "Email"
-
-#: templates/landing.html:82
+#: templates/landing.html:45 templates/landing.html.py:46
+#: templates/landing.html:83
 msgid "Contrase&ntilde;a"
 msgstr "Password"
 
-#: templates/landing.html:84
+#: templates/landing.html:50 templates/landing.html.py:61
+#: templates/topBar.html:88 templates/topBar.html.py:113
+msgid "Iniciar Sesi&oacute;n"
+msgstr "Login"
+
+#: templates/landing.html:52
+msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
+msgstr "Forgot your password?"
+
+#: templates/landing.html:61
+msgid "Tengo una cuenta"
+msgstr "I have an account"
+
+#: templates/landing.html:76
+msgid "Formulario de registro"
+msgstr "Sign Up Form"
+
+#: templates/landing.html:81 templates/landing.html.py:82
+msgid "Correo Electr&oacute;nico"
+msgstr "Email"
+
+#: templates/landing.html:85
 msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
 msgstr "Password (Confirmation)"
 
-#: templates/landing.html:90 templates/landing.html.py:99
+#: templates/landing.html:89
+#, python-format
+msgid ""
+"Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
+"uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Pol&iacute;"
+"ticas de privacidad</a>"
+msgstr ""
+"I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of Use</"
+"a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy Policy</a>"
+
+#: templates/landing.html:92 templates/landing.html.py:101
+#: templates/topBar.html:119
 msgid "Registrarme"
 msgstr "Sign Up"
 
-#: templates/landing.html:99
+#: templates/landing.html:101
 msgid "No tengo cuenta"
 msgstr "I don't have an account"
 
@@ -77,3 +88,22 @@ msgstr "Powered By"
 #: templates/layout.html:113
 msgid "Todos los derechos reservados"
 msgstr "All rights reserved"
+
+#: templates/topBar.html:120
+msgid "Entrar"
+msgstr "Enter"
+
+#~ msgid "Registrarse"
+#~ msgstr "Sign Up"
+
+#~ msgid "Inicia sesi&oacute;n"
+#~ msgstr "Login"
+
+#~ msgid "Iniciar sesi&oacute;n"
+#~ msgstr "Login"
+
+#~ msgid "Inciar Sesi&oacute;n"
+#~ msgstr "Login"
+
+#~ msgid "Contrase&ntilde;a:"
+#~ msgstr "Password"

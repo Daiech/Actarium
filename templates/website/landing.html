@@ -42,11 +42,12 @@
                     {% csrf_token %}
                     <label for="id_username-login">{% trans "Nombre de usuario" %}:</label>
                     <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
-                    <label for="id_password-login">{% trans "Contrase&ntilde;a:" %}</label>
+                    <label for="id_password-login">{% trans "Contrase&ntilde;a" %}:</label>
                     <input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" />
 
                     <div class="box mt20">
-                        <button type="submit" name="submit" class="btn btn-success link-daiech">{% trans "Inciar Sesi&oacute;n" %}</button>
+                        <button type="submit" name="submit" class="btn btn-success link-daiech">
+                            {% trans "Iniciar Sesi&oacute;n" %}</button>
                         <label>
                         <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
                     </div>
