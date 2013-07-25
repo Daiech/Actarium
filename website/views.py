@@ -13,6 +13,7 @@ from account.templatetags.gravatartag import showgravatar
 from website.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 import datetime
 
 
@@ -51,12 +52,27 @@ def home(request):
                     "title": reunion.title})
         #-----------------</REUNIONES>-----------------
 
-        ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array, 'dni_permissions': _dni_permissions}
+        ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array,
+        'dni_permissions': _dni_permissions}
         template = 'website/index.html'
     else:
         saveViewsLog(request, "Home_anonymous")
         ctx = {}
         template = 'website/landing.html'
+    if request.method == "GET" and 'lang' in request.GET:
+        try:
+            lang_available = False
+            for l in settings.LANGUAGES:
+                if request.GET.get("lang") in l:
+                    lang_available = True
+            if lang_available:
+                from django.utils import translation
+                request.session['django_language'] = request.GET.get("lang")
+                translation.activate(request.GET.get("lang"))
+            else:
+                ctx["no_supported"] = True
+        except Exception, e:
+            print e
 
     return render_to_response(template, ctx, context_instance=RequestContext(request))
 

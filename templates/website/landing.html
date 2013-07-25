@@ -201,6 +201,11 @@
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
         $("#register-link").on("click",register);
+        {% if no_supported %}
+        var t = "{% trans 'Idioma no soportado' %}"
+        var m = "{% trans 'Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal para recibir actualizaciones de nuestra plataforma' %}"
+        setAlertError(t, m);
+        {%endif%}
     });
     
     function login(e){
