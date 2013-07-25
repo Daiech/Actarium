@@ -1,9 +1,16 @@
 #encoding:utf-8
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
-from django.template import Context
+from django.template import Context,  RequestContext
 from actions_log.views import saveErrorLog
 from django.contrib.auth.models import User
+from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+from groups.models import groups, rel_user_group
+from emailmodule.models import *
+from actions_log.views import saveActionLog, saveViewsLog
+from django.utils import simplejson as json
 
 
 def sendEmailHtml(email_type, ctx, to):
@@ -20,6 +27,7 @@ def sendEmailHtml(email_type, ctx, to):
         7- Correo de invitacion a actarium
         8- Correo de notificacion de aceptacion de grupo
         9- Correo notificacion de feedback al staff de Actarium
+        14 - Correo para solicitr acceso a DNI
     """
 
     if email_type == 1:
@@ -74,7 +82,7 @@ def sendEmailHtml(email_type, ctx, to):
         subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
-    elif email_type == 14:  # colocar restriccioin
+    elif email_type == 14:  # colocar restriccion
         subject = ctx['firstname'] + " (" + ctx['username'] + u") Solicita acceso a tu DNI para el grupo " + ctx['groupname'] + " en Actarium"
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_dni_request.html')
@@ -111,3 +119,66 @@ def activeFilter(email_list):
             new_email_list.append(email)
             # print 'Se ha evitado enviar correo a: ', email
     return new_email_list
+
+@login_required(login_url='/account/login')
+def emailNotifications(request, slug_group):
+    _group = groups.objects.get( slug = slug_group )
+    try:
+        _user_rel = rel_user_group.objects.get(id_user=request.user, id_group=_group)
+        _email_admin_type = email_admin_type.objects.get(name='grupo')
+        _emails = email.objects.filter(admin_type= _email_admin_type)
+        email_list=[]
+        for e in _emails:
+            try:
+                egp = email_group_permissions.objects.get(id_user = request.user, id_email_type = e.id, id_group = _group)
+                checked = egp.is_active  
+            except email_group_permissions.DoesNotExist:
+                checked = True
+            except:
+                return HttpResponseRedirect('/groups/#error-email-permissions')
+            email_list.append({"id":e.id, "name": e.name, "description": e.description, "checked": checked })
+        ctx = {"group":_group, "is_admin": _user_rel.is_admin, "email_list": email_list}
+        return render_to_response('groups/adminEmail.html', ctx, context_instance=RequestContext(request))
+    except rel_user_group.DoesNotExist:
+        return HttpResponseRedirect('/groups/#error-user-rel-group')
+
+@login_required(login_url='/account/login')
+def emailAjax(request, slug_group):
+    saveViewsLog(request, "groups.views.emailAjax")
+    # if request.is_ajax():
+    _email_admin_type = email_admin_type.objects.get(name='grupo')
+    _group = groups.objects.get(slug = slug_group)
+    
+    if request.method == "GET":
+        try:
+            id_email_type = str(request.GET['id_email_type']) 
+            input_status = str(request.GET['input_status'])
+            if input_status == "false":
+                input_status = False
+            elif input_status == "true":
+                input_status = True
+            try:
+                _email = email.objects.get(admin_type= _email_admin_type, email_type=id_email_type)
+                try:
+                    _email_group_permission = email_group_permissions.objects.get(id_user= request.user, id_group= _group, id_email_type= _email)
+                    _email_group_permission.is_active = input_status
+                    _email_group_permission.save()
+                    message = {"saved":True}
+                    return HttpResponse(json.dumps(message), mimetype="application/json")
+                except email_group_permissions.DoesNotExist:
+                    email_group_permissions(id_user= request.user, id_group= _group, id_email_type= _email, is_active= input_status).save()
+                    message = {"saved":True}
+                    return HttpResponse(json.dumps(message), mimetype="application/json")
+                except:
+                    message=False
+                    return HttpResponse(message)
+            except:
+                message=False
+                return HttpResponse(message)
+        except:
+            message = False
+            return HttpResponse(message)
+    else:
+        message = False
+        return HttpResponse(message)
+    
