@@ -1,6 +1,6 @@
 {% extends "website/layout.html" %}
-{% block TITLE %} {% trans "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones" %}  {% endblock %}
 {% load i18n %}
+{% block TITLE %} {% trans "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones" %}  {% endblock %}
 {%block body%}
 <div id="actarium-slide" class="carousel slide">
             <ol class="carousel-indicators">
@@ -84,7 +84,8 @@
                     <label for="id_password2">{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}:</label>
                     <input type="password" name="password2" id="id_password2" placeholder="Contrase&ntilde;a" />
                     <label class="checkbox">
-                        <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>
+                        <input type="checkbox" name="term_privacy" id="term_privacy">
+                        {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
                     </label>
                     <div class="box mt20">
                         <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">{% trans "Registrarme" %}</button>
