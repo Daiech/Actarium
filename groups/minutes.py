@@ -394,7 +394,7 @@ def setMinutesApprove(request):
                         'link': link,
                         'urlgravatar': showgravatar(request.user.email, 50)
                     }
-                    sendEmailHtml(3, email_ctx, getEmailListByGroup(_minutes.id_group))
+                    sendEmailHtml(3, email_ctx, getEmailListByGroup(_minutes.id_group), _minutes.id_group)
             except Exception, e:
                 print "Error Al Firmar" % e
             response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}

@@ -1,0 +1,88 @@
+{% extends "groups/adminGroup.html" %}
+{% block TITLE %} Administraci&oacute;n de {{group.name}}{% endblock %}
+{% block bodysettings %}
+{% load gravatartag %}
+
+<h3> Configuraci&oacute;n de notificaciones al correo electronico</h3>
+<p>A continuaci&oacute;n se muestra la configuraci&oacute;n actual de notificaciones al correo electronico para el grupo <a href="/groups/{{group.slug}}">{{ group.name }}</a></p>
+<p>Marca las casillas de los tipos de correos que quieres que lleguen a la bandeja de entrada de tu correo electronico o desmarca las casillas de los correos que no quieres que lleguen.</p>
+<hr>
+<div>
+<h4>Tipos de correo electronico</h4>
+<table id="table-email" class="table table-bordered table-hover">
+	<tr>
+		<th >
+			<div class="info-title" title="Activa o desactiva">
+				Acci&oacute;n
+			</div>
+		</th>
+		<th>
+			<div class="info-title" title="Tipo de correo que puede ser confirgurado">
+				Tipo de correo
+			</div>
+		</th>
+	</tr>
+	{% for e in email_list %}
+		<tr>
+			<td  >
+				<label class="input-center" for="email_{{e.id}}">
+					<input class ="change-email-status" type="checkbox" id="email_{{e.id}}" 
+					{% if e.checked %}
+						checked
+						data-status="1"
+					{% else %}
+						data-status="0"
+					{% endif %}
+					data-id="{{e.id}}"
+					/>
+				</label>
+			</td>
+			<td>
+				<div class="info-title" title="{{ e.description }}">
+					{{ e.name }}
+				</div>
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+</div>
+
+<hr>
+
+{% endblock %}
+{%block settings_style%}
+<style type="text/css">
+.input-center{
+	text-align: center;
+}
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" >
+	
+	$(document).ready( function() {
+		$("#admin-emailNotifications").addClass("active")
+
+		$(".change-email-status").on("click", function() {
+			var id_email_type = $(this).attr("data-id")
+			var input_status = $(this).prop("checked")
+			sendAjax("/groups/{{ group.slug }}/admin/emailAjax",
+				{id_email_type: id_email_type, input_status: input_status},
+				"#loading-reunion",
+				function(data){
+	    			if (data.saved){
+	    				if (input_status)
+	    					message = "Se ha activado correctamente"
+	    				else
+	    					message = "se ha desactivado correctamente"
+	    				setAlertMessage(message, "Se han realizado correctamente los cambios a la configuracion de notificaciones al correo electronico")
+	    			}
+	    			else{
+	    				setAlertError("Ocurri&oacute; un error", data.error)
+	    			}
+	    		}
+			); 
+	    });
+	});
+</script>
+{% endblock %}
