@@ -1,8 +1,3 @@
-
-
-
-
-
 AUTHENTICATION_BACKENDS = (
 'account.backends.EmailOrUsernameModelBackend',
 'django.contrib.auth.backends.ModelBackend'
@@ -21,3 +16,23 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'website.context_processors.gloval_vars_url',
 )
+
+ALLOWED_HOSTS = []
+
+# add to
+MIDDLEWARE_CLASSES = (
+    'django.middleware.locale.LocaleMiddleware',
+)
+# add to
+INSTALLED_APPS = (
+    'rosetta'
+)
+
+ugettext = lambda s: s
+LANGUAGES = (
+    ('es', ugettext('Spanish')),
+    ('en', ugettext('English')),
+)
+LOGIN_URL = "/account/login"
+LOGOUT_URL = "/account/logout"
+LOGIN_REDIRECT_URL = "/"
