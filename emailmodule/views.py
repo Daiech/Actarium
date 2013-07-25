@@ -13,7 +13,7 @@ from actions_log.views import saveActionLog, saveViewsLog
 from django.utils import simplejson as json
 
 
-def sendEmailHtml(email_type, ctx, to):
+def sendEmailHtml(email_type, ctx, to, _group = None):
     """
         Este modulo esta en proceso de construccion, por el momento se utilizara este metodo que recibe
         el tipo de correo que se envia y el contexto con las variables que se trasmitiran a cada template.
@@ -102,8 +102,8 @@ def sendEmailHtml(email_type, ctx, to):
     actives_required_list = [3,4,6,14] # This list contains the number of email_type that requires the user is active in actarium
     if email_type in  actives_required_list:
         to = activeFilter(to)
-
-        #    print 'se enviara un correo a las siguientes direcciones ', to
+    
+    to = groupAdminFilter(to, email_type, _group)
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, "text/html")
@@ -113,6 +113,40 @@ def sendEmailHtml(email_type, ctx, to):
         #        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
         saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
 
+
+def groupAdminFilter(email_list, email_type, _group):
+    new_email_list =[]
+    _email_admin_type = email_admin_type.objects.get(name='grupo')
+    print "email type", email_type
+    _email = email.objects.get(email_type= email_type)
+    if _email.admin_type == _email_admin_type:
+        for e in email_list:
+            print e 
+            _user = User.objects.get(email=e)
+            try:
+                # print "user",_user
+                # print "email admin type", _email_admin_type
+                # print "group ",_group
+                egp = email_group_permissions.objects.get(id_user = _user, id_email_type = _email, id_group = _group)
+                if egp.is_active:
+                    new_email_list.append(e)
+                    # print "....si esta, si activo"
+                else:
+                    # print ".....si esta, no activo"
+            except email_group_permissions.DoesNotExist:
+                new_email_list.append(e)
+                # print ".....No esta, colocar como activo"
+
+        # print "---------diferencia en listas de correos--- eliminar despues de probar----------"
+        # print " email_list -------"
+        # print email_list
+        # print " new_email_list ---"
+        # print new_email_list
+
+        return new_email_list
+    else:
+        return email_list
+    
 
 def activeFilter(email_list):
     new_email_list = []

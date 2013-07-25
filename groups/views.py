@@ -124,7 +124,7 @@ def setRoltoUser(request, _user, _group, role, remove):
                 'grouplink': link,
                 'urlgravatar': showgravatar(request.user.email, 50)
             }
-            sendEmailHtml(4, ctx_email, [rel.id_user.email])
+            sendEmailHtml(4, ctx_email, [rel.id_user.email], _group)
         return True
     return False
 
@@ -597,7 +597,7 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
             'groupname': group.name,
             'urlgravatar': showgravatar(id_user_from.email, 50)
         }
-        sendEmailHtml(6, ctx_email, email)
+        sendEmailHtml(6, ctx_email, email, group)
     return _inv
 
 
@@ -912,7 +912,7 @@ def acceptInvitation(request):
                         noHasPerms = True
                 # send email message
                 email_list = []
-                email_list.append(str(inv.id_user_invited.email) + ",")
+                email_list.append(str(inv.id_user_invited.email))
                 email_ctx = {
                     'firstname': request.user.first_name + " " + request.user.last_name,
                     'username': request.user.username,
@@ -921,7 +921,7 @@ def acceptInvitation(request):
                     'groupslug': inv.id_group.slug,
                     'urlgravatar': showgravatar(request.user.email, 50)
                 }
-                sendEmailHtml(8, email_ctx, email_list)
+                sendEmailHtml(8, email_ctx, email_list, inv.id_group)
                 response = {"accepted": accepted, "message": message, "group": group, "canceled": noHasPerms}
             except Exception, e:
                 print e
@@ -1009,7 +1009,7 @@ def newReunion(request, slug):
                 relations = rel_user_group.objects.filter(id_group=q, is_active=1)
                 email_list = []
                 for relation in relations:
-                    email_list.append(str(relation.id_user.email) + ",")
+                    email_list.append(str(relation.id_user.email)) # bug found at 25,07,2013
                 email_ctx = {
                     'firstname': request.user.first_name,
                     'username': request.user.username,
@@ -1022,7 +1022,7 @@ def newReunion(request, slug):
                     'id_reunion': id_reunion.pk,
                     'urlgravatar': showgravatar(request.user.email, 50)
                 }
-                sendEmailHtml(2, email_ctx, email_list)
+                sendEmailHtml(2, email_ctx, email_list, q)
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
                 return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
 
@@ -1227,7 +1227,7 @@ def setAssistance(request):
     #        assis.is_confirmed = is_confirmed
             assis.save()
             email_list = []
-            email_list.append(str(id_reunion.id_convener.email) + ",")
+            email_list.append(str(id_reunion.id_convener.email))
             ctx_email = {
                 'firstname': request.user.first_name,
                 'username': request.user.username,
@@ -1240,7 +1240,7 @@ def setAssistance(request):
             }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
-            sendEmailHtml(5, ctx_email, email_list)
+            sendEmailHtml(5, ctx_email, email_list, id_reunion.id_group)
         return HttpResponse(json.dumps(datos), mimetype="application/json")
     else:
         response = "Error Calendar"
