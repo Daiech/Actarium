@@ -7,13 +7,13 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from groups.models import groups, rel_user_group
+from groups.models import rel_user_group
 from emailmodule.models import *
 from actions_log.views import saveActionLog, saveViewsLog
 from django.utils import simplejson as json
 
 
-def sendEmailHtml(email_type, ctx, to, _group = None):
+def sendEmailHtml(email_type, ctx, to, _group=None):
     """
         Este modulo esta en proceso de construccion, por el momento se utilizara este metodo que recibe
         el tipo de correo que se envia y el contexto con las variables que se trasmitiran a cada template.
@@ -29,7 +29,7 @@ def sendEmailHtml(email_type, ctx, to, _group = None):
         9- Correo notificacion de feedback al staff de Actarium    (Siempre es necesario)
         10-    (Por definir)
         11-    (Depende del grupo)
-        12-    (Depende del grupo)    
+        12-    (Depende del grupo)
         13-    (Depende del grupo)
         14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)
     """
@@ -99,10 +99,10 @@ def sendEmailHtml(email_type, ctx, to, _group = None):
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
 
-    actives_required_list = [3,4,6,14] # This list contains the number of email_type that requires the user is active in actarium
-    if email_type in  actives_required_list:
+    actives_required_list = [3, 4, 6, 14]  # This list contains the number of email_type that requires the user is active in actarium
+    if email_type in actives_required_list:
         to = activeFilter(to)
-    
+
     to = groupAdminFilter(to, email_type, _group)
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
@@ -115,24 +115,24 @@ def sendEmailHtml(email_type, ctx, to, _group = None):
 
 
 def groupAdminFilter(email_list, email_type, _group):
-    new_email_list =[]
+    new_email_list = []
     _email_admin_type = email_admin_type.objects.get(name='grupo')
     print "email type", email_type
-    _email = email.objects.get(email_type= email_type)
+    _email = email.objects.get(email_type=email_type)
     if _email.admin_type == _email_admin_type:
         for e in email_list:
-            print e 
+            print e
             _user = User.objects.get(email=e)
             try:
                 # print "user",_user
                 # print "email admin type", _email_admin_type
                 # print "group ",_group
-                egp = email_group_permissions.objects.get(id_user = _user, id_email_type = _email, id_group = _group)
+                egp = email_group_permissions.objects.get(id_user=_user, id_email_type=_email, id_group=_group)
                 if egp.is_active:
                     new_email_list.append(e)
                     # print "....si esta, si activo"
                 else:
-                    # print ".....si esta, no activo"
+                    print ".....si esta, no activo"
             except email_group_permissions.DoesNotExist:
                 new_email_list.append(e)
                 # print ".....No esta, colocar como activo"
@@ -146,7 +146,7 @@ def groupAdminFilter(email_list, email_type, _group):
         return new_email_list
     else:
         return email_list
-    
+
 
 def activeFilter(email_list):
     new_email_list = []
@@ -158,60 +158,64 @@ def activeFilter(email_list):
             # print 'Se ha evitado enviar correo a: ', email
     return new_email_list
 
+
 @login_required(login_url='/account/login')
 def emailNotifications(request, slug_group):
-    _group = groups.objects.get( slug = slug_group )
+    from groups.views import getGroupBySlug
+    _group = getGroupBySlug(slug=slug_group)
     try:
         _user_rel = rel_user_group.objects.get(id_user=request.user, id_group=_group)
         _email_admin_type = email_admin_type.objects.get(name='grupo')
-        _emails = email.objects.filter(admin_type= _email_admin_type)
-        email_list=[]
+        _emails = email.objects.filter(admin_type=_email_admin_type)
+        email_list = []
         for e in _emails:
             try:
-                egp = email_group_permissions.objects.get(id_user = request.user, id_email_type = e.id, id_group = _group)
-                checked = egp.is_active  
+                egp = email_group_permissions.objects.get(id_user=request.user, id_email_type=e.id, id_group=_group)
+                checked = egp.is_active
             except email_group_permissions.DoesNotExist:
                 checked = True
             except:
                 return HttpResponseRedirect('/groups/#error-email-permissions')
-            email_list.append({"id":e.id, "name": e.name, "description": e.description, "checked": checked })
-        ctx = {"group":_group, "is_admin": _user_rel.is_admin, "email_list": email_list}
+            email_list.append({"id": e.id, "name": e.name, "description": e.description, "checked": checked})
+        ctx = {"group": _group, "is_admin": _user_rel.is_admin, "email_list": email_list}
         return render_to_response('groups/adminEmail.html', ctx, context_instance=RequestContext(request))
     except rel_user_group.DoesNotExist:
         return HttpResponseRedirect('/groups/#error-user-rel-group')
+
 
 @login_required(login_url='/account/login')
 def emailAjax(request, slug_group):
     saveViewsLog(request, "groups.views.emailAjax")
     # if request.is_ajax():
     _email_admin_type = email_admin_type.objects.get(name='grupo')
-    _group = groups.objects.get(slug = slug_group)
-    
+    from groups.views import getGroupBySlug
+    _group = getGroupBySlug(slug=slug_group)
+
     if request.method == "GET":
         try:
-            id_email_type = str(request.GET['id_email_type']) 
+            id_email_type = str(request.GET['id_email_type'])
             input_status = str(request.GET['input_status'])
             if input_status == "false":
                 input_status = False
             elif input_status == "true":
                 input_status = True
             try:
-                _email = email.objects.get(admin_type= _email_admin_type, email_type=id_email_type)
+                _email = email.objects.get(admin_type=_email_admin_type, email_type=id_email_type)
                 try:
-                    _email_group_permission = email_group_permissions.objects.get(id_user= request.user, id_group= _group, id_email_type= _email)
+                    _email_group_permission = email_group_permissions.objects.get(id_user=request.user, id_group=_group, id_email_type=_email)
                     _email_group_permission.is_active = input_status
                     _email_group_permission.save()
-                    message = {"saved":True}
+                    message = {"saved": True}
                     return HttpResponse(json.dumps(message), mimetype="application/json")
                 except email_group_permissions.DoesNotExist:
-                    email_group_permissions(id_user= request.user, id_group= _group, id_email_type= _email, is_active= input_status).save()
-                    message = {"saved":True}
+                    email_group_permissions(id_user=request.user, id_group=_group, id_email_type=_email, is_active=input_status).save()
+                    message = {"saved": True}
                     return HttpResponse(json.dumps(message), mimetype="application/json")
                 except:
-                    message=False
+                    message = False
                     return HttpResponse(message)
             except:
-                message=False
+                message = False
                 return HttpResponse(message)
         except:
             message = False
@@ -219,4 +223,3 @@ def emailAjax(request, slug_group):
     else:
         message = False
         return HttpResponse(message)
-    

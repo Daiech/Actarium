@@ -133,6 +133,7 @@ def setRole(request, slug_group):
     """
         Set or remove role to a user
     """
+
     saveViewsLog(request, "groups.views.setRole")
     error = False
     if request.is_ajax():
