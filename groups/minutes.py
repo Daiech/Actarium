@@ -990,11 +990,13 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                 try:
                     if _extra_minutes:
                         import datetime
+                        date_1 = _extra_minutes.date_start
+                        date_2 = _extra_minutes.date_end
                         form = newMinutesForm(
                             initial={
                             "code": _minute.code,
-                            "date_start": str(datetime.datetime.strftime(_extra_minutes.date_start, "%Y-%m-%d %I:%M %p")),
-                            "date_end": str(datetime.datetime.strftime(_extra_minutes.date_end, "%Y-%m-%d %I:%M %p")),
+                            "date_start": date_1,
+                            "date_end": date_2,
                             "location": _extra_minutes.location,
                             "agreement": _extra_minutes.agreement,
                             "agenda": _extra_minutes.agenda,

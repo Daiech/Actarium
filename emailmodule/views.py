@@ -27,10 +27,10 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         7- Correo de invitacion a actarium                         (Siempre es necesario)
         8- Correo de notificacion de aceptacion de grupo           (Depende del grupo)
         9- Correo notificacion de feedback al staff de Actarium    (Siempre es necesario)
-        10-    (Por definir)
-        11-    (Depende del grupo)
-        12-    (Depende del grupo)
-        13-    (Depende del grupo)
+        10- email_resend_activate_account  (Por definir)
+        11- email_group_reinvitation   (Depende del grupo)
+        12- email_new_annotation   (Depende del grupo)
+        13- email_new_minutes_for_approvers   (Depende del grupo)
         14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)
     """
 

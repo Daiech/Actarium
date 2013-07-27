@@ -1,11 +1,11 @@
-#encoding:utf-8
+# encoding:utf-8
 # from django.contrib.auth.decorators import login_required
 from groups.models import minutes
 # from django.contrib.auth.models import User
 # from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 # from django.template import RequestContext
-#from django.core.mail import EmailMessage
+# from django.core.mail import EmailMessage
 import random
 from Actarium.settings import MEDIA_ROOT
 
@@ -42,11 +42,11 @@ def minutesToPdf(request, id_minutes):
         # Creacion del PDF
         pdf_address = "/pdf/reporte%s.pdf" % (int(random.random() * 100000))
 
-        #Generar el objeto canvas (documento PDF)
+        # Generar el objeto canvas (documento PDF)
         from reportlab.pdfgen import canvas
         canvas_obj = canvas.Canvas("%s%s" % (MEDIA_ROOT, pdf_address))
 
-        #Definiendo estilos basicos
+        # Definiendo estilos basicos
         estiloHoja = getSampleStyleSheet()
         estilo1 = estiloHoja['BodyText']
         estilo2 = estiloHoja['Normal']
@@ -56,8 +56,10 @@ def minutesToPdf(request, id_minutes):
 
         # Añadimos algunos flowables.
         p1 = Paragraph(u"Grupo: %s" % (m_group), estilo1)
-        p2 = Paragraph(u"Codigo de acta: %s Creada el: %s" % (m_code, m_date_created), estilo1)
-        p3 = Paragraph(u"La reunion inicio el: %s Y finalizo el: %s" % (m_date_start, m_date_end), estilo1)
+        p2 = Paragraph(u"Codigo de acta: %s Creada el: %s" %
+                       (m_code, m_date_created), estilo1)
+        p3 = Paragraph(u"La reunion inicio el: %s Y finalizo el: %s" %
+                       (m_date_start, m_date_end), estilo1)
         p4 = Paragraph(u"Lugar de encuentro: %s" % (m_location), estilo1)
         p5 = Paragraph(u"Orden de dia", estilo1)
         p6 = Paragraph(u"%s" % (m_agenda), estilo1)
@@ -75,7 +77,7 @@ def minutesToPdf(request, id_minutes):
         story.append(p7)
         story.append(p8)
 
-        #creo los frames
+        # creo los frames
         f1 = Frame(50, 600, 500, 200, showBoundary=1)
 
         # agregando los frames al objeto canvas
@@ -91,7 +93,7 @@ def minutesToPdf(request, id_minutes):
 def minutesToPdfTest(request, id_minutes):
     saveViewsLog(request, "pdfmodule.views.minutesToPdfTest")
     if request.user.is_staff:
-        pdf_address = "/pdf/reporte%s.pdf" % (int(random.random()*100000))
+        pdf_address = "/pdf/reporte%s.pdf" % (int(random.random() * 100000))
     # try:
         # _actions= rel_user_action.objects.all().order_by("-date_done")
 
@@ -111,18 +113,18 @@ def minutesToPdfTest(request, id_minutes):
 
         # Añadimos algunos flowables.
 
-        parrafo1 = Paragraph('Id de Acta: %s' % (id_minutes),estilo1)
+        parrafo1 = Paragraph('Id de Acta: %s' % (id_minutes), estilo1)
         parrafo2 = Paragraph('España, Murcia, Lorca', estilo2)
 
         # Agregamos una tabla
-        list_data = [ ["Esto","Es","Una","Tabla"],
-                      ["Esto","Es","Una","Tabla"],
-                      ["Esto","Es","Una","Tabla"],
-                      ["Esto","Es","Una","Tabla"],]
+        list_data = [["Esto", "Es", "Una", "Tabla"],
+                    ["Esto", "Es", "Una", "Tabla"],
+                    ["Esto", "Es", "Una", "Tabla"],
+                    ["Esto", "Es", "Una", "Tabla"], ]
         t = Table(list_data)
 
-        #agregamos una imagen
-        img = Image("static/img/dragon.jpg",width=100,height=100)
+        # agregamos una imagen
+        img = Image("static/img/dragon.jpg", width=100, height=100)
         # img = Image("static/img/org.png",width=4,height=3)
 
         # Añadimos los flowables a la lista story.
@@ -130,42 +132,45 @@ def minutesToPdfTest(request, id_minutes):
         story.append(parrafo1)
         story.append(parrafo2)
         story.append(t)
-        story.append(Spacer(0,20))
+        story.append(Spacer(0, 20))
         story2.append(img)
 
         # Creamos documento.
 
-        # documento = SimpleDocTemplate("%s%s"%(MEDIA_ROOT,pdf_address), pagesize = A4)
+        # documento = SimpleDocTemplate("%s%s"%(MEDIA_ROOT,pdf_address),
+        # pagesize = A4)
 
         # Y construimos el documento.
 
         # documento.build(story)
 
-        #creo los frames
-        f1 = Frame(350,350,200,200,showBoundary=1)
-        f2 = Frame(50,50,200,200,showBoundary=1)
-
+        # creo los frames
+        f1 = Frame(350, 350, 200, 200, showBoundary=1)
+        f2 = Frame(50, 50, 200, 200, showBoundary=1)
 
         # agregando los frames al objeto canvas
-        f1.addFromList(story,canvas_obj)
+        f1.addFromList(story, canvas_obj)
         canvas_obj.showPage()
-        
-        f2.addFromList(story2,canvas_obj)
+
+        f2.addFromList(story2, canvas_obj)
 
         canvas_obj.save()
     # except:
         # print "Ocurrio un error al generar el PDF"
-        # ctx = {"actions": rel_user_action.objects.all().order_by("-date_done")}
-        return HttpResponseRedirect('/media%s'%(pdf_address))
+        # ctx = {"actions":
+        # rel_user_action.objects.all().order_by("-date_done")}
+        return HttpResponseRedirect('/media%s' % (pdf_address))
     else:
         return HttpResponseRedirect('/')
 
 
 def minutesHtmlToPdf(html_string, name_pdf):
-    pdf_address = "/pdf/%s_Actarium%s.pdf" % (name_pdf, int(random.random() * 100000))
+    pdf_address = "/pdf/%s_Actarium%s.pdf" % (
+        name_pdf, int(random.random() * 100000))
     file_dir = "%s%s" % (MEDIA_ROOT, pdf_address)
     file_dir = file(file_dir, "wb")
-    pdf = CreatePDF(html_string, file_dir)  #, default_css="#minute{margin:200px}")
+    pdf = CreatePDF(html_string, file_dir)
+                    #, default_css="#minute{margin:200px}")
     if not pdf.err:
         startViewer(name_pdf)
     file_dir.close()

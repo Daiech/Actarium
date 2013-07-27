@@ -1,5 +1,5 @@
 # Create your views here.
-#encoding:utf-8
+# encoding:utf-8
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
@@ -32,18 +32,23 @@ def home(request):
         #-----------------</GRUPOS>-----------------
 
         #-----------------<INVITACIONES>-----------------
-        my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
+        my_inv = rel_user_group.objects.filter(
+            id_user=request.user, is_active=False, is_member=True)
         #-----------------</INVITACIONES>-----------------
 
-        _dni_permissions = DNI_permissions.objects.filter(id_user=request.user, state=0)
+        _dni_permissions = DNI_permissions.objects.filter(
+            id_user=request.user, state=0)
 
         #-----------------<REUNIONES>-----------------
-        # my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")
-        my_reu = reunions.objects.filter(id_group__in=_groups_list, date_reunion__gt=datetime.date.today()).order_by("-date_convened")
+        # my_reu = reunions.objects.filter(id_group__in=gr,
+        # is_done=False).order_by("-date_convened")
+        my_reu = reunions.objects.filter(
+            id_group__in=_groups_list, date_reunion__gt=datetime.date.today()).order_by("-date_convened")
         json_array = list()
         for reunion in my_reu:
             try:
-                assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
+                assistance.objects.get(
+                    id_user=request.user, id_reunion=reunion.pk)
             except assistance.DoesNotExist:
                 json_array.append({
                     "id_reunion": str(reunion.id),
@@ -52,8 +57,9 @@ def home(request):
                     "title": reunion.title})
         #-----------------</REUNIONES>-----------------
 
-        ctx = {'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array,
-        'dni_permissions': _dni_permissions}
+        ctx = {
+            'my_reu': my_reu, "groups": gr, "invitations": my_inv, "reunions": json_array,
+            'dni_permissions': _dni_permissions}
         template = 'website/index.html'
     else:
         saveViewsLog(request, "Home_anonymous")

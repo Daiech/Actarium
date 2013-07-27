@@ -38,11 +38,11 @@ class newMinutesForm3(forms.Form):
 class newMinutesForm(forms.Form):
     TYPES = [('ORDINARIA', 'ORDINARIA'), ('EXTRAORDINARIA', 'EXTRAORDINARIA')]
     code = forms.CharField(label="Codigo", widget=forms.TextInput(attrs={'placeholder': 'Código de acta', 'autofocus': 'autofocus'}))
-    date_start = forms.DateTimeField(label="Fecha inicio", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick', 'placeholder': 'Fecha/Hora de la reunión'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    date_start = forms.DateTimeField(label="Fecha/hora inicio", localize=True, widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick', 'placeholder': 'Fecha/hora inicio'}), input_formats=['%Y-%m-%d %I:%M %p'])
     location = forms.CharField(label="Lugar", widget=forms.TextInput(attrs={'placeholder': 'Lugar'}))
     agenda = forms.CharField(label="Orden del día", widget=forms.Textarea(attrs={'placeholder': 'Orden del día'}))
     agreement = forms.CharField(label="Acuerdos", widget=forms.Textarea(attrs={'placeholder': 'Acuerdos'}))
-    date_end = forms.DateTimeField(label="Fecha finalización", widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick'}), input_formats=['%Y-%m-%d %I:%M %p'])
+    date_end = forms.DateTimeField(label="Fecha/hora finalización", localize=True, widget=forms.widgets.DateTimeInput(attrs={'class': 'date-pick', 'placeholder': "Fecha/hora finalización"}), input_formats=['%Y-%m-%d %I:%M %p'])
     type_reunion = forms.ChoiceField(widget=forms.Select(), choices=TYPES)
 
 
