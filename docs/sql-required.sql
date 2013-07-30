@@ -45,3 +45,28 @@ INSERT INTO `groups_templates` (`id`, `name`, `address_template`, `address_js`, 
 INSERT INTO `website_globalvars` (`id`, `name`, `url`, `description`, `date_created`) VALUES
 (1, 'URL_TERMS', 'terminos-y-condiciones-de-uso', 'Url de los términos y condiciones', '2013-03-23 19:22:44'),
 (2, 'URL_PRIVACY', 'politicas-de-privacidad', 'Url de las politicas-de-privacidad', '2013-03-23 19:55:08');
+
+
+
+INSERT INTO `emailmodule_email_admin_type` (`id`, `name`, `description`, `date_added`) VALUES
+(1, 'obligatorio', 'Este tipo de correos son obligatorios y no se pueden desactivar', '2013-07-25 04:14:29'),
+(2, 'grupo', 'Este tipo de correo esta directamente ligado a un grupo, el la configuración de cada grupo se pueden desactivar', '2013-07-25 04:15:09'),
+(3, 'global', 'Este tipo de correo esta relacionado directamente con cada usuario y se pueden desactivar o activar en las configuraciones generales', '2013-07-25 04:16:08'),
+(4, 'staff', 'Correo que se envía al staff de Actarium', '2013-07-25 04:47:20');
+
+
+INSERT INTO `emailmodule_email` (`id`, `name`, `description`, `email_type`, `admin_type_id`, `date_added`) VALUES
+(1, 'validación de correo', 'Correo de validacion para activar la cuenta', '1', 1, '2013-07-25 04:27:45'),
+(2, 'Nueva reunion', 'Correo que indica cuando un usuario invita a otro a una reunion', '2', 2, '2013-07-25 04:28:22'),
+(3, 'Nueva acta', 'Correo que informa a un usuario cuando se ha creado una nueva acta en un grupo', '3', 2, '2013-07-25 04:28:58'),
+(4, 'Asignacion de rol', 'Correo que informa a un usuario cuando le han asignado un rol dentro de un grupo', '4', 2, '2013-07-25 04:29:46'),
+(5, 'Confirmacion de asistencia a reunion', 'Correo que informa al convocador de una reunion cuando alguien responde a dicha reunion afirmativa o negativamente', '5', 2, '2013-07-25 04:30:49'),
+(6, 'Invitacion a un grupo', 'Correo que llega a un usuario cuando alguien lo invita a hacer parte de un grupo', '6', 3, '2013-07-25 04:31:41'),
+(7, 'Invitacion a Actarium', 'Correo que se envia cuando un usuario invita a otra persona a usar Actarium', '7', 1, '2013-07-25 04:32:56'),
+(8, 'Respuesta de invitacion a grupo', 'Cuando un usuario responde a la solicitud de hacer parte de un grupo, se envía un correo a la persona que realizo dicha invitación.', '8', 2, '2013-07-25 04:34:45'),
+(9, 'feedback', 'Comentarios que dejan los usuarios, se envia directamente al staff de Actarium', '9', 4, '2013-07-25 04:50:10'),
+(10, 'resend_activate_account', 'email_resend_activate_account', '10', 3, '2013-07-25 04:50:10'),
+(11, 'group_reinvitation', 'email_group_reinvitation', '11', 2, '2013-07-25 04:50:10'),
+(12, 'new_annotation', 'email_new_annotation', '12', 2, '2013-07-25 04:50:10'),
+(13, 'new_minutes_for_approvers', 'email_new_minutes_for_approvers', '13', 2, '2013-07-25 04:50:10'),
+(14, 'dni group', 'Correo de solicitud de acceso a DNI para un grupo', '14', 2, '2013-07-25 04:50:10');
