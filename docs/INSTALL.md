@@ -16,8 +16,8 @@ This is the correct way to install Actarium:
 * [mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
 * [pymongo](http://api.mongodb.org/python/current/installation.html)
 * PIL [Warning! Enable support for JPG](https://jamiecurle.co.uk/blog/webfaction-installing-pil/)
-* reportlab: `pip install reportlab`
-* xhtml2pdf: `pip install xhtml2pdf`
+* reportlab: `pip install reportlab` better from [source](http://www.reportlab.com/software/opensource/rl-toolkit/download/)
+* xhtml2pdf: `pip install xhtml2pdf` better from [source](https://pypi.python.org/pypi/xhtml2pdf/)
 
 for mongodb you should make this: `_`
 
