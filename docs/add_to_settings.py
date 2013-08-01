@@ -25,6 +25,11 @@ MIDDLEWARE_CLASSES = (
 )
 # add to
 INSTALLED_APPS = (
+    'groups',
+    'account',
+    'actions_log',
+    'website',
+    'emailmodule',
     'rosetta'
 )
 

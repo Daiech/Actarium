@@ -15,11 +15,11 @@ This is the correct way to install Actarium:
 
 * [mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
 * [pymongo](http://api.mongodb.org/python/current/installation.html)
-* reportlab
-* xhtml2pdf
 * PIL [Warning! Enable support for JPG](https://jamiecurle.co.uk/blog/webfaction-installing-pil/)
+* reportlab: `pip install reportlab`
+* xhtml2pdf: `pip install xhtml2pdf`
 
-for mongodb you should make this: ` `
+for mongodb you should make this: `_`
 
 ###Actarium uses the next Django apps
 
