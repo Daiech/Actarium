@@ -31,12 +31,17 @@ class groupsProAdmin(admin.ModelAdmin):
     list_display = ('id_group', 'id_organization', 'id_billing', 'is_active', 'dateOff')
 
 
+class DNI_typeAdmin(admin.ModelAdmin):
+    list_display = ('short_name', 'long_name')
+
+
 admin.site.register(groups, groupsAdmin)  # aca registramos nuestro modelo con el admin de django
 admin.site.register(minutes, minutesAdmin)
 admin.site.register(packages, packagesAdmin)
 admin.site.register(billing, billingAdmin)
 admin.site.register(organizations, organizationsAdmin)
 admin.site.register(private_templates, privateTemplatesAdmin)
+admin.site.register(DNI_type, DNI_typeAdmin)
 admin.site.register(group_type)
 admin.site.register(minutes_type)
 admin.site.register(minutes_type_1)
