@@ -23,9 +23,21 @@ for mongodb you should make this: `_`
 
 ###Actarium uses the next Django apps
 
-* django-rosetta [rosetta on GitHub](https://github.com/mbi/django-rosetta)
+* django-rosetta [view on GitHub](https://github.com/mbi/django-rosetta)
 
-4) Create the required folders:
+
+4) Django Internationalitation
+You should have `gettext` installed on your server to use the internationalitation.
+* Gettext on linux: `apt-get install gettext`
+* [gettext on Windows](https://docs.djangoproject.com/en/1.5/topics/i18n/translation/#gettext-on-windows)
+
+To compile messages:
+	/Actarium/website$ `django-admin.py compilemessages`
+	processing file django.po in /path_to/Actarium/website/locale/en/LC_MESSAGES
+
+Repeat the same with all django apps that have internationalization
+
+5) Create the required folders:
 These folders need to be created manually
 	
 	/media
@@ -35,8 +47,8 @@ These folders need to be created manually
 
 On a terminal type: /Actarium$ `mkdir media media/pdf media/orgs_img media/lastMinutes`
 
-5) Sync the Data Base: `python manage.py syncdb`
+6) Sync the Data Base: `python manage.py syncdb`
 This will create the initial data for de db
 
-6) Actarium is ready to run.
+7) Actarium is ready to run.
 On development type: `python manage.py runserver`
