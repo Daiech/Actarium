@@ -146,5 +146,21 @@
       "date_joined": "2013-03-15 13:55:52",
       "slug": "actas-subidas-4"
     }
+  },
+  {
+    "model": "groups.DNI_type",
+    "pk": 1,
+    "fields": {
+      "short_name": "C. C.",
+      "long_name": "Cédula de Ciudadanía"
+    }
+  },
+  {
+    "model": "groups.DNI_type",
+    "pk": 2,
+    "fields": {
+      "short_name": "T. I.",
+      "long_name": "Tarjeta de identidad"
+    }
   }
 ]
