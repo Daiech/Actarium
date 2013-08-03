@@ -2,6 +2,13 @@
 {% load i18n %}
 {% block TITLE %} {% trans "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones" %}  {% endblock %}
 {%block body%}
+<div id="btn-accion">
+</div>
+<div id="line-separator">
+    <div>
+        <p><span>&nbsp;&nbsp;{% trans "tus actas en un solo lugar"%}&nbsp;&nbsp;</span></p>
+    </div>
+</div>
 <div id="actarium-slide" class="carousel slide">
             <ol class="carousel-indicators">
                 <li data-target="#actarium-slide" data-slide-to="0" class="active"></li>
@@ -116,7 +123,14 @@
 {%endblock%}
 {% block style%}
 <style>
-
+    /*new design*/
+    #btn-accion{min-height: 400px}
+    #line-separator{background-color: #00ABA8; height: 100px;}
+    #line-separator div{padding-top:40px;}
+    #line-separator p{color: #ddd6d6;font-size: 18px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
+    #line-separator p span{border-bottom: solid thin #ccc;border-top: solid thin #ccc;padding: 5px;}
+    /*/new design*/
+    
     /* **************************************************************************** 
     Index Website
     **************************************************************************** */

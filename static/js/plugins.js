@@ -64,7 +64,7 @@ function main(){
     //----------------</>-------------------/
 
     //----------------<feedback>-------------------/
-    $("#feed-option, #callFeed").on("click", openFeedBack);
+    $("#feed-option, #callFeed, #menu-feed").on("click", openFeedBack);
     $("#close-feed, #cancel-feed").on("click", closeFeedBack);
     function openFeedBack(e){
         e.preventDefault();

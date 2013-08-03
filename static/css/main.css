@@ -113,10 +113,12 @@ time{font-size: 14px;color: gray}
 **************************************************************************** */
 body > header{
     background-repeat: repeat-x;
-    background-color: #EEEEEE;
-    background-image: url("/static/img/navbar-background.png");
-    box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
-    height: 70px;
+    background-color: #ECECEC;
+    /*box-shadow: 0px 1px 7px rgba(0,0,0,0.5);*/
+    background-repeat: repeat-x;
+    background-image: url("/static/img/line-topbar.png");
+    background-position: bottom;
+    /*height: 55px;*/
 }
 header #navbar-button-container > ul li a {
     display:inline-block;
@@ -133,35 +135,17 @@ header #navbar-button-container > ul li a {
     display: block;
 }
 #logo-actarium-p{
-    /*background-image: url('/static/img/texturas_menu2.png');
-    background-position: -88px -32px;*/
     background-image: url('/static/img/actarium-beta.png');
     height: 45px;
     width: 131px;
 }
 .navbar-d{
-    height: 70px;
-    /*margin: 0 auto;*/
+    height: 60px;
     width: 95%;
 }
 #logo-button{
     margin-top:  0px;
     width: 140px;
-}
-.navbar-button{
-    height: 60px;
-    padding-top: 0;
-}
-header div > #top-menu-style{
-    margin-left: 2px;
-}
-header div > #top-menu-style li{
-    list-style-type: none;
-    display: inline-block;
-    height: 60px;
-    width:100px;
-    text-align: center;
-    margin: -1px;
 }
 .ico-top{
     top: 10px;
@@ -178,19 +162,19 @@ header div > #top-menu-style li{
 #logo-sup > .navbar-element{
     /*box-shadow: none;*/
 }
+.top-bar-center{padding-top: 5px;}
 .logo-center{
-    padding-top: 10px;
     position: absolute;
     right: 10px;
     width: 131px;
 }
 .navbar-element{
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    height: 70px;
+    /*border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;*/
+    height: 55px;
     margin-top: 0px;
     margin: 0;
-    box-shadow: -1px 0px 5px rgba(0,0,0,0.3);
+    /*box-shadow: -1px 0px 5px rgba(0,0,0,0.3);*/
     position: relative;
     top:0px;
 }
@@ -199,22 +183,6 @@ header div > #top-menu-style li{
     height: 53px;
 }
 #actarium-logo{width: 205px;}
-.navbar-item{
-    background-image: url("/static/img/textura-menu.png");
-    /*background-position: -42px 0;*/
-    /*    background-size: 100px 10px;*/
-    background-repeat: repeat;
-    background-color: #eeeeee;
-    height: 63px;
-}
-.navbar-item-hover{
-    background-image: url("/static/img/textura-menu-hover.png");
-}
-.navbar-item > span{
-    font-size: 14px;
-    position:relative;
-    top: 34px;
-}
 .navbar-button-propierties{
     height: 10px;
 }
@@ -258,10 +226,14 @@ header div > #top-menu-style li{
 .navbar-active-class{
     background-color: black;
 }
+.menu-container{padding-top: 12px;}
 #menu-login{
     margin-right: 20px;
-    margin-top: 20px;
+    margin-left: 2px;
+    margin-top: 0;
 }
+#menu-groups{margin-top: 0}
+.btn-group{margin-top: 0px;}
 .ml10{margin-left: 10px;}
 .mt20{margin-top: 20px;}
 .mt40{margin-top: 40px;}
@@ -269,9 +241,6 @@ header div > #top-menu-style li{
 .mb10{margin-bottom: 10px;}
 .mb20{margin-bottom: 20px;}
 .mb50{margin-bottom: 50px;}
-#log-sup img{
-    width: 14px;
-}
 .dinline{
     display: inline;
     position: relative;
@@ -600,7 +569,7 @@ article{
     /*border:solid thin gray;*/
     clear: both;
     color: #555;
-    margin-top:-20px;
+    /*margin-top:-20px;*/
     min-height: 370px;
 }
 .but{
@@ -706,6 +675,10 @@ form table td input{
 }
 .disblock{
     display: block;
+}
+.size22{
+    width: 22px;
+    height: 22px;
 }
 .size32{
     width: 32px;
@@ -1153,7 +1126,7 @@ only screen and (min-resolution: 144dpi) {
     .container{width:95%}
     #settings-menu{margin-bottom: 20px;}
     #actarium-logo{width: 150px}
-    .navbar-element{width: 65px;box-shadow: none;border-left: solid thin #dadada;}
+    /*.navbar-element{width: 65px;box-shadow: none;border-left: solid thin #dadada;}*/
     .navbar-item > span{font-size:13px;}
     header div > #top-menu-style > li{width: 65px;margin: -2px;}
     header #navbar-button-container > ul li a{margin-top: -1px}
@@ -1183,9 +1156,10 @@ only screen and (min-resolution: 144dpi) {
     h3{font-size: 16px;}
     .container{width: 95%}
     #actarium-logo{width: 60px}
-    #logo-actarium-p{margin-top: -9px;width: 35px;}
+    #logo-actarium-p{margin-top: -9px;width: 39px;}
+    .top-bar-center{padding-top: 9px}
     .logo-center{width: 38px;}
-    .navbar-element{width: 35px;height: 54px;box-shadow: none}
+    /*.navbar-element{width: 35px;height: 54px;box-shadow: none}*/
     header div > #top-menu-style > li{width: 35px;}
     .navbar-item{height: 51px;}
     .navbar-item-logo{height: 48px;}
@@ -1199,6 +1173,7 @@ only screen and (min-resolution: 144dpi) {
     .modal.fade.in{top: 10%;}
     .message-box{width: 85%}
     #feed-modal{width: 100%}
+    .menu-container{padding-top: 3px;}
 }
 
 @media (max-width: 380px) {
