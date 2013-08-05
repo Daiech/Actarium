@@ -227,12 +227,15 @@ header #navbar-button-container > ul li a {
     background-color: black;
 }
 .menu-container{padding-top: 12px;}
-#menu-login{
+#account-menu{
     margin-right: 20px;
     margin-left: 2px;
     margin-top: 0;
 }
-#menu-groups{margin-top: 0}
+#groups-menu{margin-top: 0}
+#groups-menu .group-link{color: #00aeaa;}
+#groups-menu .group-link:hover{color: #fff}
+#groups-menu li a{font-weight: bold;}
 .btn-group{margin-top: 0px;}
 .ml10{margin-left: 10px;}
 .mt20{margin-top: 20px;}
@@ -1167,7 +1170,7 @@ only screen and (min-resolution: 144dpi) {
     .ico-top{top: 17px}
     header.navbar{height: 48px;}
     #social-buttons{display: block;}
-    #menu-login{margin-right: 0}
+    #account-menu{margin-right: 0}
     .btn{margin-top: 5px;}
     #message-box, #more-info{width: 90%;}
     .modal.fade.in{top: 10%;}

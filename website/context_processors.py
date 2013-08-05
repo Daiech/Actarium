@@ -6,3 +6,4 @@ def gloval_vars_url(request):
 def is_debug(request):
     from django.conf import settings
     return {"DEBUG": settings.DEBUG}
+
