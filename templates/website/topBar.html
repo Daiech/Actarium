@@ -54,6 +54,7 @@
                         <li title="{% if g.is_admin%}Soy administrador{%endif%} {% if g.is_secretary%}Soy secretario{%endif%}">
                             <a class="group-link" href="/groups/{{g.id_group.slug}}">
                                 {{g.id_group.name|title}}
+                            {% if g.id_group.is_pro%}<span class="label label-info">Pro</span>{% endif %}
                             </a>
                         </li>
                         {% endfor %}
