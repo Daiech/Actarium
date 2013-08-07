@@ -3,6 +3,43 @@
 {% block TITLE %} {% trans "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones" %}  {% endblock %}
 {%block body%}
 <div id="btn-accion">
+    <div id="acction-container" class="box">
+        <div class="pull-left">
+            <img src="/static/img/actarium_grande.png">
+        </div>
+        <div class="pull-right">
+            <div>
+                <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
+                    {% csrf_token %}
+                    <!-- <label for="id_username-register">{% trans "Nombre de usuario" %}:</label> -->
+                    <div>
+                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
+                    </div>
+                    <div>
+                    <!-- <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label> -->
+                    <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
+                    </div>
+                    <div>
+                    <!-- <label for="id_password1">{% trans "Contrase&ntilde;a" %}:</label> -->
+                    <input type="password" name="password1" id="id_password1" placeholder="Contrase&ntilde;a" />
+                    </div>
+                    <div>
+                    <!-- <label for="id_password2">{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}:</label> -->
+                    <input type="password" name="password2" id="id_password2" placeholder="Contrase&ntilde;a" />
+                    </div>
+                    <label class="checkbox">
+                        <input type="checkbox" name="term_privacy" id="term_privacy">
+                        {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
+                    </label>
+                    <div class="box mt20">
+                        <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">{% trans "Registrarme" %}</button>
+                    </div>
+                </form>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="line-separator">
     <div>
@@ -124,8 +161,9 @@
 {% block style%}
 <style>
     /*new design*/
-    #btn-accion{min-height: 400px}
-    #line-separator{background-color: #00ABA8; height: 100px;}
+    #btn-accion{min-height: 300px}
+    #acction-container{margin: 0 auto;margin-top:20px;width: 70%;}
+    #line-separator{background-color: #394264; height: 100px;}
     #line-separator div{padding-top:40px;}
     #line-separator p{color: #ddd6d6;font-size: 18px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
     #line-separator p span{border-bottom: solid thin #ccc;border-top: solid thin #ccc;padding: 5px;}
