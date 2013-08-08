@@ -8,35 +8,72 @@
             <img src="/static/img/actarium_grande.png">
         </div>
         <div class="pull-right">
-            <div>
-                <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
-                    {% csrf_token %}
-                    <!-- <label for="id_username-register">{% trans "Nombre de usuario" %}:</label> -->
-                    <div>
-                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
+            <div id="sign-up-form">
+                <div class="form-box">
+                    <h4>{% trans "Reg&iacute;strate gratis" %}</h4>
+                    <div class="box">
+                        <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
+                            {% csrf_token %}
+                            <!-- <label for="id_username-register">{% trans "Nombre de usuario" %}:</label> -->
+                            <div>
+                            <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
+                            </div>
+                            <div>
+                            <!-- <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label> -->
+                            <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
+                            </div>
+                            <div>
+                            <!-- <label for="id_password1">:</label> -->
+                            <input type="password" name="password1" id="id_password1" placeholder='{% trans "Contrase&ntilde;a" %}' />
+                            </div>
+                            <div>
+                            <!-- <label for="id_password2">:</label> -->
+                            <input type="password" name="password2" id="id_password2" placeholder='{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}' />
+                            </div>
+                            <!-- <label class="checkbox">
+                                <input type="checkbox" name="term_privacy" id="term_privacy" checked>
+                                {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
+                            </label> -->
+                            <div class="box mt20">
+                                <button type="submit" name="submit" id="btn-submit" class="btn btn-danger btn-block link-daiech">{% trans "Registrarme" %}</button>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                    <!-- <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label> -->
-                    <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
+                </div>
+                <div class="login-buttons">
+                    <div id="btn-login" class="btn-red">
+                        {% trans "Iniciar sesi&oacute;n" %}
                     </div>
-                    <div>
-                    <!-- <label for="id_password1">{% trans "Contrase&ntilde;a" %}:</label> -->
-                    <input type="password" name="password1" id="id_password1" placeholder="Contrase&ntilde;a" />
+                    <div class="btn-login-nets">
+                        {% trans "Inicia sesi&oacute;n con" %}
                     </div>
-                    <div>
-                    <!-- <label for="id_password2">{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}:</label> -->
-                    <input type="password" name="password2" id="id_password2" placeholder="Contrase&ntilde;a" />
-                    </div>
-                    <label class="checkbox">
-                        <input type="checkbox" name="term_privacy" id="term_privacy">
-                        {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
-                    </label>
-                    <div class="box mt20">
-                        <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">{% trans "Registrarme" %}</button>
-                    </div>
-                </form>
+                </div>
             </div>
-            <div>
+            <div id="sign-in-form" style="display:none;">
+                <div class="form-box">
+                    <h4>{% trans "Iniciar sesi&oacute;n" %}</h4>
+                    <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
+                        {% csrf_token %}
+                        <!-- <label for="id_username-login">{% trans "Nombre de usuario" %}:</label> -->
+                        <div>
+                            <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
+                        <!-- <label for="id_password-login">{% trans "Contrase&ntilde;a" %}:</label> -->
+                        </div>
+                        <div>
+                            <input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" />
+                        </div>
+                        <div class="box mt20">
+                            <button type="submit" name="submit" class="btn btn-danger link-daiech">
+                                {% trans "Iniciar Sesi&oacute;n" %}</button>
+                            <label>
+                            <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
+                        </div>
+                    </form>
+                </div>
+                <div class="login-buttons">
+                    <div id="btn-sign-up" class="btn-red">{% trans "Registrarse" %}</div>
+                    <div class="btn-login-nets">{% trans "Inicia sesi&oacute;n con" %}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -77,96 +114,23 @@
               <a class="carousel-control right" href="#actarium-slide" data-slide="next">&rsaquo;</a> -->
 </div>
 
-<div class="info-containter">
-    <div class="info-pics">
-        <div id="left-panel">
-            <section id="login-form" class="hidden white-box-container">
-                <h4>{% trans "Formulario de Inicio" %}</h4>
-                <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
-                    {% csrf_token %}
-                    <label for="id_username-login">{% trans "Nombre de usuario" %}:</label>
-                    <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
-                    <label for="id_password-login">{% trans "Contrase&ntilde;a" %}:</label>
-                    <input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" />
-
-                    <div class="box mt20">
-                        <button type="submit" name="submit" class="btn btn-success link-daiech">
-                            {% trans "Iniciar Sesi&oacute;n" %}</button>
-                        <label>
-                        <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
-                    </div>
-                </form>
-
-            </section>
-            <div id="pic-log-left" class="pic-log">
-                <a href="/account/login" >
-                    <div id="left-bubble">
-                        <div class="bubble-text">
-                            {% trans "Tengo una cuenta" %}.<br>{% trans "Iniciar Sesi&oacute;n" %}
-                        </div>
-
-                    </div>
-                </a>
-                <div id="login-pic">
-                    <div id="img-log">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="right-panel">
-            <section id="register-form" class="hidden white-box-container">
-                <h4>{% trans "Formulario de registro" %}</h4>
-                <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
-                    {% csrf_token %}
-                    <label for="id_username-register">{% trans "Nombre de usuario" %}:</label>
-                    <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
-                    <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label>
-                    <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
-                    <label for="id_password1">{% trans "Contrase&ntilde;a" %}:</label>
-                    <input type="password" name="password1" id="id_password1" placeholder="Contrase&ntilde;a" />
-                    <label for="id_password2">{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}:</label>
-                    <input type="password" name="password2" id="id_password2" placeholder="Contrase&ntilde;a" />
-                    <label class="checkbox">
-                        <input type="checkbox" name="term_privacy" id="term_privacy">
-                        {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
-                    </label>
-                    <div class="box mt20">
-                        <button type="submit" name="submit"  disabled="disabled" id="btn-submit" class="btn btn-success link-daiech pull-right">{% trans "Registrarme" %}</button>
-                    </div>
-                </form>
-            </section>            
-
-            <div id="pic-log-right" class="pic-log">
-                <a href="/account/new">
-                    <div id="right-bubble">
-                        <div class="bubble-text">
-                            {% trans "No tengo cuenta" %}.<br>{% trans "Registrarme" %}
-                        </div>
-                    </div>
-                </a>
-                <div id="singup-pic">
-                    <div id="img-reg">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 {%endblock%}
 {% block style%}
 <style>
     /*new design*/
-    #btn-accion{min-height: 300px}
-    #acction-container{margin: 0 auto;margin-top:20px;width: 70%;}
+    #btn-accion{min-height: 350px;}
+    #acction-container{margin: 0 auto;margin:30px auto;width: 70%;}
     #line-separator{background-color: #394264; height: 100px;}
     #line-separator div{padding-top:40px;}
     #line-separator p{color: #ddd6d6;font-size: 18px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
     #line-separator p span{border-bottom: solid thin #ccc;border-top: solid thin #ccc;padding: 5px;}
+    .form-box{color: #c8c8c8;background-color: #394264;padding:15px;overflow: hidden;position: relative;}
+    .form-box h4{text-align: center;margin-top: 5px;margin-bottom: 20px;}
+    .form-box a{color: #fff}
+    .form-box a:hover{color: #00aeaa;text-decoration: underline;}
+    .login-buttons{text-align: center;padding: 0;}
+    .login-buttons .btn-red{cursor: pointer;background-color: #E64C65}
+    .login-buttons .btn-login-nets{cursor: pointer;background-color: #3468AF}
     /*/new design*/
     
     /* **************************************************************************** 
@@ -235,7 +199,7 @@
         width: auto;
         border: none;
     }
-    #btn-submit{width: auto;}
+    /*#btn-submit{width: auto;}*/
     .controls{margin-top: 15px;}
     #content-container .white-box-container{min-height: 220px;}
     #group-list{margin: 10px 0;}
@@ -253,12 +217,20 @@
         $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
         $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
         $("#register-link").on("click",register);
+        $("#btn-login, #btn-sign-up").on("click", changeForm);
+
         {% if no_supported %}
         var t = "{% trans 'Idioma no soportado' %}"
         var m = "{% trans 'Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal para recibir actualizaciones de nuestra plataforma' %}"
         setAlertError(t, m);
         {%endif%}
     });
+    function changeForm(e){
+        var signup = $("#sign-up-form");
+        var signin = $("#sign-in-form");
+        signup.slideToggle("fast");
+        signin.slideToggle("fast");
+    }
     
     function login(e){
         /*  Muestra el formulario para iniciar sesion
