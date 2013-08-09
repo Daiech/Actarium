@@ -5,7 +5,11 @@
 <div id="btn-accion">
     <div id="acction-container" class="box">
         <div class="pull-left">
-            <img src="/static/img/actarium_grande.png">
+            <div><img src="/static/img/actarium_grande.png" alt="Actarium"></div>
+            <div id="value-proposition">
+                <strong>{% trans "La plataforma ideal para la gesti&oacute;n de Actas y reuniones" %}</strong>
+                <p>{% trans "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel." %}</p>
+            </div>
         </div>
         <div class="pull-right">
             <div id="sign-up-form">
@@ -119,6 +123,9 @@
     /*new design*/
     #btn-accion{min-height: 360px;}
     #acction-container{margin: 0 auto;margin:30px auto;width: 70%;}
+    #acction-container .pull-left{width: 560px;}
+    #value-proposition strong{text-transform: uppercase;border-bottom: solid thin #aaa;padding-bottom: 10px;font-size: 16px;}
+    #value-proposition p{color: #888;margin-top: 10px;padding: 10px;}
     #line-separator{background-color: #394264; height: 100px;}
     #line-separator div{padding-top:40px;}
     #line-separator p{color: #ddd6d6;font-size: 18px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
