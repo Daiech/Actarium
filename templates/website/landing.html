@@ -14,38 +14,32 @@
                     <div class="box">
                         <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
                             {% csrf_token %}
-                            <!-- <label for="id_username-register">{% trans "Nombre de usuario" %}:</label> -->
                             <div>
                             <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
                             </div>
                             <div>
-                            <!-- <label for="id_email">{% trans "Correo Electr&oacute;nico" %}:</label> -->
                             <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
                             </div>
                             <div>
-                            <!-- <label for="id_password1">:</label> -->
                             <input type="password" name="password1" id="id_password1" placeholder='{% trans "Contrase&ntilde;a" %}' />
                             </div>
                             <div>
-                            <!-- <label for="id_password2">:</label> -->
                             <input type="password" name="password2" id="id_password2" placeholder='{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}' />
                             </div>
                             <!-- <label class="checkbox">
                                 <input type="checkbox" name="term_privacy" id="term_privacy" checked>
                                 {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
                             </label> -->
-                            <div class="box mt20">
-                                <button type="submit" name="submit" id="btn-submit" class="btn btn-danger btn-block link-daiech">{% trans "Registrarme" %}</button>
+                            <div class="box btn-sumbit">
+                                <button type="submit" name="submit" id="btn-submit" class="btn btn-danger link-daiech">{% trans "Registrarme" %}</button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div class="login-buttons">
                     <div id="btn-login" class="btn-red">
+                        <div>{% trans "¿Ya tienes cuenta?" %}</div>
                         {% trans "Iniciar sesi&oacute;n" %}
-                    </div>
-                    <div class="btn-login-nets">
-                        {% trans "Inicia sesi&oacute;n con" %}
                     </div>
                 </div>
             </div>
@@ -54,15 +48,9 @@
                     <h4>{% trans "Iniciar sesi&oacute;n" %}</h4>
                     <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                         {% csrf_token %}
-                        <!-- <label for="id_username-login">{% trans "Nombre de usuario" %}:</label> -->
-                        <div>
-                            <input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
-                        <!-- <label for="id_password-login">{% trans "Contrase&ntilde;a" %}:</label> -->
-                        </div>
-                        <div>
-                            <input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" />
-                        </div>
-                        <div class="box mt20">
+                        <div><input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" class="first-input" /></div>
+                        <div><input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" /></div>
+                        <div class="box btn-sumbit">
                             <button type="submit" name="submit" class="btn btn-danger link-daiech">
                                 {% trans "Iniciar Sesi&oacute;n" %}</button>
                             <label>
@@ -71,9 +59,20 @@
                     </form>
                 </div>
                 <div class="login-buttons">
-                    <div id="btn-sign-up" class="btn-red">{% trans "Registrarse" %}</div>
-                    <div class="btn-login-nets">{% trans "Inicia sesi&oacute;n con" %}</div>
+                    <div id="btn-sign-up" class="btn-red">
+                        <div>{% trans "¿Eres nuevo?" %}</div>
+                        {% trans "Registrarse" %}
+                    </div>
                 </div>
+            </div>
+            <div class="btn-login-nets">
+                {% trans "Inicia con" %} 
+                <a href="/account/login/facebook">
+                    <span class="login-face"></span>
+                </a>
+                <a href="/account/login/google">
+                    <span class="login-google"></span>
+                </a>
             </div>
         </div>
     </div>
@@ -118,7 +117,7 @@
 {% block style%}
 <style>
     /*new design*/
-    #btn-accion{min-height: 350px;}
+    #btn-accion{min-height: 360px;}
     #acction-container{margin: 0 auto;margin:30px auto;width: 70%;}
     #line-separator{background-color: #394264; height: 100px;}
     #line-separator div{padding-top:40px;}
@@ -128,9 +127,17 @@
     .form-box h4{text-align: center;margin-top: 5px;margin-bottom: 20px;}
     .form-box a{color: #fff}
     .form-box a:hover{color: #00aeaa;text-decoration: underline;}
+    .form-box input{background-color: #50597B; color: #fff;border: solid thin #222;border-radius: 1px;}
+    .form-box input:hover{border: solid thin #4d90aa;}
+    .form-box .form-horizontal > div{margin: 2px auto;}
+    .btn-sumbit{text-align: center;padding-top: 15px}
     .login-buttons{text-align: center;padding: 0;}
-    .login-buttons .btn-red{cursor: pointer;background-color: #E64C65}
-    .login-buttons .btn-login-nets{cursor: pointer;background-color: #3468AF}
+    .login-buttons .btn-red{cursor: pointer;background-color: #E64C65;color:white;font-weight: bold; padding: 3px 0;}
+    .login-buttons .btn-red div{font-weight: normal;font-size: 12px;}
+    .btn-login-nets{background-color: #3468AF;color:white;font-size: 13px; padding: 10px 0;text-align: center;}
+    .btn-login-nets span{background-image: url({{STATIC_PREFIX}}img/btns-form.png);background-repeat:no-repeat;width: 20px; height: 20px;display: inline-block;vertical-align: text-top;margin-top: -3px;}
+    .login-face{background-position: 0 0;margin-left: 5px}
+    .login-google{background-position: -31px 0;margin-left: 5px}
     /*/new design*/
     
     /* **************************************************************************** 
@@ -214,9 +221,6 @@
     $(document).ready(function(){
     	$(".carousel").carousel("cycle");
         $("i").tooltip();
-        $("#left-bubble").on("click", login);   // Ejecuta la funcion login on click
-        $("#right-bubble").on("click", register);// Ejecuta la funcion register on click
-        $("#register-link").on("click",register);
         $("#btn-login, #btn-sign-up").on("click", changeForm);
 
         {% if no_supported %}
@@ -228,46 +232,12 @@
     function changeForm(e){
         var signup = $("#sign-up-form");
         var signin = $("#sign-in-form");
-        signup.slideToggle("fast");
-        signin.slideToggle("fast");
-    }
-    
-    function login(e){
-        /*  Muestra el formulario para iniciar sesion
-            Oculta el formulario de registro
-        */
-        e.preventDefault()
-        if($("#pic-log-right").hasClass("hidden"))
-        {
-            $("#pic-log-right").removeClass("hidden")
-            $("#pic-log-left").addClass("hidden")
-            $("#login-form").removeClass("hidden")
-            $("#register-form").addClass("hidden")
-            $("#login-form form input.first-input").focus()
-        }
-        else{
-            $("#pic-log-left").addClass("hidden")
-            $("#login-form").removeClass("hidden")
-        }
-    }
-
-    function register(e) {
-        /*  Muestra el formulario para registro
-            Oculta el formulario de login
-        */
-        e.preventDefault()
-        if($("#pic-log-left").hasClass("hidden"))
-        {
-            $("#pic-log-right").addClass("hidden")
-            $("#register-form").removeClass("hidden")
-            $("#pic-log-left").removeClass("hidden")
-            $("#login-form").addClass("hidden")
-            $("#register-form form input.first-input").focus()
-        }
-        else{
-            $("#pic-log-right").addClass("hidden")
-            $("#register-form").removeClass("hidden")
-        }
+        signup.slideToggle("fast", function (e) {
+            signup.find("form input.first-input").focus();
+        });
+        signin.slideToggle("fast", function (e) {
+            signin.find("form input.first-input").focus();
+        });
     }
 </script>
 {% endblock %}
