@@ -17,7 +17,7 @@ function main(){
     $("#log-sup").on("click", function(e){
         e.preventDefault();
         $("#username").focus();
-    })
+    });
 
     //-------------------<letra blanca del perfil on hover>-------------------------//
     $(".dropdown-menu li.current-user").hover(
@@ -31,11 +31,11 @@ function main(){
     //-------------------</letra blanca del perfil on hover>-------------------------//
 
     //------<No cierra el Menú de login al dar click>---------------/
-    $(".next-li").focus(function(e){
-        $(".dropdown-menu").addClass("disblock");
-    }).blur(function(e){
-        // $(".dropdown-menu").removeClass("disblock")
-    });
+    // $(".next-li").focus(function(e){
+    //     $(".dropdown-menu").addClass("disblock");
+    // }).blur(function(e){
+    //     // $(".dropdown-menu").removeClass("disblock")
+    // });
     //------ </No cierra el Menú de login al dar click>--------------/
 
     //------ <On Login Submit >--------------/
@@ -64,7 +64,7 @@ function main(){
     //----------------</>-------------------/
 
     //----------------<feedback>-------------------/
-    $("#feed-option, #callFeed").on("click", openFeedBack);
+    $("#feed-option, #callFeed, #menu-feed").on("click", openFeedBack);
     $("#close-feed, #cancel-feed").on("click", closeFeedBack);
     function openFeedBack(e){
         e.preventDefault();
