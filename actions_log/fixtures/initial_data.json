@@ -142,5 +142,16 @@
 			"description": "Crear nueva organización",
 			"date_created": "2013-03-22 19:55:49"
 		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 14,
+		"fields":
+		{
+			"name": "Editar organización",
+			"code": "EDIT_ORG",
+			"description": "Editar una organización",
+			"date_created": "2013-03-22 19:55:49"
+		}
 	}
 ]
