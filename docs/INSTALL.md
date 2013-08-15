@@ -26,7 +26,8 @@ for mongodb you should make this: `_`
 * django-rosetta [view on GitHub](https://github.com/mbi/django-rosetta)
 
 
-4) Django Internationalitation
+4) Django Internationalitation:
+
 You should have `gettext` installed on your server to use the internationalitation.
 * Gettext on linux: `apt-get install gettext`
 * [gettext on Windows](https://docs.djangoproject.com/en/1.5/topics/i18n/translation/#gettext-on-windows)
@@ -39,13 +40,15 @@ Repeat the same with all django apps that have internationalization
 
 5) Create the required folders:
 These folders need to be created manually
-	
+
+On a terminal type: /Actarium$ `mkdir media media/pdf media/orgs_img media/lastMinutes`
+
+You'll have the following folders:
+
 	/media
 	/media/pdf
 	/media/orgs_img
 	/media/lastMinutes
-
-On a terminal type: /Actarium$ `mkdir media media/pdf media/orgs_img media/lastMinutes`
 
 6) Sync the Data Base: `python manage.py syncdb`
 This will create the initial data for de db
