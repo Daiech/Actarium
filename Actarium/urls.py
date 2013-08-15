@@ -22,6 +22,7 @@ urlpatterns = patterns('',
 
     url(r'^blog', 'website.views.blog'),
     url(r'^update', 'github.views.update'),
+    url(r'^runMongo', 'github.views.runMongo'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
     url(r'^pdf/', include(pdfmodule_urls)),
