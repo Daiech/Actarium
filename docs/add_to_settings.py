@@ -16,6 +16,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'website.context_processors.gloval_vars_url',
     'website.context_processors.is_debug',
+    'groups.context_processors.get_groups',
 )
 
 ALLOWED_HOSTS = []
