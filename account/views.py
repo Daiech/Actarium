@@ -213,7 +213,7 @@ def personalData(request):
             print "Correo a cambiar", _email
             try:
                 _user = User.objects.get(email=_email)
-                if request.user.username == _user.username:
+                if request.user == _user:
                     print "Si se puede cambiar el correo, el usuario que lo tiene es el mismo."
                     saveActionLog(request.user, "CHG_USDATA", last_data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
                     form.save()
