@@ -1,24 +1,32 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - Actas{% endblock %}
+{% block TITLE %}Nueva Reuni&oacute;n{% endblock %}
 
 
 
 {%block body%}
 <article>
-    <div class="containterMargin">
-        <h2>Crear nueva reuni&oacute;n</h2>
-    {{ date_reunion }}  -  {{ agenda }}
-    <p>LLena el siguiente formulario para agregar una nueva acta en <strong>ACTARIUM</strong></p>
-    <form class="form-horizontal" enctype="multipart/form-data" method="POST">
-        {% csrf_token %}
-        <table>{{ newReunionForm }} 
+    <header >
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="menu-icons icons-page icon-reunions"></div>
+                <h3><a href="/groups/{{group.slug}}">{{group.name}}</a> - Crear nueva reuni&oacute;n</h3>
+            </div>
+        </div>
+    </header>
+    <hr/>
+    <div class="row-fluid white-box-container message-box " style="">
+        <p>Convocar reuni&oacute;n del grupo <a href="/groups/{{group.slug}}">{{group.name}}</a></p>
+        <hr>
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <table>
+                {{ newReunionForm.as_p }} 
+                <tr><td></td><td><button type="submit" class="btn btn-info btn-large">Crear reuni&oacute;n</button>
+                        <a href="/groups/calendar" class="btn btn-link">Mis reuniones</a></td></tr>
+            </table>
 
-            <tr><td></td><td><button type="submit" class="btn btn-success">Guardar</button>
-                    <a href="/groups/calendar" class="btn btn-link">Mis reuniones</a></td></tr>
-        </table>
 
-
-    </form>
+        </form>
     </div>
 </article>
 {%endblock%}
@@ -29,24 +37,32 @@
         margin: auto;
         width: auto;
     }
-
+    .form-horizontal label{font-weight: bold}
     table td .btn{
         margin-top:10px;
     }
 </style>
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
 <style >
-	/*datetimepicker*/
-	.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-	.ui-timepicker-div dl { text-align: left; }
-	.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-	.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
-	.ui-timepicker-div td { font-size: 90%; }
-	.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-	
-	.ui-timepicker-rtl{ direction: rtl; }
-	.ui-timepicker-rtl dl { text-align: right; }
-	.ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+    /*datetimepicker*/
+    .ui-timepicker-div .ui-widget-header { margin-bottom: 8px;}
+    .ui-timepicker-div dl { text-align: left; }
+    .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+    .ui-timepicker-div dl dd { margin: 0 10px 0 65px; padding: 0; }
+    .ui-timepicker-div td { font-size: 90%; }
+    .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+    .ui-timepicker-rtl{ direction: rtl; }
+    .ui-timepicker-rtl dl { text-align: right; }
+    .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+
+    div.ui-datepicker{
+     font-size:12px;
+     z-index: 9999 !important;
+    }
+    select{
+        width: 100%;
+    }
 </style>
 
 {%endblock%}
@@ -67,7 +83,7 @@ $('.date-pick').datetimepicker({
 	dateFormat: 'yy-mm-dd',
 	controlType: 'select',
 	ampm: true
-});
+}).css({"z-index":"1031"});
 
 </script>
 {% endblock %}

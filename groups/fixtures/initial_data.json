@@ -1,0 +1,166 @@
+[
+  {
+    "model": "groups.minutes_type",
+    "pk": 1,
+    "fields": {
+      "name": "Reunión",
+      "description": "Formato de acta para reuniones",
+      "date_added": "2013-06-06 04:30:12",
+      "id_creator": 1,
+      "is_public": 1,
+      "is_customized": 0
+    }
+  },
+  {
+    "model": "groups.minutes_type",
+    "pk": 2,
+    "fields": {
+      "name": "Last Minutes",
+      "description": "Formato de acta para actas subidas",
+      "date_added": "2013-06-06 04:30:12",
+      "id_creator": 1,
+      "is_public": 1,
+      "is_customized": 0
+    }
+  },
+  {
+    "model": "groups.group_type",
+    "pk": 1,
+    "fields": {
+      "name": "Reunión",
+      "description": "Tipo de grupo que se reúne para tomar decisiones.",
+      "date_added": "2013-06-06 04:30:12"
+    }
+  },
+  {
+    "model": "groups.group_type",
+    "pk": 2,
+    "fields": {
+      "name": "Junta Directiva",
+      "description": "junta directiva de cualquier organización",
+      "date_added": "2013-06-06 04:30:12"
+    }
+  },
+  {
+    "model": "groups.group_type",
+    "pk": 3,
+    "fields": {
+      "name": "Comité",
+      "description": "Grupo para las reuniones de comité",
+      "date_added": "2013-06-06 04:30:12"
+    }
+  },
+  {
+    "model": "groups.group_type",
+    "pk": 4,
+    "fields": {
+      "name": "Proyecto",
+      "description": "Grupo para las reuniones de proyectos",
+      "date_added": "2013-06-06 04:30:12"
+    }
+  },
+  {
+    "model": "groups.packages",
+    "pk": 1,
+    "fields": {
+      "name": "Grupo Pro Individual",
+      "number_groups_pro": 1,
+      "price": "6000",
+      "is_visible": 1,
+      "date_joined": "2013-01-31 21:00:12",
+      "time": 6
+    }
+  },
+  {
+    "model": "groups.packages",
+    "pk": 2,
+    "fields": {
+      "name": "Promoción Pro x3",
+      "number_groups_pro": 3,
+      "price": "16000",
+      "is_visible": 1,
+      "date_joined": "2013-01-31 20:59:28",
+      "time": 12
+    }
+  },
+  {
+    "model": "groups.packages",
+    "pk": 3,
+    "fields": {
+      "name": "Promoción Pro x6",
+      "number_groups_pro": 6,
+      "price": "30000",
+      "is_visible": 1,
+      "date_joined": "2013-01-31 20:58:12",
+      "time": 12
+    }
+  },
+  {
+    "model": "groups.templates",
+    "pk": 1,
+    "fields": {
+      "name": "basica",
+      "address_template": "groups/minutesTemplates/minutesTemplate1.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate1js.html",
+      "id_type": 1,
+      "is_public": 1,
+      "date_joined": "2013-03-15 02:37:31",
+      "slug": "basica-1"
+    }
+  },
+  {
+    "model": "groups.templates",
+    "pk": 2,
+    "fields": {
+      "name": "Asamblea General Parquesoft Pereira",
+      "address_template": "groups/minutesTemplates/minutesTemplate2.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate2js.html",
+      "id_type": 1,
+      "is_public": 0,
+      "date_joined": "2013-03-15 01:04:51",
+      "slug": "asamblea-general-parquesoft-pereira-2"
+    }
+  },
+  {
+    "model": "groups.templates",
+    "pk": 3,
+    "fields": {
+      "name": "Comité Parquesoft Pereira",
+      "address_template": "groups/minutesTemplates/minutesTemplate3.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate3js.html",
+      "id_type": 1,
+      "is_public": 0,
+      "date_joined": "2013-03-15 02:37:57",
+      "slug": "comite-parquesoft-pereira-3"
+    }
+  },
+  {
+    "model": "groups.templates",
+    "pk": 4,
+    "fields": {
+      "name": "Actas subidas",
+      "address_template": "groups/minutesTemplates/minutesTemplate4.html",
+      "address_js": "groups/minutesTemplates/minutesTemplateJsEmpty.html",
+      "id_type": 2,
+      "is_public": 0,
+      "date_joined": "2013-03-15 13:55:52",
+      "slug": "actas-subidas-4"
+    }
+  },
+  {
+    "model": "groups.DNI_type",
+    "pk": 1,
+    "fields": {
+      "short_name": "C. C.",
+      "long_name": "Cédula de Ciudadanía"
+    }
+  },
+  {
+    "model": "groups.DNI_type",
+    "pk": 2,
+    "fields": {
+      "short_name": "T. I.",
+      "long_name": "Tarjeta de identidad"
+    }
+  }
+]

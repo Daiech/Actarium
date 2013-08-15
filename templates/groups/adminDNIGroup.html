@@ -1,0 +1,153 @@
+{% extends "groups/adminGroup.html" %}
+{% block TITLE %} Administraci&oacute;n de {{group.name}}{% endblock %}
+{% block bodysettings %}
+{% load gravatartag %}
+
+<h3> Solicitud de informaci&oacute;n de DNI</h3>
+<p>A continuaci&oacute;n se lista los integrantes del grupo <a href="/groups/{{group.slug}}">{{ group.name }}</a></p>
+<p>Env&iacute;a la solicitud de DNI de cada integrante que sea necesario con el bot&oacute;n correspondiente a la derecha de cada nombre</p>
+<hr>
+<div>
+<h4>Usuarios a los que ya se envio solicitud de DNI</h4>
+<table id="table-dni" class="table table-bordered table-hover">
+	<tr>
+		<th class="td-first">
+			<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+				Miembro
+			</div>
+		</th>
+		<th>
+			<div class="info-title" title="Personas que aparecen en la lista de las actas">
+				Estado
+			</div>
+		</th>
+		<th>
+			<div class="info-title" title="Personas que aparecen en la lista de las actas">
+				Acci&oacute;n
+			</div>
+		</th>
+	</tr>
+	{% for m in members_dni %}
+	<tr id="" >
+		<td class="td-first">
+			<div >
+                <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}" />
+                {{m.id_user.first_name}} {{m.id_user.last_name}}
+                {%if m.id_user == user%}
+                (yo)
+                {%else%}
+                ({{m.id_user}})
+                {%endif%}
+            </div>
+		</td>
+		<td>
+			{% if m.state == '0' %}
+				Sin responder
+			{% elif m.state == '1' %}
+				Aceptado
+			{% elif m.state == '2' %}
+				Rechazado
+			{% endif %}
+		</td>
+		<td class="" >
+			{% if m.state == '0' or m.state == '2' %}
+			<button id='dni-rem-{{m.id_user.pk}}' class='dni-btn-rem btn btn-info' data-id-user="{{m.id_user.pk}} " data-name="{{m.id_user.first_name}} {{m.id_user.last_name}}" >Recordar solicitud</button>
+			{% elif m.state == '1' %}
+			<button id='dni-rem-{{m.id_user.pk}}' class='dni-btn-rem btn btn-info' data-id-user="{{m.id_user.pk}}" data-name="{{m.id_user.first_name}} {{m.id_user.last_name}}" disabled >Recordar solicitud</button>
+			{% endif %}
+		</td>
+	</tr>
+             {%endfor%}
+</table>
+</div>
+<hr>
+<div>
+<h4>Usuarios a los que no se ha enviado solicitud de DNI</h4>
+<table id="table-dni-request" class="table table-bordered table-hover">
+	<tr>
+		<th class="td-first">
+			<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+				Miembro
+			</div>
+		</th>
+		<th>
+			<div class="info-title" title="Personas que aparecen en la lista de las actas">
+				Acci&oacute;n
+			</div>
+		</th>
+	</tr>
+	{% for m in members %}
+	<tr id="dni-row-{{m.id_user.pk}}" >
+		<td id="dni-request-td-{{m.id_user.pk}}" class="td-first">
+			<div >
+                <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}" />
+                {{m.id_user.first_name}} {{m.id_user.last_name}}
+                {%if m.id_user == user%}
+                (yo)
+                {%else%}
+                ({{m.id_user}})
+                {%endif%}
+            </div>
+		</td>
+		<td class="">
+			<button id='dni-{{m.id_user.pk}}' class='dni-btn btn btn-info' data-id-user="{{m.id_user.pk}}" data-name="{{m.id_user.first_name}} {{m.id_user.last_name}}" >Solicitar DNI</button>
+		</td>
+	</tr>
+    {%endfor%}
+</table>
+</div>
+<hr>
+
+{% endblock %}
+{%block settings_style%}
+<style type="text/css">
+	
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" >
+	function listenRememberBtn(){ 
+		$('.dni-btn-rem').on('click', function(e){
+			setAlertMessage("Solicitud recordada", "Se ha recordado la solicitud de DNI al usuraio: <strong>"+$(this).attr("data-name")+"</strong>")
+			$(this).removeClass("dni-btn-rem");
+			//console.log($(this).attr("data-name"))
+		});
+	}
+	$(document).ready( function() {
+		$("#admin-dni").addClass("active")
+		{% if message %}
+		setAlertMessage("Datos guardados", "{{message}}")
+		{% endif %}
+		$('.dni-btn').on('click', function(e){
+			//console.log("ID"+$(this).attr("data-id-user"))
+			var name = $(this).attr("data-name")
+			var id_user = $(this).attr("data-id-user")
+			sendAjax("/groups/{{ group.slug }}/admin/request_dni",
+	    			{pk_user:$(this).attr("data-id-user")},
+	    			"#loading-reunion",
+	    			function(data){
+		    			if (data.saved){
+		    				setAlertMessage("Solicitud enviada", "Se ha enviado correctamente la solicitud de DNI al usuario: <strong>"+name+"</strong>")
+		    				//console.log("id: "+id_user+" Nombre: "+nombre )
+		    				$('#table-dni').append("<tr><td>"+
+		    		    	    	$('#dni-request-td-'+id_user).html()+
+		    		    	    	"</td><td>Sin responder</td><td>"+
+		    		    	    	"<button id='dni-rem-"+id_user+"' class='dni-btn-rem btn btn-info' data-id-user='"+id_user+"' data-name='"+name+"'>Recordar solicitud</button>"+
+		    		    	    	"</td></tr>"
+		    		    	    	);
+		    		    	$('#dni-row-'+id_user).animate({'height': 0},500,function(){
+		    					$(this).remove()
+		    				});
+		    		    	listenRememberBtn();
+		    			}
+		    			else{
+		    				setAlertError("Ocurri&oacute; un error", data.error)
+		    			}
+	    			} 
+	    	);
+			
+		});
+		listenRememberBtn();
+	});
+</script>
+{% endblock %}

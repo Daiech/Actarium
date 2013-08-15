@@ -1,0 +1,67 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
+
+{%block body%}
+<article>
+    <header >
+        <div class="row-fluid">
+            <div class="span8">
+                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
+                <h3><a href="/groups/{{ group.slug}}">{{group.name}}</a> - Administraci&oacute;n</h3>
+            </div>
+        </div>
+    </header>
+    <hr>
+    <div class="row-fluid">
+        <nav id="settings-menu" class="span3" >
+            <div class="bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav ">
+                    <li id="admin-roles">
+                        <a href="/groups/{{group.slug}}/admin/">
+                            <i class="icon-chevron-right"></i>Usuarios y roles
+                        </a>
+                    </li>
+                    {% if is_admin %}
+                    <li id="admin-info">
+                        <a href="/groups/{{group.slug}}/admin/info">
+                            <i class="icon-chevron-right"></i>Editar informaci&oacute;n
+                        </a>
+                    </li>
+                    <li id="admin-dni">
+                        <a href="/groups/{{group.slug}}/admin/dni">
+                            <i class="icon-chevron-right"></i>Informaci&oacute;n DNI
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li id="admin-emailNotifications">
+                        <a href="/groups/{{group.slug}}/admin/emailNotifications">
+                            <i class="icon-chevron-right"></i>Notificaciones de correo
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <section class="span9 white-box-container">
+                {% block bodysettings %}{% endblock %}
+        </section>
+    </div>
+</article>
+{%endblock%}
+{% block style_libs %}
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/docs.css" />
+{%block settings_style_libs %}{% endblock %}
+{% endblock %}
+{%block style%}
+<style>
+    section{padding: 0}
+    #settings-menu ul{
+        margin: 0;
+    }
+    section h3{margin-top: 0;}
+</style>
+{%block settings_style%}{% endblock %}
+{%endblock%}
+
+{% block js %}
+{% block settings_js %}{% endblock  %}
+{% endblock %}

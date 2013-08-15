@@ -1,0 +1,49 @@
+{% extends "website/layout.html" %}
+{% block TITLE %}Confirmaci&oacute;n de cuenta{% endblock %}
+{%block body %}		
+	<section class="message-box white-box-container">
+		<h3>Bienvendo a Actarium!</h3>
+		<p>
+			{%for inv in invitations%}
+			{{inv.id_user_invited.first_name}},
+			{%endfor%}
+			te {% if invitations|length > 1%}invitaron{%else%}invit&oacute;{%endif%} a disfrutar de <strong>Actarium</strong>.
+		</p>
+		<p>Est&aacute;s a punto de activar tu cuenta, pero antes, por favor confirma los siguientes datos y lee nuetros <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a> y <a href="/{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>:</p>
+		<div class="white-box-container message-box">
+			<form method="POST">
+				{% csrf_token %}
+				{{form}}
+				<label class="checkbox">
+                    <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a>
+                </label>
+	            <button type="submit" class="btn btn-info" disabled="disabled" id="btn-submit">
+	                Actualizar Datos
+	            </button>
+			</form>
+		</div>
+		<div class="menu-icons icon-about"></div><p>Conoce el funcionamiento general de <strong>Actarium</strong> en la secci&oacute;n <a href="/about">Acerca</a></p>
+		<div class="menu-icons icon-faqs"></div><p>Necesitas ayuda? Accede a las <a href="/help/faq">Preguntas frecuentes</a>  </p>
+		<div class="menu-icons icon-blog"></div><p>Ent&eacute;rate de las actualizaciones de la plataforma en el <a href="/blog">Blog oficial de <strong>Actarium</strong></a>
+		<br><br>
+		<p>Si tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes hacerlo a trav&eacute;s del m&oacute;dulo <a href="#" id="callFeed">FeedBack</a> que esta disponible a la derecha en todas las ventanas</p>
+	</section>
+{% endblock%}
+
+{%block js%}
+<script type="text/javascript">
+	$(document).ready(function(){
+	});
+</script>
+{% endblock%}
+
+{%block style%}
+<style>
+	#body-container > section {padding-top: 20px;margin-top: 20px;}
+	section .menu-icons{float: left;margin-right: 5px;}
+	section p{margin-bottom: 20px;}
+	.change-pass{margin-bottom: 20px;}
+	form label{font-weight: bold;}
+	form input{width: 90%; padding: 20px}
+</style>
+{%endblock%}

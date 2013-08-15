@@ -1,0 +1,171 @@
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Facturaci&oacute;n{% endblock %}
+{% block bodysettings %}
+<div class="modal hide fade" id="newBillingModal">  <!-- Ventana modal para contratar nuevo paquete -->
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Aquirir nuevo paquete (<span id="title-modal"></span>)</h3>
+		<hr>
+		<h4>Elige la cantidad de tiempo</h4>
+	</div>
+	<div class="modal-body">
+		<span id="gpa-modal" style="display:none;"></span>
+		<span id="id-package-modal" style="display:none;"></span>
+		Precio por mes= <strong>$<span id="price-modal"></span></strong><br />
+		Numero de meses= <select id="select-time"></select><br />
+		Total= <strong>$<span id="total-modal"></span></strong><br /><br />
+				
+		<a class="request-btn btn btn-success" >Solicitar paquete</a>
+	</div>
+</div>
+<h3> Paquetes disponibles</h3>
+<p>A continuaci&oacute;n se muestra los paquetes que se encuentran disponibles en Actarium, a los cuales puedes acceder seleccionando el boton adquirir.</p>
+<br />
+<table class="table table-striped">
+<tr>
+	<th>Nombre del Paquete</th>
+	<th>Precio</th>
+	<th>Minimo (Meses)</th>
+	<th>Grupos Pro</th>
+	<th>Acciones</th>
+	
+</tr>
+
+ {% for package in packages_list %}
+            <tr>
+                        <td >{{package.name}}</td>
+                        <td >${{package.price}}/mes </td>
+                        <td >{{package.time}}</td>
+                        <td >{{package.number_groups_pro}}</td>
+                        <td> <a class="get-time btn btn-success"  href="#newBillingModal" data-toggle="modal" data-time="{{package.time}}" data-id-package="{{package.pk}}" data-gpa="{{package.number_groups_pro}}" data-price="{{package.price}}" data-name="{{package.name}}">Adquirir</a></td>
+            </tr>
+
+{% endfor %}
+</table>
+
+<h3> Paquetes</h3>
+<p>A continuaci&oacute;n se muestra los paquetes registrados y su respectivo estado.</p>
+<br />
+<table class="table table-striped">
+	<tr>
+		<th>Nombre del Paquete</th>
+		<th>Grupos</th>
+		<th>Precio</th>
+		<th>Meses</th>
+		<th>Inicio</th>
+		<th>Caducidad</th>
+		<th>Estado</th>
+		
+	</tr>
+
+
+
+{% for billing in billing_list %}
+            <tr>
+                        <td >{{billing.id_package.name}}</td>
+                        <td >{% ifequal billing.state '1' %}{{billing.groups_pro_available}}{% else %}0{% endifequal %}/{{billing.id_package.number_groups_pro}}</td>
+                        <td >${{billing.id_package.price}}/mes </td>
+                        <td >{{billing.time}}</td>
+                        <td> {{billing.date_start|date:"d M Y"}}</td>
+                        <td> {{billing.date_end|date:"d M Y"}}</td>
+                        <!-- <td> <a href="#" data-id-package="billing.pk}}" class="btn btn-info">Renovar</a></td> -->
+                        <td>{% ifequal billing.state '0' %}
+                        		{{"Esperando Respuesta"}}
+                        	{% else %}
+                        		{% ifequal billing.state '1' %}
+                        			{{"Activo"}}
+                        		{% else %}
+                        			{% ifequal billing.state '2' %}
+                        				{{"Rechazado"}}
+                        			{% endifequal %}
+                        		{% endifequal %}
+                        	{% endifequal %}
+                        </td>
+            </tr>
+
+{% endfor %}
+</table>
+
+
+{% endblock %}
+
+{% block settings_style %}
+<style>
+	#select-time{
+		width: 60px;
+	}
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-billing").addClass("active");
+
+		function chargeWindow(){
+			/*{% for group in groups %}
+					$('#select-time').append('<option value="{{ group.slug }}" >{{ group.name }}</option>');
+			{% endfor %}*/
+			/*$('#select-group').change(function(){
+				group_slug = $('#select-group option:selected').val()
+				if (group_slug != "0"){
+					window.location = "/groups/newReunion/"+group_slug;}
+			});*/
+		}
+	});
+	$(".get-time").click(function(e){
+		e.preventDefault();
+		id_package=$(this).attr("data-id-package")
+		gpa=$(this).attr("data-gpa")
+		time=$(this).attr("data-time")
+		name=$(this).attr("data-name")
+		price=$(this).attr("data-price")
+
+		$('#title-modal').html(name);
+		$('#price-modal').html(price);
+		$('#gpa-modal').html(gpa);
+		$('#id-package-modal').html(id_package);
+
+		$('#select-time').html(" ");
+		for (i=1;i<5;i++){
+			$('#select-time').append('<option value='+(i*parseInt(time))+'>'+(i*parseInt(time))+'</option>')
+		}
+		$('#total-modal').html(parseInt(time)*parseInt(price));
+    	/*sendAjax("/settings/requestPackage",
+    			{id_package:id_package,gpa:gpa},
+    			"#load_packages",
+    			function(data){
+        			console.log(data)
+	    			if (data=="True"){
+		    			console.log("si")
+		    		    alert("La solicitud ha sido enviada, te daremos respuesta lo mas pronto posible");
+	    			}
+    		}
+    	)*/
+	
+	});
+	$(".request-btn").click(function(e){
+		e.preventDefault();
+		id_package=$("#id-package-modal").html()
+		gpa=$("#gpa-modal").html()
+		time=$("#select-time").val()
+		//console.log("idp:"+id_package+" gpa:"+gpa+" "+time)
+    	sendAjax("/settings/requestPackage",
+    			{id_package:id_package,gpa:gpa,time:time},
+    			"#load_packages",
+    			function(data){
+        			//console.log(data)
+	    			if (data=="True"){
+		    			//console.log("si")
+		    		    alert("La solicitud ha sido enviada, te daremos respuesta lo mas pronto posible");
+		    		    window.location="/settings/billing";
+	    			}
+    		}
+    	)
+	
+	});
+	$("#select-time").change(function(){
+		$('#total-modal').html(parseInt($("#select-time").val())*parseInt($("#price-modal").html()));
+		//console.log(parseInt($("#select-time").val())*parseInt($("#price-modal").html());
+	});
+</script>
+{% endblock %}

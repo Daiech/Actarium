@@ -1,9 +1,8 @@
-{% extends "website/layout.html" %}
-{% block TITLE %}Actarium - Cuenta de Usuario{% endblock %}
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Cuenta de Usuario{% endblock %}
 {% load gravatartag %}
-{% block body %}
-<article>
-    <h2>Cuenta</h2>
+{% block bodysettings %}
+<div>
     <div class="uTop">
         <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
         Hola
@@ -21,6 +20,10 @@
                 <th colspan="2" class="title">Tus datos</th>
             </tr>
             {{formUser}}
+            <tr>
+            	<td class="t-a-r">Cambiar im&aacute;gen:</td>
+            	<td>Actarium usa el sistema centralizado de im&aacute;genes <a href="http://gravatar.com/">Gravatar</a>. Agrega una foto a tu correro en <a href="http://gravatar.com/">Gravatar.com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella.</td>
+            </tr>
             <tr>
                 <td></td>
                 <td>
@@ -43,50 +46,29 @@
     <p class="containterMargin">Los datos con * son de caracter obligatorio.</p>
 
     <hr>
-    <form method="POST" action="/account/PasswordChange">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <th colspan="2" class="title">Cambiar Contrase&ntilde;a</th>
-            </tr>
-            {{passForm}}
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="btn btn-warning btn-large">
-                        <i class="icon-wrench icon-white"></i> Actualizar Contrase&ntilde;a
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </form>
-
-    <hr>
 
     <p>Eres miembro desde el {{ user.date_joined }} </p>
     <p>Ultimo logueo: {{ user.last_login}}.</p>
-</article>
+</div>
 
 {% endblock%}
 
 
 
-{% block style %}
+{% block settings_style %}
 <style>
-    h2{
-        margin-left: 10px;
-    }
+	td{
+		padding-left:7px;
+	}
     .uTop{
-        padding:10px;
+        /*padding:10px;*/
     }
     article p{
         font-size: 12px;
         line-height: 1;
         margin: 5px;
     }
-    hr{
-        margin:10px;
-    }
+
     li hr{
         margin:20px;
     }
@@ -116,10 +98,14 @@
 </style>
 {% endblock %}
 
-{% block js %}
+{% block settings_js %}
 <script>
-    $("#menu-account").addClass("active");
-
+	$(document).on("ready", function() {
+		$("#settings-account").addClass("active");
+	});
+	{% if error_email %}
+    setAlertError("Error al actualizar correo","Tu correo electronico no pudo ser actualizado")
+    {% endif %}
     {% if dataUpdate %}
     setAlertMessage("Datos Actualizados","Tus datos fueron actualizados correctamente")
     {% endif %}

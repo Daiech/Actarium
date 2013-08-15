@@ -1,0 +1,202 @@
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Configuraci&oacute;n de DNI{% endblock %}
+{% load gravatartag %}
+{% block bodysettings %}
+<div>
+    <div class="uTop">
+        <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+        Hola
+        <strong>
+            <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
+                {{ user.first_name }} ({{user.username}})
+            </a>
+        </strong>
+    </div>
+    <hr>
+    <form method="POST"  action="/account/dni">
+        {% csrf_token %}
+        <table class="">
+            <tr>
+                <th colspan="2" class="title">Tu informaci&oacute;n de DNI</th>
+            </tr>
+            {{ formDNI }}
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="btn btn-success btn-large">
+                       	Guardar
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <strong>Qu&eacute; es el DNI?</strong>
+    <p>
+        El documento nacional de identidad, tambi&eacute;n conocido como C&eacute;dula de Ciudadanía (CC), Carn&eacute; de Identidad (CI), C&eacute;dula de Identidad (CI) o Documento Nacional de Identidad (DNI) o identificaci&oacute;n oficial o simplemente identificaci&oacute;n, es un documento privado (individual) que contiene datos personales de car&aacute;cter p&uacute;blico emitido por una autoridad administrativa competente para permitir la identificaci&oacute;n personal de los ciudadanos. <a href="http://es.wikipedia.org/wiki/Documento_de_identidad" target="_blank">Leer m&aacute;s</a>
+    </p>
+    <hr>
+    {% if permissions %}
+    <div id="dni_request">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th class="td-first">
+                    <div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+                        Solicitante
+                    </div>
+                </th>            
+                <th >
+                    <div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+                        Grupo
+                    </div>
+                </th>
+                <th>
+                    <div class="info-title" title="Personas que aparecen en la lista de las actas">
+                        Estado
+                    </div>
+                </th>
+                <th>
+                    <div class="info-title" title="Personas que aparecen en la lista de las actas">
+                        Acci&oacute;n
+                    </div>
+                </th>
+            </tr>
+            {% for dni_p in dni_permissions %}
+            <tr>
+            	<td>
+            		<div >
+		                <img style="width:20px" src="{{dni_p.id_requester.email|showgravatar:'20'}}" alt="{{dni_p.id_requester}}" />
+		                {{dni_p.id_requester.first_name}} {{dni_p.id_requester.last_name}}
+		                {%if dni_p.id_requester == user%}
+		                (yo)
+		                {%else%}
+		                ({{dni_p.id_requester}})
+		                {%endif%}
+		            </div>
+            	</td>
+                <td>
+                    <a href="/groups/{{dni_p.id_group.slug}}">{{dni_p.id_group.name}}</a>
+                </td>
+                <td id="dni-state-{{dni_p.pk}}">
+                    {% if dni_p.state == '0' %}
+                        Sin responder
+                    {% elif dni_p.state == '1' %}
+                        Aceptado
+                    {% elif dni_p.state == '2' %}
+                        Rechazado
+                    {% endif %}
+                </td>
+                <td>
+                    {% if dni_p.state == '0' or dni_p.state == '2'%}
+                        <button class="dni-btn-option  btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Asignar DNI</button>
+                    {% elif dni_p.state == '1' %}
+                        <button class="dni-btn-option  btn btn-warning" data-option="2" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Retirar DNI</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+    
+
+
+</div>
+
+{% endblock%}
+
+
+
+{% block settings_style %}
+<style>
+    .uTop{
+        /*padding:10px;*/
+    }
+    article p{
+        font-size: 12px;
+        line-height: 1;
+        margin: 5px;
+    }
+
+    li hr{
+        margin:20px;
+    }
+    article form table tr th{
+        width: 40%;
+    }article form table tr td{
+        text-align: left;
+    }
+    table tr th label{
+        font-size: 16px;
+        margin-top: 5px;
+    }
+    table tr td input[type=password],table tr td input[type=text]{
+        /*height: 30px;*/
+        padding: 10px;
+        font-size: 16px;
+    }
+    article form table{
+        margin: 0 auto;
+        text-align: center;
+        width: 100%;
+    }
+    .title{
+        text-align: center;
+    }
+    input{
+    	width: 280px;
+    }
+	select{
+		width: 300px;
+	}
+	
+</style>
+{% endblock %}
+
+{% block settings_js %}
+<script>
+	$(document).ready( function() {
+		$("#settings-account").addClass("active");
+        $(".dni-btn-option").on("click",function() {
+            console.log("DNI: "+$(this).attr("data-dni")+" opcion "+$(this).attr("data-option"))
+            btn = $(this) 
+            var pk_dni = btn.attr("data-dni")
+            var status = btn.attr("data-option")
+            var group_name = btn.attr("data-name-group")
+            sendAjax("/account/set_dni",
+                    {pk_dni:pk_dni, status:status},
+                    "#loading-reunion",
+                    function(data){
+                        if (data.saved){
+                            setAlertMessage("Operaci&oacute;n realizada", "Se ha modificado el estado de solicitud de DNI para el grupo: <strong>"+group_name+"</strong>")
+                            if (status == 1){
+                                console.log("1"+btn.html())
+                                btn.removeClass("btn-info")
+                                btn.addClass("btn-warning")
+                                btn.attr("data-option",'2')
+                                btn.html("Retirar DNI")
+                                $('#dni-state-'+pk_dni).html("Aceptado")
+                            }
+                            else if (status == 2){
+                                console.log("2"+btn.html())
+                                btn.removeClass("btn-warning")
+                                btn.addClass("btn-info")
+                                btn.attr("data-option",'1')
+                                btn.html("Asignar DNI")
+                                $('#dni-state-'+pk_dni).html("Rechazado")
+                            }
+                            //console.log("id: "+id_user+" Nombre: "+nombre )
+                        }
+                        else{
+                            setAlertError("Ocurri&oacute; un error", data.error)
+                        }
+                    } 
+            );
+        });
+	});
+    {% if dataSaved %}
+    setAlertMessage("Datos guardados","Se ha guardado correctamente la informaci&oacute;n de DNI")
+    {% endif %}
+
+
+</script>
+{% endblock %}

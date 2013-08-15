@@ -1,161 +1,169 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - home{% endblock %}
+{% block TITLE %}Home{% endblock %}
 
 {%block body%}
-<article>
-    <header class="row-fluid">
-        <h1 class="span10">Actarium</h1>
-        <div class="fix_btn"><a href="#myModal" role="button" class="btn" data-toggle="modal">Feed-back <i class="icon-bullhorn"></i></a></div>
-        
-    </header>
 
-    {% if user.is_authenticated %}
-    <hr>
-    <div class="row-fluid">
-        <section class="span6">
-            <header>
-                <h4>Actividad Reciente  
-                {% if user.is_staff %}
-                	<a href="/actions" role="button" class="btn" style="float:right">Acciones</a>
-                {% endif %} 
-                </h4>
-            </header>
-            <div class="accordion " id="accordion">
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
-                            Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
-                        </a>
-                    </div>
-                    <div  id="Invitations" class="accordion-body collapse in">
-                        <ul class="accordion-inner">
-                            {% for invitation in invitations %}
-                            <li>
-                                <span class="notification-text alpha60">
-                                    <strong>{{invitation.id_user_from.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
-                                    <br />
-                                    <time datetime="{{reunion.date_convened|date:'c'}}">El {{invitation.date_invited}}</time>
-                                </span>
-                                <div class="buttons">
-                                    <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
-                                        Aceptar 
-                                         <span class="load"></span>
-                                    </button>
-                                    <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
-                                        Cancelar
-                                         <span class="load"></span>
-                                    </button>
-                                    <div class="pull-right load"></div>
-                                </div>
-                                <hr>
 
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
-                            Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
-                        </a>
-                    </div>
-                    <div  id="Reunions" class="accordion-body collapse in">
-                        <ul class="accordion-inner">
-                            
-                            {% for reunion in reunions %}
+{% if user.is_authenticated %}
+    <article id="b-page">
+        <div id="content-container" class="row-fluid">
+            <section id="notifications" class="span6">
+                <div style="" class="white-box-container">
+                    <header class="row-fluid fix_btn">
+                        <h4 class="span7 ml50">Actividad Reciente</h4>
+                    </header>
+                    <hr>
+                    <div class="accordion " id="accordion">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Invitations">
+                                    Tienes <span id="inv-count" class="badge badge-info">{{invitations|length}}</span> invitaciones a grupos
+                                </a>
+                            </div>
+                            <div id="Invitations" class="accordion-body collapse in">
+                                <ul class="accordion-inner">
+                                    {% for invitation in invitations %}
+                                    <li>
+                                        <span class="notification-text alpha60">
+                                            <strong>{{invitation.id_user_invited.first_name|lower|capfirst}}</strong> te invit&oacute; al grupo <a href="/groups/{{invitation.id_group.slug}}">{{invitation.id_group.name|lower|capfirst}}</a>
+                                            <br />
+                                            <time datetime="{{reunion.date_joined|date:'c'}}">El {{invitation.date_joined}}</time>
+                                        </span>
+                                        <div class="buttons">
+                                            <button type="button" data-invitation="s{{invitation.id}}" class="accept-inv btn btn-small btn-info">
+                                                Aceptar 
+                                                <span class="load"></span>
+                                            </button>
+                                            <button type="button" data-invitation="n{{invitation.id}}" class="accept-inv btn btn-small">
+                                                Cancelar
+                                                <span class="load"></span>
+                                            </button>
+                                            <div class="pull-right load"></div>
+                                        </div>
+                                        <hr>
+
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Reunions">
+                                    Tienes <span id="length-reunion" class="badge badge-info">{{reunions|length}}</span> reuniones pendientes
+                                </a>
+                            </div>
+                            <div  id="Reunions" class="accordion-body collapse in">
+                                <ul class="accordion-inner">
+
+                                    {% for reunion in reunions %}
+
+                                    <li data-group-name="{{reunion.group_name}}" data-date="{{reunion.date}}">
+                                        <span class="notification-text">
+                                            <strong>{{reunion.title}}</strong> (<a href="/groups/{{ reunion.id_group.slug}}">{{reunion.id_group.name}}</a>)
+                                            <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
+                                        </span>
+                                        <div class="buttons">
+                                            <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
+                                            <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
+                                            <a class="btn btn-link get-reunion" href="#myReunionModal" data-toggle="modal" data-id-reunion="{{reunion.id_reunion}}">Ver m&aacute;s</a>
+                                        </div>
+                                        <hr>
+
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#dni_request">
+                                    Tienes <span id="length-reunion" class="badge badge-info">{{dni_permissions|length}}</span> solicitudes de DNI
+                                </a>
+                            </div>
+                            <div  id="dni_request" class="accordion-body collapse in">
+                                <ul class="accordion-inner">
+									{% for dni_p in dni_permissions %}
+						            <li>
+						            	<span class="notification-text alpha60">
+                                            <strong>{{dni_p.id_requester.first_name|lower|capfirst}}</strong> Solicita acceder a la informaci&oacute;n de DNI para el grupo <a href="/groups/{{dni_p.id_group.slug}}">{{dni_p.id_group.name|lower|capfirst}}</a>
+                                            <br />
+                                            <time datetime="{{dni_p.date_added|date:'c'}}">El {{dni_p.date_added}}</time>
+                                        </span>
+						                <div class="buttons">
+						                        
+                        					<button class="dni-btn-option  btn-small btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Asignar DNI</button>
+                    
+                                        </div>
+						            </li>
+						            {% endfor %}
+                                    
+                                </ul>
+                            </div>
+                        </div>
                         
-                            <li data-group_name="{{reunion.group_name}}" data-date="{{reunion.date}}">
-                                <span class="notification-text">
-                                    <strong>Grupo </strong><a href="/groups/">{{reunion.group_name}}</a><br />
-                                    <time datetime="{{reunion.date}}">El {{reunion.date}}</time>
-                                </span>
-                                <div class="buttons">
-                                    <a href="#" class="btn btn-small btn-info confirmed2-true" data-id_reunion="{{reunion.id_reunion}}">Asistir&eacute;</a>
-                                    <a href="#" class="btn btn-small confirmed2-false" data-id_reunion="{{reunion.id_reunion}}">No Asistir&eacute;</a>
-                                    <a class="btn btn-link" href="#">Ver m&aacute;s</a>
-                                </div>
-                                <hr>
+                    </div><!--cierra notifications-->
 
-                            </li>
-                            {% endfor %}
-                        </ul>
+                </div>
+            </section>
+            <section class="white-box-container span6 box">
+                    <header class="span3">
+                        <h4 class="">Tus grupos</h4>
+                    </header>
+                    <div class="t-a-r">
+                        <a href="/groups/new" class="btn btn-small">
+                            <i class="icon-plus"></i> Crear Grupo
+                        </a>
+                        <a href="/groups/calendar" class="btn btn-small">
+                            <i class="icon-calendar"></i> Reuniones
+                        </a>
+                        <a href="/settings/organizations" class="btn btn-small">
+                            <i class="icon-wrench"></i> Organizaciones
+                        </a>
                     </div>
-                </div>
-            </div><!--cierra notifications-->
-        </section>
-        <section class="span5 margint30">
-            <header class="row-fluid fix_btn">
-                <h4 class="span7">Tus grupos</h4>
-
-                <div class="span4">
-                    <a href="/groups/new" class="btn btn-small">
-                        <i class="icon-book"></i> Crear Grupo
-                    </a>
-                </div>
-            </header>
-            <hr>
-            <ul id="group-list" class="nav onOver">
-                {% for group in groups %}
-                <li class="img-rounded">
-                    <a href="/groups/{{group.slug}}">
-                        <img src="{{ STATIC_PREFIX }}{{group.img_group}}" alt="{{group.name}}"/>
-                        {{group.name}}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-
-        </section>
-    </div>
-    {% else %}
-    <div class="containterMargin">
-        <p>La soluci&oacute;n empresarial para el registro y seguimiento de sus reuniones.</p>
-        <div class="sing">
-            <a href="/account/new" class="btn btn-info btn-large">Registrarse</a>
-            <a href="/account/login" class="btn btn-info btn-large">Ingresar</a>
-
+                    <hr>
+                    <ul id="group-list" class="nav onOver">
+                        {% for gr_rel in groups %}
+                        <li class="{%if gr_rel.id_group.is_pro%}selected-group{%endif%}">
+                            <a href="/groups/{{gr_rel.id_group.slug}}">
+                                <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
+                                {{gr_rel.id_group.name}}
+                                <div class="pull-right roles">
+                                    {%if not gr_rel.id_group.is_pro%}<span class="free-group"><i class="icon-flag"></i></span>{%else%}<span class="label label-info">Pro</span>{%endif%}
+                                    {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="icons-info pull-right">
+                        <span>Info:</span>
+                        <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                        <span title="Tiene permisos de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                        <span title="Grupo Free"><i class="icon-flag"></i> Grupo Free</span>
+                    </div>
+            </section>
         </div>
-    </div>
-    {% endif %}
-
-
-
-    <div class="modal hide fade" id="myModal">
+    </article>
+    <div class="modal hide fade" id="myReunionModal">
+        <!-- Ventana Modal para visualizar informacion de reuniones -->
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Env&iacute;anos tus comentarios</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Detalles de la Reuni&oacute;n</h3>
         </div>
         <div class="modal-body">
-            <p>Cu&eacute;ntanos c&oacute;mo fue tu experiencia usando Actarium y ay&uacute;danos a mejorar.</p>
-            <textarea id="textComent" placeholder="Ejemplo: No puedo cerrar sesi&oacute;n en dispositivos m&oacute;viles"></textarea>
-        </div>
-        <div class="modal-footer">
-            <div id="twitter-button">
-                <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+            <div id="reunion-data">
+                <div id="loading-reunion"></div>
             </div>
-            <a href="" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</a>
-            <a href="" class="btn btn-primary">Enviar</a>
         </div>
     </div>
+{% endif %}
 
-
-</article>
 {%endblock%}
 {% block style%}
 <style>
-    #twitter-button{
-        height: 30px;
-        width: 177px;
-        display: inline-block;
-        float: left;
-    }
-    #textComent{
-        margin-left: 12%;
-        margin-right: 12%;
-        min-height: 150px;
-        width: 70%;
-    }
     .accordion-heading{
         /*background-image: -webkit-linear-gradient(top, #62C462, #51A351);*/
 
@@ -172,8 +180,16 @@
         /* For IE 8*/
         -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#11111111,endColorstr=#11111111)";
     }
-    .span6 h4{
-        margin-bottom:20px;
+    #b-page{
+        padding-top: 100px;
+    }
+    .ml50{
+        margin-left: 48px;
+    }
+    .accordion-group{
+        border: solid #dadada thin;
+        margin-top: 10px;
+        width: 100%;
     }
     span.notification-text{
         display: block;
@@ -188,18 +204,14 @@
     .span2{
         margin-right: 20px;
     }
-    .span6{
-        border-right: solid thin #dadada;
-        padding: 0 20px;
-    }
-    section div ul li{
+    #notifications ul *{
         list-style-type: none;
-        font-size: 12px;
+        font-size: 13px;
         margin-bottom: 5px;
-    }
+    }/*
     li hr{
         margin:20;
-    }
+    }*/
     ul{
         margin:0;
     }
@@ -212,105 +224,184 @@
 </style>
 {%endblock%}
 {% block js %}
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+{% if user.is_authenticated%}
 <script>
-    
-    $(".collapse").collapse({
-        //toggle: false
-    })
-    function acceptInvitation(element, accept){
-        sendAjax(
-        "/groups/acceptInvitation",
-        {"i_id":accept},
-        $(element).find(".load"),
-        function(data){
-            if (data["accepted"]){
-                var actual = parseInt($("#inv-count").text());
-                actual--;
-                $("#inv-count").text(""+actual);
-                $("#group-list").append(
-                "<li class='img-rounded'>"+
-                    "<a href='"+data["group"]["slug"]+"'>"+
-                    "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
-                    data["group"]["name"]+
-                    "</a>"+
-                    "</li>")
-                $(element).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Ahora perteneces al grupo "+
-                        "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
-                        "<hr>"
-                ).fadeIn()
+    $(document).ready(function(){
+        $(".collapse").collapse({
+            // toggle: false
+        });
+        $(".accept-inv").on("click",function(e){
+            e.preventDefault();
+            $(this).attr("disabled", "disabled");
+            var accept = $(this).attr("data-invitation")
+            if(accept.substring(0,1)=="n"){
+                if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                    acceptInvitation($(this), accept)
                 }
-            )
-                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
-            }
-            else{
-                $(element).parent().parent().slideUp(900,function(){
-                    $(this).empty().html(
-                    "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
-                        "<br>"+
-                        "Si lo hiciste por error comunicate con el administrador del grupo para "+
-                        "obtener una nueva invitaci&oacute;n."+
-                        "<hr>"
-                ).fadeIn()
-                })
-                var actual2 = parseInt($("#inv-count").text())
-                actual2--
-                $("#inv-count").text(""+actual2)
-                setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
-                "Haz rechazado la invitaci&oacute;n")
-            }
-        })
-    }
-    $(".accept-inv").on("click",function(e){
-        e.preventDefault();
-        $(this).attr("disabled", "disabled");
-        var accept = $(this).attr("data-invitation")
-        if(accept.substring(0,1)=="n"){
-            if(confirm("¿Seguro que no quieres ser parte de este grupo?")){
+                else{
+                    $(this).attr("disabled", false);
+                }
+            }else{
                 acceptInvitation($(this), accept)
             }
-            else{
-                $(this).attr("disabled", false);
-            }
-        }else{
-            acceptInvitation($(this), accept)
+        })
+        
+        $(".dni-btn-option").on("click",function() {
+            console.log("DNI: "+$(this).attr("data-dni")+" opcion "+$(this).attr("data-option"))
+            btn = $(this) 
+            var pk_dni = btn.attr("data-dni")
+            var status = btn.attr("data-option")
+            var group_name = btn.attr("data-name-group")
+            sendAjax("/account/set_dni",
+                    {pk_dni:pk_dni, status:status},
+                    "#loading-reunion",
+                    function(data){
+                        if (data.saved){
+                            setAlertMessage("Operaci&oacute;n realizada", "Se ha modificado el estado de solicitud de DNI para el grupo: <strong>"+group_name+"</strong>")
+                            if (status == 1){
+                                console.log("1"+btn.html())
+                                btn.removeClass("btn-info")
+                                btn.addClass("btn-warning")
+                                btn.attr("data-option",'2')
+                                btn.html("Retirar DNI")
+                            }
+                            else if (status == 2){
+                                console.log("2"+btn.html())
+                                btn.removeClass("btn-warning")
+                                btn.addClass("btn-info")
+                                btn.attr("data-option",'1')
+                                btn.html("Asignar DNI")
+                            }
+                            //console.log("id: "+id_user+" Nombre: "+nombre )
+                        }
+                        else{
+                            setAlertError("Ocurri&oacute; un error", data.error)
+                        }
+                    } 
+            );
+        });
+        
+        function acceptInvitation(element, accept){
+            sendAjax(
+            "/groups/acceptInvitation",
+            {"i_id":accept},
+            $(element).find(".load"),
+            function(data){
+                if (data["accepted"]){
+                    var actual = parseInt($("#inv-count").text());
+                    actual--;
+                    $("#inv-count").text(""+actual);
+                    $("#group-list").append(
+                    "<li class=''>"+
+                        "<a href='"+data["group"]["slug"]+"'>"+
+                        "<img src='{{STATIC_PREFIX}}"+data["group"]["img_group"]+"' alt=''/>"+
+                        data["group"]["name"]+
+                        "</a>"+
+                        "</li>")
+                    $(element).parent().parent().slideUp(900,function(){
+                        $(this).empty().html(
+                        "Ahora perteneces al grupo "+
+                            "<a href='"+data["group"]["slug"]+"'>"+data["group"]["name"]+"</a>"+
+                            "<hr>"
+                        ).fadeIn()
+                        }
+                    )
+                    setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                    "Ahora puedes acceder al grupo"+data["group"]["name"]+".")
+                }
+                else{
+                    var actual2 = parseInt($("#inv-count").text())
+                    actual2--
+                    $("#inv-count").text(""+actual2)
+                    if(data["canceled"]){
+                        $(element).parent().parent().slideUp(900,function(){
+                            $(this).empty()
+                        })
+                        setAlertError("Error", data['message'])
+                    }else{
+                        $(element).parent().parent().slideUp(900,function(){
+                            $(this).empty().html(
+                            "Cancelaste la invitaci&oacute;n para unirte al grupo "+data["group"]["name"]+"."+
+                                "<br>"+
+                                "Si lo hiciste por error comunicate con el administrador del grupo para "+
+                                "obtener una nueva invitaci&oacute;n."+
+                                "<hr>"
+                        ).fadeIn()
+                        })
+                        setAlertMessage("Invitaci&oacute;n a un nuevo grupo",
+                            "Haz rechazado la invitaci&oacute;n")
+                    }
+                }
+            }); // send Ajax
         }
-    })
-    function confirmar(id_reunion, is_confirmed, group_name, date){
-		sendAjax("/groups/setAssistance",
-    			{id_reunion:id_reunion, is_confirmed: is_confirmed},
-    			"#load_reunions",
-    			function(data){
+        function confirmar(id_reunion, is_confirmed, group_name, date){
+            sendAjax("/groups/setAssistance",
+                {id_reunion:id_reunion, is_confirmed: is_confirmed},
+                "#load_reunions",
+                function(data){
                     console.log(data)
                     setAlertMessage("Reuniones", "Puedes ver la actividad de tus reuniones en el men&uacute; <a href='/groups/calendar'>Reuniones</a>")
-    			}
-    	)
-	}
-    function setList(e,btn, op){
-		var t = 500;
-		e.preventDefault();
-		li= btn.parent().parent();
-		li.animate({'height': 0},t,function(){
-			confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group_name"), $(this).attr("data-date"));
-			$(this).remove();
-			l = $("#length-reunion").html();
-			$("#length-reunion").html(l-1);
-		});
-	}
-    function setButtons(){
-		$('.confirmed2-true').click(function(e){
-            $(this).attr("disabled", "disabled");
-			setList(e,$(this), true);
-		});
-		$('.confirmed2-false').click(function(e){
-            $(this).attr("disabled", "disabled");
-			setList(e,$(this),false);
-		});	
-	}
-	setButtons();
-    
+                }
+            )
+        }
+        function setList(e,btn, op){
+            var t = 500;
+            e.preventDefault();
+            li= btn.parent().parent();
+            li.animate({'height': 0},t,function(){
+                confirmar(btn.attr("data-id_reunion"),op, $(this).attr("data-group-name"), $(this).attr("data-date"));
+                $(this).remove();
+                l = $("#length-reunion").html();
+                $("#length-reunion").html(l-1);
+            });
+        }
+        function setButtons(){
+            $('.confirmed2-true').click(function(e){
+                $(this).attr("disabled", "disabled");
+                setList(e,$(this), true);
+            });
+            $('.confirmed2-false').click(function(e){
+                $(this).attr("disabled", "disabled");
+                setList(e,$(this),false);
+            });	
+            $('.get-reunion').click(function(e){
+                e.preventDefault();
+                getReunionData($(this).attr("data-id-reunion"));
+            });
+        }
+        function getReunionData(id_reunion){
+            //console.log('dame una reunion');
+            sendAjax("/groups/getReunion",
+                    {id_reunion:id_reunion},
+                    "#loading-reunion",
+                    function(data){
+                        reunion_list=
+                            "<strong>"+data.title+"</strong><br /><br />"+
+                            "Grupo: <a href='/groups/"+data.group_slug+"'>"+data.group+"</a><br>"+
+                            "Fecha de creaci&oacute;n: <strong>"+data.date_reunion+"</strong><br><br>"+
+                            "<strong>"+data.convener+"</strong> convoc&oacute; a una reuni&oacute;n de "+
+                            "<strong>"+data.group+"</strong> para el d&iacute;a "+
+                            "<strong>"+data.date_convened+"</strong> en <strong>"+data.locale+"</strong> <br /><br />"+
+                            "Los objetivos propuestos son: <br /> <strong>"+data.agenda+"</strong><br />"+
+                            "Lista de asistentes: <table class='tabla'><tr><th>INTEGRANTE</th><th>RESPUESTA</th></tr>";
+                            $.each(data.assistants,function(){
+                                reunion_list = reunion_list+
+                            "<tr><td><img class='img20' src='"+this.gravatar+"''> <strong>"+this.username+"</strong></td><td>"+this.is_confirmed+"</td></tr>"});
+                            reunion_list = reunion_list +"</table> <br /> ";
+                            if (data.is_done == false)
+                                reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
+                            else
+                                reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
+                            if (data.iconf == 1)
+                                reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/newMinutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+                            
+                        //console.log(reunion_list)
+                        $('#reunion-data').html(reunion_list);
+                    }
+            );
+        }
+        setButtons();
+    });
 </script>
+{% endif %}
 {% endblock %}

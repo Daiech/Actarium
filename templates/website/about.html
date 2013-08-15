@@ -1,32 +1,39 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - Acerca{% endblock %}
+{% block TITLE %}Acerca de{% endblock %}
 
 {%block body%}
 <article>
-    <div class="row-fluid containterMargin">
-        <h2>About us</h2>
-        <hr>
         <header class="row-fluid ">
-            <h1 class="span12">Actarium</h1>
+            <h2 class="span12 hidden">Actarium</h2>
         </header>
-        <div class="row-fluid">
-            <section class="span6">
-                <p><b>Actarium</b> es un producto <b>Daiech</b>, de distribuci&oacute;n gratuita
-                y software libre, para el registro actas y seguimiento de reuniones
-                empresariales.</p>
-            </section>
-            <section class="span6 ">
-                <p>Env&iacute;enos sus comentarios y sugerencias a 
-                contacto@daiech.com</p>
-            </section>
+        <div id="infografia" class="row-fluid">
+            <div id="infografia1"></div>
+            <div id="infografia2"></div>
+            <div id="infografia3"></div>
         </div>
-    </div>
+        <div>
+            <p>Env&iacute;enos sus comentarios o sugerencias en nuestro sistema de <a href="#" id="callFeed">feedback</a> o escribenos a <a href="mailto:contacto@daiech.com">contacto@daiech.com</a></p>
+        </div>
 </article>
+{%endblock%}
+
+{%block style %}
+<style type="text/css">
+/*#infografia{margin-top: 20px}*/
+#infografia div{background-repeat: no-repeat; margin:0 auto;margin-bottom: 70px}
+#infografia1{background-image: url("{{STATIC_PREFIX}}img/infografia/1.png");height:393px;width: 770px;}
+#infografia2{background-image: url("{{STATIC_PREFIX}}img/infografia/2.png");height:579px;width: 870px;}
+#infografia3{background-image: url("{{STATIC_PREFIX}}img/infografia/3.png");height:435px;width: 702px;}
+</style>
 {%endblock%}
 
 
 {% block js %}
 <script>
-    $("#menu-about").addClass("active")
+    $(document).ready(function(e){
+        $("#about").addClass("menu-active");
+        $("#about .navbar-item").addClass("navbar-item-hover");
+        $("#about .navbar-button-propierties").css({"height":"15px"}, 100);
+    });
 </script>
 {% endblock %}

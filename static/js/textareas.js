@@ -17,6 +17,7 @@ tinyMCE.init({
  
     // Example content CSS (should be your site CSS)
     //content_css : "/css/style.css",
+    content_css : "/static/js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
     template_external_list_url : "lists/template_list.js",
     external_link_list_url : "lists/link_list.js",
     external_image_list_url : "lists/image_list.js",
@@ -51,7 +52,7 @@ tinyMCE.init({
     }
     ],
  
-    width: '500',
+    width: '100%',
     height: '300'
- 
+    
 });

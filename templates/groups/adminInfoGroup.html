@@ -1,0 +1,38 @@
+{% extends "groups/adminGroup.html" %}
+{% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
+{% block bodysettings %}
+
+<h3> Edici&oacute;n de informaci&oacute;n</h3>
+<p>Edita la informaci&oacute;n del grupo. &Eacute;ste c&aacute;mbio no afectar&aacute; el funcionamiento del mismo.</p>
+<div>
+	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
+		{% csrf_token %}
+		{{form}}
+		<hr>
+		<a href="#" class="btn btn-large"><i class="icon-arrow-left"></i> Volver al grupo</a>
+		<input type="submit" class="btn btn-large btn-info db" value="Actualizar" >
+	</form>
+</div>
+{% endblock %}
+{%block settings_style%}
+<style type="text/css">
+	.form-horizontal input[type='text']{
+		font-size: 16px;
+		padding: 10px;
+	}
+	.form-horizontal label{
+		font-weight: bold;
+		margin-top: 10px;
+	}
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#admin-info").addClass("active")
+		{% if message %}
+		setAlertMessage("Datos guardados", "{{message}}")
+		{% endif %}
+	});
+</script>
+{% endblock %}

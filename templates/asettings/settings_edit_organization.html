@@ -1,0 +1,65 @@
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Organizaciones{% endblock %}
+{% block bodysettings %}
+
+<h3>Editar organizaci&oacute;n <a href="/settings/organizations/?org={{org.id}}">{{org.name}}</a></h3>
+<p>Puedes editar los datos de tu organizaci&oacute;n en cualquier momento, los c&aacute;mbios no afectar&aacute;n el funcionamiento de sus grupos Pro.</p>
+<div>
+	<form class="form-horizontal" enctype="multipart/form-data" method="POST">
+		{% csrf_token %}
+		<div>
+			{{form_org.name.label_tag}}
+			{{form_org.name}}
+		</div>
+		<div>
+			{{form_org.description.label_tag}}
+			{{form_org.description}}
+		</div>
+		<div>
+			{{form_org.logo_address.label_tag}}
+			<div id="org-logo">
+				<img src="{{form_org.logo_address.value}}">
+				<a id="change-logo" href="#">Cambiar logo</a>
+			</div>
+			<div class="hidden" id="input-logo">
+				{{form_org.logo_address}}
+				<a id="cancel-logo" href="#">Cancelar</a>
+			</div>
+		</div>
+		<div class="mt20">
+			<input type="hidden" value="{{ref}}" name="ref" >
+			<a href="/settings/organizations/" class="btn btn-large"><i class="icon-arrow-left"></i> Volver</a>
+			<input type="submit" class="btn btn-large btn-info db" value="Actualizar" >
+		</div>
+	</form>
+</div>
+{% endblock %}
+{%block settings_style%}
+<style type="text/css">
+	.form-horizontal label{
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	.form-horizontal input[type='text']{
+		font-size: 16px;
+		padding: 10px;
+	}
+</style>
+{% endblock %}
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-organization").addClass("active");
+		$("#change-logo").on("click",function (e){
+			e.preventDefault();
+			$("#input-logo").removeClass("hidden");
+			$("#org-logo").addClass("hidden");
+		});
+		$("#cancel-logo").on("click",function (e){
+			e.preventDefault();
+			$("#org-logo").removeClass("hidden");
+			$("#input-logo").addClass("hidden");
+		});
+	});
+</script>
+{% endblock %}

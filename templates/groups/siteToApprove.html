@@ -1,0 +1,109 @@
+{% load gravatartag %}
+{% load humanize %}
+	{% if space_to_approve or is_secretary %}
+	{%comment%}
+	{%endcomment%}
+    <section id="sign" class="hoja white-box-container">
+    	<header>
+    		<!-- <div><img src="{{STATIC_PREFIX}}/img/icon-writter.png"></div> -->
+    		<div><img src="{{STATIC_PREFIX}}/img/groups/default.jpg"></div>
+    		<h3>Comisi&oacute;n aprobatoria</h3>
+    		<p>
+    			<small>Listado de miembros asignados como comisi&oacute;n aprobatoria.</small>
+    		</p>
+    	</header>
+		<hr>
+		{% if my_attending%}
+    		<div id="div-sign" class="alert alert-info">
+	    		<strong>Tu voto: </strong>Apruebas &eacute;sta Acta?
+		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+					<i class="icon-ok icon-white"></i> Si, apruebo <span></span>
+				</a>
+				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
+					<i class="icon-comment"></i> No, Necesita correcci&oacute;n <span></span>
+				</a>
+			</div>
+		{%endif%}
+		<div class="mt20">
+			<strong class="mt20">Comisi&oacute;n aprobatoria:</strong>
+			<ol id="commission-approving-list" class="mt20">
+    			{%for member in commission_approving%}
+    				<li id="missing-{{member.id_user.id}}">
+    					<div>
+    						<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+    					</div>
+    					<div>
+    					{{member.id_user.first_name}} {{member.id_user.last_name}}
+    					</div>
+    					<div class="icon-approver-status">
+    						{%ifequal member.is_signed_approved 0%}
+    						<i class="icon-time"></i>
+    						{%endifequal%}
+    						{%ifequal member.is_signed_approved 1%}
+    						<i class="icon-ok"></i>
+    						{%endifequal%}
+    						{%ifequal member.is_signed_approved 2%}
+    						<i class="icon-remove-circle"></i>
+    						{%endifequal%}
+    					</div>
+    				</li>
+    			{%endfor%}
+    		</ol>
+		</div>
+	</section>
+	<section class="hoja white-box-container" id="annotations-approve">
+		<header>
+    		<div><img src="{{STATIC_PREFIX}}/img/icon-writter.png" width="25px"></div>
+    		<h3>Anotaciones</h3>
+    		<small>Anotaciones y correcciones de la comisi&oacute;n aprobatoria.</small>
+    	</header>
+		<hr>
+		<div>
+			<a href="#new-annotation"  class="btn-no-approve btn btn-link"><i class="icon-plus"></i> Crear anotaci&oacute;n</a>
+		</div>
+		<div id="new-annotation" class="hidden">
+			<strong>Crear nueva anotaci&oacute;n:</strong>
+			<textarea id="textarea-new-annotation" placeholder="Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una anotaci&oacute;n al redactor." autofocus></textarea>
+			<button class="btn btn-info" id="button-save">Publicar</button>
+		</div>
+		<hr>
+		<div class="mt20">
+			<ul id="annotations" class="mt20 unstyled">
+				{%for annon in annotations%}
+				<li class="row-fluid"  id="annotation-{{annon.id_minutes_annotation}}">
+					<div class="annotation bb span70">
+						<div class="user-gravatar pull-left">
+							<img class="size32 avatar" src="{{ annon.id_user.email|showgravatar:'32'}}" alt="{{annon.id_user.first_name}}" />
+						</div>
+						<div class="name-user-annotation">
+							<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
+							·
+							<time title="{{annon.date_joined|date}}" datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
+						</div>
+						<div class="content-annotation">{{annon.annotation_text|safe}}
+						</div>
+						<div>
+							<!-- <hr> -->
+							<!-- <textarea></textarea> -->
+						</div>
+					</div>
+						{%comment%}
+					<div class="span5 ">
+						<div class="user-gravatar pull-left">
+							<img style="width:28px" class="avatar" src="{{ annon.id_user.email|showgravatar:'28'}}" alt="{{annon.id_user.first_name}}" />
+						</div>
+						<div class="name-user-annotation">
+							<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
+							·
+							<time datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
+						</div>
+						<div class="comment-annotation">{{annon.annotation_text|safe}}
+						</div>
+					</div>
+						{%endcomment%}
+				</li>
+				{%endfor%}
+			</ul>
+		</div>
+	</section>
+	{%endif%}

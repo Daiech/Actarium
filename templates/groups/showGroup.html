@@ -1,338 +1,255 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Actarium - {{TITLE}}{% endblock %}
+{% block TITLE %}Grupo {{group.name}} {% endblock %}
 {% load gravatartag %}
 {%block body%}
 <article>
     <header >
         <div class="row-fluid">
-            <div class="span8">
-                <img src="{{ STATIC_PREFIX }}{{group.img_group}}"/>
-                <h3>{{group.name}}</h3>
-                <a href="#" class="btn btn-link">Editar grupo</a>
-            </div>
-            <div class="span4 btnSup">
-                <a href="/groups/{{group.slug}}/newMinutes" class="btn btn-info btn-small">Crear acta</a>
-                <a href="/groups/newReunion/{{ group.slug}}" class="btn btn-info btn-small">Convocar Reunion</a>
+            <div class="span10">
+                {%if group.is_pro%}
+                <!-- <div class="icons-page"><span class="label label-info">Pro</span></div> -->
+                <div class="icons-page img-organization">
+                    {%if is_pro%}
+                    <img class="w32 group-img-organization" src="{{is_pro.id_organization.logo_address}}" />&nbsp;
+                    {%endif%}
+                </div>
+                {%else%}
+                <div class="menu-icons icons-page"></div>
+                {%endif%}
+                <h3>
+                    <a href="/groups/{{ group.slug}}">{{group.name}}</a>
+                    <strong style="font-size:17px;color:gray">
+                    {%if group.description%} - {{group.description}}{%else%}{%endif%}
+                    </strong> {%if not is_pro%}<span class="free-group pull-right">Este es un <a href="/help/faq">Grupo Free</a></span>{%else%}<span class="label label-info">Pro</span>{%endif%}
+                </h3>
             </div>
         </div>
     </header>
     <hr/>
     <div class="row-fluid">
-        <section class="span6">
-            <h4>Actas</h4> 
-            <ul>
-                {%for minute in minutes%}
-                <li>
-                    <a href="/groups/{{group.slug}}/minutes/{{minute.code}}">
-                        Acta #{{minute.code}}
-                        <span>{{minute.date_created|date}}</span>
+        <div class="span6 row-fluid">
+            <section class="white-box-container">
+                <header class="span3">
+                    <h4 class="">Miembros</h4>
+                </header>
+                <div class="t-a-r button-group">
+                    {%if current_member.is_admin%}
+                    <a href="/groups/{{group.slug}}/admin" class="btn btn-small">
+                        <i class="icon-wrench"></i>
+                        Administrar grupo
                     </a>
-                </li>
+                    {%endif%}
+
+                    <a href="{%if not current_member.is_admin%}#{%else%}/groups/{{ group.slug}}/admin#add-new-member{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_admin%}disabled{%endif%}" {%if not current_member.is_admin%}title="Necesitas ser administrador para habilitar esta opci&oacute;n"{%endif%}>
+                        <i class="icon-plus"></i> Agregar miembros</a>
+                </div>
+                <hr style="margin-bottom:5px;">
+                <ul class="unstyled list-members" style="display:none">
+                    {%for member in members%}
+                    <li class="list-item {%if not member.is_active%}user-pend-r{%endif%}">
+                        <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
+                            <div class="list-item-next">
+                                <span>
+                                    <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
+                                </span>
+                                <span class="color-name">
+                                    {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                    {%if member.id_user == user%}(yo){%else%}({{member.id_user}}){%endif%}
+                                </span>
+                                <span class="pull-right roles-buttons">
+                                    {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
+                                    {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es Redactor"  class="icon-pencil"></i> {%endif%}
+                                    {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                    {% if not member.is_approver and not member.is_secretary and not member.is_admin and current_member.is_admin%}<i class="icon-plus"></i> Agregar Rol{%endif%}
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    {%endfor%}
+                    <li>
+                        <div class="icons-info">
+                            <span>Info:</span>
+                            <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+                            <!-- <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span> -->
+                            <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                            <span title="Usuarios que no han aceptado la invitaci&oacute;n a &eacute;ste grupo" class="user-pend-l"> Usuarios pendientes</span>
+                            <span title="Usuarios que aceptaron la invitaci&oacute;n a &eacute;ste grupo" class="user-active-l"> Usuarios activos</span>
+                        </div>
+                    </li>
+                    <li class="show-more show-minus">
+                        <a id="show-minus" class="btn btn-link btn-mini" href="#Ver-menos">Ver menos...</a>
+                    </li>
+                </ul>
+                <ul class="unstyled list-member-pics">
+                    {%for member in members%}
+                        <li style="display:inline" class="">
+                            <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
+                                <div class="member-pic {%if not member.is_active%}user-pend-b{%else%}user-active-b{%endif%}" title="{%if not member.is_active%}{{member.id_user.username}} ({{member.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n{%else%}{{member.id_user.first_name}}{%endif%}">
+                                    <div class="user-name-pic">{{member.id_user.username}}</div>
+                                    <div class="w42" style="height:44px;">
+                                        <img class="w42" src="{{member.id_user.email|showgravatar:'42'}}" alt="{{member.id_user}}">
+                                    </div>
+                                    <div class="w48">
+                                        {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
+                                        {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
+                                        {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es Redactor"  class="icon-pencil"></i> {%endif%}
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    {%endfor%}
+                    <li class="show-more">
+                        <a id="show-more" class="btn btn-link btn-mini" href="#Ver-mas">Ver m&aacute;s...</a>
+                    </li>
+                </ul>
+            </section>
+            <section class="white-box-container">
+                <header class="span6">
+                    <h4>Reuniones</h4>
+                </header>
+                <div class="t-a-r button-group">
+                    <a href="{%if current_member.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_convener%}disabled{%endif%}" {%if not current_member.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
+                        <i class="icon-calendar"></i> Convocar Reuni&oacute;n
+                    </a>
+                </div>
+                <hr>
+                <ul class="unstyled">
+                    {%if reunions%}
+                    <li><strong>Pr&oacute;ximas:</strong></li>
+                        {%for r in reunions%}
+                            {% if r.date_reunion|date:"Y-d-m" >= now_|date:"Y-d-m" %}
+                                <li class="list-item">
+                                    <div class="ml10 list-item-next">
+                                        {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                                    </div>
+                                </li>
+                            {%endif%}
+                        {%endfor%}
+                        <li class="mt20"><strong>Anteriores:</strong> </li>
+                        {%for r in reunions%}
+                            {% if r.date_reunion|date:"Y-d-m" < now_|date:"Y-d-m" %}
+                                <li class="list-item">
+                                    <div class="ml10 list-item-next">
+                                        {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                                    </div>
+                                </li>
+                            {%endif%}
+                        {%endfor%}
+                    {%else%}
+                    <li>No hay reuniones para este grupo</li>
+                    {%endif%}
+                </ul>
+            </section>
+        </div>
+        <section class="span6 white-box-container" id="minutes-section">
+            <header class="span6">
+                <h4 class="">Listado de Actas</h4>
+            </header>
+            <div class="t-a-r button-group">
+                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+                    <i class="icon-plus"></i> Crear acta
+                </a>
+                {%if is_pro%}
+                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+                    <i class="icon-upload"></i> Subir acta
+                </a>
+                {%endif%}
+            </div>
+            <hr>
+            <ul class="unstyled minutes-list">
+                {%for minute in minutes%}
+                    {%if current_member.is_admin or minute.rol.is_approver or minute.minutes.is_full_signed%}
+                    <li title="{%if minute.minutes.is_full_signed%}
+                            Esta Acta ha sido aprobada y es visible a todo el grupo {{group.name}}
+                        {%else%}
+                            {%if minute.rol.is_approver%}Debes aprobar esta Acta para ser publicada
+                            {%else%}Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.
+                        {%endif%}
+                    {%endif%}" class="list-item-minutes {%if minute.minutes.is_full_signed%}user-active-l
+                    {%else%}
+                        {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
+                    {%endif%}">
+                        <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.minutes.code}}">
+                            {{minute.minutes.code}}
+                            <span class="date-minute-created" style="display:none"> creada el {{minute.minutes.date_created|date}}</span>
+                        </a>
+                    </li>
+                    {% endif %}
                 {%endfor%}
-                {%if not minutes%}
+                {%if minutes%}
+                <div class="icons-info">
+                    <span>Info:</span>
+                    <span class="user-active-l" title="b">Actas aprobadas y publicadas</span>
+                    <span class="user-pend-l" title="a">Actas sin tu aprobaci&oacute;n</span>
+                    <span class="minute-no-approver-l" title="Puedes ver porque eres administrador del grupo">Actas sin aprobar</span>
+                </div>
+                {%else%}
                 <li>Este grupo no tiene actas</li>
                 {%endif%}
             </ul>
-        </section>
-        <section class="span5 fix_btn">
-            <h4>Miembros <span id="load-member-actions"></span></h4> 
-            <ul class="nav list-members">
-                {%for member in members%}
-                <li class="list-member-item">
-                    <div class="">
-                        <img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}" alt="{{member.id_user}}">
-                        {{member.id_user.first_name}} {{member.id_user.last_name}}
-                        {%if member.id_user == user%}
-                        (yo)
-                        {%else%}
-                        ({{member.id_user}})
-                        {%endif%}
-                    </div>
-                </li>
-                {%endfor%}
-                {%for member in members_pend%}
-                <li class="list-member-item" ><!--Usuarios pendientes-->
-                    <div class="">
-                        <img style="width:20px" src="{{member.email_invited|showgravatar:'20'}}" alt="{{member.id_user.username}}">
-                        <span>{{member.email_invited}}</span> (pendiente)
-                    </div>
-                    <span class="remove-invitation" data-invitation="{{member.id}}" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>
-                </li>
-                {%endfor%} 
-            </ul>
-
-            <div class="dropdown">
-                <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
-                    Agregar miembro
-                    <span class="caret"></span>
-                </div>
-                <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li class="taling">
-                        Miembros <div id="close-add-member" class="close pull-right icon-remove"></div>
-                    </li>
-                    <li>
-                        <input type="hidden" id="group_name" value="{{group.name}}">
-                        <input type="hidden" id="group_id" value="{{group.id}}">
-                        <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-                        <span id="load-member"></span>
-                    </li>
-                    <li>
-                        <p>Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.</p>
-                    </li>
-                    <li>
-                        <ul id="search-result">
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- dropdown -->
         </section>
     </div>
 </article>
 {%endblock%}
 {% block js %}
 <script>
-    showIconCloseOnHover()
-    function deleteInvitation(e){
-        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-        {
-            elem = $(this)
-            sendAjax(
-                "/groups/deleteInvitation",
-                {"id_inv":$(this).attr("data-invitation")},
-                "#load-member-actions",
-                function(data){
-                    if(data['deleted']){
-                        $(elem).parent().animate({"height":0},"slow",function(e){
-                            $(this).hide()
-                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
-                        });
-                    }
-                    else{
-                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
-                    }
-                }
-                )
-        }
-    }
-    function showIconAddMemberOnHover(){
-        // mostrar flecha sobre usuario
-        $(".user-li").hover(
-            function(){
-                $(this).find("i").removeClass("hidden")
-            },
-            function(){
-                $(this).find("i").addClass("hidden")
-        })
-    }
-    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
-        if(data["username"]){//es usuario de la base de datos
-            user_to_invite = data['mail']+" ("+data['username']+")";
-            if(user_to_invite.length > 27)
-                p="..."
-            $("#search-result").html(
-                "<li class='user-li'>"+
-                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                user_to_invite.substring(0,27)+p+
-                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                "</a>"+
-                "</li>"
-                )
-        }
-        else{//No es usuario de la base de datos
-            if(data['mail'].length > 27)
-                p="..."
-            $("#search-result").html(
-                "<li class='user-li'>"+
-                "<a href='#' data-email='"+data['mail']+"' data-username='"+data['username']+"'>"+
-                "<img class='img30' src='/static/img/user_default.png' alt='"+data['mail']+"' />"+
-                data['mail'].substring(0,27)+p+
-                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                "</a>"+
-                "</li>"
-                )
-        }
-        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
-    }
-    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
-        if(data['invited']){    //USUARIO INVITADO
-            setAlertMessage("Invitado",data['message'])
-            $(".list-members").append(
-                "<li class='list-member-item' style='list-style:none'>"+
-                    "<div>"+
-                        "<img style='width:20px' src='"+data['gravatar']+"' alt='Imagen de Usuario'> "+
-                        "<span>"+(data['email']).substring(0,30)+"</span> (pendiente)"+
-                    "</div>"+
-                    '<span class="remove-invitation'+data['iid']+'" data-invitation="'+data['iid']+'" title="Eliminar invitaci&oacute;n"><i style="display:none" class="icon-remove"></i></span>'+
-                "</li>"
-            )
-            showIconCloseOnHover()
-            $(".remove-invitation"+data['iid']).on('click', deleteInvitation)
-            $("#newmember").val("")
-        }else{//EL USUARIO YA ESTA INVITADO
-            if(data["message"]){
-                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
-            }
-            else{
-                //si no hay mensaje, error desconocido
-                setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-            }
-        }
-    }
-    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
-        $(".user-li > a").on("click",function(e){
+    $(document).on("ready",function(){
+        $("i, .list-members a, span, .member-pic, .title-on-disabled, .minutes-list li").tooltip();
+        $("#show-more").on("click",function(e){
             e.preventDefault();
-            var mail = $(this).attr("data-email");
-            var uname = $(this).attr("data-username");
-            var group_id = $("#group_id").val();
-            var group_name = $("#group_name").val();
-            sendAjax("/groups/setInvitation",{"pk":group_id, "search": mail},
-                     "#load-member",invitationResult);
-            $(this).parent().fadeOut()
-            $("#newmember").focus()
+            $("ul.list-member-pics").fadeOut("fast",function(){
+                $("ul.list-members").fadeIn();
+            });
         })
-    }
-    function listMembers(data){//lista los usuarios disponibles a invitar
-        if(data){
-            p="";
-            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
-                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
-                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
-            }
-            else{//el correo es invalido o no hay resultados de usuarios existentes
-                $("#search-result").html("<li style='list-style:none'>"+
-                                            "<a href='#'>"+("No hay resultados").substring(0,27)+
-                                            "</a>"+
-                                        "</li>")
-            }
-        }else{//error en el server
-            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
-        }
-    }
-    function searchMember(e){//INVITACIONES MAIN 
-        // if(e.keyCode==13){
-            var user=$("#newmember").val()
-            sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
-        // }
-    }
-    function showIconCloseOnHover(){
-        $(".list-member-item").hover(function(){  
-            $(this).find("i.icon-remove").show(10)  
-        },function(){                      
-            $(this).find("i.icon-remove").hide(30)
+        $("#show-minus").on("click",function(e){
+            e.preventDefault();
+            $("ul.list-members").fadeOut("fast",function(){
+                $("ul.list-member-pics").fadeIn();
+            });
+        })//79B632 verde
+        $(".list-item-minutes").hover(function(){
+            $(this).find(".date-minute-created").fadeIn("fast");
+        }, function(){
+            $(this).find(".date-minute-created").fadeOut("fast");
         })
-    }
-    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
-    $(".remove-invitation").on('click', deleteInvitation);//Elimina invitaciones pendientes
-    $("#add-member").on('click focus', function(e) {//dar FOCO al input para buscar miembros
-        //give the focus to the input to search members
-        $(this).next("#add-member-menu").addClass("disblock")
-        $("#newmember").focus()
-    });
-    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
-        //Close the dropdown menu to add members
-       $(this).parent().parent().removeClass("disblock")
+        {% if no_redactor %}
+        	setAlertMessage("Permiso denegado", "No tienes permisos para subir actas, comun&iacute;cate con el administrador del grupo para solicitarlo")
+		{%endif%}
     });
 </script>
 {% endblock %}
 {%block style%}
 <style>
-    .list-member-item{
-        border: solid thin #eee;
-        border-bottom: solid thin #dadada;
-        border-radius: 3px;
-        padding: 2px;
-        margin: 1px 0;
-        position: relative;
-    }
-    .list-member-item:hover{
-        border: solid thin #dadada;
-    }
-    .list-member-item > div{
-        /*border: solid thin #dadada;*/
-        width: 80%;
-    }
-    .list-member-item > span{
-        cursor: pointer;
-        top: 0;
-        right: 5px;
-        position: absolute;
-    }
-    .span6{
-        border-right: solid thin #dadada;
-        padding: 0 20px;
-    }
-    ul#add-member-menu li{
-        margin-bottom: 10px;
-    }
-    .icon-remove{
-        margin: 5px;
-    }
-    ul#search-result{
-        margin-left: 0;
-    }
-    ul#search-result li span{
-        font-size: 13px;
-        margin-left: 13px;
-        color: gray;
-    }
-    .taling{
-        text-align: center;
-    }
-    .list-members span{
-        color: gray;
-    }
-    li a span{
-        color:black;
-    }
-    li p{
-        color:gray;
-        font-size: 12px;
-        line-height:  1;
-    }
-    article{
-        min-height: 500px;
-        overflow: visible;
-        padding-top: 1px;
-    }
-    article header img{
-        margin-top:4px;
-        float:left;
-    }
-    article header h3{
-        margin:0;
-        margin-left:35px;
-    }
-    #add-member{
-        position: static;
-    }
-    #newmember{
-        margin: 3px 10px;
-    }
-    .dropdown#add-member-menu{
-        text-decoration: none;
-        margin: 5px 20px;
-
-    }
-    #add-member-menu{
-        width:280px;
-    }
-    .dropdownmenu  * li{
-        list-style:none;
-        text-decoration: none;
-    }
-    .btnSup{
-        margin-top: 8px;
-    }
-    div > section ul{
-        margin-left:0;
-    }
-    div > section ul li{
-        list-style: none;
-    }
-    .cancel-inv{
-        font-style: italic;
-        color: gray;
-    }
+    .img-organization{width: 40px;}
+    #pro-label{position:relative;/*top: 22px;left: -43px;*/}
+    .group-img-organization{position: relative;top: -5px}
+    .free-group{font-size: 14px;color: #555}
+    .list-members{margin-top:20px;margin-bottom: 10px;}
+    .list-item{position: relative;margin: 3px 0;}
+    .list-item-minutes{position: relative;margin: 1px 0;padding: 5px;background-color: rgb(248, 248, 248)}
+    .list-item-minutes > a{display: block;}
+    .list-item-minutes:hover{background-color: #eee}
+    /*.list-item-next{padding: 8px;border-radius: 0px}*/
+    .list-item-next{border-radius: 0px}
+    .list-item > a{border:solid thin #fff;display:block;}
+    /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
+    .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
+    /*.list-item div:hover{border:solid thin #ddd;background-color: #eee}*/
+    .minutes-list{min-height: 200px;}
+    #minutes-section{min-height: 354px;}
+    .member-pic{display:inline;margin-right: 5px; display: inline-block;padding: 4px; border-radius: 2px;border:solid thin #eee;text-align: center;min-width: 55px;min-height: 81px;margin-bottom: 4px}
+    .member-pic i{display: block;float: left;}
+    .list-member-pics{padding: 5px;margin-bottom: -15px;/*border-bottom: solid 1px #ddd*/}
+    .list-member-pics a{color:#555;}
+    .user-name-pic{font-size: 14px}
+    #show-more, #show-minus{display: block;}
+    .show-more{border-radius:3px;margin-top:10px;padding: 6px 2px;}
+    .show-minus{margin-top:19px;margin-bottom: -10px;}
+    .show-more:hover{background-color: #eee}
+    .date-minute-created{color: #777;text-align: right;float:right}
+    /*.icons-info{margin-bottom: 35px;}*/
+    /*.user-pend-b{border-bottom: solid 4px #7bc779;}*/
+    .roles-buttons{font-size: 13px; margin: 8px 5px;}
+    .color-name{color: #555}
 </style>
 {%endblock%}

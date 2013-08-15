@@ -1,22 +1,23 @@
 {% extends "website/layout.html" %}
-{% block TITLE %}Sing Up - Actarium{% endblock %}
+{% block TITLE %}Registro{% endblock %}
 {%block body%}
-<article>
-    <div class="containterMargin">
-        <h1>Registro de Usuario</h1>
+<article class="message-box white-box-container">
+        <h3>Registro de Usuario</h3>
+        <p class="lead">llena el siguiente formulario para registrarte en <strong>Actarium</strong></p>
         <form class="form-horizontal" method="POST">
             {% csrf_token %}
             <table>{{ formNewUser }}</table>
-            <div class="control-group">
+            <div class="control-group t-a-c mt20">
                 <div class="controls">
                     <label class="checkbox">
-                        <!--	                        <input type="checkbox"> Acepto los <a href="#">t&eacute;rminos de uso</a>-->
+                        <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a> y las <a href="/{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>
                     </label>
-                    <button type="submit" class="btn btn-success">Registrarse</button>
-                    <a href="/account/login" class="btn btn-link">Iniciar Sesi&oacute;n</a><br />
+                    <div class="mt20">
+                        <button type="submit" class="btn btn-info btn-large" disabled="disabled" id="btn-submit">Registrarse</button>
+                        <a href="/account/login" class="btn btn-link">Iniciar Sesi&oacute;n</a><br />
+                    </div>
                 </div>
             </div>
         </form>
-    </div>
 </article>
 {%endblock%}

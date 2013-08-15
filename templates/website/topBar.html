@@ -1,61 +1,128 @@
 {% load gravatartag %}
-			<div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand"  href="/">Actarium</a>
+{% load i18n %}
+<div class="navbar-d">
 
-                    <div id="menu-login" class="btn-group pull-right">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="icon-user"></i>{% if user.is_authenticated %}{{user.username}}{% else %}Inicia sesi&oacute;n{% endif %}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            {% if user.is_authenticated %}
-                            <li class="current-user">
-                                <a href="/account">
-                                    <div class="content-box">
-                                        <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
-                                        <span class="fullname">Mi Cuenta</span>
-                                        <small class="metadata">Editar configuraci&oacute;n</small>
-                                    </div>
-                                </a>
-                            </li>
-                            <li><a href="#">Privacidad</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
-                            {% else %}
-                            <form method ="post" action="/account/login">
-                                <li>{% csrf_token %}</li>
-                                <li><p>Inicia sesi&oacute;n</p></li>
-                                <li><input id="username"  name="username" class="input-small next-li" type="text" placeholder="Usuario" autofocus></li>
-                                <li><input id="password"  name="password" class="input-small next-li" type="password" placeholder="Contrase&ntilde;a" ></li>
-                                <a id="close-login-menu" class="pull-left" href="#">cerrar</a><input id="btn-login" class="input-small btn btn-primary next-li pull-right" type="submit" value="Entrar" >
-                            </form>
-                            {% endif %}
-                        </ul>
-                    </div>
-                    
-                    {% if not user.is_authenticated %}
-                    <ul class="nav pull-right">
-                        <li><a href="/account/new">Registrarse</a></li>
-                    </ul>
-                    {% endif %}
-
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                        	{% if user.is_authenticated %}
-                            <li id="menu-organizations"><a href="/groups">Mis Grupos</a></li>
-                            <li id="menu-reunions"><a href="/groups/calendar">Reuniones</a></li>
-                            <li id="menu-account"><a href="/account">Cuenta</a></li>
-                            {% endif %}
-                            <li id="menu-about" ><a href="/about">Acerca</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                    
-                    
+        <a href="/" class="" id="logo-sup">
+            <div id="actarium-logo" class="navbar-element">
+                <div class="navbar-item navbar-item-logo">
+                    <div class="logo-center"><div id="logo-actarium-p"></div></div>
                 </div>
+                <div class="navbar-button-propierties navbar-select1"></div>
             </div>
+        </a>
+
+        <div class="navbar-button" id="navbar-button-container">
+            <ul id="top-menu-style" class="">
+                {% if user.is_authenticated %}
+                <li class="">
+                    <a href="/groups">
+                        <div id="groups" class="navbar-element">
+                            <div class="navbar-item">
+                                <div class="menu-icons ico-top icon-groups"></div>
+                                <span class="top-text">Grupos</span>
+                            </div>
+                            <div class="navbar-button-propierties navbar-select0"></div>
+                        </div>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="/groups/calendar">
+                        <div id="menu-reunions" class="navbar-element">
+                            <div class="navbar-item">
+                                <div class="ico-top menu-icons icon-reunions"></div>
+                                <span class="top-text">Reuniones</span>
+                            </div>
+                            <div class="navbar-button-propierties navbar-select1"></div>
+                        </div>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="">
+                    <a href="/blog">
+                        <div id="blog" class="navbar-element">
+                            <div class="navbar-item">
+                                <div class="ico-top menu-icons icon-blog"></div>
+                                <span class="top-text">Blog</span>
+                            </div>
+                            <div class="navbar-button-propierties navbar-select0"></div>
+                        </div>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="/help/faq">
+                        <div id="faq" class="navbar-element">
+                            <div class="navbar-item">
+                                <div class="ico-top menu-icons icon-faqs"></div>
+                                <span class="top-text">Faq</span>
+                            </div>
+                            <div class="navbar-button-propierties navbar-select1"></div>
+                        </div>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="/about">
+                        <div id="about" class="navbar-element">
+                            <div class="navbar-item">
+                                <div class="ico-top menu-icons icon-about"></div>
+                                <span class="top-text">Acerca</span>
+                            </div>
+                            <div class="navbar-button-propierties navbar-select0"></div>
+                        </div>
+                    </a>
+                </li>
+               
+            </ul>
+        </div>
+        <div>
+            <div id="social-buttons" class="mt20 pull-right">
+                <a href="https://www.facebook.com/actarium" target="_blank"><div class="social-but" id="fb-but"></div></a>
+                <a href="https://www.twitter.com/actarium" target="_blank"><div class="social-but" id="gp-but"></div></a>
+                <a href="https://plus.google.com/u/2/103573222326693941191/posts" target="_blank">
+                    <div class="social-but" id="tt-but"></div>
+                </a>   
+            </div>
+            <div id="menu-login" class="btn-group mt20 pull-right">
+                    <div id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
+                        <img src="/static/img/user_default.png" alt="ico-usuario" /> 
+                        <div class="dinline">
+                            {% if user.is_authenticated %}{{user.username}}{% else %}{% trans "Iniciar Sesi&oacute;n" %}{% endif %}
+                            <span class="caret"></span>
+                        </div>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <ul class="dropdown-menu">
+                        <li class="current-user">
+                            <a href="/account">
+                                <div class="content-box">
+                                    <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
+                                    <span class="fullname">Mi Cuenta</span>
+                                    <small class="metadata">Editar configuraci&oacute;n</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li><a href="/{{URL_PRIVACY}}">Privacidad</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
+                    </ul>
+                    {% else %}
+                    <form method ="post" action="/account/login" class="dropdown-menu">
+                        <ul class="unstyled" style="width:200px">
+                            <li>{% csrf_token %}</li>
+                            <li>
+                                <p>
+                                    {% trans "Iniciar Sesi&oacute;n" %} <a id="close-login-menu" class="pull-right" href="#"><i class="icon-remove"></i></a>
+                                </p>
+                            </li>
+                            <li><input id="username"  name="username" class="input-small next-li" type="text" placeholder="Usuario" autofocus></li>
+                            <li><input id="password"  name="password" class="input-small next-li" type="password" placeholder="Contrase&ntilde;a" ></li>
+                            <li id="li-register-link">
+                                <a href="/account/new" class="pull-left" id="register-link">{% trans "Registrarme" %}</a>
+                                <input id="btn-login" class="input-small btn btn-info next-li pull-right" type="submit" value="{% trans 'Entrar' %}" >
+                            </li>
+                        </ul>
+                    </form>
+                    {% endif %}
+            </div>
+        </div>
+        <div id="ac-load" class="pull-right mt20"></div>
+</div>
