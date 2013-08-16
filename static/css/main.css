@@ -203,7 +203,7 @@ header #navbar-button-container > ul li a {
     background-color: black;
 }
 .menu-container{padding-top: 12px;}
-.menu-container .btn{height: 22px;padding: 2px 3px;}
+.menu-container .btn{height: 24px;padding: 2px 3px;padding-right: 6px}
 #account-menu{
     margin-left: 2px;
     margin-top: 0;
@@ -283,7 +283,7 @@ Termina barra superior Daiech
 Footer
 **************************************************************************** */
 #daiech-footer{
-    background-color: #E9E9E9;
+    background-color: white;
     bottom: 0;
     min-height: 210px;
     overflow: hidden;
@@ -293,10 +293,9 @@ Footer
 }
 #footer-bar{
     background-color: white;
-    background-image: url("/static/img/debut_light.png");
-    margin-top: 20px;
+    /*background-image: url("/static/img/debut_light.png");*/
     width: 100%;
-    height: 80px;
+    /*height: 80px;*/
     padding-top: 12px;
 }
 .white-bar{
@@ -312,7 +311,7 @@ Footer
     overflow: hidden;
     width: 100%;
 }
-#footer-bar p{font-size: 12px;}
+/*#footer-bar p{font-size: 12px;}*/
 .footer-pic{
     /*float:left;*/
     height: 60px;
@@ -887,7 +886,7 @@ cierra Show Minutes
 .btn-link:hover{color:#00aeaa;}
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a:hover{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
 /*.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{background-color:#dadada;}*/
-
+.dropdown-menu{padding-top: 6px;}
 .bs-docs-sidenav > .active {
   border-left: none;/* 3px solid gray*/;
 }

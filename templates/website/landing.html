@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block TITLE %} {% trans "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones" %}  {% endblock %}
 {%block body%}
+{%comment%}
 <div id="btn-accion">
     <div id="acction-container" class="box">
         <div class="pull-left">
@@ -116,6 +117,81 @@
               <!-- <a class="carousel-control left" href="#actarium-slide" data-slide="prev">&lsaquo;</a>
               <a class="carousel-control right" href="#actarium-slide" data-slide="next">&rsaquo;</a> -->
 </div>
+{%endcomment%}
+<div id="footer-bar">
+    <div class="white-bar">
+        <p>{% trans "Aliados" %}:</p>
+        <div>
+            <div class="footer-pic pull-left">
+                <a href="http://www.daiech.com" target="_blank">
+                    <div id="daiech-foot" class="img-foot">
+                        
+                    </div>
+                </a> 
+            </div>
+            <div class="footer-pic pull-right">
+                <a href="http://www.parquesoftpereira.com" target="_blank">
+                    <div id="parque-foot" class="img-foot">
+                        
+                    </div>
+                </a>
+            </div>
+        </div>  
+    </div>
+</div>
+<div class="" id="actarium-info">
+    <div class="row-fluid">
+        <div class="span12">
+            <h2>¿Beneficios? mucho más que eso...</h2>
+        </div>
+    </div>
+    <div class="row-fluid ac-info" >
+        <div class="span2 hidden-phone">
+            <img src="{{STATIC_PREFIX}}img/silueta.png">
+        </div>
+        <div class="span4 ">
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading">Grupos de usuarios</h4>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              </div>
+            </div>
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading">Grupos de usuarios</h4>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading">Grupos de usuarios</h4>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              </div>
+            </div>
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading">Grupos de usuarios</h4>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              </div>
+            </div>
+        </div>
+        <div class="span2 hidden-phone">...</div>
+    </div>
+</div>
 
 {%endblock%}
 {% block style%}
@@ -128,7 +204,7 @@
     #value-proposition p{color: #888;margin-top: 10px;padding: 10px;}
     #line-separator{background-color: #394264; height: 100px;}
     #line-separator div{padding-top:40px;}
-    #line-separator p{color: #ddd6d6;font-size: 18px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
+    #line-separator p{color: #ddd6d6;font-size: 28px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
     #line-separator p span{border-bottom: solid thin #ccc;border-top: solid thin #ccc;padding: 5px;}
     .form-box{color: #c8c8c8;background-color: #394264;padding:15px;overflow: hidden;position: relative;}
     .form-box h4{text-align: center;margin-top: 5px;margin-bottom: 20px;}
@@ -145,6 +221,9 @@
     .btn-login-nets span{background-image: url({{STATIC_PREFIX}}img/btns-form.png);background-repeat:no-repeat;width: 20px; height: 20px;display: inline-block;vertical-align: text-top;margin-top: -3px;}
     .login-face{background-position: 0 0;margin-left: 5px}
     .login-google{background-position: -31px 0;margin-left: 5px}
+
+    #actarium-info{margin: 0 auto; width: 80%;}
+    .ac-info{margin-bottom: 35px;}
     /*/new design*/
     
     /* **************************************************************************** 
@@ -180,6 +259,7 @@
         background-color: rgba(255,255,255,0.7);
         height: 237px;
         min-height: 237px;
+        margin-bottom: 0;
         width: 100%;
         /*padding-bottom: 35px;*/
     }
