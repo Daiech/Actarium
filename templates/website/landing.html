@@ -14,14 +14,14 @@
             </div>
         </div>
         <div class="pull-right">
-            <div id="sign-up-form">
+            <div id="sign-up-form" style="display:none;">
                 <div class="form-box">
                     <h4>{% trans "Reg&iacute;strate gratis" %}</h4>
                     <div class="box">
                         <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
                             {% csrf_token %}
                             <div>
-                            <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" />
+                            <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" class="first-input" />
                             </div>
                             <div>
                             <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
@@ -49,12 +49,12 @@
                     </div>
                 </div>
             </div>
-            <div id="sign-in-form" style="display:none;">
+            <div id="sign-in-form">
                 <div class="form-box">
                     <h4>{% trans "Iniciar sesi&oacute;n" %}</h4>
                     <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
                         {% csrf_token %}
-                        <div><input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" class="first-input" /></div>
+                        <div><input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" /></div>
                         <div><input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" /></div>
                         <div class="box btn-sumbit">
                             <button type="submit" name="submit" class="btn btn-danger link-daiech">
@@ -67,7 +67,7 @@
                 <div class="login-buttons">
                     <div id="btn-sign-up" class="btn-red">
                         <div>{% trans "¿Eres nuevo?" %}</div>
-                        {% trans "Registrarse" %}
+                        {% trans "Reg&iacute;strate gratis" %}
                     </div>
                 </div>
             </div>
@@ -118,31 +118,10 @@
       <!-- <a class="carousel-control left" href="#actarium-slide" data-slide="prev">&lsaquo;</a>
       <a class="carousel-control right" href="#actarium-slide" data-slide="next">&rsaquo;</a> -->
 </div>
-<div id="ac-alliances">
-    <div class="white-bar">
-        <p>{% trans "Aliados" %}:</p>
-        <div>
-            <div class="footer-pic pull-left">
-                <a href="http://www.daiech.com" target="_blank">
-                    <div id="daiech-foot" class="img-foot">
-                        
-                    </div>
-                </a> 
-            </div>
-            <div class="footer-pic pull-right">
-                <a href="http://www.parquesoftpereira.com" target="_blank">
-                    <div id="parque-foot" class="img-foot">
-                        
-                    </div>
-                </a>
-            </div>
-        </div>  
-    </div>
-</div>
 <div class="" id="actarium-info">
     <div class="row-fluid">
         <div class="span12">
-            <h2>¿Beneficios? mucho más...</h2>
+            <h2>{% trans "¿Beneficios? mucho m&aacute;s..." %}</h2>
         </div>
     </div>
     <div class="row-fluid ac-info" >
@@ -210,6 +189,27 @@
               </div>
             </div>
         </div>
+    </div>
+</div>
+<div id="ac-alliances">
+    <div class="white-bar">
+        <!-- <p>{% trans "Aliados" %}:</p> -->
+        <div>
+            <div class="footer-pic pull-left">
+                <a href="http://www.daiech.com" target="_blank">
+                    <div id="daiech-foot" class="img-foot">
+                        
+                    </div>
+                </a> 
+            </div>
+            <div class="footer-pic pull-right">
+                <a href="http://www.parquesoftpereira.com" target="_blank">
+                    <div id="parque-foot" class="img-foot">
+                        
+                    </div>
+                </a>
+            </div>
+        </div>  
     </div>
 </div>
 
