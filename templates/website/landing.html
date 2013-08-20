@@ -5,20 +5,20 @@
 {%comment%}
 {%endcomment%}
 <div id="btn-accion">
-    <div id="acction-container" class="box">
-        <div class="pull-left">
+    <div id="action-container" class="row-fluid">
+        <div class="span8">
             <div><img src="/static/img/actarium_grande.png" alt="Actarium"></div>
             <div id="value-proposition">
                 <strong>{% trans "La plataforma ideal para la gesti&oacute;n de Actas y reuniones" %}</strong>
                 <p>{% trans "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel." %}</p>
             </div>
         </div>
-        <div class="pull-right">
+        <div class="span4">
             <div id="sign-up-form" style="display:none;">
                 <div class="form-box">
                     <h4>{% trans "Reg&iacute;strate gratis" %}</h4>
-                    <div class="box">
-                        <form name="" action="/account/new" method="POST" class="form-horizontal pull-right">
+                    <div>
+                        <form name="" action="/account/new" method="POST" class="form-horizontal">
                             {% csrf_token %}
                             <div>
                             <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" class="first-input" />
@@ -52,17 +52,19 @@
             <div id="sign-in-form">
                 <div class="form-box">
                     <h4>{% trans "Iniciar sesi&oacute;n" %}</h4>
-                    <form name="" action="/account/login" method="POST" class="form-horizontal pull-right">
-                        {% csrf_token %}
-                        <div><input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" /></div>
-                        <div><input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" /></div>
-                        <div class="box btn-sumbit">
-                            <button type="submit" name="submit" class="btn btn-danger link-daiech">
-                                {% trans "Iniciar Sesi&oacute;n" %}</button>
-                            <label>
-                            <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
-                        </div>
-                    </form>
+                    <div>
+                        <form name="" action="/account/login" method="POST" class="form-horizontal ">
+                            <div>{% csrf_token %}</div>
+                            <div class="input-form"><input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" /></div>
+                            <div class="input-form"><input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" /></div>
+                            <div class="box btn-sumbit">
+                                <button type="submit" name="submit" class="btn btn-danger link-daiech">
+                                    {% trans "Iniciar Sesi&oacute;n" %}</button>
+                                <label>
+                                <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="login-buttons">
                     <div id="btn-sign-up" class="btn-red">
@@ -218,8 +220,8 @@
 <style>
     /*new design*/
     #btn-accion{min-height: 360px;}
-    #acction-container{margin: 0 auto;margin:30px auto;width: 70%;}
-    #acction-container .pull-left{width: 560px;}
+    #action-container{margin: 0 auto;margin:30px auto;width: 70%;}
+    #action-container .pull-left{width: 560px;}
     #value-proposition strong{text-transform: uppercase;border-bottom: solid thin #aaa;padding-bottom: 10px;font-size: 16px;}
     #value-proposition p{color: #888;margin-top: 10px;padding: 10px;}
     #line-separator{background-color: #394264; height: 100px;}
@@ -230,9 +232,10 @@
     .form-box h4{text-align: center;margin-top: 5px;margin-bottom: 20px;}
     .form-box a{color: #fff}
     .form-box a:hover{color: #00aeaa;text-decoration: underline;}
-    .form-box input{background-color: #50597B; color: #fff;border: solid thin #222;border-radius: 1px;}
+    .form-box input{background-color: #50597B; color: #fff;border: solid thin #222;border-radius: 1px;width: 90%}
     .form-box input:hover{border: solid thin #4d90aa;}
     .form-box .form-horizontal > div{margin: 2px auto;}
+    .form-box > div{margin: 2px auto;/*width: 100%*/}
     .btn-sumbit{text-align: center;padding-top: 15px}
     .login-buttons{text-align: center;padding: 0;}
     .login-buttons .btn-red{cursor: pointer;background-color: #E64C65;color:white;font-weight: bold; padding: 3px 0;}
@@ -248,6 +251,15 @@
     #actarium-info a h4:hover{text-decoration: underline;}
     .ac-info{margin-bottom: 35px;font-size: 14px;}
     #ac-alliances{padding: 40px 0 15px 0;background-color: white;}
+    .input-form{width: 80%;margin-left: 10px;}
+    @media (min-width: 768px) and (max-width: 979px) {
+        #action-container{width: 90%}
+    }
+    @media (max-width: 767px) {
+        .form-box input{width: 100%;}
+    }
+
+
     /*/new design*/
     
     /* **************************************************************************** 

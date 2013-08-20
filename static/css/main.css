@@ -1084,6 +1084,7 @@ only screen and (min-resolution: 144dpi) {
     .hoja{width: 95%}
     .modal.fade.in{top: 10%;}
     .message-box{width: 70%}
+    .input-form{width: 80%;}
 }
 
 
@@ -1119,6 +1120,8 @@ only screen and (min-resolution: 144dpi) {
     .hoja{width: 90%}
     .modal.fade.in{top: 10%;}
     .message-box{width: 75%}
+    /*landing*/
+    .input-form{width: 80%;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -1154,12 +1157,16 @@ only screen and (min-resolution: 144dpi) {
     .message-box{width: 85%}
     #feed-modal{width: 100%}
     .menu-container{padding-top: 3px;}
+    /*landing*/
+    .input-form{width: 70%;}
 }
 
 @media (max-width: 380px) {
     .white-bar{
         width: 95%;
     }
+    /*landing*/
+    .form-box input{width: 70%;}
 }
    /*==================================================*/
     /*                  Modal for view in mobile       */                    
