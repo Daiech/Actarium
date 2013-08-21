@@ -99,39 +99,39 @@
     "model": "groups.templates",
     "pk": 1,
     "fields": {
-      "name": "basica",
+      "name": "Plantilla Básica  Actarium",
       "address_template": "groups/minutesTemplates/minutesTemplate1.html",
       "address_js": "groups/minutesTemplates/minutesTemplate1js.html",
       "id_type": 1,
       "is_public": 1,
       "date_joined": "2013-03-15 02:37:31",
-      "slug": "basica-1"
+      "slug": "plantilla-basica-actarium-1"
     }
   },
   {
     "model": "groups.templates",
     "pk": 2,
     "fields": {
-      "name": "Asamblea General Parquesoft Pereira",
+      "name": "Plantilla Institucional Parquesoft",
       "address_template": "groups/minutesTemplates/minutesTemplate2.html",
       "address_js": "groups/minutesTemplates/minutesTemplate2js.html",
       "id_type": 1,
       "is_public": 0,
       "date_joined": "2013-03-15 01:04:51",
-      "slug": "asamblea-general-parquesoft-pereira-2"
+      "slug": "plantilla-institucional-parquesoft-2"
     }
   },
   {
     "model": "groups.templates",
     "pk": 3,
     "fields": {
-      "name": "Comité Parquesoft Pereira",
+      "name": "Plantilla Comite Parquesoft",
       "address_template": "groups/minutesTemplates/minutesTemplate3.html",
       "address_js": "groups/minutesTemplates/minutesTemplate3js.html",
       "id_type": 1,
       "is_public": 0,
       "date_joined": "2013-03-15 02:37:57",
-      "slug": "comite-parquesoft-pereira-3"
+      "slug": "plantilla-comite-parquesoft-3"
     }
   },
   {
