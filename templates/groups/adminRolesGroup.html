@@ -401,7 +401,7 @@
 	        	var is_admin = "{{is_admin}}"
 	            var tr = '<tr><td>'+
 						'<div class="username-info user-pend-r">'+
-	                        '<img style="width:20px" src="'+data['gravatar']+'" alt="">'+(data['email']).substring(0,MAX_LENGTH)+
+	                        '<img style="width:20px" src="'+data['gravatar']+'" alt=""> '+(data['email']).substring(0,MAX_LENGTH)+
 	                    '</div>'+
 					'</td>'+
 					'<td class="t-a-c">\
@@ -425,7 +425,7 @@
 				setAlertMessage("Invitado",data['message'])
 	            showIconCloseOnHover()
 				$("td input[type='checkbox']").on("click", setRole);
-	            $("#newmember").val("")
+	            $("#newmember").val("");
 	        }else{//EL USUARIO YA ESTA INVITADO
 	            if(data["message"]){
 	                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
@@ -467,7 +467,9 @@
 	            var group_name = $("#group_name").val();
 	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},
 	                     "",invitationResult);
-	            $(this).parent().fadeOut();
+	            $(this).parent().fadeOut(300, function (e){
+	            	$(this).empty().show().removeClass("user-li");
+	            });
 	            $("#newmember").focus();
 	            $("#message-search").html(message)
 	        })
