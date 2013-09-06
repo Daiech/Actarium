@@ -3,27 +3,23 @@
 		function copyDate(){
 			$(".date_mirror").empty().text(""+$("#id_date_start").val());
 		}
-		{% if not title_edit %}
-		function newMinutesText(){
-			$("#id_agenda").val("<ol><li>Verificaci&oacute;n de qu&oacute;rum</li>"+
-						"<li>Designaci&oacute;n de presidente y secretario de la reuni&oacute;n.</li>"+
-						"<li>Lectura y aprobaci&oacute;n del orden del d&iacute;a.</li>"+
-						"<li>Proposiciones y varios.</li>"+
-						"<li>Nombramiento de la comisi&oacute;n aprobatoria del acta.</li>"+
-		                "</ol>");
-
-			$("#id_agreement").val("<ol><li>Se verific&oacute; la presencia del qu&oacute;rum estatutario para poder deliberar y decidir (53% del total de afiliados).</li>"+
-							$("#assistance_hidden").html()+
-							"<li>Designaci&oacute;n de presidente y secretario de la reuni&oacute;n.<br><br></li>"+
-							"<li>Lectura y aprobaci&oacute;n del orden del d&iacute;a.<br><br></li>"+
-							"<li>Proposiciones y varios.<br><br></li>"+
-							"<li>Nombramiento de la comisi&oacute;n aprobatoria del acta.<br><br></li>"+
+		{% if not title_edit and not minutes_saved.error %} /*se esta No editando?*/
+			function newMinutesText(){
+				$("#id_agenda").val("<ol><li>Verificaci&oacute;n de qu&oacute;rum</li>"+
+							"<li>Designaci&oacute;n de presidente y secretario de la reuni&oacute;n.</li>"+
+							"<li>Lectura y aprobaci&oacute;n del orden del d&iacute;a.</li>"+
+							"<li>Proposiciones y varios.</li>"+
+							"<li>Nombramiento de la comisi&oacute;n aprobatoria del acta.</li>"+
 			                "</ol>");
-		}
-		{% endif%}
-	{% endifequal%}
-	{% ifequal is_form 1%}
-		{% if not title_edit %}
+
+				$("#id_agreement").val("<ol><li>Se verific&oacute; la presencia del qu&oacute;rum estatutario para poder deliberar y decidir (53% del total de afiliados).</li>"+
+								$("#assistance_hidden").html()+
+								"<li>Designaci&oacute;n de presidente y secretario de la reuni&oacute;n.<br><br></li>"+
+								"<li>Lectura y aprobaci&oacute;n del orden del d&iacute;a.<br><br></li>"+
+								"<li>Proposiciones y varios.<br><br></li>"+
+								"<li>Nombramiento de la comisi&oacute;n aprobatoria del acta.<br><br></li>"+
+				                "</ol>");
+			}
 			newMinutesText();
 		{% else %}
 			$(".date_mirror").text(""+$("#first_date input").val());
