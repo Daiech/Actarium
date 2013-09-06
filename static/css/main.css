@@ -199,20 +199,39 @@ header #navbar-button-container > ul li a {
 #tt-but{
     background-position: -258px 43px;
 }
-.navbar-active-class{
-    background-color: black;
-}
 .menu-container{padding-top: 12px;}
 .menu-container .btn{height: 24px;padding: 2px 3px;padding-right: 6px}
-#account-menu{
-    margin-left: 2px;
-    margin-top: 0;
-}
+#account-menu{margin-left: 2px;margin-top: 0;}
 #groups-menu{margin-top: 0}
 #groups-menu .group-link{color: #00aeaa;}
 #groups-menu .group-link:hover{color: #fff}
 #groups-menu li a{font-weight: bold;}
 .btn-group{margin-top: 0px;}
+.dinline{display: inline;position: relative;top: 1px;}
+#ac-load{display: none;margin-right: 15px;padding: 5px 10px;text-align:center;width: 68px;}
+#close-login-menu{position: relative;left: 0}
+#li-register-link:hover{background-color: white}
+#register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}
+#register-link:hover{text-decoration: underline;background-color: white;background-image:none;}
+
+/*nueva barra*/
+#topbar{background: #F7F7F7;border-bottom: 1px solid #CBCCCC;
+box-shadow: 0 0 3px rgba(0,0,0,0.1);height: 42px;left: 0;
+position: absolute;top: 0;width: 100%;z-index: 10;}
+.topbar-btn-logo{border-right: 1px solid #cbcccc;box-shadow: 1px 0 0 0 #FFFFFF;background: #F7F7F7;
+float: left;height: 42px;line-height: 42px;padding: 0 20px;position: relative;z-index: 5;}
+.topbar-logo-center{padding-top:4px;}
+.topbar-btn{border-left: 1px solid #cbcccc;box-shadow: 1px 0 0 0 #FFFFFF inset;font-size: 14px;
+float: right;height: 32px;min-width: 80px; padding: 10px 16px 0 8px;width: auto;}
+.navbar .btn-group{margin-top: 0;}
+.topbar-caret{vertical-align: middle;}
+.dropdown-menu{min-width: 190px;}
+/*/nueva barra*/
+
+/* **************************************************************************** 
+Termina barra superior Daiech
+**************************************************************************** */
+
 .ml10{margin-left: 10px;}
 .mt20{margin-top: 20px;}
 .mt40{margin-top: 40px;}
@@ -220,53 +239,6 @@ header #navbar-button-container > ul li a {
 .mb10{margin-bottom: 10px;}
 .mb20{margin-bottom: 20px;}
 .mb50{margin-bottom: 50px;}
-.dinline{
-    display: inline;
-    position: relative;
-    top: 1px;
-}
-#ac-load{
-    /*background-color: #dadada;*/
-    display: none;
-    margin-right: 15px;
-    padding: 5px 10px;
-    text-align:center;
-    width: 68px;
-}
-.top-text{
-    /*font-weight: bold;*/
-}
-.menu-icons{
-    background-image: url("/static/img/iconos.png");
-    width: 26px;
-    height: 26px;
-}
-.icon-groups{
-    background-position: 0 0;
-}
-.icon-reunions{
-    background-position: -35px 0;
-    width: 28px;
-}
-.icon-blog{
-    background-position: -72px 0;
-}
-.icon-faqs{
-    background-position: -107px 0;
-    width: 28px;
-}
-.icon-about{
-    background-position: -150px 0;
-    width: 24px;
-}
-#close-login-menu{position: relative;left: 0}
-#li-register-link:hover{background-color: white}
-#register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}
-#register-link:hover{text-decoration: underline;background-color: white;background-image:none;}
-/* **************************************************************************** 
-Termina barra superior Daiech
-**************************************************************************** */
-
 .t-a-r{
     text-align:right;
 }
