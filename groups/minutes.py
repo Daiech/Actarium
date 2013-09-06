@@ -855,6 +855,49 @@ def getExtraMinutesById(id_extra_minutes):
         return None
 
 
+def setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
+    members_no_assistant, list_ms, president, secretary, show_dni, id_user_creator, url_logo):
+    list_newMinutesForm = {
+        "date_start": _extra_minutes.date_start,
+        "date_end": _extra_minutes.date_end,
+        "location": _extra_minutes.location,
+        "agreement": _extra_minutes.agreement,
+        "agenda": _extra_minutes.agenda,
+        "type_reunion": _extra_minutes.type_reunion,
+        "code": _minute.code}
+    full_html = loader.render_to_string(_minute.id_template.address_template, {
+        "URL_BASE": URL_BASE,
+        "newMinutesForm": list_newMinutesForm,
+        "group": group,
+        "members_selected": members_assistant,
+        "members_no_selected": members_no_assistant,
+        "members_signers": list_ms,
+        "url_logo": url_logo,
+        "president": president,
+        "secretary": secretary,
+        "show_dni": show_dni,
+        }
+    )
+    _minutes_version = minutes_version(id_minutes=_minute, id_user_creator=id_user_creator, full_html=full_html)
+    _minutes_version.save()
+    signs = getAllMinutesSigned(_minute)
+    a = list()
+    for s in signs:
+        a.append(
+            minutes_approver_version(
+                id_user_approver=s.id_user,
+                id_minutes_version=_minutes_version,
+                is_signed_approved=s.is_signed_approved)
+        )
+    try:
+        minutes_approver_version.objects.bulk_create(a)
+    except Exception, e:
+        print "Minutes.editMinute coping the approvers", e
+    for s2 in signs:
+        s2.is_signed_approved = 0
+        s2.save()
+
+
 @login_required(login_url='/account/login')
 def editMinutes(request, slug_group, slug_template, minutes_code):
     '''
@@ -924,61 +967,38 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
             if request.method == "POST":
                 form = newMinutesForm(request.POST)
                 if form.is_valid():
-                    #guardad version
-                    list_newMinutesForm = {
-                        "date_start": _extra_minutes.date_start,
-                        "date_end": _extra_minutes.date_end,
-                        "location": _extra_minutes.location,
-                        "agreement": _extra_minutes.agreement,
-                        "agenda": _extra_minutes.agenda,
-                        "type_reunion": _extra_minutes.type_reunion,
-                        "code": _minute.code}
-                    full_html = loader.render_to_string(_minute.id_template.address_template, {
-                        "URL_BASE": URL_BASE,
-                        "newMinutesForm": list_newMinutesForm,
-                        "group": group,
-                        "members_selected": members_assistant,
-                        "members_no_selected": members_no_assistant,
-                        "members_signers": list_ms,
-                        "url_logo": url_logo,
-                        "president": president,
-                        "secretary": secretary,
-                        "show_dni": show_dni,
-                        }
-                    )
-                    _minutes_version = minutes_version(id_minutes=_minute, id_user_creator=request.user, full_html=full_html)
-                    _minutes_version.save()
-                    signs = getAllMinutesSigned(_minute)
-                    a = list()
-                    for s in signs:
-                        a.append(
-                            minutes_approver_version(
-                                id_user_approver=s.id_user,
-                                id_minutes_version=_minutes_version,
-                                is_signed_approved=s.is_signed_approved)
-                        )
-                    try:
-                        print "aprovadores", a
-                        minutes_approver_version.objects.bulk_create(a)
-                    except Exception, e:
-                        print "Minutes.editMinute coping the approvers", e
-                    for s2 in signs:
-                        s2.is_signed_approved = 0
-                        s2.save()
-                    # guardar versión de los aprovadores
-                    _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  # actualizar
+                    is_other = None
+                    # editar acta y poner un código ya existente, mirar la diferencia de formatos:
+                    # print "------------------------", request.POST['date_start']
+                    # print "------------------------", form.cleaned_data['date_start']
+                    if form.cleaned_data['code'] != minutes_code:
+                        is_other = getMinutesByCode(group, form.cleaned_data['code'])
+                    if not is_other:
+                        #guardad version
+                        setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
+                            members_no_assistant, list_ms, president, secretary, show_dni, request.user, url_logo)
+                        #/guardar versión
+                        _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  # actualizar
 
-                    if _minute:
-                        ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
-                        # setMinuteAssistance(_minute, members_assistant, members_no_assistant)
-                        url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True)
-                        ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
+                        if _minute:
+                            ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
+                            # setMinuteAssistance(_minute, members_assistant, members_no_assistant)
+                            url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True)
+                            ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
 
-                        # send Email
-                        return HttpResponseRedirect(url_new_minute)
+                            # send Email
+                            return HttpResponseRedirect(url_new_minute)
+                        else:
+                            saved = False
+                            error = "e2"  # error, mismo código de acta, o error al guardar en la db
                     else:
                         saved = False
                         error = "e2"  # error, mismo código de acta, o error al guardar en la db
+                        # se redefinen las fechas ya que como vienen con otro formato (AM) no se imprimen de forma correcta en el form
+                        request.POST['date_start'] = form.cleaned_data['date_start']
+                        request.POST['date_end'] = form.cleaned_data['date_end']
+                        form = newMinutesForm(request.POST)
+
                 else:
                     saved = False
                     error = "e0"  # error, el formulario no es valido
@@ -989,7 +1009,6 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                 form = newMinutesForm()
                 try:
                     if _extra_minutes:
-                        import datetime
                         date_1 = _extra_minutes.date_start
                         date_2 = _extra_minutes.date_end
                         form = newMinutesForm(

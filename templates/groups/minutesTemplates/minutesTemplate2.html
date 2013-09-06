@@ -88,7 +88,11 @@
           <p style="text-align : justify;">
       			En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, el d&iacute;a <span id="first_date">
             {% if is_form%}
-            <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+              {%if title_edit%}
+              <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+              {%else%}
+              {{newMinutesForm.date_start}}
+              {%endif%}
             {%else%}
             {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}
             {% endif%}
