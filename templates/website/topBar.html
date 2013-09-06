@@ -34,14 +34,14 @@
                         <div class="content-box">
                             <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
                             <span class="fullname">{{user.first_name}}</span>
-                            <small class="metadata">Editar configuraci&oacute;n</small>
+                            <small class="metadata">{% trans "Editar configuraci&oacute;n" %}</small>
                         </div>
                     </a>
                 </li>
                 <li><a href="/{{URL_PRIVACY}}">{% trans "Privacidad" %}</a></li>
                 <li><a id="menu-feed" href="/#feedback">{% trans "Comentarios" %}</a></li>
                 <li class="divider"></li>
-                <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
+                <li><a href="/account/logout/">{% trans "Cerrar sesi&oacute;n" %}</a></li>
             </ul>
         </div>
         <div id="groups-menu" class="btn-group pull-right">

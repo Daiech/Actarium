@@ -18,7 +18,7 @@
             </a>   
         </div>
         {% else %}
-        <div id="topbar-account-menu" class="btn-group pull-right">
+        <div id="account-menu" class="btn-group pull-right">
             <div id="log-sup" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
                 <img class="size22 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
                 <div class="dinline">
@@ -31,18 +31,18 @@
                     <a href="/account">
                         <div class="content-box">
                             <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
-                            <span class="fullname">{{user.first_name}}</span>
-                            <small class="metadata">Editar configuraci&oacute;n</small>
+                            <span class="fullname">{{user.first_name}} {{user.last_name}}</span>
+                            <small class="metadata">{% trans "Editar configuraci&oacute;n" %}</small>
                         </div>
                     </a>
                 </li>
                 <li><a href="/{{URL_PRIVACY}}">{% trans "Privacidad" %}</a></li>
                 <li><a id="menu-feed" href="/#feedback">{% trans "Comentarios" %}</a></li>
                 <li class="divider"></li>
-                <li><a href="/account/logout/">Cerrar sesi&oacute;n</a></li>
+                <li><a href="/account/logout/">{% trans "Cerrar sesi&oacute;n" %}</a></li>
             </ul>
         </div>
-        <div id="topbar-groups-menu" class="btn-group pull-right">
+        <div id="groups-menu" class="btn-group pull-right">
             <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="">
                 <img src="/static/img/groups/default.jpg" alt='{% trans "Grupos" %}'  /> 
                 <div class="dinline">

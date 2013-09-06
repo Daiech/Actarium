@@ -203,7 +203,7 @@ header #navbar-button-container > ul li a {
 .menu-container .btn{height: 24px;padding: 2px 3px;padding-right: 6px}
 #account-menu{margin-left: 2px;margin-top: 0;}
 #groups-menu{margin-top: 0}
-#groups-menu .group-link{color: #00aeaa;}
+#groups-menu .group-link{color: #00aeaa;font-weight: normal;}
 #groups-menu .group-link:hover{color: #fff}
 #groups-menu li a{font-weight: bold;}
 .btn-group{margin-top: 0px;}
@@ -853,10 +853,19 @@ cierra Show Minutes
 
 
 .nav-list > .active > a, .nav-list > .active > a:hover{background-color:#00aeaa;color: white;}
-.btn-info{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
 .btn-link{color:#00aeaa;}
 .btn-link:hover{color:#00aeaa;}
-.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a:hover{background-color:#00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));}
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a:hover,.btn-info{
+    background-color:#00aeaa;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));
+    background-image: -webkit-linear-gradient(top, #00AEAA, #2f96b4); 
+    /* Firefox 3.6+ */
+    background-image: -moz-linear-gradient(top, #00AEAA, #2f96b4);
+    /* IE 10+ */
+    background-image: -ms-linear-gradient(top, #00AEAA, #2f96b4);
+    /* Opera 11.10+ */
+    background-image: -o-linear-gradient(top, #00AEAA, #2f96b4);
+    background-image:linear-gradient(top, #00AEAA, #2f96b4);}
 /*.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{background-color:#dadada;}*/
 .dropdown-menu{padding-top: 6px;}
 .bs-docs-sidenav > .active {
