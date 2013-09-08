@@ -3,6 +3,7 @@ from django.conf.urls import url, patterns
 groups_urls = patterns(
     '',
     url(r'^new$', 'groups.views.newGroup', name='something'),
+    url(r'^(?P<slug_group>[-\w]+)/menu$', 'groups.views_groups.showGroup'),
     url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)/edit/(?P<slug_template>.*)$', 'groups.minutes.editMinutes'),
     url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groups.views.groupInfoSettings', name='Admin Info Groups'),
     url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groups.views.groupDNISettings', name='Admin DNI Groups'),

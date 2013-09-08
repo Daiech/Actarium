@@ -1001,7 +1001,7 @@ only screen and (min-resolution: 144dpi) {
         width: 48%;
     }
     .navbar-fixed-top {
-        margin-bottom: 26px;
+        /*margin-bottom: 26px;*/
     }
     .white-bar{
         width: 30%;
@@ -1020,7 +1020,7 @@ only screen and (min-resolution: 144dpi) {
         display: inline;
     }
     .navbar-fixed-top {
-        margin-bottom: 26px;
+        /*margin-bottom: 26px;*/
     }
     #social-buttons{
         display: visible;
@@ -1048,7 +1048,7 @@ only screen and (min-resolution: 144dpi) {
             display: none;
         }*/
     .navbar-fixed-top {
-        margin-bottom: 23px;
+        margin-bottom: 0;
     }
     .white-bar{
         width: 40%
@@ -1066,6 +1066,7 @@ only screen and (min-resolution: 144dpi) {
     .modal.fade.in{top: 10%;}
     .message-box{width: 70%}
     .input-form{width: 80%;}
+    .header-group{margin-top: 0;}
 }
 
 
@@ -1120,7 +1121,7 @@ only screen and (min-resolution: 144dpi) {
     h3{font-size: 16px;}
     .container{width: 95%}
     #actarium-logo{width: 60px}
-    #logo-actarium-p{margin-top: -6px;/*width: 39px;*/}
+    #logo-actarium-p{/*margin-top: -6px;*/width: 33px;}
     .top-bar-center{padding-top: 9px}
     .logo-center{width: 38px;}
     /*.navbar-element{width: 35px;height: 54px;box-shadow: none}*/
@@ -1129,7 +1130,7 @@ only screen and (min-resolution: 144dpi) {
     .navbar-item-logo{height: 48px;}
     .top-text{display: none;}
     .ico-top{top: 17px}
-    header.navbar{height: 48px;}
+    /*header.navbar{height: 48px;}*/
     #social-buttons{display: block;}
     #account-menu{margin-right: 0}
     .btn{margin-top: 5px;}
