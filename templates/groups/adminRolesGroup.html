@@ -453,7 +453,7 @@
 	    		}
 			sendAjax("/groups/setInvitation",ctx,"",invitationResult);
 			$("#search-result").fadeOut(300,function (argument) {
-				$(this).empty();
+				$(this).empty().show();
 			});
             $("#newmember").focus();
             $("#message-search").html(message);
