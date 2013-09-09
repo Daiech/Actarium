@@ -1,9 +1,15 @@
 from django.conf.urls import url, patterns
 
-groups_urls = patterns(
+#Urls to new group design
+groups_urls = patterns('groups.views_groups',
+    url(r'^(?P<slug_group>[-\w]+)/team$', 'showTeamGroup', name="show_team"),
+    url(r'^(?P<slug_group>[-\w]+)/folder$', 'showFolderGroup', name="show_folder"),
+    url(r'^(?P<slug_group>[-\w]+)/calendar$', 'showCalendarGroup', name="show_calendar"),
+    url(r'^(?P<slug_group>[-\w]+)/home$', 'showHomeGroup', name="show_home"),
+)
+groups_urls += patterns(
     '',
     url(r'^new$', 'groups.views.newGroup', name='something'),
-    url(r'^(?P<slug_group>[-\w]+)/menu$', 'groups.views_groups.showGroup'),
     url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)/edit/(?P<slug_template>.*)$', 'groups.minutes.editMinutes'),
     url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groups.views.groupInfoSettings', name='Admin Info Groups'),
     url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groups.views.groupDNISettings', name='Admin DNI Groups'),

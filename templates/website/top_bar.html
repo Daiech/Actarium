@@ -4,7 +4,7 @@
     <a href="/" id="topbar-btn-logo">
         <div class="topbar-logo-center"><div id="logo-actarium-p" class="sprites"></div></div>
     </a>
-    <div id="topbar-group-name" class="pull-left"></div>
+    <div id="topbar-group-name" class="pull-left">{% if group %}<strong>{{group.name|title}}</strong>{% endif %}</div>
     {% if not user.is_authenticated %}
     <div id="social-buttons" class="pull-right">
         <a href="https://www.facebook.com/actarium" target="_blank">
