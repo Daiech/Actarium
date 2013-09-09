@@ -1,6 +1,17 @@
 {% extends "groups/menu.html" %}
 {% block toolbar_content %}
-
+	<li><a href="#">un boton</a></li>
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">otro boton <i class="caret"></i></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	        <li>
+	        	<a href="#">unos</a>
+	        </li>
+	        <li>
+	        	<a href="#">dos</a>
+	        </li>
+	    </ul>
+	</li>
 {% endblock %}
 
 {% block menu_content %}

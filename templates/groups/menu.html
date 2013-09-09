@@ -8,7 +8,9 @@
 	    <div id="toolbar-group" class="">
     		<div id="menu-title" class="pull-right">{% trans "Menu Principal" %}</div>
 	    	<div id="toolbar-btn" class="">
+	    		<ul class="unstyled">
 	    		{% block toolbar_content %}{% endblock %}
+				</ul>
 	    	</div>
 	    </div>
     </header>
@@ -123,14 +125,19 @@
 	#toolbar-btn{/*display: inline-block;*/padding-left: 192px;}
 	#groups-container{margin-top: 85px;position: relative;}
 	#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 40px;vertical-align: middle;width: 226px;text-align: center;}
-	#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: 1px;}
-	#group-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%}
+	#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: 1px;position: fixed;}
+	#group-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%;position: fixed;}
 	#group-menu ul{margin-top: 0;margin-bottom: 0;}
 	#group-content{padding: 15px 240px;}
 	.bs-docs-sidenav{width: 100%;}
 	.bs-docs-sidenav > li > a{border-left: none;}
 	/*#group-settings-submenu > li{border-bottom: 1px solid #e5e5e5;}*/
 	#group-settings-submenu > li > a{display:block;line-height: 10px;padding-left: 35px !important;font-size: 14px;}
+
+	#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-color: white;margin-left: -4px;}
+	#toolbar-btn > ul > li > a{display: inline-block; height: 42px; line-height: 42px;padding: 0 15px}
+	#toolbar-btn > ul > li > a:hover{background-color: #f5f5f5}
+	#toolbar-btn > ul > li > a > .caret{margin-top: 20px;}
 
 	/*Responsive*/
 	@media (max-width: 979px) {
@@ -143,8 +150,10 @@
 	    #topbar-group-name{font-size: 16px;}
 		#group-menu{float: none;position: relative;width: 100%}
 		#group-content{padding: 15px;}
+		#menu-title{display: none;}
 	}
 	@media (max-width: 480px) {
+		#toolbar-btn{padding-left: 75px}
 	}
 	/*/Responsive*/
 

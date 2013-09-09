@@ -263,6 +263,7 @@ Footer
     position: relative;
     text-align: center;
     width: 100%;
+    border-top: solid thin #cbcccc;
 }
 #footer-bar{
     background-color: white;

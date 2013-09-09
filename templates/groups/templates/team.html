@@ -3,11 +3,11 @@
 
 {% block toolbar_content %}
 {% if is_admin %}
-<div class="dropdown btn-groups-admin">
-    <div class="btn btn-info dropdown-toggle" data-toggle="dropdown"  id="add-member">
-        <i class="icon-plus icon-white"></i> Agregar miembro
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
+        <i class="icon-plus"></i> Agregar miembro
         <span class="caret"></span>
-    </div>
+    </a>
     <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
         <li class="taling">
         	<div class="header-title">
@@ -33,7 +33,7 @@
             </ul>
         </li>
     </ul>
-</div><!-- dropdown -->
+</li>
 {%endif%}
 {% endblock %}
 
@@ -256,7 +256,7 @@
     .dropdown-menu li p{color:gray;font-size: 14px;line-height:1.5;margin: 0}
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
     #add-member{position: static;}
-    #add-member-menu{padding: 10px;}
+    #add-member-menu{padding: 10px;width: 315px;}
     .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}
     ul#add-member-menu li{margin-bottom: 7px;}
     ul#add-member-menu li a:hover, ul#add-member-menu li a:active{color: white}
@@ -294,11 +294,11 @@
 
 	@media (min-width: 480px) {
 		#newmember{width: 74%;}
-		#add-member-menu{width: 70%}
+		/*#add-member-menu{width: 315px;}*/
 	}
 	@media (min-width: : 380px) {
 		#newmember{width: 60%;}
-		#add-member-menu{width: 90%}
+		#add-member-menu{width: 280px;left: -75px;}
 	}
 </style>
 {% endblock %}
