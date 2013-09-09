@@ -1,33 +1,48 @@
 {% extends "website/base.html" %}
-{% block TITLE %}Grupo {{id_group.name}} {% endblock %}
+{% block TITLE %}{{group.name|title}} {% endblock %}
 {% load gravatartag %}
 {%block body%}
 <article>
     <header class="header-group navbar-fixed-top">
-		<!-- <hr> -->
-		<!-- <div id="minutes-bar-point"></div> -->
-	    <div id="toolbar-group" class="bb">
-	    	<div id="" class="row-fluid">
+	    <div id="toolbar-group" class="">
+    		<div id="menu-title" class="pull-right">Menu Principal</div>
+	    	<div id="toolbar-btn" class="">
+	    		
 	    	</div>
 	    </div>
     </header>
-    <div id="groups-container" class="b">
-    	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    <div id="groups-container" class="">
+    	<div class="row box">
+	    	<div id="group-menu" class=" pull-right">
+	    		<ul class="unstyled">
+	    			<li>Equipo de trabajo</li>
+	    			<li>Folder de Actas</li>
+	    			<li>Calendario de reuniones</li>
+	    			<li>Configuraci&oacute;n de grupo</li>
+	    		</ul>
+	    	</div>
+	    	<div id="group-aside" class=" span3 hidden-phone">
+	    		<a href="http://daiech.com">Daiech</a>
+	    		<p>Desarrollo de redes sociales verticales</p>
+	    	</div>
+	    	<div id="group-content" class=" ">
+	    		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	    		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	    		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	    		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	    		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	    		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+	    	</div>
+	    </div>
     </div>
 </article>
-<span id="is_form" style="display:none">{{is_form}}</span>
 {%endblock%}
 {% block js %}
 <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
 <script src="{{STATIC_PREFIX}}js/vendor/waypoints.min.js"></script>
 <script>
 	$(document).on("ready",function(){
-		
+		$("#topbar-group-name").html("<strong>{{group.name}}</strong>")
 	});
 </script>
 {% endblock %}
@@ -52,10 +67,17 @@
 	body{padding: 0;}
 	#body-container, .container{width: 100%;}
 	.header-group{background-color: #F7F7F7;height: 42px;margin: 0;margin-top: 43px;width: 100%;z-index: 999}
-	#topbar{box-shadow: none;}
-	#toolbar-group{height: 42px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
 	#minutes{padding-right: 0;padding-left: 0;}
-	#groups-container{margin-top: 85px}
+	#topbar{box-shadow: none;}
+	#topbar-btn-logo{height: 85px;line-height: 85px;padding-left: 20px;}
+	.topbar-logo-center{padding-top: 22px;}
+	#toolbar-group{border-bottom: 1px solid #cbcccc;height: 42px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
+	#toolbar-btn{/*display: inline-block;*/padding-left: 192px;}
+	#groups-container{margin-top: 85px;position: relative;}
+	#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 40px;vertical-align: middle;width: 226px;text-align: center;}
+	#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;}
+	#group-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;min-height: 350px;}
+	#group-content{padding: 15px 240px;}
 
 	/*Responsive*/
 	@media (max-width: 979px) {
@@ -65,6 +87,10 @@
 	    .navbar-fixed-top{margin-bottom: 0;}
 	    .topbar-btn{width: 40px; min-width: 40px;}
 	    .topbar-btn > .dinline{display: none}
+	    #topbar-group-name{font-size: 16px;}
+		#group-menu{float: none;position: relative;width: 100%}
+	}
+	@media (max-width: 480px) {
 	}
 	/*/Responsive*/
 

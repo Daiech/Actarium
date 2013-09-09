@@ -973,10 +973,10 @@ def getGroupBySlug(slug):
     try:
         group = groups.objects.get(slug=slug, is_active=True)
     except groups.DoesNotExist:
-        group = False
+        group = None
         raise Http404
     except Exception, e:
-        group = False
+        group = None
         raise Http404
         print "Error capturando grupo: %s " % e
     return group

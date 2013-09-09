@@ -5,6 +5,15 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.utils import simplejson as json
 
+from groups.views import getGroupBySlug
+
 
 def showGroup(request, slug_group):
-	return render_to_response("groups/menu.html", context_instance=RequestContext(request))
+    '''
+        Carga el menú de un grupo 
+    '''
+    g = getGroupBySlug(slug_group)
+    ctx = {
+        "group": g
+    }
+    return render_to_response("groups/menu.html", ctx, context_instance=RequestContext(request))
