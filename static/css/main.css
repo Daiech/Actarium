@@ -794,7 +794,7 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 /*
 Show Minutes 
 */
-.hoja{width: 70%;margin:auto;}
+    .hoja{/*width: 70%;*/margin:auto;}
     #sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
     .minute{
         border: solid thin #ddd;
@@ -803,6 +803,10 @@ Show Minutes
         border-radius: 3px;
         padding-top: 40px;
     }
+    .minutes, #headerContent, #minutesContent, #footerContent{display: block;}
+    .minutes{width: 99%;}
+    #headerContent, #minutesContent, #footerContent{padding: 0 80px;}
+
     .minute header{
         width: auto;
         margin:30px 0;

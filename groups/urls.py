@@ -21,7 +21,7 @@ groups_urls = patterns(
     url(r'^(?P<slug_group>[-\w]+)/add-new-annotation', 'groups.minutes.newAnnotation', name='Set annotation'),
     url(r'^(?P<slug_group>[-\w]+)/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'groups.minutes.newMinutes', name='New minutes with reunion'),
     url(r'^(?P<slug_group>[-\w]+)/uploadMinutes', 'groups.minutes.uploadMinutes', name='uploadMinutes'),
-    url(r'^(?P<slug>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'groups.minutes.showMinutes'),
+    # url(r'^(?P<slug>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'groups.minutes.showMinutes'),
     url(r'^uploadMinutesAjax', 'groups.minutes.uploadMinutesAjax'),
     url(r'^newReunion/(?P<slug>[-\w]+)', 'groups.views.newReunion'),
     url(r'^calendar/(?P<slug>[-\w]*)', 'groups.views.calendarDate'),
