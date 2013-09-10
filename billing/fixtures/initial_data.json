@@ -1,0 +1,221 @@
+[	
+	{
+		"model": "billing.orderstatus",
+		"pk": 1,
+		"fields":
+		{
+			"name": "Pending",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.orderstatus",
+		"pk": 2,
+		"fields":
+		{
+			"name": "Approved",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.orderstatus",
+		"pk": 3,
+		"fields":
+		{
+			"name": "Rejected",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.orderstatus",
+		"pk": 4,
+		"fields":
+		{
+			"name": "Canceled",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.paymentmethod",
+		"pk": 1,
+		"fields":
+		{
+			"name": "Cash payment",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.paymentmethod",
+		"pk": 2,
+		"fields":
+		{
+			"name": "Free of pay",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.pricecustomization",
+		"pk": 1,
+		"fields":
+		{
+			"name": "Own brand",
+			"price_month": "5000",
+			"is_active": "1",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceteamsize",
+		"pk": 1,
+		"fields":
+		{
+			"quantity": "3",
+			"price_month": "0",
+			"is_active": "1",
+			"is_available": "0",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceteamsize",
+		"pk": 2,
+		"fields":
+		{
+			"quantity": "5",
+			"price_month": "5000",
+			"is_active": "1",
+			"is_available": "1",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceteamsize",
+		"pk": 3,
+		"fields":
+		{	
+			"quantity": "10",
+			"price_month": "8000",
+			"is_active": "1",
+			"is_available": "1",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceteamsize",
+		"pk": 4,
+		"fields":
+		{
+			"quantity": "20",
+			"price_month": "12000",
+			"is_active": "1",
+			"is_available": "1",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceteamsize",
+		"pk": 5,
+		"fields":
+		{
+			"quantity": "50",
+			"price_month": "20000",
+			"is_active": "1",
+			"is_available": "1",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceteamsize",
+		"pk": 6,
+		"fields":
+		{
+			"quantity": "100",
+			"price_month": "35000",
+			"is_active": "1",
+			"is_available": "1",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.timetable",
+		"pk": 1,
+		"fields":
+		{
+			"name": "Dia",
+			"time_start": "00:00:00",
+			"time_end": "07:59:59",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.timetable",
+		"pk": 2,
+		"fields":
+		{
+			"name": "Tarde",
+			"time_start": "08:00:00",
+			"time_end": "15:59:59",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.timetable",
+		"pk": 3,
+		"fields":
+		{
+			"name": "Noche",
+			"time_start": "16:00:00",
+			"time_end": "23:59:59",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceadvertising",
+		"pk": 1,
+		"fields":
+		{
+			"id_timetable": "1",
+			"price_week": "0",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceadvertising",
+		"pk": 2,
+		"fields":
+		{
+			"id_timetable": "2",
+			"price_week": "0",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	},
+	{
+		"model": "billing.priceadvertising",
+		"pk": 3,
+		"fields":
+		{
+			"id_timetable": "3",
+			"price_week": "0",
+			"date_added": "2013-09-10 15:00:00",
+			"date_modified": "2013-09-10 15:00:00"
+		}
+	}
+]
