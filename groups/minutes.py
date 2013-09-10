@@ -633,7 +633,7 @@ def setShowDNI(request, slug_group):
 
 
 @login_required(login_url='/account/login')
-def rolesForMinutes(request, slug_group, id_reunion):
+def rolesForMinutes(request, slug_group, id_reunion=None):
     '''
     return the board to set the roles for a new Minutes
     '''

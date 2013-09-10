@@ -16,10 +16,10 @@
     	<div class="row">
 	    	<div id="group-menu" class="pull-right"  data-spy="affix">
 	    		<ul class="unstyled nav nav-list bs-docs-sidenav ">
-	    			<li id="group-menu-home"><a href="{% url 'show_team' group.slug as group_slug %}home">{% trans "Inicio" %}</a></li>
-	    			<li id="group-menu-team"><a href="{% url 'show_team' group.slug as group_slug %}team">{% trans "Equipo de trabajo" %}</a></li>
-	    			<li id="group-menu-folder"><a href="{% url 'show_team' group.slug as group_slug %}folder">{% trans "Folder de Actas" %}</a></li>
-	    			<li id="group-menu-calendar"><a href="{% url 'show_team' group.slug as group_slug %}calendar">{% trans "Calendario de reuniones" %}</a></li>
+	    			<li id="group-menu-home"><a href="{% url 'show_home' group.slug %}">{% trans "Inicio" %}</a></li>
+	    			<li id="group-menu-team"><a href="{% url 'show_team' group.slug  %}">{% trans "Equipo de trabajo" %}</a></li>
+	    			<li id="group-menu-folder"><a href="{% url 'show_folder' group.slug %}">{% trans "Folder de Actas" %}</a></li>
+	    			<li id="group-menu-calendar"><a href="{% url 'show_calendar' group.slug %}">{% trans "Calendario de reuniones" %}</a></li>
 	    			<li id="group-menu-settings"><a href="#settings">
 	    				<i id="icon-chevron" class="icon-chevron-down icon-chevron-right"></i> {% trans "Configuraci&oacute;n de grupo" %}</a>
 	    				<ul id="group-settings-submenu" class="unstyled bs-docs-sidenav" style="display:none">
@@ -33,14 +33,20 @@
 	    		</ul>
 	    	</div>
 	    	<div id="group-aside" class=" span3 hidden-phone">
-	    		<div>
-	    			<img src="{{ STATIC_PREFIX }}img/ads1.jpg">
+	    		<div id="ads-title" class="bb">
+	    			Anuncios
+	    			<span class="pull-right"><a href="#">crear anuncio</a></span>
 	    		</div>
-	    		<div>
-	    			<img src="{{ STATIC_PREFIX }}img/ads2.jpg">
-	    		</div>
-	    		<div>
-	    			<img src="{{ STATIC_PREFIX }}img/ads3.jpg">
+	    		<div id="content-ads">
+	    			<div>
+		    			<img src="{{ STATIC_PREFIX }}img/ads1.jpg">
+		    		</div>
+		    		<div>
+		    			<img src="{{ STATIC_PREFIX }}img/ads2.jpg">
+		    		</div>
+		    		<div>
+		    			<img src="{{ STATIC_PREFIX }}img/ads3.jpg">
+		    		</div>
 	    		</div>
 	    	</div>
 	    	<div id="group-content" class="">
@@ -118,19 +124,20 @@
 	#minutes-bar-hoja{width: 75%;}
 	body{padding: 0;}
 	#body-container, .container{width: 100%;}
-	.header-group{background-color: #F7F7F7;height: 42px;margin: 0;margin-top: 43px;width: 100%;z-index: 999}
+	.header-group{background-color: #F7F7F7;height: 30px;margin: 0;margin-top: 43px;width: 100%;z-index: 999}
 	#minutes{padding-right: 0;padding-left: 0;}
 
 	#body-container{min-height: 430px;}
 	#topbar{box-shadow: none;}
-	#topbar-btn-logo{height: 85px;line-height: 85px;padding-left: 20px;}
-	.topbar-logo-center{padding-top: 22px;}
-	#toolbar-group{border-bottom: 1px solid #cbcccc;height: 42px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
-	#toolbar-btn{/*display: inline-block;*/padding-left: 192px;}
-	#groups-container{margin-top: 85px;position: relative;}
-	#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 40px;vertical-align: middle;width: 226px;text-align: center;}
-	#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: 1px;position: fixed;}
-	#group-aside > div{width: 110px;margin: 10px auto;}
+	#topbar-btn-logo{height: 73px;line-height: 85px;padding-left: 20px;}
+	.topbar-logo-center{margin-top: 15px}
+	#toolbar-group{border-bottom: 1px solid #cbcccc;height: 30px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
+	#toolbar-btn{/*display: inline-block;*/padding-left: 192px;height: 30px;line-height: 30px;}
+	#groups-container{margin-top: 73px;position: relative;}
+	#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 30px;vertical-align: middle;width: 226px;text-align: center;}
+	#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: 1px;position: fixed;height: 100%;}
+	#content-ads > div{width: 110px;margin: 10px auto;}
+	#ads-title{width: 90% !important;margin-top: 0 !important;font-size: 12px;padding: 0 8px}
 	#group-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%;position: fixed;}
 	#group-menu ul{margin-top: 0;margin-bottom: 0;}
 	#group-content{padding: 15px 240px;}
@@ -139,10 +146,20 @@
 	/*#group-settings-submenu > li{border-bottom: 1px solid #e5e5e5;}*/
 	#group-settings-submenu > li > a{display:block;line-height: 10px;padding-left: 35px !important;font-size: 14px;}
 
-	#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-color: white;margin-left: -4px;}
-	#toolbar-btn > ul > li > a{display: inline-block; height: 42px; line-height: 42px;padding: 0 15px}
-	#toolbar-btn > ul > li > a:hover{background-color: #f5f5f5}
-	#toolbar-btn > ul > li > a > .caret{margin-top: 20px;}
+	#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
+	#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);margin-left: -4px;}
+	#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 15px}
+	#toolbar-btn > ul > li > a:hover, #toolbar-btn > ul > li > form > a:hover{background-color: #f5f5f5;color: rgb(51, 118, 238)}
+	#toolbar-btn > ul > li > a > .caret, #toolbar-btn > ul > li > form > a > .caret{margin-top: 20px;}
+	#toolbar-btn > ul > li.pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
+	.btn-submit{color:white !important;background-color: #00aeaa;
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));
+background-image: -webkit-linear-gradient(top, #00AEAA, #2f96b4);
+background-image: -moz-linear-gradient(top, #00AEAA, #2f96b4);
+background-image: -ms-linear-gradient(top, #00AEAA, #2f96b4);
+background-image: -o-linear-gradient(top, #00AEAA, #2f96b4);
+background-image: linear-gradient(top, #00AEAA, #2f96b4);}
+	.btn-submit:hover{color: white;}
 
 	/*Responsive*/
 	@media (max-width: 979px) {

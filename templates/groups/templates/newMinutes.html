@@ -1,0 +1,254 @@
+{% extends "groups/menu.html" %}
+{% block TITLE %}{% if title_edit %}{{title_edit}}{%else%}Crear Acta{%endif%}{% endblock %}
+{% load gravatartag %}
+
+
+{% block toolbar_content %}
+<ul>
+    <li>
+        <a href="javascript:window.history.back()" class="">
+            <i class="icon-arrow-left"></i> Volver
+        </a>
+    </li>
+    <li>
+        <a href="#"  data-toggle="modal" data-target="#template-list"><i class="icon-list-alt"></i> Cambiar Plantilla</a>
+    </li>
+    <li>
+        <a href="#" id="save-new-minutes" class="btn-submit"><i class="icon-hdd icon-white"></i> Guardar Acta</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block menu_content %}
+<div class="white-box-container">
+    <span class="">
+        &Uacute;ltimo c&oacute;digo de Acta:
+        {%if last.code%}
+        <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
+        {%else%}
+        <small>No hay m&aacute;s actas</small>
+        {%endif%}
+    </span>
+</div>
+<article>
+    <div id="template-list" class="modal hide fade"> <!--  -->
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Seleccionar plantilla</h3>
+        </div>
+        <div class="modal-body">
+            <span>Selecciona una plantilla:</span>
+            <ul class="unstyled">
+                {% for template in list_templates %}
+                <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
+                    <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
+                        <a href="{{ template.slug }}" style="width:90%">{{ template.name }}</a>
+                        <div class="template-thumbnail" data-href="{{ template.slug }}">
+                            <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+                {% for template in list_private_templates %}
+                <li class="template-item {%ifequal slug_template template.id_template.slug%}template-item-selected{%endifequal%}">
+                    <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
+                        <a href="{{ template.id_template.slug }}" class="">
+                            {{ template.id_template.name }}
+                            <span style="font-size:10px;" class="label label-info">Pro</span>
+                        </a>
+                        <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
+                            <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" id="close-template-list">Cerrar</a>
+            <a id="change-template" href="#" class="btn btn-info">Aplicar Plantilla</a>
+        </div>
+    </div> <!-- close template-list -->
+    <div id="minutes-container">
+        {% if minutes_saved.error %}
+            <div class="alert alert-error">
+                {%if minutes_saved.error == "e0"%}
+                    Error, el formulario no es valido
+                {%endif%}
+                {%if minutes_saved.error == "e1"%}
+                    Error, al menos un (1) miembro debe ser seleccionado
+                {%endif%}
+                {%if minutes_saved.error == "e2"%}
+                    Error, este grupo tiene un acta con el mismo c&oacute;digo
+                {%endif%}
+                {%if minutes_saved.error == "e3"%}
+                    Ha ocurrido un error, intenta de nuevo mas tarde.
+                {%endif%}
+            </div>
+        {% endif %}
+        <form id="form-new-minutes" class="form-horizontal" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            {% include minutesTemplateForm %}
+            <table>
+                <tr>
+                    <td></td>
+                    <td>
+                        <a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn btn-large">
+                            <i class="icon-arrow-left"></i> Anterior
+                        </a>
+                        <button type="submit" class="btn btn-info btn-large">Guardar Acta</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <style type="text/css">
+            .tinymce-textareas{padding: 0;}
+            {%ifequal minutesTemplateForm "groups/minutesTemplates/minutesTemplate3.html" %}
+            #id_agreement_tbl, #id_agenda_tbl{
+                border: 0;
+                border-left: none;
+                border-right: none;
+            }
+            .defaultSkin .mceIframeContainer, .defaultSkin table.mceLayout tr.mceLast td {border-bottom: none;}
+            .defaultSkin table.mceLayout tr.mceFirst td {border-top:none;}
+            {%endifequal%}
+        </style>
+        
+    </div>
+</article>
+<span id="is_form" style="display:none">{{is_form}}</span>
+{% endblock%}
+{% block menu_content_style %}
+<style>
+    .form-horizontal table{margin: auto;width: auto;}
+    table td .btn{margin-top:10px;}
+    .member-list{padding: 10px 0;}
+    .member-list ul li{padding: 5px;}
+    .member-list ul li:hover{/*background-color: #dadada;*/}
+    label{cursor: pointer;}
+
+    #template-list{}
+    /*#template-list ul{display:inline-table;width: 100%}*/
+    #template-list ul li{border:solid thin #ccc;display:inline-block;font-size: 14px;margin-bottom:5px;text-align: center; width: 167px;}
+    #template-list ul li a{display: inline-block;}
+    .template-item{position: relative;}
+    .template-item-child{border: solid thin white; padding: 5px;}
+    .template-thumbnail{height: 160px;margin:0 auto;}
+    .template-thumbnail img{margin-top: 0}
+    .template-thumbnail:hover{cursor: pointer;}
+    .template-item-selected{background-color:rgb(240,255,240);border:solid thin #7bc779;}
+    .template-item-child-selected{border:solid thin #7bc779}
+</style>
+<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
+<style >
+    /*datetimepicker*/
+    .ui-timepicker-div .ui-widget-header { margin-bottom: 8px;}
+    .ui-timepicker-div dl { text-align: left; }
+    .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+    .ui-timepicker-div dl dd { margin: 0 10px 0 65px; padding: 0; }
+    .ui-timepicker-div td { font-size: 90%; }
+    .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+    .ui-timepicker-rtl{ direction: rtl; }
+    .ui-timepicker-rtl dl { text-align: right; }
+    .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+
+    div.ui-datepicker{
+     font-size:12px;
+     z-index: 9999 !important;
+    }
+    select{
+        width: 100%;
+    }
+    #social-buttons{width: 104px;}
+</style>
+<style>
+	.hoja{width: 70%;}
+	#sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
+	#minute, .minute{border: solid thin #ddd;background-color: #fff;box-shadow: 8px 8px 6px -6px gray;border-radius: 3px;}
+	.minute header{width: auto;margin:0;}
+	.minute > div{margin: 0 80px;}
+	.minute footer{border: none;bottom: 0;font-size: 14px;left: 0;margin:0;padding: 20px 40px;width: auto;}
+	.pager{margin: 5px auto;padding: 0;position: relative;top: 0;}
+	.minutes-form-btn{display:inline;}
+    section{margin-top: 0px;padding-top: 0 !important}
+</style>
+{%endblock%}
+
+{% block menu_content_js %}
+<script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
+<script>$("#menu-organizations").addClass("active")</script>
+<script src="{{STATIC_PREFIX}}js/vendor/jquery-ui-sliderAccess.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/jquery-ui-timepicker-addon.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
+<!-- <script src="{{STATIC_PREFIX}}js/textareas.js"></script> -->
+
+<script type="text/javascript" >
+   $(document).ready(function(){
+        $("#group-menu-folder").addClass("active");
+        $("#save-new-minutes").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $("#form-new-minutes").submit();
+        })
+        $('.date-pick').datetimepicker({
+            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            nextText: 'Siguiente',
+            prevText: 'Anterior',
+            currentText: "Ahora",
+            closeText: "Hecho",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+            controlType: 'select',
+            ampm: true
+        }).css({"z-index":"1034"});
+       // $('.date-pick').datetimepicker( "option", "currentText", "Ahora" );
+       url_s = location.pathname.split("/")
+	   $(".template_btn").click(function(){
+			//console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
+			window.location = "/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug')
+	   });
+       tinyMCE.init({
+            theme : "advanced",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,outdent,indent,|,undo,redo",
+            theme_advanced_buttons2 : "",
+            theme_advanced_buttons3 : "",
+            theme_advanced_path : false,
+            theme_advanced_statusbar_location : "none",
+            mode : "textareas",
+            height : "300",
+            width : "100%",
+            content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
+        });
+       // $("#template-list").modal("show");
+       $("#close-template-list").on("click",function(e){
+            e.preventDefault();
+            $("#template-list").modal("hide");
+       })
+
+       function setTemplateSelectedColors (elem) {
+           //reset selected items
+            $(".template-item").removeClass("template-item-selected");
+            // $(".template-item").css({"border": "solid thin #ccc", "background-color":"white"});
+            $(".template-item-child").removeClass("template-item-child-selected");
+            // $(".template-item-child").css({"border": "solid thin white"});
+
+            //set border and background to selected item
+            $(elem).parent().parent().addClass("template-item-selected");
+            $(elem).parent().addClass("template-item-child-selected");
+       }
+
+       $(".template-thumbnail").on("click",function(e){
+            e.preventDefault();
+            setTemplateSelectedColors($(this));
+            var href = $(this).attr("data-href");
+            $("#change-template").attr("href",href);
+       })
+	});
+</script>
+{% include minutesTemplateJs %}
+ 
+{% endblock %}

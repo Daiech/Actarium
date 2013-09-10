@@ -1,0 +1,198 @@
+{% extends "groups/menu.html" %}
+{% block TITLE %}Acta {{minutes.code}} Grupo {{minutes.id_group.name}} {% endblock %}
+{% load gravatartag %}
+{% load i18n %}
+
+{% block toolbar_content %}
+<ul class="unstyled">
+	<li>
+		<a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
+	            <i class="icon-plus"></i> {% trans "Crear acta" %}
+	        </a>
+	</li>
+    <li>
+        <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
+            <i class="icon-upload"></i> {% trans "Subir acta" %}
+        </a>
+    </li>
+	{% if is_secretary and not minutes.is_full_signed%}
+    <li>
+		<a href="#" class="" id="minutes-edit"><i class="icon-pencil"></i> Editar Acta</a>
+    </li>
+	{%endif%}
+	{%if minutes_version%}
+    <li>
+		<a href="#" id="history" class="">Historial de cambios ({{minutes_version|length}})</a>
+    </li>
+	{%endif%}
+    <li>
+    	<form id="pdf-form" method="post" class="">
+			{% csrf_token %}
+			<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
+			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" {%if not minutes.is_full_signed%}title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="icon-file"></i> Generar PDF</a>
+		</form>
+    </li>
+    <li class="pull-right">
+		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}"><i class="icon-arrow-right"></i></a>
+    </li>
+    <li class="pull-right">
+		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}"><i class="icon-arrow-left"></i></a>
+    </li>
+</ul>
+{% endblock %}
+
+{%block menu_content%}
+<article>
+    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
+    	<p>Historial de versiones:</p>
+    	{%for minutes in minutes_version%}
+    		{{minutes.full_html|safe}}
+    		<hr>
+    	{%endfor%}
+    </div>
+    <div id="minutes-container">
+    {{minute_template}}
+    </div>
+
+	{% include "groups/siteToApprove.html" %}
+	
+</article>
+<span id="is_form" style="display:none">{{is_form}}</span>
+{%endblock%}
+{% block menu_content_js %}
+<script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/waypoints.min.js"></script>
+<script>
+	$(document).on("ready",function(){
+		$("#group-menu-folder").addClass("active");
+		$("#btn-generate-pdf").on("click", function (e) {
+			e.preventDefault();
+			e.preventDefault();
+			{%if minutes.is_full_signed%}
+			$("#pdf-form").submit();
+			{%endif%}
+		}).tooltip();
+		$(".btn-approve").on("click", setApprove);
+		$(".btn-no-approve").on("click", newAnnotation);
+		$("#button-save").on("click", saveAnnotation);
+		$('#minutes-html-data').val($('#minutes').html());
+
+		$("#history").on("click", function (e) {
+			e.preventDefault();
+			$("#minutes-version").slideToggle();
+		})
+
+		{% if is_secretary %}
+		$("#minutes-edit").on("click", function (e) {
+			if(confirm("Seguro que desea editar esta Acta?")){
+				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/{{minutes.id_template.slug}}"
+			}
+		})
+		{% endif %}
+		if(window.location.hash){
+			console.log(window.location.hash);
+			$(window.location.hash+" > div").addClass("selected-annontation");
+		}
+	});
+	function callBackApprove(data){
+		console.log(data.signs)
+		$("#div-sign").fadeOut(300,function(){$(this).empty()});
+		var u = $("#missing-"+data["user-id"]);
+		if(data['approved']==1){
+			u.find("div.icon-approver-status").html('<i class="icon-ok"></i>');
+			setAlertMessage("Aprobado!", "Haz aprobado esta acta.");
+		}
+	}
+	function setApprove(e){
+		e.preventDefault();
+		$(this).attr({"disabled":"disabled"});
+		var minutes_id = $(this).attr("data-minutes");
+		var is_approved = parseInt($(this).attr("data-approve"));
+		sendAjax(
+			"/groups/setApprove",
+			{"m_id":minutes_id, "approve": is_approved},
+			"#btn-sign span",
+			callBackApprove
+		);
+	}
+	function goToByScroll(element, callback){// Scroll
+	    $('html,body').animate({
+	        scrollTop: $(element).offset().top - 100},
+	        'slow', callback);
+	}
+	function newAnnotation(e){
+		e.preventDefault(e);
+		tinyMCE.init({
+	        theme : "simple",
+	        mode : "textareas",
+	        height : "80",
+	        width : "100%",
+	        content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
+		});
+		$("#new-annotation").removeClass("hidden");
+		goToByScroll("#new-annotation", function(){
+			$("#new-annotation textarea").focus();
+			tinyMCE.get('textarea-new-annotation').focus();
+		}
+		);
+	}
+	function saveAnnotation(e){
+		var t = tinymce.get('textarea-new-annotation').getContent();
+		var username = "{{user.first_name}} {{user.last_name}}";
+		var gravatar = "{{ user.email|showgravatar:'32'}}";
+		/*
+		USAR TEMPLATES: MUSTACHE
+		*/
+		var params = {"annotation": t, "minutes_id": {{minutes.id}}}
+		sendAjax("/groups/{{group.slug}}/add-new-annotation",params,"", function(data){
+			if(data){
+				// console.log(data)
+				var m = '<div class="annotation bb">\
+								<div class="user-gravatar pull-left">\
+									<img class="size32 avatar" src="' + gravatar + '" alt="' + username + '" />\
+								</div>\
+								<div class="name-user-annotation">\
+									<strong>' + username + '</strong>\
+									· <time>Ahora mismo</time>\
+								</div>\
+								<div class="content-annotation">'+
+									t +
+								'</div>\
+						</div>';
+				$("#annotations").prepend("<li>" + m + "</li>");
+				tinymce.get('textarea-new-annotation').setContent("");
+			}
+			else{
+				setAlertError("Error", "Algo ocurri&oacute;");
+			}
+		});
+	}
+</script>
+{% include minutesTemplateJs %}
+{% endblock %}
+
+{% block menu_content_style%}
+<style>
+	.selected-annontation{background-color: rgb(240, 240, 240);;}
+	.content-annotation{margin-left: 40px}
+	.comment-annotation p{font-size: 14px;}
+	.name-user-annotation{margin-left: 40px}
+	.name-user-annotation time{font-size: 14px;color: gray}
+	.annotation{padding: 10px;}
+	ul#annotations > li > div{margin-top: 25px;}
+	#button-save{margin-top: 5px;}
+	article header img{margin-top: 10px;}
+	#annotations-approve{margin-top: 20px;}
+	#commission-approving-list > li > div{display: inline;}
+	.icon-approver-status i{margin-top: 5px}
+	#body-container > article{margin-top:0;padding-top: 0;}
+	#minutes-bar{background-color: rgb(251, 251, 251); padding: 5px 0;position: absolute;left: 0;width:100%;margin-top: 0px;}
+	#minutes-bar-hoja{width: 75%;}
+	.header-minutes{background-color: rgb(251, 251, 251); padding: 15px 0;position: absolute;left: 0;width: 100%;margin: 0;}
+	.header-minutes > div{margin: 0 auto;margin-bottom: 8px;width: 90%;}
+	.minutes-bar-static{position: fixed;top: 70px;left: 0;}
+	#minutes-container > section{margin-top: 0px;padding-top: 0 !important}
+	#minutes{padding-right: 0;padding-left: 0;}
+	#toolbar-btn > ul > li > form{margin: 0}
+</style>
+{% endblock %}
