@@ -5,7 +5,7 @@ groups_urls = patterns('groups.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/team$', 'showTeamGroup', name="show_team"),
     url(r'^(?P<slug_group>[-\w]+)/folder$', 'showFolderGroup', name="show_folder"),
     url(r'^(?P<slug_group>[-\w]+)/calendar$', 'showCalendarGroup', name="show_calendar"),
-    url(r'^(?P<slug_group>[-\w]+)/home$', 'showHomeGroup', name="show_home"),
+    url(r'^(?P<slug_group>[-\w]+)/', 'showHomeGroup', name="show_home"),
 )
 groups_urls += patterns(
     '',
@@ -40,6 +40,6 @@ groups_urls += patterns(
     url(r'^setApprove$', 'groups.minutes.setMinutesApprove'),
     url(r'^acceptInvitation$', 'groups.views.acceptInvitation'),
     url(r'^(?P<slug_group>[-\w]+)/deleteInvitation$', 'groups.views.deleteInvitation'),
-    url(r'^(?P<slug>[-\w]+)', 'groups.views.showGroup'),
+    url(r'^(?P<slug>[-\w]+)$', 'groups.views.showGroup'),
     url(r'^$', 'groups.views.groupsList'),
 )

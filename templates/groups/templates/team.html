@@ -39,186 +39,188 @@
 
 {% block menu_content %}
 	<!-- begin -->
-	<h3>Roles de usuario</h3>
-	<p>Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles.</p>
-	<div class="">
-		{% if is_admin %}
-		<form class="form-horizontal" enctype="multipart/form-data" method="POST">
-			{% csrf_token %}
-		{% endif %}
-			<section class="">
-				<table id="table-roles" class="table table-bordered table-hover">
-					<tr>
-						<th class="td-first">
-							<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-								Usuarios del grupo
-							</div>
-						</th>
-						<th>
-							<div class="info-title" title="Personas que aparecen en la lista de las actas">
-								<i class="icon-user"></i>
-								<span class="th-name">Miembro</span>
-							</div>
-						</th>
-						<th>
-							<div class="info-title" title="Personas encargadas de crear actas">
-								<i class="icon-pencil"></i>
-								<span class="th-name">Redactor</span>
-							</div>
-						</th>
-						<th>
-							<div class="info-title" title="Personas que pueden convocar reuniones">
-								<i class="icon-calendar"></i> 
-								<span class="th-name">Convocador</span>
-							</div>
-						</th>
-						<th>
-							<div class="info-title" title="Personas encargadas de administrar el grupo">
-								<i class="icon-wrench"></i> 
-								<span class="th-name">Administrador</span>
-							</div>
-						</th>
-					</tr>
-					{% for m in members %}
-					<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
-						<td class="td-first">
-							<div class="td-info-user">
-								<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
-								{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
-			                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
-			                        <span class="names">
-			                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
-			                        </span>
-			                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
-			                    </div>
-			                    <!-- comienza -->
+	<div class="white-box-container">
+		<h3>Roles de usuario</h3>
+		<p>Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles.</p>
+		<div class="">
+			{% if is_admin %}
+			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
+				{% csrf_token %}
+			{% endif %}
+				<section class="">
+					<table id="table-roles" class="table table-bordered table-hover">
+						<tr>
+							<th class="td-first">
+								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
+									Usuarios del grupo
+								</div>
+							</th>
+							<th>
+								<div class="info-title" title="Personas que aparecen en la lista de las actas">
+									<i class="icon-user"></i>
+									<span class="th-name">Miembro</span>
+								</div>
+							</th>
+							<th>
+								<div class="info-title" title="Personas encargadas de crear actas">
+									<i class="icon-pencil"></i>
+									<span class="th-name">Redactor</span>
+								</div>
+							</th>
+							<th>
+								<div class="info-title" title="Personas que pueden convocar reuniones">
+									<i class="icon-calendar"></i> 
+									<span class="th-name">Convocador</span>
+								</div>
+							</th>
+							<th>
+								<div class="info-title" title="Personas encargadas de administrar el grupo">
+									<i class="icon-wrench"></i> 
+									<span class="th-name">Administrador</span>
+								</div>
+							</th>
+						</tr>
+						{% for m in members %}
+						<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
+							<td class="td-first">
+								<div class="td-info-user">
+									<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
+									{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
+				                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
+				                        <span class="names">
+				                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
+				                        </span>
+				                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
+				                    </div>
+				                    <!-- comienza -->
+									{% if is_admin %}
+				                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
+				                    	<a href="#"><i class="icon-cog"></i></a>
+				                    </div>
+				                    <div class="dropdown-container">
+			                    		<div class="header-title">
+				                        	<span>Configuraci&oacute;n</span>
+				                        	<div class="close close-popover icon-remove"></div>
+				                    	</div>
+				                    	<div class="dropdown-body">
+				                    		<div>
+				                    			<strong>
+				                    				{{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}} ({{m.id_user}}):
+				                    			</strong>
+				                    		</div>
+				                    		<div class="first-menu">	
+				                    			<ul class="configuration-list">
+				                    				{%if not m.is_active%}
+				                    				<li>
+				                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
+				                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> Reenviar invitaci&oacute;n
+				                    					</a>
+				                    				</li>
+				                    				{%if not m.id_user.is_active%}
+				                    				<li>
+				                    					<a href="#change-names">
+				                    						<i class="icon-edit"></i> Cambiar nombres
+				                    					</a>
+				                    				</li>
+				                    				{%endif%}
+				                    				{%endif%}
+				                    				<li>
+				                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
+				                    						<i class="icon-remove"></i> Eliminar de grupo
+				                    					</a>
+				                    				</li>
+				                    			</ul>
+				                    		</div>
+				                    		{%if not m.is_active%}
+		                					<div class="second-menu">
+		                						<div class="">
+		                							<label>
+		                								Nombres:
+		                								<input class="first-element first-name" type="text" placeholder="Nombres" value="{{m.id_user.first_name|capfirst}}">
+		                							</label>
+		                							<label>
+		                								Apellidos:
+		                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
+		                							</label>
+						                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> Regresar</a>
+		                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
+		                						</div>
+		                					</div>
+		                					{%endif%}
+				                    	</div>
+				                    </div>
+									{%endif%}
+				                    <!-- termina -->
+								</div>
+							</td>
+							<td class="t-a-c">
+								<label for="member{{m.id_user.id}}">
 								{% if is_admin %}
-			                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
-			                    	<a href="#"><i class="icon-cog"></i></a>
-			                    </div>
-			                    <div class="dropdown-container">
-		                    		<div class="header-title">
-			                        	<span>Configuraci&oacute;n</span>
-			                        	<div class="close close-popover icon-remove"></div>
-			                    	</div>
-			                    	<div class="dropdown-body">
-			                    		<div>
-			                    			<strong>
-			                    				{{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}} ({{m.id_user}}):
-			                    			</strong>
-			                    		</div>
-			                    		<div class="first-menu">	
-			                    			<ul class="configuration-list">
-			                    				{%if not m.is_active%}
-			                    				<li>
-			                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
-			                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> Reenviar invitaci&oacute;n
-			                    					</a>
-			                    				</li>
-			                    				{%if not m.id_user.is_active%}
-			                    				<li>
-			                    					<a href="#change-names">
-			                    						<i class="icon-edit"></i> Cambiar nombres
-			                    					</a>
-			                    				</li>
-			                    				{%endif%}
-			                    				{%endif%}
-			                    				<li>
-			                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
-			                    						<i class="icon-remove"></i> Eliminar de grupo
-			                    					</a>
-			                    				</li>
-			                    			</ul>
-			                    		</div>
-			                    		{%if not m.is_active%}
-	                					<div class="second-menu">
-	                						<div class="">
-	                							<label>
-	                								Nombres:
-	                								<input class="first-element first-name" type="text" placeholder="Nombres" value="{{m.id_user.first_name|capfirst}}">
-	                							</label>
-	                							<label>
-	                								Apellidos:
-	                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
-	                							</label>
-					                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> Regresar</a>
-	                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
-	                						</div>
-	                					</div>
-	                					{%endif%}
-			                    	</div>
-			                    </div>
+									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
+								{% else %}
+								{%if m.is_member%}<i class="icon-ok"></i>{% endif%}
 								{%endif%}
-			                    <!-- termina -->
-							</div>
-						</td>
-						<td class="t-a-c">
-							<label for="member{{m.id_user.id}}">
-							{% if is_admin %}
-								<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
-							{% else %}
-							{%if m.is_member%}<i class="icon-ok"></i>{% endif%}
-							{%endif%}
-							</label>
-						</td>
-						<td class="t-a-c">
-							<label for="writer{{m.id_user.id}}">
-							{% if is_admin %}
-								<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
-							{% else %}
-							{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
-							{%endif%}
-							</label>
-						</td>
-						<td class="t-a-c">
-							<label for="convener{{m.id_user.id}}">
-							{% if is_admin %}
-								<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}> 
-							{% else %}
-							{%if m.is_convener%}<i class="icon-ok"></i>{% endif%}
-							{%endif%}
-							</label>
-						</td>
-						<td class="t-a-c">
-							<label for="admin{{m.id_user.id}}">
-							{% if is_admin %}
-								<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
-							{% else %}
-							{%if m.is_admin%}<i class="icon-ok"></i>{% endif%}
-							{%endif%}
-							</label>
-						</td>
-					</tr>
-	                {%endfor%}
-				</table>
-				<div class="icons-info">
-	                <span>Info:</span>
-	                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> Miembro</span>
-	                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
-	                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> Convocador de reuniones</span>
-	                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-	                <span class="user-pend-l"> Usuarios pendientes</span>
-	            </div>
-			</section>
-		{% if is_admin %}
-		</form>
-		{% endif %}
-	</div>
-	<div id="new-user-template" style="display:none">
-		{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-		<li>
-			<div class="">
-				<label for="new-user-firstname">Nombres y Apellidos</label>
-				<input id="new-user-firstname" type="text" placeholder="Nombres" value="[[username]]">
-				<input id="new-user-lastname" type="text" placeholder="Apellidos">
-				<input id="new-user-email" type="hidden" value="[[mail]]">
-				<input id="new-user-uname" type="hidden" value="[[username]]">
-			</div>
-		</li>
-		<li>
-			<button id="add-new-user" class="btn btn-info btn-large">Enviar invitaci&oacute;n</button>
-		</li>
+								</label>
+							</td>
+							<td class="t-a-c">
+								<label for="writer{{m.id_user.id}}">
+								{% if is_admin %}
+									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
+								{% else %}
+								{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
+								{%endif%}
+								</label>
+							</td>
+							<td class="t-a-c">
+								<label for="convener{{m.id_user.id}}">
+								{% if is_admin %}
+									<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}> 
+								{% else %}
+								{%if m.is_convener%}<i class="icon-ok"></i>{% endif%}
+								{%endif%}
+								</label>
+							</td>
+							<td class="t-a-c">
+								<label for="admin{{m.id_user.id}}">
+								{% if is_admin %}
+									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
+								{% else %}
+								{%if m.is_admin%}<i class="icon-ok"></i>{% endif%}
+								{%endif%}
+								</label>
+							</td>
+						</tr>
+		                {%endfor%}
+					</table>
+					<div class="icons-info">
+		                <span>Info:</span>
+		                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> Miembro</span>
+		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+		                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> Convocador de reuniones</span>
+		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
+		                <span class="user-pend-l"> Usuarios pendientes</span>
+		            </div>
+				</section>
+			{% if is_admin %}
+			</form>
+			{% endif %}
+		</div>
+		<div id="new-user-template" style="display:none">
+			{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+			<li>
+				<div class="">
+					<label for="new-user-firstname">Nombres y Apellidos</label>
+					<input id="new-user-firstname" type="text" placeholder="Nombres" value="[[username]]">
+					<input id="new-user-lastname" type="text" placeholder="Apellidos">
+					<input id="new-user-email" type="hidden" value="[[mail]]">
+					<input id="new-user-uname" type="hidden" value="[[username]]">
+				</div>
+			</li>
+			<li>
+				<button id="add-new-user" class="btn btn-info btn-large">Enviar invitaci&oacute;n</button>
+			</li>
 
+		</div>
 	</div>
 	<!-- end -->
 {% endblock %}
