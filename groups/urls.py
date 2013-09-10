@@ -40,6 +40,6 @@ groups_urls += patterns(
     url(r'^setApprove$', 'groups.minutes.setMinutesApprove'),
     url(r'^acceptInvitation$', 'groups.views.acceptInvitation'),
     url(r'^(?P<slug_group>[-\w]+)/deleteInvitation$', 'groups.views.deleteInvitation'),
-    url(r'^(?P<slug>[-\w]+)$', 'groups.views.showGroup'),
+    # url(r'^(?P<slug>[-\w]+)$', 'groups.views.showGroup'),
     url(r'^$', 'groups.views.groupsList'),
 )

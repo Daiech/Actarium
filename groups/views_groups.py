@@ -7,7 +7,7 @@ from django.utils import simplejson as json
 
 from django.contrib.auth.models import User
 from groups.views import getGroupBySlug, getRelUserGroup
-from groups.models import rel_user_group
+from groups.models import *
 from actions_log.views import saveActionLog, saveViewsLog
 
 
@@ -50,15 +50,40 @@ def showTeamGroup(request, slug_group):
 
 def showFolderGroup(request, slug_group):
     g = getGroupBySlug(slug_group)
-    ctx = {
-        "group": g
-    }
-    return render_to_response("groups/templates/folder.html", ctx, context_instance=RequestContext(request))
+    _user = getRelUserGroup(request.user, g)
+    if _user:
+        if _user.is_active:
+            minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
+            m = list()
+            from groups.minutes import getRolUserMinutes
+            for _minutes in minutes_group:
+                m.append({
+                    "minutes": _minutes,
+                    "rol": getRolUserMinutes(request.user, g, id_minutes=_minutes)
+                })
+            if request.method == "GET":
+                try:
+                    # Say if the user can upload minutes
+                    no_redactor = request.GET['no_redactor']
+                except Exception:
+                    no_redactor = 0
+            ctx = {
+                "group": g, "current_member": _user, "minutes": m,
+                'no_redactor': no_redactor}
+            return render_to_response("groups/templates/folder.html", ctx, context_instance=RequestContext(request))
+        return HttpResponseRedirect('/groups/#you-are-not-active')
+    return HttpResponseRedirect('/groups/#error-view-group')
 
 
 def showCalendarGroup(request, slug_group):
     g = getGroupBySlug(slug_group)
-    ctx = {
-        "group": g
-    }
-    return render_to_response("groups/templates/calendar.html", ctx, context_instance=RequestContext(request))
+    _user = getRelUserGroup(request.user, g)
+    if _user:
+        if _user.is_active:
+            _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
+            ctx = {
+                "group": g, "current_member": _user, "reunions": _reunions,
+            }
+            return render_to_response("groups/templates/calendar.html", ctx, context_instance=RequestContext(request))
+        return HttpResponseRedirect('/groups/#you-are-not-active')
+    return HttpResponseRedirect('/groups/#error-view-group')

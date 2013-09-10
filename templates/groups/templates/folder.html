@@ -1,20 +1,93 @@
 {% extends "groups/menu.html" %}
+{% load i18n %}
+
 {% block toolbar_content %}
-folder
+<ul class="unstyled">
+	<li>
+		<a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+	            <i class="icon-plus"></i> Crear acta
+	        </a>
+	</li>	
+</ul>
 {% endblock %}
 
 {% block menu_content %}
-contenido
+<div class="white-box-container">
+    <header class="span6">
+        <h4 class="">Listado de Actas</h4>
+    </header>
+    <div class="t-a-r button-group">
+        {%if is_pro%}
+        <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+            <i class="icon-upload"></i> Subir acta
+        </a>
+        {%endif%}
+    </div>
+    <hr>
+    <ul class="unstyled minutes-list">
+        {%for minute in minutes%}
+            {%if current_member.is_admin or minute.rol.is_approver or minute.minutes.is_full_signed%}
+            <li title="{%if minute.minutes.is_full_signed%}
+                    Esta Acta ha sido aprobada y es visible a todo el grupo {{group.name}}
+                {%else%}
+                    {%if minute.rol.is_approver%}Debes aprobar esta Acta para ser publicada
+                    {%else%}Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.
+                {%endif%}
+            {%endif%}" class="list-item-minutes {%if minute.minutes.is_full_signed%}user-active-l
+            {%else%}
+                {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
+            {%endif%}">
+                <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.minutes.code}}">
+                    {{minute.minutes.code}}
+                    <span class="date-minute-created" style="display:none"> creada el {{minute.minutes.date_created|date}}</span>
+                </a>
+            </li>
+            {% endif %}
+        {%endfor%}
+        {%if minutes%}
+        <div class="icons-info">
+            <span>Info:</span>
+            <span class="user-active-l" title="Actas que han sido aprobadas por la comisi&oacute;n aprobatoria del Acta">Actas aprobadas y publicadas</span>
+            <span class="user-pend-l" title="Actas que necesitan tu aprobaci&oacute;n">Actas sin tu aprobaci&oacute;n</span>
+            <span class="minute-no-approver-l" title="Puedes ver porque eres administrador del grupo">Actas sin aprobar</span>
+        </div>
+        {%else%}
+        <li>Este grupo no tiene actas</li>
+        {%endif%}
+    </ul>
+    
+</div>
 {% endblock %}
 
 {% block menu_content_js %}
 <script type="text/javascript">
-	$("#group-menu-folder").addClass("active");
+    $(document).on("ready",function(){
+		$("#group-menu-folder").addClass("active");
+        $("i, .list-members a, span, .member-pic, .title-on-disabled, .minutes-list li").tooltip();
+        $(".list-item-minutes").hover(function(){
+            $(this).find(".date-minute-created").fadeIn("fast");
+        }, function(){
+            $(this).find(".date-minute-created").fadeOut("fast");
+        })
+	});
 </script>
 {% endblock %}
 
 {% block menu_content_style %}
 <style type="text/css">
+.list-item{position: relative;margin: 3px 0;}
+    .list-item-minutes{position: relative;margin: 1px 0;padding: 5px;background-color: rgb(248, 248, 248)}
+    .list-item-minutes > a{display: block;}
+    .list-item-minutes:hover{background-color: #eee}
+    /*.list-item-next{padding: 8px;border-radius: 0px}*/
+    .list-item-next{border-radius: 0px}
+    .list-item > a{border:solid thin #fff;display:block;}
+    /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
+    .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
+    /*.list-item div:hover{border:solid thin #ddd;background-color: #eee}*/
+    .minutes-list{min-height: 200px;}
+    #minutes-section{min-height: 354px;}
+    .date-minute-created{color: #777;text-align: right;float:right}
 </style>
 {% endblock %}
 

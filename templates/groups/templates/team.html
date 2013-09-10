@@ -1,47 +1,50 @@
 {% extends "groups/menu.html" %}
 {% load gravatartag %}
+{% load i18n %}
 
 {% block toolbar_content %}
 {% if is_admin %}
-<li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
-        <i class="icon-plus"></i> Agregar miembro
-        <span class="caret"></span>
-    </a>
-    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-        <li class="taling">
-        	<div class="header-title">
-            	<span>Miembros</span>
-            	<div id="close-add-member" class="close pull-right icon-remove"></div>
-        	</div>
-        </li>
-        <li>
-            <input type="hidden" id="group_name" value="{{group.name}}">
-            <input type="hidden" id="group_id" value="{{group.id}}">
-        	<div class="prelative">
-                <button id="button-search" class="btn btn-info"><i class="icon-search icon-white"></i> </button>
-                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-                <span id="load-member"></span>
-            </div>	
-        </li>
-        <li>
-            <p id="message-search"></p>
-        </li>
-        <li>
-            <ul id="search-result">
-            	
-            </ul>
-        </li>
-    </ul>
-</li>
+<ul class="unstyled">
+	<li class="dropdown">
+	    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
+	        <i class="icon-plus"></i> {% trans "Agregar miembro" %}
+	        <span class="caret"></span>
+	    </a>
+	    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	        <li class="taling">
+	        	<div class="header-title">
+	            	<span>{% trans "Miembros" %}</span>
+	            	<div id="close-add-member" class="close pull-right icon-remove"></div>
+	        	</div>
+	        </li>
+	        <li>
+	            <input type="hidden" id="group_name" value="{{group.name}}">
+	            <input type="hidden" id="group_id" value="{{group.id}}">
+	        	<div class="prelative">
+	                <button id="button-search" class="btn btn-info"><i class="icon-search icon-white"></i> </button>
+	                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+	                <span id="load-member"></span>
+	            </div>	
+	        </li>
+	        <li>
+	            <p id="message-search"></p>
+	        </li>
+	        <li>
+	            <ul id="search-result">
+	            	
+	            </ul>
+	        </li>
+	    </ul>
+	</li>
+</ul>
 {%endif%}
 {% endblock %}
 
 {% block menu_content %}
 	<!-- begin -->
 	<div class="white-box-container">
-		<h3>Roles de usuario</h3>
-		<p>Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles.</p>
+		<h3>{% trans "Roles de usuario" %}</h3>
+		<p>{% trans "Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles." %}</p>
 		<div class="">
 			{% if is_admin %}
 			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
@@ -52,31 +55,31 @@
 						<tr>
 							<th class="td-first">
 								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-									Usuarios del grupo
+									{% trans "Usuarios del grupo" %}
 								</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas que aparecen en la lista de las actas">
 									<i class="icon-user"></i>
-									<span class="th-name">Miembro</span>
+									<span class="th-name">{% trans "Miembro" %}</span>
 								</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas encargadas de crear actas">
 									<i class="icon-pencil"></i>
-									<span class="th-name">Redactor</span>
+									<span class="th-name">{% trans "Redactor" %}</span>
 								</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas que pueden convocar reuniones">
 									<i class="icon-calendar"></i> 
-									<span class="th-name">Convocador</span>
+									<span class="th-name">{% trans "Convocador" %}</span>
 								</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas encargadas de administrar el grupo">
 									<i class="icon-wrench"></i> 
-									<span class="th-name">Administrador</span>
+									<span class="th-name">{% trans "Administrador" %}</span>
 								</div>
 							</th>
 						</tr>
@@ -99,7 +102,7 @@
 				                    </div>
 				                    <div class="dropdown-container">
 			                    		<div class="header-title">
-				                        	<span>Configuraci&oacute;n</span>
+				                        	<span>{% trans "Configuraci&oacute;n" %}</span>
 				                        	<div class="close close-popover icon-remove"></div>
 				                    	</div>
 				                    	<div class="dropdown-body">
@@ -113,20 +116,20 @@
 				                    				{%if not m.is_active%}
 				                    				<li>
 				                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
-				                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> Reenviar invitaci&oacute;n
+				                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
 				                    					</a>
 				                    				</li>
 				                    				{%if not m.id_user.is_active%}
 				                    				<li>
 				                    					<a href="#change-names">
-				                    						<i class="icon-edit"></i> Cambiar nombres
+				                    						<i class="icon-edit"></i> {% trans "Cambiar nombres" %}
 				                    					</a>
 				                    				</li>
 				                    				{%endif%}
 				                    				{%endif%}
 				                    				<li>
 				                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
-				                    						<i class="icon-remove"></i> Eliminar de grupo
+				                    						<i class="icon-remove"></i> {% trans "Eliminar de grupo" %}
 				                    					</a>
 				                    				</li>
 				                    			</ul>
@@ -135,14 +138,14 @@
 		                					<div class="second-menu">
 		                						<div class="">
 		                							<label>
-		                								Nombres:
+		                								{% trans "Nombres" %}:
 		                								<input class="first-element first-name" type="text" placeholder="Nombres" value="{{m.id_user.first_name|capfirst}}">
 		                							</label>
 		                							<label>
-		                								Apellidos:
+		                								{% trans "Apellidos" %}:
 		                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
 		                							</label>
-						                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> Regresar</a>
+						                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> {% trans "Regresar" %}</a>
 		                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
 		                						</div>
 		                					</div>
@@ -193,12 +196,12 @@
 		                {%endfor%}
 					</table>
 					<div class="icons-info">
-		                <span>Info:</span>
-		                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> Miembro</span>
-		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
-		                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> Convocador de reuniones</span>
-		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-		                <span class="user-pend-l"> Usuarios pendientes</span>
+		                <span>{% trans "Info" %}:</span>
+		                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> {% trans "Miembro" %}</span>
+		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> {% trans "Redactor" %}</span>
+		                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> {% trans "Convocador de reuniones" %}</span>
+		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> {% trans "Administrador" %}</span>
+		                <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span>
 		            </div>
 				</section>
 			{% if is_admin %}
@@ -209,7 +212,7 @@
 			{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
 			<li>
 				<div class="">
-					<label for="new-user-firstname">Nombres y Apellidos</label>
+					<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
 					<input id="new-user-firstname" type="text" placeholder="Nombres" value="[[username]]">
 					<input id="new-user-lastname" type="text" placeholder="Apellidos">
 					<input id="new-user-email" type="hidden" value="[[mail]]">
@@ -217,7 +220,7 @@
 				</div>
 			</li>
 			<li>
-				<button id="add-new-user" class="btn btn-info btn-large">Enviar invitaci&oacute;n</button>
+				<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
 			</li>
 
 		</div>

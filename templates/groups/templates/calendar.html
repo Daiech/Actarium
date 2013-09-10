@@ -1,10 +1,47 @@
 {% extends "groups/menu.html" %}
+{% load i18n %}
+
 {% block toolbar_content %}
-calendar
 {% endblock %}
 
 {% block menu_content %}
-contenido
+<div class="white-box-container">
+    <header class="span6">
+        <h4>{% trans "Reuniones" %}</h4>
+    </header>
+    <div class="t-a-r button-group">
+        <a href="{%if current_member.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_convener%}disabled{%endif%}" {%if not current_member.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
+            <i class="icon-calendar"></i> Convocar Reuni&oacute;n
+        </a>
+    </div>
+    <hr>
+    <ul class="unstyled">
+        {%if reunions%}
+        <li><strong>{% trans "Pr&oacute;ximas" %}:</strong></li>
+            {%for r in reunions%}
+                {% if r.date_reunion|date:"Y-d-m" >= now_|date:"Y-d-m" %}
+                    <li class="list-item">
+                        <div class="ml10 list-item-next">
+                            {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                        </div>
+                    </li>
+                {%endif%}
+            {%endfor%}
+            <li class="mt20"><strong>{% trans "Anteriores" %}:</strong> </li>
+            {%for r in reunions%}
+                {% if r.date_reunion|date:"Y-d-m" < now_|date:"Y-d-m" %}
+                    <li class="list-item">
+                        <div class="ml10 list-item-next">
+                            {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                        </div>
+                    </li>
+                {%endif%}
+            {%endfor%}
+        {%else%}
+        <li>{% trans "No hay reuniones para este grupo" %}</li>
+        {%endif%}
+    </ul>
+</div>
 {% endblock %}
 
 {% block menu_content_js %}

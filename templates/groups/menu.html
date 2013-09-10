@@ -8,9 +8,7 @@
 	    <div id="toolbar-group" class="">
     		<div id="menu-title" class="pull-right">{% trans "Menu Principal" %}</div>
 	    	<div id="toolbar-btn" class="">
-	    		<ul class="unstyled">
 	    		{% block toolbar_content %}{% endblock %}
-				</ul>
 	    	</div>
 	    </div>
     </header>
@@ -79,7 +77,6 @@
 				//   	div.text("Calendario de reuniones");
 				//  	break;
 				case "#settings":
-				  	div.text("Abrir menu");
 				  	$("#group-settings-submenu").slideToggle("fast");
 				  	if ( $("#icon-chevron").hasClass("icon-chevron-down") ){
 				  		$("#icon-chevron").removeClass("icon-chevron-down");
