@@ -87,3 +87,7 @@ def showCalendarGroup(request, slug_group):
             return render_to_response("groups/templates/calendar.html", ctx, context_instance=RequestContext(request))
         return HttpResponseRedirect('/groups/#you-are-not-active')
     return HttpResponseRedirect('/groups/#error-view-group')
+
+
+def showMinuteGroup(request, slug_group, minutes_code):
+    pass

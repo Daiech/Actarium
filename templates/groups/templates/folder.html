@@ -4,40 +4,38 @@
 {% block toolbar_content %}
 <ul class="unstyled">
 	<li>
-		<a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
-	            <i class="icon-plus"></i> Crear acta
+		<a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
+	            <i class="icon-plus"></i> {% trans "Crear acta" %}
 	        </a>
-	</li>	
+	</li>
+    <li>
+        <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
+            <i class="icon-upload"></i> {% trans "Subir acta" %}
+        </a>
+    </li>
 </ul>
 {% endblock %}
 
 {% block menu_content %}
 <div class="white-box-container">
-    <header class="span6">
-        <h4 class="">Listado de Actas</h4>
+    <header class="">
+        <h4 class="">{% trans "Folder de Actas" %}</h4>
     </header>
-    <div class="t-a-r button-group">
-        {%if is_pro%}
-        <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
-            <i class="icon-upload"></i> Subir acta
-        </a>
-        {%endif%}
-    </div>
     <hr>
     <ul class="unstyled minutes-list">
         {%for minute in minutes%}
             {%if current_member.is_admin or minute.rol.is_approver or minute.minutes.is_full_signed%}
             <li title="{%if minute.minutes.is_full_signed%}
-                    Esta Acta ha sido aprobada y es visible a todo el grupo {{group.name}}
+                    {% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo {{group.name}}' %}
                 {%else%}
-                    {%if minute.rol.is_approver%}Debes aprobar esta Acta para ser publicada
-                    {%else%}Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.
+                    {%if minute.rol.is_approver%}{% trans 'Debes aprobar esta Acta para ser publicada' %}
+                    {%else%}{% trans 'Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}
                 {%endif%}
             {%endif%}" class="list-item-minutes {%if minute.minutes.is_full_signed%}user-active-l
             {%else%}
                 {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
             {%endif%}">
-                <a class="list-item-next" href="/groups/{{group.slug}}/minutes/{{minute.minutes.code}}">
+                <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}">
                     {{minute.minutes.code}}
                     <span class="date-minute-created" style="display:none"> creada el {{minute.minutes.date_created|date}}</span>
                 </a>
@@ -46,13 +44,13 @@
         {%endfor%}
         {%if minutes%}
         <div class="icons-info">
-            <span>Info:</span>
-            <span class="user-active-l" title="Actas que han sido aprobadas por la comisi&oacute;n aprobatoria del Acta">Actas aprobadas y publicadas</span>
-            <span class="user-pend-l" title="Actas que necesitan tu aprobaci&oacute;n">Actas sin tu aprobaci&oacute;n</span>
-            <span class="minute-no-approver-l" title="Puedes ver porque eres administrador del grupo">Actas sin aprobar</span>
+            <span>{% trans "Info" %}:</span>
+            <span class="user-active-l" title="{% trans 'Actas que han sido aprobadas por la comisi&oacute;n aprobatoria del Acta' %}">{% trans "Actas aprobadas y publicadas" %}</span>
+            <span class="user-pend-l" title="{% trans 'Actas que necesitan tu aprobaci&oacute;n' %}">{% trans "Actas sin tu aprobaci&oacute;n" %}</span>
+            <span class="minute-no-approver-l" title="{% trans 'Puedes ver porque eres administrador del grupo' %}">{% trans "Actas sin aprobar" %}</span>
         </div>
         {%else%}
-        <li>Este grupo no tiene actas</li>
+        <li>{% trans "Este grupo no tiene actas" %}</li>
         {%endif%}
     </ul>
     
