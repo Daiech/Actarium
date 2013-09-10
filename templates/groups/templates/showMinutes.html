@@ -29,7 +29,7 @@
     	<form id="pdf-form" method="post" class="">
 			{% csrf_token %}
 			<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
-			<a href="#" id="btn-generate-pdf" {%if not minutes.is_full_signed%}disabled title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="icon-file"></i> Generar PDF</a>
+			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" {%if not minutes.is_full_signed%}title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="icon-file"></i> Generar PDF</a>
 		</form>
     </li>
     <li class="pull-right">
@@ -68,7 +68,9 @@
 		$("#btn-generate-pdf").on("click", function (e) {
 			e.preventDefault();
 			e.preventDefault();
+			{%if minutes.is_full_signed%}
 			$("#pdf-form").submit();
+			{%endif%}
 		}).tooltip();
 		$(".btn-approve").on("click", setApprove);
 		$(".btn-no-approve").on("click", newAnnotation);
@@ -192,6 +194,5 @@
 	#minutes-container > section{margin-top: 0px;padding-top: 0 !important}
 	#minutes{padding-right: 0;padding-left: 0;}
 	#toolbar-btn > ul > li > form{margin: 0}
-	#toolbar-btn > ul > li.pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
 </style>
 {% endblock %}

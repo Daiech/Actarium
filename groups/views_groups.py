@@ -1,18 +1,19 @@
 #encoding:utf-8
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
-from django.utils import simplejson as json
 from Actarium.settings import URL_BASE, MEDIA_URL
 
 from django.contrib.auth.models import User
+from groups.forms import newMinutesForm
 from groups.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
-from groups.minutes import getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions
+from groups.minutes import getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes
 from groups.models import *
 from actions_log.views import saveActionLog, saveViewsLog
 
 
+@login_required(login_url='/account/login')
 def showHomeGroup(request, slug_group):
     '''
         Carga el menú de un grupo 
@@ -24,6 +25,7 @@ def showHomeGroup(request, slug_group):
     return render_to_response("groups/templates/home.html", ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url='/account/login')
 def showTeamGroup(request, slug_group):
     saveViewsLog(request, "groups.views.groupSettings")
     try:
@@ -50,6 +52,7 @@ def showTeamGroup(request, slug_group):
     return render_to_response("groups/templates/team.html", ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url='/account/login')
 def showFolderGroup(request, slug_group):
     g = getGroupBySlug(slug_group)
     _user = getRelUserGroup(request.user, g)
@@ -77,6 +80,7 @@ def showFolderGroup(request, slug_group):
     return HttpResponseRedirect('/groups/#error-view-group')
 
 
+@login_required(login_url='/account/login')
 def showCalendarGroup(request, slug_group):
     g = getGroupBySlug(slug_group)
     _user = getRelUserGroup(request.user, g)
@@ -91,6 +95,7 @@ def showCalendarGroup(request, slug_group):
     return HttpResponseRedirect('/groups/#error-view-group')
 
 
+@login_required(login_url='/account/login')
 def showMinuteGroup(request, slug_group, minutes_code):
     '''
     Muestra toda la informacion de un Acta dentro de un grupo (minutes)
@@ -253,7 +258,8 @@ def showMinuteGroup(request, slug_group, minutes_code):
                 "annotations": annon,
                 "minutes_version": minutes_version,
                 "minutesTemplateJs": address_js_template,
-                "is_form": 0
+                "is_form": 0,
+                "current_member": rel_group
             }
         else:
             return HttpResponseRedirect("/groups/" + slug_group + "#esta-acta-aun-no-ha-sido-aprobada")
@@ -272,3 +278,194 @@ def showMinuteGroup(request, slug_group, minutes_code):
     else:
         return render_to_response('groups/templates/showMinutes.html', ctx, context_instance=RequestContext(request))
 
+
+@login_required(login_url='/account/login')
+def rolesForMinutes(request, slug_group, id_reunion):
+    '''
+    return the board to set the roles for a new Minutes
+    '''
+    saveViewsLog(request, "groups.minutes.rolesForMinutes")
+    try:
+        if id_reunion:
+            reunion = reunions.objects.get(id=id_reunion).id
+        else:
+            reunion = ""
+    except reunions.DoesNotExist:
+        reunion = ""
+    g = getGroupBySlug(slug_group)
+    _user_rel = getRelUserGroup(request.user, g.id)
+    if _user_rel.is_secretary and _user_rel.is_active:
+        members = rel_user_group.objects.filter(id_group=g, is_member=True).order_by("-is_active")
+        _members = list()
+        for m in members:
+            try:
+                rel = rol_user_minutes.objects.get(id_group=g, id_user=m.id_user, id_minutes=None, is_active=False)
+            except rol_user_minutes.DoesNotExist:
+                rel = None
+            _members.append({"member": m, "rol": rel})
+            try:
+                _secretary = rol_user_minutes.objects.get(id_group=g, is_active=False, is_secretary=True).id_user.id
+            except rol_user_minutes.DoesNotExist:
+                _secretary = None
+            except Exception:
+                _secretary = None
+            try:
+                _president = rol_user_minutes.objects.get(id_group=g, is_active=False, is_president=True).id_user.id
+            except rol_user_minutes.DoesNotExist:
+                _president = None
+            except Exception:
+                _president = None
+        # get last template used
+        try:
+            template = minutes.objects.filter(id_group=g, is_valid=True).order_by("-code")[0]
+            template = template.id_template.slug
+        except Exception:
+            template = ""
+        try:
+            rel = rel_group_dni.objects.get(id_group=g)
+            if rel.show_dni == True:
+                show_dni = True
+            else:
+                show_dni = False
+        except rel_group_dni.DoesNotExist:
+            show_dni = False
+        # print show_dni
+        ctx = {
+            "group": g, "template": template, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary,
+            "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president, "show_dni": show_dni}
+        return render_to_response('groups/templates/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/' + str(g.slug) + "#necesitas-ser-redactor")
+
+
+@login_required(login_url='/account/login')
+def newMinutes(request, slug_group, id_reunion, slug_template):
+    '''
+    This function creates a minutes with the form for this.
+    '''
+    saveViewsLog(request, "groups.minutes.newMinutes")
+    group = getGroupBySlug(slug_group)
+
+    _user_rel = getRelUserGroup(request.user, group.id)
+    if _user_rel.is_secretary and _user_rel.is_active:
+        saved = False
+        error = False
+        _reunion = None
+
+        ######## <SLUG TEMPLATE> #########
+        _template = getTemplateMinutes(slug_template)
+        list_templates = getAllPublicTemplates()
+        list_private_templates = getAllPrivateTemplates(id_group=group)
+        ######## </SLUG TEMPLATE> #########
+
+        ######## <MEMBER ASSISTANCE LISTS> #########
+        members_assistant, members_no_assistant = getAssistanceFromRolUserMinutes(group)
+        ######## </MEMBER ASSISTANCE LISTS> #########
+
+        ######## <PRESIDENT AND SECRETARY> #########
+        member_president, member_secretary = getPresidentAndSecretary(group)
+        try:
+            _dni_president = DNI.objects.get(id_user=member_president.id_user)
+            president = {"user": member_president, "dni": _dni_president.dni_value, "dni_type": _dni_president.dni_type.short_name}
+        except:
+            president = {"user": member_president, "dni": "", "dni_type": ""}
+        try:
+            _dni_secretary = DNI.objects.get(id_user=member_secretary.id_user)
+            secretary = {"user": member_secretary, "dni": _dni_secretary.dni_value, "dni_type": _dni_secretary.dni_type.short_name}
+        except:
+            secretary = {"user": member_secretary, "dni": "", "dni_type": ""}
+        ######## </PRESIDENT AND SECRETARY> #########
+
+        ######## <DNI> ########
+        try:
+            rgd = rel_group_dni.objects.get(id_group=group)
+            show_dni = rgd.show_dni
+        except:
+            show_dni = False
+        ######## </DNI> ########
+
+        ######## <MEMBER SIGNERS LISTS> #########
+        m_signers = getSignersFromRolUserMinutes(group)
+        list_ms, list_temp = getSignersList(m_signers)
+        ######## </MEMBER SIGNER LISTS> #########
+
+        ######## <LOGO> #########
+        url_logo = URL_BASE + '/static/img/logo_email.png'
+        if isProGroup(group):
+            _pro = getProGroup(group)
+            if _pro:
+                url_logo = URL_BASE + _pro.id_organization.logo_address
+        ######## </LOGO> #########
+
+        ######## <SAVE_THE_MINUTE> #########
+        if request.method == "POST":
+            form = newMinutesForm(request.POST)
+            if form.is_valid():
+                _minute = saveMinute(request, group, form, _template)
+
+                ######## <Create a relation into reunion and the new minutes> #########
+                try:
+                    id_reunion = int(request.POST['reunion_id'])
+                except Exception:
+                    id_reunion = None
+                if id_reunion:
+                    _reunion = getReunionById(id_reunion)
+
+                if _minute and _reunion:
+                        setRelationReunionMinutes(_reunion, _minute)
+                ######## </Create a relation into reunion and the new minutes> #########
+
+                if _minute:
+                    ######## <asign DNI state> #######
+                    rel_minutes_dni(id_minutes=_minute, show_dni=show_dni).save()
+                    ######## <asign DNI state> #######
+
+                    ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
+                    setMinuteAssistance(_minute, members_assistant, members_no_assistant)
+                    url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True)
+                    ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
+                    return HttpResponseRedirect(url_new_minute)
+                else:
+                    saved = False
+                    error = "e2"  # error, mismo código de acta, o error al guardar en la db
+            else:
+                saved = False
+                error = "e0"  # error, el formulario no es valido
+        ######## </SAVE_THE_MINUTE> #########
+
+        ######## <SHOW_THE_MINUTE_FORM> #########
+        else:
+            form = newMinutesForm()
+            _reunion = None
+            if id_reunion:
+                _reunion = getReunionById(id_reunion)
+                if _reunion:
+                    form = newMinutesForm(initial={"location": _reunion.locale})
+        ######## <SHOW_THE_MINUTE_FORM> #########
+
+        ######## <GET_LAST_MINUTES> #########
+        last = getLastMinutes(group)
+        ######## <GET_LAST_MINUTES> #########
+        ctx = {'TITLE': "Nueva Acta",
+               "newMinutesForm": form,
+               "group": group,
+               "reunion": _reunion,
+               "minutes_saved": {"saved": saved, "error": error},
+               "last": last,
+               "members_selected": members_assistant,
+               "members_no_selected":  members_no_assistant,
+               "slug_template": slug_template,
+               "minutesTemplateForm": _template.address_template,
+               "minutesTemplateJs": _template.address_js,
+               "list_templates": list_templates,
+               "list_private_templates": list_private_templates,
+               "members_signers": list_ms,
+               "url_logo": url_logo,
+               "president": president,
+               "secretary": secretary,
+               "show_dni": show_dni,
+               "is_form": 1
+               }
+        return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
