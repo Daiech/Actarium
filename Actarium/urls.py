@@ -4,6 +4,7 @@ from groups.urls import groups_urls
 from actions_log.urls import actions_log_urls
 from asettings.urls import asettings_urls
 from pdfmodule.urls import pdfmodule_urls
+from billing.urls import billing_urls
 from django.conf import settings
 from website.views import getGlobalVar
 
@@ -28,6 +29,7 @@ urlpatterns = patterns('',
     url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
+    url(r'^billing/', include(billing_urls)),
 
     url(r'^ads/(?P<id_ads>[-\w]+)$', 'ads.views.home'),
 

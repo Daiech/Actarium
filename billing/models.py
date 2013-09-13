@@ -5,9 +5,26 @@ from django.template import defaultfilters
 from Actarium import settings
 from groups.models import groups as Groups
 
+# model Managers ------------------------------------------------------------------------------------------
+
+class PriceCustomizationManager(models.Manager):
+    def list_prices(self):
+        return self.filter(is_active=True)
+
+class PriceTeamSizeManager(models.Manager):
+    def list_prices(self):
+        return self.filter(is_active=True)
+    
+class PriceAdvertisingManager(models.Manager):
+    def list_prices(self):
+        return self.filter(is_active=True)
+    
+# ---------------------------------------------------------------------------------------------------------
+
 
 class OrderStatus(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
+    description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     
@@ -26,6 +43,7 @@ class Order(models.Model):
        
 class PaymentMethod(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
+    description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     
@@ -47,8 +65,10 @@ class PriceCustomization(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     price_month = models.CharField(max_length=150, verbose_name="price_month")
     is_active = models.BooleanField()
+    description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    objects = PriceCustomizationManager()
     
     def __unicode__(self):
         return "%s - %s" % (self.name, self.price_month)
@@ -59,8 +79,10 @@ class PriceTeamSize(models.Model):
     price_month = models.CharField(max_length=150, verbose_name="price_month")
     is_active = models.BooleanField()
     is_available = models.BooleanField()
+    description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    objects = PriceTeamSizeManager()
     
     def __unicode__(self):
         return "%s - %s" % (self.quantity, self.price_month)
@@ -79,8 +101,10 @@ class PriceAdvertising(models.Model):
     id_timetable = models.ForeignKey(Timetable,  null=False, related_name='%(class)s_id_timetable')
     price_week = models.CharField(max_length=150, verbose_name="price_week")
     is_active = models.BooleanField()
+    description = models.TextField(blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    objects = PriceAdvertisingManager()
     
     def __unicode__(self):
         return "%s - %s" % (self.id_timetable, self.price_week)

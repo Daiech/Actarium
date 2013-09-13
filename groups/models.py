@@ -5,6 +5,10 @@ from django.template import defaultfilters
 from Actarium import settings
 
 
+class GroupsManager(models.Manager):
+    def my_groups(self, user):
+        return self.filter(id_creator=user)
+
 class group_type(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     description = models.TextField(blank=True)
@@ -25,7 +29,8 @@ class groups(models.Model):
     is_pro = models.BooleanField(default=False)
     id_group_type = models.ForeignKey(group_type, null=False, related_name='%(class)s_id_group_type')
     slug = models.SlugField(max_length=150, unique=True)
-
+    objects = GroupsManager()
+    
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.id_creator)
 
@@ -34,7 +39,12 @@ class groups(models.Model):
         super(groups, self).save(*args, **kwargs)
         self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
         super(groups, self).save(*args, **kwargs)  # reemplazado
-
+        
+    def is_creator(self, user):
+        if self.id_creator == user:
+            return True
+        else:
+            return False
 
 class invitations(models.Model):
     id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')

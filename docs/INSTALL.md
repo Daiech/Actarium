@@ -19,7 +19,21 @@ This is the correct way to install Actarium:
 * reportlab: `pip install reportlab` better from [source](http://www.reportlab.com/software/opensource/rl-toolkit/download/)
 * xhtml2pdf: `pip install xhtml2pdf` better from [source](https://pypi.python.org/pypi/xhtml2pdf/)
 
-for mongodb you should make this: `_`
+For mongodb you should make this:
+
+The file managers (mongo, mongod and others) are located in the bin folder of mongodb installation, example:
+mongodb-linux-x86_64-2.4.1/bin
+
+for run the server after installation run:
+mongod --dbpath "[db folder path]" --port [run in specific port, default: 27017]
+more documentation in: http://docs.mongodb.org/manual/tutorial/manage-mongodb-processes/
+example in linux server.
+./mongod --fork --dbpath 'data/db' --smallfiles --logpath 'data/mongodb.log' --logappend
+
+for CRUD operations in console run mongo.
+./mongo 
+or specific port and dbpath if is required
+
 
 ###Actarium uses the next Django apps
 
