@@ -107,7 +107,13 @@ a {color: #00aeaa;text-decoration: none;}
 .bl{border-left: solid thin #dadada;}
 
 time{font-size: 14px;color: gray}
-
+#body-wrap{min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -20px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;}
 
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos

@@ -70,18 +70,6 @@
 			var div = $("#group-content-div");
 			var id = $(this).attr("href");
 			switch(id){
-				// case "#home":
-				//     div.text("Bienvenido al grupo {{group.name}}");
-				//   	break;
-				// case "#team":
-				//     div.text("Equipo de trabajo");
-				//   	break;
-				// case "#Minutes":
-				//   	div.text("Folder de Actas");
-				//   	break;
-				// case "#calendar":
-				//   	div.text("Calendario de reuniones");
-				//  	break;
 				case "#settings":
 				  	$("#group-settings-submenu").slideToggle("fast");
 				  	if ( $("#icon-chevron").hasClass("icon-chevron-down") ){
@@ -153,12 +141,12 @@
 	#toolbar-btn > ul > li > a > .caret, #toolbar-btn > ul > li > form > a > .caret{margin-top: 20px;}
 	#toolbar-btn > ul > li.pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
 	.btn-submit{color:white !important;background-color: #00aeaa;
-background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));
-background-image: -webkit-linear-gradient(top, #00AEAA, #2f96b4);
-background-image: -moz-linear-gradient(top, #00AEAA, #2f96b4);
-background-image: -ms-linear-gradient(top, #00AEAA, #2f96b4);
-background-image: -o-linear-gradient(top, #00AEAA, #2f96b4);
-background-image: linear-gradient(top, #00AEAA, #2f96b4);}
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));
+	background-image: -webkit-linear-gradient(top, #00AEAA, #2f96b4);
+	background-image: -moz-linear-gradient(top, #00AEAA, #2f96b4);
+	background-image: -ms-linear-gradient(top, #00AEAA, #2f96b4);
+	background-image: -o-linear-gradient(top, #00AEAA, #2f96b4);
+	background-image: linear-gradient(top, #00AEAA, #2f96b4);}
 	.btn-submit:hover{color: white;}
 
 	/*Responsive*/
@@ -178,7 +166,6 @@ background-image: linear-gradient(top, #00AEAA, #2f96b4);}
 		#toolbar-btn{padding-left: 75px}
 	}
 	/*/Responsive*/
-
 </style>
 {% block menu_content_style %}{% endblock %}
 {% endblock %}

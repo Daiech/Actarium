@@ -31,58 +31,60 @@
         {%block js_libs%}{%endblock%}
     </head>
     <body>
-        <div id="feed-option">
-            <img src="/static/img/feedback.png" alt="Env&iacute;nos tus comentarios">
+        <div id="body-wrap">
+            <div id="feed-option">
+                <img src="/static/img/feedback.png" alt="Env&iacute;nos tus comentarios">
+            </div>
+            <div class="modal" id="feed-modal">
+                <div class="modal-header">
+                    <button id="close-feed" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Feedback</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Ayudanos a mejorar dandonos tu opini&oacute;n:</p>
+                    <div id="feed-imput" class="btn-group" data-toggle="buttons-radio">
+                        <button type="button" class="btn" value="0">General</button>
+                        <button type="button" class="btn" value="1">Sugerencia</button>
+                        <button type="button" class="btn" value="2">Error</button>
+                        <button type="button" class="btn" value="3">Pregunta</button>
+                    </div>
+                    <textarea id="textComent" name="textComent" placeholder="Escribenos tus comentarios..."></textarea>
+                    <div class="control-group">
+                    <input id="fb-email" type="email" placeholder="Correo electr&oacute;nico" value="{{user.email}}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="twitter-button">
+                        <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
+                    </div>
+                    <div id="load-feed-back"></div>
+                    <a href="#" class="btn" id="cancel-feed" >Cancelar</a>
+                    <a href="#" class="btn btn-primary disabled" id="send-feed-back">Enviar</a>
+                </div>
+            </div>
+            <!--[if lt IE 7]>
+                <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+            <![endif]-->
+            <header class="navbar navbar-fixed-top">
+                {% include "website/top_bar.html" %}
+            </header>
+            <div id="body_container"  class="container">
+                <div id="alert-message" class="alert alert-block" style="display: none">
+                    <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
+                    <h4></h4>
+                    <p></p>
+                </div>
+                <div id="alert-error" class="alert alert-error" style="display: none">
+                    <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
+                    <h4></h4>
+                    <p></p>
+                </div>
+                <div id="body-container">
+                    {%block body%}
+                    {% endblock%}
+                </div>
+            </div> <!-- /container -->
         </div>
-        <div class="modal" id="feed-modal">
-            <div class="modal-header">
-                <button id="close-feed" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3>Feedback</h3>
-            </div>
-            <div class="modal-body">
-                <p>Ayudanos a mejorar dandonos tu opini&oacute;n:</p>
-                <div id="feed-imput" class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn" value="0">General</button>
-                    <button type="button" class="btn" value="1">Sugerencia</button>
-                    <button type="button" class="btn" value="2">Error</button>
-                    <button type="button" class="btn" value="3">Pregunta</button>
-                </div>
-                <textarea id="textComent" name="textComent" placeholder="Escribenos tus comentarios..."></textarea>
-                <div class="control-group">
-                <input id="fb-email" type="email" placeholder="Correo electr&oacute;nico" value="{{user.email}}">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div id="twitter-button">
-                    <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
-                </div>
-                <div id="load-feed-back"></div>
-                <a href="#" class="btn" id="cancel-feed" >Cancelar</a>
-                <a href="#" class="btn btn-primary disabled" id="send-feed-back">Enviar</a>
-            </div>
-        </div>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
-        <header class="navbar navbar-fixed-top">
-            {% include "website/top_bar.html" %}
-        </header>
-        <div id="body_container"  class="container">
-            <div id="alert-message" class="alert alert-block" style="display: none">
-                <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
-                <h4></h4>
-                <p></p>
-            </div>
-            <div id="alert-error" class="alert alert-error" style="display: none">
-                <!--  <button type="button" class="close" data-dismiss="alert">×</button>-->
-                <h4></h4>
-                <p></p>
-            </div>
-            <div id="body-container">
-                {%block body%}
-                {% endblock%}
-            </div>
-        </div> <!-- /container -->
         <footer id="daiech-footer">
             <div id="cred-footer">
                 <p>
