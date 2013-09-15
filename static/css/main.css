@@ -105,10 +105,11 @@ a {color: #00aeaa;text-decoration: none;}
 .br{border-right: solid thin #dadada;}
 .bb{border-bottom: solid thin #dadada;}
 .bl{border-left: solid thin #dadada;}
+h1,h2,h3,h4,h5,h6, strong, .info-title{font-family: 'Oswald', sans-serif;}
 
 time{font-size: 14px;color: gray}
 
-
+.dib{display: inline-block;}
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
 **************************************************************************** */
@@ -202,7 +203,7 @@ header #navbar-button-container > ul li a {
 .menu-container{padding-top: 12px;}
 .menu-container .btn{height: 24px;padding: 2px 3px;padding-right: 6px}
 #account-menu{margin-left: 2px;margin-top: 0;}
-#groups-menu{margin-top: 0}
+#groups-menu{margin-top: 0;margin-left: 0;}
 #groups-menu .group-link{color: #00aeaa;font-weight: normal;}
 #groups-menu .group-link:hover{color: #fff}
 #groups-menu li a{font-weight: bold;}
@@ -222,7 +223,7 @@ position: absolute;top: 0;width: 100%;z-index: 10;}
 float: left;height: 42px;line-height: 42px;padding: 0 20px;position: relative;z-index: 5;}
 .topbar-logo-center{padding-top:4px;}
 .topbar-btn{border-left: 1px solid #cbcccc;box-shadow: 1px 0 0 0 #FFFFFF inset;font-size: 14px;
-float: right;height: 32px;min-width: 80px; padding: 10px 16px 0 8px;width: auto;}
+float: right;height: 32px;min-width: 80px; padding: 10px 10px 0 8px;width: auto;}
 .navbar .btn-group{margin-top: 0;}
 .topbar-caret{vertical-align: middle;}
 .dropdown-menu{min-width: 190px;}
@@ -1002,6 +1003,10 @@ only screen and (min-resolution: 144dpi) {
 /*==================================================*/
 
 /* Large desktop */
+@media (min-width: 768px) {
+    #topbar-menu{min-width: 224px;}
+    #topbar-menu > div {min-width: 111px;}
+}
 @media (min-width: 1200px) {
     .columnaD{
         width: 48%;
@@ -1078,6 +1083,8 @@ only screen and (min-resolution: 144dpi) {
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
+    #topbar-menu{min-width: 224px;}
+    #topbar-menu > div {min-width: 111px;}
     body {
         padding-right: 0;
         padding-left: 0;
