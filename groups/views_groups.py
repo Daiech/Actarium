@@ -245,7 +245,8 @@ def showMinuteGroup(request, slug_group, minutes_code):
             minutes_version = getMinutesVersions(minutes_current)
 
             ctx = {
-                "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
+                "group": group, "minutes": minutes_current, "prev": prev, "next": next,
+                "rel_user": rel_group, "is_secretary": rel_group.is_secretary,
                 "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
                 "url_minute": request.get_full_path(),
                 "minute_template": loader.render_to_string(address_template, {
@@ -266,7 +267,6 @@ def showMinuteGroup(request, slug_group, minutes_code):
                 "minutes_version": minutes_version,
                 "minutesTemplateJs": address_js_template,
                 "is_form": 0,
-                "current_member": rel_group
             }
         else:
             return HttpResponseRedirect("/groups/" + slug_group + "#esta-acta-aun-no-ha-sido-aprobada")
@@ -338,7 +338,7 @@ def rolesForMinutes(request, slug_group, id_reunion):
             show_dni = False
         # print show_dni
         ctx = {
-            "group": g, "template": template, "is_admin": _user_rel.is_admin, "is_secretary": _user_rel.is_secretary,
+            "group": g, "template": template, "rel_user": _user_rel,
             "members": _members, "id_reunion": reunion, "secretary": _secretary, "president": _president, "show_dni": show_dni}
         return render_to_response('groups/templates/rolesForMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -456,6 +456,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ctx = {'TITLE': "Nueva Acta",
                "newMinutesForm": form,
                "group": group,
+               "rel_user": _user_rel,
                "reunion": _reunion,
                "minutes_saved": {"saved": saved, "error": error},
                "last": last,
