@@ -23,4 +23,3 @@ admin.site.register(ExpAdvertising)
 admin.site.register(Advertising)
 admin.site.register(AdvertisingLog)
 admin.site.register(AdvertisingLogType)
-
