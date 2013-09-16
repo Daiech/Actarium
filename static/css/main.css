@@ -98,6 +98,7 @@ body{
     /*background-color: #E9E9E9;*/
     /*background-image: url("/static/img/debut_light.png");*/
     background-image: url("/static/img/ticks.png");
+    height: 100%;
 }
 a {color: #00aeaa;text-decoration: none;}
 .b{border: solid thin #dadada;}
@@ -107,13 +108,15 @@ a {color: #00aeaa;text-decoration: none;}
 .bl{border-left: solid thin #dadada;}
 
 time{font-size: 14px;color: gray}
-#body-wrap{min-height: 100%;
+#body-wrap{
+    min-height: 100%;
   height: auto !important;
   height: 100%;
-  /* Negative indent footer by its height */
+  /* Negative indent footer by its height *
   margin: 0 auto -20px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px;}
+  padding: 0 0 60px;
+  * Pad bottom by footer height */
+}
 
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
@@ -263,8 +266,8 @@ Footer
 **************************************************************************** */
 #daiech-footer{
     background-color: white;
-    bottom: 0;
-    min-height: 110px;
+    bottom: 0;/*
+    min-height: 110px;*/
     overflow: hidden;
     position: relative;
     text-align: center;
