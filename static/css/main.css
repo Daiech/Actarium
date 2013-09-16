@@ -806,6 +806,7 @@ Show Minutes
     }
     .minutes, #headerContent, #minutesContent, #footerContent{display: block;}
     .minutes{width: 99%;}
+    .minutes *, #minutes *{font-family: Arial}
     #headerContent, #minutesContent, #footerContent{padding: 0 80px;}
 
     .minute header{

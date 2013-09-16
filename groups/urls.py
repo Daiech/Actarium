@@ -11,7 +11,7 @@ groups_urls = patterns(
     url(r'^(?P<slug_group>[-\w]+)/admin/request_dni', 'groups.views.requestDNI', name='Request DNI ajax'),
     url(r'^(?P<slug_group>[-\w]+)/admin/resend-invitation', 'groups.views.resendInvitation', name='Resend Invitation'),
     url(r'^(?P<slug_group>[-\w]+)/admin/change-names', 'groups.views.changeNames', name='Change Names'),
-    url(r'^(?P<slug_group>[-\w]+)/admin/emailNotifications', 'emailmodule.views.emailNotifications', name='Email Notifications'),
+    # url(r'^(?P<slug_group>[-\w]+)/admin/emailNotifications', 'emailmodule.views.emailNotifications', name='Email Notifications'),
     url(r'^(?P<slug_group>[-\w]+)/admin/emailAjax', 'emailmodule.views.emailAjax', name='Email Ajax'),
     url(r'^(?P<slug_group>[-\w]+)/admin', 'groups.views.groupSettings', name='Admin Groups'),
     # url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'groups.minutes.rolesForMinutes', name='set_role_for_minute'),
@@ -40,9 +40,10 @@ groups_urls = patterns(
 )
 
 groups_urls += patterns('groups.views_groups',
+    url(r'^(?P<slug_group>[-\w]+)/config/email-notifications$', 'configEmailNotifications', name='email_notifications'),
+    url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'showMinuteGroup', name="show_minute"),
     url(r'^(?P<slug_group>[-\w]+)/minutes/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='create_minutes'),
     url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'rolesForMinutes', name='set_role_for_minute'),
-    url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'showMinuteGroup', name="show_minute"),
     url(r'^(?P<slug_group>[-\w]+)/team$', 'showTeamGroup', name="show_team"),
     url(r'^(?P<slug_group>[-\w]+)/folder$', 'showFolderGroup', name="show_folder"),
     url(r'^(?P<slug_group>[-\w]+)/calendar$', 'showCalendarGroup', name="show_calendar"),

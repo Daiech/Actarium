@@ -10,6 +10,7 @@ from groups.forms import newMinutesForm
 from groups.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
 from groups.minutes import getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes
 from groups.models import *
+from emailmodule.models import *
 from actions_log.views import saveActionLog, saveViewsLog
 
 
@@ -469,3 +470,27 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
+
+
+@login_required(login_url='/account/login')
+def configEmailNotifications(request, slug_group):
+    from groups.views import getGroupBySlug
+    _group = getGroupBySlug(slug=slug_group)
+    try:
+        _user_rel = rel_user_group.objects.get(id_user=request.user, id_group=_group)
+        _email_admin_type = email_admin_type.objects.get(name='grupo')
+        _emails = email.objects.filter(admin_type=_email_admin_type)
+        email_list = []
+        for e in _emails:
+            try:
+                egp = email_group_permissions.objects.get(id_user=request.user, id_email_type=e.id, id_group=_group)
+                checked = egp.is_active
+            except email_group_permissions.DoesNotExist:
+                checked = True
+            except:
+                return HttpResponseRedirect('/groups/#error-email-permissions')
+            email_list.append({"id": e.id, "name": e.name, "description": e.description, "checked": checked})
+        ctx = {"group": _group, "is_admin": _user_rel.is_admin, "email_list": email_list}
+        return render_to_response('groups/templates/config_email.html', ctx, context_instance=RequestContext(request))
+    except rel_user_group.DoesNotExist:
+        return HttpResponseRedirect('/groups/#error-user-rel-group')

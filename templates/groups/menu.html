@@ -23,10 +23,9 @@
 	    			<li id="group-menu-settings"><a href="#settings">
 	    				<i id="icon-chevron" class="icon-chevron-down icon-chevron-right"></i> {% trans "Configuraci&oacute;n de grupo" %}</a>
 	    				<ul id="group-settings-submenu" class="unstyled bs-docs-sidenav" style="display:none">
-	    					<li><a href="#">{% trans "DNI" %}</a></li>
-	    					<li><a href="#">{% trans "Notificaciones de correo" %}</a></li>
-	    					<li><a href="#">{% trans "Editar informaci&oacute;n" %}</a></li>
-	    					<li><a href="#">{% trans "Roles de miembros" %}</a></li>
+	    					<li id="group-config-dni"><a href="#">{% trans "DNI" %}</a></li>
+	    					<li id="group-config-email"><a href="{% url 'email_notifications' group.slug %}">{% trans "Notificaciones de correo" %}</a></li>
+	    					<li class="mt20"><a href="#">{% trans "Editar informaci&oacute;n" %}</a></li>
 	    					<li><a href="#">{% trans "Premium $" %}</a></li>
 	    				</ul>
 	    			</li>
@@ -50,6 +49,9 @@
 	    		</div>
 	    	</div>
 	    	<div id="group-content" class="">
+	    		{% if dni_request %}
+					<div class="white-box-container">dni</div>
+	    		{% endif %}
 	    		<div id="group-content-div">{% block menu_content %}{% endblock %}</div>
 	    	</div>
 	    </div>
@@ -137,7 +139,7 @@
 	#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 30px;vertical-align: middle;width: 226px;text-align: center;}
 	#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: 1px;position: fixed;height: 100%;}
 	#content-ads > div{width: 110px;margin: 10px auto;}
-	#ads-title{width: 90% !important;margin-top: 0 !important;font-size: 12px;padding: 0 8px}
+	#ads-title{width: 174px !important;margin-top: 0 !important;font-size: 12px;padding: 0 8px}
 	#group-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%;position: fixed;}
 	#group-menu ul{margin-top: 0;margin-bottom: 0;}
 	#group-content{padding: 15px 240px;}
@@ -145,6 +147,7 @@
 	.bs-docs-sidenav > li > a{border-left: none;}
 	/*#group-settings-submenu > li{border-bottom: 1px solid #e5e5e5;}*/
 	#group-settings-submenu > li > a{display:block;line-height: 10px;padding-left: 35px !important;font-size: 14px;}
+	#group-settings-submenu > li.active > a{background-color: #00aeaa;color: white;}
 
 	#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
 	#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);margin-left: -4px;}
