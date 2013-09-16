@@ -7,7 +7,7 @@ groups_urls = patterns(
     url(r'^new$', 'groups.views.newGroup', name='something'),
     url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)/edit/(?P<slug_template>.*)$', 'groups.minutes.editMinutes'),
     url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groups.views.groupInfoSettings', name='Admin Info Groups'),
-    url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groups.views.groupDNISettings', name='Admin DNI Groups'),
+    # url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groups.views.groupDNISettings', name='Admin DNI Groups'),
     url(r'^(?P<slug_group>[-\w]+)/admin/request_dni', 'groups.views.requestDNI', name='Request DNI ajax'),
     url(r'^(?P<slug_group>[-\w]+)/admin/resend-invitation', 'groups.views.resendInvitation', name='Resend Invitation'),
     url(r'^(?P<slug_group>[-\w]+)/admin/change-names', 'groups.views.changeNames', name='Change Names'),
@@ -41,6 +41,7 @@ groups_urls = patterns(
 
 groups_urls += patterns('groups.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/config/email-notifications$', 'configEmailNotifications', name='email_notifications'),
+    url(r'^(?P<slug_group>[-\w]+)/config/dni', 'showGroupDNISettings', name='dni_group'),
     url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'showMinuteGroup', name="show_minute"),
     url(r'^(?P<slug_group>[-\w]+)/minutes/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='create_minutes'),
     url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'rolesForMinutes', name='set_role_for_minute'),

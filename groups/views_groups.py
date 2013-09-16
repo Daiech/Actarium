@@ -494,3 +494,23 @@ def configEmailNotifications(request, slug_group):
         return render_to_response('groups/templates/config_email.html', ctx, context_instance=RequestContext(request))
     except rel_user_group.DoesNotExist:
         return HttpResponseRedirect('/groups/#error-user-rel-group')
+
+
+@login_required(login_url='/account/login')
+def showGroupDNISettings(request, slug_group):
+    '''
+        Muestra la configuracion de DNI de los integrantes de un grupo
+    '''
+    saveViewsLog(request, "groups.views.groupDNISettings")
+    try:
+        g = getGroupBySlug(slug_group)
+        _user_rel = getRelUserGroup(request.user, g)
+        members_dni = DNI_permissions.objects.filter(id_group=g)
+        users_dni = []
+        for m in members_dni:
+            users_dni.append(m.id_user)
+        members = rel_user_group.objects.filter(id_group=g, is_member=True).exclude(id_user__in=users_dni)
+        ctx = {"group": g, "is_admin": _user_rel.is_admin, 'members': members, 'members_dni': members_dni}
+        return render_to_response('groups/templates/showGroupDNI.html', ctx, context_instance=RequestContext(request))
+    except groups.DoesNotExist:
+        return HttpResponseRedirect('/groups/')
