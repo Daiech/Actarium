@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from groups.models import rel_user_group
 from emailmodule.models import *
-from actions_log.views import saveActionLog, saveViewsLog
+# from actions_log.views import saveActionLog, saveViewsLog
 from django.utils import simplejson as json
 
 

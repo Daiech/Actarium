@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.conf import settings
+# from django.conf import settings
 
 import commands
 import os
