@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
+from django.http import Http404
 from Actarium.settings import URL_BASE, MEDIA_URL
 
 from django.contrib.auth.models import User
-from groups.forms import newMinutesForm
+from groups.forms import newMinutesForm, newGroupForm
 from groups.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
 from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes
 from groups.models import *
@@ -20,8 +21,16 @@ def showHomeGroup(request, slug_group):
         Carga el menú de un grupo 
     '''
     g = getGroupBySlug(slug_group)
+    _user = getRelUserGroup(request.user, g)
+    if _user:
+        if _user.is_active:
+            pass
+    else:
+        # return HttpResponseRedirect('/groups/#error-view-group')
+        raise Http404
     ctx = {
-        "group": g
+        "group": g,
+        "rel_user": _user
     }
     return render_to_response("groups/templates/home.html", ctx, context_instance=RequestContext(request))
 
@@ -38,18 +47,15 @@ def showTeamGroup(request, slug_group):
         u_selected = None
     g = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, g.id)
-    if _user_rel.is_active:
-        # if _user_rel.is_admin:
+    if _user_rel:
+        if _user_rel.is_active:
             members = rel_user_group.objects.filter(id_group=g.id).order_by("-is_active")
-            ctx = {"group": g, "is_admin": _user_rel.is_admin, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
+            ctx = {"group": g, "rel_user": _user_rel, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
             return render_to_response('groups/templates/team.html', ctx, context_instance=RequestContext(request))
-        # else:
-        #     return HttpResponseRedirect('/groups/' + str(g.slug) + "#redireccionado")
+        else:
+            return HttpResponseRedirect('/groups/' + str(g.slug) + "#not-active")
     else:
-        return HttpResponseRedirect('/groups/' + str(g.slug) + "#redireccionado")
-    # ctx = {
-    #     "group": g
-    # }
+        raise Http404
     return render_to_response("groups/templates/team.html", ctx, context_instance=RequestContext(request))
 
 
@@ -61,7 +67,6 @@ def showFolderGroup(request, slug_group):
         if _user.is_active:
             minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
             m = list()
-            from groups.minutes import getRolUserMinutes
             for _minutes in minutes_group:
                 m.append({
                     "minutes": _minutes,
@@ -74,11 +79,12 @@ def showFolderGroup(request, slug_group):
                 except Exception:
                     no_redactor = 0
             ctx = {
-                "group": g, "current_member": _user, "minutes": m,
+                "group": g, "rel_user": _user, "minutes": m,
                 'no_redactor': no_redactor}
             return render_to_response("groups/templates/folder.html", ctx, context_instance=RequestContext(request))
         return HttpResponseRedirect('/groups/#you-are-not-active')
-    return HttpResponseRedirect('/groups/#error-view-group')
+    else:
+        raise Http404
 
 
 @login_required(login_url='/account/login')
@@ -89,7 +95,7 @@ def showCalendarGroup(request, slug_group):
         if _user.is_active:
             _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
             ctx = {
-                "group": g, "current_member": _user, "reunions": _reunions,
+                "group": g, "rel_user": _user, "reunions": _reunions,
             }
             return render_to_response("groups/templates/calendar.html", ctx, context_instance=RequestContext(request))
         return HttpResponseRedirect('/groups/#you-are-not-active')
@@ -490,7 +496,7 @@ def configEmailNotifications(request, slug_group):
             except:
                 return HttpResponseRedirect('/groups/#error-email-permissions')
             email_list.append({"id": e.id, "name": e.name, "description": e.description, "checked": checked})
-        ctx = {"group": _group, "is_admin": _user_rel.is_admin, "email_list": email_list}
+        ctx = {"group": _group, "rel_user": _user_rel, "email_list": email_list}
         return render_to_response('groups/templates/config_email.html', ctx, context_instance=RequestContext(request))
     except rel_user_group.DoesNotExist:
         return HttpResponseRedirect('/groups/#error-user-rel-group')
@@ -510,7 +516,33 @@ def showGroupDNISettings(request, slug_group):
         for m in members_dni:
             users_dni.append(m.id_user)
         members = rel_user_group.objects.filter(id_group=g, is_member=True).exclude(id_user__in=users_dni)
-        ctx = {"group": g, "is_admin": _user_rel.is_admin, 'members': members, 'members_dni': members_dni}
+        ctx = {"group": g, "rel_user": _user_rel, 'members': members, 'members_dni': members_dni}
         return render_to_response('groups/templates/showGroupDNI.html', ctx, context_instance=RequestContext(request))
     except groups.DoesNotExist:
         return HttpResponseRedirect('/groups/')
+
+
+@login_required(login_url='/account/login')
+def editInfoGroup(request, slug_group):
+    '''
+        Muestra la configuracion de un grupo
+    '''
+    saveViewsLog(request, "groups.views.groupInfoSettings")
+    g = getGroupBySlug(slug_group)
+    _user_rel = getRelUserGroup(request.user, g)
+    if _user_rel.is_admin and _user_rel.is_active:
+        message = False
+        if request.method == "POST":
+            form = newGroupForm(request.POST)
+            if form.is_valid():
+                g.name = form.cleaned_data['name']
+                g.description = form.cleaned_data['description']
+                g.save()
+                message = "Los datos del grupo han sido actualizados"
+            else:
+                message = "Hubo un error en los datos del grupo. Intenta de nuevo."
+        form = newGroupForm(initial={"name": g.name, "description": g.description})
+        ctx = {"group": g, "rel_user": _user_rel, "form": form, "message": message}
+        return render_to_response('groups/templates/editInfoGroup.html', ctx, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/groups/' + str(g.slug))

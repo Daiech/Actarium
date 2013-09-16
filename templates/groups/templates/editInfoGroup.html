@@ -1,0 +1,39 @@
+{% extends "groups/menu.html" %}
+{% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
+{% block menu_content %}
+<div class="white-box-container">
+	<h4> Edici&oacute;n de informaci&oacute;n</h4>
+	<p>Edita la informaci&oacute;n del grupo. &Eacute;ste c&aacute;mbio no afectar&aacute; el funcionamiento del mismo.</p>
+	<div>
+		<form class="form-horizontal" enctype="multipart/form-data" method="POST">
+			{% csrf_token %}
+			{{form}}
+			<hr>
+			<input type="submit" class="btn btn-large btn-info db" value="Actualizar" >
+		</form>
+	</div>
+</div>
+{% endblock %}
+{%block menu_content_style%}
+<style type="text/css">
+	.form-horizontal input[type='text']{
+		font-size: 16px;
+		padding: 10px;
+	}
+	.form-horizontal label{
+		font-weight: bold;
+		margin-top: 10px;
+	}
+</style>
+{% endblock %}
+{% block menu_content_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#group-settings-submenu").show();
+		$("#group-config-info").addClass("active");
+		{% if message %}
+		setAlertMessage("Datos guardados", "{{message}}")
+		{% endif %}
+	});
+</script>
+{% endblock %}

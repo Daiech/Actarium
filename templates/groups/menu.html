@@ -23,10 +23,13 @@
 	    			<li id="group-menu-settings"><a href="#settings">
 	    				<i id="icon-chevron" class="icon-chevron-down icon-chevron-right"></i> {% trans "Configuraci&oacute;n de grupo" %}</a>
 	    				<ul id="group-settings-submenu" class="unstyled bs-docs-sidenav" style="display:none">
-	    					<li id="group-config-dni"><a href="{% url 'dni_group' group.slug %}">{% trans "DNI" %}</a></li>
 	    					<li id="group-config-email"><a href="{% url 'email_notifications' group.slug %}">{% trans "Notificaciones de correo" %}</a></li>
-	    					<li class="mt20"><a href="#">{% trans "Editar informaci&oacute;n" %}</a></li>
-	    					<li><a href="#">{% trans "Premium $" %}</a></li>
+	    					<li id="group-config-dni"><a href="{% url 'dni_group' group.slug %}">{% trans "DNI" %}</a></li>
+	    					{% if rel_user.is_admin %}
+	    						
+	    					<li id="group-config-info"><a href="{% url 'edit_info_group' group.slug %}">{% trans "Editar informaci&oacute;n" %}</a></li>
+	    					<li id="group-config-premium"><a href="#">{% trans "Premium $" %}</a></li>
+	    					{% endif %}
 	    				</ul>
 	    			</li>
 	    		</ul>
