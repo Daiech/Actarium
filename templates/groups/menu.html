@@ -90,15 +90,6 @@
 			  	// $(".bs-docs-sidenav li").removeClass("active");
 			  	// $(this).parent().addClass("active");
 			}
-
-			$('#first-point').waypoint(function() {
-				if($("#approve-message-up").hasClass("minutes-bar-static")){
-					$("#approve-message-up").removeClass("minutes-bar-static").css({"position": "relative"});
-				}
-				else{
-					$("#approve-message-up").addClass("minutes-bar-static").css({"position": "fixed"});
-				}
-			});
 		});
 	</script>
 	{% block menu_content_js %}{% endblock %}
