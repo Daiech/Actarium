@@ -813,6 +813,9 @@ def resendInvitation(request, slug_group):
 
 
 def changeNames(request, slug_group):
+    """
+    Cambia los nombres del usuario invitado
+    """
     if request.is_ajax():
         if request.method == "GET":
             try:

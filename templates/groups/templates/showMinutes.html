@@ -6,12 +6,12 @@
 {% block toolbar_content %}
 <ul class="unstyled">
 	<li>
-		<a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
+		<a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
 	            <i class="icon-plus"></i> {% trans "Crear acta" %}
 	        </a>
 	</li>
     <li>
-        <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
+        <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
             <i class="icon-upload"></i> {% trans "Subir acta" %}
         </a>
     </li>
@@ -33,31 +33,81 @@
 		</form>
     </li>
     <li class="pull-right">
-		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}"><i class="icon-arrow-right"></i></a>
+		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="icon-arrow-right"></i></a>
     </li>
     <li class="pull-right">
-		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}"><i class="icon-arrow-left"></i></a>
+		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><i class="icon-arrow-left"></i></a>
     </li>
 </ul>
 {% endblock %}
 
 {%block menu_content%}
-<article>
-    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
-    	<p>Historial de versiones:</p>
-    	{%for minutes in minutes_version%}
-    		{{minutes.full_html|safe}}
-    		<hr>
-    	{%endfor%}
-    </div>
-    <div id="minutes-container">
-    {{minute_template}}
-    </div>
+	{% if space_to_approve or is_secretary %}
+		{% if my_attending%}
+		<div id="message-temp" class="white-box-container">
+			<header>
+				<div id="first-point"></div>
+				<div class="pull-left ico-title"><img src="{{ STATIC_PREFIX }}img/groups/default.jpg"> </div> 
+				<h4> {{user.first_name}} &eacute;sta Acta necesita tu aprobaci&oacute;n</h4>
+				<p>
+					<small>&Eacute;sta Acta no ser&aacute; publicada a todo el grupo {{group.name}} hasta que los miembros asignados como comisi&oacute;n aprobatoria est&eacute;n de acuerdo con su redacci&oacute;n.</small>
+				</p>
+			</header>
+			<hr>
+			<div id="approve-message-up" class="div-sign alert ">
+	    		<strong>Tu voto: </strong> Apruebas &eacute;sta Acta?
+		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+					<i class="icon-ok icon-white"></i> Si, apruebo <span></span>
+				</a>
+				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
+					<i class="icon-comment"></i> No, Necesita correcci&oacute;n <span></span>
+				</a>
+			</div>
+			<div class="mt20">
+				<strong class="mt20">Comisi&oacute;n aprobatoria:</strong>
+				<ol class="commission-approving-list" class="mt20">
+					{%for member in commission_approving%}
+						<li class="missing-{{member.id_user.id}}">
+							<div>
+								<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+							</div>
+							<div>
+							{{member.id_user.first_name}} {{member.id_user.last_name}}
+							</div>
+							<div class="icon-approver-status">
+								{%ifequal member.is_signed_approved 0%}
+								<i class="icon-time"></i>
+								{%endifequal%}
+								{%ifequal member.is_signed_approved 1%}
+								<i class="icon-ok"></i>
+								{%endifequal%}
+								{%ifequal member.is_signed_approved 2%}
+								<i class="icon-remove-circle"></i>
+								{%endifequal%}
+							</div>
+						</li>
+					{%endfor%}
+				</ol>
+			</div>
+		</div>
+		{% endif %}
+	{% endif %}
+	<article>
+	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
+	    	<p>Historial de versiones:</p>
+	    	{%for minutes in minutes_version%}
+	    		{{minutes.full_html|safe}}
+	    		<hr>
+	    	{%endfor%}
+	    </div>
+	    <div id="minutes-container">
+	    {{minute_template}}
+	    </div>
 
-	{% include "groups/siteToApprove.html" %}
-	
-</article>
-<span id="is_form" style="display:none">{{is_form}}</span>
+		{% include "groups/siteToApprove.html" %}
+		
+	</article>
+	<span id="is_form" style="display:none">{{is_form}}</span>
 {%endblock%}
 {% block menu_content_js %}
 <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
@@ -72,6 +122,14 @@
 			$("#pdf-form").submit();
 			{%endif%}
 		}).tooltip();
+		$('#first-point').waypoint(function() {
+			if($("#approve-message-up").hasClass("minutes-bar-static")){
+				$("#approve-message-up").removeClass("minutes-bar-static").css({"position": "relative"});
+			}
+			else{
+				$("#approve-message-up").addClass("minutes-bar-static").css({"position": "fixed"});
+			}
+		});
 		$(".btn-approve").on("click", setApprove);
 		$(".btn-no-approve").on("click", newAnnotation);
 		$("#button-save").on("click", saveAnnotation);
@@ -85,7 +143,7 @@
 		{% if is_secretary %}
 		$("#minutes-edit").on("click", function (e) {
 			if(confirm("Seguro que desea editar esta Acta?")){
-				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/{{minutes.id_template.slug}}"
+				top.location = "{% url 'edit_minutes' group.slug minutes.code minutes.id_template.slug %}"
 			}
 		})
 		{% endif %}
@@ -96,8 +154,10 @@
 	});
 	function callBackApprove(data){
 		console.log(data.signs)
-		$("#div-sign").fadeOut(300,function(){$(this).empty()});
-		var u = $("#missing-"+data["user-id"]);
+		$(".div-sign").fadeOut(300,function(){$(this).empty();$("#message-temp").hide(300, function () {
+			$(this).empty();
+		})});
+		var u = $(".missing-"+data["user-id"]);
 		if(data['approved']==1){
 			u.find("div.icon-approver-status").html('<i class="icon-ok"></i>');
 			setAlertMessage("Aprobado!", "Haz aprobado esta acta.");
@@ -181,18 +241,23 @@
 	.annotation{padding: 10px;}
 	ul#annotations > li > div{margin-top: 25px;}
 	#button-save{margin-top: 5px;}
-	article header img{margin-top: 10px;}
+	article header img{margin-top: 0px;}
 	#annotations-approve{margin-top: 20px;}
-	#commission-approving-list > li > div{display: inline;}
+	.commission-approving-list > li > div{display: inline;}
 	.icon-approver-status i{margin-top: 5px}
 	#body-container > article{margin-top:0;padding-top: 0;}
 	#minutes-bar{background-color: rgb(251, 251, 251); padding: 5px 0;position: absolute;left: 0;width:100%;margin-top: 0px;}
 	#minutes-bar-hoja{width: 75%;}
 	.header-minutes{background-color: rgb(251, 251, 251); padding: 15px 0;position: absolute;left: 0;width: 100%;margin: 0;}
 	.header-minutes > div{margin: 0 auto;margin-bottom: 8px;width: 90%;}
-	.minutes-bar-static{position: fixed;top: 70px;left: 0;}
+	.minutes-bar-static{position: fixed;top: 73px;width: 50%;left: 0;right: 0;margin: 0 auto;}
 	#minutes-container > section{margin-top: 0px;padding-top: 0 !important}
 	#minutes{padding-right: 0;padding-left: 0;}
 	#toolbar-btn > ul > li > form{margin: 0}
+	.ico-title{margin-top: -4px;margin-right: 2px;}
+
+	@media (max-width: 979px) {
+		.minutes-bar-static{top: 0px;}
+	}
 </style>
 {% endblock %}

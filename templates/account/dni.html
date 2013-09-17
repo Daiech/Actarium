@@ -80,16 +80,16 @@
                     {% if dni_p.state == '0' %}
                         Sin responder
                     {% elif dni_p.state == '1' %}
-                        Aceptado
+                        Aceptado, si tiene acceso
                     {% elif dni_p.state == '2' %}
-                        Rechazado
+                        Rechazado, no tiene acceso
                     {% endif %}
                 </td>
                 <td>
                     {% if dni_p.state == '0' or dni_p.state == '2'%}
-                        <button class="dni-btn-option  btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Asignar DNI</button>
+                        <button class="dni-btn-option  btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Permitir acceso a DNI</button>
                     {% elif dni_p.state == '1' %}
-                        <button class="dni-btn-option  btn btn-warning" data-option="2" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Retirar DNI</button>
+                        <button class="dni-btn-option  btn btn-warning" data-option="2" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Retirar acceso a DNI</button>
                     {% endif %}
                 </td>
             </tr>
@@ -173,16 +173,16 @@
                                 btn.removeClass("btn-info")
                                 btn.addClass("btn-warning")
                                 btn.attr("data-option",'2')
-                                btn.html("Retirar DNI")
-                                $('#dni-state-'+pk_dni).html("Aceptado")
+                                btn.html("Retirar acceso a DNI")
+                                $('#dni-state-'+pk_dni).html("Aceptado, si tiene acceso")
                             }
                             else if (status == 2){
                                 console.log("2"+btn.html())
                                 btn.removeClass("btn-warning")
                                 btn.addClass("btn-info")
                                 btn.attr("data-option",'1')
-                                btn.html("Asignar DNI")
-                                $('#dni-state-'+pk_dni).html("Rechazado")
+                                btn.html("Permitir acceso a DNI")
+                                $('#dni-state-'+pk_dni).html("Rechazado, no tiene acceso")
                             }
                             //console.log("id: "+id_user+" Nombre: "+nombre )
                         }

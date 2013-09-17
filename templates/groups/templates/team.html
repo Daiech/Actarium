@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block toolbar_content %}
-{% if is_admin %}
+{% if rel_user.is_admin %}
 <ul class="unstyled">
 	<li class="dropdown">
 	    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
@@ -46,7 +46,7 @@
 		<h4>{% trans "Roles de usuario" %}</h4>
 		<p>{% trans "Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles." %}</p>
 		<div class="">
-			{% if is_admin %}
+			{% if rel_user.is_admin %}
 			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 				{% csrf_token %}
 			{% endif %}
@@ -96,7 +96,7 @@
 				                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
 				                    </div>
 				                    <!-- comienza -->
-									{% if is_admin %}
+									{% if rel_user.is_admin %}
 				                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
 				                    	<a href="#"><i class="icon-cog"></i></a>
 				                    </div>
@@ -158,7 +158,7 @@
 							</td>
 							<td class="t-a-c">
 								<label for="member{{m.id_user.id}}">
-								{% if is_admin %}
+								{% if rel_user.is_admin %}
 									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
 								{% else %}
 								{%if m.is_member%}<i class="icon-ok"></i>{% endif%}
@@ -167,7 +167,7 @@
 							</td>
 							<td class="t-a-c">
 								<label for="writer{{m.id_user.id}}">
-								{% if is_admin %}
+								{% if rel_user.is_admin %}
 									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
 								{% else %}
 								{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
@@ -176,7 +176,7 @@
 							</td>
 							<td class="t-a-c">
 								<label for="convener{{m.id_user.id}}">
-								{% if is_admin %}
+								{% if rel_user.is_admin %}
 									<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}> 
 								{% else %}
 								{%if m.is_convener%}<i class="icon-ok"></i>{% endif%}
@@ -185,7 +185,7 @@
 							</td>
 							<td class="t-a-c">
 								<label for="admin{{m.id_user.id}}">
-								{% if is_admin %}
+								{% if rel_user.is_admin %}
 									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 								{% else %}
 								{%if m.is_admin%}<i class="icon-ok"></i>{% endif%}
@@ -204,7 +204,7 @@
 		                <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span>
 		            </div>
 				</section>
-			{% if is_admin %}
+			{% if rel_user.is_admin %}
 			</form>
 			{% endif %}
 		</div>
@@ -323,7 +323,7 @@
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
-		{% if is_admin %}
+		{% if rel_user.is_admin %}
 	    showIconCloseOnHover()
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {

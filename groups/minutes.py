@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.utils import simplejson as json
+from django.core.urlresolvers import reverse
 
 # imports from application
 from groups.models import *
@@ -279,6 +280,7 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False):
         print "newMinutes Error", e
         # saveErrorLog
     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
+    url_new_minute = reverse("show_minute", args=(group.slug, _minute.code))
     link = URL_BASE + url_new_minute
     email_ctx = {
         'firstname': request.user.first_name,
