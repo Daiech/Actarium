@@ -4,14 +4,12 @@
 {% load i18n %}
 {%block body%}
 <!-- <div> -->
-    <header class="header-group navbar-fixed-top">
+   <!--  <header id="header-toolbar" class="header-group navbar-fixed-top">
 	    <div id="toolbar-group" class="">
     		<div id="menu-title" class="pull-right"></div>
-	    	<div id="toolbar-btn" class="">
-	    		{% block toolbar_content %}{% endblock %}
-	    	</div>
+    		
 	    </div>
-    </header>
+    </header> -->
     <div id="groups-container" class="">
     	<div class="row-fluid">
 	    	<div id="group-menu" class="pull-right"  data-spy="affix">
@@ -41,7 +39,9 @@
 	    			</li>
 	    		</ul>
 	    	</div>
-	    	<div id="second-toolbar"></div>
+	    	<div id="toolbar-btn" class="bb box">
+	    		{% block toolbar_content %}{% endblock %}
+	    	</div>
 	    	<div id="group-aside" class="">
 	    		<div id="ads-title" class="bb bt">
 	    			Anuncios
@@ -63,7 +63,9 @@
 	    		{% if dni_request %}
 					<div class="white-box-container">dni</div>
 	    		{% endif %}
-	    		<div id="group-content-div">{% block menu_content %}{% endblock %}</div>
+	    		<div id="group-content-div">
+	    			{% block menu_content %}{% endblock %}
+	    		</div>
 	    	</div>
 	    </div>
     </div>
@@ -101,6 +103,15 @@
 			  	// $(".bs-docs-sidenav li").removeClass("active");
 			  	// $(this).parent().addClass("active");
 			}
+
+			$('#first-point').waypoint(function() {
+				if($("#approve-message-up").hasClass("minutes-bar-static")){
+					$("#approve-message-up").removeClass("minutes-bar-static").css({"position": "relative"});
+				}
+				else{
+					$("#approve-message-up").addClass("minutes-bar-static").css({"position": "fixed"});
+				}
+			});
 		});
 	</script>
 	{% block menu_content_js %}{% endblock %}
@@ -133,13 +144,25 @@
 
 		#body-container{min-height: 430px;}
 		#topbar{box-shadow: none;}
-		#topbar-btn-logo{height: 73px;line-height: 85px;padding-left: 20px;}
+		#topbar-btn-logo{height: 73px;line-height: 85px;padding-left: 20px;border-bottom: 1px solid #cbcccc;}
 		.topbar-logo-center{margin-top: 15px}
 		#toolbar-group{border-bottom: 1px solid #cbcccc;height: 30px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
-		#toolbar-btn{/*display: inline-block;*/padding-left: 192px;height: 30px;line-height: 30px;font-size: 14px;}
+		#toolbar-btn{/*display: inline-block;*/
+			/*padding-left: 192px;*/
+			background-color: #F7F7F7;min-height: 30px;line-height: 30px;font-size: 14px;
+		}
+		.toolbar-btn-waypoint{position: fixed;
+bottom: 0;
+z-index: 6000;
+width: 100%;
+background: #F7F7F7;
+border-top: solid thin #dadada;
+margin: 0 auto;
+left: 0;
+right: 0;}
 		#groups-container{margin-top: 73px;position: relative;}
 		#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 30px;vertical-align: middle;width: 226px;text-align: center;}
-		#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: 1px;position: fixed;height: 100%;}
+		#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: -1px;position: fixed;height: 100%;border-top: 1px solid #cbcccc;}
 		#content-ads > div{width: 110px;margin: 10px auto;}
 		#ads-title{width: 174px !important;margin-top: -1px !important;font-size: 12px;padding: 0 8px}
 		#group-menu{background: #F7F7F7;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%;position: fixed;}
@@ -152,8 +175,8 @@
 		#group-settings-submenu > li.active > a{background-color: #00aeaa;color: white;}
 
 		#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
-		#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);margin-left: -4px;}
-		#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 12px}
+		#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);/*border-bottom:solid thin #cbcccc*/;/*margin-left: -4px;*/}
+		#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 12px;}
 		#toolbar-btn > ul > li > a:hover, #toolbar-btn > ul > li > form > a:hover{background-color: #f5f5f5;color: rgb(51, 118, 238)}
 		#toolbar-btn > ul > li > a > .caret, #toolbar-btn > ul > li > form > a > .caret{margin-top: 14px;}
 		#toolbar-btn > ul > li.pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
@@ -170,12 +193,18 @@
 		#group-menu-list > li:first-child a{border-top: none;}
 
 		/*Responsive*/
+		@media (min-width: 980px) {
+			#toolbar-btn{margin-top: -30px;margin-right: 227px;}
+			#group-menu{margin-top: -31px}
+		}
 		@media (max-width: 979px) {
 			#groups-container{margin-top: 0px}
 			/*#group-menu{float: none;position: relative;width: 100%}*/
 			#toolbar-btn{font-size: 12px;}
 			#group-menu-list{display: none;}
+			#group-menu{margin-top: 42px;/*margin-top: -31px;z-index: 6000;*/}
 			#toolbar-btn > ul > li{margin-left: -3px;}
+			/*#header-toolbar{display: none;visibility: hidden;}*/
 		}
 
 		@media (min-width: 768px) and (max-width: 979px) {
@@ -184,6 +213,9 @@
 			#group-aside{top:73px;}
 			#topbar-btn-logo{position: fixed;}
 			#menu-title{display: none;}
+		}
+		@media (min-width: 768px) {
+			#toolbar-btn{margin-left: 190px;/*margin-top: -30px;margin-right: 227px;*/}
 		}
 		@media (max-width: 767px) {
 		    .navbar-fixed-top{margin-bottom: 0;}
@@ -195,11 +227,12 @@
 			#ads-title{border-top: none;width: auto !important;}
 			#content-ads *{display: inline-block;}
 			#menu-title{display: none;}
-			#group-menu{float: none;position: relative;margin-left: 0px;width: auto;}
+			#group-menu{float: none;position: relative;margin-left: 0px;width: auto;margin-top: 42px}
+			#topbar-btn-logo{height: 42px;}
+			.topbar-logo-center{margin-top: 0}
 		}
 		@media (max-width: 480px) {
-			#toolbar-btn{padding-left: 75px}
-    		#title-menu a {margin-top: -24px;}
+    		/*#title-menu a {margin-top: -24px;}*/
     		#headerContent, #minutesContent, #footerContent{padding: 0 40px;}
     		#toolbar-group{}
 		}
