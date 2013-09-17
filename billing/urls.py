@@ -7,4 +7,5 @@ billing_urls = patterns('billing.views',
     url(r'^get_advertising', 'get_advertising', name='get_advertising'),
     url(r'^create_advertising', 'create_advertising', name='create_advertising'),
     url(r'^show_advertising_stats', 'show_advertising_stats', name='show_advertising_stats'),
+    url(r'^random_advertising', 'random_advertising', name='random_advertising'),
 )

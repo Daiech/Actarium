@@ -2,8 +2,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 # from django.template import defaultfilters
-# from Actarium import settings
+from django.conf import settings
 from groups.models import groups as Groups
+from billing.thumbs import ImageWithThumbsField
 
 # model Managers ---------------------------------------------------------
 
@@ -24,6 +25,14 @@ class PriceAdvertisingManager(models.Manager):
 
     def list_prices(self):
         return self.filter(is_active=True)
+
+class AdvertisingManager(models.Manager):
+    
+    def my_list_ads(self,user,n):
+        return self.filter(id_user=user)
+    
+    def random_3_ads(self):
+        return self.order_by('?')[:3]
 
 # ------------------------------------------------------------------------
 
@@ -65,9 +74,12 @@ class Billing(models.Model):
         Order,  null=False, related_name='%(class)s_id_order')
     id_payment_method = models.ForeignKey(
         PaymentMethod,  null=False, related_name='%(class)s_id_payment_method')
+    id_user = models.ForeignKey(
+        User,  null=False, related_name='%(class)s_id_user_register') # register who accept the order
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-
+    
+    
     def __unicode__(self):
         return "%s (%s)" % (self.id_order, self.id_payment_method)
 
@@ -132,6 +144,8 @@ class OrderCustomization(models.Model):
         PriceCustomization,  null=False, related_name='%(class)s_id_price_customization')
     id_order = models.ForeignKey(
         Order,  null=False, related_name='%(class)s_id_order')
+    id_user = models.ForeignKey(
+        User,  null=False, related_name='%(class)s_id_user') # register who accept the order
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
@@ -147,6 +161,8 @@ class OrderTeamSize(models.Model):
         PriceTeamSize,  null=False, related_name='%(class)s_id_price_team_size')
     id_order = models.ForeignKey(
         Order,  null=False, related_name='%(class)s_id_order')
+    id_user = models.ForeignKey(
+        User,  null=False, related_name='%(class)s_id_user') # register who accept the order
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
@@ -160,6 +176,8 @@ class OrderAdvertising(models.Model):
         PriceAdvertising,  null=False, related_name='%(class)s_id_price_advertising')
     id_order = models.ForeignKey(
         Order,  null=False, related_name='%(class)s_id_order')
+    id_user = models.ForeignKey(
+        User,  null=False, related_name='%(class)s_id_user') # register who accept the order
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
@@ -171,12 +189,15 @@ class Advertising(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     description = models.TextField(blank=True)
     url = models.TextField(blank=True)
-    image_path = models.CharField(
-        max_length=150, verbose_name="image", default="img/groups/default.jpg")
+    image_path = ImageWithThumbsField(
+        upload_to='advertising/%Y/%m/%d', sizes=((100,75),(200,200)), verbose_name="image", default="advertising/default.jpg")
     is_active = models.BooleanField(default=False)
+    id_user = models.ForeignKey(
+        User,  null=False, related_name='%(class)s_id_user')
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-
+    objects = AdvertisingManager()
+    
     def __unicode__(self):
         return "%s - %s" % (self.name, self.is_active)
 

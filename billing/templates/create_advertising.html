@@ -1,0 +1,14 @@
+{% extends "menu.html" %}
+{% block TITLE %}Reuniones{% endblock %}
+{% load i18n %}
+{%block menu_content %}
+
+<div class="white-box-container">
+	<form action="{% url 'create_advertising' %}" method = "POST"  enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" value="enviar" />
+	</form>
+</div>
+
+{% endblock %}
