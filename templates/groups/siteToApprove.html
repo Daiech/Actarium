@@ -1,34 +1,21 @@
 {% load gravatartag %}
 {% load humanize %}
 	{% if space_to_approve or is_secretary %}
-	{%comment%}
-	{%endcomment%}
     <section id="sign" class="hoja white-box-container">
     	<header>
     		<!-- <div><img src="{{STATIC_PREFIX}}/img/icon-writter.png"></div> -->
-    		<div><img src="{{STATIC_PREFIX}}/img/groups/default.jpg"></div>
-    		<h3>Comisi&oacute;n aprobatoria</h3>
+    		<div class="ico-title pull-left"><img src="{{ STATIC_PREFIX }}img/groups/default.jpg"> </div> 
+    		<h4>Comisi&oacute;n aprobatoria de &eacute;sta Acta</h4>
     		<p>
-    			<small>Listado de miembros asignados como comisi&oacute;n aprobatoria.</small>
+    			<small>&Eacute;sta Acta no ser&aacute; publicada a todo el grupo {{group.name}} hasta que los miembros asignados como comisi&oacute;n aprobatoria est&eacute;n de acuerdo con su redacci&oacute;n.</small>
     		</p>
     	</header>
 		<hr>
-		{% if my_attending%}
-    		<div id="div-sign" class="alert alert-info">
-	    		<strong>Tu voto: </strong>Apruebas &eacute;sta Acta?
-		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
-					<i class="icon-ok icon-white"></i> Si, apruebo <span></span>
-				</a>
-				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
-					<i class="icon-comment"></i> No, Necesita correcci&oacute;n <span></span>
-				</a>
-			</div>
-		{%endif%}
 		<div class="mt20">
 			<strong class="mt20">Comisi&oacute;n aprobatoria:</strong>
-			<ol id="commission-approving-list" class="mt20">
+			<ol class="commission-approving-list" class="mt20">
     			{%for member in commission_approving%}
-    				<li id="missing-{{member.id_user.id}}">
+    				<li class="missing-{{member.id_user.id}}">
     					<div>
     						<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
     					</div>
@@ -51,10 +38,11 @@
     		</ol>
 		</div>
 	</section>
+
 	<section class="hoja white-box-container" id="annotations-approve">
 		<header>
     		<div><img src="{{STATIC_PREFIX}}/img/icon-writter.png" width="25px"></div>
-    		<h3>Anotaciones</h3>
+    		<h4>Anotaciones</h4>
     		<small>Anotaciones y correcciones de la comisi&oacute;n aprobatoria.</small>
     	</header>
 		<hr>
