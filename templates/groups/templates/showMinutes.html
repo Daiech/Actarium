@@ -85,7 +85,8 @@
 		{% if is_secretary %}
 		$("#minutes-edit").on("click", function (e) {
 			if(confirm("Seguro que desea editar esta Acta?")){
-				top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/{{minutes.id_template.slug}}"
+				// top.location = "/groups/{{group.slug}}/minutes/{{minutes.code}}/edit/{{minutes.id_template.slug}}"
+				top.location = "{% url 'edit_minutes' group.slug minutes.code minutes.id_template.slug %}"
 			}
 		})
 		{% endif %}

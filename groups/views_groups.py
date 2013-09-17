@@ -9,7 +9,7 @@ from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
 from groups.forms import newMinutesForm, newGroupForm
 from groups.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
-from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes
+from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes, getExtraMinutesById, setMinutesVersion
 from groups.models import *
 from emailmodule.models import *
 from actions_log.views import saveActionLog, saveViewsLog
@@ -547,3 +547,163 @@ def editInfoGroup(request, slug_group):
         return render_to_response('groups/templates/editInfoGroup.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/groups/' + str(g.slug))
+
+
+@login_required(login_url='/account/login')
+def editMinutes(request, slug_group, slug_template, minutes_code):
+    '''
+    This function creates a minutes with the form for this.
+    '''
+    saveViewsLog(request, "groups.minutes.newMinutes")
+    group = getGroupBySlug(slug_group)
+
+    _user_rel = getRelUserGroup(request.user, group.id)
+    if _user_rel.is_secretary and _user_rel.is_active:
+        saved = False
+        error = False
+        _reunion = None
+        _minute = getMinutesByCode(group, minutes_code)
+        _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
+        if _minute:
+            ######## <SLUG TEMPLATE> #########
+            _template = getTemplateMinutes(slug_template)
+            list_templates = getAllPublicTemplates()
+            list_private_templates = getAllPrivateTemplates(id_group=group)
+            ######## </SLUG TEMPLATE> #########
+
+            ######## <MEMBER ASSISTANCE LISTS> #########
+            members_assistant, members_no_assistant = getAssistanceFromRolUserMinutes(group, id_minutes=_minute)
+            ######## </MEMBER ASSISTANCE LISTS> #########
+
+            ######## <PRESIDENT AND SECRETARY> #########
+            #member_president, member_secretary = getPresidentAndSecretary(group, minutes_current=_minute)
+            ######## </PRESIDENT AND SECRETARY> #########
+
+            ######## <PRESIDENT AND SECRETARY> #########
+            member_president, member_secretary = getPresidentAndSecretary(group, minutes_current=_minute)
+            try:
+                _dni_president = DNI.objects.get(id_user=member_president.id_user)
+                president = {"user": member_president, "dni": _dni_president.dni_value, "dni_type": _dni_president.dni_type.short_name}
+            except:
+                president = {"user": member_president, "dni": "", "dni_type": ""}
+            try:
+                _dni_secretary = DNI.objects.get(id_user=member_secretary.id_user)
+                secretary = {"user": member_secretary, "dni": _dni_secretary.dni_value, "dni_type": _dni_secretary.dni_type.short_name}
+            except:
+                secretary = {"user": member_secretary, "dni": "", "dni_type": ""}
+            ######## </PRESIDENT AND SECRETARY> #########
+
+            ######## <DNI> ########
+            try:
+                rgd = rel_group_dni.objects.get(id_group=group)
+                show_dni = rgd.show_dni
+            except:
+                show_dni = False
+            ######## </DNI> ########
+
+            ######## <MEMBER SIGNERS LISTS> #########
+            m_signers = getSignersFromRolUserMinutes(group, id_minutes=_minute)
+            list_ms, list_temp = getSignersList(m_signers)
+            ######## </MEMBER SIGNER LISTS> #########
+
+            ######## <LOGO> #########
+            url_logo = URL_BASE + '/static/img/logo_email.png'
+            if isProGroup(group):
+                _pro = getProGroup(group)
+                if _pro:
+                    url_logo = URL_BASE + _pro.id_organization.logo_address
+            ######## </LOGO> #########
+
+            ######## <SAVE_THE_MINUTE> #########
+            if request.method == "POST":
+                form = newMinutesForm(request.POST)
+                if form.is_valid():
+                    is_other = None
+                    # editar acta y poner un código ya existente, mirar la diferencia de formatos:
+                    # print "------------------------", request.POST['date_start']
+                    # print "------------------------", form.cleaned_data['date_start']
+                    if form.cleaned_data['code'] != minutes_code:
+                        is_other = getMinutesByCode(group, form.cleaned_data['code'])
+                    if not is_other:
+                        #guardad version
+                        setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
+                            members_no_assistant, list_ms, president, secretary, show_dni, request.user, url_logo)
+                        #/guardar versión
+                        _minute = saveMinute(request, group, form, _template, id_minutes_update=_minute.pk)  # actualizar
+
+                        if _minute:
+                            ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
+                            # setMinuteAssistance(_minute, members_assistant, members_no_assistant)
+                            url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True)
+                            ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
+
+                            # send Email
+                            return HttpResponseRedirect(url_new_minute)
+                        else:
+                            saved = False
+                            error = "e2"  # error, mismo código de acta, o error al guardar en la db
+                    else:
+                        saved = False
+                        error = "e2"  # error, mismo código de acta, o error al guardar en la db
+                        # se redefinen las fechas ya que como vienen con otro formato (AM) no se imprimen de forma correcta en el form
+                        request.POST['date_start'] = form.cleaned_data['date_start']
+                        request.POST['date_end'] = form.cleaned_data['date_end']
+                        form = newMinutesForm(request.POST)
+
+                else:
+                    saved = False
+                    error = "e0"  # error, el formulario no es valido
+            ######## </SAVE_THE_MINUTE> #########
+
+            ######## <SHOW_THE_MINUTE_FORM> #########
+            else:
+                form = newMinutesForm()
+                try:
+                    if _extra_minutes:
+                        date_1 = _extra_minutes.date_start
+                        date_2 = _extra_minutes.date_end
+                        form = newMinutesForm(
+                            initial={
+                            "code": _minute.code,
+                            "date_start": date_1,
+                            "date_end": date_2,
+                            "location": _extra_minutes.location,
+                            "agreement": _extra_minutes.agreement,
+                            "agenda": _extra_minutes.agenda,
+                            "type_reunion": _extra_minutes.type_reunion
+                            }
+                            )
+                    _reunion = None
+                except Exception, e:
+                    print e
+                    #saveActionLog "no se puede editar acta."
+            ######## <SHOW_THE_MINUTE_FORM> #########
+
+            ######## <GET_LAST_MINUTES> #########
+            last = getLastMinutes(group)
+            ######## <GET_LAST_MINUTES> #########
+            ctx = {'title_edit': "Editar Acta",
+                   "newMinutesForm": form,
+                   "group": group,
+                   "reunion": _reunion,
+                   "minutes_saved": {"saved": saved, "error": error},
+                   "last": last,
+                   "members_selected": members_assistant,
+                   "members_no_selected":  members_no_assistant,
+                   "slug_template": slug_template,
+                   "minutesTemplateForm": _template.address_template,
+                   "minutesTemplateJs": _template.address_js,
+                   "list_templates": list_templates,
+                   "list_private_templates": list_private_templates,
+                   "members_signers": list_ms,
+                   "url_logo": url_logo,
+                   "president": president,
+                   "secretary": secretary,
+                   "show_dni": show_dni,
+                   "is_form": 1
+                   }
+            return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect("/groups/" + group.slug + "#No-existe-un-acta-con-codigo-" + minutes_code)
+    else:
+        return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")

@@ -147,7 +147,7 @@
 					<a href="{% url 'show_folder' group.slug %}" class="btn">
 	                	<i class="icon-arrow-left"></i> Volver al Folder
 	                </a>
-	                <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{{id_reunion}}/{{template}}{%endif%}" class="btn btn-info">
+	                <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="btn btn-info">
 	                    Siguiente <i class="icon-arrow-right icon-white"></i>
 	                </a>
 				</div>

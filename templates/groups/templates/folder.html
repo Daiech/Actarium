@@ -26,7 +26,7 @@
             {%for minute in minutes%}
                 {%if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_full_signed%}
                 <li title="{%if minute.minutes.is_full_signed%}
-                        {% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo {{group.name}}' %}
+                        {% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}
                     {%else%}
                         {%if minute.rol.is_approver%}{% trans 'Debes aprobar esta Acta para ser publicada' %}
                         {%else%}{% trans 'Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}
