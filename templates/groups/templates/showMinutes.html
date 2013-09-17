@@ -17,25 +17,25 @@
     </li>
 	{% if is_secretary and not minutes.is_full_signed%}
     <li>
-		<a href="#" class="" id="minutes-edit"><i class="icon-pencil"></i> Editar Acta</a>
+		<a href="#" class="" id="minutes-edit"><i class="icon-pencil"></i> Editar</a>
     </li>
 	{%endif%}
 	{%if minutes_version%}
     <li>
-		<a href="#" id="history" class="">Historial de cambios ({{minutes_version|length}})</a>
+		<a href="#" id="history" class="">Veriones ({{minutes_version|length}})</a>
     </li>
 	{%endif%}
     <li>
     	<form id="pdf-form" method="post" class="">
 			{% csrf_token %}
 			<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
-			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" {%if not minutes.is_full_signed%}title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="icon-file"></i> Generar PDF</a>
+			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" {%if not minutes.is_full_signed%}title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="icon-file"></i> PDF</a>
 		</form>
     </li>
-    <li class="pull-right">
+    <li class="pull-right important">
 		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="icon-arrow-right"></i></a>
     </li>
-    <li class="pull-right">
+    <li class="pull-right important">
 		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><i class="icon-arrow-left"></i></a>
     </li>
 </ul>
@@ -255,6 +255,7 @@
 	#minutes{padding-right: 0;padding-left: 0;}
 	#toolbar-btn > ul > li > form{margin: 0}
 	.ico-title{margin-top: -4px;margin-right: 2px;}
+	.important{z-index: 2001}
 
 	@media (max-width: 979px) {
 		.minutes-bar-static{top: 0px;}

@@ -1028,59 +1028,28 @@ only screen and (min-resolution: 144dpi) {
     #topbar-menu > div {min-width: 111px;}
 }
 @media (min-width: 980px) and (max-width: 1280px) {
-    #form-new-group{
-        width: 40%;
-    }
-    .columnaD{
-        width: 48%;
-    }
-    .notifications span{
-        display: inline;
-    }
-    .navbar-fixed-top {
-        /*margin-bottom: 26px;*/
-    }
-    #social-buttons{
-        display: visible;
-    }
-    .white-bar{
-        width: 27%;
-    }
+    #form-new-group{width: 40%;}
+    .notifications span{display: inline;}
+    #social-buttons{display: visible;}
+    .white-bar{width: 27%;}
     .logo-center{right: 20px}
     .btn-groups-admin{width: 70%;}
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
-    #form-new-group{
-        width: 65%;
-    }
-    article{
-        width: 100%;
-        /*        border: solid thin blue;*/
-    }
-    .columnaD{
-        width: 40%;
-    } 
-    /*    #navbar-button-container{
-            display: none;
-        }*/
-    .navbar-fixed-top {
-        margin-bottom: 0;
-    }
-    .white-bar{
-        width: 40%
-    }
-    #social-buttons{
-        display: visible;
-    }
+    #form-new-group{width: 65%;}
+    article{width: 100%;}
+    .navbar-fixed-top {margin-bottom: 0;}
+    .white-bar{width: 40%;}
+    #social-buttons{display: visible;}
     #table-roles th div{width: auto;}
     .th-name{display: none;width: auto;}
     .td-first{width: 68%;}
     .btn-groups-admin{width: 90%;}
     #minute, .minute{width: 80%}
     .minute > div{padding: 15px}
-    .hoja{width: 95%}
+    .hoja{width: 94%}
     .modal.fade.in{top: 10%;}
     .message-box{width: 70%}
     .input-form{width: 80%;}
@@ -1125,10 +1094,7 @@ only screen and (min-resolution: 144dpi) {
 /* Landscape phones and down */
 @media (max-width: 480px) {
     .span6{margin: 6px auto;width: 96%;}
-    body {
-        padding-right: 0;
-        padding-left: 0;
-    }
+    body {padding-right: 0;padding-left: 0;}
     .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
         margin-right: 0;
         margin-left: 0;

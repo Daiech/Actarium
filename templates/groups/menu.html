@@ -15,7 +15,9 @@
     <div id="groups-container" class="">
     	<div class="row-fluid">
 	    	<div id="group-menu" class="pull-right"  data-spy="affix">
-	    		<div class="t-a-l bt bb" id="title-menu">&nbsp;<!-- <strong>{% trans "Men&uacute; de Grupo" %}</strong> -->
+	    		<div class="t-a-l bt bb" id="title-menu">
+	    			<!-- &nbsp; -->
+	    			<strong>{% trans "Men&uacute; de Grupo" %}</strong>
 	    			<a href="#" class="btn pull-right">
 	    				<i class="icon-align-justify"></i>
 	    			</a>
@@ -24,7 +26,7 @@
 	    			<li id="group-menu-home"><a href="{% url 'show_home' group.slug %}">{% trans "Inicio" %}</a></li>
 	    			<li id="group-menu-team"><a href="{% url 'show_team' group.slug  %}">{% trans "Equipo de trabajo" %}</a></li>
 	    			<li id="group-menu-folder"><a href="{% url 'show_folder' group.slug %}">{% trans "Folder de Actas" %}</a></li>
-	    			<li id="group-menu-calendar"><a href="{% url 'show_calendar' group.slug %}">{% trans "Calendario de reuniones" %}</a></li>
+	    			<li id="group-menu-calendar"><a href="{% url 'show_calendar' group.slug %}">{% trans "Agenda de reuniones" %}</a></li>
 	    			<li id="group-menu-settings"><a href="#settings">
 	    				<i id="icon-chevron" class="icon-chevron-down icon-chevron-right"></i> {% trans "Configuraci&oacute;n de grupo" %}</a>
 	    				<ul id="group-settings-submenu" class="unstyled bs-docs-sidenav" style="display:none">
@@ -39,6 +41,7 @@
 	    			</li>
 	    		</ul>
 	    	</div>
+	    	<div id="second-toolbar"></div>
 	    	<div id="group-aside" class="">
 	    		<div id="ads-title" class="bb bt">
 	    			Anuncios
@@ -141,7 +144,7 @@
 		#ads-title{width: 174px !important;margin-top: -1px !important;font-size: 12px;padding: 0 8px}
 		#group-menu{background: #F7F7F7;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%;position: fixed;}
 		#group-menu ul{margin-top: 0;margin-bottom: 0;}
-		#group-content{padding: 15px 240px;}
+		#group-content{padding: 15px 240px;padding-left: 210px;}
 		.bs-docs-sidenav{width: 100%;}
 		.bs-docs-sidenav > li > a{border-left: none;}
 		/*#group-settings-submenu > li{border-bottom: 1px solid #e5e5e5;}*/
@@ -150,7 +153,7 @@
 
 		#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
 		#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);margin-left: -4px;}
-		#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 15px}
+		#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 12px}
 		#toolbar-btn > ul > li > a:hover, #toolbar-btn > ul > li > form > a:hover{background-color: #f5f5f5;color: rgb(51, 118, 238)}
 		#toolbar-btn > ul > li > a > .caret, #toolbar-btn > ul > li > form > a > .caret{margin-top: 14px;}
 		#toolbar-btn > ul > li.pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
@@ -188,7 +191,7 @@
 		    .topbar-btn > .dinline{display: none}
 		    #topbar-group-name{font-size: 16px;}
 			#group-content{padding: 15px;}
-			#group-aside{float: none;position: relative;width: 100%;height: 120px;min-height: 120px;margin-top: 2px;border-right: none;}
+			#group-aside{float: none;position: relative;width: 93%;height: 120px;min-height: 120px;margin-top: 1px;border-right: none;margin: 10px auto;border: solid thin #dadada;}
 			#ads-title{border-top: none;width: auto !important;}
 			#content-ads *{display: inline-block;}
 			#menu-title{display: none;}
@@ -196,6 +199,9 @@
 		}
 		@media (max-width: 480px) {
 			#toolbar-btn{padding-left: 75px}
+    		#title-menu a {margin-top: -24px;}
+    		#headerContent, #minutesContent, #footerContent{padding: 0 40px;}
+    		#toolbar-group{}
 		}
 		/*/Responsive*/
 	</style>
