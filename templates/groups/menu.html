@@ -17,7 +17,7 @@
 	    		<ul id="group-menu-list" class="unstyled nav nav-list bs-docs-sidenav">
 	    			<li id="group-menu-home"><a href="{% url 'show_home' group.slug %}">{% trans "Inicio" %}</a></li>
 	    			<li id="group-menu-team"><a href="{% url 'show_team' group.slug  %}">{% trans "Equipo de trabajo" %}</a></li>
-	    			<li id="group-menu-folder"><a href="{% url 'show_folder' group.slug %}">{% trans "Folder de Actas" %}</a></li>
+	    			<li id="group-menu-folder"><a href="{% url 'show_folder' group.slug %}">{% trans "Libro de Actas" %}</a></li>
 	    			<li id="group-menu-calendar"><a href="{% url 'show_calendar' group.slug %}">{% trans "Agenda de reuniones" %}</a></li>
 	    			<li id="group-menu-settings"><a href="#settings">
 	    				<i id="icon-chevron" class="icon-chevron-down icon-chevron-right"></i> {% trans "Configuraci&oacute;n de grupo" %}</a>
@@ -152,8 +152,8 @@ right: 0;}
 		#group-settings-submenu > li > a{display:block;line-height: 10px;padding-left: 35px !important;font-size: 14px;}
 		#group-settings-submenu > li.active > a{background-color: #00aeaa;color: white;}
 
-		#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
-		#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);/*border-bottom:solid thin #cbcccc*/;/*margin-left: -4px;*/}
+		#toolbar-btn > ul {display: inline;padding: 0;margin: 0;margin-left: 5px;}
+		#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);/*border-bottom:solid thin #cbcccc*/;margin-left: -4px;}
 		#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 12px;}
 		#toolbar-btn > ul > li > a:hover, #toolbar-btn > ul > li > form > a:hover{background-color: #f5f5f5;color: rgb(51, 118, 238)}
 		#toolbar-btn > ul > li > a > .caret, #toolbar-btn > ul > li > form > a > .caret{margin-top: 14px;}
