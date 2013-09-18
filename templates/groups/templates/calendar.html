@@ -2,18 +2,20 @@
 {% load i18n %}
 
 {% block toolbar_content %}
+<ul class="unstyled">
+    <li>
+        <a href="{%if rel_user.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="title-on-disabled {%if not rel_user.is_convener%}disabled{%endif%}" {%if not rel_user.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
+            <i class="icon-plus"></i> Convocar Reuni&oacute;n
+        </a>
+    </li>
+</ul>
 {% endblock %}
 
 {% block menu_content %}
 <div class="white-box-container">
-    <header class="span6">
-        <h4>{% trans "Reuniones" %}</h4>
+    <header>
+        <h4>{% trans "Agenda de Reuniones" %}</h4>
     </header>
-    <div class="t-a-r button-group">
-        <a href="{%if rel_user.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="btn btn-small title-on-disabled {%if not rel_user.is_convener%}disabled{%endif%}" {%if not rel_user.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
-            <i class="icon-calendar"></i> Convocar Reuni&oacute;n
-        </a>
-    </div>
     <hr>
     <ul class="unstyled">
         {%if reunions%}
