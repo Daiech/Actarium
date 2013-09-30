@@ -46,6 +46,16 @@ class groups(models.Model):
         else:
             return False
 
+    def get_minutes_by_code(self, **kwargs):
+        try:
+            return minutes.objects.get(id_group=self.pk, **kwargs)
+        except minutes.DoesNotExist:
+            return None
+        except Exception, e:
+            print "Error get_minutes_by_code: %s" % e
+            return None
+
+
 class invitations(models.Model):
     id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
     id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')

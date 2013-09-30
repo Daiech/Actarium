@@ -9,7 +9,7 @@ from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
 from groups.forms import newMinutesForm, newGroupForm
 from groups.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
-from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getMinutesByCode, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes, getExtraMinutesById, setMinutesVersion
+from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes, getExtraMinutesById, setMinutesVersion
 from groups.models import *
 from emailmodule.models import *
 from actions_log.views import saveActionLog, saveViewsLog
@@ -119,7 +119,8 @@ def showMinuteGroup(request, slug_group, minutes_code):
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
 
     if isMemberOfGroup(request.user, group):
-        minutes_current = getMinutesByCode(group, minutes_code)
+        # minutes_current = getMinutesByCode(group, minutes_code)
+        minutes_current = group.get_minutes_by_code(code=minutes_code)
         rel_group = getRelUserGroup(request.user, group)
         rol = getRolUserMinutes(request.user, group, id_minutes=minutes_current)
 
@@ -562,7 +563,8 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
         saved = False
         error = False
         _reunion = None
-        _minute = getMinutesByCode(group, minutes_code)
+        # _minute = getMinutesByCode(group, minutes_code)
+        _minute = group.get_minutes_by_code(code=minutes_code)
         _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
         if _minute:
             ######## <SLUG TEMPLATE> #########
@@ -623,7 +625,8 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                     # print "------------------------", request.POST['date_start']
                     # print "------------------------", form.cleaned_data['date_start']
                     if form.cleaned_data['code'] != minutes_code:
-                        is_other = getMinutesByCode(group, form.cleaned_data['code'])
+                        # is_other = getMinutesByCode(group, form.cleaned_data['code'])
+                        is_other = group.get_minutes_by_code(code=form.cleaned_data['code'])
                     if not is_other:
                         #guardad version
                         setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
