@@ -310,6 +310,8 @@ def rolesForMinutes(request, slug_group, id_reunion):
                 rel = rol_user_minutes.objects.get(id_group=g, id_user=m.id_user, id_minutes=None, is_active=False)
             except rol_user_minutes.DoesNotExist:
                 rel = None
+            except Exception:
+                rel = None
             if rel:
                 _members.append({"member": m, "rol": rel})
         try:
