@@ -310,19 +310,20 @@ def rolesForMinutes(request, slug_group, id_reunion):
                 rel = rol_user_minutes.objects.get(id_group=g, id_user=m.id_user, id_minutes=None, is_active=False)
             except rol_user_minutes.DoesNotExist:
                 rel = None
-            _members.append({"member": m, "rol": rel})
-            try:
-                _secretary = rol_user_minutes.objects.get(id_group=g, is_active=False, is_secretary=True).id_user.id
-            except rol_user_minutes.DoesNotExist:
-                _secretary = None
-            except Exception:
-                _secretary = None
-            try:
-                _president = rol_user_minutes.objects.get(id_group=g, is_active=False, is_president=True).id_user.id
-            except rol_user_minutes.DoesNotExist:
-                _president = None
-            except Exception:
-                _president = None
+            if rel:
+                _members.append({"member": m, "rol": rel})
+        try:
+            _secretary = rol_user_minutes.objects.get(id_group=g, is_active=False, is_secretary=True).id_user.id
+        except rol_user_minutes.DoesNotExist:
+            _secretary = None
+        except Exception:
+            _secretary = None
+        try:
+            _president = rol_user_minutes.objects.get(id_group=g, is_active=False, is_president=True).id_user.id
+        except rol_user_minutes.DoesNotExist:
+            _president = None
+        except Exception:
+            _president = None
         # get last template used
         try:
             template = minutes.objects.filter(id_group=g, is_valid=True).order_by("-code")[0]
