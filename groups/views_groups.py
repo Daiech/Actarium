@@ -305,15 +305,15 @@ def rolesForMinutes(request, slug_group, id_reunion):
     if _user_rel.is_secretary and _user_rel.is_active:
         members = rel_user_group.objects.filter(id_group=g, is_member=True).order_by("-is_active")
         _members = list()
+        print "MIEMBROS", members
         for m in members:
             try:
                 rel = rol_user_minutes.objects.get(id_group=g, id_user=m.id_user, id_minutes=None, is_active=False)
             except rol_user_minutes.DoesNotExist:
                 rel = None
-            except Exception:
+            except Exception, e:
                 rel = None
-            if rel:
-                _members.append({"member": m, "rol": rel})
+            _members.append({"member": m, "rol": rel})
         try:
             _secretary = rol_user_minutes.objects.get(id_group=g, is_active=False, is_secretary=True).id_user.id
         except rol_user_minutes.DoesNotExist:
