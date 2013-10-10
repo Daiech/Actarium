@@ -2,7 +2,7 @@
 ## Django Python ##
 ###################
 *.pyc
-Actarium/settings.py
+settings_db.py
 media/*
 static/js/vendor/tiny_mce/
 
@@ -10,7 +10,6 @@ static/js/vendor/tiny_mce/
 ## Eclipse
 #################
 *.pyc
-Daiech_com/settings.py
 .settings/
 *.pydevproject
 .project
@@ -209,9 +208,6 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
-
-# Settings files
-settings.py
 
 # archivos de la bd
 media/*
