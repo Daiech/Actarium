@@ -2,8 +2,8 @@
 ## Django Python ##
 ###################
 *.pyc
+Actarium/local_settings.py
 settings_db.py
-media/*
 static/js/vendor/tiny_mce/
 
 #################
@@ -211,5 +211,3 @@ Thumbs.db
 
 # archivos de la bd
 media/*
-
-Actarium/local_settings.py
