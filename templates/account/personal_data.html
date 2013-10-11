@@ -47,6 +47,7 @@
     <hr>
 
     <div class="white-box-container box-container">
+        <form method="post" action="" id="disconnect-form">{% csrf_token %}</form>
         <p>{% trans 'Cuantas asociadas' %}:</p>
         <ul>
           {% for assoc in backends.associated %}
