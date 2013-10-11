@@ -75,10 +75,10 @@
             </div>
             <div class="btn-login-nets">
                 {% trans "Inicia con" %} 
-                <a href="/account/login/facebook">
+                <a href="{% url 'social:begin' 'facebook' %}">
                     <span class="login-face"></span>
                 </a>
-                <a href="/account/login/google">
+                <a href="{% url 'social:begin' "google-oauth2" %}">
                     <span class="login-google"></span>
                 </a>
             </div>

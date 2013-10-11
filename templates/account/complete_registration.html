@@ -1,0 +1,42 @@
+{% extends "website/base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Confirmaci&oacute;n de cuenta' %}{% endblock %}
+{%block body %}
+<article>
+	
+	<section id="groups-container" class="message-box white-box-container">
+		<h4 class="text-center">{% trans 'Configura tu perf&iacute;l' %}</h4>
+		<hr>
+		<div class="text-center">
+			<form method="POST">
+				{% csrf_token %}
+				<table>
+				{{ form }}
+				</table>
+				<!-- <label class="checkbox">
+                    <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a>
+                </label> -->
+                <hr>
+	            <a href="{% url 'home' %}" class="btn btn-link" class="text-right">{% trans 'Omitir' %}</a>
+	            <button type="submit" class="btn btn-success btn-large" id="btn-submit">
+	                {% trans 'Confirmar' %}
+	            </button>
+			</form>
+		</div>
+	</section>
+</article>
+{% endblock%}
+
+{%block js%}
+<script type="text/javascript">
+	$(document).ready(function(){
+	});
+</script>
+{% endblock%}
+
+{%block style%}
+<style>
+	.message-box{display: block;margin: 0 auto;width: 40%;}
+	table{width: 100%}
+</style>
+{%endblock%}

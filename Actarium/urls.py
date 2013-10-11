@@ -15,6 +15,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'website.views.home', name='home'),
+    url(r'^tour$', 'website.views.home', name='tour'),
     url(r'^about', 'website.views.about'),
     url(r'^help/faq', 'website.views.help'),
     url(r'^feed-back', 'website.views.sendFeedBack'),
@@ -37,8 +38,9 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^meal/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^meal/', include(admin.site.urls)),
 )
 
 if settings.DEBUG:

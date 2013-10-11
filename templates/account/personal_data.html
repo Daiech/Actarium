@@ -1,11 +1,10 @@
 {% extends "asettings/settings_menu.html" %}
 {% block TITLE %}Cuenta de Usuario{% endblock %}
-{% load gravatartag %}
+{% load gravatartag i18n %}
 {% block bodysettings %}
 <div>
     <div class="uTop">
         <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
-        Hola
         <strong>
             <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
                 {{ user.first_name }} ({{user.username}})
@@ -17,18 +16,19 @@
         {% csrf_token %}
         <table class="">
             <tr>
-                <th colspan="2" class="title">Tus datos</th>
+                <th colspan="2" class="title">{% trans 'Tus datos' %}</th>
             </tr>
             {{formUser}}
             <tr>
-            	<td class="t-a-r">Cambiar im&aacute;gen:</td>
-            	<td>Actarium usa el sistema centralizado de im&aacute;genes <a href="http://gravatar.com/">Gravatar</a>. Agrega una foto a tu correro en <a href="http://gravatar.com/">Gravatar.com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella.</td>
+            	<td class="t-a-r">{% trans 'Cambiar im&aacute;gen' %}:</td>
+            	<td><img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+                {% trans 'Agrega una foto a tu correro en <a href="http://gravatar.com/">Gravatar.com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella.' %}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>
                     <button type="submit" class="btn btn-success btn-large">
-                        Actualizar Datos
+                        {% trans 'Actualizar Datos' %}
                     </button>
                 </td>
             </tr>
@@ -43,12 +43,40 @@
         </table>
 
     </form>
-    <p class="containterMargin">Los datos con * son de caracter obligatorio.</p>
-
+    <p class="containterMargin">{% trans 'Los datos con * son de caracter obligatorio.' %}</p>
     <hr>
 
-    <p>Eres miembro desde el {{ user.date_joined }} </p>
-    <p>Ultimo logueo: {{ user.last_login}}.</p>
+    <div class="white-box-container box-container">
+        <p>{% trans 'Cuantas asociadas' %}:</p>
+        <ul>
+          {% for assoc in backends.associated %}
+            <li>
+                {% ifequal assoc.provider 'google-oauth2' %}
+                Google
+                {% else %}{{ assoc.provider|title }}{% endifequal %}
+              (<a href="{% url 'social:disconnect_individual' assoc.provider assoc.id %}" class="disconnect">{% trans 'Desconectar' %}</a>)
+            </li>
+          {% endfor %}
+        </ul>
+        {% if backends.not_associated %}
+        <p>{% trans 'Conectate con' %}: </p>
+        <ul>
+          {% for name in backends.not_associated %}
+            <li>
+              <a href="{% url 'social:begin' name %}">
+                {% ifequal name 'google-oauth2' %}
+                Google
+                {% else %}{{ name|title }}{% endifequal %}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <hr>
+
+    <p>{% trans 'Eres miembro desde el' %} {{ user.date_joined }} </p>
+    <p>{% trans 'Ultimo logueo' %}: {{ user.last_login}}.</p>
 </div>
 
 {% endblock%}

@@ -18,9 +18,23 @@ from emailmodule.views import sendEmailHtml
 from account.templatetags.gravatartag import showgravatar
 from groups.models import DNI, DNI_type, DNI_permissions
 from django.utils import simplejson as json
+from django.core.urlresolvers import reverse
 
 
 #------------------------------- <Normal User>---------------------------
+@login_required(login_url='/account/login')
+def complete_registration(request):
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("tour"))
+    else:
+        form = UserForm(instance=request.user)
+    return render_to_response("account/complete_registration.html", locals(), context_instance=RequestContext(request))
+
+
+
 def newUser(request):
     '''
     crea un nuevo usuario usando un formulario propio

@@ -117,18 +117,6 @@ ROOT_URLCONF = 'Actarium.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Actarium.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    'django.core.context_processors.request',
-    'website.context_processors.gloval_vars_url',
-    'groups.context_processors.get_groups',
-)
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -148,6 +136,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'social.apps.django_app.default',
     'groups',
     'account',
     'actions_log',
@@ -191,8 +180,24 @@ DEFAULT_FROM_EMAIL = 'Actarium <no-reply@daiech.com>'
 
 ORGS_IMG_DIR = "orgs_img/"
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    'django.core.context_processors.request',
+    'social.apps.django_app.context_processors.backends',
+    'website.context_processors.gloval_vars_url',
+    'groups.context_processors.get_groups',
+)
 
 AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOAuth2',
+    # 'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
     'account.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend'
 )
@@ -205,3 +210,56 @@ LANGUAGES = (
 LOGIN_URL = "/account/login"
 LOGOUT_URL = "/account/logout"
 LOGIN_REDIRECT_URL = "/"
+
+# LOGIN_ERROR_URL = "/except"
+URL_PATH = URL_BASE
+SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#welcome'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/account/complete-registration"
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = "/account/?msj=new-association"
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = "/account/?msj=association-deleted"
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/new-error-url/'
+SOCIAL_AUTH_COMPLETE_URL_NAME  = '/socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = '/socialauth_associate_complete'
+
+SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
+# SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
+SOCIALredirect_AUTH_UID_LENGTH = 767
+SOCIAL_AUTH_UUID_LENGTH = 16
+SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
+
+SOCIAL_AUTH_FORCE_EMAIL_VALIDATION = False
+SOCIAL_AUTH_EMAIL_FORM_URL = '/signup-email'
+SOCIAL_AUTH_EMAIL_FORM_HTML = 'email_signup.html'
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'apps.account.mail.send_validation'
+# # SOCIAL_AUTH_EMAIL_VALIDATION_URL = reverse('email_sent')
+SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
+SOCIAL_AUTH_USERNAME_FORM_HTML = 'username_signup.html'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+
+SOCIAL_AUTH_EMAIL_NOT_UNIQUE_URL = "/account/complete-registration?msj=ya-existe-ese-email"
+
+SOCIAL_AUTH_PIPELINE = ( 
+    'social.pipeline.social_auth.social_details', 
+    'social.pipeline.social_auth.social_uid', 
+    'social.pipeline.social_auth.auth_allowed', 
+    # 'social.pipeline.social_auth.social_user', 
+    'account.social_auth.social_user',
+    'social.pipeline.user.get_username', 
+    # 'social.pipeline.social_auth.associate_by_email', 
+    # 'social.pipeline.mail.mail_validation',
+    'account.social_auth.mail_unique',
+    'social.pipeline.user.create_user', 
+    'social.pipeline.social_auth.associate_user', 
+    'social.pipeline.social_auth.load_extra_data', 
+    'social.pipeline.user.user_details' 
+) 
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
