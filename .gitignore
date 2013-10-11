@@ -211,3 +211,5 @@ Thumbs.db
 
 # archivos de la bd
 media/*
+
+local_settings.py
