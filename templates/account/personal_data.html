@@ -130,6 +130,12 @@
 <script>
 	$(document).on("ready", function() {
 		$("#settings-personal-data").addClass("active");
+        $("a.disconnect").on('click', function (e) {
+              e.preventDefault();
+              $('form#disconnect-form')
+                  .attr('action', $(this).attr('href'))
+                  .submit();
+          });
 	});
 	{% if error_email %}
     setAlertError("Error al actualizar correo","Tu correo electronico no pudo ser actualizado")
