@@ -9,7 +9,7 @@ from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
 from groups.forms import newMinutesForm, newGroupForm
 from groups.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
-from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes, getExtraMinutesById, setMinutesVersion
+from groups.minutes import updateRolUserMinutes, saveMinute, setMinuteAssistance, getRolUserMinutes, getMembersAssistance, getMembersSigners, getPresidentAndSecretary, getRelUserMinutesSigned, getPrevNextOfGroup, getMinutesVersions, getTemplateMinutes, getAllPublicTemplates, getAllPrivateTemplates, getAssistanceFromRolUserMinutes, getSignersFromRolUserMinutes, getSignersList, getLastMinutes, getExtraMinutesById, setMinutesVersion, getReunionById
 from groups.models import *
 from emailmodule.models import *
 from actions_log.views import saveActionLog, saveViewsLog
