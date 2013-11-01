@@ -5,7 +5,7 @@
 <ul class="unstyled">
     <li>
         <a href="{%if rel_user.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="title-on-disabled {%if not rel_user.is_convener%}disabled{%endif%}" {%if not rel_user.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
-            <i class="icon-plus"></i> Convocar Reuni&oacute;n
+            <i class="icon-plus"></i> {% trans " Convocar Reuni&oacute;n" %}
         </a>
     </li>
 </ul>

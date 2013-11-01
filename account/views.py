@@ -155,11 +155,9 @@ def log_in(request):
     if not request.user.is_anonymous():
         return HttpResponseRedirect('/account/')
     if request.method == 'POST':
-        formulario = AuthenticationForm(request.POST)
-        if formulario.is_valid:
+        formulario = AuthenticationForm(data=request.POST)
+        if formulario.is_valid():
             return userLogin(request, request.POST['username'], request.POST['password'])
-        else:
-            formulario = AuthenticationForm(request.POST)
     else:
         formulario = AuthenticationForm()
     return render_to_response('account/login.html', {'formulario': formulario}, context_instance=RequestContext(request))
