@@ -131,9 +131,9 @@ def saveViewsLog(request, page):
         try:
             import os
             import commands
-            os.chdir('/home2/anuncio3/bin/mongodb-linux-x86_64-2.4.1/bin')
+            # os.chdir('/home2/anuncio3/bin/mongodb-linux-x86_64-2.4.1/bin')
             mongoresponse = commands.getstatusoutput(
-                "./mongod --fork --dbpath 'data/db' --smallfiles --logpath 'data/mongodb.log' --logappend")[1]
+                "mongod --fork --dbpath '/home2/anuncio3/mongodata_2014/data/db' --smallfiles --logpath '/home2/anuncio3/mongodata_2014/data/mongodb.log' --logappend")[1]
             saveErrorLog("Se ha activado el servidor de MongoDB %s" % (mongoresponse))
             print "Se ha activado el servidor de MongoDB %s" % (mongoresponse)
         except:

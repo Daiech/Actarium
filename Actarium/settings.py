@@ -18,7 +18,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 try:
-    from .settings_db import DATABASES
+    from .local_settings import DATABASES
 except ImportError:
     DATABASES = {
         'default': {
