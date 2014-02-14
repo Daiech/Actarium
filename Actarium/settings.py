@@ -22,8 +22,8 @@ try:
 except ImportError:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'actarium.sqlite',                      # Or path to database file if using sqlite3.
+            'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'actarium',                      # Or path to database file if using sqlite3.
             'USER': 'root',                      # Not used with sqlite3.
             'PASSWORD': 'holamundo',                  # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
