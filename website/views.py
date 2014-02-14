@@ -199,3 +199,11 @@ def getGlobalVar(name):
         return ""
     except Exception:
         return ""
+
+
+def services(request):
+    pdf = open(settings.STATIC_ROOT + "/Actarium.pdf", "r")
+    response = HttpResponse(pdf.read(), mimetype='application/pdf')
+    response['Content-Disposition'] = 'inline;filename=Services.pdf'
+    pdf.close()
+    return response
