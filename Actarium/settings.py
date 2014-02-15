@@ -1,3 +1,4 @@
+# encoding:utf-8
 # Django settings for Actarium project.
 import os.path
 try:
@@ -209,6 +210,10 @@ ugettext = lambda s: s
 LANGUAGES = (
     ('es', ugettext('Spanish')),
     ('en', ugettext('English')),
+)
+LANGUAGES = (
+    ('es', 'Spanish'),
+    ('en', 'English'),
 )
 LOGIN_URL = "/account/login"
 LOGOUT_URL = "/account/logout"
