@@ -1,5 +1,9 @@
 django
-#xhtml2pdf
+xhtml2pdf
 pillow
 pymongo
 MySQL-python
+
+python-social-auth
+python-slugify
+django-uuslug

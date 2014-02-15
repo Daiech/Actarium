@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_complete, password_reset_confirm
 from actions_log.views import saveActionLog, saveViewsLog
 from django.contrib.auth.models import User
-from django.utils.hashcompat import sha_constructor
+# from django.utils.hashcompat import sha_constructor
+from hashlib import sha256 as sha_constructor
 import random
 from emailmodule.views import sendEmailHtml
 from account.templatetags.gravatartag import showgravatar
