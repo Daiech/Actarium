@@ -2,8 +2,8 @@ django
 xhtml2pdf
 pillow
 pymongo
-psycopg2
-#MySQL-python
+#psycopg2
+MySQL-python
 
 python-social-auth
 python-slugify
