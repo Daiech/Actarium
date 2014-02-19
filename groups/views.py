@@ -10,7 +10,8 @@ from groups.forms import newGroupForm, newReunionForm
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
-from django.utils import simplejson as json
+# from django.utils import simplejson as json
+import json
 from account.templatetags.gravatartag import showgravatar
 from actions_log.views import saveActionLog, saveViewsLog
 from Actarium.settings import URL_BASE
