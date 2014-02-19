@@ -34,6 +34,7 @@ urlpatterns = patterns('',
 
     url(r'^ads/(?P<id_ads>[-\w]+)$', 'ads.views.home'),
     url(r'^services.pdf$', 'website.views.services', name='services'),
+    url(r'^features.pdf$', 'website.views.services', name='features'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
