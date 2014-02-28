@@ -99,6 +99,7 @@ body{
     /*background-image: url("/static/img/debut_light.png");*/
     background-image: url("/static/img/ticks.png");
     height: 100%;
+    font-family: "sans-serif"
 }
 a {color: #00aeaa;text-decoration: none;}
 .b{border: solid thin #dadada;}

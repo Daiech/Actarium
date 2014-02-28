@@ -3,6 +3,7 @@
 import os.path
 try:
     from .local_settings import DEBUG
+    print "DEBUG", DEBUG
 except Exception:
     DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -195,6 +196,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'social.apps.django_app.context_processors.backends',
     'website.context_processors.gloval_vars_url',
+    'website.context_processors.is_debug',
     'groups.context_processors.get_groups',
 )
 

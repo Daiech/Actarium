@@ -3,23 +3,26 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
-import re
-from groups.models import reunions, assistance, rel_user_group, DNI_permissions
-from actions_log.views import saveActionLog, saveViewsLog
-from groups.views import dateTimeFormatForm
 from django.utils import simplejson as json
-from emailmodule.views import sendEmailHtml
-from account.templatetags.gravatartag import showgravatar
-from website.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.utils import translation
+from groups.models import reunions, assistance, rel_user_group, DNI_permissions
+from groups.views import dateTimeFormatForm
+from actions_log.views import saveActionLog, saveViewsLog
+from emailmodule.views import sendEmailHtml
+from account.templatetags.gravatartag import showgravatar
+from .models import *
+from .utils import *
 import datetime
+import re
 
 
 def home(request):
     if request.user.is_authenticated():
         saveViewsLog(request, "Home_authenticated")
+        return organizations_index(request)
         #-----------------</GRUPOS>-----------------
         gr = rel_user_group.objects.filter(
             id_user=request.user,
@@ -72,7 +75,6 @@ def home(request):
                 if request.GET.get("lang") in l:
                     lang_available = True
             if lang_available:
-                from django.utils import translation
                 request.session['django_language'] = request.GET.get("lang")
                 translation.activate(request.GET.get("lang"))
             else:
