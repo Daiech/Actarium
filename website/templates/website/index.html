@@ -10,7 +10,34 @@
             <h3 class="panel-title">{{ o.name }}</h3>
           </div>
           <div class="panel-body">
-            
+            <div class="">
+                <div class="group-preview">
+                    <span class="pull-right group-notifications"></span>
+                    <div class="group-circle">
+                    <span class="group-members-num">7</span>
+                    </div>
+                    <div class="group-permissions">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="group-name">Nombre del grupo</div>
+                </div>
+                <div class="group-preview">
+                    <span class="pull-right group-notifications"></span>
+                    <div class="group-circle">
+                    <span class="group-members-num">7</span>
+                    </div>
+                    <div class="group-permissions">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="group-name">Nombre del grupo</div>
+                </div>
+            </div>
           </div>
         </div>
     {% endfor %}
@@ -19,7 +46,13 @@
 
 {% block style%}
     <style>
-        
+        .group-preview{min-width: 100px;max-width: 150px;position: relative;text-align: center;display: inline-block;margin: 0 5px;margin-right: 20px;}
+        .group-preview .group-notifications{background-color: #428bca; border-radius: 8px;width: 15px;height: 15px;position: relative;}
+        .group-preview .group-circle{border-radius: 50px;width: 100px;height: 100px;margin:0 auto;border: 4px solid #79B632;/*#5CB89E*/}
+        .group-preview .group-members-num{position: absolute;top: 30%;left: 42%;font-size: 36px;}
+        .group-preview .group-name{font-weight: bold;}
+        .group-preview .group-permissions{margin-top: 8px;margin-bottom: -3px}
+        .group-preview .group-permissions > span{width: 15px;height: 15px;display: inline-block;border: solid thin #dadada;}
     </style>
 {%endblock%}
 

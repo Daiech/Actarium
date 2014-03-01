@@ -11,7 +11,8 @@
 	    			<!-- &nbsp; -->
 	    			<strong>{% trans "Men&uacute; de Grupo" %}</strong>
 	    			<a href="#" class="btn pull-right">
-	    				<i class="icon-align-justify"></i>
+	    				<span class="glyphicon glyphicon-align-justify"></span>
+
 	    			</a>
 	    		</div>
 	    		<ul id="group-menu-list" class="unstyled nav nav-list bs-docs-sidenav">
@@ -33,7 +34,7 @@
 	    			</li>
 	    		</ul>
 	    	</div>
-	    	<div id="toolbar-btn" class="bb box">
+	    	<div id="toolbar-btn" class="bb">
 	    		{% block toolbar_content %}{% endblock %}
 	    	</div>
 	    	<div id="group-aside" class="">
@@ -143,7 +144,7 @@ right: 0;}
 		#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 190px;min-height: 350px;margin-top: -1px;position: fixed;height: 100%;border-top: 1px solid #cbcccc;}
 		#content-ads > div{width: 110px;margin: 10px auto;}
 		#ads-title{width: 174px !important;margin-top: -1px !important;font-size: 12px;padding: 0 8px}
-		#group-menu{background: #F7F7F7;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;/*min-height: 400px;*/height: 100%;position: fixed;}
+		#group-menu{background: #F7F7F7;border-left: 1px solid #cbcccc;width: 226px;position: absolute;right: 0;height: 100%;position: fixed;}
 		#group-menu ul{margin-top: 0;margin-bottom: 0;}
 		#group-content{padding: 15px 240px;padding-left: 210px;}
 		.bs-docs-sidenav{width: 100%;}
@@ -187,7 +188,7 @@ right: 0;}
 
 		@media (min-width: 768px) and (max-width: 979px) {
 			#group-content{padding: 15px;padding-left: 210px;}
-			#group-menu{float: none;position: relative;margin-left: 190px;width: auto;}
+			#group-menu{float: none;position: relative;margin-left: 190px;width: 100%;}
 			#group-aside{top:73px;}
 			#topbar-btn-logo{position: fixed;}
 			#menu-title{display: none;}
@@ -205,7 +206,7 @@ right: 0;}
 			#ads-title{border-top: none;width: auto !important;}
 			#content-ads *{display: inline-block;}
 			#menu-title{display: none;}
-			#group-menu{float: none;position: relative;margin-left: 0px;width: auto;margin-top: 42px}
+			#group-menu{float: none;position: relative;margin-left: 0px;width: 100%;margin-top: 42px}
 			#topbar-btn-logo{height: 42px;}
 			.topbar-logo-center{margin-top: 0}
 		}
