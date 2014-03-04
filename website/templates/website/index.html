@@ -4,56 +4,57 @@
 
 {%block body%}
 <article>
+    <div class="organizations-list">
     {% for o in orgs %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{ o.name }}</h3>
+            <span class="org-principal-image pull-left"><img src="{{ STATIC_URL }}img/groups/default.jpg" alt="{{ o.name }}" /></span>
+            <h3 class="panel-title"><a href="{{ o.get_absolute_url }}">{{ o.name }}</a></h3>
           </div>
           <div class="panel-body">
             <div class="">
-                <div class="group-preview">
-                    <span class="pull-right group-notifications"></span>
-                    <div class="group-circle">
-                    <span class="group-members-num">7</span>
+                {% for g in groups %}
+                <a href="{{ g.get_absolute_url }}">
+                    <div class="group-preview">
+                        <span class="pull-right group-notifications glyphicon glyphicon-bell"></span>
+                        <div class="group-circle">
+                        <span class="group-members-num">{{ g.num_members }}</span>
+                        </div>
+                        <div class="group-permissions">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="group-name">{{ g.name }}</div>
                     </div>
-                    <div class="group-permissions">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div class="group-name">Nombre del grupo</div>
-                </div>
-                <div class="group-preview">
-                    <span class="pull-right group-notifications"></span>
-                    <div class="group-circle">
-                    <span class="group-members-num">7</span>
-                    </div>
-                    <div class="group-permissions">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div class="group-name">Nombre del grupo</div>
-                </div>
+                </a>
+                {% empty %}
+                <p>No tienes ning&uacute;n grupo :(</p>
+                <div class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crea un grupo' %}</div>
+                {% endfor %}
             </div>
           </div>
         </div>
     {% endfor %}
+    </div>
 </article>
 {%endblock%}
 
 {% block style%}
-    <style>
-        .group-preview{min-width: 100px;max-width: 150px;position: relative;text-align: center;display: inline-block;margin: 0 5px;margin-right: 20px;}
-        .group-preview .group-notifications{background-color: #dadada; border-radius: 8px;width: 13px;height: 13px;position: relative;}
-        .group-preview .group-circle{border-radius: 50px;width: 100px;height: 100px;margin:0 auto;border: 4px solid #79B632;/*#5CB89E*/}
-        .group-preview .group-members-num{position: absolute;top: 30%;left: 42%;font-size: 36px;}
-        .group-preview .group-name{font-weight: bold;}
-        .group-preview .group-permissions{margin-top: 8px;margin-bottom: -3px}
-        .group-preview .group-permissions > span{width: 15px;height: 15px;display: inline-block;border: solid thin #dadada;}
-    </style>
+<style>
+    .organizations-list .panel-title{font-weight: bold;}
+    .organizations-list .org-principal-image{width: 30px;height: 30px;margin-top: -6px;margin-right: 6px;}
+    .organizations-list .org-principal-image img{width: 28px;margin-top: 5px;}
+    .group-preview{color: #666;min-width: 100px;max-width: 150px;position: relative;text-align: center;display: inline-block;margin: 0 5px;margin-left: 0px;margin-right: 20px;padding:10px 10px 5px;border:solid thin;border-color: white;}
+    .group-preview:hover{border:solid thin #dadada;color: #555;}
+    .group-preview .group-notifications{color: #C7C6C6; /*border-radius: 8px;*/width: 13px;height: 13px;position: relative;}
+    .group-preview .group-circle{border-radius: 50px;width: 100px;height: 100px;margin:0 auto;border: 4px solid #79B632;/*#5CB89E*/}
+    .group-preview .group-members-num{margin-top: 37px;font-size: 36px;text-align: center !important;display: block;}
+    .group-preview .group-name{font-weight: bold;}
+    .group-preview .group-permissions{margin-top: 8px;margin-bottom: -3px}
+    .group-preview .group-permissions > span{width: 15px;height: 15px;display: inline-block;border: solid thin #dadada;}
+</style>
 {%endblock%}
 
 {% block js %}
