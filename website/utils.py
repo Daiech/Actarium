@@ -9,7 +9,7 @@ def organizations_index(request):
     except:
         orgs = None
     try:
-        groups = [{"id": 1, "name": "Mi grupo", "num_members": 4}, {"id": 2, "name": "Junta directiva", "num_members": 43}]
+        groups = [{"id": 1, "name": "Mi grupo", "num_members": 4}, {"id": 2, "name": "Junta directiva de Parquesoft", "num_members": 43}]
     except:
         groups = None
     # groups = list()

@@ -310,6 +310,9 @@ class organizations(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
+    def get_num_members(self):
+        return self.id
+
     def __unicode__(self):
         return "Org: %s" % (self.name)
 
