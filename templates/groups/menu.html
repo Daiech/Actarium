@@ -51,12 +51,19 @@
 					<div class="white-box-container">dni</div>
 	    		{% endif %}
 	    		<div id="group-content-div">
+	    			<div class="alert">
+					  <strong>Ayudanos a mejorar!</strong><br>Por favor responde esta pequeña encuesta, te tomará solo un minuto.
+					  <a href="#encuesta" role="button" class="btn btn-info btn-large" data-toggle="modal">Click para responder encuesta</a>
+					</div>
 	    			{% block menu_content %}{% endblock %}
 	    		</div>
 	    	</div>
 	    </div>
     </div>
 <!-- </div> -->
+
+
+	{% include "encuesta.html" %}
 {%endblock%}
 {% block js %}
 	<!-- <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script> -->

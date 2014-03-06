@@ -69,3 +69,7 @@ This will create the initial data for de db
 
 7) Actarium is ready to run.
 On development type: `python manage.py runserver`
+
+
+Note: Para ver la letra de tiny_mce más grande, el archivo editorstyles.css debe estar en la siguiente dirección:
+{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css
