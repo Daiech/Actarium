@@ -32,7 +32,7 @@ def showHomeGroup(request, slug_group):
         "group": g,
         "rel_user": _user
     }
-    return render_to_response("groups/templates/home.html", ctx, context_instance=RequestContext(request))
+    return render_to_response("groups/templates/folder.html", ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')

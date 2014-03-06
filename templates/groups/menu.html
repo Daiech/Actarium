@@ -15,9 +15,9 @@
 	    			</a>
 	    		</div>
 	    		<ul id="group-menu-list" class="unstyled nav nav-list bs-docs-sidenav">
-	    			<li id="group-menu-home"><a href="{% url 'show_home' group.slug %}">{% trans "Inicio" %}</a></li>
-	    			<li id="group-menu-team"><a href="{% url 'show_team' group.slug  %}">{% trans "Equipo de trabajo" %}</a></li>
+	    			<!-- <li id="group-menu-home"><a href="{% url 'show_home' group.slug %}">{% trans "Inicio" %}</a></li> -->
 	    			<li id="group-menu-folder"><a href="{% url 'show_folder' group.slug %}">{% trans "Libro de Actas" %}</a></li>
+	    			<li id="group-menu-team"><a href="{% url 'show_team' group.slug  %}">{% trans "Equipo de trabajo" %}</a></li>
 	    			<li id="group-menu-calendar"><a href="{% url 'show_calendar' group.slug %}">{% trans "Agenda de reuniones" %}</a></li>
 	    			<li id="group-menu-settings"><a href="#settings">
 	    				<i id="icon-chevron" class="icon-chevron-down icon-chevron-right"></i> {% trans "Configuraci&oacute;n de grupo" %}</a>
@@ -52,8 +52,8 @@
 	    		{% endif %}
 	    		<div id="group-content-div">
 	    			<div class="alert">
-					  <strong>Ayudanos a mejorar!</strong><br>Por favor responde esta pequeña encuesta, te tomará solo un minuto.
-					  <a href="#encuesta" role="button" class="btn btn-info btn-large" data-toggle="modal">Click para responder encuesta</a>
+					  <strong>Ayúdenos a mejorar!</strong><br>Por favor responda esta pequeña encuesta, le tomará sólo un minuto.
+					  <a href="#encuesta" role="button" class="btn btn-info btn-large" data-toggle="modal">Responder encuesta</a>
 					</div>
 	    			{% block menu_content %}{% endblock %}
 	    		</div>
