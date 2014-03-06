@@ -247,7 +247,7 @@
 		    	var role = checkbox.attr("data-role")
 		    	var role_name = checkbox.attr("data-role-name")
 		    	var uid = checkbox.attr("data-uid")
-		    	console.log(checkbox.is(":checked"))
+		    	console.log(checkbox.is(":checked"));
 		    	if(checkbox.is(":checked")){
 		    		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 		    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
