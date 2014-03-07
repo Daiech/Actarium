@@ -148,7 +148,8 @@ INSTALLED_APPS = (
     'website',
     'emailmodule',
     # 'rosetta',
-    'billing'
+    'billing',
+    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -273,3 +274,9 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

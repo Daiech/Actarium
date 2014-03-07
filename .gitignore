@@ -5,6 +5,9 @@
 Actarium/local_settings.py
 settings_db.py
 static/js/vendor/tiny_mce/
+*.dot
+*.svg
+*.eps
 
 #################
 ## Eclipse
