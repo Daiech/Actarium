@@ -45,7 +45,7 @@
     </form>
     <p class="containterMargin">{% trans 'Los datos con * son de caracter obligatorio.' %}</p>
     <hr>
-
+    {% comment %}
     <div class="white-box-container box-container">
         <form method="post" action="" id="disconnect-form">{% csrf_token %}</form>
         <p>{% trans 'Cuantas asociadas' %}:</p>
@@ -74,6 +74,7 @@
         </ul>
         {% endif %}
     </div>
+    {% endcomment %}
     <hr>
 
     <p>{% trans 'Eres miembro desde el' %} {{ user.date_joined }} </p>

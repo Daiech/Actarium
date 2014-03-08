@@ -3,7 +3,6 @@
 import os.path
 try:
     from .local_settings import DEBUG
-    print "DEBUG", DEBUG
 except Exception:
     DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -18,6 +17,10 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps.emailmodule','apps.billing',]
+
+if DEBUG:
+    APPS += ["django_extensions"]
 
 try:
     from .settings_db import DATABASES
@@ -32,7 +35,6 @@ except ImportError:
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
-
 ALLOWED_HOSTS = ["actarium.com", ".actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost"]
 
 # Local time zone for this installation. Choices can be found here:
@@ -141,16 +143,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'social.apps.django_app.default',
-    'groups',
-    'account',
-    'actions_log',
-    'website',
-    'emailmodule',
+    # 'social.apps.django_app.default',
     # 'rosetta',
-    'billing',
-    'django_extensions',
-)
+    # 'django_extensions',
+) + tuple(APPS)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -195,17 +191,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request',
+    'apps.website.context_processors.gloval_vars_url',
+    'apps.website.context_processors.is_debug',
+    'apps.groups_app.context_processors.get_groups',
     'social.apps.django_app.context_processors.backends',
-    'website.context_processors.gloval_vars_url',
-    'website.context_processors.is_debug',
-    'groups.context_processors.get_groups',
 )
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
+    # 'social.backends.google.GoogleOAuth2',
     # 'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
-    'account.backends.EmailOrUsernameModelBackend',
+    'apps.account.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend'
 )
 

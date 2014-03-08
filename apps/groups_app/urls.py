@@ -1,0 +1,58 @@
+from django.conf.urls import url, patterns
+
+#Urls to new group design
+
+groups_urls = patterns('',
+    # url(r'^(?P<slug_group>[-\w]+)/admin/emailNotifications', 'apps.emailmodule.views.emailNotifications', name='Email Notifications'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/emailAjax', 'apps.emailmodule.views.emailAjax', name='Email Ajax'),
+)
+groups_urls += patterns('apps.groups_app.minutes',
+    # url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'rolesForMinutes', name='set_role_for_minute'),
+    url(r'^(?P<slug_group>[-\w]+)/set-rol-for-minute', 'setRolForMinute', name='Set Role'),
+    url(r'^(?P<slug_group>[-\w]+)/set-show-dni', 'setShowDNI', name='Set Show DNI'),
+    url(r'^(?P<slug_group>[-\w]+)/add-new-annotation', 'newAnnotation', name='Set annotation'),
+    # url(r'^(?P<slug_group>[-\w]+)/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='New minutes with reunion'),
+    url(r'^(?P<slug_group>[-\w]+)/uploadMinutes', 'uploadMinutes', name='uploadMinutes'),
+    # url(r'^(?P<slug>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'showMinutes'),
+    # url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)/edit/(?P<slug_template>.*)$', 'editMinutes'),
+    url(r'^uploadMinutesAjax', 'uploadMinutesAjax'),
+    url(r'^setApprove$', 'setMinutesApprove'),
+
+)
+groups_urls += patterns('apps.groups_app.views',
+    url(r'^new$', 'newGroup', name='something'),
+    # url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groupInfoSettings', name='Admin Info Groups'),
+    # url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groupDNISettings', name='Admin DNI Groups'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/request_dni', 'requestDNI', name='Request DNI ajax'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/resend-invitation', 'resendInvitation', name='Resend Invitation'),
+    url(r'^(?P<slug_group>[-\w]+)/admin/change-names', 'changeNames', name='Change Names'),
+    url(r'^(?P<slug_group>[-\w]+)/admin', 'groupSettings', name='Admin Groups'),
+    url(r'^(?P<slug_group>[-\w]+)/setRole', 'setRole', name='Set Role'),
+    url(r'^newReunion/(?P<slug>[-\w]+)', 'newReunion'),
+    url(r'^calendar/(?P<slug>[-\w]*)', 'calendarDate'),
+    url(r'^calendar', 'calendar'),
+    url(r'^getMembers$', 'getMembers'),
+    url(r'^setInvitation$', 'newInvitationToGroup'),
+    url(r'^getReunions$', 'getReunions'),
+    url(r'^getNextReunions$', 'getNextReunions'),
+    url(r'^getReunion', 'getReunionData'),
+    url(r'^setAssistance$', 'setAssistance'),
+    url(r'^acceptInvitation$', 'acceptInvitation'),
+    url(r'^(?P<slug_group>[-\w]+)/deleteInvitation$', 'deleteInvitation'),
+    # url(r'^(?P<slug>[-\w]+)$', 'showGroup'),
+    url(r'^$', 'groupsList'),
+)
+
+groups_urls += patterns('apps.groups_app.views_groups',
+    url(r'^(?P<slug_group>[-\w]+)/config/edit-info$', 'editInfoGroup', name='edit_info_group'),
+    url(r'^(?P<slug_group>[-\w]+)/config/email-notifications$', 'configEmailNotifications', name='email_notifications'),
+    url(r'^(?P<slug_group>[-\w]+)/config/dni$', 'showGroupDNISettings', name='dni_group'),
+    url(r'^(?P<slug_group>[-\w]+)/minutes-code/edit/(?P<minutes_code>[-\w.\ ]+)/(?P<slug_template>.*)$', 'editMinutes', name="edit_minutes"),
+    url(r'^(?P<slug_group>[-\w]+)/minutes-code/(?P<minutes_code>[-\w.\ ]+)$', 'showMinuteGroup', name="show_minute"),
+    url(r'^(?P<slug_group>[-\w]+)/minutes/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='create_minutes'),
+    url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'rolesForMinutes', name='set_role_for_minute'),
+    url(r'^(?P<slug_group>[-\w]+)/team$', 'showTeamGroup', name="show_team"),
+    url(r'^(?P<slug_group>[-\w]+)/folder$', 'showFolderGroup', name="show_folder"),
+    url(r'^(?P<slug_group>[-\w]+)/calendar$', 'showCalendarGroup', name="show_calendar"),
+    url(r'^(?P<slug_group>[-\w]+)/', 'showHomeGroup', name="show_home"),
+)
