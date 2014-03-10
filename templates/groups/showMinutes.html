@@ -19,14 +19,14 @@
 				<div class="pull-left">
 			    	<!-- <span>Fecha de creaci&oacute;n: {{minutes.date_created}}</span> -->
 			    	
-					<a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn"><i class="icon-plus"></i> Crear acta</a>
+					<a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn"><span class="glyphicon glyphicon-plus"></span> Crear acta</a>
 					<form method="post" class="minutes-form-btn">
 						{% csrf_token %}
 						<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
-						<button type='submit' id="btn-generate-pdf" class="btn" {%if not minutes.is_full_signed%}disabled title="Los PDF solo son generados para actas aprobadas."{%endif%} ><i class="icon-file"></i> Generar PDF</button>
+						<button type='submit' id="btn-generate-pdf" class="btn" {%if not minutes.is_full_signed%}disabled title="Los PDF solo son generados para actas aprobadas."{%endif%} ><i class="glyphicon glyphicon-file"></i> Generar PDF</button>
 					</form>
 					{% if is_secretary and not minutes.is_full_signed%}
-					<button class="btn" id="minutes-edit"><i class="icon-pencil"></i> Editar Acta</button>
+					<button class="btn" id="minutes-edit"><i class="glyphicon glyphicon-pencil"></i> Editar Acta</button>
 					{%endif%}
 					{%if minutes_version%}
 					<a href="#" id="history" class="btn btn-link">Ver historial de cambios ({{minutes_version|length}})</a>
@@ -35,8 +35,8 @@
 				<div class="pull-right">
 					<!-- <span class="b">1-1</span> -->
 					<div class="btn-group">
-						<a class="btn {%if not prev %}disabled{%endif%}" href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}"><i class="icon-arrow-left"></i></a>
-						<a class="btn {%if not next %}disabled{%endif%}" href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}"><i class="icon-arrow-right"></i></a>
+						<a class="btn {%if not prev %}disabled{%endif%}" href="{%if prev %}/groups/{{group.slug}}/minutes/{{prev.code}}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+						<a class="btn {%if not next %}disabled{%endif%}" href="{%if next %}/groups/{{group.slug}}/minutes/{{next.code}}{%else%}#{%endif%}"><i class="glyphicon glyphicon-arrow-right"></i></a>
 					</div>
 				</div>
 	    	</div>
@@ -99,7 +99,7 @@
 		$("#div-sign").fadeOut(300,function(){$(this).empty()});
 		var u = $("#missing-"+data["user-id"]);
 		if(data['approved']==1){
-			u.find("div.icon-approver-status").html('<i class="icon-ok"></i>');
+			u.find("div.icon-approver-status").html('<i class="glyphicon glyphicon-ok"></i>');
 			setAlertMessage("Aprobado!", "Haz aprobado esta acta.");
 		}
 	}

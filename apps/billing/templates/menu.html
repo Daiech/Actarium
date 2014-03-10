@@ -15,7 +15,7 @@
     <div id="groups-container" class="">
     	<div class="row">
 	    	<div id="group-menu" class="pull-right"  data-spy="affix">
-	    		<ul class="unstyled nav nav-list bs-docs-sidenav ">
+	    		<ul class="list-unstyled nav nav-list bs-docs-sidenav ">
 	    			<li id="to_order"><a href="{% url 'to_order'%}">{% trans "Facturacion" %}</a></li>
 	    			<li id="create_advertising"><a href="{% url 'create_advertising'%}">{% trans "Crear Anuncios" %}</a></li>
 	    			<li id="get_advertising"><a href="{% url 'get_advertising'%}">{% trans "Mostrar Anuncios" %}</a></li>
@@ -73,10 +73,10 @@
 				//  	break;
 				case "#settings":
 				  	$("#group-settings-submenu").slideToggle("fast");
-				  	if ( $("#icon-chevron").hasClass("icon-chevron-down") ){
-				  		$("#icon-chevron").removeClass("icon-chevron-down");
+				  	if ( $("#icon-chevron").hasClass("glyphicon glyphicon-chevron-down") ){
+				  		$("#icon-chevron").removeClass("glyphicon glyphicon-chevron-down");
 				  	}else{
-				  		$("#icon-chevron").addClass("icon-chevron-down");
+				  		$("#icon-chevron").addClass("glyphicon glyphicon-chevron-down");
 				  	}
 				  	break;
 				default:

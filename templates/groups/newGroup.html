@@ -78,7 +78,7 @@
                     <div id="administrator" class="">
                     <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">Administrador principal de grupo:</label>
                     <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ Cambiar administrador</a>
-                    <ul id="admin-list" class="unstyled">
+                    <ul id="admin-list" class="list-unstyled">
                         <li>
                             <label for="id_admin">
                                 <input type="radio" name="id_admin" value="{{user.id}}" id="id_admin" checked> <img src="{{ user.email|showgravatar:'20'}}" class="img20"> {{user.first_name}} {{user.last_name}} (yo)
@@ -88,13 +88,13 @@
                     <div id="admin-box" style="display:none">
                         <input id="search-member" type="text" placeholder="email o nombre de usuario" autocomplete="false">
                     </div>
-                    <ul id="search-result" class="unstyled">
+                    <ul id="search-result" class="list-unstyled">
                         
                     </ul>
                 </div>
                 </div>
                 <div>
-                    <ul class="unstyled">
+                    <ul class="list-unstyled">
                     {{newGroupForm.as_ul}}
                     </ul>
                 </div>

@@ -112,10 +112,10 @@
                     </header>
                     <div class="t-a-r">
                         <a href="/groups/new" class="btn btn-small">
-                            <i class="icon-plus"></i> Crear Grupo
+                            <span class="glyphicon glyphicon-plus"></span> Crear Grupo
                         </a>
                         <a href="/groups/calendar" class="btn btn-small">
-                            <i class="icon-calendar"></i> Reuniones
+                            <span class="glyphicon glyphicon-calendar"></span> Reuniones
                         </a>
                         <a href="/settings/organizations" class="btn btn-small">
                             <i class="icon-wrench"></i> Organizaciones
@@ -132,7 +132,7 @@
                                     {%if not gr_rel.id_group.is_pro%}<span class="free-group"><i class="icon-flag"></i></span>{%else%}<span class="label label-info">Pro</span>{%endif%}
                                     {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
                                     {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="glyphicon glyphicon-pencil"></i> {%endif%}
                                 </div>
                             </a>
                         </li>
@@ -141,7 +141,7 @@
                     <div class="icons-info pull-right">
                         <span>Info:</span>
                         <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-                        <span title="Tiene permisos de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                        <span title="Tiene permisos de redactar actas"><i class="glyphicon glyphicon-pencil"></i> Redactor</span>
                         <span title="Grupo Free"><i class="icon-flag"></i> Grupo Free</span>
                     </div>
             </section>

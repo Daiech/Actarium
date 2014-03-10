@@ -4,10 +4,10 @@
 
 {% block toolbar_content %}
 {% if rel_user.is_admin %}
-<ul class="unstyled">
+<ul class="list-unstyled">
 	<li class="dropdown">
 	    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
-	        <i class="icon-plus"></i> {% trans "Agregar miembro" %}
+	        <span class="glyphicon glyphicon-plus"></span> {% trans "Agregar miembro" %}
 	        <span class="caret"></span>
 	    </a>
 	    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -66,13 +66,13 @@
 							</th>
 							<th>
 								<div class="info-title" title="Personas encargadas de crear actas">
-									<i class="icon-pencil"></i>
+									<i class="glyphicon glyphicon-pencil"></i>
 									<span class="th-name">{% trans "Redactor" %}</span>
 								</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas que pueden convocar reuniones">
-									<i class="icon-calendar"></i> 
+									<span class="glyphicon glyphicon-calendar"></span> 
 									<span class="th-name">{% trans "Convocador" %}</span>
 								</div>
 							</th>
@@ -161,7 +161,7 @@
 								{% if rel_user.is_admin %}
 									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
 								{% else %}
-								{%if m.is_member%}<i class="icon-ok"></i>{% endif%}
+								{%if m.is_member%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>
@@ -170,7 +170,7 @@
 								{% if rel_user.is_admin %}
 									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
 								{% else %}
-								{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
+								{%if m.is_secretary%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>
@@ -179,7 +179,7 @@
 								{% if rel_user.is_admin %}
 									<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}> 
 								{% else %}
-								{%if m.is_convener%}<i class="icon-ok"></i>{% endif%}
+								{%if m.is_convener%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>
@@ -188,7 +188,7 @@
 								{% if rel_user.is_admin %}
 									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 								{% else %}
-								{%if m.is_admin%}<i class="icon-ok"></i>{% endif%}
+								{%if m.is_admin%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>
@@ -198,8 +198,8 @@
 					<div class="icons-info">
 		                <span>{% trans "Info" %}:</span>
 		                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> {% trans "Miembro" %}</span>
-		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> {% trans "Redactor" %}</span>
-		                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> {% trans "Convocador de reuniones" %}</span>
+		                <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans "Redactor" %}</span>
+		                <span title="Puede convocar reuniones"><span class="glyphicon glyphicon-calendar"></span> {% trans "Convocador de reuniones" %}</span>
 		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> {% trans "Administrador" %}</span>
 		                <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span>
 		            </div>
@@ -312,7 +312,7 @@
 {% block menu_content_js %}
 <script type="text/javascript">
 	$("#group-menu-team").addClass("active");
-	$("ul").addClass("unstyled");
+	$("ul").addClass("list-unstyled");
 </script>
 <script src="{{STATIC_PREFIX}}js/vendor/mustache.js"></script>
 <script type="text/javascript" ><!--

@@ -24,10 +24,10 @@
     					</div>
     					<div class="icon-approver-status">
     						{%ifequal member.is_signed_approved 0%}
-    						<i class="icon-time"></i>
+    						<i class="glyphicon glyphicon-time"></i>
     						{%endifequal%}
     						{%ifequal member.is_signed_approved 1%}
-    						<i class="icon-ok"></i>
+    						<i class="glyphicon glyphicon-ok"></i>
     						{%endifequal%}
     						{%ifequal member.is_signed_approved 2%}
     						<i class="icon-remove-circle"></i>
@@ -47,7 +47,7 @@
     	</header>
 		<hr>
 		<div>
-			<a href="#new-annotation"  class="btn-no-approve btn btn-link"><i class="icon-plus"></i> Crear anotaci&oacute;n</a>
+			<a href="#new-annotation"  class="btn-no-approve btn btn-link"><span class="glyphicon glyphicon-plus"></span> Crear anotaci&oacute;n</a>
 		</div>
 		<div id="new-annotation" class="hidden">
 			<strong>Crear nueva anotaci&oacute;n:</strong>
@@ -56,7 +56,7 @@
 		</div>
 		<hr>
 		<div class="mt20">
-			<ul id="annotations" class="mt20 unstyled">
+			<ul id="annotations" class="mt20 list-unstyled">
 				{%for annon in annotations%}
 				<li class="row-fluid"  id="annotation-{{annon.id_minutes_annotation}}">
 					<div class="annotation bb span70">

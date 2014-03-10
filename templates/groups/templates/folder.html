@@ -2,15 +2,15 @@
 {% load i18n %}
 
 {% block toolbar_content %}
-<ul class="unstyled">
+<ul class="list-unstyled">
     <li>
         <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
-                <i class="icon-plus"></i> {% trans "Crear acta" %}
+                <span class="glyphicon glyphicon-plus"></span> {% trans "Crear acta" %}
         </a>
     </li>
     <li>
         <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
-            <i class="icon-upload"></i> {% trans "Subir acta" %}
+            <i class="glyphico glyphicon glyphicon-cloud-upload"></i> {% trans "Subir acta" %}
         </a>
     </li>
 </ul>
@@ -22,7 +22,7 @@
             <h4 class="">{% trans "Folder de Actas" %}</h4>
         </header>
         <hr>
-        <ul class="unstyled minutes-list">
+        <ul class="list-unstyled minutes-list">
             {%for minute in minutes%}
                 {%if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_full_signed%}
                 <li title="{%if minute.minutes.is_full_signed%}
