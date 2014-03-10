@@ -19,7 +19,7 @@
                     <div class="group-preview">
                         <span class="pull-right group-notifications glyphicon glyphicon-bell"></span>
                         <div class="group-circle">
-                        <span class="group-members-num" title="{% trans 'Miembros del grupo:' %} {{ g.num_members }}">{{ g.num_members }}</span>
+                        <span class="group-members-num" title="{{ g.num_members }} {% trans 'miembros en el grupo' %}">{{ g.num_members }}</span>
                         </div>
                         <div class="group-permissions">
                             <span title="El usuario pude agregar usuarios y roles" class="glyphicon glyphicon-wrench"></span>
@@ -64,7 +64,7 @@
     {% if user.is_authenticated%}
     <script>
         $(document).ready(function(){
-            $(".group-preview .group-permissions > span").tooltip();
+            $(".group-permissions > span, .group-name, .group-members-num").tooltip();
         });
     </script>
     {% endif %}

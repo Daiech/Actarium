@@ -774,8 +774,7 @@ cierra Show Minutes
 
 
 .prelative{position: relative;}
-
-
+.panel, .panel-heading{border-radius: 0 !important;}
 
 
 
