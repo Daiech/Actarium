@@ -22,10 +22,10 @@
                         <span class="group-members-num" title="{% trans 'Miembros del grupo:' %} {{ g.num_members }}">{{ g.num_members }}</span>
                         </div>
                         <div class="group-permissions">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                            <span title="El usuario pude agregar usuarios y roles" class="glyphicon glyphicon-wrench"></span>
+                            <span title="Tiene la responsabilidad de redactar actas" class="glyphicon glyphicon-pencil"></span>
+                            <span title="Pertenece al grupo. Aparece en las actas" class="glyphicon glyphicon-user"></span>
+                            <span title="Puede convocar reuniones" class="glyphicon glyphicon-calendar"></span>
                         </div>
                         <div class="group-name" title="{{ g.name }}">{{ g.name|truncatechars:20 }}</div>
                     </div>
@@ -56,7 +56,7 @@
     .group-preview .group-members-num{margin-top: 37px;font-size: 36px;text-align: center !important;display: block;}
     .group-preview .group-name{font-weight: bold;font-size: 14px;}
     .group-preview .group-permissions{margin-top: 8px;margin-bottom: -3px}
-    .group-preview .group-permissions > span{width: 15px;height: 15px;display: inline-block;border: solid thin #dadada;}
+    .group-preview .group-permissions > span{width: 15px;height: 15px;display: inline-block;/*border: solid thin #dadada;*/}
 </style>
 {%endblock%}
 
@@ -64,7 +64,7 @@
     {% if user.is_authenticated%}
     <script>
         $(document).ready(function(){
-
+            $(".group-preview .group-permissions > span").tooltip();
         });
     </script>
     {% endif %}

@@ -1,11 +1,12 @@
 #encoding:utf-8
+from django.shortcuts import render_to_response, render
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.http import Http404
-from Actarium.settings import URL_BASE, MEDIA_URL
+from django.core.urlresolvers import reverse
 
+from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
 from apps.groups_app.forms import newMinutesForm, newGroupForm
 from apps.groups_app.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
@@ -20,29 +21,11 @@ def showHomeGroup(request, slug_group):
     '''
         Carga el menú de un grupo 
     '''
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
-    print "************************************************************"
     g = getGroupBySlug(slug_group)
     _user = getRelUserGroup(request.user, g)
     if _user:
         if _user.is_active:
-            pass
+            return HttpResponseRedirect(reverse("show_folder", args=(slug_group,)))
     else:
         # return HttpResponseRedirect('/groups/#error-view-group')
         raise Http404
@@ -50,7 +33,7 @@ def showHomeGroup(request, slug_group):
         "group": g,
         "rel_user": _user
     }
-    return render_to_response("groups/templates/home.html", ctx, context_instance=RequestContext(request))
+    return render(request, "groups/templates/home.html", ctx)
 
 
 @login_required(login_url='/account/login')
@@ -71,6 +54,7 @@ def showTeamGroup(request, slug_group):
             ctx = {"group": g, "rel_user": _user_rel, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
             return render_to_response('groups/templates/team.html', ctx, context_instance=RequestContext(request))
         else:
+            raise Http404
             return HttpResponseRedirect('/groups/' + str(g.slug) + "#not-active")
     else:
         raise Http404

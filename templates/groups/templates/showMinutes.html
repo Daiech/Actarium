@@ -32,10 +32,10 @@
 			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" {%if not minutes.is_full_signed%}title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="glyphicon glyphicon-file"></i> PDF</a>
 		</form>
     </li>
-    <li class="pull-right important">
+    <li class=" important">
 		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="glyphicon glyphicon-arrow-right"></i></a>
     </li>
-    <li class="pull-right important">
+    <li class=" important">
 		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
     </li>
 </ul>
