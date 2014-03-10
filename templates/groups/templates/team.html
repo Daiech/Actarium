@@ -319,7 +319,7 @@
 	$(document).ready(function() {
 		var message = "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.";
 		$("#message-search").html(message);
-		$("#admin-roles").addClass("active")
+		$("#admin-roles").addClass("active");
 		$(".icons-info span, .username-info, .info-title, .resend").tooltip();
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})

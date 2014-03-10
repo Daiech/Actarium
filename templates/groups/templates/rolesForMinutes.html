@@ -27,8 +27,8 @@
 		<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 			{% csrf_token %}
 			<section class="">
-				<div class="row-fluid mb50">
-					<div class="span6">
+				<div class="row mb50">
+					<div class="col-md-6">
 						<span>Presidente:</span>
 						<select id="sel-president">
 							<option value="0">Seleccione presidente</option>
@@ -38,7 +38,7 @@
 						</select>
 						<span class="president-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 					</div>
-					<div class="span6">
+					<div class="col-md-6">
 						<span>Secretario:</span>
 						<select id="sel-secretary">
 							<option value="0">Seleccione secretario</option>
@@ -197,6 +197,7 @@
 	    div > section ul{margin-left:0; }
 	    div > section ul li{list-style: none;}
 	    .cancel-inv{font-style: italic;color: gray;}
+	    .col-md-6{margin-bottom: 10px;}
 	</style>
 {% endblock %}
 {% block menu_content_js %}

@@ -641,7 +641,7 @@ form table td input{
 }
 .white-box-container{
     background-color: #fff;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
     border: 1px solid #79B632;
     font-size: 1em;
     margin-bottom: 20px;
