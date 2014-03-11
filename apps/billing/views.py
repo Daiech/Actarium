@@ -1,7 +1,7 @@
 # encoding:utf-8
 from django.contrib.auth.decorators import login_required
 from apps.billing.models import *
-from apps.groups_app.models import groups as Groups
+from apps.groups_app.models import Groups
 # from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 # from django.http import HttpResponseRedirect

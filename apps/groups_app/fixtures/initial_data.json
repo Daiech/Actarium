@@ -24,42 +24,6 @@
     }
   },
   {
-    "model": "groups_app.group_type",
-    "pk": 1,
-    "fields": {
-      "name": "Reunión",
-      "description": "Tipo de grupo que se reúne para tomar decisiones.",
-      "date_added": "2013-06-06 04:30:12"
-    }
-  },
-  {
-    "model": "groups_app.group_type",
-    "pk": 2,
-    "fields": {
-      "name": "Junta Directiva",
-      "description": "junta directiva de cualquier organización",
-      "date_added": "2013-06-06 04:30:12"
-    }
-  },
-  {
-    "model": "groups_app.group_type",
-    "pk": 3,
-    "fields": {
-      "name": "Comité",
-      "description": "Grupo para las reuniones de comité",
-      "date_added": "2013-06-06 04:30:12"
-    }
-  },
-  {
-    "model": "groups_app.group_type",
-    "pk": 4,
-    "fields": {
-      "name": "Proyecto",
-      "description": "Grupo para las reuniones de proyectos",
-      "date_added": "2013-06-06 04:30:12"
-    }
-  },
-  {
     "model": "groups_app.packages",
     "pk": 1,
     "fields": {

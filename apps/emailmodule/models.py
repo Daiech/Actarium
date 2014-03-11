@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from apps.groups_app.models import groups
+from apps.groups_app.models import Groups
 
 
 class email_admin_type(models.Model):
@@ -24,7 +24,7 @@ class email(models.Model):
 
 
 class email_group_permissions(models.Model):
-    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
     id_email_type = models.ForeignKey(email, null=False, related_name='%(class)s_id_email_type')
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
     is_active = models.BooleanField(default=True)

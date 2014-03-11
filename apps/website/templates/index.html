@@ -124,7 +124,7 @@
                     <hr>
                     <ul id="group-list" class="nav onOver">
                         {% for gr_rel in groups %}
-                        <li class="{%if gr_rel.id_group.is_pro%}selected-group{%endif%}">
+                        <li class="selected-group">
                             <a href="/groups/{{gr_rel.id_group.slug}}">
                                 <img src="{{ STATIC_PREFIX }}{{gr_rel.id_group.img_group}}" alt="{{gr_rel.id_group.name}}"/>
                                 {{gr_rel.id_group.name}}

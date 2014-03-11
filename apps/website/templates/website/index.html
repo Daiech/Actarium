@@ -19,7 +19,7 @@
                     <div class="group-preview">
                         <span class="pull-right group-notifications glyphicon glyphicon-bell"></span>
                         <div class="group-circle">
-                        <span class="group-members-num" title="{{ g.num_members }} {% trans 'miembros en el grupo' %}">{{ g.num_members }}</span>
+                        <span class="group-members-num" title="{{ g.get_num_members }} {% trans 'miembros en el grupo' %}">{{ g.get_num_members }}</span>
                         </div>
                         <div class="group-permissions">
                             <span title="El usuario pude agregar usuarios y roles" class="glyphicon glyphicon-wrench"></span>
@@ -27,13 +27,23 @@
                             <span title="Pertenece al grupo. Aparece en las actas" class="glyphicon glyphicon-user"></span>
                             <span title="Puede convocar reuniones" class="glyphicon glyphicon-calendar"></span>
                         </div>
-                        <div class="group-name" title="{{ g.name }}">{{ g.name|truncatechars:20 }}</div>
+                        <div class="group-name" title="{{ g.name }}">{{ g.name|truncatechars:18 }}</div>
                     </div>
                 </a>
                 {% empty %}
-                <p>No tienes ning&uacute;n grupo :(</p>
-                <a href="{% url 'new_group' %}?org={{ o.organization.id }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crea un grupo' %}</a>
+                <p>{% trans 'No tienes ning&uacute;n grupo :(' %}</p>
                 {% endfor %}
+                <a href="{% url 'new_group' %}?org={{ o.organization.id }}">
+                    <div class="group-preview">
+                        <div class="group-circle group-circle-plus">
+                            <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+                        </div>
+                        <div class="group-permissions">
+                            <span class="glyphicon"></span>
+                        </div>
+                        <div class="group-name" title="{{ g.name }}">{% trans 'Crear grupo' %}</div>
+                    </div>
+                </a>
             </div>
           </div>
         </div>
@@ -44,10 +54,33 @@
           </div>
           <div class="panel-body">
               <p>{% trans 'Las organizaciones te permiten tener un mejor control de los equipos de trabajo.' %}</p>
-              <a href="{% url 'new_organization'  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crear organización' %}</a>
+              <a href="{% url 'new_organization' %}">
+                    <div class="group-preview">
+                        <div class="group-circle group-circle-plus">
+                            <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+                        </div>
+                        <div class="group-permissions">
+                            <span class="glyphicon"></span>
+                        </div>
+                        <div class="group-name" title="{{ g.name }}">{% trans 'Crear grupo' %}</div>
+                    </div>
+                </a>
           </div>
         </div>
     {% endfor %}
+    {% if organizations %}
+    <a href="{% url 'new_organization' %}">
+            <div class="group-preview">
+                <div class="group-circle group-circle-plus">
+                    <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+                </div>
+                <div class="group-permissions">
+                    <span class="glyphicon"></span>
+                </div>
+                <div class="group-name" title="{{ g.name }}">{% trans 'Crear organización' %}</div>
+            </div>
+        </a>
+    {% endif %}
     </div>
 </article>
 {%endblock%}
@@ -63,10 +96,14 @@
     .group-preview:hover{border:solid thin #dadada;color: #555;}
     .group-preview .group-notifications{color: #C7C6C6; /*border-radius: 8px;*/width: 13px;height: 13px;position: relative;}
     .group-preview .group-circle{border-radius: 50px;width: 100px;height: 100px;margin:0 auto;border: 4px solid #79B632;/*#5CB89E*/}
+    .group-preview .group-circle-plus{border-color: #5CB89E}
     .group-preview .group-members-num{margin-top: 37px;font-size: 36px;text-align: center !important;display: block;}
     .group-preview .group-name{font-weight: bold;font-size: 14px;}
     .group-preview .group-permissions{margin-top: 8px;margin-bottom: -3px}
     .group-preview .group-permissions > span{width: 15px;height: 15px;display: inline-block;/*border: solid thin #dadada;*/}
+    .btn-create-group{margin-left: 4px;margin-top: 28px !important;}
+/*    .panel-default{border: white}
+    .panel-default>.panel-heading{background-color: white}*/
 </style>
 {%endblock%}
 

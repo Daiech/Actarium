@@ -7,8 +7,8 @@ class minutesAdmin(admin.ModelAdmin):
     list_display = ('code', 'id_group', 'minutesIsFullSigned', 'minutesIsValid')
 
 
-class groupsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id_creator', 'date_joined', 'is_active', 'is_pro')
+class GroupsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date_added', 'is_active')
 
 
 class billingAdmin(admin.ModelAdmin):
@@ -24,7 +24,7 @@ class privateTemplatesAdmin(admin.ModelAdmin):
 
 
 class organizationsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id_admin', 'description', 'date_joined', 'is_active')
+    list_display = ('name', 'admin', 'description', 'date_added', 'is_active')
 
 
 class groupsProAdmin(admin.ModelAdmin):
@@ -35,14 +35,13 @@ class DNI_typeAdmin(admin.ModelAdmin):
     list_display = ('short_name', 'long_name')
 
 
-admin.site.register(groups, groupsAdmin)  # aca registramos nuestro modelo con el admin de django
+admin.site.register(Groups, GroupsAdmin)  # aca registramos nuestro modelo con el admin de django
 admin.site.register(minutes, minutesAdmin)
 admin.site.register(packages, packagesAdmin)
 admin.site.register(billing, billingAdmin)
-admin.site.register(organizations, organizationsAdmin)
+admin.site.register(Organizations, organizationsAdmin)
 admin.site.register(private_templates, privateTemplatesAdmin)
 admin.site.register(DNI_type, DNI_typeAdmin)
-admin.site.register(group_type)
 admin.site.register(minutes_type)
 admin.site.register(minutes_type_1)
 admin.site.register(reunions)

@@ -579,7 +579,7 @@ def setRolForMinute(request, slug_group):
                         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
                 else:
                     error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
-            except groups.DoesNotExist:
+            except Groups.DoesNotExist:
                 error = "Este grupo no existe"
             except rol_user_minutes.DoesNotExist:
                 error = "Error! no existe el usuario para esta acta"
@@ -621,7 +621,7 @@ def setShowDNI(request, slug_group):
                     saved = True
                 else:
                     error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
-            except groups.DoesNotExist:
+            except Groups.DoesNotExist:
                 error = "Este grupo no existe"
             except rol_user_minutes.DoesNotExist:
                 error = "Error! no existe el usuario para esta acta"
@@ -1318,7 +1318,7 @@ def showMinutes(request, slug, minutes_code):
 @login_required(login_url='/account/login')
 def uploadMinutes(request, slug_group):
     saveViewsLog(request, "apps.groups_app.minutes.uploadMinutes")
-    group = groups.objects.get(slug=slug_group, is_active=True)
+    group = Groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=group.id, id_user=request.user)
     datos_validos = ""
     if is_member:
@@ -1387,13 +1387,10 @@ def uploadMinutesAjax(request):
                 last_minutes_get = request.GET['last_minutes']
             except Exception, e:
                 last_minutes_get = False
-                print e
             if last_minutes_get:
-                print "last get", last_minutes_get
                 a = json.loads(last_minutes_get)
-                print "aaaaaaaaaaaa", a
                 group_id = a['group_id']
-                group = groups.objects.get(pk=group_id)
+                group = Groups.objects.get_or_none(pk=group_id)
                 a = a['values']
                 valid = True
                 for m in a:

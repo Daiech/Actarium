@@ -5,20 +5,21 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from apps.groups_app.models import *
-from apps.groups_app.forms import newGroupForm, newReunionForm
 from django.contrib.auth.models import User
-import datetime
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
-# from django.utils import simplejson as json
-import json
+from django.conf import settings
+from django.contrib.humanize.templatetags import humanize
+
+from .models import *
+from .forms import newGroupForm, newReunionForm
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.actions_log.views import saveActionLog, saveViewsLog
-from Actarium.settings import URL_BASE
 from apps.emailmodule.views import sendEmailHtml
 from apps.groups_app.validators import validateEmail
-from django.contrib.humanize.templatetags import humanize
 from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGroup, setRelUserGroup, sendInvitationToGroup, newUserWithInvitation
+import datetime
+import json
+URL_BASE = settings.URL_BASE
 
 
 def isProGroup(group):
@@ -134,7 +135,7 @@ def setRole(request, slug_group):
     if request.is_ajax():
         if request.method == 'GET':
             try:
-                g = groups.objects.get(slug=slug_group, is_active=True)
+                g = Groups.objects.get(slug=slug_group, is_active=True)
                 _user_rel = getRelUserGroup(request.user, g)
 
                 if _user_rel.is_admin:
@@ -148,7 +149,7 @@ def setRole(request, slug_group):
                         error = "El usuario no ha aceptado la invitaci&oacute;n"
                 else:
                     error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
-            except groups.DoesNotExist:
+            except Groups.DoesNotExist:
                 error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
                 error = "Error! no existe el usuario para este grupo"
@@ -194,8 +195,8 @@ def groupInfoSettings(request, slug_group):
     '''
     saveViewsLog(request, "apps.groups_app.views.groupInfoSettings")
     try:
-        g = groups.objects.get(slug=slug_group, is_active=True)
-    except groups.DoesNotExist:
+        g = Groups.objects.get(slug=slug_group, is_active=True)
+    except Groups.DoesNotExist:
         raise Http404
     _user_rel = getRelUserGroup(request.user, g)
     if _user_rel.is_admin and _user_rel.is_active:
@@ -221,14 +222,14 @@ def groupDNISettings(request, slug_group):
     '''
         Muestra la configuracion de DNI de los integrantes de un grupo
     '''
-    #    gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+    #    gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     #    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     #    dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
     #    dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
     #    my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
     saveViewsLog(request, "apps.groups_app.views.groupDNISettings")
     try:
-        g = groups.objects.get(slug=slug_group, is_active=True)
+        g = Groups.objects.get(slug=slug_group, is_active=True)
         _user_rel = getRelUserGroup(request.user, g)
         members_dni = DNI_permissions.objects.filter(id_group=g)
         users_dni = []
@@ -237,7 +238,7 @@ def groupDNISettings(request, slug_group):
         members = rel_user_group.objects.filter(id_group=g, is_member=True).exclude(id_user__in=users_dni)
         ctx = {"group": g, "is_admin": _user_rel.is_admin, 'members': members, 'members_dni': members_dni}
         return render_to_response('groups/adminDNIGroup.html', ctx, context_instance=RequestContext(request))
-    except groups.DoesNotExist:
+    except Groups.DoesNotExist:
         return HttpResponseRedirect('/groups/')
 
 
@@ -251,7 +252,7 @@ def requestDNI(request, slug_group):
     if request.is_ajax():
         if request.method == 'GET':
             try:
-                g = groups.objects.get(slug=slug_group, is_active=True)
+                g = Groups.objects.get(slug=slug_group, is_active=True)
                 _user_rel = getRelUserGroup(request.user, g)
 
                 if _user_rel.is_admin:
@@ -273,7 +274,7 @@ def requestDNI(request, slug_group):
                         error = "Ha ocurrido un error inesperado al enviar la solicitud, por favor intentalo de nuevo mas tarde"
                 else:
                     error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
-            except groups.DoesNotExist:
+            except Groups.DoesNotExist:
                 error = "Este grupo no existe"
             except rel_user_group.DoesNotExist:
                 error = "Error! no existe el usuario para este grupo"
@@ -298,7 +299,7 @@ def newBasicGroup(request, form, pro=False):
         # 'id_group_type': form.cleaned_data['id_group_type']  # Se omite para no pedir tipo de grupo
         'id_group_type': 1
     }
-    myNewGroup = groups(
+    myNewGroup = Groups(
         name=df['name'],
         description=df['description'],
         id_creator=df['id_creator'],
@@ -343,7 +344,7 @@ def newProGroup(request, form):
     # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
     org_id = request.POST.get('sel-organization')
     try:
-        org = organizations.objects.get(id=ord_id, id_admin=request.user, is_active=True)
+        org = Organizations.objects.get(id=ord_id, id_admin=request.user, is_active=True)
     except organizations.DoesNotExist:
         org = None
     except Exception:
@@ -374,7 +375,7 @@ def getProGroupDataForm(request):
     orgs = None
     billing_list = None
     try:
-        orgs = organizations.objects.filter(is_active=True, id_admin=request.user)
+        orgs = Organizations.objects.filter(is_active=True, id_admin=request.user)
     except Exception, e:
         orgs = None
         raise e
@@ -436,7 +437,7 @@ def showGroup(request, slug):
     '''
     saveViewsLog(request, "apps.groups_app.views.showGroup")
     try:
-        g = groups.objects.get(slug=slug, is_active=True)
+        g = Groups.objects.get(slug=slug, is_active=True)
         _user = getRelUserGroup(request.user, g)
         if _user:
             if _user.is_active:
@@ -485,7 +486,7 @@ def showGroup(request, slug):
                         saved = 0
                     return HttpResponseRedirect("/settings/organizations?saved=" + str(saved))
         return HttpResponseRedirect('/groups/#error-view-group')
-    except groups.DoesNotExist:
+    except Groups.DoesNotExist:
         raise Http404
     except rel_user_group.DoesNotExist:
         raise Http404
@@ -577,11 +578,11 @@ def newInvitationToGroup(request):
         if request.method == 'GET':
             _user_rel = False
             try:
-                g = groups.objects.get(pk=request.GET['pk'])
+                g = Groups.objects.get(pk=request.GET['pk'])
                 _user_rel = getRelUserGroup(request.user, g)
                 if not (_user_rel.is_admin or _user_rel.is_secretary):
                     return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
-            except groups.DoesNotExist:
+            except Groups.DoesNotExist:
                 g = False
                 return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo. Si el error persiste, comun&iacute;cate con el administrador de Actarium en <a href='mailto:soporte@daiech.com'>soporte@daiech.com</a>"}), mimetype="application/json")
             except Exception, e:
@@ -855,8 +856,8 @@ def deleteInvitation(request, slug_group):
 
 def getGroupBySlug(slug):
     try:
-        group = groups.objects.get(slug=slug, is_active=True)
-    except groups.DoesNotExist:
+        group = Groups.objects.get(slug=slug, is_active=True)
+    except Groups.DoesNotExist:
         group = None
         raise Http404
     except Exception, e:
@@ -869,7 +870,7 @@ def getGroupBySlug(slug):
 @login_required(login_url='/account/login')
 def newReunion(request, slug):
     saveViewsLog(request, "apps.groups_app.views.newReunion")
-    q = groups.objects.get(slug=slug, is_active=True)
+    q = Groups.objects.get(slug=slug, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         if request.method == "POST":
@@ -925,7 +926,7 @@ def newReunion(request, slug):
 @login_required(login_url='/account/login')
 def calendar(request):
     saveViewsLog(request, "apps.groups_app.views.calendar")
-    gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+    gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     my_reu_day = reunions.objects.filter(id_group__in=gr).order_by("-date_convened")  # reuniones para un dia
     i = 0
@@ -965,7 +966,7 @@ def calendar(request):
 @login_required(login_url='/account/login')
 def calendarDate(request, slug=None):
     saveViewsLog(request, "apps.groups_app.views.calendarDate")
-    gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+    gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
     my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
     dateslug_min = str(make_aware(datetime.datetime.strptime(slug + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
     dateslug_max = str(make_aware(datetime.datetime.strptime(slug + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
@@ -1010,7 +1011,7 @@ def getReunions(request):
     if request.is_ajax():
         if request.method == 'GET':
             date = str(request.GET['date'])
-            gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+            gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
             dateslug_min = str(make_aware(datetime.datetime.strptime(date + " 00:00:00", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
             dateslug_max = str(make_aware(datetime.datetime.strptime(date + " 23:59:59", '%Y-%m-%d %H:%M:%S'), get_default_timezone()))
             my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__range=[dateslug_min, dateslug_max]).order_by("-date_convened")  # reuniones para un dia
@@ -1052,7 +1053,7 @@ def getNextReunions(request):
     """
     saveViewsLog(request, "apps.groups_app.views.getNextReunions")
     if request.is_ajax():
-        gr = groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
+        gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
         my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
         i = 0
         json_array = {}

@@ -14,7 +14,7 @@ from apps.groups_app.minutes import *
 from apps.groups_app.models import *
 from apps.emailmodule.models import *
 from apps.actions_log.views import saveActionLog, saveViewsLog
-from .utils import newProGroup2
+from .utils import create_group
 
 
 @login_required(login_url='/account/login')
@@ -718,32 +718,26 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
         return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
 
 
-def newGroup(request):
-    saveViewsLog(request, "apps.groups_app.views.newGroup")
+@login_required(login_url='/account/login')
+def newGeneralGroup(request):
+    saveViewsLog(request, "apps.groups_app.views_groups.newGeneralGroup")
     orgs = None
-    billing_list = None
-    no_billing_avalaible = False  # indica si se intento crear un grupo pro sin paquetes disponibles
     sel_org = request.GET.get('org')
     if request.method == "POST":  # selecciona los datos para crear un nuevo grupo
         form = newGroupForm(request.POST)
         if form.is_valid():
-            print "//////////////////////////////"
-            resp = newProGroup2(request, form)
-            print "//////////////////////////////", resp
+            resp = create_group(request, form)
             if resp:
                 saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
                 return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")
             else:
-                no_billing_avalaible = True
+                pass ## No se pudo crear
     else:
         form = newGroupForm()
-    # orgs, billing_list = getProGroupDataForm(request)
-    orgs = organizations.objects.get_my_orgs(request.user)
+    orgs = Organizations.objects.get_my_orgs(request.user)
     ctx = {"newGroupForm": form,
            "organizations": orgs,
-           "billing": billing_list,
            "sel_org": sel_org,
            "full_path": request.get_full_path(),
-           "no_billing_avalaible": no_billing_avalaible
            }
     return render(request, 'groups/templates/new_group.html', ctx)

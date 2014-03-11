@@ -1,6 +1,6 @@
 #encoding:utf-8
 from django.contrib.auth.decorators import login_required
-from .models import organizations, groups, group_type, rel_user_group, groups_pro
+from .models import Organizations, Groups, rel_user_group, groups_pro
 from .validators import validateEmail
 from django.contrib.auth.models import User
 from apps.account.templatetags.gravatartag import showgravatar
@@ -133,7 +133,7 @@ def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_s
 
 
 @login_required(login_url='/account/login')
-def newBasicGroup(request, form, pro=False):
+def newBasicGroup(request, form, org):
     df = {
         'name': form.cleaned_data['name'],
         'description': form.cleaned_data['description'],
@@ -141,13 +141,11 @@ def newBasicGroup(request, form, pro=False):
         # 'id_group_type': form.cleaned_data['id_group_type']  # Se omite para no pedir tipo de grupo
         'id_group_type': 1
     }
-    myNewGroup = groups(
+    myNewGroup = Groups(
         name=df['name'],
         description=df['description'],
-        id_creator=df['id_creator'],
-        id_group_type=group_type.objects.get(pk=df['id_group_type']),
+        organization=org,
     )
-    print "CREANDO GRUPO///////////////////////"
     myNewGroup.save()
     try:
         user_or_email = get_user_or_email(request.POST.get('id_admin'))
@@ -175,25 +173,15 @@ def newBasicGroup(request, form, pro=False):
             print getRelUserGroup(user_or_email['user'], myNewGroup).is_admin
     else:
         print "No hay un administrador para este grupo"  # error! se dio atras al crear new group y no se selecciono un admin
-    print "GRUPO CREADO!!!!!!!!!!!!!!!!!!"
     return myNewGroup
 
 
 @login_required(login_url='/account/login')
-def newProGroup2(request, form):
-    # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
+def create_group(request, form):
     org_id = request.POST.get('sel-organization')
-    try:
-        org = organizations.objects.get(id=org_id, id_admin=request.user, is_active=True)
-    except organizations.DoesNotExist:
-        org = None
-    except Exception, e:
-        org = False
-    print org
+    org = Organizations.objects.get_my_org_by_id(id=org_id, admin=request.user)
     if org:
-        new_group = newBasicGroup(request, form, pro=True)
-        g_pro = groups_pro(id_group=new_group, id_organization=org)
-        g_pro.save()
+        new_group = newBasicGroup(request, form, org)
         return new_group
     else:
         return False

@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 # from django.http import Http404
-from apps.groups_app.models import billing, packages, organizations, groups_pro, templates, rel_user_private_templates, private_templates, rel_user_group
+from apps.groups_app.models import Groups, billing, packages, Organizations, groups_pro, templates, rel_user_private_templates, private_templates, rel_user_group
 # group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance
-from apps.groups_app.forms import newOrganizationForm
+from apps.groups_app.forms import OrganizationForm
 #from django.contrib.auth.models import User
 # from django.core.mail import EmailMessage
 #import re
@@ -57,7 +57,7 @@ def settingsOrganizations(request):
         except Exception:
             new_group = False
     try:
-        orgs = organizations.objects.filter(is_active=True, id_admin=request.user)
+        orgs = Organizations.objects.filter(is_active=True, admin=request.user)
     except Exception, e:
         orgs = None
         raise e
@@ -78,13 +78,13 @@ def newOrganization(request):
         except Exception:
             ref_get = "/settings/organizations"
     if request.method == "POST":
-        form = newOrganizationForm(request.POST, request.FILES)
+        form = OrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
             ref = saveOrganization(request, form)
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect(ref)
     else:
-        form = newOrganizationForm()
+        form = OrganizationForm()
     ctx = {"form_org": form, "ref": ref_get}
     return render_to_response('asettings/settings_new_organization.html', ctx, context_instance=RequestContext(request))
 
@@ -93,33 +93,30 @@ def newOrganization(request):
 def saveOrganization(request, form, id_org=False):
     url = "/static/img/groups/default.jpg"
     if id_org:
-        org = organizations.objects.get(id=id_org)
+        org = Organizations.objects.get_or_none(id=id_org)
         if org:
             org.name = form.cleaned_data['name']
             org.description = form.cleaned_data['description']
         else:
             return None
     else:
-        org = organizations(
-            id_admin=request.user,
-            name=form.cleaned_data['name'],
-            description=form.cleaned_data['description'],
-            logo_address=url)
+        org = form.save(commit=False)
+        org.admin = request.user
     org.save()
-    try:
-        url_file = request.FILES['logo_address']
-    except Exception:
-        url_file = None
-    if url_file:
-        from django.template import defaultfilters
-        url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-        thumbnail = createThumbnail(url)
-        if thumbnail:
-            org.logo_address = thumbnail
-            deleteRealImage(url)
-        else:
-            org.logo_address = MEDIA_URL[:-1] + url
-    org.save()
+    # try:
+    #     url_file = request.FILES['image_path']
+    # except Exception:
+    #     url_file = None
+    # if url_file:
+    #     # from django.template import defaultfilters
+    #     # url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
+    #     # thumbnail = createThumbnail(url)
+    #     # if thumbnail:
+    #     #     org.image_path = thumbnail
+    #     #     deleteRealImage(url)
+    #     # else:
+    #     org.image_path = request.POST.get("image_path")
+    # org.save()
     try:
         ref = request.POST['ref'] + "?org=" + str(org.id)
     except Exception:
@@ -158,18 +155,18 @@ def createThumbnail(buf):
 def editOrganization(request, id_org):
     saveViewsLog(request, "asettings.views.editOrganization")
     if request.method == "POST":
-        form = newOrganizationForm(request.POST, request.FILES)
+        form = OrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
             if saveOrganization(request, form, id_org):
                 saveActionLog(request.user, 'EDIT_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect("/settings/organizations/?org=" + id_org)
     try:
-        org = organizations.objects.get(id=id_org)
+        org = Organizations.objects.get(id=id_org)
         initial = {"name": org.name, "logo_address": org.logo_address, "description": org.description}
     except Exception:
         org = None
         initial = {}
-    form = newOrganizationForm(initial=initial)
+    form = OrganizationForm(initial=initial)
     ctx = {"form_org": form, "org": org}
     return render_to_response('asettings/settings_edit_organization.html', ctx, context_instance=RequestContext(request))
 
@@ -269,9 +266,8 @@ def assignTemplateAjax(request):
                 id_template = str(request.GET['id_template'])
                 id_group = str(request.GET['id_group'])
                 try:
-                    from apps.groups_app.models import groups
                     _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
-                    _group = rel_user_group.objects.get(id_user=request.user, id_group=groups.objects.get(pk=id_group), is_admin=True)
+                    _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
                     try:
                         response = "True"
                         private_templates(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).save()
@@ -298,9 +294,8 @@ def unassignTemplateAjax(request):
                 id_template = str(request.GET['id_template'])
                 id_group = str(request.GET['id_group'])
                 try:
-                    from apps.groups_app.models import groups
                     _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
-                    _group = rel_user_group.objects.get(id_user=request.user, id_group=groups.objects.get(pk=id_group), is_admin=True)
+                    _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
                     response = "True"
                     try:
                         response = "True"

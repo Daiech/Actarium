@@ -2,47 +2,100 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template import defaultfilters
-from Actarium import settings
+from libs.thumbs import ImageWithThumbsField
+from django.conf import settings
 
 
-class GroupsManager(models.Manager):
+class GenericManager(models.Manager):
+
+    def get_all_active(self):
+        return self.filter(is_active=True).distinct().order_by('-date_modified')
+
+    def get_or_none(self, **kwargs):
+        try:
+            return self.get(**kwargs)
+        except self.model.DoesNotExist:
+            return None
+        except self.model.MultipleObjectsReturned:
+            return None
+
+    def get_active_or_none(self, **kwargs):
+        return self.get_or_none(is_active=True, **kwargs)
+
+class GroupsManager(GenericManager):
     def my_groups(self, user):
         return self.filter(id_creator=user)
 
-class OrganizationsManager(models.Manager):
+
+class OrganizationsManager(GenericManager):
+    def get_my_org_by_id(self, id, admin):
+        return Organizations.objects.get_active_or_none(id=id, admin=admin)
+
     def get_my_orgs(self, user):
-        return self.filter(id_admin=user)
+        return self.filter(admin=user)
 
-class group_type(models.Model):
+
+class Organizations(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
+    slug = models.SlugField(max_length=150, unique=True, verbose_name="org_slug")
     description = models.TextField(blank=True)
-    date_added = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return "tipo de grupo: %s " % (self.name)
-
-
-class groups(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    organization = models.CharField(max_length=150, verbose_name="organization")
-    img_group = models.CharField(max_length=150, verbose_name="image", default="img/groups/default.jpg")
-    id_creator = models.ForeignKey(User,  null=False, related_name='%(class)s_id_creator')
-    date_joined = models.DateTimeField(auto_now=True)
-    description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
-    is_pro = models.BooleanField(default=False)
-    id_group_type = models.ForeignKey(group_type, null=False, related_name='%(class)s_id_group_type')
-    slug = models.SlugField(max_length=150, unique=True)
-    objects = GroupsManager()
+    image_path = ImageWithThumbsField(upload_to="orgs_img", sizes=settings.ORG_IMAGE_SIZE, verbose_name="org_image", null=True, blank=True, default=settings.ORG_IMAGE_DEFAULT)
     
-    def __unicode__(self):
-        return "%s (%s)" % (self.name, self.id_creator)
+    admin = models.ForeignKey(User, null=False, related_name='%(class)s_id_admin')
+    
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    objects = OrganizationsManager()
+
+    def get_num_members(self):
+        return self.id
+
+    # @models.permalink
+    # def get_absolute_url(self):
+    #     return ('show_org', (), {'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"
-        super(groups, self).save(*args, **kwargs)
+        super(Organizations, self).save(*args, **kwargs)
         self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
-        super(groups, self).save(*args, **kwargs)  # reemplazado
+        super(Organizations, self).save(*args, **kwargs) 
+
+    def __unicode__(self):
+        return "Org: %s" % (self.name)
+
+
+
+class Groups(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    slug = models.SlugField(max_length=150, unique=True, verbose_name="group_slug")
+    description = models.TextField(blank=True)
+    image_path = ImageWithThumbsField(upload_to="groups_img", sizes=settings.GROUP_IMAGE_SIZE, verbose_name="org_image", null=True, blank=True, default=settings.GROUP_IMAGE_DEFAULT)
+
+    organization = models.ForeignKey(Organizations, null=False, related_name='%(class)s_org')
+
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    objects = GroupsManager()
+
+    def get_num_members(self):
+        return self.id
+    
+    def __unicode__(self):
+        return "%s (%s)" % (self.name, self.id_creator)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('show_home', (), {'slug_group': self.slug})
+
+    def save(self, *args, **kwargs):
+        self.slug = "reemplazame"
+        super(Groups, self).save(*args, **kwargs)
+        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
+        super(Groups, self).save(*args, **kwargs)  # reemplazado
         
     def is_creator(self, user):
         if self.id_creator == user:
@@ -62,7 +115,7 @@ class groups(models.Model):
 
 class invitations(models.Model):
     id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
-    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
     email_invited = models.CharField(max_length=60, null=False)
     date_invited = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -70,7 +123,7 @@ class invitations(models.Model):
 
 class invitations_groups(models.Model):
     id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
-    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
     id_user_invited = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_invited')
     date_invited = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -82,7 +135,7 @@ class invitations_groups(models.Model):
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_user_invited = models.ForeignKey(User, blank=True, null=True, default=None, related_name='%(class)s_id_user_invited')
-    id_group = models.ForeignKey(groups)
+    id_group = models.ForeignKey(Groups)
     is_member = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_secretary = models.BooleanField(default=False)
@@ -94,8 +147,8 @@ class rel_user_group(models.Model):
     def __unicode__(self):
         return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
 
-    class Meta:
-        ordering = ['-id_group__is_pro', 'id']
+    # class Meta:
+    #     ordering = ['-id_group__is_pro', 'id']
 
 
 class minutes_type_1(models.Model):
@@ -149,7 +202,7 @@ class rel_user_private_templates(models.Model):
 
 class private_templates(models.Model):
     id_template = models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates')
-    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
     id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
     date_joined = models.DateTimeField(auto_now=True)
 
@@ -161,7 +214,7 @@ class private_templates(models.Model):
 
 
 class minutes(models.Model):
-    id_group = models.ForeignKey(groups, null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
     id_creator = models.ForeignKey(User, null=False, related_name='%(class)s_id_creator')
     date_created = models.DateTimeField(auto_now=True)
     id_extra_minutes = models.IntegerField(max_length=5)
@@ -194,7 +247,7 @@ class reunions(models.Model):
     date_convened = models.DateTimeField(auto_now=True)
     date_reunion = models.DateTimeField()
     locale = models.CharField(max_length=150, verbose_name="locale")
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups,  null=False, related_name='%(class)s_id_group')
     title = models.CharField(max_length=150, verbose_name="title")
     agenda = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)
@@ -306,25 +359,9 @@ class billing(models.Model):
         return "Factura: %s %s %s" % (self.id_package.name, self.id_user.username, self.state)
 
 
-class organizations(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_admin')
-    logo_address = models.CharField(max_length=150, verbose_name="logo_address")
-    description = models.TextField(blank=True)
-    date_joined = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-    objects = OrganizationsManager()
-
-    def get_num_members(self):
-        return self.id
-
-    def __unicode__(self):
-        return "Org: %s" % (self.name)
-
-
 class groups_pro(models.Model):
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
-    id_organization = models.ForeignKey(organizations,  null=False, related_name='%(class)s_id_organization')
+    id_group = models.ForeignKey(Groups,  null=False, related_name='%(class)s_id_group')
+    id_organization = models.ForeignKey(Organizations,  null=False, related_name='%(class)s_id_organization')
     id_billing = models.ForeignKey(billing,  null=True, blank=True, related_name='%(class)s_id_billing')
     is_active = models.BooleanField(default=True)
 
@@ -349,7 +386,7 @@ class last_minutes(models.Model):
 
 class rol_user_minutes(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups,  null=False, related_name='%(class)s_id_group')
     id_minutes = models.ForeignKey(minutes, blank=True, null=True, default=None, related_name='%(class)s_id_minutes')
     is_president = models.BooleanField(default=False)
     is_secretary = models.BooleanField(default=False)
@@ -396,14 +433,14 @@ class DNI(models.Model):
 
 class DNI_permissions(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups,  null=False, related_name='%(class)s_id_group')
     date_added = models.DateTimeField(auto_now=True)
     state = models.CharField(max_length=1, verbose_name="state", default="0")  # 0: Sin responder,  1:Aceptado, 2:rechazado
     id_requester = models.ForeignKey(User,  null=False, related_name='%(class)s_id_requester')
 
 
 class rel_group_dni(models.Model):
-    id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
+    id_group = models.ForeignKey(Groups,  null=False, related_name='%(class)s_id_group')
     show_dni = models.BooleanField()
     id_admin = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     date_added = models.DateTimeField(auto_now=True)

@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # from django.template import defaultfilters
 from django.conf import settings
-from apps.groups_app.models import groups as Groups
+from apps.groups_app.models import Groups
 from apps.billing.thumbs import ImageWithThumbsField
 
 # model Managers ---------------------------------------------------------

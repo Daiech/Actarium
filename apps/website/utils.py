@@ -1,11 +1,11 @@
 # encoding:utf-8
 from django.shortcuts import render
-from apps.groups_app.models import organizations as Orgs, groups_pro
+from apps.groups_app.models import Organizations as Orgs, Groups
 
 
 def organizations_index(request):
     try:
-        orgs = Orgs.objects.filter(is_active=True, id_admin=request.user)
+        orgs = Orgs.objects.filter(is_active=True, admin=request.user)
     except :
         orgs = None
     # try:
@@ -15,5 +15,5 @@ def organizations_index(request):
     organizations = list()
     if orgs:
         for org in orgs:
-            organizations.append({"organization": org, "groups": groups_pro.objects.filter(id_organization=org)})
+            organizations.append({"organization": org, "groups": Groups.objects.filter(organization=org)})
     return render(request, "website/index.html", locals())

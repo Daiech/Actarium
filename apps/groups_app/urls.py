@@ -55,5 +55,5 @@ groups_urls += patterns('apps.groups_app.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/folder$', 'showFolderGroup', name="show_folder"),
     url(r'^(?P<slug_group>[-\w]+)/calendar$', 'showCalendarGroup', name="show_calendar"),
     url(r'^(?P<slug_group>[-\w]+)/', 'showHomeGroup', name="show_home"),
-    url(r'^create$', 'newGroup', name='new_group'),
+    url(r'^create$', 'newGeneralGroup', name='new_group'),
 )
