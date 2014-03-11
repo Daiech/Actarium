@@ -18,6 +18,7 @@ from Actarium.settings import URL_BASE
 from apps.emailmodule.views import sendEmailHtml
 from apps.groups_app.validators import validateEmail
 from django.contrib.humanize.templatetags import humanize
+from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGroup, setRelUserGroup, sendInvitationToGroup, newUserWithInvitation
 
 
 def isProGroup(group):
@@ -34,13 +35,6 @@ def getProGroup(group):
     except groups_pro.DoesNotExist:
         return False
 
-
-def getUserByEmail(email):
-    try:
-        _user = User.objects.get(email=email)
-        return _user
-    except User.DoesNotExist:
-        return None
 
 
 def getUserById(id_user):
@@ -294,45 +288,6 @@ def requestDNI(request, slug_group):
     return True
 
 
-def setUserRoles(_user, _group, is_superadmin=0, is_admin=0, is_approver=0, is_secretary=0, is_member=1, is_active=True):
-    try:
-        no_rel = False
-        relation = getRelUserGroup(_user, _group)
-        if relation:
-            relation.is_member = bool(is_member)
-            if is_superadmin:
-                relation.is_superadmin = bool(is_superadmin)
-            if is_admin:
-                relation.is_admin = bool(is_admin)
-            if is_secretary:
-                relation.is_secretary = bool(is_secretary)
-            if is_approver:
-                relation.is_approver
-            if is_active:
-                relation.is_active = bool(is_active)
-            relation.save()
-        else:
-            no_rel = True
-    except rel_user_group.DoesNotExist:
-        no_rel = True
-    if no_rel:
-        setRelUserGroup(id_user=_user, id_group=_group, is_member=bool(is_member), is_active=is_active, is_admin=is_admin, is_secretary=is_secretary, is_superadmin=is_superadmin)
-
-
-def get_user_or_email(s):
-    if validateEmail(s):
-        return {"user": False, "email": str(s)}
-    else:
-        try:
-            if isinstance(int(s), int):  # valida si es un entero
-                _user = User.objects.get(id=int(s))
-                return {"user": _user, "email": str(s)}
-        except User.DoesNotExist:
-            return {"user": False, "email": str(s)}
-        except Exception:
-            return {"user": False, "email": False}
-
-
 @login_required(login_url='/account/login')
 def newBasicGroup(request, form, pro=False):
     saveViewsLog(request, "apps.groups_app.views.newBasicGroup")
@@ -386,8 +341,9 @@ def newBasicGroup(request, form, pro=False):
 def newProGroup(request, form):
     saveViewsLog(request, "apps.groups_app.views.newProGroup")
     # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
+    org_id = request.POST.get('sel-organization')
     try:
-        org = organizations.objects.get(id=request.POST['sel-organization'], id_admin=request.user, is_active=True)
+        org = organizations.objects.get(id=ord_id, id_admin=request.user, is_active=True)
     except organizations.DoesNotExist:
         org = None
     except Exception:
@@ -582,49 +538,6 @@ def getMembers(request):
         return HttpResponse(message)
 
 
-def sendInvitationToGroup(id_user_invited, id_user_from, group):
-    '''
-        Enviar una invitacion de grupo a un usuario
-    '''
-    try:
-        _inv = setRelUserGroup(id_user=id_user_invited, id_user_invited=id_user_from, id_group=group, is_member=True, is_active=False)
-    except Exception, e:
-        print "EROROR views.sendInvitationToGroup", e
-        return False
-    if _inv:
-        email = [id_user_invited.email]
-        ctx_email = {
-            'firstname': id_user_from.first_name + id_user_from.last_name,
-            'username': id_user_from.username,
-            'groupname': group.name,
-            'urlgravatar': showgravatar(id_user_from.email, 50)
-        }
-        sendEmailHtml(6, ctx_email, email, group)
-    return _inv
-
-
-def newUserWithInvitation(email, id_user_from, group, first_name=False, last_name=False):
-    '''
-        Crear un nuevo usuario y lo relaciona al grupo.
-    '''
-    if validateEmail(email):
-        try:
-            if not getUserByEmail(email):
-                from apps.account.views import newInvitedUser
-                _user = newInvitedUser(email, id_user_from, first_name=first_name, last_name=last_name)
-                if _user:
-                    return _user
-                else:
-                    return False
-            else:
-                return False
-        except Exception, e:
-            print e
-        return False
-    else:
-        return 0  # Email Failed
-
-
 def isMemberOfGroup(id_user, id_group):
     try:
         _member = getRelUserGroup(id_user, id_group)
@@ -725,41 +638,6 @@ def newInvitationToGroup(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
-def getRelUserGroup(_user, _group):
-    try:
-        return rel_user_group.objects.get(id_user=_user, id_group=_group)
-    except rel_user_group.DoesNotExist:
-        return False
-    except Exception:
-        return False
-
-
-def setRelUserGroup(id_user, id_group,
-    id_user_invited=None,
-    is_superadmin=False,
-    is_admin=False,
-    is_secretary=False,
-    is_member=True,
-    is_active=False):
-    try:
-        rel = rel_user_group(
-            id_user=id_user,
-            id_user_invited=id_user_invited,
-            id_group=id_group,
-            is_member=bool(is_member),
-            is_admin=is_admin,
-            is_secretary=is_secretary,
-            is_superadmin=is_superadmin,
-            is_active=is_active)
-        rel.save()
-        # saveAction new Rel user group
-        return True
-    except Exception, e:
-        # error log
-        print "EROROR en setRelUserGroup", e
-        return False
-
-
 def resendInvitation(request, slug_group):
     if request.is_ajax():
         if request.method == "GET":
@@ -811,6 +689,8 @@ def resendInvitation(request, slug_group):
     else:
         message = False
     return HttpResponse(json.dumps(message), mimetype="application/json")
+
+
 
 
 def changeNames(request, slug_group):

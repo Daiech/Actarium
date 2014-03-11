@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block TITLE %}Crear Grupo{% endblock %}
-{% load gravatartag %}
+{% load gravatartag i18n %}
 {%block body%}
 <article>
     <header >
@@ -12,70 +12,44 @@
         </div>
     </header>
     <hr/>
-    <div class="row">
+    <div class="row-fluid">
         <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
-        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
             {% csrf_token %}
             <div id="form-new-group" class="white-box-container">
                 <div id="sel-type-group" class="">
                     <div class="type-group">
-                        <input id="free" value="0" type="radio" name="type-group" class="btn btn-info pull-left" checked> 
-                        <div>
-                            <label for="free">
-                                <i class="icon-flag"></i>
-                                Grupo Free
-                            </label>
-                            <div class="text-info-smal">Gestiona tus reuniones y actas de forma f&aacute;cil y gratuita.</div>
-                        </div>
-                    </div>
-                    <div class="type-group">
-                        <input id="pro" value="1" type="radio" name="type-group" class="btn btn-info pull-left">
+                        <!-- <input id="pro" value="1" type="radio" name="type-group" class="btn btn-info pull-left"> -->
                         <div>
                             <label for="pro">
                                 <i class="icon-cog"></i>
-                                Grupo Pro
+                                Crear Grupo
                             </label>
                             <div class="text-info-smal">Crea organizaciones, sube actas anteriores, descargalas cuando quieras.</div>
                         </div>
                     </div>
                 </div>
-                <div class="data-pro hidden">
-                    <div class="">
-                        <span class="pull-left">
-                            <label for="sel-org">Organizaci&oacute;n:</label>
-                        </span>
-                        <span class="pull-right">
-                            <a href="/settings/organizations/new?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
-                        </span>
-                        <select name="sel-organization" id="sel-org">
-                            {% for org in organizations%}
-                            <option value="{{org.id}}" >
-                                {{org.name}}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="">
-                        <span class="pull-left">
-                            <label for="sel-billing">Paquete:</label>
-                        </span>
-                        <span class="pull-right">
-                            <a href="/settings/billing"> + Adquirir paquete</a>
-                        </span>
-                        <select name="sel-billing" id="sel-billing">
-                            {% for bill in billing%}
-                            <option value="{{bill.id}}">{{bill.id_package.name}} ({{bill.groups_pro_available}} disponible)</option>
-                            {% endfor %}
-                            {%if not billing%}<option>No tienes paquetes disponibles</option>{%endif%}
-                        </select>
-                    </div>
-                    <div id="is-memeber" class="">
-                        <label data-original-title="Accede al grupo. Puede crear actas, reuniones, etc." for="is_member">
-                            <input type="checkbox" id="is_member" name="is_member" value="1" checked>
-                            Ser miembro del grupo
-                        </label>
-                    </div>
-                    <div id="administrator" class="">
+                <div>
+                    <ul class="list-unstyled">
+                    {{newGroupForm.as_ul}}
+                    </ul>
+                </div>
+                <div class="">
+                    <span class="pull-left">
+                        <label for="sel-org">Organizaci&oacute;n:</label>
+                    </span>
+                    <span class="pull-right">
+                        <a href="/settings/organizations/new?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
+                    </span>
+                    <select name="sel-organization" id="sel-org">
+                        {% for org in organizations%}
+                        <option value="{{org.id}}" >
+                            {{org.name}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="administrator" class="hidden">
                     <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">Administrador principal de grupo:</label>
                     <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ Cambiar administrador</a>
                     <ul id="admin-list" class="list-unstyled">
@@ -92,11 +66,11 @@
                         
                     </ul>
                 </div>
-                </div>
-                <div>
-                    <ul class="list-unstyled">
-                    {{newGroupForm.as_ul}}
-                    </ul>
+                <div id="is-memeber" class="">
+                    <label data-original-title="{% trans 'Aparecer en las actas' %}" for="is_member">
+                        <input type="checkbox" id="is_member" name="is_member" value="1" checked>
+                        Ser miembro del grupo
+                    </label>
                 </div>
                 <div>
                     <input type="hidden" id="group_name" value="{{group.name}}">
@@ -123,6 +97,7 @@
     }
     #form-new-group{
         border-radius: 5px;
+        width: 40%;
     }
     #sel-type-group{
         margin-bottom: 10px;
@@ -132,9 +107,9 @@
         padding-top: 0;
         margin: 5px 4px;
     }
-    #sel-type-group > div > div{
+    /*#sel-type-group > div > div{
         margin-left: 10px;
-    }
+    }*/
     .type-group{
         margin: 4px 0;
     }
@@ -148,7 +123,7 @@
     .form-horizontal label{
         cursor: pointer;
         margin-bottom: 0;
-        margin: 3px;
+        margin: 3px 0;
         font-weight: bold;
     }
     #sel-type-group label{
@@ -190,9 +165,6 @@
         var selected = $("#org-selected").val();
         var len = 35;
         $("#sel-org").val(selected)
-        {%if no_billing_avalaible%}
-        setAlertMessage("Grupos Pro no disponibles", "Por ahora no tienes grupos Pro disponibles. Ingresa a nuestra secci&oacute;n de <a href='/settings/billing'>facturaci&oacute;n</a> y adquiere uno ahora mismo. :)");
-        {%endif%}
         {%if sel_org%}
             $("#pro").click();
             $(".data-pro").removeClass("hidden");

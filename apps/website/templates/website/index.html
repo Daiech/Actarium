@@ -5,16 +5,16 @@
 {%block body%}
 <article>
     <div class="organizations-list">
-    {% for o in orgs %}
+    {% for o in organizations %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="org-principal-image pull-left"><img src="{{ STATIC_URL }}img/groups/default.jpg" alt="{{ o.name }}" /></span>
-            <span class="pull-left"><h3 class="panel-title"><a href="{{ o.get_absolute_url }}">{{ o.name }}</a></h3></span>
-            <span class="pull-right" title="{% blocktrans with num=o.get_num_members name=o.name %}{{ name }} tiene {{ num }} miembros{% endblocktrans%}">{{ o.get_num_members }} {% trans 'miembros' %}</span>
+            <span class="org-principal-image pull-left"><img src="{{ STATIC_URL }}img/groups/default.jpg" alt="{{ o.organization.name }}" /></span>
+            <span class="pull-left"><h3 class="panel-title"><a href="{{ o.organization.get_absolute_url }}">{{ o.organization.name }}</a></h3></span>
+            <span class="pull-right" title="{% blocktrans with num=o.organization.get_num_members name=o.organization.name %}{{ name }} tiene {{ num }} miembros{% endblocktrans%}">{{ o.organization.get_num_members }} {% trans 'miembros' %}</span>
           </div>
           <div class="panel-body">
             <div class="">
-                {% for g in groups %}
+                {% for g in o.groups %}
                 <a href="{{ g.get_absolute_url }}">
                     <div class="group-preview">
                         <span class="pull-right group-notifications glyphicon glyphicon-bell"></span>
@@ -32,9 +32,19 @@
                 </a>
                 {% empty %}
                 <p>No tienes ning&uacute;n grupo :(</p>
-                <div class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crea un grupo' %}</div>
+                <a href="{% url 'new_group' %}?org={{ o.organization.id }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crea un grupo' %}</a>
                 {% endfor %}
             </div>
+          </div>
+        </div>
+    {% empty %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{% trans ':( No tienes ninguna organización.' %}</h3>
+          </div>
+          <div class="panel-body">
+              <p>{% trans 'Las organizaciones te permiten tener un mejor control de los equipos de trabajo.' %}</p>
+              <a href="{% url 'new_organization'  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crear organización' %}</a>
           </div>
         </div>
     {% endfor %}

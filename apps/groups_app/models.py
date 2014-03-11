@@ -9,6 +9,10 @@ class GroupsManager(models.Manager):
     def my_groups(self, user):
         return self.filter(id_creator=user)
 
+class OrganizationsManager(models.Manager):
+    def get_my_orgs(self, user):
+        return self.filter(id_admin=user)
+
 class group_type(models.Model):
     name = models.CharField(max_length=150, verbose_name="name")
     description = models.TextField(blank=True)
@@ -309,6 +313,7 @@ class organizations(models.Model):
     description = models.TextField(blank=True)
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    objects = OrganizationsManager()
 
     def get_num_members(self):
         return self.id
@@ -320,7 +325,7 @@ class organizations(models.Model):
 class groups_pro(models.Model):
     id_group = models.ForeignKey(groups,  null=False, related_name='%(class)s_id_group')
     id_organization = models.ForeignKey(organizations,  null=False, related_name='%(class)s_id_organization')
-    id_billing = models.ForeignKey(billing,  null=False, related_name='%(class)s_id_billing')
+    id_billing = models.ForeignKey(billing,  null=True, blank=True, related_name='%(class)s_id_billing')
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):

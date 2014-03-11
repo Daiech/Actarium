@@ -20,7 +20,7 @@ groups_urls += patterns('apps.groups_app.minutes',
 
 )
 groups_urls += patterns('apps.groups_app.views',
-    url(r'^new$', 'newGroup', name='something'),
+    url(r'^new$', 'newGroup', name='new_group_old'),
     # url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groupInfoSettings', name='Admin Info Groups'),
     # url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groupDNISettings', name='Admin DNI Groups'),
     url(r'^(?P<slug_group>[-\w]+)/admin/request_dni', 'requestDNI', name='Request DNI ajax'),
@@ -55,4 +55,5 @@ groups_urls += patterns('apps.groups_app.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/folder$', 'showFolderGroup', name="show_folder"),
     url(r'^(?P<slug_group>[-\w]+)/calendar$', 'showCalendarGroup', name="show_calendar"),
     url(r'^(?P<slug_group>[-\w]+)/', 'showHomeGroup', name="show_home"),
+    url(r'^create$', 'newGroup', name='new_group'),
 )
