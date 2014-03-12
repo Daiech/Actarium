@@ -54,24 +54,22 @@ class Organizations(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        print "SLUG!!!!!!!!!!!!!!!!!!!!!! ", self.slug
         return ('show_org', (), {'slug_org': self.slug})
 
     def get_num_members(self):
         return self.id
 
     def get_groups(self):
-        return self.groups_org.all()
+        return self.groups_org.filter(is_active=True)
 
     def save(self, *args, **kwargs):
-        self.slug = "reemplazame"
+        self.slug = ""
         super(Organizations, self).save(*args, **kwargs)
-        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
-        super(Organizations, self).save(*args, **kwargs) 
+        self.slug = defaultfilters.slugify(self.name) + "-" + self.pk
+        super(Organizations, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "Org: %s" % (self.name)
-
 
 
 class Groups(models.Model):
@@ -89,7 +87,8 @@ class Groups(models.Model):
     objects = GroupsManager()
 
     def get_num_members(self):
-        return self.id
+        """Calculate from relations"""
+        return rel_user_group.objects.filter(id_group=self).count()
     
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.id_creator)
