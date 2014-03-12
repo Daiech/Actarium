@@ -28,6 +28,9 @@ class GroupsManager(GenericManager):
 
 
 class OrganizationsManager(GenericManager):
+    def get_by_slug(self, slug):
+        return Organizations.objects.get_active_or_none(slug=slug)
+
     def get_my_org_by_id(self, id, admin):
         return Organizations.objects.get_active_or_none(id=id, admin=admin)
 
@@ -49,12 +52,16 @@ class Organizations(models.Model):
 
     objects = OrganizationsManager()
 
+    @models.permalink
+    def get_absolute_url(self):
+        print "SLUG!!!!!!!!!!!!!!!!!!!!!! ", self.slug
+        return ('show_org', (), {'slug_org': self.slug})
+
     def get_num_members(self):
         return self.id
 
-    # @models.permalink
-    # def get_absolute_url(self):
-    #     return ('show_org', (), {'slug': self.slug})
+    def get_groups(self):
+        return self.groups_org.all()
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"

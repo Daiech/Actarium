@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from apps.account.urls import account_urls
-from apps.groups_app.urls import groups_urls
+from apps.groups_app.urls import groups_urls, orgs_urls
 from apps.actions_log.urls import actions_log_urls
 from apps.asettings.urls import asettings_urls
 from apps.pdfmodule.urls import pdfmodule_urls
@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^runMongo', 'apps.github.views.runMongo'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
+    url(r'^organization/', include(orgs_urls)),
     url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),

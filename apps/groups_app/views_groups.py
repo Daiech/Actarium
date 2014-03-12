@@ -18,6 +18,12 @@ from .utils import create_group
 
 
 @login_required(login_url='/account/login')
+def showOrg(request, slug_org):
+    organizations = [Organizations.objects.get_by_slug(slug_org)]
+    return render(request, "website/index.html", locals())
+
+
+@login_required(login_url='/account/login')
 def showHomeGroup(request, slug_group):
     '''
         Carga el menú de un grupo 
