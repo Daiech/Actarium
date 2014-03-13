@@ -18,7 +18,7 @@ import random
 from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.groups_app.models import DNI, DNI_type, DNI_permissions
-from django.utils import simplejson as json
+import json
 from django.core.urlresolvers import reverse
 
 

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from apps.groups_app.models import rel_user_group
 from apps.emailmodule.models import *
 # from apps.actions_log.views import saveActionLog, saveViewsLog
-from django.utils import simplejson as json
+import json
 
 
 def sendEmailHtml(email_type, ctx, to, _group=None):

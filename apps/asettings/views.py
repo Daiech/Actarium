@@ -14,7 +14,7 @@ from apps.groups_app.forms import OrganizationForm
 import datetime
 # from dateutil.relativedelta import *
 #from django.utils.timezone import make_aware, get_default_timezone, make_naive
-from django.utils import simplejson as json
+import json
 #from apps.account.templatetags.gravatartag import showgravatar
 #from django.core.mail import EmailMessage
 from apps.actions_log.views import saveActionLog, saveErrorLog, saveViewsLog
@@ -103,20 +103,6 @@ def saveOrganization(request, form, id_org=False):
         org = form.save(commit=False)
         org.admin = request.user
     org.save()
-    # try:
-    #     url_file = request.FILES['image_path']
-    # except Exception:
-    #     url_file = None
-    # if url_file:
-    #     # from django.template import defaultfilters
-    #     # url = save_file(url_file, defaultfilters.slugify(org.name) + "-" + str(org.id), path=ORGS_IMG_DIR)
-    #     # thumbnail = createThumbnail(url)
-    #     # if thumbnail:
-    #     #     org.image_path = thumbnail
-    #     #     deleteRealImage(url)
-    #     # else:
-    #     org.image_path = request.POST.get("image_path")
-    # org.save()
     try:
         ref = request.POST['ref'] + "?org=" + str(org.id)
     except Exception:

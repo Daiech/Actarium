@@ -65,7 +65,7 @@ class Organizations(models.Model):
     def save(self, *args, **kwargs):
         self.slug = ""
         super(Organizations, self).save(*args, **kwargs)
-        self.slug = defaultfilters.slugify(self.name) + "-" + self.pk
+        self.slug = defaultfilters.slugify(self.name) + "-" + str(self.pk)
         super(Organizations, self).save(*args, **kwargs)
 
     def __unicode__(self):
