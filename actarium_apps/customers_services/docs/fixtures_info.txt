@@ -1,0 +1,8 @@
+# use the command below to load the example fixtures data for Customers Services Application
+
+manage.py loaddata customers_services_example_data.json
+
+# The following command make fixtures for the customers_services application
+
+manage.py dumpdata --format=json customers_services > actarium_apps/customers_services/fixtures/backup_fixtures.json
+

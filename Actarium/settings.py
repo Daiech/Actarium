@@ -17,7 +17,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps.emailmodule','apps.billing',]
+APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps.emailmodule','apps.billing','actarium_apps.customers_services']
 
 if DEBUG:
     APPS += ["django_extensions"]
