@@ -21,7 +21,7 @@ APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps
 'actarium_apps.customers_services', 'actarium_apps.organizations']
 
 if DEBUG:
-    APPS += ["django_extensions", "south"]
+    APPS += ["django_extensions"]
 
 try:
     from .settings_db import DATABASES
