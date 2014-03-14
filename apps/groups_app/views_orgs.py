@@ -10,6 +10,7 @@ from apps.actions_log.views import saveActionLog, saveViewsLog
 from .models import Organizations
 from .utils import saveOrganization
 
+
 @login_required(login_url='/account/login')
 def createOrg(request):
     saveViewsLog(request, "apps.groups_app.views_groups.createOrg")
@@ -24,6 +25,18 @@ def createOrg(request):
         form = OrganizationForm()
     return render(request, "groups_app/create_org.html", locals())
 
+
+@login_required(login_url='/account/login')
+def readOrg(request, slug_org=False):
+    if slug_org:
+        org = Organizations.objects.get_by_slug(slug_org)
+        if org and request.user == org.admin:
+            organizations = [org]
+        else:
+            raise Http404
+    else:
+        organizations = Organizations.objects.get_active_orgs(user=request.user)
+    return render(request, "groups_app/read_orgs.html", locals())
 
 
 @login_required(login_url='/account/login')
@@ -41,20 +54,6 @@ def updateOrg(request, slug_org):
         return render(request, "groups_app/update_org.html", locals())
     else:
         raise Http404
-
-
-
-@login_required(login_url='/account/login')
-def readOrg(request, slug_org=False):
-    if slug_org:
-        org = Organizations.objects.get_by_slug(slug_org)
-        if org and request.user == org.admin:
-            organizations = [org]
-        else:
-            raise Http404
-    else:
-        organizations = Organizations.objects.get_active_orgs(user=request.user)
-    return render(request, "groups_app/read_orgs.html", locals())
 
 
 @login_required(login_url='/account/login')

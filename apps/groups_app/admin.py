@@ -27,8 +27,8 @@ class organizationsAdmin(admin.ModelAdmin):
     list_display = ('name', 'admin', 'description', 'date_added', 'is_active')
 
 
-class groupsProAdmin(admin.ModelAdmin):
-    list_display = ('id_group', 'id_organization', 'id_billing', 'is_active', 'dateOff')
+# class groupsProAdmin(admin.ModelAdmin):
+#     list_display = ('id_group', 'id_organization', 'id_billing', 'is_active', 'dateOff')
 
 
 class DNI_typeAdmin(admin.ModelAdmin):
@@ -52,7 +52,7 @@ admin.site.register(rel_user_minutes_signed)
 admin.site.register(user_role)
 admin.site.register(groups_permissions)
 admin.site.register(rel_role_group_permissions)
-admin.site.register(groups_pro, groupsProAdmin)
+# admin.site.register(groups_pro, groupsProAdmin)
 admin.site.register(rol_user_minutes)
 admin.site.register(templates)
 admin.site.register(rel_user_private_templates)

@@ -1,3 +1,124 @@
 from django.db import models
+from django.template import defaultfilters
+from django.contrib.auth.models import User
+from django.conf import settings
 
-# Create your models here.
+from apps.groups_app.models import GenericManager
+from libs.thumbs import ImageWithThumbsField
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules(
+    [
+        (
+            (ImageWithThumbsField, ),
+            [],
+            {
+                "verbose_name": ["verbose_name", {"default": None}],
+                "name":         ["name",         {"default": None}],
+                "width_field":  ["width_field",  {"default": None}],
+                "height_field": ["height_field", {"default": None}],
+                "sizes":        ["sizes",        {"default": None}],
+            },
+        ),
+    ],
+    ["^libs\.thumbs\.ImageWithThumbsField",])
+
+
+class OrganizationsManager(GenericManager):
+    def get_by_slug(self, slug):
+        return Organizations.objects.get_active_or_none(slug=slug)
+
+    def get_my_org_by_id(self, id, admin):
+        return Organizations.objects.get_active_or_none(id=id, admin=admin)
+
+    def get_active_orgs(self, user):
+        return Organizations.objects.get_active_or_none(admin=user)
+
+    def get_my_orgs(self, user):
+        return self.filter(admin=user)
+
+
+class Organizations(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    slug = models.SlugField(max_length=150, unique=True, verbose_name="org_slug")
+    description = models.TextField(blank=True)
+    image_path = ImageWithThumbsField(upload_to="orgs_img", sizes=settings.ORG_IMAGE_SIZE, verbose_name="org_image", null=True, blank=True, default=settings.ORG_IMAGE_DEFAULT)
+    
+    admin = models.ForeignKey(User, null=False, related_name='%(class)s_id_admin')
+    
+    is_archived = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    objects = OrganizationsManager()
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('show_org', (), {'slug_org': self.slug})
+
+    def get_num_members(self):
+        return 10
+
+    def get_groups(self):
+        return self.groups_org.filter(is_active=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = ""
+        super(Organizations, self).save(*args, **kwargs)
+        self.slug = defaultfilters.slugify(self.name) + "-" + str(self.pk)
+        super(Organizations, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return "Org: %s" % (self.name)
+
+
+class GroupsManager(GenericManager):
+    def my_groups(self, user):
+        return self.filter(id_creator=user)
+
+
+class Groups(models.Model):
+    name = models.CharField(max_length=150, verbose_name="name")
+    slug = models.SlugField(max_length=150, unique=True, verbose_name="group_slug")
+    description = models.TextField(blank=True)
+    image_path = ImageWithThumbsField(upload_to="groups_img", sizes=settings.GROUP_IMAGE_SIZE, verbose_name="org_image", null=True, blank=True, default=settings.GROUP_IMAGE_DEFAULT)
+
+    organization = models.ForeignKey(Organizations, null=False, related_name='%(class)s_org')
+
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    objects = GroupsManager()
+
+    def get_num_members(self):
+        """Calculate from relations"""
+        return rel_user_group.objects.filter(id_group=self).count()
+    
+    def __unicode__(self):
+        return "%s (%s)" % (self.name, self.id_creator)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('show_home', (), {'slug_group': self.slug})
+
+    def save(self, *args, **kwargs):
+        self.slug = "reemplazame"
+        super(Groups, self).save(*args, **kwargs)
+        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
+        super(Groups, self).save(*args, **kwargs)  # reemplazado
+        
+    def is_creator(self, user):
+        if self.id_creator == user:
+            return True
+        else:
+            return False
+
+    def get_minutes_by_code(self, **kwargs):
+        try:
+            return minutes.objects.get(id_group=self.pk, **kwargs)
+        except minutes.DoesNotExist:
+            return None
+        except Exception, e:
+            print "Error get_minutes_by_code: %s" % e
+            return None

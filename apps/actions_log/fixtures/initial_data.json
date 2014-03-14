@@ -8,7 +8,7 @@
 			"name": "Iniciar sesión",
 			"code": "LOG_IN",
 			"description": "Un usuario inicia sesión en la plataforma.",
-			"date_created": "2012-11-22 00:24:18"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -19,7 +19,7 @@
 			"name": "Registro de usuarios",
 			"code": "SIGN_IN",
 			"description": "Acción de registrar un usuario en la plataforma.",
-			"date_created": "2012-11-22 16:22:56"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -30,7 +30,7 @@
 			"name": "Cerrar sesion",
 			"code": "LOG_OUT",
 			"description": "Acción de cerrar sesion, solo se ejecuta cuando se da clic en el boton 'cerrar sesion' no cuando cierran el navegador o apagan el computador",
-			"date_created": "2012-11-22 16:34:04"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -41,7 +41,7 @@
 			"name": "Nueva reunion",
 			"code": "NEW_REUNION",
 			"description": "Convocación de una reunión, se almacena el id de la reunión y el grupo al que pertenece.",
-			"date_created": "2012-11-23 15:36:45"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -52,7 +52,7 @@
 			"name": "Nueva acta",
 			"code": "NEW_MINUTE",
 			"description": "Creación de una nueva acta, guarda el grupo al que pertenece y su codigo correpondiente.",
-			"date_created": "2012-11-23 16:07:02"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -63,7 +63,7 @@
 			"name": "Confirmar asistencia",
 			"code": "SET_ASSIST",
 			"description": "Confirmara asistencia indicando el id de la reunión y el valor, True: aceptar y False: rechazar",
-			"date_created": "2012-11-23 16:22:41"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -74,7 +74,7 @@
 			"name": "Nuevo Grupo",
 			"code": "NEW_GROUP",
 			"description": "Creación de un nuevo grupo, guarda el nombre del grupo y el nombre del administrador",
-			"date_created": "2012-11-23 17:15:57"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -85,7 +85,7 @@
 			"name": "Aceptar invitación",
 			"code": "SET_INVITA",
 			"description": "Acción de aceptar o rechazar una invitación a un grupo",
-			"date_created": "2012-11-23 17:46:11"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -96,7 +96,7 @@
 			"name": "Eliminar invitación",
 			"code": "DEL_INVITA",
 			"description": "Elimina la invitación que se ha hecho a un usuario para participar en un grupo",
-			"date_created": "2012-11-23 20:04:12"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	},
 	{
@@ -107,7 +107,7 @@
 			"name": "Actualizar datos",
 			"code": "CHG_USDATA",
 			"description": "Actualizar datos de usuario, se guarda la información anterior del usuario",
-			"date_created": "2012-11-23 20:35:12"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	}, 
 	{
@@ -118,7 +118,7 @@
 			"name": "Cambiar Contraseña",
 			"code": "CHG_PASS",
 			"description": "Notificación de cambio de contraseña",
-			"date_created": "2012-11-23 20:35:57"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	}, 
 	{
@@ -129,7 +129,7 @@
 			"name": "Enviar invitación",
 			"code": "SEN_INVITA",
 			"description": "Acción de enviar invitación a participar en un grupo, guarda el email al cual se envio la invitación.",
-			"date_created": "2012-12-11 20:16:45"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	}, 
 	{
@@ -140,7 +140,7 @@
 			"name": "Nueva organización",
 			"code": "NEW_ORG",
 			"description": "Crear nueva organización",
-			"date_created": "2013-03-22 19:55:49"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	}, 
 	{
@@ -151,7 +151,7 @@
 			"name": "Editar organización",
 			"code": "EDIT_ORG",
 			"description": "Editar una organización",
-			"date_created": "2013-03-22 19:55:49"
+			"date_created": "2013-12-20T23:37:01Z"
 		}
 	}
 ]

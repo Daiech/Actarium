@@ -5,7 +5,7 @@
     "fields": {
       "name": "Reunión",
       "description": "Formato de acta para reuniones",
-      "date_added": "2013-06-06 04:30:12",
+      "date_added": "2013-12-20T23:37:01Z",
       "id_creator": 1,
       "is_public": 1,
       "is_customized": 0
@@ -17,7 +17,7 @@
     "fields": {
       "name": "Last Minutes",
       "description": "Formato de acta para actas subidas",
-      "date_added": "2013-06-06 04:30:12",
+      "date_added": "2013-12-20T23:37:01Z",
       "id_creator": 1,
       "is_public": 1,
       "is_customized": 0
@@ -31,7 +31,7 @@
       "number_groups_pro": 1,
       "price": "6000",
       "is_visible": 1,
-      "date_joined": "2013-01-31 21:00:12",
+      "date_joined": "2013-12-20T23:37:01Z",
       "time": 6
     }
   },
@@ -43,7 +43,7 @@
       "number_groups_pro": 3,
       "price": "16000",
       "is_visible": 1,
-      "date_joined": "2013-01-31 20:59:28",
+      "date_joined": "2013-12-20T23:37:01Z",
       "time": 12
     }
   },
@@ -55,7 +55,7 @@
       "number_groups_pro": 6,
       "price": "30000",
       "is_visible": 1,
-      "date_joined": "2013-01-31 20:58:12",
+      "date_joined": "2013-12-20T23:37:01Z",
       "time": 12
     }
   },
@@ -68,7 +68,7 @@
       "address_js": "groups/minutesTemplates/minutesTemplate1js.html",
       "id_type": 1,
       "is_public": 1,
-      "date_joined": "2013-03-15 02:37:31",
+      "date_joined": "2013-12-20T23:37:01Z",
       "slug": "plantilla-basica-actarium-1"
     }
   },
@@ -81,7 +81,7 @@
       "address_js": "groups/minutesTemplates/minutesTemplate2js.html",
       "id_type": 1,
       "is_public": 0,
-      "date_joined": "2013-03-15 01:04:51",
+      "date_joined": "2013-12-20T23:37:01Z",
       "slug": "plantilla-institucional-parquesoft-2"
     }
   },
@@ -94,7 +94,7 @@
       "address_js": "groups/minutesTemplates/minutesTemplate3js.html",
       "id_type": 1,
       "is_public": 0,
-      "date_joined": "2013-03-15 02:37:57",
+      "date_joined": "2013-12-20T23:37:01Z",
       "slug": "plantilla-comite-parquesoft-3"
     }
   },
@@ -107,7 +107,7 @@
       "address_js": "groups/minutesTemplates/minutesTemplateJsEmpty.html",
       "id_type": 2,
       "is_public": 0,
-      "date_joined": "2013-03-15 13:55:52",
+      "date_joined": "2013-12-20T23:37:01Z",
       "slug": "actas-subidas-4"
     }
   },
