@@ -9,11 +9,12 @@ from django.core.urlresolvers import reverse
 from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
 from apps.groups_app.forms import newMinutesForm, newGroupForm, OrganizationForm
-from apps.groups_app.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
+from apps.groups_app.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup
 from apps.groups_app.minutes import *
 from apps.groups_app.models import *
 from apps.emailmodule.models import *
 from apps.actions_log.views import saveActionLog, saveViewsLog
+from actarium_apps.organizations.models import rel_user_group
 from .utils import create_group, saveOrganization
 
 
@@ -214,10 +215,10 @@ def showMinuteGroup(request, slug_group, minutes_code):
 
             ######## <LOGO> #########
             url_logo = URL_BASE + '/static/img/logo_email.png'
-            if isProGroup(group):
-                _pro = getProGroup(group)
-                if _pro:
-                    url_logo = URL_BASE + _pro.id_organization.logo_address
+            # if isProGroup(group):
+            #     _pro = getProGroup(group)
+            #     if _pro:
+            #         url_logo = URL_BASE + _pro.id_organization.logo_address
 
             ######## </LOGO> #########
 
@@ -406,10 +407,10 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
         ######## <LOGO> #########
         url_logo = URL_BASE + '/static/img/logo_email.png'
-        if isProGroup(group):
-            _pro = getProGroup(group)
-            if _pro:
-                url_logo = URL_BASE + _pro.id_organization.logo_address
+        # if isProGroup(group):
+        #     _pro = getProGroup(group)
+        #     if _pro:
+        #         url_logo = URL_BASE + _pro.id_organization.logo_address
         ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########

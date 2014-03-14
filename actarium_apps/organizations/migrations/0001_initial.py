@@ -37,6 +37,22 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'organizations', ['Groups'])
 
+        # Adding model 'rel_user_group'
+        db.create_table(u'organizations_rel_user_group', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('id_user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='rel_user_group_id_user', to=orm['auth.User'])),
+            ('id_user_invited', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='rel_user_group_id_user_invited', null=True, blank=True, to=orm['auth.User'])),
+            ('id_group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['organizations.Groups'])),
+            ('is_member', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('is_admin', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_secretary', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_superadmin', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_convener', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+        ))
+        db.send_create_signal(u'organizations', ['rel_user_group'])
+
 
     def backwards(self, orm):
         # Deleting model 'Organizations'
@@ -44,6 +60,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Groups'
         db.delete_table(u'organizations_groups')
+
+        # Deleting model 'rel_user_group'
+        db.delete_table(u'organizations_rel_user_group')
 
 
     models = {
@@ -107,6 +126,20 @@ class Migration(SchemaMigration):
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '150'})
+        },
+        u'organizations.rel_user_group': {
+            'Meta': {'object_name': 'rel_user_group'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id_group': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['organizations.Groups']"}),
+            'id_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rel_user_group_id_user'", 'to': u"orm['auth.User']"}),
+            'id_user_invited': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'rel_user_group_id_user_invited'", 'null': 'True', 'blank': 'True', 'to': u"orm['auth.User']"}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_convener': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_member': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_secretary': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superadmin': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         }
     }
 

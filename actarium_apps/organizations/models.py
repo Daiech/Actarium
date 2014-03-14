@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 from apps.groups_app.models import GenericManager
+
 from libs.thumbs import ImageWithThumbsField
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules(
@@ -115,6 +116,7 @@ class Groups(models.Model):
             return False
 
     def get_minutes_by_code(self, **kwargs):
+        from apps.groups_app.models import minutes
         try:
             return minutes.objects.get(id_group=self.pk, **kwargs)
         except minutes.DoesNotExist:
@@ -122,3 +124,19 @@ class Groups(models.Model):
         except Exception, e:
             print "Error get_minutes_by_code: %s" % e
             return None
+
+
+class rel_user_group(models.Model):
+    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
+    id_user_invited = models.ForeignKey(User, blank=True, null=True, default=None, related_name='%(class)s_id_user_invited')
+    id_group = models.ForeignKey(Groups)
+    is_member = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_secretary = models.BooleanField(default=False)
+    is_superadmin = models.BooleanField(default=False)
+    is_convener = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)

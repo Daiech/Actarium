@@ -1,6 +1,6 @@
 #encoding:utf-8
 from django.contrib.auth.decorators import login_required
-from .models import Organizations, Groups, rel_user_group, groups_pro
+from actarium_apps.organizations.models import Organizations, Groups, rel_user_group
 from .validators import validateEmail
 from django.contrib.auth.models import User
 from apps.account.templatetags.gravatartag import showgravatar

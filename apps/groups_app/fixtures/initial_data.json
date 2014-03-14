@@ -24,42 +24,6 @@
     }
   },
   {
-    "model": "groups_app.packages",
-    "pk": 1,
-    "fields": {
-      "name": "Grupo Pro Individual",
-      "number_groups_pro": 1,
-      "price": "6000",
-      "is_visible": 1,
-      "date_joined": "2013-12-20T23:37:01Z",
-      "time": 6
-    }
-  },
-  {
-    "model": "groups_app.packages",
-    "pk": 2,
-    "fields": {
-      "name": "Promoción Pro x3",
-      "number_groups_pro": 3,
-      "price": "16000",
-      "is_visible": 1,
-      "date_joined": "2013-12-20T23:37:01Z",
-      "time": 12
-    }
-  },
-  {
-    "model": "groups_app.packages",
-    "pk": 3,
-    "fields": {
-      "name": "Promoción Pro x6",
-      "number_groups_pro": 6,
-      "price": "30000",
-      "is_visible": 1,
-      "date_joined": "2013-12-20T23:37:01Z",
-      "time": 12
-    }
-  },
-  {
     "model": "groups_app.templates",
     "pk": 1,
     "fields": {

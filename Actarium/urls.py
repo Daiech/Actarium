@@ -5,7 +5,6 @@ from apps.groups_app.urls import groups_urls, orgs_urls
 from apps.actions_log.urls import actions_log_urls
 from apps.asettings.urls import asettings_urls
 from apps.pdfmodule.urls import pdfmodule_urls
-from apps.billing.urls import billing_urls
 from apps.website.views import getGlobalVar
 
 # Uncomment the next two lines to enable the admin:
@@ -31,7 +30,6 @@ urlpatterns = patterns('',
     url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
-    url(r'^billing/', include(billing_urls)),
 
     url(r'^ads/(?P<id_ads>[-\w]+)$', 'apps.ads.views.home'),
     url(r'^services.pdf$', 'apps.website.views.services', name='services'),

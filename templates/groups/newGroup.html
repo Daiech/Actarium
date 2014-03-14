@@ -55,20 +55,6 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="">
-                        <span class="pull-left">
-                            <label for="sel-billing">Paquete:</label>
-                        </span>
-                        <span class="pull-right">
-                            <a href="/settings/billing"> + Adquirir paquete</a>
-                        </span>
-                        <select name="sel-billing" id="sel-billing">
-                            {% for bill in billing%}
-                            <option value="{{bill.id}}">{{bill.id_package.name}} ({{bill.groups_pro_available}} disponible)</option>
-                            {% endfor %}
-                            {%if not billing%}<option>No tienes paquetes disponibles</option>{%endif%}
-                        </select>
-                    </div>
                     <div id="is-memeber" class="">
                         <label data-original-title="Accede al grupo. Puede crear actas, reuniones, etc." for="is_member">
                             <input type="checkbox" id="is_member" name="is_member" value="1" checked>
@@ -190,9 +176,6 @@
         var selected = $("#org-selected").val();
         var len = 35;
         $("#sel-org").val(selected)
-        {%if no_billing_avalaible%}
-        setAlertMessage("Grupos Pro no disponibles", "Por ahora no tienes grupos Pro disponibles. Ingresa a nuestra secci&oacute;n de <a href='/settings/billing'>facturaci&oacute;n</a> y adquiere uno ahora mismo. :)");
-        {%endif%}
         {%if sel_org%}
             $("#pro").click();
             $(".data-pro").removeClass("hidden");

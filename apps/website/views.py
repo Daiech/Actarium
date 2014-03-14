@@ -8,7 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils import translation
-from apps.groups_app.models import reunions, assistance, rel_user_group, DNI_permissions
+from apps.groups_app.models import reunions, assistance, DNI_permissions
+from actarium_apps.organizations.models import rel_user_group
 from apps.groups_app.views import dateTimeFormatForm
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml

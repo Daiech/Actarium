@@ -10,6 +10,7 @@ from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.conf import settings
 from django.contrib.humanize.templatetags import humanize
 
+from actarium_apps.organizations.models import rel_user_group
 from .models import *
 from .forms import newGroupForm, newReunionForm
 from apps.account.templatetags.gravatartag import showgravatar
@@ -20,22 +21,6 @@ from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGr
 import datetime
 import json
 URL_BASE = settings.URL_BASE
-
-
-def isProGroup(group):
-    try:
-        groups_pro.objects.get(id_group=group, is_active=True)
-        return True
-    except groups_pro.DoesNotExist:
-        return False
-
-
-def getProGroup(group):
-    try:
-        return groups_pro.objects.get(id_group=group, is_active=True)
-    except groups_pro.DoesNotExist:
-        return False
-
 
 
 def getUserById(id_user):
@@ -339,98 +324,6 @@ def newBasicGroup(request, form, pro=False):
 
 
 @login_required(login_url='/account/login')
-def newProGroup(request, form):
-    saveViewsLog(request, "apps.groups_app.views.newProGroup")
-    # print "type-group: %s , id-organization: %s, id-billing: %s" % (request.POST['type-group'], request.POST['sel-organization'], request.POST['sel-billing'])
-    org_id = request.POST.get('sel-organization')
-    try:
-        org = Organizations.objects.get(id=ord_id, id_admin=request.user, is_active=True)
-    except organizations.DoesNotExist:
-        org = None
-    except Exception:
-        org = False
-    try:
-        bill = billing.objects.get(id=request.POST['sel-billing'], id_user=request.user, state='1')
-    except billing.DoesNotExist:
-        bill = None
-    except Exception:
-        bill = False
-    if org and bill:
-        if bill.groups_pro_available >= 1:
-            new_group = newBasicGroup(request, form, pro=True)
-            g_pro = groups_pro(id_group=new_group, id_organization=org, id_billing=bill)
-            g_pro.save()
-            bill.groups_pro_available = bill.groups_pro_available - 1
-            bill.save()
-            return new_group
-        else:
-            return False
-    else:
-        return False
-
-
-@login_required(login_url='/account/login')
-def getProGroupDataForm(request):
-    saveViewsLog(request, "apps.groups_app.views.getProGroupDataForm")
-    orgs = None
-    billing_list = None
-    try:
-        orgs = Organizations.objects.filter(is_active=True, id_admin=request.user)
-    except Exception, e:
-        orgs = None
-        raise e
-    try:
-        billing_list = billing.objects.filter(state='1', id_user=request.user, groups_pro_available__gte=1)
-    except billing.DoesNotExist:
-        billing_list = u"No hay información disponible."
-    return (orgs, billing_list)
-
-
-@login_required(login_url='/account/login')
-def newGroup(request):
-    '''
-        crea una nuevo grupo
-    '''
-    saveViewsLog(request, "apps.groups_app.views.newGroup")
-    orgs = None
-    billing_list = None
-    no_billing_avalaible = False  # indica si se intento crear un grupo pro sin paquetes disponibles
-    sel_org = False
-    if request.method == "GET":  # envia una variable para seleccionar una organizacion
-        try:
-            sel_org = request.GET['org']
-        except Exception:
-            sel_org = False
-
-    if request.method == "POST":  # selecciona los datos para crear un nuevo grupo
-        form = newGroupForm(request.POST)
-        if form.is_valid():
-            if int(request.POST['type-group']) == 0:  # 0 = grupo Free
-                resp = newBasicGroup(request, form)
-            else:
-                resp = newProGroup(request, form)
-                if resp:
-                    resp.is_pro = True
-                    resp.save()
-            if resp:
-                saveActionLog(request.user, 'NEW_GROUP', "id_group: %s, group_name: %s, admin: %s" % (resp.pk, resp.name, request.user.username), request.META['REMOTE_ADDR'])
-                return HttpResponseRedirect("/groups/" + str(resp.slug) + "?saved=1")
-            else:
-                no_billing_avalaible = True
-    else:
-        form = newGroupForm()
-    orgs, billing_list = getProGroupDataForm(request)
-    ctx = {"newGroupForm": form,
-           "organizations": orgs,
-           "billing": billing_list,
-           "sel_org": sel_org,
-           "full_path": request.get_full_path(),
-           "no_billing_avalaible": no_billing_avalaible
-           }
-    return render_to_response('groups/newGroup.html', ctx, context_instance=RequestContext(request))
-
-
-@login_required(login_url='/account/login')
 def showGroup(request, slug):
     '''
         Muestra la informacion de un grupo
@@ -458,8 +351,8 @@ def showGroup(request, slug):
                     except Exception:
                         no_redactor = 0
                 pro = False
-                if isProGroup(g):
-                    pro = getProGroup(g)
+                # if isProGroup(g):
+                #     pro = getProGroup(g)
                 ctx = {
                     "group": g, "current_member": _user, "members": members, "minutes": m, "reunions": _reunions,
                     "now_": datetime.datetime.now(), 'no_redactor': no_redactor, "is_pro": pro}

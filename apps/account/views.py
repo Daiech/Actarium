@@ -20,7 +20,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 from apps.groups_app.models import DNI, DNI_type, DNI_permissions
 import json
 from django.core.urlresolvers import reverse
-
+from actarium_apps.organizations.models import rel_user_group
 
 #------------------------------- <Normal User>---------------------------
 @login_required(login_url='/account/login')
@@ -435,7 +435,6 @@ def confirm_account(request, activation_key, is_invited=False):
     saveViewsLog(request, "apps.account.views.confirm_account")
     ak = activationKeyIsValid(activation_key)
     if ak:
-        from apps.groups_app.models import rel_user_group
         try:
             rels = rel_user_group.objects.filter(id_user=ak.id_user, is_active=False)
         except rel_user_group.DoesNotExist:

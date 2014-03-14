@@ -30,22 +30,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'groups_app', ['invitations_groups'])
 
-        # Adding model 'rel_user_group'
-        db.create_table(u'groups_app_rel_user_group', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('id_user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='rel_user_group_id_user', to=orm['auth.User'])),
-            ('id_user_invited', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='rel_user_group_id_user_invited', null=True, blank=True, to=orm['auth.User'])),
-            ('id_group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['organizations.Groups'])),
-            ('is_member', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('is_admin', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_secretary', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_superadmin', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_convener', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        ))
-        db.send_create_signal(u'groups_app', ['rel_user_group'])
-
         # Adding model 'minutes_type_1'
         db.create_table(u'groups_app_minutes_type_1', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -204,32 +188,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'groups_app', ['rel_role_group_permissions'])
 
-        # Adding model 'packages'
-        db.create_table(u'groups_app_packages', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('number_groups_pro', self.gf('django.db.models.fields.IntegerField')()),
-            ('price', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('is_visible', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('time', self.gf('django.db.models.fields.CharField')(max_length=3)),
-        ))
-        db.send_create_signal(u'groups_app', ['packages'])
-
-        # Adding model 'billing'
-        db.create_table(u'groups_app_billing', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('id_user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='billing_id_user', to=orm['auth.User'])),
-            ('id_package', self.gf('django.db.models.fields.related.ForeignKey')(related_name='billing_id_package', to=orm['groups_app.packages'])),
-            ('date_request', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('groups_pro_available', self.gf('django.db.models.fields.IntegerField')()),
-            ('state', self.gf('django.db.models.fields.CharField')(default='0', max_length=1)),
-            ('date_start', self.gf('django.db.models.fields.DateTimeField')(null=True)),
-            ('date_end', self.gf('django.db.models.fields.DateTimeField')(null=True)),
-            ('time', self.gf('django.db.models.fields.CharField')(max_length=3)),
-        ))
-        db.send_create_signal(u'groups_app', ['billing'])
-
         # Adding model 'last_minutes'
         db.create_table(u'groups_app_last_minutes', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -363,9 +321,6 @@ class Migration(SchemaMigration):
         # Deleting model 'invitations_groups'
         db.delete_table(u'groups_app_invitations_groups')
 
-        # Deleting model 'rel_user_group'
-        db.delete_table(u'groups_app_rel_user_group')
-
         # Deleting model 'minutes_type_1'
         db.delete_table(u'groups_app_minutes_type_1')
 
@@ -407,12 +362,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'rel_role_group_permissions'
         db.delete_table(u'groups_app_rel_role_group_permissions')
-
-        # Deleting model 'packages'
-        db.delete_table(u'groups_app_packages')
-
-        # Deleting model 'billing'
-        db.delete_table(u'groups_app_billing')
 
         # Deleting model 'last_minutes'
         db.delete_table(u'groups_app_last_minutes')
@@ -511,18 +460,6 @@ class Migration(SchemaMigration):
             'id_reunion': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'assistance_id_reunion'", 'to': u"orm['groups_app.reunions']"}),
             'id_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'assistance_id_user'", 'to': u"orm['auth.User']"}),
             'is_confirmed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        u'groups_app.billing': {
-            'Meta': {'object_name': 'billing'},
-            'date_end': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'date_request': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'date_start': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'groups_pro_available': ('django.db.models.fields.IntegerField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'id_package': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'billing_id_package'", 'to': u"orm['groups_app.packages']"}),
-            'id_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'billing_id_user'", 'to': u"orm['auth.User']"}),
-            'state': ('django.db.models.fields.CharField', [], {'default': "'0'", 'max_length': '1'}),
-            'time': ('django.db.models.fields.CharField', [], {'max_length': '3'})
         },
         u'groups_app.dni': {
             'Meta': {'object_name': 'DNI'},
@@ -628,16 +565,6 @@ class Migration(SchemaMigration):
             'id_minutes': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'minutes_version_id_minutes'", 'to': u"orm['groups_app.minutes']"}),
             'id_user_creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'minutes_version_id_user'", 'to': u"orm['auth.User']"})
         },
-        u'groups_app.packages': {
-            'Meta': {'object_name': 'packages'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_visible': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
-            'number_groups_pro': ('django.db.models.fields.IntegerField', [], {}),
-            'price': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
-            'time': ('django.db.models.fields.CharField', [], {'max_length': '3'})
-        },
         u'groups_app.private_templates': {
             'Meta': {'unique_together': "(('id_template', 'id_group'),)", 'object_name': 'private_templates'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
@@ -672,20 +599,6 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'id_group_permission': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rel_role_group_permissions_id_group_permission'", 'to': u"orm['groups_app.groups_permissions']"}),
             'id_role': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rel_role_group_permissions_id_role'", 'to': u"orm['groups_app.user_role']"})
-        },
-        u'groups_app.rel_user_group': {
-            'Meta': {'object_name': 'rel_user_group'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'id_group': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['organizations.Groups']"}),
-            'id_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rel_user_group_id_user'", 'to': u"orm['auth.User']"}),
-            'id_user_invited': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'rel_user_group_id_user_invited'", 'null': 'True', 'blank': 'True', 'to': u"orm['auth.User']"}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_convener': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_member': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_secretary': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superadmin': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         u'groups_app.rel_user_minutes_assistance': {
             'Meta': {'object_name': 'rel_user_minutes_assistance'},

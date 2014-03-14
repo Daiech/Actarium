@@ -13,10 +13,11 @@ from Actarium.settings import URL_BASE, MEDIA_URL
 from apps.account.templatetags.gravatartag import showgravatar
 
 # Imports from views.py
-from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email, isProGroup, getProGroup, dateTimeFormatForm, dateTimeFormatDb, removeGMT
+from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email, dateTimeFormatForm, dateTimeFormatDb, removeGMT
 from apps.actions_log.views import saveActionLog, saveViewsLog
 # from Actarium.settings import URL_BASE
 from apps.emailmodule.views import sendEmailHtml
+from actarium_apps.organizations.models import rel_user_group
 
 
 def getEmailListByGroup(group):
@@ -770,10 +771,9 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
         ######## <LOGO> #########
         url_logo = URL_BASE + '/static/img/logo_email.png'
-        if isProGroup(group):
-            _pro = getProGroup(group)
-            if _pro:
-                url_logo = URL_BASE + _pro.id_organization.logo_address
+        # _pro = getProGroup(group)
+        # if _pro:
+        #     url_logo = URL_BASE + _pro.id_organization.logo_address
         ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########
@@ -959,10 +959,10 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
 
             ######## <LOGO> #########
             url_logo = URL_BASE + '/static/img/logo_email.png'
-            if isProGroup(group):
-                _pro = getProGroup(group)
-                if _pro:
-                    url_logo = URL_BASE + _pro.id_organization.logo_address
+            # if isProGroup(group):
+            #     _pro = getProGroup(group)
+            #     if _pro:
+            #         url_logo = URL_BASE + _pro.id_organization.logo_address
             ######## </LOGO> #########
 
             ######## <SAVE_THE_MINUTE> #########
@@ -1239,10 +1239,10 @@ def showMinutes(request, slug, minutes_code):
 
             ######## <LOGO> #########
             url_logo = URL_BASE + '/static/img/logo_email.png'
-            if isProGroup(group):
-                _pro = getProGroup(group)
-                if _pro:
-                    url_logo = URL_BASE + _pro.id_organization.logo_address
+            # if isProGroup(group):
+            #     _pro = getProGroup(group)
+            #     if _pro:
+            #         url_logo = URL_BASE + _pro.id_organization.logo_address
 
             ######## </LOGO> #########
 

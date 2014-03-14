@@ -42,21 +42,6 @@ class invitations_groups(models.Model):
         return "from: %s, to: %s, is_active : %s " % (self.id_user_from, self.id_user_invited, self.is_active)
 
 
-class rel_user_group(models.Model):
-    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_user_invited = models.ForeignKey(User, blank=True, null=True, default=None, related_name='%(class)s_id_user_invited')
-    id_group = models.ForeignKey(Groups)
-    is_member = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_secretary = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
-    is_convener = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-
-    def __unicode__(self):
-        return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
-
     # class Meta:
     #     ordering = ['-id_group__is_pro', 'id']
 
@@ -240,33 +225,6 @@ class groups_permissions(models.Model):
 class rel_role_group_permissions(models.Model):
     id_role = models.ForeignKey(user_role, null=False, related_name='%(class)s_id_role')
     id_group_permission = models.ForeignKey(groups_permissions, null=False, related_name='%(class)s_id_group_permission')
-
-
-# nueva configuracion para manejo de grupos Pro y finanzas
-class packages(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    number_groups_pro = models.IntegerField()
-    price = models.CharField(max_length=150, verbose_name="price")
-    is_visible = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now=True)
-    time = models.CharField(max_length=3, verbose_name="time")
-
-    def __unicode__(self):
-        return "%s" % (self.name)
-
-
-class billing(models.Model):
-    id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
-    id_package = models.ForeignKey(packages,  null=False, related_name='%(class)s_id_package')
-    date_request = models.DateTimeField(auto_now=True)
-    groups_pro_available = models.IntegerField()
-    state = models.CharField(max_length=1, verbose_name="state", default="0")
-    date_start = models.DateTimeField(null=True)
-    date_end = models.DateTimeField(null=True)
-    time = models.CharField(max_length=3, verbose_name="time")
-
-    def __unicode__(self):
-        return "Factura: %s %s %s" % (self.id_package.name, self.id_user.username, self.state)
 
 
 class last_minutes(models.Model):
