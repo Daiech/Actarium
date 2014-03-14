@@ -1,7 +1,9 @@
+#encoding:utf-8
 from django.db import models
 from django.template import defaultfilters
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from apps.groups_app.models import GenericManager
 
@@ -79,10 +81,10 @@ class GroupsManager(GenericManager):
 
 
 class Groups(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    slug = models.SlugField(max_length=150, unique=True, verbose_name="group_slug")
+    name = models.CharField(max_length=150, verbose_name=_("Nombre"))
+    slug = models.SlugField(max_length=150, unique=True, verbose_name=_("Slug"))
     description = models.TextField(blank=True)
-    image_path = ImageWithThumbsField(upload_to="groups_img", sizes=settings.GROUP_IMAGE_SIZE, verbose_name="org_image", null=True, blank=True, default=settings.GROUP_IMAGE_DEFAULT)
+    image_path = ImageWithThumbsField(upload_to="groups_img", sizes=settings.GROUP_IMAGE_SIZE, verbose_name=_("Imagen"), null=True, blank=True, default=settings.GROUP_IMAGE_DEFAULT)
 
     organization = models.ForeignKey(Organizations, null=False, related_name='%(class)s_org')
 
@@ -140,3 +142,25 @@ class rel_user_group(models.Model):
 
     def __unicode__(self):
         return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
+
+
+class OrganizationsRoles(models.Model):
+    name = models.CharField(max_length=150, verbose_name=_("name"))
+    description = models.TextField(blank=True, verbose_name=_("Descripción"))
+    
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+
+class OrganizationsUser(models.Model):
+    name = models.CharField(max_length=150, verbose_name=_("name"))
+    description = models.TextField(blank=True, verbose_name=_("Descripción"))
+    
+    user = models.ForeignKey(User, related_name='%(class)s_user')
+    role = models.ForeignKey(OrganizationsRoles, related_name='%(class)s_role')
+    organization = models.ForeignKey(Organizations, related_name='%(class)s_organization')
+    
+    is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
