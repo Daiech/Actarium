@@ -185,3 +185,22 @@ def create_group(request, form):
         return new_group
     else:
         return False
+
+
+@login_required(login_url='/account/login')
+def saveOrganization(request, form, id_org=False):
+    if id_org:
+        org = Organizations.objects.get_or_none(id=id_org)
+        if org:
+            org.name = form.cleaned_data['name']
+            org.description = form.cleaned_data['description']
+        else:
+            return None
+    else:
+        org = form.save(commit=False)
+        org.admin = request.user
+    org.save()
+    ref = request.POST.get('ref')
+    if ref:
+        ref = request.POST.get('ref') + "?org=" + str(org.id)
+    return org.get_absolute_url()

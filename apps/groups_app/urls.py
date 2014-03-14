@@ -58,5 +58,6 @@ groups_urls += patterns('apps.groups_app.views_groups',
     url(r'^create$', 'newGeneralGroup', name='new_group'),
 )
 orgs_urls = patterns('apps.groups_app.views_groups',
+    url(r'^create/', 'createOrg', name="create_org"),
     url(r'^(?P<slug_org>[-\w]+)/', 'showOrg', name="show_org"),
 )

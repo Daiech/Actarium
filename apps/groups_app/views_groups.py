@@ -8,13 +8,29 @@ from django.core.urlresolvers import reverse
 
 from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
-from apps.groups_app.forms import newMinutesForm, newGroupForm
+from apps.groups_app.forms import newMinutesForm, newGroupForm, OrganizationForm
 from apps.groups_app.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup, isProGroup, getProGroup
 from apps.groups_app.minutes import *
 from apps.groups_app.models import *
 from apps.emailmodule.models import *
 from apps.actions_log.views import saveActionLog, saveViewsLog
-from .utils import create_group
+from .utils import create_group, saveOrganization
+
+
+@login_required(login_url='/account/login')
+def createOrg(request):
+    saveViewsLog(request, "apps.groups_app.views_groups.createOrg")
+    ref = request.GET.get('ref') if 'ref' in request.GET else ""
+    if request.method == "POST":
+        form = OrganizationForm(request.POST, request.FILES)
+        if form.is_valid() and form.is_multipart():
+            ref = saveOrganization(request, form)
+            saveActionLog(request.user, 'NEW_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
+            return HttpResponseRedirect(ref)
+    else:
+        form = OrganizationForm()
+    return render(request, "groups_app/create_org.html", locals())
+
 
 
 @login_required(login_url='/account/login')
