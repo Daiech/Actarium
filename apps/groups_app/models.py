@@ -5,7 +5,21 @@ from django.template import defaultfilters
 from libs.thumbs import ImageWithThumbsField
 from django.conf import settings
 from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^groups_app\.organizations\.fields\.image_path", "^groups_app\.groups\.fields\.image_path"])
+add_introspection_rules(
+    [
+        (
+            (ImageWithThumbsField, ),
+            [],
+            {
+                "verbose_name": ["verbose_name", {"default": None}],
+                "name":         ["name",         {"default": None}],
+                "width_field":  ["width_field",  {"default": None}],
+                "height_field": ["height_field", {"default": None}],
+                "sizes":        ["sizes",        {"default": None}],
+            },
+        ),
+    ],
+    ["^libs\.thumbs\.ImageWithThumbsField",])
 
 class GenericManager(models.Manager):
 
