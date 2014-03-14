@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.template import defaultfilters
 from libs.thumbs import ImageWithThumbsField
 from django.conf import settings
-
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^groups_app\.organizations\.fields\.image_path", "^groups_app\.groups\.fields\.image_path"])
 
 class GenericManager(models.Manager):
 
@@ -34,6 +35,9 @@ class OrganizationsManager(GenericManager):
     def get_my_org_by_id(self, id, admin):
         return Organizations.objects.get_active_or_none(id=id, admin=admin)
 
+    def get_active_orgs(self, user):
+        return Organizations.objects.get_active_or_none(admin=user)
+
     def get_my_orgs(self, user):
         return self.filter(admin=user)
 
@@ -46,6 +50,7 @@ class Organizations(models.Model):
     
     admin = models.ForeignKey(User, null=False, related_name='%(class)s_id_admin')
     
+    is_archived = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -57,7 +62,7 @@ class Organizations(models.Model):
         return ('show_org', (), {'slug_org': self.slug})
 
     def get_num_members(self):
-        return self.id
+        return 10
 
     def get_groups(self):
         return self.groups_org.filter(is_active=True)

@@ -2,6 +2,7 @@ django
 xhtml2pdf
 pillow
 pymongo
+south
 #psycopg2
 MySQL-python
 

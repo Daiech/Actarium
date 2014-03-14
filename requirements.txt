@@ -3,6 +3,7 @@ xhtml2pdf
 pillow
 pymongo
 psycopg2
+south
 #MySQL-python
 
 python-social-auth

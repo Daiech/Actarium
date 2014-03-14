@@ -188,17 +188,9 @@ def create_group(request, form):
 
 
 @login_required(login_url='/account/login')
-def saveOrganization(request, form, id_org=False):
-    if id_org:
-        org = Organizations.objects.get_or_none(id=id_org)
-        if org:
-            org.name = form.cleaned_data['name']
-            org.description = form.cleaned_data['description']
-        else:
-            return None
-    else:
-        org = form.save(commit=False)
-        org.admin = request.user
+def saveOrganization(request, form, org_obj=False):
+    org = form.save(commit=False)
+    org.admin = request.user
     org.save()
     ref = request.POST.get('ref')
     if ref:

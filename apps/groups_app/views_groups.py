@@ -17,27 +17,6 @@ from apps.actions_log.views import saveActionLog, saveViewsLog
 from .utils import create_group, saveOrganization
 
 
-@login_required(login_url='/account/login')
-def createOrg(request):
-    saveViewsLog(request, "apps.groups_app.views_groups.createOrg")
-    ref = request.GET.get('ref') if 'ref' in request.GET else ""
-    if request.method == "POST":
-        form = OrganizationForm(request.POST, request.FILES)
-        if form.is_valid() and form.is_multipart():
-            ref = saveOrganization(request, form)
-            saveActionLog(request.user, 'NEW_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
-            return HttpResponseRedirect(ref)
-    else:
-        form = OrganizationForm()
-    return render(request, "groups_app/create_org.html", locals())
-
-
-
-@login_required(login_url='/account/login')
-def showOrg(request, slug_org):
-    organizations = [Organizations.objects.get_by_slug(slug_org)]
-    return render(request, "website/index.html", locals())
-
 
 @login_required(login_url='/account/login')
 def showHomeGroup(request, slug_group):
