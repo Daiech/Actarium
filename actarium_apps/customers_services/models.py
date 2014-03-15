@@ -1,7 +1,7 @@
 #encoding:utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
+from .managers import *
 
 # common fields: for use it uncomment the class below 
 # and change "models.Model" for "CommonFields" in each class model that you want, 
@@ -91,8 +91,27 @@ class CustomersServices(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
+    objects = CustomersServicesManager()
+    
+    def service_name(self):
+        orders_related = self.orderitems_customer_service.all()
+        try:
+            service_name =  orders_related[0].service.service_category.name
+        except:
+            service_name = _(u"Servicio no asignado a ninguna orden")
+        return service_name
+    
+    def service_category(self):
+        orders_related = self.orderitems_customer_service.all()
+        try:
+            service_category =  orders_related[0].service.service_category
+        except:
+            service_category = None
+        return service_category
+    
     def __unicode__(self):
-        return u"%s - %s" % (self.quantity, self.date_expiration)
+        return u"[%s] %s - %s" % (self.service_name(),self.quantity, self.date_expiration)
+    
 
 
 class Addresses(models.Model):
@@ -147,6 +166,8 @@ class OrderItems(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    
+    objects = OrderItemsManager()
     
     def __unicode__(self):
         return u"%s - %s" % (self.service, self.order)
