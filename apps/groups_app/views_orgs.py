@@ -4,10 +4,11 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 
 from apps.groups_app.forms import OrganizationForm
 from apps.actions_log.views import saveActionLog, saveViewsLog
-from .models import Organizations
+from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles
 from .utils import saveOrganization
 
 
@@ -18,9 +19,10 @@ def createOrg(request):
     if request.method == "POST":
         form = OrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
-            ref = saveOrganization(request, form)
-            saveActionLog(request.user, 'NEW_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
-            return HttpResponseRedirect(ref)
+            org = form.save()
+            org.set_role(request.user, is_admin=True, is_member=True)
+            saveActionLog(request.user, 'NEW_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
+            return HttpResponseRedirect(org.get_absolute_url())
     else:
         form = OrganizationForm()
     return render(request, "groups_app/create_org.html", locals())
@@ -29,13 +31,9 @@ def createOrg(request):
 @login_required(login_url='/account/login')
 def readOrg(request, slug_org=False):
     if slug_org:
-        org = Organizations.objects.get_by_slug(slug_org)
-        if org and request.user == org.admin:
-            organizations = [org]
-        else:
-            raise Http404
+        organizations = request.user.organizationsuser_user.get_org(slug=slug_org)
     else:
-        organizations = Organizations.objects.get_active_orgs(user=request.user)
+        organizations = request.user.organizationsuser_user.get_orgs()
     return render(request, "groups_app/read_orgs.html", locals())
 
 

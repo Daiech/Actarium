@@ -11,9 +11,11 @@ from django.utils import translation
 from apps.groups_app.models import reunions, assistance, DNI_permissions
 from actarium_apps.organizations.models import rel_user_group
 from apps.groups_app.views import dateTimeFormatForm
+from apps.groups_app.views_orgs import readOrg
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
+from django.core.urlresolvers import reverse
 from .models import *
 from .utils import *
 import datetime
@@ -22,8 +24,8 @@ import re
 
 def home(request):
     if request.user.is_authenticated():
-        saveViewsLog(request, "Home_authenticated")
-        return organizations_index(request)
+        # saveViewsLog(request, "Home_authenticated")
+        return readOrg(request)
         #-----------------</GRUPOS>-----------------
         gr = rel_user_group.objects.filter(
             id_user=request.user,

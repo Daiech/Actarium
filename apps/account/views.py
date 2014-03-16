@@ -133,7 +133,7 @@ def newInvitedUser(email_to_invite, _user_from, first_name=False, last_name=Fals
         #ERROR log
     if _user:
         # saveAction Log: new user invited by _user_from
-        print "localhost:8000/account/activate/", activation_key, "/invited1"
+        print reverse("confirm_account", args=(activation_key, 1, ))
         id_inv = activation_key[5:20]
         ctx_email = {
             'username': _user_from.username,

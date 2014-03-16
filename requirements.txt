@@ -1,4 +1,5 @@
 django
+reportlab==2.5
 xhtml2pdf
 pillow
 pymongo

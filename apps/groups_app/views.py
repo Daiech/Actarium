@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.utils.timezone import make_aware, get_default_timezone, make_naive
 from django.conf import settings
 from django.contrib.humanize.templatetags import humanize
+from django.utils.translation import ugettext as _
 
 from actarium_apps.organizations.models import rel_user_group
 from .models import *
@@ -17,7 +18,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
 from apps.groups_app.validators import validateEmail
-from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGroup, setRelUserGroup, sendInvitationToGroup, newUserWithInvitation
+from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGroup, setRelUserGroup, sendInvitationToGroup, newUserWithInvitation, can_group_add_a_user
 import datetime
 import json
 URL_BASE = settings.URL_BASE
@@ -471,62 +472,65 @@ def newInvitationToGroup(request):
         if request.method == 'GET':
             _user_rel = False
             try:
-                g = Groups.objects.get(pk=request.GET['pk'])
+                g = Groups.objects.get(pk=str(request.GET['pk']))
                 _user_rel = getRelUserGroup(request.user, g)
                 if not (_user_rel.is_admin or _user_rel.is_secretary):
-                    return HttpResponse(json.dumps({"error": "permiso denegado"}), mimetype="application/json")
+                    return HttpResponse(json.dumps({"error": _("uPermiso denegado")}), mimetype="application/json")
             except Groups.DoesNotExist:
                 g = False
-                return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo. Si el error persiste, comun&iacute;cate con el administrador de Actarium en <a href='mailto:soporte@daiech.com'>soporte@daiech.com</a>"}), mimetype="application/json")
+                return HttpResponse(json.dumps({"error": _("uOcurri&oacute; un error, estamos trabajando para resolverlo. Si el error persiste, comun&iacute;cate con el administrador de Actarium en <a href='mailto:soporte@daiech.com'>soporte@daiech.com</a>")}), mimetype="application/json")
             except Exception, e:
                 print "Exception newInvitationToGroup: " % e
                 g = False
-                return HttpResponse(json.dumps({"error": "Ocurri&oacute; un error, estamos trabajando para resolverlo."}), mimetype="application/json")
-            if _user_rel.is_admin:
-                email = str(request.GET['mail'])
-                firstname = None
-                lastname = None
-                try:
-                    if request.GET['new'] == "1":
-                        firstname = str(request.GET['firstname'])
-                        lastname = str(request.GET['lastname'])
-                except Exception:
+                return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo.")}), mimetype="application/json")
+            if can_group_add_a_user(g):
+                if _user_rel.is_admin:
+                    email = str(request.GET['mail'])
                     firstname = None
                     lastname = None
-                if isMemberOfGroupByEmail(email, g):
-                    invited = False
-                    message = "El usuario ya es miembro del grupo"
-                    iid = False
-                    gravatar = False
-                else:
-                    _user = getUserByEmail(email)
-                    if not _user:
-                        _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
-                    sendInvitationToGroup(_user, request.user, g)
-                    if _user and not (_user is 0):  # 0 = is email failed
-                        try:
-                            invited = True
-                            iid = str(_user.id)  # get de id from invitation
-                            gravatar = showgravatar(email, 30)
-                            message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
-                            saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                        except Exception, e:
-                            print e
-                    else:
-                        iid = False
+                    try:
+                        if request.GET['new'] == "1":
+                            firstname = str(request.GET['firstname'])
+                            lastname = str(request.GET['lastname'])
+                    except Exception:
+                        firstname = None
+                        lastname = None
+                    if isMemberOfGroupByEmail(email, g):
                         invited = False
+                        message = _("El usuario ya es miembro del grupo")
+                        iid = False
                         gravatar = False
-                        if not _user and not (_user is 0):
-                            message = "El email que estas tratando de registrar ya tiene una cuenta."
-                            # message = u"El usuario tiene la invitación pendiente"
+                    else:
+                        _user = getUserByEmail(email)
+                        if not _user:
+                            _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
+                        sendInvitationToGroup(_user, request.user, g)
+                        if _user and not (_user is 0):  # 0 = is email failed
+                            try:
+                                invited = True
+                                iid = str(_user.id)  # get de id from invitation
+                                gravatar = showgravatar(email, 30)
+                                message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
+                                saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                            except Exception, e:
+                                print e
                         else:
-                            if _user == 0:
-                                message = "El correo electronico no es valido"
+                            iid = False
+                            invited = False
+                            gravatar = False
+                            if not _user and not (_user is 0):
+                                message = "El email que estas tratando de registrar ya tiene una cuenta."
+                                # message = u"El usuario tiene la invitación pendiente"
                             else:
-                                message = "Error desconocido. Lo sentimos"
-                response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+                                if _user == 0:
+                                    message = "El correo electronico no es valido"
+                                else:
+                                    message = "Error desconocido. Lo sentimos"
+                    response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+                else:
+                    response = {"error": _(u"No tienes permiso para hacer eso")}
             else:
-                response = {"error": "No tienes permiso para hacer eso"}
+                response = {"error": _(u"Ya no se puede agregar miembros a este grupo. Cupo de miembros de organización lleno.")}
         else:
             response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -583,8 +587,6 @@ def resendInvitation(request, slug_group):
     else:
         message = False
     return HttpResponse(json.dumps(message), mimetype="application/json")
-
-
 
 
 def changeNames(request, slug_group):

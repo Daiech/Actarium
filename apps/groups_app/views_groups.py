@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.http import Http404
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
@@ -736,7 +737,7 @@ def newGeneralGroup(request):
                 pass ## No se pudo crear
     else:
         form = newGroupForm()
-    orgs = Organizations.objects.get_my_orgs(request.user)
+    orgs = request.user.organizationsuser_user.get_orgs()
     ctx = {"newGroupForm": form,
            "organizations": orgs,
            "sel_org": sel_org,

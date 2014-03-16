@@ -6,22 +6,27 @@ from django.contrib.auth.models import User
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.account.views import newInvitedUser
 from apps.emailmodule.views import sendEmailHtml
+from django.utils.translation import ugettext as _
 
 
 def getUserByEmail(email):
     try:
-        _user = User.objects.get(email=email)
-        return _user
+        return User.objects.get(email=email)
     except User.DoesNotExist:
         return None
 
+def can_group_add_a_user(group):
+    """Consultar con los servicios activos de la organización"""
+    return True
+    group.organization.organizationservices_organization.can_add()
+
 
 def sendInvitationToGroup(id_user_invited, id_user_from, group):
-    '''
-        Enviar una invitacion de grupo a un usuario
-    '''
+    '''Enviar una invitacion de grupo a un usuario'''
     try:
         _inv = setRelUserGroup(id_user=id_user_invited, id_user_invited=id_user_from, id_group=group, is_member=True, is_active=False)
+        if _inv:
+            group.organization.set_role(id_user_invited, is_member=True)
     except Exception, e:
         print "EROROR views.sendInvitationToGroup", e
         return False
@@ -90,6 +95,7 @@ def setRelUserGroup(id_user, id_group,
             is_superadmin=is_superadmin,
             is_active=is_active)
         rel.save()
+
         # saveAction new Rel user group
         return True
     except Exception, e:
@@ -179,9 +185,10 @@ def newBasicGroup(request, form, org):
 @login_required(login_url='/account/login')
 def create_group(request, form):
     org_id = request.POST.get('sel-organization')
-    org = Organizations.objects.get_my_org_by_id(id=org_id, admin=request.user)
-    if org:
-        new_group = newBasicGroup(request, form, org)
+    # org = Organizations.objects.get_my_org_by_id(id=org_id, admin=request.user)
+    orgs = request.user.organizationsuser_user.get_org(id=org_id)
+    if orgs:
+        new_group = newBasicGroup(request, form, orgs[0])
         return new_group
     else:
         return False
@@ -189,9 +196,9 @@ def create_group(request, form):
 
 @login_required(login_url='/account/login')
 def saveOrganization(request, form, org_obj=False):
-    org = form.save(commit=False)
-    org.admin = request.user
-    org.save()
+    org = form.save()
+    # org.admin = request.user
+    # org.save()
     ref = request.POST.get('ref')
     if ref:
         ref = request.POST.get('ref') + "?org=" + str(org.id)
