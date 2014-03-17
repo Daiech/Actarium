@@ -65,13 +65,18 @@ class Organizations(models.Model):
 
     def set_role(self, user, **kwargs):
         objs_created = 0
+        roles_not_added = []
         for arg in kwargs:
-            role, created = OrganizationsRoles.objects.get_or_create(name=str(arg), is_active=True)
-            obj = OrganizationsUser.objects.create(user=user, organization=self, role=role)
-            if obj:
-                objs_created += 1
+            role = OrganizationsRoles.objects.get_or_none(code=str(arg), is_active=True)
+            if role:
+                obj = OrganizationsUser.objects.create(user=user, organization=self, role=role)
+                if obj:
+                    objs_created += 1
+            else:
+                roles_not_added.append(str(arg))          
         if objs_created < len(kwargs):
             print "[WARNING] NO SE ASIGNARON TODOS LOS ROLES"
+            print "Roles not added", roles_not_added
             #error log
         
 
@@ -80,6 +85,7 @@ class Organizations(models.Model):
         super(Organizations, self).save(*args, **kwargs)
         self.slug = defaultfilters.slugify(self.name) + "-" + str(self.pk)
         super(Organizations, self).save(*args, **kwargs)
+        print self
 
     def __unicode__(self):
         return "%s" % (self.name)
@@ -155,6 +161,7 @@ class rel_user_group(models.Model):
 
 
 class OrganizationsRoles(models.Model):
+    code = models.CharField(max_length=100, verbose_name=_(u"Código"))
     name = models.CharField(max_length=150, verbose_name=_("Nombre"))
     description = models.TextField(blank=True, verbose_name=_(u"Descripción"))
     
@@ -164,6 +171,8 @@ class OrganizationsRoles(models.Model):
 
     def __unicode__(self):
         return "%s" % (self.name)
+    
+    objects = GenericManager()
 
 
 class OrganizationsUserManager(GenericManager):

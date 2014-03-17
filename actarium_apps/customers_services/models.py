@@ -29,6 +29,7 @@ class OrderStatus(models.Model):
 
 
 class Periods(models.Model):
+    code = models.CharField(max_length=300, verbose_name=_(u"Código"))
     name = models.CharField(max_length=300, verbose_name=_("Nombre"))
     is_active = models.BooleanField(default=True)
     
@@ -40,7 +41,8 @@ class Periods(models.Model):
 
 
 class ServicesCategories(models.Model,):
-    name = models.CharField(max_length=300, verbose_name="Nombre")
+    code = models.CharField(max_length=100, verbose_name=_(u"Código"))
+    name = models.CharField(max_length=300, verbose_name=_("Nombre"))
     description = models.TextField(blank=True, verbose_name=_(u"Descripción"))
     
     is_active = models.BooleanField(default=True)
@@ -48,11 +50,12 @@ class ServicesCategories(models.Model,):
     modified = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
-        return u"%s" % (self.name)
+        return u"[%s] %s" % (self.code,self.name)
 
 
 class PaymentMethods(models.Model):
-    name = models.CharField(max_length=300, verbose_name="Nombre")
+    code = models.CharField(max_length=100, verbose_name=_(u"Código"))
+    name = models.CharField(max_length=300, verbose_name=_("Nombre"))
     description = models.TextField(blank=True, verbose_name=_(u"Descripción"))
     
     is_active = models.BooleanField(default=True)
@@ -60,7 +63,7 @@ class PaymentMethods(models.Model):
     modified = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
-        return u"%s" % (self.name)
+        return u"[%s] %s" % (self.code,self.name)
     
     
 class Services(models.Model):
@@ -77,7 +80,7 @@ class Services(models.Model):
     modified = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
-        return u"[%s] %s ($%.0f/%s)" % (self.service_category, self.name,self.price_per_period,self.period)
+        return u"[%s-%s] %s ($%.0f/%s)" % (self.service_category,self.code, self.name,self.price_per_period,self.period)
     
     
 # Models for runtime
@@ -129,7 +132,7 @@ class Addresses(models.Model):
     
 class Customers(models.Model):
     name = models.CharField(max_length=300, verbose_name=_("Nombre"))
-    phone = models.CharField(max_length=300, verbose_name=_(u"Teléfono"))
+    phone = models.CharField(max_length=300, verbose_name=_(u"Teléfono"), null=False, blank=True)
     email = models.CharField(max_length=300, verbose_name=_("Correo"))
  
     address = models.OneToOneField(Addresses, verbose_name=_("Dirección"))

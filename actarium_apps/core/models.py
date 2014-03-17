@@ -32,4 +32,7 @@ class OrganizationServices(models.Model):
     def __unicode__(self):
         return u"[%s] %s" % (self.organization, self.service)
     
+    def set_service(self,user,org):
+        customer = Customers.objects.get_or_create()
+    
     objects = OrganizationServicesManager()

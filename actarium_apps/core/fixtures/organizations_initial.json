@@ -1,0 +1,38 @@
+[
+	{
+		"pk": 1,
+		"model": "organizations.organizationsroles",
+		"fields": {
+			"date_added": "2014-03-16T16:25:28Z",
+			"date_modified": "2014-03-16T16:25:28Z",
+			"is_active": true,
+			"code":"is_creator",
+			"name": "Creador",
+			"description": "Este usuario ha creado la organizacion"
+		}
+	},
+	{
+		"pk": 2,
+		"model": "organizations.organizationsroles",
+		"fields": {
+			"date_added": "2014-03-16T16:25:28Z",
+			"date_modified": "2014-03-16T16:25:28Z",
+			"is_active": true,
+			"code":"is_admin",
+			"name": "Administrador",
+			"description": "Este usuario tiene permisos para administrar la organizacion"
+		}
+	},
+	{
+		"pk": 3,
+		"model": "organizations.organizationsroles",
+		"fields": {
+			"date_added": "2014-03-16T16:25:28Z",
+			"date_modified": "2014-03-16T16:25:28Z",
+			"is_active": true,
+			"code":"is_member",
+			"name": "Miembro",
+			"description": "Este usuario hace parte de la organizacion"
+		}
+	}
+]

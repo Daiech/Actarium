@@ -20,7 +20,7 @@ def createOrg(request):
         form = OrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
             org = form.save()
-            org.set_role(request.user, is_admin=True, is_member=True)
+            org.set_role(request.user, is_admin=True, is_member=True, is_creator=True)
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect(org.get_absolute_url())
     else:
@@ -40,7 +40,7 @@ def readOrg(request, slug_org=False):
 @login_required(login_url='/account/login')
 def updateOrg(request, slug_org):
     org = Organizations.objects.get_by_slug(slug_org)
-    if org and request.user == org.admin:
+    if org: #and request.user == org.admin:
         if request.method == "POST":
             form = OrganizationForm(request.POST, request.FILES, instance=org)
             if form.is_valid() and form.is_multipart():
