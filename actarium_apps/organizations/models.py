@@ -58,7 +58,7 @@ class Organizations(models.Model):
         return ('show_org', (), {'slug_org': self.slug})
 
     def get_num_members(self):
-        return 10
+        return 10 #hay que modificar esto
 
     def get_groups(self):
         return self.groups_org.filter(is_active=True)

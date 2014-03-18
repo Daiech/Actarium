@@ -1,7 +1,8 @@
 #encoding:utf-8
 from django.db import models
+from libs.generic_managers import GenericManager
 
-class OrganizationServicesManager(models.Manager):
+class OrganizationServicesManager(GenericManager):
 
     def get_max_num_members(self):
         organization_services = self.all()
@@ -19,7 +20,11 @@ class OrganizationServicesManager(models.Manager):
         except:
             current_num_members = 0
         num_available_members = max_num_members - current_num_members
+        print num_available_members
         if num_available_members >0:
             return True
         else:
             return False
+        
+class ActariumCustomersManager(GenericManager):
+    pass

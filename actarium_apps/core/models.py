@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from .managers import *
 # import models
 from django.contrib.auth.models import User
-from actarium_apps.customers_services.models import Customers, CustomersServices
+from actarium_apps.customers_services.models import Customers, CustomersServices #, Services,  OrderStatus, CustomerOrders, OrderItems
 from actarium_apps.organizations.models import Organizations
 
 
@@ -16,6 +16,8 @@ class ActariumCustomers(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
  
+    objects = ActariumCustomersManager()
+    
     def __unicode__(self):
         return u"[%s] %s" % (self.user, self.customer)
     
@@ -28,11 +30,11 @@ class OrganizationServices(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    
+    objects = OrganizationServicesManager()
  
     def __unicode__(self):
         return u"[%s] %s" % (self.organization, self.service)
     
-    def set_service(self,user,org):
-        customer = Customers.objects.get_or_create()
     
-    objects = OrganizationServicesManager()
+    

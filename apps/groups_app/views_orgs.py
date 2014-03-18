@@ -21,6 +21,9 @@ def createOrg(request):
         if form.is_valid() and form.is_multipart():
             org = form.save()
             org.set_role(request.user, is_admin=True, is_member=True, is_creator=True)
+            from actarium_apps.core.utils import create_default_service
+            is_created, response = create_default_service(request.user, org)
+            print "::::::::::::::Respuesta",response
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect(org.get_absolute_url())
     else:

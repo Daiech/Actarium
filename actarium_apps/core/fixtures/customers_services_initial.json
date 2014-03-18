@@ -160,5 +160,20 @@
 "price_per_period":50000.0,
 "description":"Incluye lo de la personalizacion economica mas la posibilidad de personalizar colores de la plataforam"
 }
+},
+{
+"pk":7,
+"model":"customers_services.services",
+"fields":{
+"code":"S000",
+"name":"Version Trial",
+"created":"2013-07-25T09:50:10Z",
+"is_active":true,
+"period":2,
+"modified":"2013-07-25T09:50:10Z",
+"service_category":1,
+"price_per_period":0,
+"description":"Version de prueba de Actarium por 3 meses con 5 miembros"
+}
 }
 ]

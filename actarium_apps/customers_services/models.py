@@ -24,8 +24,10 @@ class OrderStatus(models.Model):
     description = models.TextField(blank=True, verbose_name=_(u"Descripción"))
     is_active = models.BooleanField(default=True)
     
+    objects = GenericManager()
+    
     def __unicode__(self):
-        return u"%s" % (self.name)
+        return u"[%s] %s" % (self.code,self.name)
 
 
 class Periods(models.Model):
@@ -34,7 +36,7 @@ class Periods(models.Model):
     is_active = models.BooleanField(default=True)
     
     def __unicode__(self):
-        return u"%s" % (self.name)
+        return u"[%s] %s" % (self.code,self.name)
 
 
 # models that require Django-Admin
@@ -79,6 +81,8 @@ class Services(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
+    objects = GenericManager()
+    
     def __unicode__(self):
         return u"[%s-%s] %s ($%.0f/%s)" % (self.service_category,self.code, self.name,self.price_per_period,self.period)
     
@@ -118,9 +122,9 @@ class CustomersServices(models.Model):
 
 
 class Addresses(models.Model):
-    country = models.CharField(max_length=300, verbose_name=_(u"País"))
-    province = models.CharField(max_length=300, verbose_name=_("Departamento"))
-    city = models.CharField(max_length=300, verbose_name=_("Ciudad"))
+    country = models.CharField(max_length=300, verbose_name=_(u"País"), null=False, blank=True)
+    province = models.CharField(max_length=300, verbose_name=_("Departamento"), null=False, blank=True)
+    city = models.CharField(max_length=300, verbose_name=_("Ciudad"), null=False, blank=True)
 
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)

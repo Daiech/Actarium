@@ -1,4 +1,3 @@
-#encoding:utf-8
 from django.db import models
 
 class GenericManager(models.Manager):
@@ -16,12 +15,3 @@ class GenericManager(models.Manager):
 
     def get_active_or_none(self, **kwargs):
         return self.get_or_none(is_active=True, **kwargs)
-
-class OrderItemsManager(GenericManager):
-    pass
-    
-class CustomersServicesManager(GenericManager):
-    pass
-
-class ServicesManager(GenericManager):
-    pass
