@@ -56,7 +56,7 @@ class Organizations(models.Model):
         return self.groups_org.filter(is_active=True)
 
     def has_user_role(self, user, role):
-        qs = self.organizationsuser_organization.filter(role__code=role, user=user).distinct()
+        qs = self.organizationsuser_organization.filter(role__code=role, user=user)
         if qs.count() > 0:
             return True
         else:
@@ -174,6 +174,13 @@ class OrganizationsRoles(models.Model):
 
 
 class OrganizationsUserManager(GenericManager):
+
+    def get_org_by_slug(self, slug):
+        orgs = self.filter(organization__slug=slug)
+        if orgs:
+            return orgs[0].organization
+        else:
+            return None
 
     def get_orgs_by_role_code(self, role):
         orgs = []
