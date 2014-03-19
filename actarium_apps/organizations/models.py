@@ -63,6 +63,13 @@ class Organizations(models.Model):
     def get_groups(self):
         return self.groups_org.filter(is_active=True)
 
+    def has_user_role(self, user, role):
+        qs = self.organizationsuser_organization.filter(role__code=role, user=user)
+        if qs.count() > 0:
+            return True
+        else:
+            return False
+
     def set_role(self, user, **kwargs):
         objs_created = 0
         roles_not_added = []
@@ -185,13 +192,6 @@ class OrganizationsUserManager(GenericManager):
             orgs.append(org.organization.id)
         return Organizations.objects.filter(id__in=orgs, is_active=True) # Organizations Objects
 
-    def has_role(self, *args):
-        print "==============================="
-        print args
-
-    def is_admin(self):
-        return True
-        
 
 class OrganizationsUser(models.Model):    
     user = models.ForeignKey(User, related_name='%(class)s_user')
