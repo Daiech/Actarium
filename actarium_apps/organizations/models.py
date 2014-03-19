@@ -200,7 +200,6 @@ class OrganizationsUser(models.Model):
     user = models.ForeignKey(User, related_name='%(class)s_user')
     role = models.ForeignKey(OrganizationsRoles, related_name='%(class)s_role')
     organization = models.ForeignKey(Organizations, related_name='%(class)s_organization')
-    accepted = models.BooleanField(default=True)
 
     objects = OrganizationsUserManager()
     
