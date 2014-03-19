@@ -30,14 +30,6 @@ class OrganizationsManager(GenericManager):
     def get_by_slug(self, slug):
         return self.get_active_or_none(slug=slug)
 
-    def get_my_org_by_id(self, id, admin):
-        return Organizations.objects.get_active_or_none(id=id, admin=admin)
-
-    def get_active_orgs(self, user):
-        return Organizations.objects.get_active_or_none(admin=user)
-
-    def get_my_orgs(self, user):
-        return self.filter(admin=user)
 
 
 class Organizations(models.Model):
@@ -182,12 +174,10 @@ class OrganizationsRoles(models.Model):
 
 
 class OrganizationsUserManager(GenericManager):
-    def get_org(self, **kwargs):
-        return self.get_orgs().filter(**kwargs)
 
-    def get_orgs(self):
+    def get_orgs_by_role_code(self, role):
         orgs = []
-        for org in self.get_all_active(): # OrganizationsUser objects
+        for org in self.filter(role__code=role, is_active=True): # OrganizationsUser objects
             orgs.append(org.organization.id)
         return Organizations.objects.filter(id__in=orgs, is_active=True) # Organizations Objects
 

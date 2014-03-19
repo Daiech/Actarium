@@ -34,9 +34,13 @@ def createOrg(request):
 @login_required(login_url='/account/login')
 def readOrg(request, slug_org=False):
     if slug_org:
-        organizations = request.user.organizationsuser_user.get_org(slug=slug_org)
+        org = request.user.organizationsuser_user.filter(organization__slug=slug_org)
+        if org:
+            organizations = [org[0].organization]
+        else:
+            raise Http404
     else:
-        organizations = request.user.organizationsuser_user.get_orgs()
+        organizations = request.user.organizationsuser_user.get_orgs_by_role_code("is_member")
     return render(request, "groups_app/read_orgs.html", locals())
 
 
