@@ -69,7 +69,10 @@ class Organizations(models.Model):
         for arg in kwargs:
             role = OrganizationsRoles.objects.get_or_none(code=str(arg), is_active=True)
             if role:
-                obj = OrganizationsUser.objects.create(user=user, organization=self, role=role)
+                accepted = True
+                if str(arg) == "is_member":
+                    accepted = False
+                obj = OrganizationsUser.objects.create(user=user, organization=self, role=role, accepted=accepted)
                 if obj:
                     objs_created += 1
             else:
@@ -88,7 +91,7 @@ class Organizations(models.Model):
         print self
 
     def __unicode__(self):
-        return "%s" % (self.name)
+        return self.name
 
 
 class GroupsManager(GenericManager):
@@ -183,7 +186,6 @@ class OrganizationsUserManager(GenericManager):
         orgs = []
         for org in self.get_all_active(): # OrganizationsUser objects
             orgs.append(org.organization.id)
-        # return orgs  # Organizations Objects
         return Organizations.objects.filter(id__in=orgs, is_active=True) # Organizations Objects
 
     def has_role(self, *args):
@@ -198,6 +200,7 @@ class OrganizationsUser(models.Model):
     user = models.ForeignKey(User, related_name='%(class)s_user')
     role = models.ForeignKey(OrganizationsRoles, related_name='%(class)s_role')
     organization = models.ForeignKey(Organizations, related_name='%(class)s_organization')
+    accepted = models.BooleanField(default=True)
 
     objects = OrganizationsUserManager()
     
@@ -206,4 +209,4 @@ class OrganizationsUser(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "@%s %s in %s" % (self.user, self.role, self.organization)
+        return "@%s %s in %s" % (self.user, self.role.code, self.organization)

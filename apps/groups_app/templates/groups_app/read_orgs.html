@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n has_role %}
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {%block body%}
@@ -12,7 +12,7 @@
             <span class="pull-left">
                 <h3 class="panel-title">
                     <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
-                    {% if user.organizationsuser_user.is_admin %}
+                    {% if user|has_role:"adf" %}
                     <span><a href="{% url 'update_org' org.slug %}"><span class="glyphicon glyphicon-pencil"></span></a>
                         <a href="{% url 'delete_org' org.slug %}"><span class="glyphicon glyphicon-remove"></span></a></span>
                     {% endif %}

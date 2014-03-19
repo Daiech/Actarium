@@ -1,0 +1,8 @@
+How to install Fixtures
+
+
+#Required by Actarium
+
+python manage.py loaddata customers_services_initial.json
+
+python manage.py loaddata organizations_initial.json

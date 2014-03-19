@@ -223,27 +223,22 @@ def personalData(request):
 
         if form.is_valid():
             _email = form.cleaned_data['email']
-            print "Correo a cambiar", _email
             try:
                 _user = User.objects.get(email=_email)
                 if request.user == _user:
-                    print "Si se puede cambiar el correo, el usuario que lo tiene es el mismo."
                     saveActionLog(request.user, "CHG_USDATA", last_data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
                     form.save()
                     update = True
                     error_email = None
                 else:
-                    print "El correo no se puede cambiar, otro usuario tiene el este correo ya asignado"
                     error_email = True
                     update = False
             except User.DoesNotExist:
-                print "No existe un usuario con ese correo, el correo puede ser asignado"
                 saveActionLog(request.user, "CHG_USDATA", last_data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
                 form.save()
                 update = True
                 error_email = None
             except User.MultipleObjectsReturned:
-                print "Multiples objetos retornados, error en la base de datos, se debe revizar"
                 error_email = True
                 update = False
             except:
