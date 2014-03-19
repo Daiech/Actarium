@@ -46,8 +46,8 @@ def readOrg(request, slug_org=False):
 
 @login_required(login_url='/account/login')
 def updateOrg(request, slug_org):
-    org = Organizations.objects.get_by_slug(slug_org)
-    if org: #and request.user == org.admin:
+    org = request.user.organizationsuser_user.get_org_by_slug(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_admin"):
         if request.method == "POST":
             form = OrganizationForm(request.POST, request.FILES, instance=org)
             if form.is_valid() and form.is_multipart():
