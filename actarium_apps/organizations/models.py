@@ -69,10 +69,7 @@ class Organizations(models.Model):
         for arg in kwargs:
             role = OrganizationsRoles.objects.get_or_none(code=str(arg), is_active=True)
             if role:
-                accepted = True
-                if str(arg) == "is_member":
-                    accepted = False
-                obj = OrganizationsUser.objects.create(user=user, organization=self, role=role, accepted=accepted)
+                obj = OrganizationsUser.objects.create(user=user, organization=self, role=role)
                 if obj:
                     objs_created += 1
             else:
