@@ -58,13 +58,13 @@ class Organizations(models.Model):
         return ('show_org', (), {'slug_org': self.slug})
 
     def get_num_members(self):
-        return 10 #hay que modificar esto
+        return self.organizationsuser_organization.filter(role__code="is_member").count()
 
     def get_groups(self):
         return self.groups_org.filter(is_active=True)
 
     def has_user_role(self, user, role):
-        qs = self.organizationsuser_organization.filter(role__code=role, user=user)
+        qs = self.organizationsuser_organization.filter(role__code=role, user=user).distinct()
         if qs.count() > 0:
             return True
         else:
@@ -76,8 +76,8 @@ class Organizations(models.Model):
         for arg in kwargs:
             role = OrganizationsRoles.objects.get_or_none(code=str(arg), is_active=True)
             if role:
-                obj = OrganizationsUser.objects.create(user=user, organization=self, role=role)
-                if obj:
+                obj, created = OrganizationsUser.objects.get_or_create(user=user, organization=self, role=role)
+                if created:
                     objs_created += 1
             else:
                 roles_not_added.append(str(arg))          
@@ -92,7 +92,6 @@ class Organizations(models.Model):
         super(Organizations, self).save(*args, **kwargs)
         self.slug = defaultfilters.slugify(self.name) + "-" + str(self.pk)
         super(Organizations, self).save(*args, **kwargs)
-        print self
 
     def __unicode__(self):
         return self.name
@@ -206,3 +205,6 @@ class OrganizationsUser(models.Model):
 
     def __unicode__(self):
         return "@%s %s in %s" % (self.user, self.role.code, self.organization)
+
+    class Meta:
+        unique_together = ('user', 'role', 'organization')

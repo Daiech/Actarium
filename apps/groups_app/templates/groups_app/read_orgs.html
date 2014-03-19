@@ -6,13 +6,13 @@
 <article>
     <div class="organizations-list">
     {% for org in organizations %}
+        {% has_role "user" "org" "is_admin" as user_is_admin %}
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="org-principal-image pull-left"><img src="{{ STATIC_URL }}img/groups/default.jpg" alt="{{ org.name }}" /></span>
             <span class="pull-left">
                 <h3 class="panel-title">
                     <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
-                    {% has_role "user" "org" "is_admin" as user_is_admin %}
                     {% if user_is_admin %}
                     <span><a href="{% url 'update_org' org.slug %}"><span class="glyphicon glyphicon-pencil"></span></a>
                         <a href="{% url 'delete_org' org.slug %}"><span class="glyphicon glyphicon-remove"></span></a></span>
@@ -42,6 +42,7 @@
                 {% empty %}
                 <p>{% trans 'No tienes ning&uacute;n grupo :(' %}</p>
                 {% endfor %}
+                {% if user_is_admin %}
                 <a href="{% url 'new_group' %}?org={{ org.id }}">
                     <div class="group-preview btn-new-group">
                         <div class="group-circle group-circle-plus">
@@ -53,6 +54,7 @@
                         <div class="group-name" title="{{ g.name }}">{% trans 'Crear grupo' %}</div>
                     </div>
                 </a>
+                {% endif %}
             </div>
           </div>
         </div>
