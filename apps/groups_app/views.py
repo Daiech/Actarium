@@ -483,29 +483,40 @@ def newInvitationToGroup(request):
                 print "Exception newInvitationToGroup: " % e
                 g = False
                 return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo.")}), mimetype="application/json")
-            if can_group_add_a_user(g):
-                if _user_rel.is_admin:
-                    email = str(request.GET.get('mail'))
-                    firstname = None
-                    lastname = None
-                    try:
-                        if request.GET.get('new') == "1":
-                            firstname = str(request.GET['firstname'])
-                            lastname = str(request.GET['lastname'])
-                    except:
-                        firstname = None
-                        lastname = None
-                    if isMemberOfGroupByEmail(email, g):
+            if g and _user_rel.is_admin:
+                agregar = False
+                email = str(request.GET.get('mail'))
+                _user = getUserByEmail(email)
+                if _user:
+                    if g.organization.has_user_role(_user, "is_member"):
+                        agregar = True # agreguelo relajado que ya esta en la org!
+                    if isMemberOfGroup(_user, g):
+                        agregar = False
                         invited = False
                         message = _("Este usuario ya es miembro del grupo")
                         iid = False
                         gravatar = False
-                    else:
-                        _user = getUserByEmail(email)
-                        if not _user:
-                            _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
-                        sendInvitationToGroup(_user, request.user, g)
-                        if _user and not (_user is 0):  # 0 = is email failed
+                        response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+                        return HttpResponse(json.dumps(response), mimetype="application/json")
+                if can_group_add_a_user(g):
+                    agregar = True
+                else:
+                    response = {"error": _(u"Ya no se puede agregar miembros a este grupo. Su cupo de miembros de organización está lleno.")}
+
+                if agregar:
+                    if not _user:
+                        firstname = None
+                        lastname = None
+                        try:
+                            if request.GET.get('new') == "1":
+                                firstname = str(request.GET['firstname'])
+                                lastname = str(request.GET['lastname'])
+                        except:
+                            pass #relax, simplemente no hay nombres
+                        _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
+                    # aqui ya esta el usuario en _user. y es existente (y no pertenece a la org) o nuevo.
+                    if _user and not (_user is 0):  # 0 => is email failed
+                        if sendInvitationToGroup(_user, request.user, g):
                             try:
                                 invited = True
                                 iid = str(_user.id)  # get de id from invitation
@@ -515,22 +526,25 @@ def newInvitationToGroup(request):
                             except Exception, e:
                                 print e
                         else:
-                            iid = False
                             invited = False
+                            message = _(u"No se pudo agregar este usuario al grupo. Por favor recargue la página e intente de nuevo")
+                            iid = False
                             gravatar = False
-                            if not _user and not (_user is 0):
-                                message = "El email que estas tratando de registrar ya tiene una cuenta."
-                                # message = u"El usuario tiene la invitación pendiente"
+                    else:
+                        iid = False
+                        invited = False
+                        gravatar = False
+                        if not _user and not (_user is 0):
+                            message = "El email que estas tratando de registrar ya tiene una cuenta."
+                            # message = u"El usuario tiene la invitación pendiente"
+                        else:
+                            if _user == 0:
+                                message = "El correo electronico no es valido"
                             else:
-                                if _user == 0:
-                                    message = "El correo electronico no es valido"
-                                else:
-                                    message = "Error desconocido. Lo sentimos"
+                                message = "Error desconocido. Lo sentimos"
                     response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
-                else:
-                    response = {"error": _(u"No tienes permiso para hacer eso")}
             else:
-                response = {"error": _(u"Ya no se puede agregar miembros a este grupo. Cupo de miembros de organización lleno.")}
+                response = {"error": _(u"No tienes permiso para hacer eso")}
         else:
             response = "Error invitacion, no puedes entrar desde aqui"
     return HttpResponse(json.dumps(response), mimetype="application/json")

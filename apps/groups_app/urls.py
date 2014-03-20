@@ -56,10 +56,3 @@ groups_urls += patterns('apps.groups_app.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/', 'showHomeGroup', name="show_home"),
     url(r'^create$', 'newGeneralGroup', name='new_group'),
 )
-orgs_urls = patterns('apps.groups_app.views_orgs',
-    url(r'^$', 'readOrg', name="show_org"),
-    url(r'^create/', 'createOrg', name="create_org"),
-    url(r'^(?P<slug_org>[-\w]+)/$', 'readOrg', name="show_org"),
-    url(r'^(?P<slug_org>[-\w]+)/edit$', 'updateOrg', name="update_org"),
-    url(r'^(?P<slug_org>[-\w]+)/delete$', 'deleteOrg', name="delete_org"),
-)

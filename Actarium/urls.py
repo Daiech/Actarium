@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from apps.account.urls import account_urls
-from apps.groups_app.urls import groups_urls, orgs_urls
+from apps.groups_app.urls import groups_urls
 from apps.actions_log.urls import actions_log_urls
 from apps.asettings.urls import asettings_urls
 from apps.pdfmodule.urls import pdfmodule_urls
@@ -26,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^runMongo', 'apps.github.views.runMongo'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
-    url(r'^organization/', include(orgs_urls)),
+    url(r'^organization/', include('actarium_apps.organizations.urls')),
     url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     url(r'^services.pdf$', 'apps.website.views.services', name='services'),
     url(r'^features.pdf$', 'apps.website.views.services', name='features'),
 
+    url(r'^actarium/', include('actarium_apps.core.urls', namespace='core')),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -42,7 +43,6 @@ urlpatterns = patterns('',
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^meal/', include(admin.site.urls)),
-    url(r'^actarium/', include('actarium_apps.core.urls', namespace='core')),
 )
 
 if settings.DEBUG:

@@ -15,27 +15,33 @@ def getUserByEmail(email):
     except User.DoesNotExist:
         return None
 
+def isMemberOfOrg(user, org):
+    if user.organizationsuser_user.filter(organization=org, role__code="is_member").count() > 0:
+        return True
+    else:
+        return False
+
 def can_group_add_a_user(group):
     """Consultar con los servicios activos de la organización"""
     return group.organization.organizationservices_organization.can_add()
 
 
-def sendInvitationToGroup(id_user_invited, id_user_from, group):
+def sendInvitationToGroup(user_invited, user_from, group):
     '''Enviar una invitacion de grupo a un usuario'''
     try:
-        _inv = setRelUserGroup(id_user=id_user_invited, id_user_invited=id_user_from, id_group=group, is_member=True, is_active=True)
+        _inv = setRelUserGroup(id_user=user_invited, id_user_invited=user_from, id_group=group, is_member=True, is_active=True)
         if _inv:
-            group.organization.set_role(id_user_invited, is_member=True)
+            group.organization.set_role(user_invited, is_member=True)
     except Exception, e:
         print "EROROR views.sendInvitationToGroup", e
         return False
     if _inv:
-        email = [id_user_invited.email]
+        email = [user_invited.email]
         ctx_email = {
-            'firstname': id_user_from.first_name + id_user_from.last_name,
-            'username': id_user_from.username,
+            'firstname': user_from.first_name + user_from.last_name,
+            'username': user_from.username,
             'groupname': group.name,
-            'urlgravatar': showgravatar(id_user_from.email, 50)
+            'urlgravatar': showgravatar(user_from.email, 50)
         }
         sendEmailHtml(6, ctx_email, email, group)
     return _inv
@@ -191,12 +197,3 @@ def create_group(request, form):
         return False
 
 
-@login_required(login_url='/account/login')
-def saveOrganization(request, form, org_obj=False):
-    org = form.save()
-    # org.admin = request.user
-    # org.save()
-    ref = request.POST.get('ref')
-    if ref:
-        ref = request.POST.get('ref') + "?org=" + str(org.id)
-    return org.get_absolute_url()
