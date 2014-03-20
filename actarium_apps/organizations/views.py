@@ -28,7 +28,7 @@ def createOrg(request):
             return HttpResponseRedirect(org.get_absolute_url())
     else:
         form = OrganizationForm()
-    return render(request, "groups_app/create_org.html", locals())
+    return render(request, "organizations/create_org.html", locals())
 
 
 @login_required(login_url='/account/login')
@@ -41,7 +41,7 @@ def readOrg(request, slug_org=False):
             raise Http404
     else:
         organizations = request.user.organizationsuser_user.get_orgs_by_role_code("is_member")
-    return render(request, "groups_app/read_orgs.html", locals())
+    return render(request, "organizations/read_orgs.html", locals())
 
 
 @login_required(login_url='/account/login')
@@ -56,7 +56,7 @@ def updateOrg(request, slug_org):
                 return HttpResponseRedirect(ref)
         else:
             form = OrganizationForm(instance=org)
-        return render(request, "groups_app/update_org.html", locals())
+        return render(request, "organizations/update_org.html", locals())
     else:
         raise Http404
 
@@ -66,10 +66,9 @@ def deleteOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
     if org and org.has_user_role(request.user, "is_creator"):
         if request.method == "POST" and "archive" in request.POST:
-            org.is_active = False
             org.is_archived = True
             org.save()
             return HttpResponseRedirect(reverse("home") + "?org_archived=1")
-        return render(request, "groups_app/delete_org.html", locals())
+        return render(request, "organizations/delete_org.html", locals())
     else:
         raise Http404

@@ -190,11 +190,11 @@ class OrganizationsUserManager(GenericManager):
         else:
             return None
 
-    def get_orgs_by_role_code(self, role):
+    def get_orgs_by_role_code(self, role, is_archived=False):
         orgs = []
         for org in self.filter(role__code=role, is_active=True): # OrganizationsUser objects
             orgs.append(org.organization.id)
-        return Organizations.objects.filter(id__in=orgs, is_active=True) # Organizations Objects
+        return Organizations.objects.filter(id__in=orgs, is_active=True, is_archived=is_archived) # Organizations Objects
 
 
 class OrganizationsUser(models.Model):    
