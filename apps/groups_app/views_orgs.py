@@ -66,7 +66,10 @@ def deleteOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
     if org and org.has_user_role(request.user, "is_creator"):
         if request.method == "POST" and "archive" in request.POST:
-            pass
+            org.is_active = False
+            org.is_archived = False
+            org.save()
+            return HttpResponseRedirect(reverse("home") + "?org_archived=1")
         return render(request, "groups_app/delete_org.html", locals())
     else:
         raise Http404

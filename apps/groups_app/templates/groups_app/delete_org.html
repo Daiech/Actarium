@@ -22,6 +22,7 @@
             <p>{% trans '¿Seguro que desea archivar esta organización?' %}</p>
             <form class="" enctype="multipart/form-data" method="POST" action="">
                 {% csrf_token %}
+                <input type="hidden" name="archive" value="true">
     			<a href="{% url 'show_org' org.slug %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>
                 <button type="submit" class="btn btn-large btn-warning db"><span class="glyphicon glyphicon-remove"></span> {% trans 'Archivar' %}</button>
             </form>
