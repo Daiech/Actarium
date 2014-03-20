@@ -1,0 +1,41 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n %}
+{% block TITLE %}Servicios{% endblock %}
+
+{% block bodysettings %}
+
+<h3>Servicios</h3>
+<p>Listado de servicios que ofrece actarium</p>
+
+{% for org in my_orgs %}
+	<h2>{{ org.name }}</h2>
+	<table class="table">
+	<tr>
+		<th>{% trans 'Nombre del servicio' %}</th>
+		<th>{% trans 'Cantidad' %} </th>
+		<th>{% trans 'Fecha de expiraci&oacute;n' %}</th>
+	</tr>
+	{% for org_service in  org.organizationservices_organization.all %}
+		<tr>
+		<td>{{ org_service.service.service_name }}</td>
+		<td>{{ org_service.service.quantity }}</td>
+		<td>{{ org_service.service.date_expiration }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endfor %}
+
+{% endblock %}
+
+{%block settings_style%}
+
+{% endblock %}
+
+{% block settings_js %}
+<script>
+	$(document).on("ready", function() {
+		$("#settings-services").addClass("active");
+	});
+</script>
+{% endblock %}
+

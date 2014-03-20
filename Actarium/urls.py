@@ -42,6 +42,7 @@ urlpatterns = patterns('',
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^meal/', include(admin.site.urls)),
+    url(r'^actarium/', include('actarium_apps.core.urls', namespace='core')),
 )
 
 if settings.DEBUG:

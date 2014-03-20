@@ -17,7 +17,6 @@ from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
 from django.core.urlresolvers import reverse
 from .models import *
-from .utils import *
 import datetime
 import re
 
