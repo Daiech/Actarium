@@ -6,9 +6,9 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 
-from apps.groups_app.forms import OrganizationForm
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles
+from .forms import OrganizationForm
 from .utils import saveOrganization
 
 
@@ -51,9 +51,9 @@ def updateOrg(request, slug_org):
         if request.method == "POST":
             form = OrganizationForm(request.POST, request.FILES, instance=org)
             if form.is_valid() and form.is_multipart():
-                ref = saveOrganization(request, form)
+                form.save()
                 saveActionLog(request.user, 'UPDATE_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
-                return HttpResponseRedirect(ref)
+                return HttpResponseRedirect(org.get_absolute_url())
         else:
             form = OrganizationForm(instance=org)
         return render(request, "organizations/update_org.html", locals())

@@ -6,20 +6,11 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 # from django.http import Http404
 from apps.groups_app.models import templates, rel_user_private_templates, private_templates
-from actarium_apps.organizations.models import rel_user_group
-# group_type, rel_user_group, minutes, invitations, minutes_type_1, minutes_type, reunions, admin_group, assistance, rel_user_minutes_assistance
-from apps.groups_app.forms import OrganizationForm
-#from django.contrib.auth.models import User
-# from django.core.mail import EmailMessage
-#import re
-import datetime
-# from dateutil.relativedelta import *
-#from django.utils.timezone import make_aware, get_default_timezone, make_naive
-import json
-#from apps.account.templatetags.gravatartag import showgravatar
-#from django.core.mail import EmailMessage
 from apps.actions_log.views import saveActionLog, saveErrorLog, saveViewsLog
-from Actarium.settings import MEDIA_ROOT, ORGS_IMG_DIR, MEDIA_URL, PROJECT_PATH
+from actarium_apps.organizations.models import rel_user_group
+
+import datetime
+import json
 
 
 

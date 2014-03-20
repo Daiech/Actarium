@@ -9,7 +9,7 @@
         {% has_role "user" "org" "is_admin" as user_is_admin %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="org-principal-image pull-left"><img src="{{ STATIC_URL }}img/groups/default.jpg" alt="{{ org.name }}" /></span>
+            <span class="org-principal-image pull-left"><img src="{{ org.image_path.url_50x50 }}" alt="{{ org.name }}" /></span>
             <span class="pull-left">
                 <h3 class="panel-title">
                     <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
@@ -88,7 +88,7 @@
     .organizations-list .panel-heading{height: 38px;}
     .organizations-list .panel-title{font-weight: bold;}
     .organizations-list .org-principal-image{width: 30px;height: 30px;margin-top: -6px;margin-right: 6px;}
-    .organizations-list .org-principal-image img{width: 28px;margin-top: 5px;}
+    .organizations-list .org-principal-image img{width: 28px;margin-top: 1px;}
     .group-preview{color: #666;min-width: 150px;max-width: 150px;position: relative;text-align: center;display: inline-block;margin: 0 5px;margin-left: 0px;margin-right: 20px;padding:10px 10px 5px;border:solid thin;border-color: white;}
     .group-preview:hover{border:solid thin #dadada;color: #555;}
     .group-preview .group-notifications{color: #C7C6C6; /*border-radius: 8px;*/width: 13px;height: 13px;position: relative;}

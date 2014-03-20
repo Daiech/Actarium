@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 
 from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
-from apps.groups_app.forms import newMinutesForm, newGroupForm, OrganizationForm
+from apps.groups_app.forms import newMinutesForm, newGroupForm
 from apps.groups_app.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup
 from apps.groups_app.minutes import *
 from apps.groups_app.models import *
