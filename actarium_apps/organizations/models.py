@@ -176,10 +176,10 @@ class OrganizationsRoles(models.Model):
 class OrganizationsUserManager(GenericManager):
 
     def get_org(self, **kwargs):
-        kwargs2 = {}
         for k,v in kwargs.iteritems():
-            kwargs2["organization__" + k] = v
-        orgs = self.filter(**kwargs2)
+            kwargs["organization__" + k] = v
+            del kwargs[k]
+        orgs = self.filter(**kwargs)
         if orgs:
             return orgs[0].organization
         else:
