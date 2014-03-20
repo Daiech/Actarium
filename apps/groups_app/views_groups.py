@@ -737,7 +737,7 @@ def newGeneralGroup(request):
                 pass ## No se pudo crear
     else:
         form = newGroupForm()
-    orgs = request.user.organizationsuser_user.get_orgs()
+    orgs = request.user.organizationsuser_user.get_orgs_by_role_code("is_admin")
     ctx = {"newGroupForm": form,
            "organizations": orgs,
            "sel_org": sel_org,

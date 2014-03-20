@@ -34,9 +34,9 @@ def createOrg(request):
 @login_required(login_url='/account/login')
 def readOrg(request, slug_org=False):
     if slug_org:
-        org = request.user.organizationsuser_user.filter(organization__slug=slug_org)
+        org = request.user.organizationsuser_user.get_org_by_slug(slug=slug_org)
         if org:
-            organizations = [org[0].organization]
+            organizations = [org]
         else:
             raise Http404
     else:
@@ -46,8 +46,8 @@ def readOrg(request, slug_org=False):
 
 @login_required(login_url='/account/login')
 def updateOrg(request, slug_org):
-    org = Organizations.objects.get_by_slug(slug_org)
-    if org: #and request.user == org.admin:
+    org = request.user.organizationsuser_user.get_org_by_slug(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_admin"):
         if request.method == "POST":
             form = OrganizationForm(request.POST, request.FILES, instance=org)
             if form.is_valid() and form.is_multipart():
@@ -63,8 +63,8 @@ def updateOrg(request, slug_org):
 
 @login_required(login_url='/account/login')
 def deleteOrg(request, slug_org):
-    org = Organizations.objects.get_by_slug(slug_org)
-    if org and request.user == org.admin:
+    org = request.user.organizationsuser_user.get_org_by_slug(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_creator"):
         if request.method == "POST" and "archive" in request.POST:
             pass
         return render(request, "groups_app/delete_org.html", locals())
