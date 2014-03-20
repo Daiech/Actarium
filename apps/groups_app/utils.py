@@ -17,14 +17,13 @@ def getUserByEmail(email):
 
 def can_group_add_a_user(group):
     """Consultar con los servicios activos de la organización"""
-    return True
-    group.organization.organizationservices_organization.can_add()
+    return group.organization.organizationservices_organization.can_add()
 
 
 def sendInvitationToGroup(id_user_invited, id_user_from, group):
     '''Enviar una invitacion de grupo a un usuario'''
     try:
-        _inv = setRelUserGroup(id_user=id_user_invited, id_user_invited=id_user_from, id_group=group, is_member=True, is_active=False)
+        _inv = setRelUserGroup(id_user=id_user_invited, id_user_invited=id_user_from, id_group=group, is_member=True, is_active=True)
         if _inv:
             group.organization.set_role(id_user_invited, is_member=True)
     except Exception, e:
@@ -42,14 +41,12 @@ def sendInvitationToGroup(id_user_invited, id_user_from, group):
     return _inv
 
 
-def newUserWithInvitation(email, id_user_from, group, first_name=False, last_name=False):
-    '''
-        Crear un nuevo usuario y lo relaciona al grupo.
-    '''
+def newUserWithInvitation(email, user_from, group, first_name=False, last_name=False):
+    '''Crear un nuevo usuario.'''
     if validateEmail(email):
         try:
             if not getUserByEmail(email):
-                _user = newInvitedUser(email, id_user_from, first_name=first_name, last_name=last_name)
+                _user = newInvitedUser(email, user_from, first_name=first_name, last_name=last_name)
                 if _user:
                     return _user
                 else:

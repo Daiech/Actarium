@@ -23,28 +23,6 @@ class GenericManager(models.Manager):
 
 from actarium_apps.organizations.models import Organizations, Groups
 
-class invitations(models.Model):
-    id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
-    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
-    email_invited = models.CharField(max_length=60, null=False)
-    date_invited = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-
-
-class invitations_groups(models.Model):
-    id_user_from = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_from')
-    id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
-    id_user_invited = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user_invited')
-    date_invited = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-
-    def __unicode__(self):
-        return "from: %s, to: %s, is_active : %s " % (self.id_user_from, self.id_user_invited, self.is_active)
-
-
-    # class Meta:
-    #     ordering = ['-id_group__is_pro', 'id']
-
 
 class minutes_type_1(models.Model):
     date_start = models.DateTimeField()
@@ -202,29 +180,6 @@ class rel_user_minutes_signed(models.Model):
 
     def __unicode__(self):
         return "%s: assistance %s in %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
-
-
-# Definicion del modelo para manerjo de roles de usuarios en grupos
-
-class user_role(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    description = models.CharField(max_length=150, verbose_name="description")
-    date_joined = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return "%s: %s" % (self.name, self.description)
-
-
-class groups_permissions(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    code = models.CharField(max_length=150, verbose_name="code")
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now=True)
-
-
-class rel_role_group_permissions(models.Model):
-    id_role = models.ForeignKey(user_role, null=False, related_name='%(class)s_id_role')
-    id_group_permission = models.ForeignKey(groups_permissions, null=False, related_name='%(class)s_id_group_permission')
 
 
 class last_minutes(models.Model):

@@ -4,6 +4,7 @@ from django.template import defaultfilters
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.http import Http404
 
 from apps.groups_app.models import GenericManager
 
@@ -90,8 +91,12 @@ class Organizations(models.Model):
 
 
 class GroupsManager(GenericManager):
-    def my_groups(self, user):
-        return self.filter(id_creator=user)
+    def get_group(self, **kwargs):
+        g = self.get_or_none(is_active=True, **kwargs)
+        if g:
+            return g
+        else:
+            raise Http404
 
 
 class Groups(models.Model):

@@ -154,6 +154,7 @@ def groupSettings(request, slug_group):
         Muestra la configuracion de un grupo para agregar usuarios y asignar roles
     '''
     saveViewsLog(request, "apps.groups_app.views.groupSettings")
+    g = Groups.objects.get_group(slug_group)
     try:
         u_selected = None
         if request.method == "GET":
@@ -161,7 +162,6 @@ def groupSettings(request, slug_group):
             u_selected = User.objects.get(username=u).id
     except Exception:
         u_selected = None
-    g = getGroupBySlug(slug_group)
     _user_rel = getRelUserGroup(request.user, g.id)
     if _user_rel.is_active:
         if _user_rel.is_admin:
@@ -433,9 +433,9 @@ def getMembers(request):
         return HttpResponse(message)
 
 
-def isMemberOfGroup(id_user, id_group):
+def isMemberOfGroup(user, group):
     try:
-        _member = getRelUserGroup(id_user, id_group)
+        _member = getRelUserGroup(user, group)
         if _member:
             return True
         else:
@@ -472,7 +472,7 @@ def newInvitationToGroup(request):
         if request.method == 'GET':
             _user_rel = False
             try:
-                g = Groups.objects.get(pk=str(request.GET['pk']))
+                g = Groups.objects.get_group(pk=str(request.GET['pk']))
                 _user_rel = getRelUserGroup(request.user, g)
                 if not (_user_rel.is_admin or _user_rel.is_secretary):
                     return HttpResponse(json.dumps({"error": _("uPermiso denegado")}), mimetype="application/json")
@@ -485,19 +485,19 @@ def newInvitationToGroup(request):
                 return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo.")}), mimetype="application/json")
             if can_group_add_a_user(g):
                 if _user_rel.is_admin:
-                    email = str(request.GET['mail'])
+                    email = str(request.GET.get('mail'))
                     firstname = None
                     lastname = None
                     try:
-                        if request.GET['new'] == "1":
+                        if request.GET.get('new') == "1":
                             firstname = str(request.GET['firstname'])
                             lastname = str(request.GET['lastname'])
-                    except Exception:
+                    except:
                         firstname = None
                         lastname = None
                     if isMemberOfGroupByEmail(email, g):
                         invited = False
-                        message = _("El usuario ya es miembro del grupo")
+                        message = _("Este usuario ya es miembro del grupo")
                         iid = False
                         gravatar = False
                     else:
@@ -540,7 +540,7 @@ def resendInvitation(request, slug_group):
     if request.is_ajax():
         if request.method == "GET":
             try:
-                group = getGroupBySlug(slug_group)
+                group = Groups.objects.get_group(slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if _user_rel.is_admin and _user_rel.is_active:
                     try:
@@ -596,7 +596,7 @@ def changeNames(request, slug_group):
     if request.is_ajax():
         if request.method == "GET":
             try:
-                group = getGroupBySlug(slug_group)
+                group = Groups.objects.get_group(slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if _user_rel.is_admin and _user_rel.is_active:
                     error = False
@@ -643,9 +643,7 @@ def changeNames(request, slug_group):
 
 @login_required(login_url='/account/login')
 def acceptInvitation(request):
-    """
-        Acepta invitaciones a grupos
-    """
+    """Acepta invitaciones a grupos. Deprecated"""
     saveViewsLog(request, "apps.groups_app.views.acceptInvitation")
     noHasPerms = False
     my_response = u"algo pasó y no sabemos si"
@@ -663,7 +661,7 @@ def acceptInvitation(request):
                 try:
                     inv = rel_user_group.objects.get(id=iid, id_user=request.user, is_active=False)
                     user_from_is_member = True  # isMemberOfGroup(inv.id_user_from, inv.id_group)  # el usuario que lo invito es miembro?
-                except invitations_groups.DoesNotExist:
+                except rel_user_group.DoesNotExist:
                     inv = False
                     user_from_is_member = False
                 if accept and user_from_is_member and inv:  # aprobar la invitacion
