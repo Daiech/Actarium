@@ -175,8 +175,11 @@ class OrganizationsRoles(models.Model):
 
 class OrganizationsUserManager(GenericManager):
 
-    def get_org_by_slug(self, slug):
-        orgs = self.filter(organization__slug=slug)
+    def get_org(self, **kwargs):
+        kwargs2 = {}
+        for k,v in kwargs.iteritems():
+            kwargs2["organization__" + k] = v
+        orgs = self.filter(**kwargs2)
         if orgs:
             return orgs[0].organization
         else:

@@ -186,9 +186,9 @@ def newBasicGroup(request, form, org):
 def create_group(request, form):
     org_id = request.POST.get('sel-organization')
     # org = Organizations.objects.get_my_org_by_id(id=org_id, admin=request.user)
-    orgs = request.user.organizationsuser_user.get_org(id=org_id)
-    if orgs:
-        new_group = newBasicGroup(request, form, orgs[0])
+    org = request.user.organizationsuser_user.get_org(id=org_id)
+    if org:
+        new_group = newBasicGroup(request, form, org)
         return new_group
     else:
         return False
