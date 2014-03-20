@@ -46,6 +46,11 @@ class Organizations(models.Model):
 
     objects = OrganizationsManager()
 
+    def get_short_icon(self):
+        """it should return a 50x50 icon"""
+        print self.image_path.url_50x50
+        return self.image_path.url_50x50
+
     @models.permalink
     def get_absolute_url(self):
         return ('show_org', (), {'slug_org': self.slug})
@@ -123,6 +128,10 @@ class Groups(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('show_home', (), {'slug_group': self.slug})
+
+    def get_short_icon(self):
+        """it should return a 50x50 icon"""
+        return self.image_path.url_50x50()
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"

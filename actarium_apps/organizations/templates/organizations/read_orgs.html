@@ -9,7 +9,7 @@
         {% has_role "user" "org" "is_admin" as user_is_admin %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="org-principal-image pull-left"><img src="{{ org.image_path.url_50x50 }}" alt="{{ org.name }}" /></span>
+            <span class="org-principal-image pull-left"><img src="{{ org.get_short_icon }}" alt="{{ org.name }}" /></span>
             <span class="pull-left">
                 <h3 class="panel-title">
                     <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
