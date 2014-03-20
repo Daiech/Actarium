@@ -212,5 +212,7 @@ Icon?
 Thumbs.db
 
 
-# archivos de la bd
-media/*
+# archivos de usuarios
+/media/pdf/*
+/media/orgs_img/*
+/media/lastMinutes/*

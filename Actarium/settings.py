@@ -274,7 +274,7 @@ except ImportError:
     pass
 
 ORG_IMAGE_SIZE = ((50,50), (100,100))
-ORG_IMAGE_DEFAULT = "orgs_img/default.jpg"
+ORG_IMAGE_DEFAULT = "icons/org_default.jpg"
 
 GROUP_IMAGE_SIZE = ((50,50), (100,100))
 GROUP_IMAGE_DEFAULT = "orgs_img/default.jpg"
