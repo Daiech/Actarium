@@ -16,8 +16,10 @@
                 </ul>
             </div>
         </nav>
-        <div id="" class="col-md-10">
+        <div id="content_menu" class="col-md-10">
+            <div class="b">
                 {% block content_menu %}{% endblock %}
+            </div>
         </div>
     </div>
 </article>
@@ -29,12 +31,10 @@
     .org-menu-container > nav{padding: 0;margin: 0}
     .org-menu-container nav.nav-menu ul.nav{margin: 0;}
     .org-menu-container .glyphicon-chevron-right{float: right;}
-    /*.bs-docs-sidenav{width: 99%;}*/
     .bs-docs-sidenav{width: auto;}
-    .breadcrumb {
-background: none;
-margin-top: 3px;
-}
+    .breadcrumb{background: none;margin-top: 3px;}
+    /*#content_menu{height: 100%;min-height: 200px;overflow: hidden;}*/
+    #content_menu > div{height: 100%;min-height: 200px;padding: 5px;}
 </style>
 {% block style_menu %}{% endblock %}
 {% endblock %}

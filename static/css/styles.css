@@ -796,7 +796,7 @@ cierra Show Minutes
 /*.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{background-color:#dadada;}*/
 .dropdown-menu{padding-top: 6px;}
 .bs-docs-sidenav > .active {
-  border-left: none;/* 3px solid gray*/;
+  border-left: none !important;/* 3px solid gray*/;
 }
 .dropdown-menu li > a {padding: 3px 15px;}
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a{color: white}
@@ -819,8 +819,6 @@ cierra Show Minutes
 .group-preview .group-circle-plus{border-color: #d0d0d0;color:#d0d0d0;}
 .group-preview .btn-create-group{margin-left: 4px;margin-top: 28px !important;}
 /*close groups*/
-
-
 
 /*==================================================*/
 /*                  Inicia Responsive               */                    

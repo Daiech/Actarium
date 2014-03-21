@@ -20,6 +20,7 @@
         $(document).ready(function(){
             $(".org-menu-container #org-groups").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+            $(".group-permissions > span, .group-name, .group-members-num").tooltip();
         });
     </script>
 {% endblock %}
