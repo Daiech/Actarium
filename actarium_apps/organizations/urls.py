@@ -8,4 +8,5 @@ urlpatterns = patterns('actarium_apps.organizations.views',
     url(r'^(?P<slug_org>[-\w]+)/delete$', 'deleteOrg', name="delete_org"),
     
     url(r'^(?P<slug_org>[-\w]+)/profile$', 'profileOrg', name="profile_org"),
+    url(r'^(?P<slug_org>[-\w]+)/team$', 'teamOrg', name="team_org"),
 )

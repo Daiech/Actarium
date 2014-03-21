@@ -188,6 +188,12 @@ class OrganizationsRoles(models.Model):
 
 class OrganizationsUserManager(GenericManager):
 
+    def get_members(self):
+        users = []
+        for u in self.get_all_active():
+            users.append(u.user.id)
+        return User.objects.filter(id__in=users)
+
     def get_org(self, **kwargs):
         for k,v in kwargs.iteritems():
             kwargs["organization__" + k] = v

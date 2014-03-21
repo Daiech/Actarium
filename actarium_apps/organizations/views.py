@@ -65,7 +65,7 @@ def deleteOrg(request, slug_org):
 @login_required(login_url='/account/login')
 def profileOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
-    if org and ('edit' in request.GET) and org.has_user_role(request.user, "is_creator"):
+    if org and ('edit' in request.GET) and org.has_user_role(request.user, "is_admin"):
         update = True
         if request.method == "POST":
             form = OrganizationForm(request.POST, request.FILES, instance=org)
@@ -83,3 +83,19 @@ def profileOrg(request, slug_org):
     else:
         raise Http404
     return render(request, "organizations/profile_org.html", locals())
+
+
+@login_required(login_url='/account/login')
+def teamOrg(request, slug_org):
+    org = request.user.organizationsuser_user.get_org(slug=slug_org)
+    if org:
+        current_members = org.get_num_members()
+        max_members = org.organizationservices_organization.get_max_num_members()
+        total = int(current_members)*100/int(max_members)
+        if org.has_user_role(request.user, "is_admin"):
+            pass
+        elif org.has_user_role(request.user, "is_member"):
+            pass
+    else:
+        raise Http404
+    return render(request, "organizations/team_org.html", locals())
