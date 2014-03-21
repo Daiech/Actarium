@@ -18,7 +18,7 @@ def listOrgs(request):
     organizations = request.user.organizationsuser_user.get_orgs_by_role_code("is_member")
     return render(request, "organizations/read_orgs.html", locals())
 
-
+#### ORGANIZATION CRUD #####
 @login_required(login_url='/account/login')
 def createOrg(request):
     saveViewsLog(request, "apps.groups_app.views_groups.createOrg")
@@ -74,5 +74,15 @@ def deleteOrg(request, slug_org):
             org.save()
             return HttpResponseRedirect(reverse("home") + "?org_archived=1")
         return render(request, "organizations/delete_org.html", locals())
+    else:
+        raise Http404
+#### ORGANIZATION CRUD #####
+
+
+@login_required(login_url='/account/login')
+def profileOrg(request, slug_org):
+    org = request.user.organizationsuser_user.get_org(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_creator"):
+        return render(request, "organizations/profile_org.html", locals())
     else:
         raise Http404

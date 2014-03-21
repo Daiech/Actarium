@@ -1,0 +1,25 @@
+{% extends "organizations/menu.html" %}
+{% load i18n has_role %}
+{% block TITLE %}{% trans 'Home' %}{% endblock %}
+
+{% block content_menu %}
+    <div>
+    <img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}">	<br>		
+    {{ org.name }}	
+    </div>
+{% endblock %}
+
+{% block style_menu %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block js_menu %}
+    <script>
+        $(document).ready(function(){
+            $(".org-menu-container #org-profile").addClass("active")
+                .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+        });
+    </script>
+{% endblock %}

@@ -9,15 +9,15 @@
             <div class="bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav">
                     <li id="org-groups" ><a href="{{ org.get_absolute_url }}"><span></span>{% trans 'Grupos' %}</a></li>
-                    <li id=""><a href="#">{% trans 'Miembros' %}</a></li>
-                    <li id=""><a href="#">{% trans 'Perfil' %}</a></li>
-                    <li id="" ><a href="{% url 'core:read_organizations_services' %}">Servicios</a></li>
-                    <li id="" ><a href="{% url 'services:read_pricing' %}">Precios</a></li>
+                    <li id="org-members"><a href="#"><span></span>{% trans 'Miembros' %}</a></li>
+                    <li id="org-profile"><a href="{% url 'profile_org' org.slug %}"><span></span>{% trans 'Perfil' %}</a></li>
+                    <li id="" ><a href="{% url 'core:read_organizations_services' %}"><span></span>{% trans 'Servicios' %}</a></li>
+                    <li id="" ><a href="{% url 'services:read_pricing' %}"><span></span>{% trans 'Precios' %}</a></li>
                 </ul>
             </div>
         </nav>
         <div id="content_menu" class="col-md-10">
-            <div class="b">
+            <div class="bt bb">
                 {% block content_menu %}{% endblock %}
             </div>
         </div>
@@ -35,6 +35,9 @@
     .breadcrumb{background: none;margin-top: 3px;}
     /*#content_menu{height: 100%;min-height: 200px;overflow: hidden;}*/
     #content_menu > div{height: 100%;min-height: 200px;padding: 5px;}
+    .bs-docs-sidenav > li > a{border:none;}
+    #topbar-btn-logo{padding-right: 72px;padding-right: 35px;padding-left: 56px;}
+    .nav-list > .active > a, .nav-list > .active > a:hover {background-color: #79B632}
 </style>
 {% block style_menu %}{% endblock %}
 {% endblock %}
