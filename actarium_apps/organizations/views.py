@@ -49,23 +49,6 @@ def readOrg(request, slug_org=False):
 
 
 @login_required(login_url='/account/login')
-def updateOrg(request, slug_org):
-    org = request.user.organizationsuser_user.get_org(slug=slug_org)
-    if org and org.has_user_role(request.user, "is_admin"):
-        if request.method == "POST":
-            form = OrganizationForm(request.POST, request.FILES, instance=org)
-            if form.is_valid() and form.is_multipart():
-                form.save()
-                saveActionLog(request.user, 'UPDATE_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
-                return HttpResponseRedirect(org.get_absolute_url())
-        else:
-            form = OrganizationForm(instance=org)
-        return render(request, "organizations/update_org.html", locals())
-    else:
-        raise Http404
-
-
-@login_required(login_url='/account/login')
 def deleteOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
     if org and org.has_user_role(request.user, "is_creator"):
@@ -82,7 +65,21 @@ def deleteOrg(request, slug_org):
 @login_required(login_url='/account/login')
 def profileOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
-    if org and org.has_user_role(request.user, "is_creator"):
-        return render(request, "organizations/profile_org.html", locals())
+    if org and ('edit' in request.GET) and org.has_user_role(request.user, "is_creator"):
+        update = True
+        if request.method == "POST":
+            form = OrganizationForm(request.POST, request.FILES, instance=org)
+            if form.is_valid() and form.is_multipart():
+                form.save()
+                updated = saveActionLog(request.user, 'UPDATE_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
+                return HttpResponseRedirect(reverse("profile_org", args=(org.slug,)))
+        else:
+            form = OrganizationForm(instance=org)
+    elif org and org.has_user_role(request.user, "is_member"):
+        update = False
+        current_members = org.get_num_members()
+        max_members = org.organizationservices_organization.get_max_num_members()
+        total = int(current_members)*100/int(max_members)
     else:
         raise Http404
+    return render(request, "organizations/profile_org.html", locals())

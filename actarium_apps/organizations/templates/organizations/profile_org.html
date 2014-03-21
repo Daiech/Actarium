@@ -3,23 +3,47 @@
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {% block content_menu %}
-    <div>
-    <img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}">	<br>		
-    {{ org.name }}	
+    <div class="org-profile">
+	{% if update %}
+    	{% include "organizations/form_org.html" %}
+    {% else %}
+        <span class="pull-left b"><img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}"></span>
+        <div class="pull-left org-info">
+        	<h3>{{ org.name }}</h3>
+        	<p>{{ org.description }}</p>
+        	<div class="">
+	        	<div style="overflow:hidden">
+	        		<span class="pull-left">{% trans 'Miembros' %}</span>
+			    	<span class="pull-right">{{ current_members }} {% trans 'de' %} {{ max_members }}</span>
+	        	</div>
+		    	<div class="progress">
+				  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
+				    <span class="sr-only"></span>
+				  </div>
+				</div>
+        		
+        	</div>
+        </div>
+	{% endif %}
     </div>
 {% endblock %}
 
 {% block style_menu %}
 <style>
-
+	.org-profile form label{width: 160px;}
+	.org-profile .org-info{margin-left: 10px;min-width: 180px;}
+	.org-profile .org-info h3{margin-top: 0}
 </style>
 {% endblock %}
-
 {% block js_menu %}
     <script>
         $(document).ready(function(){
             $(".org-menu-container #org-profile").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+            {% if updated %}
+            	setAlertMessage("{% trans 'Información actualizada' %}","{% trans 'La información de su organización ha sido actualizada con éxito' %}");
+            {% endif %}
+            $("#org-num-members").css({"width": {{ total }} + "%"});
         });
     </script>
 {% endblock %}

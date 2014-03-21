@@ -8,6 +8,16 @@
         <nav class="nav-menu col-md-2" >
             <div class="bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav">
+                    <li>
+                        <div class="box" id="org-info">
+                            <span class="pull-left b"><img src="{{ org.get_short_icon }}" alt="{{ org.name }}"> </span>
+                            <span class="pull-left" id="org-info-text">
+                                <h5>{{ org.name|truncatechars:16 }}</h5>
+                                <p><a href="{% url 'profile_org' org.slug %}?edit">{% trans 'Editar perfil' %}</a></p>
+                            </span>
+                        </div>
+                        <!-- <hr> -->
+                    </li>
                     <li id="org-groups" ><a href="{{ org.get_absolute_url }}"><span></span>{% trans 'Grupos' %}</a></li>
                     <li id="org-members"><a href="#"><span></span>{% trans 'Miembros' %}</a></li>
                     <li id="org-profile"><a href="{% url 'profile_org' org.slug %}"><span></span>{% trans 'Perfil' %}</a></li>
@@ -30,14 +40,18 @@
 <style>
     .org-menu-container > nav{padding: 0;margin: 0}
     .org-menu-container nav.nav-menu ul.nav{margin: 0;}
-    .org-menu-container .glyphicon-chevron-right{float: right;}
+    .org-menu-container .glyphicon-chevron-right{float: right;margin-top: 2px;}
     .bs-docs-sidenav{width: auto;}
     .breadcrumb{background: none;margin-top: 3px;}
     /*#content_menu{height: 100%;min-height: 200px;overflow: hidden;}*/
     #content_menu > div{height: 100%;min-height: 200px;padding: 5px;}
     .bs-docs-sidenav > li > a{border:none;}
-    #topbar-btn-logo{padding-right: 72px;padding-right: 35px;padding-left: 56px;}
+    #topbar-btn-logo{/*padding-right: 72px;*/padding-right: 37px;padding-left: 58px;}
     .nav-list > .active > a, .nav-list > .active > a:hover {background-color: #79B632}
+    #org-info{margin-bottom: 5px;}
+    #org-info-text{margin: 2px 0;margin-left:7px}
+    #org-info-text h5{margin: 0;}
+    #org-info-text a{text-decoration: underline;}
 </style>
 {% block style_menu %}{% endblock %}
 {% endblock %}

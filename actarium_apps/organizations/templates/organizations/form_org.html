@@ -1,0 +1,9 @@
+{% load i18n %}
+    <form class="form-horizontal" enctype="multipart/form-data" method="POST" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}"><hr>
+        <input type="hidden" value="{{ref}}" name="ref" >
+        <a href="{% url 'profile_org' org.slug %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Cancelar' %}</a>
+        <input type="submit" class="btn btn-large btn-info db" value="{% trans 'Actualizar' %}" >
+    </form>

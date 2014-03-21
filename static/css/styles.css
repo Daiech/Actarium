@@ -7,7 +7,7 @@ body{
     /*font-family: "sans-serif"*/
     /*margin-bottom: 84px;*/
 }
-a {color: #00aeaa;text-decoration: none;}
+a {color: #555;text-decoration: none;}/*00aeaa*/
 .b{border: solid thin #dadada;}
 .bt{border-top: solid thin #dadada;}
 .br{border-right: solid thin #dadada;}
@@ -820,6 +820,7 @@ cierra Show Minutes
 .group-preview .btn-create-group{margin-left: 4px;margin-top: 28px !important;}
 /*close groups*/
 
+.nav-list > li > a{color: #555;}
 /*==================================================*/
 /*                  Inicia Responsive               */                    
 /*==================================================*/
