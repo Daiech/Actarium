@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 
+from actarium_apps.core.utils import create_default_service
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles
 from .forms import OrganizationForm
@@ -21,9 +22,8 @@ def createOrg(request):
         if form.is_valid() and form.is_multipart():
             org = form.save()
             org.set_role(request.user, is_admin=True, is_member=True, is_creator=True)
-            from actarium_apps.core.utils import create_default_service
             is_created, response = create_default_service(request.user, org)
-            print "::::::::::::::Respuesta",response
+            print "::::::::::::::Respuesta", response
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect(org.get_absolute_url())
     else:

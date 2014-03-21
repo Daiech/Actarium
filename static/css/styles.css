@@ -128,7 +128,8 @@ header #navbar-button-container > ul li a {
 #groups-menu li a{font-weight: bold;}
 .btn-group{margin-top: 0px;}
 .dinline{display: inline;position: relative;top: 1px;}
-#ac-load{display: none;margin-right: 15px;padding: 5px 10px;text-align:center;width: 68px;width: 65px;margin-top: 10px;}
+#ac-load{display: none;margin-right: 15px;padding: 5px 10px;text-align:center;width: 68px;}
+#ac-load img{width: 65px;margin-top: 10px;}
 #close-login-menu{position: relative;left: 0}
 #li-register-link:hover{background-color: white}
 #register-link{padding: 5px 15px;cursor: pointer;color: #00aeaa}

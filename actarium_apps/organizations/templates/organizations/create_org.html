@@ -22,8 +22,8 @@
         		
         	{{ form.as_p }}<br><br>
 			<input type="hidden" value="{{ref}}" name="ref" >
-			<a href="{% url 'home' %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>
-			<input type="submit" class="btn btn-large btn-info db" value="Crear" >
+			<a href="{% url 'home' %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}</a>
+			<input type="submit" class="btn btn-large btn-info db" value="{% trans 'Crear' %}" >
         	</div>
     	</form>
     </div>
