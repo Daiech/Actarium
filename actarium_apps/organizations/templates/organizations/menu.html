@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n has_role %}
+{% block TITLE %}{% trans 'Home' %}{% endblock %}
+
+{% block body %}
+<article>
+    <div class="row-fluid org-menu-container">
+        <nav class="nav-menu col-md-2" >
+            <div class="bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav">
+                    <li id="org-groups" ><a href="{{ org.get_absolute_url }}"><span></span>{% trans 'Grupos' %}</a></li>
+                    <li id=""><a href="#">{% trans 'Miembros' %}</a></li>
+                    <li id=""><a href="#">{% trans 'Perfil' %}</a></li>
+                    <li id="" ><a href="{% url 'core:read_organizations_services' %}">Servicios</a></li>
+                    <li id="" ><a href="{% url 'services:read_pricing' %}">Precios</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div id="" class="col-md-10">
+                {% block content_menu %}{% endblock %}
+        </div>
+    </div>
+</article>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/todc-docs.css">
+<style>
+    .org-menu-container > nav{padding: 0;margin: 0}
+    .org-menu-container nav.nav-menu ul.nav{margin: 0;}
+    .org-menu-container .glyphicon-chevron-right{float: right;}
+    /*.bs-docs-sidenav{width: 99%;}*/
+    .bs-docs-sidenav{width: auto;}
+    .breadcrumb {
+background: none;
+margin-top: 3px;
+}
+</style>
+{% block style_menu %}{% endblock %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function(){
+            $("#topbar-group-name").html('<ol class="breadcrumb"><li><a href="{{ org.get_absolute_url }}">{{ org.name }}</a></li></ol>')
+            // $("").tooltip();
+        });
+    </script>
+    {% block js_menu %}{% endblock %}
+{% endblock %}

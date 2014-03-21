@@ -1,0 +1,33 @@
+{% load i18n %}
+{% for g in org.get_groups %}
+<a href="{{ g.get_absolute_url }}">
+    <div class="group-preview">
+        <!-- <span class="pull-right group-notifications glyphicon glyphicon-bell"></span> -->
+        <div class="group-circle">
+        <span class="group-members-num" title="{{ g.get_num_members }} {% trans 'miembros' %}">{{ g.get_num_members }}</span>
+        </div>
+        <div class="group-permissions">
+            <span title="{% trans 'El usuario pude agregar usuarios y roles' %}" class="glyphicon glyphicon-wrench"></span>
+            <span title="{% trans 'Tiene la responsabilidad de redactar actas' %}" class="glyphicon glyphicon-pencil"></span>
+            <span title="{% trans 'Pertenece al grupo. Aparece en las actas' %}" class="glyphicon glyphicon-user"></span>
+            <span title="{% trans 'Puede convocar reuniones' %}" class="glyphicon glyphicon-calendar"></span>
+        </div>
+        <div class="group-name" title="{{ g.name }}">{{ g.name|truncatechars:18 }}</div>
+    </div>
+</a>
+{% empty %}
+<p>{% trans 'No tienes ning&uacute;n grupo :(' %}</p>
+{% endfor %}
+{% if user_is_admin %}
+<a href="{% url 'new_group' %}?org={{ org.id }}">
+    <div class="group-preview btn-new-group">
+        <div class="group-circle group-circle-plus">
+            <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+        </div>
+        <div class="group-permissions">
+            <span class="glyphicon"></span>
+        </div>
+        <div class="group-name" title="{{ g.name }}">{% trans 'Crear grupo' %}</div>
+    </div>
+</a>
+{% endif %}

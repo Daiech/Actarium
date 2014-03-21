@@ -14,6 +14,12 @@ from .utils import saveOrganization
 
 
 @login_required(login_url='/account/login')
+def listOrgs(request):
+    organizations = request.user.organizationsuser_user.get_orgs_by_role_code("is_member")
+    return render(request, "organizations/read_orgs.html", locals())
+
+
+@login_required(login_url='/account/login')
 def createOrg(request):
     saveViewsLog(request, "apps.groups_app.views_groups.createOrg")
     ref = request.GET.get('ref') if 'ref' in request.GET else ""
@@ -35,13 +41,11 @@ def createOrg(request):
 def readOrg(request, slug_org=False):
     if slug_org:
         org = request.user.organizationsuser_user.get_org(slug=slug_org)
-        if org:
-            organizations = [org]
-        else:
+        if not org:
             raise Http404
     else:
-        organizations = request.user.organizationsuser_user.get_orgs_by_role_code("is_member")
-    return render(request, "organizations/read_orgs.html", locals())
+        return listOrgs(request)
+    return render(request, "organizations/index.html", locals())
 
 
 @login_required(login_url='/account/login')

@@ -1,0 +1,23 @@
+{% extends "organizations/menu.html" %}
+{% load i18n has_role %}
+{% block TITLE %}{% trans 'Home' %}{% endblock %}
+
+{% block content_menu %}
+    <div>asd
+    </div>
+{% endblock %}
+
+{% block style_menu %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block js_menu %}
+    <script>
+        $(document).ready(function(){
+            $(".org-menu-container #org-groups").addClass("active")
+                .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+        });
+    </script>
+{% endblock %}
