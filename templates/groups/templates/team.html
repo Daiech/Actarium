@@ -14,7 +14,7 @@
 	        <li class="taling">
 	        	<div class="header-title">
 	            	<span>{% trans "Miembros" %}</span>
-	            	<div id="close-add-member" class="close pull-right icon-remove"></div>
+	            	<div id="close-add-member" class="close pull-right glyphicon glyphicon-remove"></div>
 	        	</div>
 	        </li>
 	        <li>
@@ -78,7 +78,7 @@
 							</th>
 							<th>
 								<div class="info-title" title="Personas encargadas de administrar el grupo">
-									<i class="icon-wrench"></i> 
+									<i class="glyphicon glyphicon-wrench"></i> 
 									<span class="th-name">{% trans "Administrador" %}</span>
 								</div>
 							</th>
@@ -98,12 +98,12 @@
 				                    <!-- comienza -->
 									{% if rel_user.is_admin %}
 				                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
-				                    	<a href="#"><i class="icon-cog"></i></a>
+				                    	<a href="#"><i class="glyphicon glyphicon-cog"></i></a>
 				                    </div>
 				                    <div class="dropdown-container">
 			                    		<div class="header-title">
 				                        	<span>{% trans "Configuraci&oacute;n" %}</span>
-				                        	<div class="close close-popover icon-remove"></div>
+				                        	<div class="close close-popover glyphicon glyphicon-remove"></div>
 				                    	</div>
 				                    	<div class="dropdown-body">
 				                    		<div>
@@ -116,20 +116,20 @@
 				                    				{%if not m.is_active%}
 				                    				<li>
 				                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
-				                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
+				                    						<!-- <i class="icon-refresh"></i>  --><i class="glyphicon glyphicon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
 				                    					</a>
 				                    				</li>
 				                    				{%if not m.id_user.is_active%}
 				                    				<li>
 				                    					<a href="#change-names">
-				                    						<i class="icon-edit"></i> {% trans "Cambiar nombres" %}
+				                    						<i class="glyphicon glyphicon-edit"></i> {% trans "Cambiar nombres" %}
 				                    					</a>
 				                    				</li>
 				                    				{%endif%}
 				                    				{%endif%}
 				                    				<li>
 				                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
-				                    						<i class="icon-remove"></i> {% trans "Eliminar de grupo" %}
+				                    						<i class="glyphicon glyphicon-remove"></i> {% trans "Eliminar de grupo" %}
 				                    					</a>
 				                    				</li>
 				                    			</ul>
@@ -145,7 +145,7 @@
 		                								{% trans "Apellidos" %}:
 		                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
 		                							</label>
-						                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> {% trans "Regresar" %}</a>
+						                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
 		                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
 		                						</div>
 		                					</div>

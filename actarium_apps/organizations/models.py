@@ -48,7 +48,6 @@ class Organizations(models.Model):
 
     def get_short_icon(self):
         """it should return a 50x50 icon"""
-        print self.image_path.url_50x50
         return self.image_path.url_50x50
 
     @models.permalink
