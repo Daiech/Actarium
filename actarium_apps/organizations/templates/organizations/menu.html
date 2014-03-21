@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load i18n has_role %}
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
-
 {% block body %}
+{% has_role "user" "org" "is_admin" as user_is_admin %}
 <article>
     <div class="row-fluid org-menu-container">
         <nav class="nav-menu col-md-2" >
@@ -13,7 +13,11 @@
                             <span class="pull-left b"><img src="{{ org.get_short_icon }}" alt="{{ org.name }}"> </span>
                             <span class="pull-left" id="org-info-text">
                                 <h5>{{ org.name|truncatechars:16 }}</h5>
+                                {% if user_is_admin %}
                                 <p><a href="{% url 'profile_org' org.slug %}?edit">{% trans 'Editar perfil' %}</a></p>
+                                {% else %}
+                                <p>{{ org.description|truncatechars:30 }}</p>
+                                {% endif %}
                             </span>
                         </div>
                         <!-- <hr> -->

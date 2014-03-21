@@ -1,7 +1,7 @@
 {% extends "organizations/menu.html" %}
 {% load i18n has_role %}
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
-
+{% has_role "user" "org" "is_admin" as user_is_admin %}
 {% block content_menu %}
     <div class="org-profile">
 	{% if update %}
@@ -21,7 +21,9 @@
 				    <span class="sr-only"></span>
 				  </div>
 				</div>
-        		
+        		{% if user_is_admin %}
+                <p><a href="{% url 'profile_org' org.slug %}?edit" class="btn">{% trans 'Editar perfil' %}</a></p>
+                {% endif %}
         	</div>
         </div>
 	{% endif %}
