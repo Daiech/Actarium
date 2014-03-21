@@ -13,7 +13,8 @@
 					<li id="settings-password"><a href="/account/changePassword"><i class="glyphicon glyphicon-chevron-right"></i>Contrase&ntilde;a</a></li>
 					<li id="settings-dni"><a href="/account/dni"><i class="glyphicon glyphicon-chevron-right"></i>DNI</a></li>
 					<li id="settings-templates" ><a href="/settings/templates"><i class="glyphicon glyphicon-chevron-right"></i>Plantillas</a></li>
-					<li id="settings-services" ><a href="{% url 'core:services' %}"><i class="glyphicon glyphicon-chevron-right"></i>Servicios</a></li>
+					<li id="settings-services" ><a href="{% url 'core:read_organizations_services' %}"><i class="glyphicon glyphicon-chevron-right"></i>Servicios</a></li>
+					<li id="settings-pricing" ><a href="{% url 'services:read_pricing' %}"><i class="glyphicon glyphicon-chevron-right"></i>Precios</a></li>
 			        {% if user.is_staff %}
                     <li id="settings-actions" style="margin-top:50px"><a href="/actions"><i class="glyphicon glyphicon-chevron-right"></i>Acciones</a></li>
                     <li id="settings-views"><a href="/actions/views"><i class="glyphicon glyphicon-chevron-right"></i>Visitas a Paginas</a></li>

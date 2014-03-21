@@ -1,7 +1,9 @@
 from django.conf.urls import url, patterns
+from .views import *
 
-customers_services = patterns('actarium_apps.core.views',
-    url(r'^servicios$', 'services', name='services'),
+customers_services = patterns('',
+    url(r'^servicios$', read_organizations_services, name='read_organizations_services'),
+    url(r'^servicios/(?P<slug_org>[-\w]+)/$', read_organizations_services, name='read_organization_services'),
 )
 
 

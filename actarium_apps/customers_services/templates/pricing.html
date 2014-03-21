@@ -1,0 +1,49 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Precios' %}{% endblock %}
+
+{% block bodysettings %}
+
+	<h3>{% trans 'Precios' %}</h3>
+	<p>{% trans 'Listado de los servicios disponibles' %}</p>
+
+
+	{% for category in services_categories %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3>{{ category.name }}</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+				<tr >
+					<th>{% trans 'Name' %} </th>
+					<th>{% trans 'Description' %} </th>
+					<th>{% trans 'Precio' %}</th>
+				</tr>
+
+				{% for service in category.services_service_category.get_all_active %}
+					<tr>
+						<td>{{ service.name }}</td> 
+						<td>{{ service.description }}</td>
+						<td>{{ service.price_per_period }}/{{ service.period.name }}</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
+
+{%block settings_style%}
+
+{% endblock %}
+
+{% block settings_js %}
+<script>
+	$(document).on("ready", function() {
+		$("#settings-pricing").addClass("active");
+	});
+</script>
+{% endblock %}
+

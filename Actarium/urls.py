@@ -36,6 +36,7 @@ urlpatterns = patterns('',
     url(r'^features.pdf$', 'apps.website.views.services', name='features'),
 
     url(r'^actarium/', include('actarium_apps.core.urls', namespace='core')),
+    url(r'^servicios/', include('actarium_apps.customers_services.urls', namespace='services')),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

@@ -1,0 +1,57 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n %}
+{% block TITLE %}Servicios{% endblock %}
+
+{% block bodysettings %}
+
+<h3>
+	{% trans 'Servicios' %} 
+</h3>
+
+{% if show_all %}
+	<a class="btn btn-warning" href="{% url 'core:read_organizations_services' %}"> {% trans 'Ver todos' %} <a>
+{% endif %}
+
+
+<p>{% trans 'Listado de servicios que ofrece actarium' %} </p>
+
+{% for org in my_orgs %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a href="{{ org.get_absolute_url }}"><h3>{{ org.name }}</h3></a>
+		</div>
+		<div class="panel-body">
+			<table class="table">
+			<tr>
+				<th>{% trans 'Nombre del servicio' %}</th>
+				<th>{% trans 'Cantidad' %} </th>
+				<th>{% trans 'Fecha de expiraci&oacute;n' %}</th>
+				<th>{% trans 'Acci&oacute;n' %}</th>
+			</tr>
+			{% for org_service in  org.organizationservices_organization.all %}
+				<tr>
+				<td>{{ org_service.service.service_name }}</td>
+				<td>{{ org_service.service.quantity }}</td>
+				<td>{{ org_service.service.date_expiration }}</td>
+				<td> <a class="btn btn-success" href="#upgrade">{% trans 'Actualizar' %}</a></td>
+				</tr>
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endfor %}
+
+{% endblock %}
+
+{%block settings_style%}
+
+{% endblock %}
+
+{% block settings_js %}
+<script>
+	$(document).on("ready", function() {
+		$("#settings-services").addClass("active");
+	});
+</script>
+{% endblock %}
+
