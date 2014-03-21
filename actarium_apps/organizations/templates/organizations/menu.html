@@ -21,8 +21,8 @@
                     <li id="org-groups" ><a href="{{ org.get_absolute_url }}"><span></span>{% trans 'Grupos' %}</a></li>
                     <li id="org-members"><a href="#"><span></span>{% trans 'Miembros' %}</a></li>
                     <li id="org-profile"><a href="{% url 'profile_org' org.slug %}"><span></span>{% trans 'Perfil' %}</a></li>
-                    <li id="" ><a href="{% url 'core:read_organizations_services' %}"><span></span>{% trans 'Servicios' %}</a></li>
-                    <li id="" ><a href="{% url 'services:read_pricing' %}"><span></span>{% trans 'Precios' %}</a></li>
+                    <li id="org-services" ><a href="{% url 'core:read_organization_services' org.slug %}"><span></span>{% trans 'Servicios' %}</a></li>
+                    
                 </ul>
             </div>
         </nav>

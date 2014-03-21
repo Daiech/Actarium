@@ -39,4 +39,5 @@ OrganizationsRoles---------------------------
 is_creator: Creador
 is_admin: Administrador
 is_member: Miembro
+is_owner: Propietario
 
