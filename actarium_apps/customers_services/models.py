@@ -85,7 +85,7 @@ class Services(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    objects = GenericManager()
+    objects = ServicesManager()
     
     def __unicode__(self):
         return u"[%s-%s] %s ($%.0f/%s)" % (self.service_category,self.code, self.name,self.price_per_period,self.period)
