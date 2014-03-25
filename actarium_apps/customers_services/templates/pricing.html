@@ -2,11 +2,15 @@
 {% load i18n %}
 {% block TITLE %}{% trans 'Precios' %}{% endblock %}
 
-{% block bodysettings %}
+{% block content_menu %}
 
 	<h3>{% trans 'Precios' %}</h3>
-	<p>{% trans 'Listado de los servicios disponibles' %}</p>
 
+	{% if org %}
+		<a class="btn btn-warning" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Volver' %} <a>
+	{% endif %}
+
+	<p>{% trans 'Listado de los servicios disponibles' %}</p>
 
 	{% for category in services_categories %}
 		<div class="panel panel-default">
@@ -35,15 +39,17 @@
 
 {% endblock %}
 
-{%block settings_style%}
+{%block style_menu %}
 
 {% endblock %}
 
-{% block settings_js %}
-<script>
-	$(document).on("ready", function() {
-		$("#settings-pricing").addClass("active");
-	});
-</script>
+{% block js_menu %}
+	<script>
+        $(document).ready(function(){
+            $(".org-menu-container #org-services").addClass("active")
+                .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+            //$(".group-permissions > span, .group-name, .group-members-num").tooltip();
+        });
+    </script>
 {% endblock %}
 

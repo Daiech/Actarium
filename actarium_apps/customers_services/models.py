@@ -67,7 +67,7 @@ class PaymentMethods(models.Model):
     modified = models.DateTimeField(auto_now=True)
     
     objects = GenericManager()
-    
+
     def __unicode__(self):
         return u"[%s] %s" % (self.code,self.name)
     
@@ -144,6 +144,7 @@ class Customers(models.Model):
     email = models.CharField(max_length=300, verbose_name=_("Correo"))
  
     address = models.OneToOneField(Addresses, verbose_name=_("Dirección"))
+    payment_methods = models.ManyToManyField(PaymentMethods)
     
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)

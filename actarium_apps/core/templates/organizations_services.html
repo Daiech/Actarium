@@ -1,6 +1,6 @@
 {% extends "organizations/menu.html" %}
 {% load i18n %}
-{% block TITLE %}Servicios{% endblock %}
+{% block TITLE %}{% trans 'Servicios' %}{% endblock %}
 
 {% block content_menu %}
 
@@ -36,7 +36,7 @@
 				<td>{{ org_service.service.quantity }}</td>
 				<td>{{ org_service.service.date_expiration }}</td>
 				{% if is_creator %}
-					<td> <a class="btn btn-success" href="#upgrade">{% trans 'Actualizar' %}</a></td>	
+					<td> <a class="btn btn-success" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a></td>	
 				{% endif %}
 				</tr>
 			{% endfor %}
