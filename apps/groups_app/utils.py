@@ -166,19 +166,19 @@ def newBasicGroup(request, form, org):
         except Exception:
             is_memb = 0
         if is_memb:  # new rel to: Create group. I'm member
-            setUserRoles(request.user, myNewGroup, is_member=1, is_active=True)
+            setUserRoles(request.user, myNewGroup, is_member=1, is_active=True, is_secretary=1)
         if user_or_email['user'] != request.user:
             if user_or_email['user']:
                 inv = sendInvitationToGroup(user_or_email['user'], request.user, myNewGroup)
                 if inv:  # new rel to: Create group. Other is admin (other) # this is the group than only i administer
-                    setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
+                    setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_active=False, is_secretary=1)
             else:
                 _user = newUserWithInvitation(user_or_email['email'], request.user, myNewGroup)
                 if _user:  # new rel to: Create group. Other is admin (other)
-                    setUserRoles(_user, myNewGroup, is_superadmin=1, is_admin=1, is_active=False)
+                    setUserRoles(_user, myNewGroup, is_superadmin=1, is_admin=1, is_active=False, is_secretary=1)
 
         else:  # new rel to: Create group. I'm admin
-            setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb, is_active=1)
+            setUserRoles(user_or_email['user'], myNewGroup, is_superadmin=1, is_admin=1, is_member=is_memb, is_active=1, is_secretary=1)
             print getRelUserGroup(user_or_email['user'], myNewGroup).is_admin
     else:
         print "No hay un administrador para este grupo"  # error! se dio atras al crear new group y no se selecciono un admin
