@@ -57,21 +57,19 @@ def groupsList(request):
 
 
 def setRoltoUser(request, _user, _group, role, remove):
-    '''
-        rel is getRelUserGroup(u, g) where u is the user to set the rol
+    '''rel is getRelUserGroup(u, g) where u is the user to set the rol
         role is an int to the role:
             Roles id:
             1 = member
             2 = writer
             3 = convener
             4 = admin
-        remove is a boolean
-    '''
+        remove is a boolean'''
     saveViewsLog(request, "apps.groups_app.views.setRoltoUser")
     rel = getRelUserGroup(_user, _group)
     if rel:
         role_name = False
-        r = ["Miembro", "Redactor", "Convocador", "Administrador"]
+        r = [_("Miembro"), _("Redactor"), _("Convocador"), _("Administrador")]
         if not remove:
             if role == 1:
                 rel.is_member = True
@@ -84,6 +82,7 @@ def setRoltoUser(request, _user, _group, role, remove):
                 role_name = r[2]
             if role == 4:
                 rel.is_admin = True
+                rel.is_secretary = True
                 role_name = r[3]
         if remove:
             if role == 1:
@@ -94,6 +93,7 @@ def setRoltoUser(request, _user, _group, role, remove):
                 rel.is_convener = False
             if role == 4 and not rel.is_superadmin:
                 rel.is_admin = False
+                rel.is_secretary = False
         rel.save()
         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
         if role_name:  # the rol has been assigned
@@ -112,35 +112,32 @@ def setRoltoUser(request, _user, _group, role, remove):
 
 
 def setRole(request, slug_group):
-    """
-        Set or remove role to a user
-    """
-
+    """Set or remove role to a user"""
     saveViewsLog(request, "apps.groups_app.views.setRole")
     error = False
     if request.is_ajax():
-        if request.method == 'GET':
+        if request.method == 'POST':
             try:
                 g = Groups.objects.get(slug=slug_group, is_active=True)
                 _user_rel = getRelUserGroup(request.user, g)
 
                 if _user_rel.is_admin:
-                    role = int(request.GET['role'])
-                    remove = bool(int(request.GET['remove']))
-                    _user = get_user_or_email(request.GET['uid'])
+                    role = int(request.POST.get('role'))
+                    remove = bool(int(request.POST.get('remove')))
+                    _user = get_user_or_email(request.POST.get('uid'))
                     u = _user['user']
-                    if u:  # only if there are an user.
+                    if u:
                         saved = setRoltoUser(request, u, g, role, remove)
                     else:
-                        error = "El usuario no ha aceptado la invitaci&oacute;n"
+                        error = _("El usuario no ha aceptado la invitaci&oacute;n")
                 else:
-                    error = "No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina"
+                    error = _("No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina")
             except Groups.DoesNotExist:
-                error = "Este grupo no existe"
+                error = _("Este grupo no existe")
             except rel_user_group.DoesNotExist:
-                error = "Error! no existe el usuario para este grupo"
-            except Exception:
-                error = "Por favor recarga la p&aacute;gina e intenta de nuevo."
+                error = _("Error! no existe el usuario para este grupo")
+            except:
+                error = _("Por favor recarga la p&aacute;gina e intenta de nuevo.")
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
             response = {"saved": saved, "u": u.first_name, "role": role}

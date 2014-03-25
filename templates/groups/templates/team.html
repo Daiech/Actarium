@@ -44,7 +44,7 @@
 	<!-- begin -->
 	<div class="white-box-container">
 		<h4>{% trans "Roles de usuario" %}</h4>
-		<p>{% trans "Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles." %}</p>
+		<p>{% trans "Éste es tu equipo de trabajo con sus roles en el grupo." %}</p>
 		<div class="">
 			{% if rel_user.is_admin %}
 			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
@@ -54,26 +54,12 @@
 					<table id="table-roles" class="table table-bordered table-hover">
 						<tr>
 							<th class="td-first">
-								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-									{% trans "Usuarios del grupo" %}
-								</div>
+								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">{% trans "Miembros del grupo" %}</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas que aparecen en la lista de las actas">
-									<i class="icon-user"></i>
-									<span class="th-name">{% trans "Miembro" %}</span>
-								</div>
-							</th>
-							<th>
-								<div class="info-title" title="Personas encargadas de crear actas">
-									<i class="glyphicon glyphicon-pencil"></i>
-									<span class="th-name">{% trans "Redactor" %}</span>
-								</div>
-							</th>
-							<th>
-								<div class="info-title" title="Personas que pueden convocar reuniones">
-									<span class="glyphicon glyphicon-calendar"></span> 
-									<span class="th-name">{% trans "Convocador" %}</span>
+									<i class="glyphicon glyphicon-user"></i>
+									<span class="th-name">{% trans "Aparece en actas" %}</span>
 								</div>
 							</th>
 							<th>
@@ -166,24 +152,6 @@
 								</label>
 							</td>
 							<td class="t-a-c">
-								<label for="writer{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
-									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
-								{% else %}
-								{%if m.is_secretary%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-							<td class="t-a-c">
-								<label for="convener{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
-									<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}> 
-								{% else %}
-								{%if m.is_convener%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-							<td class="t-a-c">
 								<label for="admin{{m.id_user.id}}">
 								{% if rel_user.is_admin %}
 									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
@@ -198,8 +166,8 @@
 					<div class="icons-info">
 		                <span>{% trans "Info" %}:</span>
 		                <span title="Pertenece al grupo. Aparece en las actas"><i class="glyphicon glyphicon-user"></i> {% trans "Miembro" %}</span>
-		                <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans "Redactor" %}</span>
-		                <span title="Puede convocar reuniones"><span class="glyphicon glyphicon-calendar"></span> {% trans "Convocador de reuniones" %}</span>
+		                <!-- <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans "Redactor" %}</span>
+		                <span title="Puede convocar reuniones"><span class="glyphicon glyphicon-calendar"></span> {% trans "Convocador de reuniones" %}</span> -->
 		                <span title="El usuario pude agregar usuarios y roles"><i class="glyphicon glyphicon-wrench"></i> {% trans "Administrador" %}</span>
 		                <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span>
 		            </div>
@@ -317,7 +285,7 @@
 <script src="{{STATIC_PREFIX}}js/vendor/mustache.js"></script>
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
-		var message = "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.";
+		var message = "{% trans 'Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.' %}";
 		$("#message-search").html(message);
 		$("#admin-roles").addClass("active");
 		$(".icons-info span, .username-info, .info-title, .resend").tooltip();
@@ -329,26 +297,26 @@
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
 	    	switch(op){
-	    		case 1 : return "Miembro. Los miembros aparecen en las actas"; break;
-	    		case 2 : return "Redactor de Actas"; break;
-	    		case 3 : return "Creador de reuniones para &eacute;ste grupo."; break;
-	    		case 4 : return "Administrador de &eacute;ste grupo"; break;
+	    		case 1 : return "{% trans 'Miembro. Los miembros aparecen en las actas' %}"; break;
+	    		case 2 : return "{% trans 'Redactor de Actas' %}"; break;
+	    		case 3 : return "{% trans 'Creador de reuniones para &eacute;ste grupo.' %}"; break;
+	    		case 4 : return "{% trans 'Administrador de &eacute;ste grupo' %}"; break;
 	    	}
 	    }
 	    function callbackSetRole(data) {
 	    	if (data["saved"]){
-		    	setAlertMessage("Permiso agregado", data['u'] + " ahora es " + getRoleName(data['role']))
+		    	setAlertMessage("{% trans 'Permiso agregado' %}", data['u'] + " ahora es " + getRoleName(data['role']))
 		    }
 		    else{
-		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
 		    }
 	    }
 	    function callbackRemoveRole(data) {
 	    	if (data["saved"]){
-		    	setAlertMessage("Rol removido", data['u'] + " ya no es " + getRoleName(data['role']))
+		    	setAlertMessage("{% trans 'Rol removido' %}", data['u'] + " ya no es " + getRoleName(data['role']))
 		    }
 		    else{
-		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
 		    }
 	    }
 	    function setRole(e) {
@@ -357,16 +325,20 @@
 	    	var role_name = checkbox.attr("data-role-name")
 	    	var uid = checkbox.attr("data-uid")
 	    	if(checkbox.is(":checked")){
-	    		sendAjax("/groups/{{group.slug}}/setRole",
-	    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
+	    		sendNewAjax("/groups/{{group.slug}}/setRole",
+	    			{"role":role, "uid": uid, "remove": 0},
+	    			callbackSetRole,
+	    			{"load_elem": "#ac-load", "method":"post"})
 	    	}
 	    	else{
-	    		if(confirm("Seguro que desea eliminarle este rol?")){
-	    			sendAjax("/groups/{{group.slug}}/setRole",
-	    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
+	    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
+	    			sendNewAjax("/groups/{{group.slug}}/setRole",
+	    				{"role":role, "uid": uid, "remove": 1},
+	    				callbackRemoveRole,
+	    				{"load_elem": "#ac-load", "method":"post"})
 	    		}
 	    		else{
-	    			checkbox.attr("checked","checked")
+	    			checkbox.attr("checked","checked");
 	    		}
 	    	}
 	    }
