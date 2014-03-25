@@ -25,13 +25,18 @@
 					<th>{% trans 'Precio' %}</th>
 				</tr>
 
-				{% for service in category.services_service_category.get_all_active %}
-					<tr>
+				{% for service in category.services_service_category.get_all_active_orderer %}
+					<tr id="{{ service.code }}" >
 						<td>{{ service.name }}</td> 
 						<td>{{ service.description }}</td>
-						<td>{{ service.price_per_period }}/{{ service.period.name }}</td>
+						<td>${{ service.price_per_period|floatformat }} / {{ service.period.name }}</td>
 					</tr>
 				{% endfor %}
+				<tr>
+					<td>{% trans 'Mas de 35' %}</td> 
+					<td><input type='text' placeholder="Cantidad"/></td>
+					<td>$2900 / mes</td>
+				</tr>
 				</table>
 			</div>
 		</div>

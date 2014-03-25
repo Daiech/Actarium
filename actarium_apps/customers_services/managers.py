@@ -24,4 +24,5 @@ class CustomersServicesManager(GenericManager):
     pass
 
 class ServicesManager(GenericManager):
-    pass
+    def get_all_active_orderer(self):
+        return self.filter(is_active=True).distinct().order_by('code')
