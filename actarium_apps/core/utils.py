@@ -1,4 +1,4 @@
-from actarium_apps.customers_services.models import Customers, CustomersServices, Services,  OrderStatus, CustomerOrders, OrderItems, Addresses
+from actarium_apps.customers_services.models import Customers, CustomersServices, Services,  OrderStatus, CustomerOrders, OrderItems, Addresses, PaymentMethods
 from actarium_apps.organizations.models import Organizations
 from .models import *
 
@@ -9,7 +9,11 @@ def create_default_service(user,org):
             customer = actarium_customer.customer
         else:
             address = Addresses.objects.create(country="",province="",city="")
+            payment_method = PaymentMethods.objects.get_or_none(code="P001")
+            if payment_method == None:
+                return False, "No se encontro el metodo de pago"
             customer = Customers.objects.create(name=user.get_full_name(),email=user.email,address=address)
+            customer.payment_methods.add(payment_method)
             ActariumCustomers.objects.create(user=user,customer=customer)
         
         
