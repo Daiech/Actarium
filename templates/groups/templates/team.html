@@ -165,11 +165,11 @@
 					</table>
 					<div class="icons-info">
 		                <span>{% trans "Info" %}:</span>
-		                <span title="Pertenece al grupo. Aparece en las actas"><i class="glyphicon glyphicon-user"></i> {% trans "Miembro" %}</span>
+		                <span title="{% trans 'Miembros que aparecen en las actas' %}"><i class="glyphicon glyphicon-user"></i> {% trans "Aparece en actas" %}</span>
 		                <!-- <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans "Redactor" %}</span>
 		                <span title="Puede convocar reuniones"><span class="glyphicon glyphicon-calendar"></span> {% trans "Convocador de reuniones" %}</span> -->
-		                <span title="El usuario pude agregar usuarios y roles"><i class="glyphicon glyphicon-wrench"></i> {% trans "Administrador" %}</span>
-		                <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span>
+		                <span title="{% trans 'El usuario pude agregar miembros, crear actas y administrar la información del grupo' %}"><i class="glyphicon glyphicon-wrench"></i> {% trans "Administrador" %}</span>
+		                <!-- <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span> -->
 		            </div>
 				</section>
 			{% if rel_user.is_admin %}
