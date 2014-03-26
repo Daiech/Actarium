@@ -7,7 +7,7 @@
 	<h3>{% trans 'Precios' %}</h3>
 
 	{% if org %}
-		<a class="btn btn-warning" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Volver' %} <a>
+		<a class="btn btn-default" href="{% url 'core:read_organization_services' org.slug %}"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %} <a>
 	{% endif %}
 
 	<p>{% trans 'Listado de los servicios disponibles' %}</p>
@@ -15,28 +15,27 @@
 	{% for category in services_categories %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3>{{ category.name }}</h3>
+				<h3 class="panel-title">{{ category.name }}</h3>
 			</div>
 			<div class="panel-body">
 				<table class="table">
-				<tr >
-					<th>{% trans 'Name' %} </th>
-					<th>{% trans 'Description' %} </th>
-					<th>{% trans 'Precio' %}</th>
-				</tr>
-
-				{% for service in category.services_service_category.get_all_active_orderer %}
-					<tr id="{{ service.code }}" >
-						<td>{{ service.name }}</td> 
-						<td>{{ service.description }}</td>
-						<td>${{ service.price_per_period|floatformat }} / {{ service.period.name }}</td>
+					<tr >
+						<th>{% trans 'Name' %} </th>
+						<th>{% trans 'Description' %} </th>
+						<th>{% trans 'Precio' %}</th>
 					</tr>
-				{% endfor %}
-				<tr>
-					<td>{% trans 'Mas de 35' %}</td> 
-					<td><input type='text' placeholder="Cantidad"/></td>
-					<td>$2900 / mes</td>
-				</tr>
+					{% for service in category.services_service_category.get_all_active_orderer %}
+						<tr id="{{ service.code }}" >
+							<td>{{ service.name }}</td> 
+							<td>{{ service.description }}</td>
+							<td>${{ service.price_per_period|floatformat }} / {{ service.period.name }}</td>
+						</tr>
+					{% endfor %}
+					<tr>
+						<td>{% trans 'Mas de 35' %}</td> 
+						<td><input type='text' placeholder="Cantidad"/></td>
+						<td>$2900 / {% trans 'mes' %}</td>
+					</tr>
 				</table>
 			</div>
 		</div>
