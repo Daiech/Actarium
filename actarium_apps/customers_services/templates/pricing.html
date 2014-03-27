@@ -17,7 +17,7 @@
 
 <div class="panel panel-default">
 			<div class="panel-heading">
-				<h3>{% trans 'Paquetes' %}</h3>
+				<h3>{% trans 'Paquetes predefinidos' %}</h3>
 			</div>
 			<div class="panel-body">
 				<table class="table">
@@ -25,7 +25,7 @@
 						<tr >
 							<th>{% trans 'Opci&oacute;n' %} </th>
 							<th>{% trans '# Mimembros' %} </th>
-							<th>{% trans 'Total' %}</th>
+							<th>{% trans 'Precio' %}</th>
 							<th>{% trans 'Adquirir' %}</th>
 						</tr>
 					</thead>
@@ -57,7 +57,7 @@
 						<tr>
 							<td>5</td> 
 							<td><input type='text' placeholder="Cantidad mayor que 5"/></td>
-							<td>? / mes</td>
+							<td>---- / mes</td>
 							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
 						</tr>
 					</tbody>

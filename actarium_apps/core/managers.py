@@ -30,3 +30,12 @@ class OrganizationServicesManager(GenericManager):
 
 class ActariumCustomersManager(GenericManager):
     pass
+
+class PackagesManager(GenericManager):
+    pass
+
+class ServicesRangesManager(GenericManager):
+    pass
+
+class DiscountCodesManager(GenericManager):
+    pass
