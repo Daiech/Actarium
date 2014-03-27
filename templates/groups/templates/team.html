@@ -420,34 +420,26 @@
 							<input id="member'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="'+data['iid']+'" checked>\
 						</label>\
 					</td>'+
-					'<td class="t-a-c">\
-						<label for="writer{{m.id_user.id}}">\
-							<input id="writer'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="'+data['iid']+'">\
-						</label>\
-					</td>'+
-					'<td class="t-a-c"><label for="convener'+data['iid']+'">'+
-					'<input  id="convener'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="'+data['iid']+'" checked>'+
-					'</label></td>'+
 					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
 						'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
 					'</label></td>'+
 					'</tr>';
 				$("#table-roles").append(tr);
-				setAlertMessage("Invitado",data['message'])
+				setAlertMessage("{% trans 'Invitado' %}", data['message'])
 	            showIconCloseOnHover()
 				$("td input[type='checkbox']").on("click", setRole);
 	            $("#newmember").val("");
 	        }else{//EL USUARIO YA ESTA INVITADO
 	            if(data["message"]){
-	                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
+	                setAlertError("{% trans 'Informaci&oacute;n' %}","("+data['email']+") "+data['message'])
 	            }
 	            else{
 	                //si no hay mensaje, error desconocido
 	                if(data["error"]){
-	                	setAlertError("Ups! Algo sali&oacute; mal :(",data['error'])
+	                	setAlertError("{% trans 'Ups! Algo sali&oacute; mal :(' %}",data['error'])
 	                }
 	                else{
-	                	setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
+	                	setAlertError("{% trans 'Ups! Algo sali&oacute; mal :(' %}","{% trans 'Por favor recarga la p&aacute;gina e intenta de nuevo' %}")
 	                }
 	            }
 	        }
