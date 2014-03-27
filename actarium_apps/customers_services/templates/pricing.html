@@ -7,40 +7,105 @@
 	<h3>{% trans 'Precios' %}</h3>
 
 	{% if org %}
-		<a class="btn btn-warning" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Volver' %} <a>
+		<a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Volver' %} </a>
 	{% endif %}
 
 	<p>{% trans 'Listado de los servicios disponibles' %}</p>
 
-	{% for category in services_categories %}
-		<div class="panel panel-default">
+
+<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3>{{ category.name }}</h3>
+				<h3>{% trans 'Paquetes' %}</h3>
 			</div>
 			<div class="panel-body">
 				<table class="table">
-				<tr >
-					<th>{% trans 'Name' %} </th>
-					<th>{% trans 'Description' %} </th>
-					<th>{% trans 'Precio' %}</th>
-				</tr>
-
-				{% for service in category.services_service_category.get_all_active_orderer %}
-					<tr id="{{ service.code }}" >
-						<td>{{ service.name }}</td> 
-						<td>{{ service.description }}</td>
-						<td>${{ service.price_per_period|floatformat }} / {{ service.period.name }}</td>
-					</tr>
-				{% endfor %}
-				<tr>
-					<td>{% trans 'Mas de 35' %}</td> 
-					<td><input type='text' placeholder="Cantidad"/></td>
-					<td>$2900 / mes</td>
-				</tr>
+					<thead>
+						<tr >
+							<th>{% trans 'Opci&oacute;n' %} </th>
+							<th>{% trans '# Mimembros' %} </th>
+							<th>{% trans 'Total' %}</th>
+							<th>{% trans 'Adquirir' %}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td> 
+							<td>5</td>
+							<td>$25,000 / mes</td>
+							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+						</tr>
+						<tr>
+							<td>2</td> 
+							<td>15</td>
+							<td>$61,500 / mes</td>
+							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+						</tr>
+						<tr>
+							<td>3</td> 
+							<td>30</td>
+							<td>$99,000 / mes</td>
+							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+						</tr>
+						<tr>
+							<td>4</td> 
+							<td>40</td>
+							<td>$116,000 / mes</td>
+							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+						</tr>
+						<tr>
+							<td>5</td> 
+							<td><input type='text' placeholder="Cantidad mayor que 5"/></td>
+							<td>? / mes</td>
+							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
-	{% endfor %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3>{% trans 'Listado de precios por miembros' %}</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<thead>
+						<tr >
+							<th>{% trans 'Name' %} </th>
+							<th>{% trans 'Description' %} </th>
+							<th>{% trans 'Precio' %}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="{{ S000.code }}" >
+							<td>{{ S000.name }}</td> 
+							<td>{{ S000.description }}</td>
+							<td>${{ S000.price_per_period|floatformat }} / {{ S000.period.name }}</td>
+						</tr>
+						<tr id="{{ S004.code }}" >
+							<td>{{ S004.name }}</td> 
+							<td>{{ S004.description }}</td>
+							<td>${{ S004.price_per_period|floatformat }} / {{ S000.period.name }}</td>
+						</tr>
+						<tr id="{{ S003.code }}" >
+							<td>{{ S003.name }}</td> 
+							<td>{{ S003.description }}</td>
+							<td>${{ S003.price_per_period|floatformat }} / {{ S000.period.name }}</td>
+						</tr>
+						<tr id="{{ S002.code }}" >
+							<td>{{ S002.name }}</td> 
+							<td>{{ S002.description }}</td>
+							<td>${{ S002.price_per_period|floatformat }} / {{ S000.period.name }}</td>
+						</tr>
+						<tr id="{{ S001.code }}" >
+							<td>{{ S001.name }}</td> 
+							<td>{{ S001.description }}</td>
+							<td>${{ S001.price_per_period|floatformat }} / {{ S000.period.name }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	
 
 {% endblock %}
 
