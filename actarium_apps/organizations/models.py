@@ -34,9 +34,9 @@ class OrganizationsManager(GenericManager):
 
 
 class Organizations(models.Model):
-    name = models.CharField(max_length=150, verbose_name="Nombre")
-    slug = models.SlugField(max_length=150, unique=True, verbose_name="org_slug")
-    description = models.TextField(blank=True)
+    name = models.CharField(max_length=100, verbose_name="Nombre")
+    slug = models.SlugField(max_length=120, unique=True, verbose_name="org_slug")
+    description = models.TextField(blank=True, max_length=100)
     image_path = ImageWithThumbsField(upload_to="orgs_img", sizes=settings.ORG_IMAGE_SIZE, verbose_name="org_image", null=True, blank=True, default=settings.ORG_IMAGE_DEFAULT)
     
     is_archived = models.BooleanField(default=False)

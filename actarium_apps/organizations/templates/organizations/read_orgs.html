@@ -14,8 +14,7 @@
                 <h3 class="panel-title">
                     <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
                     {% if user_is_admin %}
-                    <span><a href="{% url 'profile_org' org.slug %}"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="{% url 'delete_org' org.slug %}"><span class="glyphicon glyphicon-remove"></span></a></span>
+                    <span><a href="{% url 'profile_org' org.slug %}"><i class="glyphicon glyphicon-cog"></i></a></span>
                     {% endif %}
                 </h3>
             </span>

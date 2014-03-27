@@ -4,51 +4,47 @@
 
 {% block content_menu %}
 
-<h3>
-	{% trans 'Servicios' %} 
-</h3>
-
-{% if show_all %}
-	<a class="btn btn-warning" href="{% url 'core:read_organizations_services' %}"> {% trans 'Ver todos' %} <a>
-{% endif %}
-
-
-<p>{% trans 'Listado de servicios que ofrece actarium' %} </p>
+	<h3>{% trans 'Servicios' %}</h3>
+	{% if show_all %}
+		<a class="btn btn-warning" href="{% url 'core:read_organizations_services' %}"> {% trans 'Ver todos' %} <a>
+	{% endif %}
+	<p>{% trans 'Listado de servicios que ofrece actarium' %} </p>
 
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<a href="{{ org.get_absolute_url }}"><h3>{{ org.name }}</h3></a>
+			<a href="{{ org.get_absolute_url }}"><h3 class="panel-title">{{ org.name }}</h3></a>
 		</div>
 		<div class="panel-body">
 			<table class="table">
-			<tr>
-				<th>{% trans 'Nombre del servicio' %}</th>
-				<th>{% trans 'Cantidad' %} </th>
-				<th>{% trans 'Fecha de expiraci&oacute;n' %}</th>
-				{% if is_creator  %}
-					<th>{% trans 'Acci&oacute;n' %}</th>
-				{% endif %}
-			</tr>
-			{% for org_service in  org.organizationservices_organization.all %}
 				<tr>
-				<td>{{ org_service.service.service_name }}</td>
-				<td>{{ org_service.service.quantity }}</td>
-				<td>{{ org_service.service.date_expiration }}</td>
-				{% if is_creator %}
-					<td> <a class="btn btn-success" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a></td>	
-				{% endif %}
+					<th>{% trans 'Nombre del servicio' %}</th>
+					<th>{% trans 'Cantidad' %} </th>
+					<th>{% trans 'Fecha de expiraci&oacute;n' %}</th>
+					{% if is_creator  %}
+						<th>{% trans 'Acci&oacute;n' %}</th>
+					{% endif %}
 				</tr>
-			{% endfor %}
+				{% for org_service in  org.organizationservices_organization.all %}
+					<tr>
+					<td>{{ org_service.service.service_name }}</td>
+					<td>{{ org_service.service.quantity }}</td>
+					<td>{{ org_service.service.date_expiration }}</td>
+					{% if is_creator %}
+						<td> <a class="btn btn-default" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a></td>	
+					{% endif %}
+					</tr>
+				{% endfor %}
 			</table>
 		</div>
 	</div>
 
-
 {% endblock %}
 
 {%block style_menu %}
-
+<style type="text/css">
+	
+</style>
 {% endblock %}
 
 {% block js_menu %}

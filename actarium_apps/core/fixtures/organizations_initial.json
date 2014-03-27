@@ -34,17 +34,5 @@
 			"name": "Miembro",
 			"description": "Este usuario hace parte de la organizacion"
 		}
-	},
-	{
-		"pk": 4,
-		"model": "organizations.organizationsroles",
-		"fields": {
-			"date_added": "2014-03-16T16:25:28Z",
-			"date_modified": "2014-03-16T16:25:28Z",
-			"is_active": true,
-			"code":"is_owner",
-			"name": "Propietario",
-			"description": "Este usuario es propietario de la organizacion y puede comprar servicios"
-		}
 	}
 ]

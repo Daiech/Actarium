@@ -7,25 +7,52 @@
 	{% if update %}
     	{% include "organizations/form_org.html" %}
     {% else %}
-        <span class="pull-left b"><img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}"></span>
-        <div class="pull-left org-info">
-        	<h3>{{ org.name }}</h3>
-        	<p>{{ org.description }}</p>
-        	<div class="">
-	        	<div style="overflow:hidden">
-	        		<span class="pull-left">{% trans 'Miembros' %}</span>
-			    	<span class="pull-right">{{ current_members }} {% trans 'de' %} {{ max_members }}</span>
-	        	</div>
-		    	<div class="progress">
-				  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
-				    <span class="sr-only"></span>
-				  </div>
-				</div>
-        		{% if user_is_admin %}
-                <p><a href="{% url 'profile_org' org.slug %}?edit" class="btn">{% trans 'Editar perfil' %}</a></p>
-                {% endif %}
-        	</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'Información de organización' %}</h3>
+            </div>
+            <div class="panel-body">
+                <span class="pull-left b"><img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}"></span>
+                <div class="pull-left org-info">
+                    <h3>{{ org.name }}</h3>
+                    <p>{{ org.description }}</p>
+                    <div class="box org-num-members">
+                        <div class="box">
+                            <span class="pull-left">{% trans 'Miembros' %}</span>
+                            <span class="pull-right">{{ current_members }} {% trans 'de' %} {{ max_members }}</span>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
+                            <span class="sr-only"></span>
+                          </div>
+                        </div>
+                    </div>
+                    {% if user_is_admin %}
+                    <p>
+                        <a href="{% url 'profile_org' org.slug %}?edit" class="btn">
+                            <span class="glyphicon glyphicon-edit"></span> {% trans 'Editar perfil' %}
+                        </a>
+                        <a class="btn btn-default" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
+
+        {% if user_is_admin %}
+        <div class="">
+            <div class="panel panel-danger">
+              <div class="panel-heading">
+                <h3 class="panel-title">{% trans 'Eliminar cuenta' %}</h3>
+              </div>
+              <div class="panel-body">
+                <p>{% trans 'Las organizaciones no se pueden eliminar del todo.' %}</p>
+                <p>{% trans 'Puedes archivar ésta organización para que desaparezca de tu lista de organizaciones.' %}</p>
+                <a href="{% url 'delete_org' org.slug %}" class="btn btn-sm"><span class="glyphicon glyphicon-remove"></span> {% trans 'Archivar organización' %}</a>
+              </div>
+            </div>
+        </div>
+        {% endif %}
 	{% endif %}
     </div>
 {% endblock %}
@@ -34,7 +61,9 @@
 <style>
 	.org-profile form label{width: 160px;}
 	.org-profile .org-info{margin-left: 10px;min-width: 180px;}
-	.org-profile .org-info h3{margin-top: 0}
+    .org-profile .org-info h3{margin-top: 0}
+	.org-profile .org-num-members{max-width: 200px}
+    #content_menu > div{border:none;}
 </style>
 {% endblock %}
 {% block js_menu %}

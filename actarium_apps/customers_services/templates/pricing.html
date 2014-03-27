@@ -7,7 +7,9 @@
 	<h3>{% trans 'Precios' %}</h3>
 
 	{% if org %}
-		<a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Volver' %} </a>
+
+		<a class="btn btn-default" href="{% url 'core:read_organization_services' org.slug %}"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %} </a>
+
 	{% endif %}
 
 	<p>{% trans 'Listado de los servicios disponibles' %}</p>
