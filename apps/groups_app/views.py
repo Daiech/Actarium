@@ -383,53 +383,6 @@ def showGroup(request, slug):
         raise Http404
 
 
-@login_required(login_url='/account/login')
-def getMembers(request):
-    saveViewsLog(request, "apps.groups_app.views.getMembers")
-    if request.is_ajax():
-        if request.method == "GET":
-            try:
-                search = request.GET.get('search')
-                valid_email = validateEmail(search)
-                if valid_email:
-                    try:
-                        ans = User.objects.get(email=search)
-                    except User.DoesNotExist:
-                        ans = 1  # email valido, pero no es usuario
-                else:
-                    try:
-                        ans = User.objects.get(username=search)
-                    except User.DoesNotExist:
-                        ans = 2  # no existe el usuario
-                if ans != 1 and ans != 2:
-                    message = {
-                        "user_id": ans.id,
-                        "mail_is_valid": True,
-                        "username": ans.username,
-                        "is_user": True,
-                        "mail": ans.email,
-                        "gravatar": showgravatar(ans.email, 30)}
-                else:
-                    if ans == 1:  # email valido, pero no es usuario
-                        message = {"user_id": search, "mail_is_valid": True,
-                                    "mail": search, "username": search.split("@")[0].title(),
-                                    "gravatar": showgravatar(search, 30), "is_user": False}
-                    else:
-                        if ans == 2:  # no existe el usuario e email invalido
-                            message = {"mail_is_valid": False}
-                        else:
-                            message = False
-            except Exception:
-                message = False
-            return HttpResponse(json.dumps(message), mimetype="application/json")
-        else:
-            message = False
-        return HttpResponse(message)
-    else:
-        message = False
-        return HttpResponse(message)
-
-
 def isMemberOfGroup(user, group):
     try:
         _member = getRelUserGroup(user, group)
@@ -543,7 +496,7 @@ def newInvitationToGroup(request):
             else:
                 response = {"error": _(u"No tienes permiso para hacer eso")}
         else:
-            response = "Error invitacion, no puedes entrar desde aqui"
+            response = _(u"Error invitación, no puedes entrar desde aquí")
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 

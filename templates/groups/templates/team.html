@@ -1,43 +1,47 @@
 {% extends "groups/menu.html" %}
 {% load gravatartag %}
 {% load i18n %}
-
 {% block toolbar_content %}
-{% if rel_user.is_admin %}
-<ul class="list-unstyled">
-	<li class="dropdown">
-	    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
-	        <span class="glyphicon glyphicon-plus"></span> {% trans "Agregar miembro" %}
-	        <span class="caret"></span>
-	    </a>
-	    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-	        <li class="taling">
-	        	<div class="header-title">
-	            	<span>{% trans "Miembros" %}</span>
-	            	<div id="close-add-member" class="close pull-right glyphicon glyphicon-remove"></div>
-	        	</div>
-	        </li>
-	        <li>
-	            <input type="hidden" id="group_name" value="{{group.name}}">
-	            <input type="hidden" id="group_id" value="{{group.id}}">
-	        	<div class="prelative">
-	                <button id="button-search" class="btn btn-info"><i class="glyphicon glyphicon-search icon-white"></i> </button>
-	                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-	                <span id="load-member"></span>
-	            </div>	
-	        </li>
-	        <li>
-	            <p id="message-search"></p>
-	        </li>
-	        <li>
-	            <ul id="search-result">
-	            	
-	            </ul>
-	        </li>
-	    </ul>
-	</li>
-</ul>
-{%endif%}
+	<ul class="list-unstyled">
+	{% if user_is_org_admin %}
+		<li class="dropdown">
+		    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
+		        <span class="glyphicon glyphicon-plus"></span> {% trans "Agregar miembro" %}
+		        <span class="caret"></span>
+		    </a>
+		    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+		        <li class="taling">
+		        	<div class="header-title">
+		            	<span>{% trans "Miembros" %}</span>
+		            	<div id="close-add-member" class="close pull-right glyphicon glyphicon-remove"></div>
+		        	</div>
+		        </li>
+		        <li>
+		            <input type="hidden" id="group_name" value="{{group.name}}">
+		            <input type="hidden" id="group_id" value="{{group.id}}">
+		        	<div class="prelative">
+		                <button id="button-search" class="btn btn-info"><i class="glyphicon glyphicon-search icon-white"></i> </button>
+		                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+		                <span id="load-member"></span>
+		            </div>	
+		        </li>
+		        <li>
+		            <p id="message-search"></p>
+		        </li>
+		        <li>
+		            <ul id="search-result">
+		            	
+		            </ul>
+		        </li>
+		    </ul>
+		</li>
+	{% endif %}
+	{% if rel_user.is_admin or user_is_org_admin %}
+		<li>
+			<a href="#"><span class="glyphicon glyphicon-plus"></span> {% trans 'Agregar miembro de la organización' %}</a>
+		</li>
+	{% endif %}
+	</ul>
 {% endblock %}
 
 {% block menu_content %}
@@ -228,7 +232,7 @@
     li a span{/*color:black;*/}
     .dropdown-menu li p{color:gray;font-size: 14px;line-height:1.5;margin: 0}
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
-    #add-member{position: static;}
+    #add-member{position: static;cursor: pointer;}
     #add-member-menu{padding: 10px;width: 315px;}
     .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}
     ul#add-member-menu li{margin-bottom: 7px;}
@@ -278,6 +282,7 @@
 {% endblock %}
 
 {% block menu_content_js %}
+<script type="text/javascript" src="http://localhost/clones/jquery-marcopolo/build/jquery.marcopolo.min.js"></script>
 <script type="text/javascript">
 	$("#group-menu-team").addClass("active");
 	$("ul").addClass("list-unstyled");
@@ -292,7 +297,7 @@
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
-		{% if rel_user.is_admin %}
+	{% if rel_user.is_admin or user_is_org_admin %}
 	    showIconCloseOnHover()
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
@@ -408,7 +413,6 @@
 	    }
 	    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
 	        if(data['invited']){    //USUARIO INVITADO
-	        	console.log(data)
 	        	var is_admin = "{{is_admin}}"
 	            var tr = '<tr><td>'+
 						'<div class="username-info user-pend-r">'+
@@ -468,8 +472,7 @@
 	            var uname = $(this).attr("data-username");
 	            var group_id = $("#group_id").val();
 	            var group_name = $("#group_name").val();
-	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},
-	                     "",invitationResult);
+	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},"",invitationResult);
 	            $(this).parent().fadeOut(300, function (e){
 	            	$(this).empty().show().removeClass("user-li");
 	            });
@@ -479,25 +482,29 @@
 	    }
 	    function listMembers(data){//lista los usuarios disponibles a invitar
 	        if(data){
-	            p="";
-	            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
-	                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
-	                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
-	            }
-	            else{//el correo es invalido o no hay resultados de usuarios existentes
-	            	$("#message-search").html("Asegurate de escribir correctamente el correo electr&oacute;nico.");
-	                $("#search-result").html("<li style='list-style:none'>"+
-	                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
-	                                            "</a>"+
-	                                        "</li>")
-	            }
+	        	if (data.forbbiden){
+	        		setAlertError("{% trans 'Error' %}", data.forbbiden);
+	        	}else{
+		            p="";
+		            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
+		                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
+		                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
+		            }
+		            else{//el correo es invalido o no hay resultados de usuarios existentes
+		            	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electr&oacute;nico.' %}");
+		                $("#search-result").html("<li style='list-style:none'>"+
+		                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
+		                                            "</a>"+
+		                                        "</li>")
+		            }
+	        	}
 	        }else{//error en el server
 	            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
 	        }
 	    }
 	    function getSearch () {
-	    	var user=$("#newmember").val()
-	        sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
+	    	var user = $("#newmember").val();
+	        sendNewAjax("{% url 'get_users_list' group.organization.slug  %}", {search: user}, listMembers);
 	    }
 	    function searchMember(e){//INVITACIONES MAIN
 	    	e.preventDefault();
@@ -580,7 +587,7 @@
 	    	getSearch();
 	    	$("#newmember").focus();
 	    });
-	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
+	    $("#newmember").on("keyup", searchMember);//INVITACIONES MAIN 
 	    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
 	        $("#add-member-menu").addClass("disblock");
 	        $("#newmember").focus();//give the focus to the input to search members
@@ -588,6 +595,7 @@
 	    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
 	        $("#add-member-menu").removeClass("disblock");//Close the dropdown menu to add members
 	    });
+
 		
 		/*Dropdown Actarium*/
 	    function restartMenus(){
@@ -609,7 +617,7 @@
     		restartMenus();
 		});
 		/*Close Dropdown Actarium*/
-		{% endif %}
+	{% endif %}
 		$(".dropdown-body ul li a").hover(
 			function (){
 				$(this).find("i").addClass("icon-white");

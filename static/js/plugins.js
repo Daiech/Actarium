@@ -202,24 +202,25 @@ function sendNewAjax(url, params, myCallback, args){
     if (typeof args === "undefined") {
         load_elem = "#ac-load";
     } else {
-        load_elem = args.load_elem;
+        load_elem = args.load_elem || "#ac-load";
     }
-    // $(load_elem).show().html('Cargando...');
     $(load_elem).fadeIn().html('<img src="/static/img/load.gif" />');
     if (typeof args === "undefined" || args.method === "get") {
         $.get(url, params)
-                .done(function(data) {
+        .done(function(data) {
             myCallback(data);
             $(load_elem).fadeOut();
-        }).fail(function(error) {
+        })
+        .fail(function(error){
             console.log(error);
         });
     } else if (args.method === "post") {
         $.post(url, params)
-                .done(function(data) {
+        .done(function(data) {
             myCallback(data);
             $(load_elem).fadeOut();
-        }).fail(function(error) {
+        })
+        .fail(function(error) {
             console.log(error);
         });
     }

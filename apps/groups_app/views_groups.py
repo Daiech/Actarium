@@ -51,11 +51,13 @@ def showTeamGroup(request, slug_group):
     except Exception:
         u_selected = None
     g = getGroupBySlug(slug_group)
+    user_is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+    print user_is_org_admin
     _user_rel = getRelUserGroup(request.user, g.id)
     if _user_rel:
         if _user_rel.is_active:
             members = rel_user_group.objects.filter(id_group=g.id).order_by("-is_active")
-            ctx = {"group": g, "rel_user": _user_rel, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
+            ctx = {"user_is_org_admin": user_is_org_admin, "group": g, "rel_user": _user_rel, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
             return render_to_response('groups/templates/team.html', ctx, context_instance=RequestContext(request))
         else:
             raise Http404
