@@ -430,7 +430,7 @@ article{
     margin: 0 auto;
     margin-bottom: 10px;
     min-height: 400px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     padding-bottom: 20px;
     width: 100%;
 }

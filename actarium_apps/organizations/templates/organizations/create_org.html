@@ -19,8 +19,10 @@
         <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
         	{% csrf_token %}
         	<div class="white-box-container">
-        		
-        	{{ form.as_p }}<br><br>
+        	<table class="">
+        	{{ form.as_table }}
+            </table>
+            <br><br>
 			<input type="hidden" value="{{ref}}" name="ref" >
 			<a href="{% url 'home' %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}</a>
 			<input type="submit" class="btn btn-large btn-info db" value="{% trans 'Crear' %}" >

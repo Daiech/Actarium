@@ -32,9 +32,7 @@
                         <a href="{% url 'profile_org' org.slug %}?edit" class="btn">
                             <span class="glyphicon glyphicon-edit"></span> {% trans 'Editar perfil' %}
                         </a>
-                        <a href="{% url 'profile_org' org.slug %}?edit" class="btn">
-                            <span class="glyphicon glyphicon-edit"></span> {% trans 'Editar perfil' %}
-                        </a>
+                        <a class="btn btn-default" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a>
                     </p>
                     {% endif %}
                 </div>
