@@ -1,5 +1,5 @@
 {% extends "organizations/menu.html" %}
-{% load i18n %}
+{% load i18n pricing %}
 {% block TITLE %}{% trans 'Precios' %}{% endblock %}
 
 {% block content_menu %}
@@ -30,35 +30,19 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td> 
-							<td>5</td>
-							<td>$25,000 / mes</td>
-							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
-						</tr>
-						<tr>
-							<td>2</td> 
-							<td>15</td>
-							<td>$61,500 / mes</td>
-							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
-						</tr>
-						<tr>
-							<td>3</td> 
-							<td>30</td>
-							<td>$99,000 / mes</td>
-							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
-						</tr>
-						<tr>
-							<td>4</td> 
-							<td>40</td>
-							<td>$116,000 / mes</td>
-							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
-						</tr>
+						{% for package in packages %}
+							<tr>
+								<td>{{ package.code }}</td>
+								<td>{{ package.number_of_members }}</td>
+								<td>${{ package.number_of_members|total_price|floatformat }} / {{ package.service.period.name }}</td>
+								<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+							</tr>
+						{% endfor %}
 						<tr>
 							<td>5</td> 
-							<td><input type='text' placeholder="Cantidad mayor que 5"/></td>
-							<td>---- / mes</td>
-							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+							<td><input id="other_quantity" type="number" name="quantity" min="5" max="300" placeholder="{% trans 'N&uacute;mero de miembros' %}" ></td>
+							<td>$<span id="other_quantity_price" >---</span> / mes</td>
+							<td><a id="other_quantity_button" class="btn" href="{% url 'core:read_organization_services' org.slug %}" disabled="disabled"> {% trans 'Adquirir' %} </a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -121,6 +105,27 @@
             $(".org-menu-container #org-services").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
             //$(".group-permissions > span, .group-name, .group-members-num").tooltip();
+            
+            function setOtherQuantityPrice(data){
+            	if (data.Error){
+            		$('#other_quantity_price').html('---')
+            		$("#other_quantity_button").attr("disabled", "disabled");
+            	}
+            	else{
+            		$('#other_quantity_price').html(data.quantity)
+            		$("#other_quantity_button").removeAttr("disabled");
+            	}
+            }
+
+			$("#other_quantity").on("blur",function(){
+				other_quantity = $(this).val()
+				console.log(other_quantity)
+				sendNewAjax("{% url 'core:get_total_price' %}",
+					{"quantity":other_quantity},
+					setOtherQuantityPrice,
+					{"method":"post"})
+			});
+            
         });
     </script>
 {% endblock %}

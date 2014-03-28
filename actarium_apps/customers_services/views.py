@@ -1,8 +1,9 @@
+#encoding:utf-8
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-
+from actarium_apps.core.models import Packages
 
 @login_required()
 def read_pricing(request, slug_org):
@@ -10,6 +11,8 @@ def read_pricing(request, slug_org):
         org = request.user.organizationsuser_user.get_org(slug=slug_org)
         if org and org.has_user_role(request.user,'is_creator'):
             is_creator = True
+
+        packages = Packages.objects.get_all_active().order_by('code')
 
         S000 = Services.objects.get_or_none(code='S000')
         S001 = Services.objects.get_or_none(code='S001')
