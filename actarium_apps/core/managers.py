@@ -35,7 +35,36 @@ class PackagesManager(GenericManager):
     pass
 
 class ServicesRangesManager(GenericManager):
-    pass
+
+    def get_service(self,quantity):
+        quantity = int(quantity)
+        service_range = self.get_or_none(upper__gte=quantity,lower__lte=quantity)
+        if service_range:
+            service = service_range.service
+            return service
+        return None
+
+
+    def get_total_price(self,quantity):
+        quantity = int(quantity)
+        service = self.get_service(quantity)
+        if service:
+            service_price = service.price_per_period
+            total = service_price*quantity
+            return total
+        else:
+            return None
+
+    def get_total_price_formated(self,quantity):
+        quantity = int(quantity)
+        service = self.get_service()
+        if service:
+            total_price = self.get_total_price(quantity)
+            if total_price:
+                period = service.period.name
+                total = "$%.0f / %s"%(total_price,period)
+                return total
+        return "Valor no determinado"
 
 class DiscountCodesManager(GenericManager):
     pass
