@@ -2,8 +2,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+
 from .models import *
 from actarium_apps.core.models import Packages
+from actarium_apps.core.forms import OrderMembersServiceForm
 
 @login_required()
 def read_pricing(request, slug_org):
@@ -23,6 +25,9 @@ def read_pricing(request, slug_org):
         S006 = Services.objects.get_or_none(code='S006')
 
         services_categories = ServicesCategories.objects.filter(is_active=True)
+
+        order_members_form  = OrderMembersServiceForm()
+
         return render(request,'pricing.html', locals())
     raise Http404
 

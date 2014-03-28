@@ -3,6 +3,31 @@
 {% block TITLE %}{% trans 'Precios' %}{% endblock %}
 
 {% block content_menu %}
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        formulario
+        <form class="form-horizontal" method="POST">
+            {% csrf_token %}
+            <table>{{ order_members_form }}</table>
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal -->
+
 
 	<h3>{% trans 'Precios' %}</h3>
 
@@ -35,14 +60,20 @@
 								<td>{{ package.code }}</td>
 								<td>{{ package.number_of_members }}</td>
 								<td>${{ package.number_of_members|total_price|floatformat }} / {{ package.service.period.name }}</td>
-								<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+								<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"> 
+									{% trans 'Adquirir' %} 
+									</button>
+								</td>
 							</tr>
 						{% endfor %}
 						<tr>
 							<td>5</td> 
 							<td><input id="other_quantity" type="number" name="quantity" min="5" max="300" placeholder="{% trans 'N&uacute;mero de miembros' %}" ></td>
 							<td>$<span id="other_quantity_price" >---</span> / mes</td>
-							<td><a id="other_quantity_button" class="btn" href="{% url 'core:read_organization_services' org.slug %}" disabled="disabled"> {% trans 'Adquirir' %} </a></td>
+							<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="other_quantity_button"  disabled="disabled"> 
+								{% trans 'Adquirir' %} 
+								</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
