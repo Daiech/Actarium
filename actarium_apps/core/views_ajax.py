@@ -12,14 +12,20 @@ def get_total_price(request):
     if request.is_ajax():
         if request.method == "POST":
             quantity = request.POST.get('quantity')
-            if quantity:
-                total_price = ServicesRanges.objects.get_total_price(quantity)
-                if total_price:
-                    message = {'quantity': total_price}
-                else:
-                    message = {'quantity': "No disponible"}
+
+            if quantity and not quantity=="":
+                try:
+                    quantity = int(quantity)
+                    total_price = ServicesRanges.objects.get_total_price(quantity)
+                    if total_price:
+                        message = {'quantity': total_price}
+                    else:
+                        message = {'Error': _( "(No disponible)" )}
+                except:
+                    message = {'Error': _(" (Introduce un numero)" )}
+                    return HttpResponse(json.dumps(message), mimetype="application/json")
             else:
-                message = {"Error": _("Error")}
+                message = {"Error":  _(" (Introduce un numero)" )}
             return HttpResponse(json.dumps(message), mimetype="application/json")
         else:
             message = False

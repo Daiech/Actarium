@@ -42,7 +42,7 @@
 							<td>5</td> 
 							<td><input id="other_quantity" type="number" name="quantity" min="5" max="300" placeholder="{% trans 'N&uacute;mero de miembros' %}" ></td>
 							<td>$<span id="other_quantity_price" >---</span> / mes</td>
-							<td><a class="btn" href="{% url 'core:read_organization_services' org.slug %}"> {% trans 'Adquirir' %} </a></td>
+							<td><a id="other_quantity_button" class="btn" href="{% url 'core:read_organization_services' org.slug %}" disabled="disabled"> {% trans 'Adquirir' %} </a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -107,7 +107,14 @@
             //$(".group-permissions > span, .group-name, .group-members-num").tooltip();
             
             function setOtherQuantityPrice(data){
-            	$('#other_quantity_price').html(data.quantity)
+            	if (data.Error){
+            		$('#other_quantity_price').html('---')
+            		$("#other_quantity_button").attr("disabled", "disabled");
+            	}
+            	else{
+            		$('#other_quantity_price').html(data.quantity)
+            		$("#other_quantity_button").removeAttr("disabled");
+            	}
             }
 
 			$("#other_quantity").on("blur",function(){
