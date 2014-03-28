@@ -36,19 +36,41 @@
 		    </ul>
 		</li>
 	{% endif %}
-	{% if rel_user.is_admin or user_is_org_admin %}
-		<li>
-			<a href="#"><span class="glyphicon glyphicon-plus"></span> {% trans 'Agregar miembro de la organización' %}</a>
-		</li>
-	{% endif %}
 	</ul>
 {% endblock %}
 
 {% block menu_content %}
 	<!-- begin -->
 	<div class="white-box-container">
-		<h4>{% trans "Roles de usuario" %}</h4>
-		<p>{% trans "Éste es tu equipo de trabajo con sus roles en el grupo." %}</p>
+		<div class="box">
+			<div class="pull-left">
+				<h4>{% trans "Roles de usuario" %}</h4>
+				<p>{% trans "Éste es tu equipo de trabajo con sus roles en el grupo." %}</p>
+			</div>
+			<div class="pull-right">
+				<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
+	            <div class="dropdown-container">
+	        		<div class="header-title">
+	                	<span>{% blocktrans with org=group.organization %}Miembros de {{ org }} {% endblocktrans %}</span>
+	                	<div class="close close-popover glyphicon glyphicon-remove"></div>
+	            	</div>
+	            	<div class="dropdown-body">
+	            		<div class="first-menu">	
+	            			<ul class="list-unstyled">
+	            				{% for u in group.organization.get_members %}
+	            				<li class="user-li"><a href="#" class="nud"  data-email="{{ u.email }}" data-username="{{ u.username }}"><img class="img-circle" src="{{ u.email|showgravatar:32 }}" width="32px"> {{ u.get_full_name }}</a></li>
+	            				{% endfor %}
+	            			</ul>
+	            		</div>
+						<div class="second-menu">
+							<div class="">
+	                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
+							</div>
+						</div>
+	            	</div>
+	            </div>
+			</div>
+		</div>
 		<div class="">
 			{% if rel_user.is_admin %}
 			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
@@ -79,7 +101,7 @@
 								<div class="td-info-user">
 									<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
 									{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
-				                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
+				                        <img class="img-circle" style="width:24px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
 				                        <span class="names">
 				                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
 				                        </span>
@@ -87,7 +109,7 @@
 				                    </div>
 				                    <!-- comienza -->
 									{% if rel_user.is_admin %}
-				                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
+				                    <div class="user-config actarium-dropdown" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
 				                    	<a href="#"><i class="glyphicon glyphicon-cog"></i></a>
 				                    </div>
 				                    <div class="dropdown-container">
@@ -111,7 +133,7 @@
 				                    				</li>
 				                    				{%if not m.id_user.is_active%}
 				                    				<li>
-				                    					<a href="#change-names">
+				                    					<a href="#" class="open-second-menu">
 				                    						<i class="glyphicon glyphicon-edit"></i> {% trans "Cambiar nombres" %}
 				                    					</a>
 				                    				</li>
@@ -234,7 +256,7 @@
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
     #add-member{position: static;cursor: pointer;}
     #add-member-menu{padding: 10px;width: 315px;}
-    .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}
+    /*.header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}*/
     ul#add-member-menu li{margin-bottom: 7px;}
     ul#add-member-menu li a:hover, ul#add-member-menu li a:active{color: white}
     .dropdownmenu  * li{list-style:none;text-decoration: none;}
@@ -247,29 +269,8 @@
     #new-user-firstname{margin-bottom: 2px;}
     .user-config{background-color: white; position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
-    
-    /*Dropdown Actarium*/
-    .dropdown-container{display:none;position:absolute;right:0;top:30px;z-index:1001;background-color:rgb(253,253,253);border:solid thin #ccc;box-shadow: 0 5px 10px rgba(0,0,0,0.15);border-radius:3px;padding:10px;width:200px;}
-    .header-title{border-bottom: 1px solid #dcdcdc;height:26px;text-align:center;color:#939393;font-weight: bold;font-size:14px;}
-    .close-popover{position:absolute;right: 10px;top: 10px;}
-    .dropdown-body{margin-top: 10px;}
-    .dropdown-body *{font-size: 14px;}
-    .dropdown-body ul{margin-bottom: 0;}
-    .dropdown-body ul li a{display: block; padding: 5px;}
-    .dropdown-body ul li a:hover{background-color: #00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;}
-    .second-menu{display: none;width:100%}
-    .second-menu label {margin:0;padding: 0;}
-    .second-menu input {width: auto;}
-    .back{margin-top: 5px;padding: 5px;border-radius: 3px;}
-    .back:hover{background-color: #dadada}
-    section{padding-top: 10px;}
-    #toolbar-btn{overflow: visible;}
-
-	@media (max-width: 768px) {
-		.dropdown-container{right: auto;left: 0;}
-	}
-    /*Close Dropdown Actarium*/
-
+    .td-info-user .dropdown-container{right: 0}
+    .btn .caret{margin: 0 !important;}
 	@media (min-width: 480px) {
 		#newmember{width: 74%;}
 		/*#add-member-menu{width: 315px;}*/
@@ -282,7 +283,6 @@
 {% endblock %}
 
 {% block menu_content_js %}
-<script type="text/javascript" src="http://localhost/clones/jquery-marcopolo/build/jquery.marcopolo.min.js"></script>
 <script type="text/javascript">
 	$("#group-menu-team").addClass("active");
 	$("ul").addClass("list-unstyled");
@@ -333,7 +333,7 @@
 	    		sendNewAjax("/groups/{{group.slug}}/setRole",
 	    			{"role":role, "uid": uid, "remove": 0},
 	    			callbackSetRole,
-	    			{"load_elem": "#ac-load", "method":"post"})
+	    			{"method":"post"})
 	    	}
 	    	else{
 	    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
@@ -480,6 +480,7 @@
 	            $("#message-search").html(message)
 	        })
 	    }
+	    sendInvitationOnClick();
 	    function listMembers(data){//lista los usuarios disponibles a invitar
 	        if(data){
 	        	if (data.forbbiden){
@@ -546,7 +547,7 @@
 	    	});
 	    }
 	    function setNewNames(uid, fname, lname){
-	    	
+
 	    }
     	$(".save-names").on("click", function (e){
     		e.preventDefault();
@@ -596,36 +597,7 @@
 	        $("#add-member-menu").removeClass("disblock");//Close the dropdown menu to add members
 	    });
 
-		
-		/*Dropdown Actarium*/
-	    function restartMenus(){
-	    	$(".second-menu").slideUp(200);
-    		$(".first-menu").slideDown(150);
-	    }
-		$(".user-config").on("click", function (e){
-			e.preventDefault();
-			var this_dropdown = $(this).parent().find(".dropdown-container");
-			$(".dropdown-container").not(this_dropdown).hide();//hide every .dropdown-container except this_dropdown
-			this_dropdown.slideToggle(100);
-			restartMenus();
-		});
-		$(".close-popover").on("click", function (e){
-			/*Close dropdown container*/
-			e.preventDefault();
-			e.stopPropagation();
-			$(this).closest(".dropdown-container").hide();
-    		restartMenus();
-		});
-		/*Close Dropdown Actarium*/
 	{% endif %}
-		$(".dropdown-body ul li a").hover(
-			function (){
-				$(this).find("i").addClass("icon-white");
-			},
-			function (){
-				$(this).find("i").removeClass("icon-white");
-			}
-		);
 	});
 </script>
 {% endblock %}

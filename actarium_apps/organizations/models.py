@@ -67,6 +67,9 @@ class Organizations(models.Model):
         else:
             return False
 
+    def get_members(self):
+        return self.organizationsuser_organization.get_members()
+
     def set_role(self, user, **kwargs):
         objs_created = 0
         roles_not_added = []
