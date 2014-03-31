@@ -492,7 +492,7 @@ def newInvitationToGroup(request):
                                 message = "El correo electronico no es valido"
                             else:
                                 message = "Error desconocido. Lo sentimos"
-                    response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+                    response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar, "username": _user.username, "full_name": _user.get_full_name()}
             else:
                 response = {"error": _(u"No tienes permiso para hacer eso")}
         else:
