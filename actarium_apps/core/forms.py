@@ -1,15 +1,21 @@
 #encoding:utf-8
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from actarium_apps.customers_services.models import PaymentMethods
 
 
 class OrderMembersServiceForm(forms.Form):
-    organization = forms.CharField(label=_(u"Organización"), widget=forms.TextInput(attrs={'placeholder': _(u'Organización'), 'autofocus': 'autofocus'}))
+    MONTHS = [('6', '6'), ('9', '9'), ('12', '12'), ('18', '18'), ('24', '24')]
+    organization = forms.CharField(label=_(u"Organización"), widget=forms.HiddenInput()) # attrs={'placeholder': _(u'Organización'), 'autofocus': 'autofocus'}
     number_of_members = forms.CharField(label=_(u"Número de miembros"), widget=forms.TextInput(attrs={'placeholder': _(u'Número de miembros')}))
-    price_per_month = forms.CharField(label=_(u"Precio por mes"), widget=forms.TextInput(attrs={'placeholder': _(u'Precio por mes')}))
-    number_of_months = forms.CharField(label=_(u"Número de meses"), widget=forms.TextInput(attrs={'placeholder': _(u'Número de meses')}))
-    payment_method = forms.CharField(label=_(u"Método de pago"), widget=forms.TextInput(attrs={'placeholder': _(u'Método de pago')}))
+    discount = forms.CharField(label=_(u"Código de descuento"), widget=forms.TextInput(attrs={'placeholder': _(u'Código de descuento')}))
+    number_of_months = forms.ChoiceField(label=_(u"Número de meses"), widget=forms.Select(), choices=MONTHS)
+    payment_method = forms.ModelChoiceField(label=_(u"Método de pago"), queryset=PaymentMethods.objects.none()) #  widget=forms.TextInput(attrs={'placeholder': _(u'Método de pago')})
 
+    # def __init__(self, *args, **kwargs):
+    #     super(OrderMembersServiceForm, self).__init__(*args, **kwargs)
+    #     if "user" in kwargs:
+    #         self.fields['subject'].queryset = kwargs["user"].actariumcustomers_user.all()[0].customer.payment_methods.all()
 
 
 # class newGroupForm(forms.Form):

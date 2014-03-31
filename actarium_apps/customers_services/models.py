@@ -69,7 +69,7 @@ class PaymentMethods(models.Model):
     objects = GenericManager()
 
     def __unicode__(self):
-        return u"[%s] %s" % (self.code,self.name)
+        return u"%s" % (self.name)
     
     
 class Services(models.Model):

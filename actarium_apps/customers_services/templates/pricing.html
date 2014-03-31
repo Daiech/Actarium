@@ -9,19 +9,26 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">Actualizar paquete</h4>
       </div>
       <div class="modal-body">
-        formulario
         <form class="form-horizontal" method="POST">
             {% csrf_token %}
-            <table>{{ order_members_form }}</table>
-        </form>
-        
+            <table id="tableForm" class="table">{{ order_members_form }}
+            </table>
+            <table id="tableResume" class="table">
+
+            <tr><td> Precio por mes: </td><td>  $<strong id="pricePerMonth"></strong></td></tr>
+            <tr><td> Sub total: </td><td>  $<strong id="SubTotal"></strong></td></tr>
+            <tr><td> Descuento: </td><td>  $<strong id="discountValue">0</strong></td></tr>
+            <tr><td> IVA: </td><td> $<strong id="discountValue">0</strong></td></tr>
+            <tr><td> Total a pagar: </td><td> $<strong id="totalPrice"></strong></td></tr>
+
+            </table>     
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Actualizar</button>
       </div>
     </div>
   </div>
@@ -60,7 +67,10 @@
 								<td>{{ package.code }}</td>
 								<td>{{ package.number_of_members }}</td>
 								<td>${{ package.number_of_members|total_price|floatformat }} / {{ package.service.period.name }}</td>
-								<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"> 
+								<td>
+									<button class="btn btn-lg btn-upgrade" 
+										data-number-of-members="{{ package.number_of_members }}" data-total-price="{{package.number_of_members|total_price|floatformat}}" 
+										data-toggle="modal" data-target="#myModal"> 
 									{% trans 'Adquirir' %} 
 									</button>
 								</td>
@@ -70,7 +80,7 @@
 							<td>5</td> 
 							<td><input id="other_quantity" type="number" name="quantity" min="5" max="300" placeholder="{% trans 'N&uacute;mero de miembros' %}" ></td>
 							<td>$<span id="other_quantity_price" >---</span> / mes</td>
-							<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="other_quantity_button"  disabled="disabled"> 
+							<td><button class="btn btn-lg" data-toggle="modal" data-target="#myModal" id="other_quantity_button"  disabled="disabled"> 
 								{% trans 'Adquirir' %} 
 								</button>
 							</td>
@@ -127,7 +137,12 @@
 {% endblock %}
 
 {%block style_menu %}
-
+<style>
+	#tableForm th, #tableForm td{
+		border: 0px;
+	}
+	
+</style>
 {% endblock %}
 
 {% block js_menu %}
@@ -141,22 +156,75 @@
             	if (data.Error){
             		$('#other_quantity_price').html('---')
             		$("#other_quantity_button").attr("disabled", "disabled");
+            		$('#pricePerMonth').html("");
             	}
             	else{
-            		$('#other_quantity_price').html(data.quantity)
+            		$('#other_quantity_price').html(data.quantity);
+            		$('#pricePerMonth').html(data.quantity);
             		$("#other_quantity_button").removeAttr("disabled");
+            		setTotalPrice();
             	}
             }
 
-			$("#other_quantity").on("blur",function(){
+            function setDiscountValue(data){
+            	if (data.Error){
+            		console.log(data.Error)
+            	}
+            	else{
+            		$('#discountValue').html(data.discount_value)
+            		setTotalPrice();
+            	}
+            }
+
+            function setTotalPrice(){
+            	number_of_months = parseInt($('#id_number_of_months').val());
+            	price_per_month = parseInt($('#pricePerMonth').html());
+            	sub_total = number_of_months*price_per_month;
+            	$("#SubTotal").html(sub_total)
+            	discount_value = parseInt($('#discountValue').html());
+            	total_price = sub_total - discount_value
+            	$("#totalPrice").html(total_price)
+
+            }
+
+			$("#other_quantity").on("keyup", function(){
 				other_quantity = $(this).val()
-				console.log(other_quantity)
+				sendNewAjax("{% url 'core:get_total_price' %}",
+					{"quantity":other_quantity},
+					setOtherQuantityPrice,
+					{"method":"post"})
+				$('#id_number_of_members').val(other_quantity);
+			});
+
+            
+			$("#id_number_of_members").on("keyup", function(){
+				other_quantity = $(this).val();
 				sendNewAjax("{% url 'core:get_total_price' %}",
 					{"quantity":other_quantity},
 					setOtherQuantityPrice,
 					{"method":"post"})
 			});
-            
+
+			$("#id_number_of_months").on("change", function(){
+				setTotalPrice();
+			})
+			
+			$('.btn-upgrade').on('click', function(){
+				number_of_members = $(this).attr('data-number-of-members');
+				total_price = $(this).attr("data-total-price");
+				$('#pricePerMonth').html(total_price);
+				$('#id_number_of_members').val(number_of_members);
+				setTotalPrice()
+			})
+
+			$("#id_discount").on("blur", function(){
+				discount_code = $(this).val();
+				sendNewAjax("{% url 'core:get_discount_value' %}",
+					{"discount_code":discount_code},
+					setDiscountValue,
+					{"method":"post"})
+			});
+
         });
     </script>
 {% endblock %}
