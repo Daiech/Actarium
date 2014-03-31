@@ -9,7 +9,7 @@ from actarium_apps.organizations.models import Organizations
 
 
 class ActariumCustomers(models.Model):
-    user = models.ForeignKey(User, related_name='%(class)s_status', verbose_name=_("Usuario"))
+    user = models.ForeignKey(User, related_name='%(class)s_user', verbose_name=_("Usuario"))
     customer = models.ForeignKey(Customers, related_name='%(class)s_customer', verbose_name=_("Cliente"))
     
     is_active = models.BooleanField(default=True)

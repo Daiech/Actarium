@@ -26,7 +26,9 @@ def read_pricing(request, slug_org):
 
         services_categories = ServicesCategories.objects.filter(is_active=True)
 
-        order_members_form  = OrderMembersServiceForm()
+        order_members_form  = OrderMembersServiceForm(initial={"organization":org.id,"payment_method":'1'})
+        order_members_form.fields['payment_method'].queryset = request.user.actariumcustomers_user.all()[0].customer.payment_methods.all()
+        # order_members_form.fields['payment_method'].defaults = "1"
 
         return render(request,'pricing.html', locals())
     raise Http404
