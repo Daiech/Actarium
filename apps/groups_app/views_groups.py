@@ -52,7 +52,6 @@ def showTeamGroup(request, slug_group):
         u_selected = None
     g = getGroupBySlug(slug_group)
     user_is_org_admin = g.organization.has_user_role(request.user, "is_admin")
-    print user_is_org_admin
     _user_rel = getRelUserGroup(request.user, g.id)
     if _user_rel:
         if _user_rel.is_active:

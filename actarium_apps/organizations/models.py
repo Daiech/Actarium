@@ -158,6 +158,11 @@ class Groups(models.Model):
             return None
 
 
+class RelUserGroupManager(GenericManager):
+    def get_rel(self, user, group):
+        return self.filter(id_user=user, id_group=group, is_active=True)
+
+
 class rel_user_group(models.Model):
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_user_invited = models.ForeignKey(User, blank=True, null=True, default=None, related_name='%(class)s_id_user_invited')
@@ -169,6 +174,8 @@ class rel_user_group(models.Model):
     is_convener = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+
+    objects = RelUserGroupManager()
 
     def __unicode__(self):
         return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)

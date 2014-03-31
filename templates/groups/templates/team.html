@@ -1,6 +1,6 @@
 {% extends "groups/menu.html" %}
 {% load gravatartag %}
-{% load i18n %}
+{% load i18n has_role %}
 {% block toolbar_content %}
 	<ul class="list-unstyled">
 	{% if user_is_org_admin %}
@@ -42,25 +42,21 @@
 {% block menu_content %}
 	<!-- begin -->
 	<div class="white-box-container">
-		<div class="box">
-			<div class="pull-left">
+		<div class="row">
+			<div class="col-md-6">
 				<h4>{% trans "Roles de usuario" %}</h4>
 				<p>{% trans "Éste es tu equipo de trabajo con sus roles en el grupo." %}</p>
 			</div>
-			<div class="pull-right">
+			<div class="col-md-6">
 				<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
-	            <div class="dropdown-container">
+	            <div class="dropdown-container" id="dropdown-org-users">
 	        		<div class="header-title">
 	                	<span>{% blocktrans with org=group.organization %}Miembros de {{ org }} {% endblocktrans %}</span>
 	                	<div class="close close-popover glyphicon glyphicon-remove"></div>
 	            	</div>
 	            	<div class="dropdown-body">
-	            		<div class="first-menu">	
-	            			<ul class="list-unstyled">
-	            				{% for u in group.organization.get_members %}
-	            				<li class="user-li"><a href="#" class="nud"  data-email="{{ u.email }}" data-username="{{ u.username }}"><img class="img-circle" src="{{ u.email|showgravatar:32 }}" width="32px"> {{ u.get_full_name }}</a></li>
-	            				{% endfor %}
-	            			</ul>
+	            		<div class="first-menu user-list">
+	            			<ul class="list-unstyled" id="org-user-list"></ul>
 	            		</div>
 						<div class="second-menu">
 							<div class="">
@@ -202,24 +198,39 @@
 			</form>
 			{% endif %}
 		</div>
-		<div id="new-user-template" style="display:none">
-			{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-			<li>
-				<div class="">
-					<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
-					<input id="new-user-firstname" type="text" placeholder="Nombres" value="[[username]]">
-					<input id="new-user-lastname" type="text" placeholder="Apellidos">
-					<input id="new-user-email" type="hidden" value="[[mail]]">
-					<input id="new-user-uname" type="hidden" value="[[username]]">
-				</div>
-			</li>
-			<li>
-				<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
-			</li>
-
-		</div>
 	</div>
 	<!-- end -->
+
+	<script type="text/template" id="new-user-template">
+		<li>
+			<div class="">
+				<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
+				{% verbatim %}
+				<input id="new-user-firstname" type="text" placeholder="Nombres" value="{{username}}">
+				<input id="new-user-lastname" type="text" placeholder="Apellidos">
+				<input id="new-user-email" type="hidden" value="{{mail}}">
+				<input id="new-user-uname" type="hidden" value="{{username}}">
+				{% endverbatim %}
+			</div>
+		</li>
+		<li>
+			<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
+		</li>
+	</script>
+	<script type="text/template" id="org-user-template">
+		{% verbatim %}
+		{% if not users %}si hay{% endif %}
+		{% for u in users %}
+			<li id="org-user-{{ u.id }}">
+				<a href="#" class="{% if not u.is_member %}user-inv{% endif %} nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+					<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="32px" /></span>
+					<span>{{ u.full_name }}</span>
+					<span class="glyphicon glyphicon-ok {% if not u.is_member %}hidden{% endif %}"></span>
+				</a>
+			</li>
+		{% endfor %}
+		{% endverbatim %}
+	</script>
 {% endblock %}
 
 
@@ -270,6 +281,12 @@
     .user-config{background-color: white; position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
     .td-info-user .dropdown-container{right: 0}
+    #dropdown-org-users{width: 283px;}
+    .org-user-img{width: 32px;height: 32px;display: inline-block;}
+    #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 240px;}
+    #dropdown-org-users .dropdown-body ul li {position: relative;}
+    #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;}
+    #dropdown-org-users .dropdown-body ul li a span.glyphicon-ok{position: absolute;right: 0;padding: 10px;font-size: 14px;color: #dadada;}
     .btn .caret{margin: 0 !important;}
 	@media (min-width: 480px) {
 		#newmember{width: 74%;}
@@ -287,7 +304,8 @@
 	$("#group-menu-team").addClass("active");
 	$("ul").addClass("list-unstyled");
 </script>
-<script src="{{STATIC_PREFIX}}js/vendor/mustache.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/swig.min.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/jquery.nicescroll.min.js"></script>
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
 		var message = "{% trans 'Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.' %}";
@@ -298,6 +316,11 @@
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
 	{% if rel_user.is_admin or user_is_org_admin %}
+		$(".user-list").niceScroll();
+		users = {};
+		{% for u in group.organization.get_members %}{% is_member_of_group "u" "group" as is_member %}
+		users[{{ forloop.counter0 }}] = {"id": "{{ u.id }}","email": "{{ u.email }}","username": "{{ u.username }}","image": "{{ u.email|showgravatar:32 }}","full_name": "{{ u.get_full_name }}", "is_member": {{ is_member|lower }}};{% endfor %}
+		$("#org-user-list").html(swig.render($("#org-user-template").html(), {locals: users}));
 	    showIconCloseOnHover()
 	    var MAX_LENGTH = 60
 	    function getRoleName (op) {
@@ -372,10 +395,7 @@
 	        // mostrar flecha sobre usuario
 	        $(".user-li").hover(
 	            function(){
-	                $(this).find("i").removeClass("hidden");
-	            },
-	            function(){
-	                $(this).find("i").addClass("hidden");
+	                $(this).find("i").toggleClass("hidden");
 	        })
 	    }
 	    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
@@ -404,14 +424,14 @@
 		            	"username": data['username'],
 		            	"p": p
 		            }
-		            $("#search-result").html(Mustache.to_html($("#new-user-template").html(),view));
+		            $("#search-result").html(swig.render($("#new-user-template").html(), {locals:view}));
 		            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
 		            $("#add-new-user").on("click", sendInvitationToNewUser);
 		        }
 		        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
 		    }
 	    }
-	    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
+	    invitationResult = function (data){//Resultados de la invitacion (agrega si TRUE, error si False)
 	        if(data['invited']){    //USUARIO INVITADO
 	        	var is_admin = "{{is_admin}}"
 	            var tr = '<tr><td>'+
@@ -465,22 +485,23 @@
             $("#newmember").focus();
             $("#message-search").html(message);
 	    }
+	    sendInvitation = function (elem, callback) {
+	    	var mail = elem.attr("data-email");
+            var uname = elem.attr("data-username");
+            var group_id = $("#group_id").val();
+            sendNewAjax("/groups/setInvitation",{"pk":group_id, "mail": mail}, callback);
+	    }
 	    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
 	        $(".user-li > a").on("click",function(e){
 	            e.preventDefault();
-	            var mail = $(this).attr("data-email");
-	            var uname = $(this).attr("data-username");
-	            var group_id = $("#group_id").val();
-	            var group_name = $("#group_name").val();
-	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},"",invitationResult);
+	            sendInvitation($(this), invitationResult);
 	            $(this).parent().fadeOut(300, function (e){
 	            	$(this).empty().show().removeClass("user-li");
 	            });
 	            $("#newmember").focus();
-	            $("#message-search").html(message)
-	        })
+	            $("#message-search").html(message);
+	        });
 	    }
-	    sendInvitationOnClick();
 	    function listMembers(data){//lista los usuarios disponibles a invitar
 	        if(data){
 	        	if (data.forbbiden){
@@ -488,8 +509,8 @@
 	        	}else{
 		            p="";
 		            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
-		                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
-		                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
+		                appendMemberToList(data);//Muestra la lista de posibles miembros a agregar
+		                sendInvitationOnClick();//escucha el evento click para agregar al usuario al grupo
 		            }
 		            else{//el correo es invalido o no hay resultados de usuarios existentes
 		            	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electr&oacute;nico.' %}");
@@ -599,6 +620,16 @@
 
 	{% endif %}
 	});
+
+    $(document).on("click", "a.user-inv", function (e){
+    	e.preventDefault();
+    	console.log("agregando")
+		sendInvitation($(this), function(data){invitationResult(data);
+			var e = $("#org-user-" + data.iid);
+			e.find("span.glyphicon-ok").removeClass("hidden");
+			e.find("a.user-inv").removeClass("user-inv");
+		});
+    });
 </script>
 {% endblock %}
 
