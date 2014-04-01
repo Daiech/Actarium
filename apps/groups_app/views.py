@@ -504,7 +504,7 @@ def resendInvitation(request, slug_group):
     if request.is_ajax():
         if request.method == "GET":
             try:
-                group = Groups.objects.get_group(slug_group)
+                group = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if _user_rel.is_admin and _user_rel.is_active:
                     try:
@@ -560,7 +560,7 @@ def changeNames(request, slug_group):
     if request.is_ajax():
         if request.method == "GET":
             try:
-                group = Groups.objects.get_group(slug_group)
+                group = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if _user_rel.is_admin and _user_rel.is_active:
                     error = False
@@ -675,15 +675,15 @@ def acceptInvitation(request):
 
 
 @login_required(login_url='/account/login')
-def deleteInvitation(request, slug_group):
-    saveViewsLog(request, "apps.groups_app.views.deleteInvitation")
+def remove_from_group(request, slug_group):
+    saveViewsLog(request, "apps.groups_app.views.remove_from_group")
     if request.is_ajax():
-        if request.method == 'GET':
-            group = getGroupBySlug(slug_group)
+        if request.method == 'POST':
+            group = Groups.objects.get_group(slug=slug_group)
             _user_rel = getRelUserGroup(request.user, group)
-            if _user_rel.is_admin and _user_rel.is_active:
+            if _user_rel and _user_rel.is_admin and _user_rel.is_active:
                 try:
-                    iid = request.GET['id_inv']
+                    iid = request.POST.get('id_inv')
                     if iid == "" or not iid:
                         return HttpResponse(False)
                     _user = getUserById(iid)
@@ -694,20 +694,18 @@ def deleteInvitation(request, slug_group):
                             "user: %s, grupo: %s, id_user_invited=%s,  is_superadmin=%s, is_admin=%s, is_secretary=%s, is_member=%s, is_active=%s, is_convener=%s, date_joined=%s" % (_user, group, rel.id_user_invited, rel.is_superadmin, rel.is_admin, rel.is_secretary, rel.is_member, rel.is_active, rel.is_convener, rel.date_joined),
                             request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
                         rel.delete()
-                        deleted = True
                         message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
-                        response = {"deleted": deleted, "message": message}
+                        response = {"deleted": True, "message": message}
                     else:
-                        response = "Error de relación"
-                except Exception, e:
-                    print "error ", e
+                        response = _(u"Error de relación")
+                except:
                     return HttpResponse(False)
             else:
-                response = "No tienes permisos para hacer eso."
-        if request.method == 'POST':
-            response = "Error invitacion"
+                response = _("No tienes permisos para hacer eso.")
+        else:
+            response = _(u"Error invitación")
     else:
-        response = "Error invitacion"
+        response = _(u"Error invitación")
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
