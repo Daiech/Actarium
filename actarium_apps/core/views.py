@@ -12,3 +12,5 @@ def read_organizations_services(request,slug_org):
             is_creator = True
         return render(request,'organizations_services.html', locals())   
     raise Http404
+
+
