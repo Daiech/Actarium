@@ -44,10 +44,10 @@
 	<div class="white-box-container">
 		<div class="row">
 			<div class="col-md-6">
-				<h4>{% trans "Roles de usuario" %}</h4>
+				<h4>{% trans "Equipo de trabajo" %}</h4>
 				<p>{% trans "Éste es tu equipo de trabajo con sus roles en el grupo." %}</p>
 			</div>
-			{% if rel_user.is_admin %}
+			{% if rel_user.is_admin or user_is_org_admin %}
 			<div class="col-md-6">
 				<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
 	            <div class="dropdown-container" id="dropdown-org-users">
@@ -70,7 +70,7 @@
 			{% endif %}
 		</div>
 		<div class="">
-			{% if rel_user.is_admin %}
+			{% if rel_user.is_admin or user_is_org_admin %}
 			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 				{% csrf_token %}
 			{% endif %}
@@ -106,7 +106,7 @@
 				                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
 				                    </div>
 				                    <!-- comienza -->
-									{% if rel_user.is_admin %}
+									{% if rel_user.is_admin or user_is_org_admin %}
 				                    <div class="user-config actarium-dropdown" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
 				                    	<a href="#"><i class="glyphicon glyphicon-cog"></i></a>
 				                    </div>
@@ -168,7 +168,7 @@
 							</td>
 							<td class="t-a-c">
 								<label for="member{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
+								{% if rel_user.is_admin or user_is_org_admin %}
 									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
 								{% else %}
 								{%if m.is_member%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
@@ -177,7 +177,7 @@
 							</td>
 							<td class="t-a-c">
 								<label for="admin{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
+								{% if rel_user.is_admin or user_is_org_admin %}
 									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 								{% else %}
 								{%if m.is_admin%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
@@ -196,42 +196,42 @@
 		                <!-- <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span> -->
 		            </div>
 				</section>
-			{% if rel_user.is_admin %}
+			{% if rel_user.is_admin or user_is_org_admin %}
 			</form>
 			{% endif %}
 		</div>
 	</div>
 	<!-- end -->
-
-	<script type="text/template" id="new-user-template">
-		<li>
-			<div class="">
-				<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
-				{% verbatim %}
-				<input id="new-user-firstname" type="text" placeholder="Nombres" value="{{username}}">
-				<input id="new-user-lastname" type="text" placeholder="Apellidos">
-				<input id="new-user-email" type="hidden" value="{{mail}}">
-				<input id="new-user-uname" type="hidden" value="{{username}}">
-				{% endverbatim %}
-			</div>
+{% if rel_user.is_admin or user_is_org_admin %}
+<script type="text/template" id="new-user-template">
+	<li>
+		<div class="">
+			<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
+			{% verbatim %}
+			<input id="new-user-firstname" type="text" placeholder="Nombres" value="{{username}}">
+			<input id="new-user-lastname" type="text" placeholder="Apellidos">
+			<input id="new-user-email" type="hidden" value="{{mail}}">
+			<input id="new-user-uname" type="hidden" value="{{username}}">
+			{% endverbatim %}
+		</div>
+	</li>
+	<li>
+		<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
+	</li>
+</script>
+<script type="text/template" id="org-user-template">
+	{% verbatim %}
+	{% for u in users %}
+		<li id="org-user-{{ u.id }}">
+			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+				<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="32px" /></span>
+				<span>{{ u.full_name }}</span>
+				<span class="glyphicon glyphicon-ok {% if not u.is_member %}hidden{% endif %}"></span>
+			</a>
 		</li>
-		<li>
-			<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
-		</li>
-	</script>
-	<script type="text/template" id="org-user-template">
-		{% verbatim %}
-		{% for u in users %}
-			<li id="org-user-{{ u.id }}">
-				<a href="#" class="{% if not u.is_member %}user-inv{% endif %} link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
-					<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="32px" /></span>
-					<span>{{ u.full_name }}</span>
-					<span class="glyphicon glyphicon-ok {% if not u.is_member %}hidden{% endif %}"></span>
-				</a>
-			</li>
-		{% endfor %}
-		{% endverbatim %}
-	</script>
+	{% endfor %}
+	{% endverbatim %}
+</script>{% endif %}
 {% endblock %}
 
 

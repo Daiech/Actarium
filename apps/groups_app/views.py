@@ -118,25 +118,33 @@ def setRole(request, slug_group):
     if request.is_ajax():
         if request.method == 'POST':
             try:
-                g = Groups.objects.get(slug=slug_group, is_active=True)
+                g = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, g)
-
-                if _user_rel.is_admin:
-                    role = int(request.POST.get('role'))
-                    remove = bool(int(request.POST.get('remove')))
+                is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+                if is_org_admin or _user_rel.is_admin:
+                    role = request.POST.get('role')
+                    if role:
+                        role = int(role)
+                    remove = request.POST.get('remove')
+                    if remove:
+                        remove = bool(int(remove))
                     _user = get_user_or_email(request.POST.get('uid'))
                     u = _user['user']
                     if u:
-                        saved = setRoltoUser(request, u, g, role, remove)
+                        if role:
+                            saved = setRoltoUser(request, u, g, role, remove)
+                        else:
+                            error = _(u"Ocurrió un error, por favor recarga la página e intenta de nuevo.")
                     else:
-                        error = _("El usuario no ha aceptado la invitaci&oacute;n")
+                        error = _(u"El usuario no ha aceptado la invitaci&oacute;n")
                 else:
                     error = _("No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina")
             except Groups.DoesNotExist:
                 error = _("Este grupo no existe")
             except rel_user_group.DoesNotExist:
                 error = _("Error! no existe el usuario para este grupo")
-            except:
+            except Exception, e:
+                print "ERERRRRROOOOORRR",  e
                 error = _("Por favor recarga la p&aacute;gina e intenta de nuevo.")
             if error:
                 return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
@@ -421,80 +429,82 @@ def newInvitationToGroup(request):
     if request.is_ajax():
         if request.method == 'GET':
             _user_rel = False
-            try:
-                g = Groups.objects.get_group(pk=str(request.GET['pk']))
-                _user_rel = getRelUserGroup(request.user, g)
-                if not (_user_rel.is_admin or _user_rel.is_secretary):
-                    return HttpResponse(json.dumps({"error": _("uPermiso denegado")}), mimetype="application/json")
-            except Groups.DoesNotExist:
-                g = False
-                return HttpResponse(json.dumps({"error": _("uOcurri&oacute; un error, estamos trabajando para resolverlo. Si el error persiste, comun&iacute;cate con el administrador de Actarium en <a href='mailto:soporte@daiech.com'>soporte@daiech.com</a>")}), mimetype="application/json")
-            except Exception, e:
-                print "Exception newInvitationToGroup: " % e
-                g = False
-                return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo.")}), mimetype="application/json")
-            if g and _user_rel.is_admin:
-                agregar = False
-                email = str(request.GET.get('mail'))
-                _user = getUserByEmail(email)
-                if _user:
-                    if g.organization.has_user_role(_user, "is_member"):
-                        agregar = True # agreguelo relajado que ya esta en la org!
-                    if isMemberOfGroup(_user, g):
-                        agregar = False
-                        invited = False
-                        message = _("Este usuario ya es miembro del grupo")
-                        iid = False
-                        gravatar = False
-                        response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
-                        return HttpResponse(json.dumps(response), mimetype="application/json")
-                if can_group_add_a_user(g):
-                    agregar = True
-                else:
-                    response = {"error": _(u"Ya no se puede agregar miembros a este grupo. Su cupo de miembros de organización está lleno.")}
-
-                if agregar:
-                    if not _user:
-                        firstname = None
-                        lastname = None
-                        try:
-                            if request.GET.get('new') == "1":
-                                firstname = str(request.GET['firstname'])
-                                lastname = str(request.GET['lastname'])
-                        except:
-                            pass #relax, simplemente no hay nombres
-                        _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
-                    # aqui ya esta el usuario en _user. y es existente (y no pertenece a la org) o nuevo.
-                    if _user and not (_user is 0):  # 0 => is email failed
-                        if sendInvitationToGroup(_user, request.user, g):
-                            try:
-                                invited = True
-                                iid = str(_user.id)  # get de id from invitation
-                                gravatar = showgravatar(email, 30)
-                                message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
-                                saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
-                            except Exception, e:
-                                print e
-                        else:
+            gid=request.GET.get('pk')
+            if gid:
+                try:
+                    g = Groups.objects.get_group(id=gid)
+                    is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+                    _user_rel = getRelUserGroup(request.user, g)
+                    if not is_org_admin and not _user_rel and not (_user_rel.is_admin or _user_rel.is_secretary):
+                        return HttpResponse(json.dumps({"error": _(u"Permiso denegado")}), mimetype="application/json")
+                except Exception, e:
+                    print "Exception newInvitationToGroup: %s" % e
+                    g = False
+                    return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo.")}), mimetype="application/json")
+                if g and (is_org_admin or _user_rel.is_admin):
+                    agregar = False
+                    email = str(request.GET.get('mail'))
+                    _user = getUserByEmail(email)
+                    if _user:
+                        if g.organization.has_user_role(_user, "is_member"):
+                            agregar = True # agreguelo relajado que ya esta en la org!
+                        if isMemberOfGroup(_user, g):
+                            agregar = False
                             invited = False
-                            message = _(u"No se pudo agregar este usuario al grupo. Por favor recargue la página e intente de nuevo")
+                            message = _("Este usuario ya es miembro del grupo")
                             iid = False
                             gravatar = False
+                            response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
+                            return HttpResponse(json.dumps(response), mimetype="application/json")
+                    if can_group_add_a_user(g):
+                        agregar = True
                     else:
-                        iid = False
-                        invited = False
-                        gravatar = False
-                        if not _user and not (_user is 0):
-                            message = "El email que estas tratando de registrar ya tiene una cuenta."
-                            # message = u"El usuario tiene la invitación pendiente"
-                        else:
-                            if _user == 0:
-                                message = "El correo electronico no es valido"
+                        response = {"error": _(u"Ya no se puede agregar miembros a este grupo. Su cupo de miembros de organización está lleno.")}
+
+                    if agregar:
+                        if not _user:
+                            firstname = None
+                            lastname = None
+                            try:
+                                if request.GET.get('new') == "1":
+                                    firstname = str(request.GET['firstname'])
+                                    lastname = str(request.GET['lastname'])
+                            except:
+                                pass #relax, simplemente no hay nombres
+                            _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
+                        # aqui ya esta el usuario en _user. y es existente (y no pertenece a la org) o nuevo.
+                        if _user and not (_user is 0):  # 0 => is email failed
+                            if sendInvitationToGroup(_user, request.user, g):
+                                try:
+                                    invited = True
+                                    iid = str(_user.id)  # get de id from invitation
+                                    gravatar = showgravatar(email, 30)
+                                    message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
+                                    saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
+                                except Exception, e:
+                                    print e
                             else:
-                                message = "Error desconocido. Lo sentimos"
-                    response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar, "username": _user.username, "full_name": _user.get_full_name()}
+                                invited = False
+                                message = _(u"No se pudo agregar este usuario al grupo. Por favor recargue la página e intente de nuevo")
+                                iid = False
+                                gravatar = False
+                        else:
+                            iid = False
+                            invited = False
+                            gravatar = False
+                            if not _user and not (_user is 0):
+                                message = "El email que estas tratando de registrar ya tiene una cuenta."
+                                # message = u"El usuario tiene la invitación pendiente"
+                            else:
+                                if _user == 0:
+                                    message = "El correo electronico no es valido"
+                                else:
+                                    message = "Error desconocido. Lo sentimos"
+                        response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar, "username": _user.username, "full_name": _user.get_full_name()}
+                else:
+                    response = {"error": _(u"No tienes permiso para hacer eso")}
             else:
-                response = {"error": _(u"No tienes permiso para hacer eso")}
+                return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo. Si el error persiste, comun&iacute;cate con el administrador de Actarium en <a href='mailto:soporte@daiech.com'>soporte@daiech.com</a>")}), mimetype="application/json")
         else:
             response = _(u"Error invitación, no puedes entrar desde aquí")
     return HttpResponse(json.dumps(response), mimetype="application/json")
@@ -681,7 +691,8 @@ def remove_from_group(request, slug_group):
         if request.method == 'POST':
             group = Groups.objects.get_group(slug=slug_group)
             _user_rel = getRelUserGroup(request.user, group)
-            if _user_rel and _user_rel.is_admin and _user_rel.is_active:
+            is_org_admin = group.organization.has_user_role(request.user, "is_admin")
+            if is_org_admin or (_user_rel and _user_rel.is_admin and _user_rel.is_active):
                 try:
                     iid = request.POST.get('id_inv')
                     if iid == "" or not iid:
