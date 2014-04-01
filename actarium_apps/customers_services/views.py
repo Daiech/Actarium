@@ -26,11 +26,18 @@ def read_pricing(request, slug_org):
 
         services_categories = ServicesCategories.objects.filter(is_active=True)
 
-        order_members_form  = OrderMembersServiceForm(initial={"organization":org.id,"payment_method":'1'})
-        order_members_form.fields['payment_method'].queryset = request.user.actariumcustomers_user.all()[0].customer.payment_methods.all()
-        # order_members_form.fields['payment_method'].defaults = "1"
+        if request.method == "POST":
+            order_members_form = OrderMembersServiceForm(request.POST,user_customer=request.user)
+            if order_members_form.is_valid():
+                print "Forumlario valido"
+            else:
+                print "Formulario No valido"
+                show_modal=True
+
+        else:
+            order_members_form  = OrderMembersServiceForm(initial={"organization":org.id,"payment_method":'1'},user_customer=request.user)
+            # order_members_form.fields['payment_method'].queryset = request.user.actariumcustomers_user.all()[0].customer.payment_methods.all()
 
         return render(request,'pricing.html', locals())
     raise Http404
-
 
