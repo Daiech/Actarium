@@ -44,7 +44,7 @@ def is_member_of_group(context, user, g):
 def filter_only_groups_of_user(group_list, user):
     """if user is an admin, return the initial group_list var, else the group_list list will be filtered"""
     org = group_list[0].organization if len(group_list) > 0 else None
-    if not org.has_user_role(user, "is_admin"):
+    if org and not org.has_user_role(user, "is_admin"):
         my_group_list = []
         for g in group_list:
             rel = rel_user_group.objects.get_rel(user, g)
