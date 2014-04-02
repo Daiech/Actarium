@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 from Actarium.settings import URL_BASE, MEDIA_URL
 from django.contrib.auth.models import User
 from apps.groups_app.forms import newMinutesForm, newGroupForm
-from apps.groups_app.views import getGroupBySlug, getRelUserGroup, isMemberOfGroup
+from apps.groups_app.views import getRelUserGroup, isMemberOfGroup
 from apps.groups_app.minutes import *
 from apps.groups_app.models import *
 from apps.emailmodule.models import *
@@ -22,22 +22,14 @@ from .utils import create_group
 
 @login_required(login_url='/account/login')
 def showHomeGroup(request, slug_group):
-    '''
-        Carga el menú de un grupo 
-    '''
-    g = getGroupBySlug(slug_group)
+    '''Carga el menú de un grupo'''
+    g = Groups.objects.get_group(slug=slug_group)
     _user = getRelUserGroup(request.user, g)
-    if _user:
-        if _user.is_active:
+    is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+    if is_org_admin or _user:
+        if is_org_admin or _user.is_active:
             return HttpResponseRedirect(reverse("show_folder", args=(slug_group,)))
-    else:
-        # return HttpResponseRedirect('/groups/#error-view-group')
-        raise Http404
-    ctx = {
-        "group": g,
-        "rel_user": _user
-    }
-    return render(request, "groups/templates/home.html", ctx)
+    raise Http404
 
 
 @login_required(login_url='/account/login')
@@ -48,30 +40,33 @@ def showTeamGroup(request, slug_group):
         if request.method == "GET":
             u = str(request.GET['u'])
             u_selected = User.objects.get(username=u).id
-    except Exception:
+    except:
         u_selected = None
-    g = getGroupBySlug(slug_group)
+    g = Groups.objects.get_group(slug=slug_group)
     user_is_org_admin = g.organization.has_user_role(request.user, "is_admin")
     _user_rel = getRelUserGroup(request.user, g.id)
-    if _user_rel:
-        if _user_rel.is_active:
+    if _user_rel or user_is_org_admin:
+        if user_is_org_admin or _user_rel.is_active:
             members = rel_user_group.objects.filter(id_group=g.id).order_by("-is_active")
-            ctx = {"user_is_org_admin": user_is_org_admin, "group": g, "rel_user": _user_rel, "is_member": _user_rel.is_member, "is_secretary": _user_rel.is_secretary, "members": members, "user_selected": u_selected}
-            return render_to_response('groups/templates/team.html', ctx, context_instance=RequestContext(request))
+            is_m = _user_rel.is_member if( _user_rel and _user_rel.is_member) else user_is_org_admin
+            is_s = _user_rel.is_secretary if (_user_rel and _user_rel.is_secretary) else user_is_org_admin
+            ctx = {"user_is_org_admin": user_is_org_admin, "group": g, "rel_user": _user_rel, "is_member": is_m, "is_secretary": is_s, "members": members, "user_selected": u_selected}
+            return render(request, 'groups/templates/team.html', ctx)
         else:
             raise Http404
             return HttpResponseRedirect('/groups/' + str(g.slug) + "#not-active")
     else:
         raise Http404
-    return render_to_response("groups/templates/team.html", ctx, context_instance=RequestContext(request))
+    return render("groups/templates/team.html", ctx)
 
 
 @login_required(login_url='/account/login')
 def showFolderGroup(request, slug_group):
-    g = getGroupBySlug(slug_group)
+    g = Groups.objects.get_group(slug=slug_group)
     _user = getRelUserGroup(request.user, g)
-    if _user:
-        if _user.is_active:
+    is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+    if is_org_admin or _user:
+        if is_org_admin or _user.is_active:
             minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
             m = list()
             for _minutes in minutes_group:
@@ -96,14 +91,13 @@ def showFolderGroup(request, slug_group):
 
 @login_required(login_url='/account/login')
 def showCalendarGroup(request, slug_group):
-    g = getGroupBySlug(slug_group)
+    g = Groups.objects.get_group(slug=slug_group)
     _user = getRelUserGroup(request.user, g)
-    if _user:
-        if _user.is_active:
+    is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+    if is_org_admin or _user:
+        if is_org_admin or _user.is_active:
             _reunions = reunions.objects.filter(id_group=g).order_by("date_reunion")
-            ctx = {
-                "group": g, "rel_user": _user, "reunions": _reunions,
-            }
+            ctx = {"group": g, "rel_user": _user, "reunions": _reunions}
             return render_to_response("groups/templates/calendar.html", ctx, context_instance=RequestContext(request))
         return HttpResponseRedirect('/groups/#you-are-not-active')
     return HttpResponseRedirect('/groups/#error-view-group')
@@ -111,9 +105,7 @@ def showCalendarGroup(request, slug_group):
 
 @login_required(login_url='/account/login')
 def showMinuteGroup(request, slug_group, minutes_code):
-    '''
-    Muestra toda la informacion de un Acta dentro de un grupo (minutes)
-    '''
+    '''Muestra toda la informacion de un Acta dentro de un grupo (minutes)'''
     saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
     pdf_address = 'false'
     if request.method == 'POST':
@@ -121,11 +113,11 @@ def showMinuteGroup(request, slug_group, minutes_code):
         from apps.pdfmodule.views import minutesHtmlToPdf
         pdf_address = minutesHtmlToPdf(html_data, slug_group)
         return HttpResponseRedirect(pdf_address)
-    group = getGroupBySlug(slug_group)
+    group = Groups.objects.get_group(slug=slug_group)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
-
-    if isMemberOfGroup(request.user, group):
+    is_org_admin = group.organization.has_user_role(request.user, "is_admin")
+    if isMemberOfGroup(request.user, group) or is_org_admin:
         # minutes_current = getMinutesByCode(group, minutes_code)
         minutes_current = group.get_minutes_by_code(code=minutes_code)
         rel_group = getRelUserGroup(request.user, group)
@@ -133,10 +125,10 @@ def showMinuteGroup(request, slug_group, minutes_code):
 
         rol_is_approver = False
         rel_group_is_secretary = False
-        if rol:
+        if rol and rel_group:
             rol_is_approver = rol.is_approver
             rel_group_is_secretary = rel_group.is_secretary
-        if rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin or minutes_current.is_full_signed:
+        if is_org_admin or (rel_group and rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin or minutes_current.is_full_signed):
             if not minutes_current:
                 return HttpResponseRedirect('/groups/' + slug_group + '/#error-there-is-not-that-minutes')
 
@@ -251,10 +243,12 @@ def showMinuteGroup(request, slug_group, minutes_code):
             annon = annotations.objects.filter(id_minutes=minutes_current).order_by("-date_joined")
 
             minutes_version = getMinutesVersions(minutes_current)
-
+            is_s = False
+            if rel_group:
+                is_s = rel_group.is_secretary
             ctx = {
                 "group": group, "minutes": minutes_current, "prev": prev, "next": next,
-                "rel_user": rel_group, "is_secretary": rel_group.is_secretary,
+                "rel_user": rel_group, "is_secretary": is_s,
                 "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
                 "url_minute": request.get_full_path(),
                 "minute_template": loader.render_to_string(address_template, {
@@ -296,9 +290,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
 
 @login_required(login_url='/account/login')
 def rolesForMinutes(request, slug_group, id_reunion):
-    '''
-    return the board to set the roles for a new Minutes
-    '''
+    '''return the board to set the roles for a new Minutes'''
     saveViewsLog(request, "apps.groups_app.minutes.rolesForMinutes")
     try:
         if id_reunion:
@@ -307,12 +299,12 @@ def rolesForMinutes(request, slug_group, id_reunion):
             reunion = ""
     except reunions.DoesNotExist:
         reunion = ""
-    g = getGroupBySlug(slug_group)
+    g = Groups.objects.get_group(slug=slug_group)
     _user_rel = getRelUserGroup(request.user, g.id)
-    if _user_rel.is_secretary and _user_rel.is_active:
+    is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+    if is_org_admin or _user_rel.is_secretary and _user_rel.is_active:
         members = rel_user_group.objects.filter(id_group=g, is_member=True).order_by("-is_active")
         _members = list()
-        print "MIEMBROS", members
         for m in members:
             try:
                 rel = rol_user_minutes.objects.get(id_group=g, id_user=m.id_user, id_minutes=None, is_active=False)
@@ -362,7 +354,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
     This function creates a minutes with the form for this.
     '''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
-    group = getGroupBySlug(slug_group)
+    group = Groups.objects.get_group(slug=slug_group)
 
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_secretary and _user_rel.is_active:
@@ -521,7 +513,7 @@ def showGroupDNISettings(request, slug_group):
     '''
     saveViewsLog(request, "apps.groups_app.views.groupDNISettings")
     try:
-        g = getGroupBySlug(slug_group)
+        g = Groups.objects.get_group(slug=slug_group)
         _user_rel = getRelUserGroup(request.user, g)
         members_dni = DNI_permissions.objects.filter(id_group=g)
         users_dni = []
@@ -540,7 +532,7 @@ def editInfoGroup(request, slug_group):
         Muestra la configuracion de un grupo
     '''
     saveViewsLog(request, "apps.groups_app.views.groupInfoSettings")
-    g = getGroupBySlug(slug_group)
+    g = Groups.objects.get_group(slug=slug_group)
     _user_rel = getRelUserGroup(request.user, g)
     if _user_rel.is_admin and _user_rel.is_active:
         message = False
@@ -566,7 +558,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
     This function creates a minutes with the form for this.
     '''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
-    group = getGroupBySlug(slug_group)
+    group = Groups.objects.get_group(slug=slug_group)
 
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_secretary and _user_rel.is_active:

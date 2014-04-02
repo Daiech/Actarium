@@ -1,10 +1,10 @@
 # encoding:utf-8
 # Django settings for Actarium project.
 import os.path
-try:
-    from .local_settings import DEBUG
-except Exception:
-    DEBUG = True
+# try:
+#     from .local_settings import DEBUG
+# except Exception:
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 # PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(".")
