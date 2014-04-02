@@ -4,28 +4,38 @@
 
 {% block content_menu %}
     <div class="org-team">
-    	<div class="clearfix">
-	    	<div class="pull-left">
-		    	<h3>{{ org.name }}</h3>
-		    	<div class="org-team-box">
+    	<div class="">
+	    	<div>
+		    	<span class=""><h3>{% blocktrans with n=org.name %}Miembros de {{ n }}{% endblocktrans %}</h3></span>
+		    	<!-- <div class="org-team-box">
 			    	<div class="box">
 			    		<span class="pull-left">{% trans 'Miembros' %}</span>
-				    	<span class="pull-right">{{ current_members }} {% trans 'de' %} {{ max_members }}</span>
+				    	<span class="pull-right">{% blocktrans with c=current_members m=max_members %} {{ c }} de {{ m }} {% endblocktrans %}</span>
 			    	</div>
 			    	<div class="progress">
 					  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
 					    <span class="sr-only"></span>
 					  </div>
 					</div>
-				</div>
+				</div> -->
 			</div>
-			<div class="pull-right">
-				<a href="#" class="btn"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %}</a>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<form>
+					<div class="col-xs-6">
+					<input type="text" id="filter_members" class="form-control " placeholder="{% trans 'Filtrar usuarios' %}" autofocus />
+					</div>
+				</form>
+				
+			</div>
+			<div class="col-md-6">
+				<a href="#" class="btn btn-large btn-info pull-right"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} <span class="caret"></span> </a>
 			</div>
 		</div>
 		<hr>
 		<div class="org-user-list">
-			<ul class="list-unstyled">
+			<ul id="org-list-members" class="list-unstyled">
 			{% for u in org.organizationsuser_organization.get_members %}
 				<li>
 					<div class="org-user-box clearfix">
@@ -76,12 +86,14 @@
 {% endblock %}
 
 {% block js_menu %}
+    <script src="{{ STATIC_PREFIX }}/js/vendor/jquery.fastLiveFilter.min.js"></script>
     <script>
         $(document).ready(function(){
             $(".org-menu-container #org-team").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
 
             $("#org-num-members").css({"width": {{ total }} + "%"});
+            $('#filter_members').fastLiveFilter('#org-list-members');
         });
     </script>
 {% endblock %}
