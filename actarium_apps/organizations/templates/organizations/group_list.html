@@ -1,5 +1,5 @@
-{% load i18n %}
-{% for g in org.get_groups %}
+{% load i18n orgs_ttag %}
+{% for g in org.get_groups|only_groups_of:user %}
 <a href="{{ g.get_absolute_url }}">
     <div class="group-preview">
         <!-- <span class="pull-right group-notifications glyphicon glyphicon-bell"></span> -->
@@ -7,10 +7,9 @@
         <span class="group-members-num" title="{{ g.get_num_members }} {% trans 'miembros' %}">{{ g.get_num_members }}</span>
         </div>
         <div class="group-permissions">
-            <span title="{% trans 'El usuario pude agregar usuarios y roles' %}" class="glyphicon glyphicon-wrench"></span>
-            <span title="{% trans 'Tiene la responsabilidad de redactar actas' %}" class="glyphicon glyphicon-pencil"></span>
-            <span title="{% trans 'Pertenece al grupo. Aparece en las actas' %}" class="glyphicon glyphicon-user"></span>
-            <span title="{% trans 'Puede convocar reuniones' %}" class="glyphicon glyphicon-calendar"></span>
+            <span title="{% trans 'El usuario puede agregar usuarios y cambiar funciones' %}" class="glyphicon glyphicon-wrench"></span>
+            <span title="{% trans 'El usuario puede redactar actas' %}" class="glyphicon glyphicon-pencil"></span>
+            <span title="{% trans 'El usuario aparece en las actas' %}" class="glyphicon glyphicon-user"></span>
         </div>
         <div class="group-name" title="{{ g.name }}">{{ g.name|truncatechars:18 }}</div>
     </div>

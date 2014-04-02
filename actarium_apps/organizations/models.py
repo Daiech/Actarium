@@ -32,7 +32,6 @@ class OrganizationsManager(GenericManager):
         return self.get_active_or_none(slug=slug)
 
 
-
 class Organizations(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nombre")
     slug = models.SlugField(max_length=120, unique=True, verbose_name="org_slug")
@@ -59,6 +58,12 @@ class Organizations(models.Model):
 
     def get_groups(self):
         return self.groups_org.filter(is_active=True)
+
+    def get_my_groups(self):
+        ids = []
+        for g in self.groups_org.filter(is_active=True):
+            if rel_user_group.objects.get_rel():
+                ids.append(g.id)
 
     def has_user_role(self, user, role):
         qs = self.organizationsuser_organization.filter(role__code=role, user=user)
