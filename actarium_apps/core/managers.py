@@ -27,6 +27,14 @@ class OrganizationServicesManager(GenericManager):
         else:
             return False
 
+    def get_members_service_active(self):
+        organization_services = self.all()
+        for organization_service in  organization_services:
+            service_category = organization_service.service.service_category() 
+            if service_category and service_category.pk == 1:
+                return organization_service.service
+        return None
+
 
 class ActariumCustomersManager(GenericManager):
     pass

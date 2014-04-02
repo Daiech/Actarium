@@ -290,6 +290,10 @@
 
 			setTotalPrice();
 
+			{% if error %}
+				setAlertError("Error", "{{ error }}")
+			{% endif %}
+
         });
     </script>
 {% endblock %}

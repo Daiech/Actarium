@@ -1,7 +1,9 @@
 #encoding:utf-8
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+
 from actarium_apps.customers_services.models import PaymentMethods
+
 from .validators import greater_than_or_equal_to_five
 
 
@@ -14,10 +16,8 @@ class OrderMembersServiceForm(forms.Form):
     discount = forms.CharField(label=_(u"Código de descuento"), widget=forms.TextInput(attrs={'placeholder': _(u'Código de descuento')}), required=False)
 
     def __init__(self, *args, **kwargs):
-        print 'kwargs',kwargs
         user_customer = kwargs.pop('user_customer',None)
         super(OrderMembersServiceForm, self).__init__(*args, **kwargs)
         if user_customer:
-            print user_customer
             self.fields['payment_method'].queryset = user_customer.actariumcustomers_user.all()[0].customer.payment_methods.all()
             
