@@ -20,6 +20,8 @@ MANAGERS = ADMINS
 APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps.emailmodule',
 'actarium_apps.customers_services', 'actarium_apps.organizations','actarium_apps.core']
 
+RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta"]
+
 if DEBUG:
     APPS += ["django_extensions"]
     pass

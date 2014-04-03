@@ -1,3 +1,4 @@
+#encoding:utf-8
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from apps.account.urls import account_urls
@@ -12,6 +13,13 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    ######################################################################################################
+    #
+    #                                          ¡¡¡¡WARNING!!""
+    #      You must to add the first work of you url to the RESERVED_WORDS var in the settings file
+    #
+    #
+    ######################################################################################################
     # Examples:
     url(r'^$', 'apps.website.views.home', name='home'),
     url(r'^tour$', 'apps.website.views.home', name='tour'),
@@ -26,7 +34,6 @@ urlpatterns = patterns('',
     url(r'^runMongo', 'apps.github.views.runMongo'),
     url(r'^account/', include(account_urls)),
     url(r'^groups/', include(groups_urls)),
-    url(r'^organization/', include('actarium_apps.organizations.urls')),
     url(r'^pdf/', include(pdfmodule_urls)),
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
@@ -44,6 +51,8 @@ urlpatterns = patterns('',
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^meal/', include(admin.site.urls)),
+    url(r'^', include('actarium_apps.organizations.urls')),
+
 )
 
 if settings.DEBUG:
