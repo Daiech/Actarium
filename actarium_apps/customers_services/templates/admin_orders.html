@@ -1,0 +1,63 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n %}
+{% block TITLE %}Administrar Ordenes{% endblock %}
+
+
+{% block bodysettings %}
+
+	<h3>Administrar Ordenes</h3>
+	<p>Espaccio para administrar las ordenes que han realizado los clientes de Actarium</p>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>{% trans 'Ordenes de servicio' %}</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table">
+				<thead>
+					<tr >
+						<th>{% trans 'Estado' %} </th>
+						<th>{% trans 'Usuario' %} </th>
+						<th>{% trans 'Organizacion' %} </th>
+						<th>{% trans 'Orden' %}</th>
+						<th>{% trans '# miembros' %}</th>
+						<th>{% trans '# meses' %}</th>
+						<th>{% trans 'Total' %}</th>
+						<th>{% trans 'Acciones' %}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Solicitud enviada</td>
+						<td>User_1</td> 
+						<td>Org_Prueba</td>
+						<td>Orden 1</td>
+						<td>6</td>
+						<td>9</td>
+						<td>$30.000</td>
+						<td>
+							<button class="btn btn-lg" data-toggle="modal" data-target="#myModal" > 
+								{% trans 'Aprobar' %} 
+							</button>
+							<button class="btn btn-lg" data-toggle="modal" data-target="#myModal" > 
+								{% trans 'Rechazar' %} 
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}
+
+{%block settings_style%}
+{% endblock %}
+
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-admin-orders").addClass("active");
+	});
+</script>
+{% endblock %}

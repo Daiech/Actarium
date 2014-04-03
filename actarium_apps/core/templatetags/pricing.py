@@ -12,6 +12,3 @@ def total_price(quantity):
     total_price = ServicesRanges.objects.get_total_price(quantity)
     return total_price
        
-
-# def multiply(x, y):
-#     return x*y

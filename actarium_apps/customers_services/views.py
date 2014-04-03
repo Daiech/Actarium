@@ -1,7 +1,9 @@
 #encoding:utf-8
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 from actarium_apps.core.models import Packages
 from actarium_apps.core.models import ServicesRanges
@@ -43,29 +45,13 @@ def read_pricing(request, slug_org):
                     service = ServicesRanges.objects.get_service(number_of_members)
                     discount_value = DiscountCodes.objects.get_or_none(code=discount_code,is_active=True)
                     discount_value = discount_value.value if discount_value else  0
-                    # print "number_of_members",number_of_members
-                    # print "number_of_months",number_of_months
-                    # print "discount",discount_value
-                    # print "customer_services",  customer_services
-                    # print "service", service
-                    # print "discount_value", discount_value
-                    if customer_services and service:
-                        customer = request.user.actariumcustomers_user.all()[0].customer
-                        if customer:
-                            status = OrderStatus.objects.get_or_none(pk=1)
-                            if status:
-                                # print "STATUS",status
-                                customer_orders = CustomerOrders.objects.create(status=status, customer=customer)
-                                order_items = OrderItems(service=service,order=customer_orders,order_quantity=number_of_members,number_of_periods=number_of_months,customer_service=customer_services,discount=discount_value)
-                                order_items.save()
-                            else:
-                                print "No Status"
-                        else:
-                            print "No customer"
-                    else:
-                        print "No customer services"
-                        
 
+                    order_id, message = OrderItems.objects.create_members_order(number_of_members=number_of_members,number_of_months=number_of_months,
+                                                customer_services=customer_services,service=service,discount_value=discount_value,user=request.user)
+                    if order_id:
+                        return HttpResponseRedirect(reverse("core:read_organization_services",args=(org.slug,))+"?order="+str(id_or_none))
+                    else:
+                        error = message
                 else:
                     error = _("El metodo de pago seleccionado")
             else:                
@@ -78,3 +64,7 @@ def read_pricing(request, slug_org):
         return render(request,'pricing.html', locals())
     raise Http404
 
+
+def read_orders(request):
+    order_items = OrderItems.objects.all()
+    return render(request,'admin_orders.html',locals())

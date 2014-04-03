@@ -52,7 +52,7 @@
 					<th>{% trans 'Total' %}</th>
 				</tr>
 				{% for order_item in  order_items %}
-					<tr>
+					<tr id="order_{{ order_item.id }}" >
 						<td>
 							{% if order_item.order.status.id == 1 %}
 								<span class="glyphicon glyphicon-arrow-up"></span>
@@ -86,7 +86,11 @@
         $(document).ready(function(){
             $(".org-menu-container #org-services").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+	        {% if order %}
+	        	$('#order_{{ order }}').css('background-color',"#eee");
+	        {% endif %}
         });
+        
     </script>
 {% endblock %}
 
