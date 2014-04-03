@@ -64,7 +64,8 @@ def deleteOrg(request, slug_org):
 @login_required(login_url='/account/login')
 def profileOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
-    if org and ('edit' in request.GET) and org.has_user_role(request.user, "is_admin"):
+    user_is_admin = org.has_user_role(request.user, "is_admin")
+    if org and ('edit' in request.GET) and user_is_admin:
         update = True
         if request.method == "POST":
             form = OrganizationForm(request.POST, request.FILES, instance=org)

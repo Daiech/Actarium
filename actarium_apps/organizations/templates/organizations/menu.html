@@ -10,7 +10,7 @@
                 <ul class="nav nav-list bs-docs-sidenav">
                     <li>
                         <div class="box" id="org-info">
-                            <span class="pull-left b"><img src="{{ org.get_short_icon }}" alt="{{ org.name }}"> </span>
+                            <span class="pull-left"><img class="img-circle b" src="{{ org.get_short_icon }}" alt="{{ org.name }}"> </span>
                             <span class="pull-left" id="org-info-text">
                                 <h5>{{ org.name|truncatechars:16 }}</h5>
                                 {% if user_is_admin %}

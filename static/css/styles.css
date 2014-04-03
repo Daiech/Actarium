@@ -840,7 +840,7 @@ cierra Show Minutes
 .back:hover{background-color: #dadada}
 /*section{padding-top: 10px;}*/
 #toolbar-btn{overflow: visible;}
-
+.btn{margin-left: 2px}
 @media (max-width: 768px) {
     .dropdown-container{right: auto;left: 0;}
 }
