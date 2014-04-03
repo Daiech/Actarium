@@ -181,5 +181,12 @@ class OrderItems(models.Model):
     
     objects = OrderItemsManager()
     
+    def get_price_per_period(self):
+        return self.order_quantity*self.service.price_per_period
+
+    def get_total_price(self):
+        return (self.get_price_per_period()*self.number_of_periods) - self.discount
+
+
     def __unicode__(self):
         return u"%s - %s" % (self.service, self.order)
