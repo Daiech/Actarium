@@ -23,7 +23,6 @@ def get_user_org_groups(request, slug_org=False):
             if uname:
                 _user = User.objects.get_or_none(username=str(uname))
                 if _user and org.has_user_role(_user, "is_member") or org.has_user_role(_user, "is_admin"):
-                    print "USER", _user
                     my_group_list = []
                     for g in org.get_groups():
                         rel = rel_user_group.objects.get_rel(_user, g)
@@ -44,7 +43,7 @@ def getListMembers(request, slug_org=False):
     if request.is_ajax():
         if request.method == "GET":
             org = request.user.organizationsuser_user.get_org(slug=slug_org)
-            if org.has_user_role(request.user, "is_admin"):
+            if org and org.has_user_role(request.user, "is_admin"):
                 try:
                     search = request.GET.get('search')
                     valid_email = validateEmail(search)
@@ -90,14 +89,13 @@ def getListMembers(request, slug_org=False):
 
 
 @login_required(login_url='/account/login')
-def change_role_member_org(request, slug_org):
+def config_admin_to_org(request, slug_org):
     """uname and set_admin come in POST method.
     set_admin is a number: 1=set admin, 0=remove admin"""
     if request.is_ajax():
         if request.method == "POST":
-            print request.POST
             org = request.user.organizationsuser_user.get_org(slug=slug_org)
-            if org.has_user_role(request.user, "is_admin"):
+            if org and org.has_user_role(request.user, "is_admin"):
                 uname = request.POST.get("uname")
                 set_admin = request.POST.get("set_admin")
                 if uname and set_admin:
@@ -115,6 +113,32 @@ def change_role_member_org(request, slug_org):
                         message = {"error": _(u"Este usuario no pertenece al grupo")}
                 else:
                     message = {"error": _(u"Ocurrió un error extraño, por favor recargue la página e intente de nuevo.")}
+            else:
+                message = {"forbbiden": _(u"No tienes permiso para agregar usuarios.")}
+            return HttpResponse(json.dumps(message), mimetype="application/json")
+    raise Http404
+
+
+@login_required(login_url='/account/login')
+def delete_member_org(request, slug_org):
+    """uname and set_admin come in POST method.
+    set_admin is a number: 1=set admin, 0=remove admin"""
+    if request.is_ajax():
+        if request.method == "POST":
+            org = request.user.organizationsuser_user.get_org(slug=slug_org)
+            if org and org.has_user_role(request.user, "is_admin"):
+                uname = request.POST.get("uname")
+                if uname:
+                    _user = User.objects.get_or_none(username=str(uname))
+                    if _user and org.has_user_role(_user, "is_member"):
+                        org.delete_role(_user, is_member=True) ## el True se ignora, solo es para pasar como **kwarg
+                        org.delete_role(_user, is_admin=True) ## el True se ignora, solo es para pasar como **kwarg
+                        # eliminar cascada (los grupos)
+                        message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ya no podrá acceder a la organización.")}
+                    else:
+                        message = {"error": _(u"Este usuario no pertenece a la organización")}
+                else:
+                    message = {"error": _(u"Faltan variables para realizar la operación, por favor recargue la página e intente de nuevo.")}
             else:
                 message = {"forbbiden": _(u"No tienes permiso para agregar usuarios.")}
             return HttpResponse(json.dumps(message), mimetype="application/json")

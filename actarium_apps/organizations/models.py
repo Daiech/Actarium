@@ -217,7 +217,7 @@ class OrganizationsUserManager(GenericManager):
 
     def get_members(self):
         users = []
-        for u in self.get_all_active():
+        for u in self.get_all_active().filter(role__code="is_member"):
             users.append(u.user.id)
         return User.objects.filter(id__in=users)
 

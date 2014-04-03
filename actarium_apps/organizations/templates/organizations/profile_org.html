@@ -1,8 +1,8 @@
 {% extends "organizations/menu.html" %}
-{% load i18n has_role %}
+{% load i18n orgs_ttag %}
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
-{% has_role "user" "org" "is_admin" as user_is_admin %}
 {% block content_menu %}
+{% has_role "user" "org" "is_creator" as user_is_creator %}
     <div class="org-profile">
 	{% if update %}
     	{% include "organizations/form_org.html" %}
@@ -12,7 +12,7 @@
                 <h3 class="panel-title">{% trans 'Información de organización' %}</h3>
             </div>
             <div class="panel-body">
-                <span class="pull-left b"><img src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}"></span>
+                <span class="pull-left "><img class="img-circle b" src="{{ org.image_path.url_100x100 }}" alt="{{ org.name }}"></span>
                 <div class="pull-left org-info">
                     <h3>{{ org.name }}</h3>
                     <p>{{ org.description }}</p>
@@ -26,33 +26,18 @@
                             <span class="sr-only"></span>
                           </div>
                         </div>
+                        <a class="btn" href="{% url 'services:read_pricing' org.slug %}"><span class="glyphicon glyphicon-user"></span> {% trans 'Actualizar miembros' %}</a>
                     </div>
-                    {% if user_is_admin %}
-                    <p>
-                        <a href="{% url 'profile_org' org.slug %}?edit" class="btn">
-                            <span class="glyphicon glyphicon-edit"></span> {% trans 'Editar perfil' %}
-                        </a>
-                        <a class="btn btn-default" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a>
-                    </p>
-                    {% endif %}
                 </div>
             </div>
-        </div>
-
-        {% if user_is_admin %}
-        <div class="">
-            <div class="panel panel-danger">
-              <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Eliminar cuenta' %}</h3>
-              </div>
-              <div class="panel-body">
-                <p>{% trans 'Las organizaciones no se pueden eliminar del todo.' %}</p>
-                <p>{% trans 'Puedes archivar ésta organización para que desaparezca de tu lista de organizaciones.' %}</p>
-                <a href="{% url 'delete_org' org.slug %}" class="btn btn-sm"><span class="glyphicon glyphicon-remove"></span> {% trans 'Archivar organización' %}</a>
-              </div>
+            <div class="panel-footer">
+                {% if user_is_admin %}
+                <a href="{% url 'profile_org' org.slug %}?edit" class="btn"><span class="glyphicon glyphicon-edit"></span> {% trans 'Editar perfil' %}</a>
+                {% if user_is_creator %}<a href="{% url 'delete_org' org.slug %}" class="btn"><span class="glyphicon glyphicon-remove"></span> {% trans 'Archivar organización' %}</a>{% endif %}
+                {% endif %}
             </div>
         </div>
-        {% endif %}
+        
 	{% endif %}
     </div>
 {% endblock %}

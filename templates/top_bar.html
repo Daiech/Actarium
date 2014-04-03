@@ -28,7 +28,7 @@
     <div id="topbar-menu" class="dib pull-right">
         <div id="account-menu" class="btn-group pull-right">
             <div id="log-sup" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
-                <img class="size22 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
+                <img class="size22 avatar img-circle b" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
                 <div class="dinline">
                     {% if user.is_authenticated %}{{user.username}}{% else %}{% trans "Iniciar Sesi&oacute;n" %}{% endif %}
                 </div>
@@ -38,7 +38,7 @@
                 <li class="current-user">
                     <a href="/account">
                         <div class="content-box">
-                            <img class="size32 avatar" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
+                            <img class="size32 avatar img-circle b" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
                             <span class="fullname">{{user.first_name}} {{user.last_name}}</span>
                             <small class="metadata">{% trans "Editar configuraci&oacute;n" %}</small>
                         </div>
@@ -52,7 +52,7 @@
         </div>
         <div id="groups-menu" class="btn-group pull-right">
             <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="">
-                <img src="/static/img/groups/default.jpg" alt='{% trans "Grupos" %}'  /> 
+                <img class="" src="/static/img/groups/default.jpg" alt='{% trans "Grupos" %}'  /> 
                 <div class="dinline"> {% trans "Grupos" %}</div> <span class="caret topbar-caret"></span>
             </div>
             <ul class="dropdown-menu">
