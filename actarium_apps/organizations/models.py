@@ -108,7 +108,7 @@ class Organizations(models.Model):
             #error log
 
     def save(self, *args, **kwargs):
-        if not self.id
+        if not self.id:
             self.slug = uuslug(self.name, instance=self)
         super(Organizations, self).save(*args, **kwargs)
 
@@ -155,7 +155,7 @@ class Groups(models.Model):
         return self.image_path.url_50x50()
 
     def save(self, *args, **kwargs):
-        if not self.id
+        if not self.id:
             self.slug = uuslug(self.name, instance=self)
         super(Groups, self).save(*args, **kwargs)  # reemplazado
         
