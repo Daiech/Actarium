@@ -46,10 +46,9 @@ def read_pricing(request, slug_org):
                     discount_value = DiscountCodes.objects.get_or_none(code=discount_code,is_active=True)
                     discount_value = discount_value.value if discount_value else  0
 
-                    id_or_none, message = OrderItems.objects.create_members_order(number_of_members=number_of_members,number_of_months=number_of_months,
+                    order_id, message = OrderItems.objects.create_members_order(number_of_members=number_of_members,number_of_months=number_of_months,
                                                 customer_services=customer_services,service=service,discount_value=discount_value,user=request.user)
-                    print id_or_none
-                    if id_or_none:
+                    if order_id:
                         return HttpResponseRedirect(reverse("core:read_organization_services",args=(org.slug,))+"?order="+str(id_or_none))
                     else:
                         error = message
@@ -65,3 +64,7 @@ def read_pricing(request, slug_org):
         return render(request,'pricing.html', locals())
     raise Http404
 
+
+def read_orders(request):
+    order_items = OrderItems.objects.all()
+    return render(request,'admin_orders.html',locals())
