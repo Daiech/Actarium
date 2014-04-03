@@ -16,10 +16,10 @@
 			<table class="table">
 				<thead>
 					<tr >
+						<th>{% trans 'Orden' %}</th>
 						<th>{% trans 'Estado' %} </th>
 						<th>{% trans 'Usuario' %} </th>
 						<th>{% trans 'Organizacion' %} </th>
-						<th>{% trans 'Orden' %}</th>
 						<th>{% trans '# miembros' %}</th>
 						<th>{% trans '# meses' %}</th>
 						<th>{% trans 'Total' %}</th>
@@ -27,16 +27,18 @@
 					</tr>
 				</thead>
 				<tbody>
+				   {% for order_item in order_items %}
 					<tr>
-						<td>Solicitud enviada</td>
-						<td>User_1</td> 
-						<td>Org_Prueba</td>
-						<td>Orden 1</td>
-						<td>6</td>
-						<td>9</td>
-						<td>$30.000</td>
+						<td>{{ order_item.id }}</td>
+						<td>{{ order_item.order.status.name }}</td>
+						<td>{{ order_item.order.customer.actariumcustomers_customer.get_user.username }}</td> 
+						<td>{{ order_item.customer_service.organizationservices_service.get_org.name }}</td>
+						<td>{{ order_item.order_quantity }}</td>
+						<td>{{ order_item.number_of_periods }}</td>
+						<td>${{ order_item.get_total_price }}</td>
 						<td>
-							<button class="btn btn-lg" data-toggle="modal" data-target="#myModal" > 
+							<button class="btn btn-lg" data-toggle="modal" data-target="#myModal" 
+								{% if order_item.order.status.id == 2 %} disabled="disabled" {% endif %}> 
 								{% trans 'Aprobar' %} 
 							</button>
 							<button class="btn btn-lg" data-toggle="modal" data-target="#myModal" > 
@@ -44,6 +46,7 @@
 							</button>
 						</td>
 					</tr>
+				   {% endfor %}
 				</tbody>
 			</table>
 		</div>

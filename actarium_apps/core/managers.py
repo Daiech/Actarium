@@ -5,6 +5,13 @@ from libs.generic_managers import GenericManager
 
 class OrganizationServicesManager(GenericManager):
 
+    def get_org(self):
+        try:
+            org= self.all()[0].organization
+            return org
+        except:
+            return None
+
     def get_max_num_members(self):
         organization_services = self.all()
         for organization_service in  organization_services:
@@ -37,7 +44,19 @@ class OrganizationServicesManager(GenericManager):
 
 
 class ActariumCustomersManager(GenericManager):
-    pass
+    def get_user(self):
+        try:
+            obj = self.all()[0]
+            return obj.user
+        except:
+            return None
+
+    def get_customer(self):
+        try:
+            obj = self.all()[0]
+            return obj.customer
+        except:
+            return None
 
 class PackagesManager(GenericManager):
     pass

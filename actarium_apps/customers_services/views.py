@@ -49,7 +49,7 @@ def read_pricing(request, slug_org):
                     order_id, message = OrderItems.objects.create_members_order(number_of_members=number_of_members,number_of_months=number_of_months,
                                                 customer_services=customer_services,service=service,discount_value=discount_value,user=request.user)
                     if order_id:
-                        return HttpResponseRedirect(reverse("core:read_organization_services",args=(org.slug,))+"?order="+str(id_or_none))
+                        return HttpResponseRedirect(reverse("core:read_organization_services",args=(org.slug,))+"?order="+str(order_id))
                     else:
                         error = message
                 else:
@@ -66,5 +66,5 @@ def read_pricing(request, slug_org):
 
 
 def read_orders(request):
-    order_items = OrderItems.objects.all()
+    order_items = OrderItems.objects.all().order_by("-created")
     return render(request,'admin_orders.html',locals())
