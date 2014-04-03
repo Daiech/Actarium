@@ -40,11 +40,11 @@ def createOrg(request):
 def readOrg(request, slug_org=False):
     if slug_org:
         org = request.user.organizationsuser_user.get_org(slug=slug_org)
-        if not org:
+        if org and org.has_user_role(request.user, "is_member"):
+            return render(request, "organizations/index.html", locals())
+        else:
             raise Http404
-    else:
-        return listOrgs(request)
-    return render(request, "organizations/index.html", locals())
+    return listOrgs(request)
 
 
 @login_required(login_url='/account/login')
@@ -88,10 +88,10 @@ def profileOrg(request, slug_org):
 def teamOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
     if org:
-        current_members = org.get_num_members()
-        max_members = org.organizationservices_organization.get_max_num_members()
-        total = int(current_members)*100/int(max_members)
-        is_org_admin = org.has_user_role(request.user, "is_admin")
-    else:
-        raise Http404
-    return render(request, "organizations/team_org.html", locals())
+        is_org_admin = org.has_user_role(request.user, "is_admin") # this var is needed in templates
+        if is_org_admin or org.has_user_role(request.user, "is_member"):
+            current_members = org.get_num_members()
+            max_members = org.organizationservices_organization.get_max_num_members()
+            total = int(current_members)*100/int(max_members)
+            return render(request, "organizations/team_org.html", locals())
+    raise Http404

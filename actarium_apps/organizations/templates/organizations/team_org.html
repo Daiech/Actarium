@@ -59,14 +59,14 @@
 							</div>
 						</div>
 						{% has_role "u" "org" "is_admin" as u_is_admin %}
-						<div class="col-md-5 org-user-options">
+						<div class="col-md-5 org-user-options" data-username="{{ u.username }}" >
 							<span><a href="#" class="btn btn-link open-modal-groups">{% trans 'Ver grupos' %}</a></span>
 						{% if is_org_admin %}
 							<span>
-								<label for="is_admin_{{ u.id }}" class="btn">{% trans 'Administrador' %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u_is_admin %}checked{% endif %}  data-username="{{ u.username }}" /></label>
+								<label for="is_admin_{{ u.id }}" class="btn">{% trans 'Administrador' %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u_is_admin %}checked{% endif %} /></label>
 							</span>
 							<span>
-							<a href="#" class="btn"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</a>
+							<button type="button" class="btn org-user-delete"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</button>
 							</span>
 						{% else %}
 							{% if u_is_admin %}
@@ -123,16 +123,17 @@
 			{% if is_org_admin %}
 
             $(".org-user-admin").on("click", change_admin);
+            $(".org-user-delete").on("click", delete_user);
             function change_admin (e) {
             	var checkbox = $(this);
-            	var uname = checkbox.attr("data-username");
+            	var uname = checkbox.closest(".org-user-options").attr("data-username");
             	if(checkbox.is(":checked")){
             		var set = 1;
             	}
             	else{
             		var set = 0;
             	}
-            	sendNewAjax("{% url 'change_role_member_org' org.slug %}", {"uname":uname, "set_admin":set}, function (data){
+            	sendNewAjax("{% url 'config_admin_to_org' org.slug %}", {"uname":uname, "set_admin":set}, function (data){
             		if (data.error){
             			setAlertError("{% trans 'Error' %}", data.error);
             		}
@@ -140,6 +141,21 @@
             			setAlertMessage("{% trans 'Rol cambiado' %}", data.msj);
             		}
             	},{"method": "post"});
+            }
+            function delete_user (e) {
+            	var uname = $(this).closest(".org-user-options").attr("data-username");
+            	if ( confirm("{% trans 'Seguro que desea eliminar a' %} @" + uname + "?") ){
+	            	sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
+	            		if (data.error){
+	            			setAlertError("{% trans 'Error' %}", data.error);
+	            		}
+	            		else{
+	            			setAlertMessage("{% trans 'Usuario eliminado de la organización' %}", data.msj);
+	            		}
+	            	},{"method": "post"});
+            	}else{
+            		e.preventDefault();
+            	}
             }
             {% endif %}
         });
