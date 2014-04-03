@@ -60,12 +60,11 @@
 						</div>
 						{% has_role "u" "org" "is_admin" as u_is_admin %}
 						<div class="col-md-5 org-user-options">
-							<span><a href="#" class="btn btn-link open-modal-groups" data-username="{{ u.username }}">{% trans 'Ver grupos' %}</a></span>
+							<span><a href="#" class="btn btn-link open-modal-groups">{% trans 'Ver grupos' %}</a></span>
 						{% if is_org_admin %}
-							<span><select class="org-user-roles btn" data-username="{{ u.username }}">
-							  	<option value="1" {% if u_is_admin %}selected{% endif %}>{% trans 'Administrador' %}</option>
-							  	<option value="2" {% if not u_is_admin %}selected{% endif %}>{% trans 'Miembro' %}</option>
-							</select></span>
+							<span>
+								<label for="is_admin_{{ u.id }}" class="btn">{% trans 'Administrador' %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u_is_admin %}checked{% endif %}  data-username="{{ u.username }}" /></label>
+							</span>
 							<span>
 							<a href="#" class="btn"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</a>
 							</span>
@@ -90,6 +89,7 @@
 	.org-team .org-team-box{width: 180px;}
 	.org-team .org-user-list > ul > li{position: relative;border-bottom: solid thin #eee;}
 	.org-team .org-user-list .org-user-box{padding: 5px 5px;}
+	.org-team .org-user-list .org-user-box input[type='checkbox']{margin-top: 0px;}
 	.org-team .org-user-list .org-user-box .org-user-info{margin-left: 6px}
 	.org-team .org-user-list .org-user-box .org-user-info strong{font-size: 15px}
 	.org-team .org-user-list .org-user-box .org-user-info p{color: #999;}
@@ -121,12 +121,18 @@
             	});
             })
 			{% if is_org_admin %}
-            $(".org-user-roles").on("change", change_roles);
-            function change_roles (e) {
-            	e.preventDefault();
-            	var uname = $(this).attr("data-username");
-            	var role = $(this).val();
-            	sendNewAjax("{% url 'change_role_member_org' org.slug %}", {"uname":uname, "role":role}, function (data){
+
+            $(".org-user-admin").on("click", change_admin);
+            function change_admin (e) {
+            	var checkbox = $(this);
+            	var uname = checkbox.attr("data-username");
+            	if(checkbox.is(":checked")){
+            		var set = 1;
+            	}
+            	else{
+            		var set = 0;
+            	}
+            	sendNewAjax("{% url 'change_role_member_org' org.slug %}", {"uname":uname, "set_admin":set}, function (data){
             		if (data.error){
             			setAlertError("{% trans 'Error' %}", data.error);
             		}

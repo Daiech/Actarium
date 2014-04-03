@@ -91,26 +91,28 @@ def getListMembers(request, slug_org=False):
 
 @login_required(login_url='/account/login')
 def change_role_member_org(request, slug_org):
-    """uname and role come in POST method.
-    role is a number: 1=admin, 2=member"""
+    """uname and set_admin come in POST method.
+    set_admin is a number: 1=set admin, 0=remove admin"""
     if request.is_ajax():
         if request.method == "POST":
+            print request.POST
             org = request.user.organizationsuser_user.get_org(slug=slug_org)
             if org.has_user_role(request.user, "is_admin"):
                 uname = request.POST.get("uname")
-                role = request.POST.get("role")
-                if uname and role:
+                set_admin = request.POST.get("set_admin")
+                if uname and set_admin:
                     _user = User.objects.get_or_none(username=str(uname))
-                    if _user and org.has_user_role(_user, "is_member") or org.has_user_role(_user, "is_admin"):
-                        role = "is_admin" if role == "1" else "is_member"
-                        rel = org.organizationsuser_organization.filter(user=_user, role__code=role, is_active=True)
-                        if rel: # "YA TIENE ESTE ROL"
-                            message = {"error": "@" + _user.username + " " + _(u"ya tiene éste rol.")}
-                        else: # "PONGALE CON CONFIANZA"
-                            _role = "is_admin" if role != "is_admin" else "is_member"
-                            org.delete_role(_user, **{_role:True})
-                            org.set_role(_user, **{role:True})
-                            message = {"changed": True, "msj": _(u"El cambio de rol ha sido cambiado existosamente para") + " " + "@" + _user.username}
+                    if _user and org.has_user_role(_user, "is_member"):
+                        is_admin = org.organizationsuser_organization.get_or_none(user=_user, role__code="is_admin", is_active=True)
+                        set_like_admin = True if set_admin == "1" else False
+                        if not is_admin and set_like_admin: ## pongalo como admin
+                            org.set_role(_user, is_admin=True)
+                            message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ahora es administrador de la organización.")}
+                        elif is_admin and not set_like_admin: ## se quiere quitar admin
+                            deleted = org.delete_role(_user, is_admin=True) ## el True se ignora, solo es para pasar como **kwarg
+                            message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ya no podrá administrar la organización.")}
+                    else:
+                        message = {"error": _(u"Este usuario no pertenece al grupo")}
                 else:
                     message = {"error": _(u"Ocurrió un error extraño, por favor recargue la página e intente de nuevo.")}
             else:
