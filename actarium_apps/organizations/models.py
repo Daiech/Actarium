@@ -108,7 +108,8 @@ class Organizations(models.Model):
             #error log
 
     def save(self, *args, **kwargs):
-        self.slug = uuslug(self.name, instance=self)
+        if not self.id
+            self.slug = uuslug(self.name, instance=self)
         super(Organizations, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -154,9 +155,8 @@ class Groups(models.Model):
         return self.image_path.url_50x50()
 
     def save(self, *args, **kwargs):
-        self.slug = "reemplazame"
-        super(Groups, self).save(*args, **kwargs)
-        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
+        if not self.id
+            self.slug = uuslug(self.name, instance=self)
         super(Groups, self).save(*args, **kwargs)  # reemplazado
         
     def is_creator(self, user):
