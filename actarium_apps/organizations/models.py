@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
-
 from apps.groups_app.models import GenericManager
 
 from libs.thumbs import ImageWithThumbsField
+from uuslug import uuslug
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules(
     [
@@ -106,12 +106,9 @@ class Organizations(models.Model):
             print "[WARNING] NO SE ASIGNARON TODOS LOS ROLES"
             print "Roles not added", roles_not_added
             #error log
-        
 
     def save(self, *args, **kwargs):
-        self.slug = ""
-        super(Organizations, self).save(*args, **kwargs)
-        self.slug = defaultfilters.slugify(self.name) + "-" + str(self.pk)
+        self.slug = uuslug(self.name, instance=self)
         super(Organizations, self).save(*args, **kwargs)
 
     def __unicode__(self):
