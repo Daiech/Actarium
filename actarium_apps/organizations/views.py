@@ -27,9 +27,8 @@ def createOrg(request):
         form = OrganizationForm(request.POST, request.FILES)
         if form.is_valid() and form.is_multipart():
             org = form.save()
-            org.set_role(request.user, is_admin=True, is_member=True, is_creator=True)
+            org.set_role(request.user, is_admin=True, is_creator=True)
             is_created, response = create_default_service(request.user, org)
-            print "::::::::::::::Respuesta", response
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect(org.get_absolute_url())
     else:
@@ -92,10 +91,7 @@ def teamOrg(request, slug_org):
         current_members = org.get_num_members()
         max_members = org.organizationservices_organization.get_max_num_members()
         total = int(current_members)*100/int(max_members)
-        if org.has_user_role(request.user, "is_admin"):
-            pass
-        elif org.has_user_role(request.user, "is_member"):
-            pass
+        is_org_admin = org.has_user_role(request.user, "is_admin")
     else:
         raise Http404
     return render(request, "organizations/team_org.html", locals())

@@ -62,3 +62,33 @@ def getListMembers(request, slug_org=False):
     else:
         message = False
         return HttpResponse(message, mimetype="application/json")
+
+
+@login_required(login_url='/account/login')
+def change_role_member_org(request, slug_org):
+    """uname and role come in POST method.
+    role is a number: 1=admin, 2=member"""
+    if request.is_ajax():
+        if request.method == "POST":
+            org = request.user.organizationsuser_user.get_org(slug=slug_org)
+            if org.has_user_role(request.user, "is_admin"):
+                uname = request.POST.get("uname")
+                role = request.POST.get("role")
+                if uname and role:
+                    _user = User.objects.get_or_none(username=str(uname))
+                    if _user and org.has_user_role(_user, "is_member") or org.has_user_role(_user, "is_admin"):
+                        role = "is_admin" if role == "1" else "is_member"
+                        rel = org.organizationsuser_organization.filter(user=_user, role__code=role, is_active=True)
+                        if rel: # "YA TIENE ESTE ROL"
+                            message = {"error": "@" + _user.username + " " + _(u"ya tiene éste rol.")}
+                        else: # "PONGALE CON CONFIANZA"
+                            _role = "is_admin" if role != "is_admin" else "is_member"
+                            org.delete_role(_user, **{_role:True})
+                            org.set_role(_user, **{role:True})
+                            message = {"changed": True, "msj": _(u"El cambio de rol ha sido cambiado existosamente para") + " " + "@" + _user.username}
+                else:
+                    message = {"error": _(u"Ocurrió un error extraño, por favor recargue la página e intente de nuevo.")}
+            else:
+                message = {"forbbiden": _(u"No tienes permiso para agregar usuarios.")}
+            return HttpResponse(json.dumps(message), mimetype="application/json")
+    raise Http404

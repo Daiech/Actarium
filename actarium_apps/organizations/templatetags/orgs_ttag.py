@@ -4,10 +4,10 @@ from actarium_apps.organizations.models import rel_user_group
 register = template.Library()
 
 @register.assignment_tag(takes_context=True)
-def has_role(context, user, obj, role):
+def has_role(context, user, org, role):
     l = role.split(",")
     try:
-        org = Variable(obj).resolve(context)
+        org = Variable(org).resolve(context)
     except VariableDoesNotExist:
         print "Errorcito"
         org = None

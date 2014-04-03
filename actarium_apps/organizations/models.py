@@ -66,7 +66,7 @@ class Organizations(models.Model):
                 ids.append(g.id)
 
     def has_user_role(self, user, role):
-        qs = self.organizationsuser_organization.filter(role__code=role, user=user)
+        qs = self.organizationsuser_organization.filter(role__code=role, user=user, is_active=True)
         if qs.count() > 0:
             return True
         else:
@@ -74,6 +74,19 @@ class Organizations(models.Model):
 
     def get_members(self):
         return self.organizationsuser_organization.get_members()
+
+    def delete_role(self, user, **kwargs):
+        for arg in kwargs:
+            role = OrganizationsRoles.objects.get_or_none(code=str(arg), is_active=True)
+            if role:
+                obj = OrganizationsUser.objects.get_or_none(user=user, organization=self, role=role)
+                if obj:
+                    obj.is_active = False
+                    obj.save()
+                    print "se elimino el rol:", role
+                    print obj
+                else:
+                    print "Este man no tiene ese rol:", role
 
     def set_role(self, user, **kwargs):
         objs_created = 0
@@ -84,6 +97,9 @@ class Organizations(models.Model):
                 obj, created = OrganizationsUser.objects.get_or_create(user=user, organization=self, role=role)
                 if created:
                     objs_created += 1
+                obj.is_active = True
+                obj.save()
+                print obj, "////////////"
             else:
                 roles_not_added.append(str(arg))          
         if objs_created < len(kwargs):

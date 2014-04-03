@@ -1,5 +1,5 @@
 {% extends "organizations/menu.html" %}
-{% load i18n gravatartag has_role %}
+{% load i18n gravatartag orgs_ttag %}
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {% block content_menu %}
@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-8">
 				<form>
 					<div class="col-xs-6">
 					<input type="text" id="filter_members" class="form-control " placeholder="{% trans 'Filtrar usuarios' %}" autofocus />
@@ -29,39 +29,43 @@
 				</form>
 				
 			</div>
-			<div class="col-md-6">
-				<a href="#" class="btn btn-large btn-info pull-right"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} <span class="caret"></span> </a>
+			{% if is_org_admin %}
+			<div class="col-md-4">
+				<a href="#" class="btn btn-large "><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a>
 			</div>
+			{% endif %}
 		</div>
 		<hr>
 		<div class="org-user-list">
 			<ul id="org-list-members" class="list-unstyled">
 			{% for u in org.organizationsuser_organization.get_members %}
 				<li>
-					<div class="org-user-box clearfix">
-						<div class="pull-left">
+					<div class="org-user-box row">
+						<div class="col-md-8">
 							<span class="pull-left org-user-image"><img src="{{ u.email|showgravatar:'32'}}" width="32px" class="img-circle" /></span>
 							<div class="pull-left org-user-info">
 								<strong>{{ u.get_full_name }}</strong>
 								<p>@{{ u.username }}</p>
 							</div>
 						</div>
-						<div class="pull-right org-user-options">
-							<!-- <div class="btn-group">
-							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							    <span class="glyphicon glyphicon-cog"></span> {% trans 'Permisos' %} <span class="caret"></span>
-							  </button>
-							  <ul class="dropdown-menu" role="menu">
-							    <li><a href="#">{% trans '' %}</a></li>
-							    <li><a href="#">Another action</a></li>
-							  </ul>
-							</div> -->
-							<select class="btn">
-							  	<option>{% trans 'Administrador' %}</option>
-							  	<option>{% trans 'Miembro' %}</option>
-							</select>
+						{% has_role "u" "org" "is_admin" as u_is_admin %}
+						{% if is_org_admin %}
+						<div class="col-md-4 org-user-options">
+							<span><select class="org-user-roles btn" data-username="{{ u.username }}">
+							  	<option value="1" {% if u_is_admin %}selected{% endif %}>{% trans 'Administrador' %}</option>
+							  	<option value="2" {% if not u_is_admin %}selected{% endif %}>{% trans 'Miembro' %}</option>
+							</select></span>
+							<span>
 							<a href="#" class="btn"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</a>
+							</span>
 						</div>
+						{% else %}
+							{% if u_is_admin %}
+							<span class="glyphicon glyphicon-user"></span>&nbsp;<span class="glyphicon glyphicon-wrench"></span> {% trans 'Miembro administrador' %}
+							{% else %}
+							<span class="glyphicon glyphicon-user"></span> {% trans 'Miembro normal' %}
+							{% endif %}
+						{% endif %}
 					</div>
 				</li>
 			{% endfor %}
@@ -80,6 +84,7 @@
 	.org-team .org-user-list .org-user-box .org-user-info p{color: #999;}
 	.org-team .org-user-list .org-user-box .org-user-image{margin-top: 5px;}
 	.org-team .org-user-list .org-user-box .org-user-options {margin-top: 10px}
+	.org-team .org-user-list .org-user-box .org-user-options > span{margin-right: 2px}
 	/*.org-team .org-user-list .org-user-box .org-user-options ul.org-user-btn-list li{display: inline-block;}*/
 	.dropdown-menu{z-index: 900}
 </style>
@@ -94,6 +99,20 @@
 
             $("#org-num-members").css({"width": {{ total }} + "%"});
             $('#filter_members').fastLiveFilter('#org-list-members');
+            $(".org-user-roles").on("change", change_roles);
+            function change_roles (e) {
+            	e.preventDefault();
+            	var uname = $(this).attr("data-username");
+            	var role = $(this).val();
+            	sendNewAjax("{% url 'change_role_member_org' org.slug %}", {"uname":uname, "role":role}, function (data){
+            		if (data.error){
+            			setAlertError("{% trans 'Error' %}", data.error);
+            		}
+            		else{
+            			setAlertMessage("{% trans 'Rol cambiado' %}", data.msj);
+            		}
+            	},{"method": "post"});
+            }
         });
     </script>
 {% endblock %}

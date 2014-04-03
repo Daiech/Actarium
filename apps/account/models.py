@@ -2,12 +2,14 @@
 from django.db import models
 # from django.template import defaultfilters
 from django.contrib.auth.models import User
+from libs.generic_managers import GenericManager
 
 #class ActivationManager(models.Manager):
 #    """
 #    This class is responsible to manage the process of  account activation.
 #    """
 
+User.add_to_class('objects', GenericManager())
 
 class activation_keys(models.Model):
     """
