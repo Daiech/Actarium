@@ -83,10 +83,9 @@ class Organizations(models.Model):
                 if obj:
                     obj.is_active = False
                     obj.save()
-                    print "se elimino el rol:", role
-                    print obj
                 else:
                     print "Este man no tiene ese rol:", role
+                    return False
 
     def set_role(self, user, **kwargs):
         objs_created = 0
