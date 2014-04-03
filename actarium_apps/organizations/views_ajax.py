@@ -5,11 +5,36 @@ from django.http import Http404, HttpResponse
 from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
 
-from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles
+from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles, rel_user_group
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.groups_app.validators import validateEmail
 import json
+
+
+@login_required(login_url='/account/login')
+def get_user_org_groups(request, slug_org=False):
+    """Only org admin can use this function"""
+    saveViewsLog(request, "actarium_apps.organizations.views_ajax.getListMembers")
+    if request.is_ajax():
+        if request.method == "GET":
+            org = request.user.organizationsuser_user.get_org(slug=slug_org)
+            uname = request.GET.get("uname")
+            if uname:
+                _user = User.objects.get_or_none(username=str(uname))
+                if _user and org.has_user_role(_user, "is_member") or org.has_user_role(_user, "is_admin"):
+                    print "USER", _user
+                    my_group_list = []
+                    for g in org.get_groups():
+                        rel = rel_user_group.objects.get_rel(_user, g)
+                        if rel:
+                            my_group_list.append(
+                                {"id": g.id,
+                                "name": g.name,
+                                "url": g.get_absolute_url(),
+                                "image": g.image_path.url_100x100})
+                    return HttpResponse(json.dumps(my_group_list), mimetype="application/json")
+    raise Http404
 
 
 @login_required(login_url='/account/login')

@@ -3,21 +3,31 @@
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {% block content_menu %}
+	<div id="modalGroups" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	</div>
+	<script id="modalGroupsTemplate" type="text/template">
+	<div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	    {% verbatim %}
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="">{{ ctx.title }}</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<ul>
+	        {% for g in ctx.groups %}
+	        	<li>{{ g.name }}</li>
+	        {% endfor %}
+	        </ul>
+	      </div>
+	    </div>
+	    {% endverbatim %}
+	  </div>
+	</script>
     <div class="org-team">
     	<div class="">
 	    	<div>
 		    	<span class=""><h3>{% blocktrans with n=org.name %}Miembros de {{ n }}{% endblocktrans %}</h3></span>
-		    	<!-- <div class="org-team-box">
-			    	<div class="box">
-			    		<span class="pull-left">{% trans 'Miembros' %}</span>
-				    	<span class="pull-right">{% blocktrans with c=current_members m=max_members %} {{ c }} de {{ m }} {% endblocktrans %}</span>
-			    	</div>
-			    	<div class="progress">
-					  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
-					    <span class="sr-only"></span>
-					  </div>
-					</div>
-				</div> -->
 			</div>
 		</div>
 		<div class="row">
@@ -41,7 +51,7 @@
 			{% for u in org.organizationsuser_organization.get_members %}
 				<li>
 					<div class="org-user-box row">
-						<div class="col-md-8">
+						<div class="col-md-7">
 							<span class="pull-left org-user-image"><img src="{{ u.email|showgravatar:'32'}}" width="32px" class="img-circle" /></span>
 							<div class="pull-left org-user-info">
 								<strong>{{ u.get_full_name }}</strong>
@@ -49,8 +59,9 @@
 							</div>
 						</div>
 						{% has_role "u" "org" "is_admin" as u_is_admin %}
+						<div class="col-md-5 org-user-options">
+							<span><a href="#" class="btn btn-link open-modal-groups" data-username="{{ u.username }}">{% trans 'Ver grupos' %}</a></span>
 						{% if is_org_admin %}
-						<div class="col-md-4 org-user-options">
 							<span><select class="org-user-roles btn" data-username="{{ u.username }}">
 							  	<option value="1" {% if u_is_admin %}selected{% endif %}>{% trans 'Administrador' %}</option>
 							  	<option value="2" {% if not u_is_admin %}selected{% endif %}>{% trans 'Miembro' %}</option>
@@ -58,7 +69,6 @@
 							<span>
 							<a href="#" class="btn"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</a>
 							</span>
-						</div>
 						{% else %}
 							{% if u_is_admin %}
 							<span class="glyphicon glyphicon-user"></span>&nbsp;<span class="glyphicon glyphicon-wrench"></span> {% trans 'Miembro administrador' %}
@@ -66,6 +76,7 @@
 							<span class="glyphicon glyphicon-user"></span> {% trans 'Miembro normal' %}
 							{% endif %}
 						{% endif %}
+						</div>
 					</div>
 				</li>
 			{% endfor %}
@@ -92,6 +103,7 @@
 
 {% block js_menu %}
     <script src="{{ STATIC_PREFIX }}/js/vendor/jquery.fastLiveFilter.min.js"></script>
+	<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
     <script>
         $(document).ready(function(){
             $(".org-menu-container #org-team").addClass("active")
@@ -99,6 +111,16 @@
 
             $("#org-num-members").css({"width": {{ total }} + "%"});
             $('#filter_members').fastLiveFilter('#org-list-members');
+            $(".open-modal-groups").on("click", function (e) {
+            	e.preventDefault();
+            	var uname = $(this).attr("data-username");
+            	sendNewAjax("{% url 'get_user_org_groups' org.slug %}",{"uname":uname}, function (data) {
+            		console.log(data);
+	            	ctx = {"title": "{% trans 'Grupos de ' %}" + "@" + uname, "groups": data}
+	            	$("#modalGroups").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
+            	});
+            })
+			{% if is_org_admin %}
             $(".org-user-roles").on("change", change_roles);
             function change_roles (e) {
             	e.preventDefault();
@@ -113,6 +135,7 @@
             		}
             	},{"method": "post"});
             }
+            {% endif %}
         });
     </script>
 {% endblock %}

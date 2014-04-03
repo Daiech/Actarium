@@ -12,5 +12,6 @@ urlpatterns = patterns('actarium_apps.organizations.views',
     
 urlpatterns += patterns('actarium_apps.organizations.views_ajax',
     url(r'^(?P<slug_org>[-\w]+)/get-members$', 'getListMembers', name="get_users_list"),
+    url(r'^(?P<slug_org>[-\w]+)/get-groups$', 'get_user_org_groups', name="get_user_org_groups"),
     url(r'^(?P<slug_org>[-\w]+)/change-role$', 'change_role_member_org', name="change_role_member_org"),
 )
