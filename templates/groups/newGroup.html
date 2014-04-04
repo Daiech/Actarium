@@ -1,18 +1,18 @@
-{% extends "website/base.html" %}
+{% extends "base.html" %}
 {% block TITLE %}Crear Grupo{% endblock %}
 {% load gravatartag %}
 {%block body%}
 <article>
     <header >
-        <div class="row-fluid">
-            <div class="span8">
+        <div class="row">
+            <div class="col-md-8">
                 <div class="menu-icons icons-page icon-groups"></div>
                 <h3>Crear grupo</h3>
             </div>
         </div>
     </header>
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
         <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
@@ -55,20 +55,6 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="">
-                        <span class="pull-left">
-                            <label for="sel-billing">Paquete:</label>
-                        </span>
-                        <span class="pull-right">
-                            <a href="/settings/billing"> + Adquirir paquete</a>
-                        </span>
-                        <select name="sel-billing" id="sel-billing">
-                            {% for bill in billing%}
-                            <option value="{{bill.id}}">{{bill.id_package.name}} ({{bill.groups_pro_available}} disponible)</option>
-                            {% endfor %}
-                            {%if not billing%}<option>No tienes paquetes disponibles</option>{%endif%}
-                        </select>
-                    </div>
                     <div id="is-memeber" class="">
                         <label data-original-title="Accede al grupo. Puede crear actas, reuniones, etc." for="is_member">
                             <input type="checkbox" id="is_member" name="is_member" value="1" checked>
@@ -78,7 +64,7 @@
                     <div id="administrator" class="">
                     <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">Administrador principal de grupo:</label>
                     <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ Cambiar administrador</a>
-                    <ul id="admin-list" class="unstyled">
+                    <ul id="admin-list" class="list-unstyled">
                         <li>
                             <label for="id_admin">
                                 <input type="radio" name="id_admin" value="{{user.id}}" id="id_admin" checked> <img src="{{ user.email|showgravatar:'20'}}" class="img20"> {{user.first_name}} {{user.last_name}} (yo)
@@ -88,13 +74,13 @@
                     <div id="admin-box" style="display:none">
                         <input id="search-member" type="text" placeholder="email o nombre de usuario" autocomplete="false">
                     </div>
-                    <ul id="search-result" class="unstyled">
+                    <ul id="search-result" class="list-unstyled">
                         
                     </ul>
                 </div>
                 </div>
                 <div>
-                    <ul class="unstyled">
+                    <ul class="list-unstyled">
                     {{newGroupForm.as_ul}}
                     </ul>
                 </div>
@@ -190,9 +176,6 @@
         var selected = $("#org-selected").val();
         var len = 35;
         $("#sel-org").val(selected)
-        {%if no_billing_avalaible%}
-        setAlertMessage("Grupos Pro no disponibles", "Por ahora no tienes grupos Pro disponibles. Ingresa a nuestra secci&oacute;n de <a href='/settings/billing'>facturaci&oacute;n</a> y adquiere uno ahora mismo. :)");
-        {%endif%}
         {%if sel_org%}
             $("#pro").click();
             $(".data-pro").removeClass("hidden");

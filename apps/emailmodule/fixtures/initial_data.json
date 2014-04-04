@@ -1,0 +1,192 @@
+[
+  {
+    "model": "emailmodule.email_admin_type",
+    "pk": 1,
+    "fields": {
+      "name": "obligatorio",
+      "description": "Este tipo de correos son obligatorios y no se pueden desactivar",
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email_admin_type",
+    "pk": 2,
+    "fields": {
+      "name": "grupo",
+      "description": "Este tipo de correo esta directamente ligado a un grupo, el la configuración de cada grupo se pueden desactivar",
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email_admin_type",
+    "pk": 3,
+    "fields": {
+      "name": "global",
+      "description": "Este tipo de correo esta relacionado directamente con cada usuario y se pueden desactivar o activar en las configuraciones generales",
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email_admin_type",
+    "pk": 4,
+    "fields": {
+      "name": "staff",
+      "description": "Correo que se envía al staff de Actarium",
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 1,
+    "fields": {
+      "name": "validación de correo",
+      "description": "Correo de validacion para activar la cuenta",
+      "email_type": "1",
+      "admin_type": 1,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 2,
+    "fields": {
+      "name": "Nueva reunión",
+      "description": "Correo que indica cuando un usuario invita a otro a una reunión",
+      "email_type": "2",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 3,
+    "fields": {
+      "name": "Nueva acta",
+      "description": "Correo que informa a un usuario cuando se ha creado una nueva acta en un grupo",
+      "email_type": "3",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 4,
+    "fields": {
+      "name": "Asignacion de rol",
+      "description": "Correo que informa a un usuario cuando le han asignado un rol dentro de un grupo",
+      "email_type": "4",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 5,
+    "fields": {
+      "name": "Confirmacion de asistencia a reunión",
+      "description": "Correo que informa al convocador de una reunion cuando alguien responde a dicha reunion afirmativa o negativamente",
+      "email_type": "5",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 6,
+    "fields": {
+      "name": "Invitación a un grupo",
+      "description": "Correo que llega a un usuario cuando alguien lo invita a hacer parte de un grupo",
+      "email_type": "6",
+      "admin_type": 3,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 7,
+    "fields": {
+      "name": "Invitación a Actarium",
+      "description": "Correo que se envia cuando un usuario invita a otra persona a usar Actarium",
+      "email_type": "7",
+      "admin_type": 1,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 8,
+    "fields": {
+      "name": "Respuesta de invitación a grupo",
+      "description": "Cuando un usuario responde a la solicitud de hacer parte de un grupo, se envía un correo a la persona que realizo dicha invitación",
+      "email_type": "8",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 9,
+    "fields": {
+      "name": "Feedback",
+      "description": "Comentarios que dejan los usuarios, se envia directamente al staff de Actarium",
+      "email_type": "9",
+      "admin_type": 4,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 10,
+    "fields": {
+      "name": "Reenviar activación de cuenta",
+      "description": "Reenvía activación de cuenta",
+      "email_type": "10",
+      "admin_type": 3,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 11,
+    "fields": {
+      "name": "Reenviar invitación a grupo",
+      "description": "Reenvía el correo para invitar al grupo",
+      "email_type": "11",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 12,
+    "fields": {
+      "name": "Nueva anotación de Acta",
+      "description": "Envía un correo a los aprobadores de acta informando de una nueva anotación",
+      "email_type": "12",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 13,
+    "fields": {
+      "name": "Nueva Acta para aprobadores",
+      "description": "Envía un correo para informar a los aprobadores de Acta que se un acta se encuentra disponible para su aprobación",
+      "email_type": "13",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 14,
+    "fields": {
+      "name": "Solicitud de DNI",
+      "description": "Correo de solicitud de acceso a DNI para un grupo",
+      "email_type": "14",
+      "admin_type": 2,
+      "date_added": "2013-12-20T23:37:01Z"
+    }
+  }
+]

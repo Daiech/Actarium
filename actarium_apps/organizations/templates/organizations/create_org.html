@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load gravatartag i18n %}
+{% block TITLE %}{% trans 'Crear organización' %}{% endblock %}
+
+{%block body%}
+<article>
+	
+    <header >
+        <div class="row">
+            <div class="col-md-8">
+                <div class="menu-icons icons-page icon-groups"></div>
+                <h3>{% trans 'Crear organización' %}</h3>
+            </div>
+        </div>
+    </header>
+    <hr/>
+    <div class="row-fluid">
+    	<!-- <p>....</p> -->
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
+        	{% csrf_token %}
+        	<div class="white-box-container">
+        	<table class="">
+        	{{ form.as_table }}
+            </table>
+            <br><br>
+			<input type="hidden" value="{{ref}}" name="ref" >
+			<a href="{% url 'home' %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}</a>
+			<input type="submit" class="btn btn-large btn-info db" value="{% trans 'Crear' %}" >
+        	</div>
+    	</form>
+    </div>
+</article>
+{%endblock%}
+{%block style%}
+<style>
+	.white-box-container{width: 40%;margin: 0 auto;}
+</style>
+{%endblock%}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}

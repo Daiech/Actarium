@@ -7,14 +7,14 @@
 <ul>
     <li>
         <a href="javascript:window.history.back()" class="">
-            <i class="icon-arrow-left"></i> Volver
+            <span class="glyphicon glyphicon-arrow-left"></span> Volver
         </a>
     </li>
     <li>
-        <a href="#"  data-toggle="modal" data-target="#template-list"><i class="icon-list-alt"></i> Cambiar Plantilla</a>
+        <a href="#"  data-toggle="modal" data-target="#template-list"><i class="glyphicon glyphicon-list-alt"></i> Cambiar Plantilla</a>
     </li>
     <li>
-        <a href="#" id="save-new-minutes" class="btn-submit"><i class="icon-hdd icon-white"></i> Guardar Acta</a>
+        <a href="#" id="save-new-minutes" class="btn-submit"><i class="glyphicon glyphicon-hdd icon-white"></i> Guardar Acta</a>
     </li>
 </ul>
 {% endblock %}
@@ -38,7 +38,7 @@
         </div>
         <div class="modal-body">
             <span>Selecciona una plantilla:</span>
-            <ul class="unstyled">
+            <ul class="list-unstyled">
                 {% for template in list_templates %}
                 <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
                     <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
@@ -94,7 +94,7 @@
                     <td></td>
                     <td>
                         <a href="/groups/{{group.slug}}/roles-for-this-minutes" class="btn btn-large">
-                            <i class="icon-arrow-left"></i> Anterior
+                            <span class="glyphicon glyphicon-arrow-left"></span> Anterior
                         </a>
                         <button type="submit" class="btn btn-info btn-large">Guardar Acta</button>
                     </td>

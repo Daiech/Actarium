@@ -1,5 +1,5 @@
 AUTHENTICATION_BACKENDS = (
-'account.backends.EmailOrUsernameModelBackend',
+'apps.account.backends.EmailOrUsernameModelBackend',
 'django.contrib.auth.backends.ModelBackend'
 )
 
@@ -14,9 +14,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request',
-    'website.context_processors.gloval_vars_url',
-    'website.context_processors.is_debug',
-    'groups.context_processors.get_groups',
+    'apps.website.context_processors.gloval_vars_url',
+    'apps.website.context_processors.is_debug',
+    'apps.groups_app.context_processors.get_groups',
 )
 
 ALLOWED_HOSTS = []
@@ -27,11 +27,11 @@ MIDDLEWARE_CLASSES = (
 )
 # add to
 INSTALLED_APPS = (
-    'groups',
-    'account',
-    'actions_log',
-    'website',
-    'emailmodule',
+    'apps.groups_app',
+    'apps.account',
+    'apps.actions_log',
+    'apps.website',
+    'apps.emailmodule',
     'rosetta'
 )
 

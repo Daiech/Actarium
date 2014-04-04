@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load i18n has_role %}
+{% block TITLE %}{% trans 'Home' %}{% endblock %}
+{% block body %}
+{% has_role "user" "org" "is_admin" as user_is_admin %}
+<article>
+    <div class="row-fluid org-menu-container">
+        <nav class="nav-menu col-md-2" >
+            <div class="bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav">
+                    <li>
+                        <div class="box" id="org-info">
+                            <span class="pull-left"><img class="img-circle b" src="{{ org.get_short_icon }}" alt="{{ org.name }}"> </span>
+                            <span class="pull-left" id="org-info-text">
+                                <h5>{{ org.name|truncatechars:16 }}</h5>
+                                {% if user_is_admin %}
+                                <p><a href="{% url 'profile_org' org.slug %}?edit">{% trans 'Editar perfil' %}</a></p>
+                                {% else %}
+                                <p>{{ org.description|truncatechars:26 }}</p>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <!-- <hr> -->
+                    </li>
+                    <li id="org-profile"><a href="{% url 'profile_org' org.slug %}"><span></span>{% trans 'Perfil' %}</a></li>
+                    <li id="org-groups" ><a href="{{ org.get_absolute_url }}"><span></span>{% trans 'Grupos' %}</a></li>
+                    <li id="org-team"><a href="{% url 'team_org' org.slug %}"><span></span>{% trans 'Miembros' %}</a></li>
+                    <li id="org-services" ><a href="{% url 'core:read_organization_services' org.slug %}"><span></span>{% trans 'Servicios' %}</a></li>
+                    
+                </ul>
+            </div>
+        </nav>
+        <div id="content_menu" class="col-md-10">
+            <div class="bt bb">
+                {% block content_menu %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/todc-docs.css">
+<style>
+    .org-menu-container > nav{padding: 0;margin: 0}
+    .org-menu-container nav.nav-menu ul.nav{margin: 0;}
+    .org-menu-container .glyphicon-chevron-right{float: right;margin-top: 2px;}
+    .bs-docs-sidenav{width: auto;}
+    .breadcrumb{background: none;margin-top: 3px;}
+    /*#content_menu{height: 100%;min-height: 200px;overflow: hidden;}*/
+    #content_menu > div{height: 100%;min-height: 200px;padding: 5px;}
+    .bs-docs-sidenav > li > a{border:none;}
+    #topbar-btn-logo{padding-right: 72px;/*padding-right: 37px;padding-left: 58px;*/padding-right: 62px;
+padding-left: 31px;}
+    .nav-list > .active > a, .nav-list > .active > a:hover {background-color: #79B632}
+    #org-info{margin-bottom: 5px;padding-left: 10px;}
+    #org-info-text{margin: 2px 0;margin-left:7px}
+    #org-info-text h5{margin: 0;}
+    #org-info-text a{text-decoration: underline;}
+    .btn .caret{margin: 0 !important;}
+</style>
+{% block style_menu %}{% endblock %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function(){
+            $("#topbar-group-name").html('<ol class="breadcrumb"><li><a href="{{ org.get_absolute_url }}">{{ org.name }}</a></li></ol>')
+            // $("").tooltip();
+        });
+    </script>
+    {% block js_menu %}{% endblock %}
+{% endblock %}

@@ -1,10 +1,11 @@
 django
-xhtml2pdf
-pillow
-pymongo
-psycopg2
-#MySQL-python
-
 python-social-auth
 python-slugify
 django-uuslug
+reportlab==2.5
+pillow
+pymongo
+psycopg2
+south
+#MySQL-python
+xhtml2pdf

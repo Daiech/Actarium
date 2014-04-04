@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Actarium Dropdown</title>
+    <link href="http://localhost:8000/static/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://localhost:8000/static/css/todc-bootstrap.css" rel="stylesheet" >
+    <link href="css/actarium-dropdown.css" rel="stylesheet" >
+</head>
+	<body>
+	<h1>Dropdown Actarium</h1>
+	<hr>
+	<a href="#" class="actarium-dropdown" >Soy dropdwon <span class="caret"></span></a>
+	<div class="dropdown-container">
+		<div class="header-title">
+	    	<span>Menu principal</span>
+	    	<button type="button" class="close close-popover" aria-hidden="true">&times;</button>
+		</div>
+		<div class="dropdown-body">
+			<div>
+				<strong>cualquier cosa</strong>
+			</div>
+			<div class="first-menu">
+				<ul class="list-unstyled">
+					<li><a href="#" class="">Algo aqui</a></li>
+					<li><a href="#" class="open-second-menu btn">Abrir segundo menu</a></li>
+				</ul>
+			</div>
+			<div class="second-menu">
+				<p>Hola, este es el segundo menu.</p>
+				<div class="">
+	            	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i>Regresar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/actarium-dropdown.js"></script>
+</body>
+</html>

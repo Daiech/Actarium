@@ -4,7 +4,10 @@
 *.pyc
 Actarium/local_settings.py
 settings_db.py
-
+static/js/vendor/tiny_mce/
+*.dot
+*.svg
+*.eps
 
 #################
 ## Eclipse
@@ -209,5 +212,7 @@ Icon?
 Thumbs.db
 
 
-# archivos de la bd
-media/*
+# archivos de usuarios
+/media/pdf/*
+/media/orgs_img/*
+/media/lastMinutes/*

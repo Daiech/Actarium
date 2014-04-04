@@ -1,10 +1,10 @@
 # encoding:utf-8
 # Django settings for Actarium project.
 import os.path
-try:
-    from .local_settings import DEBUG
-except Exception:
-    DEBUG = True
+# try:
+#     from .local_settings import DEBUG
+# except Exception:
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 # PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(".")
@@ -17,6 +17,14 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps.emailmodule',
+'actarium_apps.customers_services', 'actarium_apps.organizations','actarium_apps.core']
+
+RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta"]
+
+if DEBUG:
+    APPS += ["django_extensions"]
+    pass
 
 try:
     from .settings_db import DATABASES
@@ -31,7 +39,6 @@ except ImportError:
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
-
 ALLOWED_HOSTS = ["actarium.com", ".actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost"]
 
 # Local time zone for this installation. Choices can be found here:
@@ -132,7 +139,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    # 'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
@@ -140,15 +147,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'social.apps.django_app.default',
-    'groups',
-    'account',
-    'actions_log',
-    'website',
-    'emailmodule',
+    # 'social.apps.django_app.default',
     # 'rosetta',
-    'billing'
-)
+    # 'django_extensions',
+) + tuple(APPS)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -191,18 +193,19 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
+    # "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request',
+    'apps.website.context_processors.gloval_vars_url',
+    'apps.website.context_processors.is_debug',
+    'actarium_apps.organizations.context_processors.my_orgs',
     'social.apps.django_app.context_processors.backends',
-    'website.context_processors.gloval_vars_url',
-    'groups.context_processors.get_groups',
 )
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
+    # 'social.backends.google.GoogleOAuth2',
     # 'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
-    'account.backends.EmailOrUsernameModelBackend',
+    'apps.account.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend'
 )
 
@@ -271,3 +274,14 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+ORG_IMAGE_SIZE = ((50,50), (100,100))
+ORG_IMAGE_DEFAULT = "icons/org_default.jpg"
+
+GROUP_IMAGE_SIZE = ((50,50), (100,100))
+GROUP_IMAGE_DEFAULT = "orgs_img/default.jpg"
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

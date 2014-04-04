@@ -2,10 +2,10 @@
 {% load i18n %}
 
 {% block toolbar_content %}
-<ul class="unstyled">
+<ul class="list-unstyled">
     <li>
         <a href="{%if rel_user.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="title-on-disabled {%if not rel_user.is_convener%}disabled{%endif%}" {%if not rel_user.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
-            <i class="icon-plus"></i> {% trans " Convocar Reuni&oacute;n" %}
+            <span class="glyphicon glyphicon-plus"></span> {% trans " Convocar Reuni&oacute;n" %}
         </a>
     </li>
 </ul>
@@ -17,7 +17,7 @@
         <h4>{% trans "Agenda de Reuniones" %}</h4>
     </header>
     <hr>
-    <ul class="unstyled">
+    <ul class="list-unstyled">
         {%if reunions%}
         <li><strong>{% trans "Pr&oacute;ximas" %}:</strong></li>
             {%for r in reunions%}

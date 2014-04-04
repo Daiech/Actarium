@@ -1,0 +1,91 @@
+{% extends "organizations/menu.html" %}
+{% load i18n pricing %}
+{% block TITLE %}{% trans 'Servicios' %}{% endblock %}
+
+{% block content_menu %}
+
+	<h3>{% trans 'Servicios' %}</h3>
+
+	<p>{% trans 'Listado de servicios que ofrece actarium' %} </p>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a href="{{ org.get_absolute_url }}"><h3 class="panel-title">{{ org.name }}</h3></a>
+		</div>
+		<div class="panel-body">
+			<table class="table">
+				<tr>
+					<th>{% trans 'Nombre del servicio' %}</th>
+					<th>{% trans 'Cantidad' %} </th>
+					<th>{% trans 'Fecha de expiraci&oacute;n' %}</th>
+					{% if is_admin  %}
+						<th>{% trans 'Acci&oacute;n' %}</th>
+					{% endif %}
+				</tr>
+				{% for org_service in  org.organizationservices_organization.all %}
+					<tr>
+					<td>{{ org_service.service.service_name }}</td>
+					<td>{{ org_service.service.quantity }}</td>
+					<td>{{ org_service.service.date_expiration }}</td>
+					{% if is_admin %}
+						<td> <a class="btn btn-default" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a></td>	
+					{% endif %}
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{% trans 'Estado de Ordenes' %}</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table">
+				<tr>
+					<th>{% trans 'Estado' %}</th>
+					<th>{% trans 'Numero de miembros' %} </th>
+					<th>{% trans 'Valor unidad' %}</th>
+					<th>{% trans 'Precio por mes' %}</th>
+					<th>{% trans 'N&uacute;mero de meses' %}</th>
+					<th>{% trans 'Descuento' %}</th>
+					<th>{% trans 'Total' %}</th>
+				</tr>
+				{% for order_item in  order_items %}
+					<tr id="order_{{ order_item.id }}" >
+						<td>
+							<span class="glyphicon {{ order_item.order.status.id|icon_status }}"></span>
+							{{ order_item.order.status.name }}</td>
+						<td>{{ order_item.order_quantity }}</td>
+						<td>{{ order_item.service.price_per_period }} / Mes</td>
+						<td>{{ order_item.get_price_per_period }} / Mes</td>
+						<td>{{ order_item.number_of_periods }}</td>
+						<td>{{ order_item.discount }}</td>
+						<td>{{ order_item.get_total_price }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+
+{% endblock %}
+
+{%block style_menu %}
+<style type="text/css">
+	
+</style>
+{% endblock %}
+
+{% block js_menu %}
+	<script>
+        $(document).ready(function(){
+            $(".org-menu-container #org-services").addClass("active")
+                .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+	        {% if order %}
+	        	$('#order_{{ order }}').css('background-color',"#eee");
+	        {% endif %}
+        });
+        
+    </script>
+{% endblock %}
+

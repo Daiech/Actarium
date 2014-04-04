@@ -1,0 +1,41 @@
+Those codes are being loaded with fixtures
+
+
+
+PaymentMethods------------------------------
+
+P001: Efectivo
+P002: Consignacion directa
+
+ServicesCategories-------------------------
+
+C001: Numero de miembros
+C002: Numero de grupos
+C003: Numero de Actas
+C004: Personalizacion
+
+Services------------------------------------
+
+S000: Version Trial
+S001: Numero de miembros economico
+S002: Numero de miembros regular
+S003: Numero de miembros costoso
+S004: Numero de miembros muy costoso
+S005: Personalizacion economica
+S006: Personalizacion Costosa
+
+OrderStatus----------------------------------
+
+001: Solicitud enviada
+002: Orden aprobada
+003: Orden rechazada por conexion
+004: Transferencia en proceso
+005: Sin credito para realizar la compra
+006: Orden Vencida
+
+
+OrganizationsRoles---------------------------
+
+is_creator: Creador
+is_admin: Administrador
+is_member: Miembro

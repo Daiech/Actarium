@@ -1,0 +1,163 @@
+{% extends "organizations/menu.html" %}
+{% load i18n gravatartag orgs_ttag %}
+{% block TITLE %}{% trans 'Home' %}{% endblock %}
+
+{% block content_menu %}
+	<div id="modalGroups" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	</div>
+	<script id="modalGroupsTemplate" type="text/template">
+	<div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	    {% verbatim %}
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="">{{ ctx.title }}</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<ul>
+	        {% for g in ctx.groups %}
+	        	<li>{{ g.name }}</li>
+	        {% endfor %}
+	        </ul>
+	      </div>
+	    </div>
+	    {% endverbatim %}
+	  </div>
+	</script>
+    <div class="org-team">
+    	<div class="">
+	    	<div>
+		    	<span class=""><h3>{% blocktrans with n=org.name %}Miembros de {{ n }}{% endblocktrans %}</h3></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<form>
+					<div class="col-xs-6">
+					<input type="text" id="filter_members" class="form-control " placeholder="{% trans 'Filtrar usuarios' %}" autofocus />
+					</div>
+				</form>
+				
+			</div>
+			{% if is_org_admin %}
+			<div class="col-md-4">
+				<a href="#" class="btn btn-large "><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a>
+			</div>
+			{% endif %}
+		</div>
+		<hr>
+		<div class="org-user-list">
+			<ul id="org-list-members" class="list-unstyled">
+			{% for u in org.organizationsuser_organization.get_members %}
+				<li>
+					<div class="org-user-box row">
+						<div class="col-md-7">
+							<span class="pull-left org-user-image"><img src="{{ u.email|showgravatar:'32'}}" width="32px" class="img-circle" /></span>
+							<div class="pull-left org-user-info">
+								<strong>{{ u.get_full_name }}</strong>
+								<p>@{{ u.username }}</p>
+							</div>
+						</div>
+						{% has_role "u" "org" "is_admin" as u_is_admin %}
+						<div class="col-md-5 org-user-options" data-username="{{ u.username }}" >
+							<span><a href="#" class="btn btn-link open-modal-groups">{% trans 'Ver grupos' %}</a></span>
+						{% if is_org_admin %}
+							<span>
+								<label for="is_admin_{{ u.id }}" class="btn">{% trans 'Administrador' %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u_is_admin %}checked{% endif %} /></label>
+							</span>
+							<span>
+							<button type="button" class="btn org-user-delete"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</button>
+							</span>
+						{% else %}
+							{% if u_is_admin %}
+							<span class="glyphicon glyphicon-user"></span>&nbsp;<span class="glyphicon glyphicon-wrench"></span> {% trans 'Miembro administrador' %}
+							{% else %}
+							<span class="glyphicon glyphicon-user"></span> {% trans 'Miembro normal' %}
+							{% endif %}
+						{% endif %}
+						</div>
+					</div>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+    </div>
+{% endblock %}
+
+{% block style_menu %}
+<style>
+	.org-team .org-team-box{width: 180px;}
+	.org-team .org-user-list > ul > li{position: relative;border-bottom: solid thin #eee;}
+	.org-team .org-user-list .org-user-box{padding: 5px 5px;}
+	.org-team .org-user-list .org-user-box input[type='checkbox']{margin-top: 0px;}
+	.org-team .org-user-list .org-user-box .org-user-info{margin-left: 6px}
+	.org-team .org-user-list .org-user-box .org-user-info strong{font-size: 15px}
+	.org-team .org-user-list .org-user-box .org-user-info p{color: #999;}
+	.org-team .org-user-list .org-user-box .org-user-image{margin-top: 5px;}
+	.org-team .org-user-list .org-user-box .org-user-options {margin-top: 10px}
+	.org-team .org-user-list .org-user-box .org-user-options > span{margin-right: 2px}
+	/*.org-team .org-user-list .org-user-box .org-user-options ul.org-user-btn-list li{display: inline-block;}*/
+	.dropdown-menu{z-index: 900}
+</style>
+{% endblock %}
+
+{% block js_menu %}
+    <script src="{{ STATIC_PREFIX }}/js/vendor/jquery.fastLiveFilter.min.js"></script>
+	<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".org-menu-container #org-team").addClass("active")
+                .find("a > span").addClass("glyphicon glyphicon-chevron-right");
+
+            $("#org-num-members").css({"width": {{ total }} + "%"});
+            $('#filter_members').fastLiveFilter('#org-list-members');
+            $(".open-modal-groups").on("click", function (e) {
+            	e.preventDefault();
+            	var uname = $(this).attr("data-username");
+            	sendNewAjax("{% url 'get_user_org_groups' org.slug %}",{"uname":uname}, function (data) {
+            		console.log(data);
+	            	ctx = {"title": "{% trans 'Grupos de ' %}" + "@" + uname, "groups": data}
+	            	$("#modalGroups").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
+            	});
+            })
+			{% if is_org_admin %}
+
+            $(".org-user-admin").on("click", change_admin);
+            $(".org-user-delete").on("click", delete_user);
+            function change_admin (e) {
+            	var checkbox = $(this);
+            	var uname = checkbox.closest(".org-user-options").attr("data-username");
+            	if(checkbox.is(":checked")){
+            		var set = 1;
+            	}
+            	else{
+            		var set = 0;
+            	}
+            	sendNewAjax("{% url 'config_admin_to_org' org.slug %}", {"uname":uname, "set_admin":set}, function (data){
+            		if (data.error){
+            			setAlertError("{% trans 'Error' %}", data.error);
+            		}
+            		else{
+            			setAlertMessage("{% trans 'Rol cambiado' %}", data.msj);
+            		}
+            	},{"method": "post"});
+            }
+            function delete_user (e) {
+            	var uname = $(this).closest(".org-user-options").attr("data-username");
+            	if ( confirm("{% trans 'Seguro que desea eliminar a' %} @" + uname + "?") ){
+	            	sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
+	            		if (data.error){
+	            			setAlertError("{% trans 'Error' %}", data.error);
+	            		}
+	            		else{
+	            			setAlertMessage("{% trans 'Usuario eliminado de la organización' %}", data.msj);
+	            		}
+	            	},{"method": "post"});
+            	}else{
+            		e.preventDefault();
+            	}
+            }
+            {% endif %}
+        });
+    </script>
+{% endblock %}

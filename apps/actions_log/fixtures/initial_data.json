@@ -1,0 +1,157 @@
+[	
+	{
+		"model": "actions_log.actions",
+		"pk": 1,
+		"fields":
+		{
+			
+			"name": "Iniciar sesión",
+			"code": "LOG_IN",
+			"description": "Un usuario inicia sesión en la plataforma.",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 2,
+		"fields":
+		{
+			"name": "Registro de usuarios",
+			"code": "SIGN_IN",
+			"description": "Acción de registrar un usuario en la plataforma.",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 3,
+		"fields":
+		{
+			"name": "Cerrar sesion",
+			"code": "LOG_OUT",
+			"description": "Acción de cerrar sesion, solo se ejecuta cuando se da clic en el boton 'cerrar sesion' no cuando cierran el navegador o apagan el computador",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 4,
+		"fields":
+		{
+			"name": "Nueva reunion",
+			"code": "NEW_REUNION",
+			"description": "Convocación de una reunión, se almacena el id de la reunión y el grupo al que pertenece.",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 5,
+		"fields":
+		{
+			"name": "Nueva acta",
+			"code": "NEW_MINUTE",
+			"description": "Creación de una nueva acta, guarda el grupo al que pertenece y su codigo correpondiente.",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 6,
+		"fields":
+		{
+			"name": "Confirmar asistencia",
+			"code": "SET_ASSIST",
+			"description": "Confirmara asistencia indicando el id de la reunión y el valor, True: aceptar y False: rechazar",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 7,
+		"fields":
+		{
+			"name": "Nuevo Grupo",
+			"code": "NEW_GROUP",
+			"description": "Creación de un nuevo grupo, guarda el nombre del grupo y el nombre del administrador",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 8,
+		"fields":
+		{
+			"name": "Aceptar invitación",
+			"code": "SET_INVITA",
+			"description": "Acción de aceptar o rechazar una invitación a un grupo",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 9,
+		"fields":
+		{
+			"name": "Eliminar invitación",
+			"code": "DEL_INVITA",
+			"description": "Elimina la invitación que se ha hecho a un usuario para participar en un grupo",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	},
+	{
+		"model": "actions_log.actions",
+		"pk": 10,
+		"fields":
+		{
+			"name": "Actualizar datos",
+			"code": "CHG_USDATA",
+			"description": "Actualizar datos de usuario, se guarda la información anterior del usuario",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 11,
+		"fields":
+		{
+			"name": "Cambiar Contraseña",
+			"code": "CHG_PASS",
+			"description": "Notificación de cambio de contraseña",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 12,
+		"fields":
+		{
+			"name": "Enviar invitación",
+			"code": "SEN_INVITA",
+			"description": "Acción de enviar invitación a participar en un grupo, guarda el email al cual se envio la invitación.",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 13,
+		"fields":
+		{
+			"name": "Nueva organización",
+			"code": "NEW_ORG",
+			"description": "Crear nueva organización",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 14,
+		"fields":
+		{
+			"name": "Editar organización",
+			"code": "EDIT_ORG",
+			"description": "Editar una organización",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	}
+]

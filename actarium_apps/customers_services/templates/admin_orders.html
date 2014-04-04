@@ -1,0 +1,90 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n pricing %}
+{% block TITLE %}Administrar Ordenes{% endblock %}
+
+
+{% block bodysettings %}
+
+	<h3>Administrar Ordenes</h3>
+	<p>Espaccio para administrar las ordenes que han realizado los clientes de Actarium</p>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>{% trans 'Ordenes de servicio' %}</h3>
+		</div>
+		<div class="panel-body">
+			<table class="table">
+				<thead>
+					<tr >
+						<th>{% trans 'Orden' %}</th>
+						<th>{% trans 'Estado' %} </th>
+						<th>{% trans 'Usuario' %} </th>
+						<th>{% trans 'Organizacion' %} </th>
+						<th>{% trans '# miembros' %}</th>
+						<th>{% trans '# meses' %}</th>
+						<th>{% trans 'Total' %}</th>
+						<th>{% trans 'Acciones' %}</th>
+					</tr>
+				</thead>
+				<tbody>
+				   {% for order_item in order_items %}
+					<tr>
+						<td>{{ order_item.id }}</td>
+						<td>
+							<span class="glyphicon {{ order_item.order.status.id|icon_status }}"></span> 
+							{{ order_item.order.status.name }}
+						</td>
+						<td>{{ order_item.order.customer.actariumcustomers_customer.get_user.username }}</td> 
+						<td>{{ order_item.customer_service.organizationservices_service.get_org.name }}</td>
+						<td>{{ order_item.order_quantity }}</td>
+						<td>{{ order_item.number_of_periods }}</td>
+						<td>${{ order_item.get_total_price }}</td>
+						<td>
+							<button class="btn btn-lg btn-approve" data-toggle="modal" data-target="#myModal" data-order-id="{{ order_item.id }}"
+								{% if order_item.order.status.id == 2 or order_item.order.status.id == 6 %} disabled="disabled" {% endif %}> 
+								{% trans 'Aprobar' %} 
+							</button>
+							<button class="btn btn-lg" data-toggle="modal" data-target="#myModal" > 
+								{% trans 'Rechazar' %} 
+							</button>
+						</td>
+					</tr>
+				   {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}
+
+{%block settings_style%}
+{% endblock %}
+
+{% block settings_js %}
+<script type="text/javascript" ><!--
+	$(document).on("ready", function() {
+		$("#settings-admin-orders").addClass("active");
+
+		function showResponse(data){
+			console.log("is_done",data.is_done,"response",data.response)
+			console.dir(data)
+			if(data.Error){
+				setAlertError("Error", data.Error)
+			}
+			else if (data.is_done){
+				window.top.location.href="{% url 'services:admin_orders' %}"
+			}
+
+		}
+
+		$(".btn-approve").on("click", function(){
+				order_id = $(this).attr("data-order-id");
+				sendNewAjax("{% url 'services:approve_order' %}",
+					{"order_id":order_id},
+					showResponse,
+					{"method":"post"})
+			});
+
+	});
+</script>
+{% endblock %}

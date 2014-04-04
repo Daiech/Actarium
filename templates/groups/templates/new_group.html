@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% load gravatartag i18n %}
+{% block TITLE %}{% trans 'Crear grupo' %}{% endblock %}
+{%block body%}
+<article>
+    <header >
+        <div class="row">
+            <div class="col-md-8">
+                <div class="menu-icons icons-page icon-groups"></div>
+                <h3>Crear grupo</h3>
+            </div>
+        </div>
+    </header>
+    <hr/>
+    <div class="row-fluid">
+        <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
+        <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
+            {% csrf_token %}
+            <div id="form-new-group" class="white-box-container">
+                <div id="sel-type-group" class="">
+                    <div class="type-group">
+                        <!-- <input id="pro" value="1" type="radio" name="type-group" class="btn btn-info pull-left"> -->
+                        <div>
+                            <label for="pro">
+                                <i class="icon-cog"></i>
+                                Crear Grupo
+                            </label>
+                            <div class="text-info-smal">Crea organizaciones, sube actas anteriores, descargalas cuando quieras.</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <ul class="list-unstyled">
+                    {{newGroupForm.as_ul}}
+                    </ul>
+                </div>
+                <div class="">
+                    <span class="pull-left">
+                        <label for="sel-org">Organizaci&oacute;n:</label>
+                    </span>
+                    <span class="pull-right">
+                        <a href="/settings/organizations/new?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
+                    </span>
+                    <select name="sel-organization" id="sel-org">
+                        {% for org in organizations%}
+                        <option value="{{org.id}}" >
+                            {{org.name}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="administrator" class="hidden">
+                    <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">Administrador principal de grupo:</label>
+                    <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ Cambiar administrador</a>
+                    <ul id="admin-list" class="list-unstyled">
+                        <li>
+                            <label for="id_admin">
+                                <input type="radio" name="id_admin" value="{{user.id}}" id="id_admin" checked> <img src="{{ user.email|showgravatar:'20'}}" class="img20"> {{user.first_name}} {{user.last_name}} (yo)
+                            </label>
+                        </li>
+                    </ul>
+                    <div id="admin-box" style="display:none">
+                        <input id="search-member" type="text" placeholder="email o nombre de usuario" autocomplete="false">
+                    </div>
+                    <ul id="search-result" class="list-unstyled">
+                        
+                    </ul>
+                </div>
+                <div id="is-memeber" class="">
+                    <label data-original-title="{% trans 'Aparecer en las actas' %}" for="is_member">
+                        <input type="checkbox" id="is_member" name="is_member" value="1" checked>
+                        Ser miembro del grupo
+                    </label>
+                </div>
+                <div>
+                    <input type="hidden" id="group_name" value="{{group.name}}">
+                    <input type="hidden" id="group_id" value="{{group.id}}">
+                    <input type="hidden" value="{{sel_org}}" id="org-selected">
+                    <button type="submit" class="btn btn-info btn-large">Guardar</button>
+                    <a href="/groups" class="btn-link btn-small">Ver mis grupos</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</article>
+{%endblock%}
+{%block style%}
+<style>
+    #administrator{margin-bottom: 40px;}
+    #is-memeber{margin-bottom: 20px;font-weight: normal;}
+    #administrator label:first{margin-bottom: 10px;}
+    #admin-box{margin-top: 20px;}
+    select{width: 100%;}
+    #form-new-group input[type="text"], #form-new-group input[type="text"]{
+        padding: 10px;
+        width: 95%;
+    }
+    #form-new-group{
+        border-radius: 5px;
+        width: 40%;
+    }
+    #sel-type-group{
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    #sel-type-group > div input{
+        padding-top: 0;
+        margin: 5px 4px;
+    }
+    /*#sel-type-group > div > div{
+        margin-left: 10px;
+    }*/
+    .type-group{
+        margin: 4px 0;
+    }
+    table td .btn{
+        margin-top:10px;
+    }
+    table td ul{
+        margin: 0;
+        /*width: 87%;*/
+    }
+    .form-horizontal label{
+        cursor: pointer;
+        margin-bottom: 0;
+        margin: 3px 0;
+        font-weight: bold;
+    }
+    #sel-type-group label{
+        display: inline;
+    }
+    .form-horizontal li{
+        margin-bottom: 20px;
+    }
+    .btn-group-vertical li{
+        margin-bottom: 0;
+    }
+    ul.btn-group{
+        margin: 0;
+    }
+    .data-pro{margin-top: 20px;}
+    .data-pro > div{
+        margin-bottom: 20px;
+        margin-left: 22px;
+    }
+    .data-pro span{margin: 5px 0}
+    input[type="checkbox"]{margin-top: 0;}
+    .icon-remove{
+        margin: 5px;
+    }
+    ul#search-result{margin-left: 0;margin-top: 4px;margin-bottom: 0px;}
+    ul#search-result li{margin-bottom: 0px;}
+    ul#search-result li span{font-size: 13px;margin-left: 13px;color: gray;}
+    .user-li a{padding:5px;}
+    .user-li a:hover{background-color: #eee}
+    .icon-accept{top:4px;}
+</style>
+{%endblock%}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("#menu-organizations").addClass("active");
+        $('label').tooltip();
+        var selected = $("#org-selected").val();
+        var len = 35;
+        $("#sel-org").val(selected)
+        {%if sel_org%}
+            $("#pro").click();
+            $(".data-pro").removeClass("hidden");
+        {%endif%}
+        // $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
+        $(".group-type").parent().parent().parent().addClass("btn-group").attr({"data-toggle":"buttons-radio"})
+        $("#form-new-group .btn-group li").addClass("btn");
+
+        $(".group-type").first().click().parent().parent().addClass("active")
+
+        $("#sel-type-group input").on("click",function(e){
+            if($(this).val()==0){
+                $(".data-pro").addClass("hidden");
+            }
+            else{
+                $(".data-pro").removeClass("hidden");
+            }
+        })
+        $("#new-admin").on("click", function(e){
+            e.preventDefault();
+            $("#admin-box").slideToggle();
+            $("#search-member").focus()
+        });
+        function showIconAddMemberOnHover(){
+            // mostrar flecha sobre usuario
+            $(".user-li").hover(
+                function(){
+                    $(this).find("i").removeClass("hidden")
+                },
+                function(){
+                    $(this).find("i").addClass("hidden")
+            })
+        }
+        function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
+            if(data["username"]){//es usuario de la base de datos
+                user_to_invite = data['mail']+" ("+data['username']+")";
+                if(user_to_invite.length > len)
+                    p="..."
+                $("#search-result").html(
+                    "<li class='user-li'>"+
+                    "<a href='#invite-user' data-is-user='true' data-email='"+data['mail']+"' data-username='"+data['username']+"' data-uid='"+data['user_id']+"'>"+
+                    "<img class='img20' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+                    user_to_invite.substring(0,len)+p+
+                    '<i class="icon-accept pull-right icon-ok hidden"></i>'+
+                    "</a>"+
+                    "</li>"
+                    )
+            }
+            else{//No es usuario de la base de datos
+                if(data['mail'].length > len)
+                    p="..."
+                $("#search-result").html(
+                    "<li class='user-li'>"+
+                    "<a href='#' data-is-user='false' data-email='"+data['mail']+"' data-username='Se enviar&aacute; invitaci&oacute;n' data-uid='"+data['user_id']+"'>"+
+                    "<img class='img20' src='"+data['gravatar']+"' alt='"+data['mail']+"' />"+
+                    data['mail'].substring(0,len)+p+
+                    '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+                    "</a>"+
+                    "</li>"
+                    )
+            }
+            showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
+        }
+        var j = 1;
+        function addNewAdmin(g){//escucha el evento click para agregar al usuario a la lista de admins
+            $(".user-li > a").on("click",function(e){
+                e.preventDefault();
+                var mail = $(this).attr("data-email");
+                var uname = $(this).attr("data-username");
+                var uid = $(this).attr("data-uid");
+                var id_user = $(this).attr("data-is-user");
+                if(id_user==="true"){
+                    title ="data-original-title='"+uname+" ya disfruta de Actarium. Se le enviar&aacute; un correo electr&oacute;nico con un link para el registro.'";}
+                else{
+                    title ="data-original-title='El usuario no est&aacute; registrado. Se le enviar&aacute; un correo electr&oacute;nico con un link para el registro.'"
+                }
+                $("#search-result").removeClass("b")
+                $("#admin-list").append("<li>"+
+                    '<label for="id_admin'+j+'" '+title+'>'+
+                        '<input type="radio" name="id_admin" value="'+uid+'" id="id_admin'+j+'" checked> <img src="'+g+'" class="img20"> '+mail+" ("+uname+")"+
+                    '</label></li>'
+                )
+                $("label").tooltip();
+                j++;
+                $(this).parent().fadeOut();
+                $("#search-member").val("").parent().css({"display":"none"});
+                $("#id_name").focus();
+            });
+        }
+        function listMembers(data){//lista los usuarios disponibles a invitar
+            if(data){
+                p="";
+                if(data["mail_is_valid"]){//el email valido, o el usuario es existente
+                    appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
+                    addNewAdmin(data['gravatar'])//escucha el evento click para agregar al usuario al grupo
+                }
+                else{//el correo es invalido o no hay resultados de usuarios existentes
+                    $("#search-result").html("<li class='user-li'>"+
+                                                "<a href='#'>"+("No hay resultados").substring(0,len)+
+                                                "</a>"+
+                                            "</li>")
+                }
+            }else{//error en el server
+                setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
+            }
+        }
+        function searchMember(e){
+            // if(e.keyCode==13){
+                var user=$("#search-member").val()
+                if(!$("#search-result").hasClass("b")){$("#search-result").addClass("b")}
+                if(user.length == 0) {$("#search-result").removeClass("b")}
+                sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
+            // }
+        }
+        $("#search-member").on("keyup",searchMember);
+    });
+</script>
+
+
+{% endblock %}

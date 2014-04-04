@@ -1,0 +1,22 @@
+[
+  {
+    "model": "website.globalvars",
+    "pk": 1,
+    "fields": {
+      "name": "URL_TERMS",
+      "url": "terminos-y-condiciones-de-uso",
+      "description": "Url de los términos y condiciones",
+      "date_created": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "website.globalvars",
+    "pk": 2,
+    "fields": {
+      "name": "URL_PRIVACY",
+      "url": "politicas-de-privacidad",
+      "description": "Url de las politicas-de-privacidad",
+      "date_created": "2013-12-20T23:37:01Z"
+    }
+  }
+]

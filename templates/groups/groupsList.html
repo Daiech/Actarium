@@ -1,17 +1,17 @@
-{% extends "website/base.html" %}
+{% extends "base.html" %}
 {% block TITLE %}Grupos{% endblock %}
 
 {%block body%}
 <article>
     <header >
         <div class="row-fluid">
-            <div class="span1">
+            <div class="col-md-1">
                 <div class="menu-icons icons-page"></div>
                 <h3 class="">Grupos</h3>
             </div>
             <div class="offset2 btnSup">
                 <a href="/groups/new" class="btn">
-                    <i class="icon-plus"></i> Crear Grupo
+                    <span class="glyphicon glyphicon-plus"></span> Crear Grupo
                 </a>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <section id="invitations" class="white-box-container">
         <h4>Invitaciones pendientes a Grupos</h4>
         <hr>
-        <ul class="unstyled">
+        <ul class="list-unstyled">
             {% for inv in invitations %}
             <li class="bb" id="group-{{inv.id_group.slug}}" >
                 <span class="notification-text">
@@ -46,7 +46,7 @@
     </section>
     {% endif %}
     <div id="content-container" class="row-fluid">
-        <section id="notifications" class="span6 white-box-container">
+        <section id="notifications" class="col-md-6 white-box-container">
                 <h4 class=" ml50" title="Pertenezco al grupo. Puedo ver actas, crear reuniones o tener permisos sobre el grupo." >Soy miembro</h4>
                 <hr>
                 <ul id="group-list" class="nav onOver">
@@ -62,7 +62,7 @@
                                     {%endif%}
                                     {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
                                     {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="glyphicon glyphicon-pencil"></i> {%endif%}
                                 </span>
                             </a>
                     </li>
@@ -71,11 +71,11 @@
                 <div class="icons-info">
                     <span>Info:</span>
                     <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
-                    <span title="Tiene permisos de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                    <span title="Tiene permisos de redactar actas"><i class="glyphicon glyphicon-pencil"></i> Redactor</span>
                     <span title="Grupo Free"><i class="icon-flag"></i> Grupo Free</span>
                 </div>
         </section>
-        <section class="white-box-container span6">
+        <section class="white-box-container col-md-6">
                 <h4 title="Grupos que administro pero no pertenzco. Puedo administrar el grupo, pero no puedo ver las actas ni crear reuniones.">&Uacute;nicamente administro</h4>
                 <hr>
                 <ul id="group-list" class="nav onOver">
@@ -87,7 +87,7 @@
                                 <div class="pull-right roles">
                                     {% if gr_rel.is_admin%}<i title="Soy administrador" class="icon-wrench"></i>{%endif%}
                                     {% if gr_rel.is_approver%}<i title="Soy aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="icon-pencil"></i> {%endif%}
+                                    {% if gr_rel.is_secretary%}<i title="Soy secretario"  class="glyphicon glyphicon-pencil"></i> {%endif%}
                                 </div>
                             </a>
                         </li>

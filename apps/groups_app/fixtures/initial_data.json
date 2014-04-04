@@ -1,0 +1,94 @@
+[
+  {
+    "model": "groups_app.minutes_type",
+    "pk": 1,
+    "fields": {
+      "name": "Reunión",
+      "description": "Formato de acta para reuniones",
+      "date_added": "2013-12-20T23:37:01Z",
+      "id_creator": 1,
+      "is_public": 1,
+      "is_customized": 0
+    }
+  },
+  {
+    "model": "groups_app.minutes_type",
+    "pk": 2,
+    "fields": {
+      "name": "Last Minutes",
+      "description": "Formato de acta para actas subidas",
+      "date_added": "2013-12-20T23:37:01Z",
+      "id_creator": 1,
+      "is_public": 1,
+      "is_customized": 0
+    }
+  },
+  {
+    "model": "groups_app.templates",
+    "pk": 1,
+    "fields": {
+      "name": "Plantilla Básica  Actarium",
+      "address_template": "groups/minutesTemplates/minutesTemplate1.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate1js.html",
+      "id_type": 1,
+      "is_public": 1,
+      "date_joined": "2013-12-20T23:37:01Z",
+      "slug": "plantilla-basica-actarium-1"
+    }
+  },
+  {
+    "model": "groups_app.templates",
+    "pk": 2,
+    "fields": {
+      "name": "Plantilla Institucional Parquesoft",
+      "address_template": "groups/minutesTemplates/minutesTemplate2.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate2js.html",
+      "id_type": 1,
+      "is_public": 0,
+      "date_joined": "2013-12-20T23:37:01Z",
+      "slug": "plantilla-institucional-parquesoft-2"
+    }
+  },
+  {
+    "model": "groups_app.templates",
+    "pk": 3,
+    "fields": {
+      "name": "Plantilla Comite Parquesoft",
+      "address_template": "groups/minutesTemplates/minutesTemplate3.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate3js.html",
+      "id_type": 1,
+      "is_public": 0,
+      "date_joined": "2013-12-20T23:37:01Z",
+      "slug": "plantilla-comite-parquesoft-3"
+    }
+  },
+  {
+    "model": "groups_app.templates",
+    "pk": 4,
+    "fields": {
+      "name": "Actas subidas",
+      "address_template": "groups/minutesTemplates/minutesTemplate4.html",
+      "address_js": "groups/minutesTemplates/minutesTemplateJsEmpty.html",
+      "id_type": 2,
+      "is_public": 0,
+      "date_joined": "2013-12-20T23:37:01Z",
+      "slug": "actas-subidas-4"
+    }
+  },
+  {
+    "model": "groups_app.DNI_type",
+    "pk": 1,
+    "fields": {
+      "short_name": "C. C.",
+      "long_name": "Cédula de Ciudadanía"
+    }
+  },
+  {
+    "model": "groups_app.DNI_type",
+    "pk": 2,
+    "fields": {
+      "short_name": "T. I.",
+      "long_name": "Tarjeta de identidad"
+    }
+  }
+]

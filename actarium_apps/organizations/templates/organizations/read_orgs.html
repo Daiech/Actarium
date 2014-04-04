@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n has_role %}
+{% block TITLE %}{% trans 'Home' %}{% endblock %}
+
+{%block body%}
+<article>
+    <div class="organizations-list">
+    {% for org in organizations %}
+        {% has_role "user" "org" "is_admin" as user_is_admin %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="org-principal-image pull-left"><img src="{{ org.get_short_icon }}" alt="{{ org.name }}" /></span>
+            <span class="pull-left">
+                <h3 class="panel-title">
+                    <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
+                    {% if user_is_admin %}
+                    <span><a href="{% url 'profile_org' org.slug %}"><i class="glyphicon glyphicon-cog"></i></a></span>
+                    {% endif %}
+                </h3>
+            </span>
+            <span class="pull-right" title="{% blocktrans with num=org.get_num_members name=org.name %}{{ name }} tiene {{ num }} miembros{% endblocktrans%}">{{ org.get_num_members }}/{{ org.organizationservices_organization.get_max_num_members }} {% trans 'miembros' %}</span>
+          </div>
+          <div class="panel-body">
+            <div class="">
+                {% include "organizations/group_list.html" %}
+            </div>
+          </div>
+        </div>
+    {% empty %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{% trans 'No tienes ninguna organización :(' %}</h3>
+          </div>
+          <div class="panel-body">
+              <p>{% trans 'Las organizaciones te permiten tener un mejor control de los equipos de trabajo.' %}</p>
+          </div>
+        </div>
+    {% endfor %}
+        <a href="{% url 'create_org' %}">
+            <div class="group-preview">
+                <div class="group-circle group-circle-plus">
+                    <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+                </div>
+                <div class="group-permissions">
+                    <span class="glyphicon"></span>
+                </div>
+                <div class="group-name" title="{{ g.name }}">{% trans 'Crear organización' %}</div>
+            </div>
+        </a>
+    </div>
+</article>
+{%endblock%}
+
+{% block style%}
+<style>
+    /*.organizations-list > .panel{display: inline-block;}*/
+    .organizations-list .panel-heading{height: 38px;}
+    .organizations-list .panel-title{font-weight: bold;}
+    .organizations-list .org-principal-image{width: 30px;height: 30px;margin-top: -6px;margin-right: 6px;}
+    .organizations-list .org-principal-image img{width: 28px;margin-top: 1px;}
+</style>
+{%endblock%}
+
+{% block js %}
+    {% if user.is_authenticated%}
+    <script>
+        $(document).ready(function(){
+            $(".group-permissions > span, .group-name, .group-members-num").tooltip();
+        });
+    </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+
+/*Dropdown Actarium*/
+.dropdown-container{display:none;position:absolute;z-index:1001;background-color:rgb(253,253,253);border:solid thin #ccc;box-shadow: 0 5px 10px rgba(0,0,0,0.15);border-radius:3px;padding:10px;width:200px;}
+.header-title{border-bottom: 1px solid #dcdcdc;height:26px;text-align:center;color:#939393;font-weight: bold;font-size:14px;}
+.close-popover{position:absolute;right: 10px;top: 10px;}
+.dropdown-body{margin-top: 10px;}
+.dropdown-body *{font-size: 14px;}
+.dropdown-body ul{margin-bottom: 0;}
+.dropdown-body ul li a{display: block; padding: 5px;}
+.dropdown-body ul li a:hover{background-color: #f3f3f3;text-decoration:underline; /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;*/}
+.second-menu{display: none;width:100%}
+.second-menu label {margin:0;padding: 0;}
+.second-menu input {width: auto;}
+.back{margin-top: 5px;padding: 5px;border-radius: 3px;}
+.back:hover{background-color: #dadada}
+/*section{padding-top: 10px;}*/
+#toolbar-btn{overflow: visible;}
+
+@media (max-width: 768px) {
+    .dropdown-container{right: auto;left: 0;}
+}
+/*Close Dropdown Actarium*/

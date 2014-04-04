@@ -1,0 +1,98 @@
+[	
+	{
+		"model": "customers_services.periods",
+		"pk": 1,
+		"fields":
+		{
+			"code": "year",
+			"name": "Año",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.periods",
+		"pk": 2,
+		"fields":
+		{
+			"code":"month",
+			"name": "Mes",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.periods",
+		"pk": 3,
+		"fields":
+		{
+			"code":"day",
+			"name": "Dia",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.orderstatus",
+		"pk": 1,
+		"fields":
+		{
+			"code": "001",
+			"name": "Solicitud enviada",
+			"description": "Cuando un cliente realiza una solicitud de una orden",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.orderstatus",
+		"pk": 2,
+		"fields":
+		{
+			"code": "002",
+			"name": "Orden aprobada",
+			"description": "Cuando una orden es aprobada",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.orderstatus",
+		"pk": 3,
+		"fields":
+		{
+			"code": "003",
+			"name": "Orden rechazada por conexion",
+			"description": "Cuando la plataforma rechaza una orden por problemas de conexion",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.orderstatus",
+		"pk": 4,
+		"fields":
+		{
+			"code": "004",
+			"name": "Trasferencia en proceso",
+			"description": "En espera de la respuesta de el banco o la pasarela de pago",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.orderstatus",
+		"pk": 5,
+		"fields":
+		{
+			"code": "005",
+			"name": "Sin credito",
+			"description": "Cuando una orden es rechazada por falta de credito",
+			"is_active":"1"
+		}
+	},
+	{
+		"model": "customers_services.orderstatus",
+		"pk": 6,
+		"fields":
+		{
+			"code": "006",
+			"name": "Vencida",
+			"description": "Cuando una orden esta vencida",
+			"is_active":"1"
+		}
+	}
+]

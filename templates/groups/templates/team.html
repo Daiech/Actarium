@@ -1,52 +1,76 @@
 {% extends "groups/menu.html" %}
 {% load gravatartag %}
-{% load i18n %}
-
+{% load i18n has_role %}
 {% block toolbar_content %}
-{% if rel_user.is_admin %}
-<ul class="unstyled">
-	<li class="dropdown">
-	    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
-	        <i class="icon-plus"></i> {% trans "Agregar miembro" %}
-	        <span class="caret"></span>
-	    </a>
-	    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-	        <li class="taling">
-	        	<div class="header-title">
-	            	<span>{% trans "Miembros" %}</span>
-	            	<div id="close-add-member" class="close pull-right icon-remove"></div>
-	        	</div>
-	        </li>
-	        <li>
-	            <input type="hidden" id="group_name" value="{{group.name}}">
-	            <input type="hidden" id="group_id" value="{{group.id}}">
-	        	<div class="prelative">
-	                <button id="button-search" class="btn btn-info"><i class="icon-search icon-white"></i> </button>
-	                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-	                <span id="load-member"></span>
-	            </div>	
-	        </li>
-	        <li>
-	            <p id="message-search"></p>
-	        </li>
-	        <li>
-	            <ul id="search-result">
-	            	
-	            </ul>
-	        </li>
-	    </ul>
-	</li>
-</ul>
-{%endif%}
+	<ul class="list-unstyled">
+	{% if user_is_org_admin %}
+		<li class="dropdown">
+		    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
+		        <span class="glyphicon glyphicon-plus"></span> {% trans "Agregar miembro" %}
+		        <span class="caret"></span>
+		    </a>
+		    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+		        <li class="taling">
+		        	<div class="header-title">
+		            	<span>{% trans "Miembros" %}</span>
+		            	<div id="close-add-member" class="close pull-right glyphicon glyphicon-remove"></div>
+		        	</div>
+		        </li>
+		        <li>
+		            <input type="hidden" id="group_name" value="{{group.name}}">
+		            <input type="hidden" id="group_id" value="{{group.id}}">
+		        	<div class="prelative">
+		                <button id="button-search" class="btn btn-info"><i class="glyphicon glyphicon-search icon-white"></i> </button>
+		                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
+		                <span id="load-member"></span>
+		            </div>	
+		        </li>
+		        <li>
+		            <p id="message-search"></p>
+		        </li>
+		        <li>
+		            <ul id="search-result">
+		            	
+		            </ul>
+		        </li>
+		    </ul>
+		</li>
+	{% endif %}
+	</ul>
 {% endblock %}
 
 {% block menu_content %}
 	<!-- begin -->
 	<div class="white-box-container">
-		<h4>{% trans "Roles de usuario" %}</h4>
-		<p>{% trans "Solo los administradores acceden a este tablero: Pueden agregar/eliminar usuarios y asignar roles." %}</p>
+		<div class="row">
+			<div class="col-md-6">
+				<h4>{% trans "Equipo de trabajo" %}</h4>
+				<p>{% trans "Éste es tu equipo de trabajo con sus roles en el grupo." %}</p>
+			</div>
+			{% if rel_user.is_admin or user_is_org_admin %}
+			<div class="col-md-6">
+				<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
+	            <div class="dropdown-container" id="dropdown-org-users">
+	        		<div class="header-title">
+	                	<span>{% blocktrans with org=group.organization %}Miembros de {{ org }} {% endblocktrans %}</span>
+	                	<div class="close close-popover glyphicon glyphicon-remove"></div>
+	            	</div>
+	            	<div class="dropdown-body">
+	            		<div class="first-menu user-list">
+	            			<ul class="list-unstyled" id="org-user-list"></ul>
+	            		</div>
+						<div class="second-menu">
+							<div class="">
+	                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
+							</div>
+						</div>
+	            	</div>
+	            </div>
+			</div>
+			{% endif %}
+		</div>
 		<div class="">
-			{% if rel_user.is_admin %}
+			{% if rel_user.is_admin or user_is_org_admin %}
 			<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 				{% csrf_token %}
 			{% endif %}
@@ -54,31 +78,17 @@
 					<table id="table-roles" class="table table-bordered table-hover">
 						<tr>
 							<th class="td-first">
-								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-									{% trans "Usuarios del grupo" %}
-								</div>
+								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">{% trans "Miembros del grupo" %}</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas que aparecen en la lista de las actas">
-									<i class="icon-user"></i>
-									<span class="th-name">{% trans "Miembro" %}</span>
-								</div>
-							</th>
-							<th>
-								<div class="info-title" title="Personas encargadas de crear actas">
-									<i class="icon-pencil"></i>
-									<span class="th-name">{% trans "Redactor" %}</span>
-								</div>
-							</th>
-							<th>
-								<div class="info-title" title="Personas que pueden convocar reuniones">
-									<i class="icon-calendar"></i> 
-									<span class="th-name">{% trans "Convocador" %}</span>
+									<i class="glyphicon glyphicon-user"></i>
+									<span class="th-name">{% trans "Aparece en actas" %}</span>
 								</div>
 							</th>
 							<th>
 								<div class="info-title" title="Personas encargadas de administrar el grupo">
-									<i class="icon-wrench"></i> 
+									<i class="glyphicon glyphicon-wrench"></i> 
 									<span class="th-name">{% trans "Administrador" %}</span>
 								</div>
 							</th>
@@ -89,21 +99,21 @@
 								<div class="td-info-user">
 									<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
 									{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
-				                        <img style="width:20px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
+				                        <img class="img-circle" style="width:24px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
 				                        <span class="names">
 				                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
 				                        </span>
 				                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
 				                    </div>
 				                    <!-- comienza -->
-									{% if rel_user.is_admin %}
-				                    <div class="user-config" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
-				                    	<a href="#"><i class="icon-cog"></i></a>
+									{% if rel_user.is_admin or user_is_org_admin %}
+				                    <div class="user-config actarium-dropdown" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
+				                    	<a href="#"><i class="glyphicon glyphicon-cog"></i></a>
 				                    </div>
 				                    <div class="dropdown-container">
 			                    		<div class="header-title">
 				                        	<span>{% trans "Configuraci&oacute;n" %}</span>
-				                        	<div class="close close-popover icon-remove"></div>
+				                        	<div class="close close-popover glyphicon glyphicon-remove"></div>
 				                    	</div>
 				                    	<div class="dropdown-body">
 				                    		<div>
@@ -116,20 +126,20 @@
 				                    				{%if not m.is_active%}
 				                    				<li>
 				                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
-				                    						<!-- <i class="icon-refresh"></i>  --><i class="icon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
+				                    						<!-- <i class="icon-refresh"></i>  --><i class="glyphicon glyphicon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
 				                    					</a>
 				                    				</li>
 				                    				{%if not m.id_user.is_active%}
 				                    				<li>
-				                    					<a href="#change-names">
-				                    						<i class="icon-edit"></i> {% trans "Cambiar nombres" %}
+				                    					<a href="#" class="open-second-menu">
+				                    						<i class="glyphicon glyphicon-edit"></i> {% trans "Cambiar nombres" %}
 				                    					</a>
 				                    				</li>
 				                    				{%endif%}
 				                    				{%endif%}
 				                    				<li>
 				                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
-				                    						<i class="icon-remove"></i> {% trans "Eliminar de grupo" %}
+				                    						<i class="glyphicon glyphicon-remove"></i> {% trans "Eliminar de grupo" %}
 				                    					</a>
 				                    				</li>
 				                    			</ul>
@@ -145,7 +155,7 @@
 		                								{% trans "Apellidos" %}:
 		                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
 		                							</label>
-						                        	<a href="#" class="btn btn-link back"><i class="icon-chevron-left"></i> {% trans "Regresar" %}</a>
+						                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
 		                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
 		                						</div>
 		                					</div>
@@ -158,37 +168,19 @@
 							</td>
 							<td class="t-a-c">
 								<label for="member{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
+								{% if rel_user.is_admin or user_is_org_admin %}
 									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
 								{% else %}
-								{%if m.is_member%}<i class="icon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-							<td class="t-a-c">
-								<label for="writer{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
-									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
-								{% else %}
-								{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-							<td class="t-a-c">
-								<label for="convener{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
-									<input id="convener{{m.id_user.id}}" type="checkbox" data-role="3" data-role-name="Convocador" data-uid="{{m.id_user.id}}" {%if m.is_convener%}checked{%endif%}> 
-								{% else %}
-								{%if m.is_convener%}<i class="icon-ok"></i>{% endif%}
+								{%if m.is_member%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>
 							<td class="t-a-c">
 								<label for="admin{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
+								{% if rel_user.is_admin or user_is_org_admin %}
 									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
 								{% else %}
-								{%if m.is_admin%}<i class="icon-ok"></i>{% endif%}
+								{%if m.is_admin%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>
@@ -197,35 +189,49 @@
 					</table>
 					<div class="icons-info">
 		                <span>{% trans "Info" %}:</span>
-		                <span title="Pertenece al grupo. Aparece en las actas"><i class="icon-user"></i> {% trans "Miembro" %}</span>
-		                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> {% trans "Redactor" %}</span>
-		                <span title="Puede convocar reuniones"><i class="icon-calendar"></i> {% trans "Convocador de reuniones" %}</span>
-		                <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> {% trans "Administrador" %}</span>
-		                <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span>
+		                <span title="{% trans 'Miembros que aparecen en las actas' %}"><i class="glyphicon glyphicon-user"></i> {% trans "Aparece en actas" %}</span>
+		                <!-- <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans "Redactor" %}</span>
+		                <span title="Puede convocar reuniones"><span class="glyphicon glyphicon-calendar"></span> {% trans "Convocador de reuniones" %}</span> -->
+		                <span title="{% trans 'El usuario pude agregar miembros, crear actas y administrar la información del grupo' %}"><i class="glyphicon glyphicon-wrench"></i> {% trans "Administrador" %}</span>
+		                <!-- <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span> -->
 		            </div>
 				</section>
-			{% if rel_user.is_admin %}
+			{% if rel_user.is_admin or user_is_org_admin %}
 			</form>
 			{% endif %}
 		</div>
-		<div id="new-user-template" style="display:none">
-			{% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-			<li>
-				<div class="">
-					<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
-					<input id="new-user-firstname" type="text" placeholder="Nombres" value="[[username]]">
-					<input id="new-user-lastname" type="text" placeholder="Apellidos">
-					<input id="new-user-email" type="hidden" value="[[mail]]">
-					<input id="new-user-uname" type="hidden" value="[[username]]">
-				</div>
-			</li>
-			<li>
-				<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
-			</li>
-
-		</div>
 	</div>
 	<!-- end -->
+{% if rel_user.is_admin or user_is_org_admin %}
+<script type="text/template" id="new-user-template">
+	<li>
+		<div class="">
+			<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
+			{% verbatim %}
+			<input id="new-user-firstname" type="text" placeholder="Nombres" value="{{username}}">
+			<input id="new-user-lastname" type="text" placeholder="Apellidos">
+			<input id="new-user-email" type="hidden" value="{{mail}}">
+			<input id="new-user-uname" type="hidden" value="{{username}}">
+			{% endverbatim %}
+		</div>
+	</li>
+	<li>
+		<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
+	</li>
+</script>
+<script type="text/template" id="org-user-template">
+	{% verbatim %}
+	{% for u in users %}
+		<li id="org-user-{{ u.id }}">
+			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+				<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="32px" /></span>
+				<span>{{ u.full_name }}</span>
+				<span class="glyphicon glyphicon-ok {% if not u.is_member %}hidden{% endif %}"></span>
+			</a>
+		</li>
+	{% endfor %}
+	{% endverbatim %}
+</script>{% endif %}
 {% endblock %}
 
 
@@ -260,13 +266,13 @@
     li a span{/*color:black;*/}
     .dropdown-menu li p{color:gray;font-size: 14px;line-height:1.5;margin: 0}
     article{min-height: 500px;overflow: visible;padding-top: 1px;}
-    #add-member{position: static;}
+    #add-member{position: static;cursor: pointer;}
     #add-member-menu{padding: 10px;width: 315px;}
-    .header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}
+    /*.header-title{border-bottom: 1px solid #dcdcdc;height: 26px;text-align: center;color: #939393;font-weight: bold;font-size: 14px;}*/
     ul#add-member-menu li{margin-bottom: 7px;}
     ul#add-member-menu li a:hover, ul#add-member-menu li a:active{color: white}
     .dropdownmenu  * li{list-style:none;text-decoration: none;}
-    #newmember{margin: 3px;padding: 10px;width: 68%;}
+    #newmember{margin: 3px;/*padding: 10px;*/width: 68%;}
     #button-search{margin: 3px;padding: 10px;padding-left: 20px;padding-right: 20px;position: absolute;right: 0;}
     .btnSup{margin-top: 8px;}
     div > section ul{margin-left:0; }
@@ -275,29 +281,14 @@
     #new-user-firstname{margin-bottom: 2px;}
     .user-config{background-color: white; position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
-    
-    /*Dropdown Actarium*/
-    .dropdown-container{display:none;position:absolute;right:0;top:30px;z-index:1001;background-color:rgb(253,253,253);border:solid thin #ccc;box-shadow: 0 5px 10px rgba(0,0,0,0.15);border-radius:3px;padding:10px;width:200px;}
-    .header-title{border-bottom: 1px solid #dcdcdc;height:26px;text-align:center;color:#939393;font-weight: bold;font-size:14px;}
-    .close-popover{position:absolute;right: 10px;top: 10px;}
-    .dropdown-body{margin-top: 10px;}
-    .dropdown-body *{font-size: 14px;}
-    .dropdown-body ul{margin-bottom: 0;}
-    .dropdown-body ul li a{display: block; padding: 5px;}
-    .dropdown-body ul li a:hover{background-color: #00aeaa;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;}
-    .second-menu{display: none;width:100%}
-    .second-menu label {margin:0;padding: 0;}
-    .second-menu input {width: auto;}
-    .back{margin-top: 5px;padding: 5px;border-radius: 3px;}
-    .back:hover{background-color: #dadada}
-    section{padding-top: 10px;}
-    #toolbar-btn{overflow: visible;}
-
-	@media (max-width: 768px) {
-		.dropdown-container{right: auto;left: 0;}
-	}
-    /*Close Dropdown Actarium*/
-
+    .td-info-user .dropdown-container{right: 0}
+    #dropdown-org-users{width: 283px;}
+    .org-user-img{width: 32px;height: 32px;display: inline-block;}
+    #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 240px;}
+    #dropdown-org-users .dropdown-body ul li {position: relative;}
+    #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;}
+    #dropdown-org-users .dropdown-body ul li a span.glyphicon-ok{position: absolute;right: 0;padding: 10px;font-size: 14px;color: #dadada;}
+    .btn .caret{margin: 0 !important;}
 	@media (min-width: 480px) {
 		#newmember{width: 74%;}
 		/*#add-member-menu{width: 315px;}*/
@@ -312,349 +303,349 @@
 {% block menu_content_js %}
 <script type="text/javascript">
 	$("#group-menu-team").addClass("active");
-	$("ul").addClass("unstyled");
+	$("ul").addClass("list-unstyled");
 </script>
-<script src="{{STATIC_PREFIX}}js/vendor/mustache.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/swig.min.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/jquery.nicescroll.min.js"></script>
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
-		var message = "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.";
+		var message = "{% trans 'Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.' %}";
 		$("#message-search").html(message);
-		$("#admin-roles").addClass("active")
+		$("#admin-roles").addClass("active");
 		$(".icons-info span, .username-info, .info-title, .resend").tooltip();
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
-		{% if rel_user.is_admin %}
-	    showIconCloseOnHover()
-	    var MAX_LENGTH = 60
-	    function getRoleName (op) {
-	    	switch(op){
-	    		case 1 : return "Miembro. Los miembros aparecen en las actas"; break;
-	    		case 2 : return "Redactor de Actas"; break;
-	    		case 3 : return "Creador de reuniones para &eacute;ste grupo."; break;
-	    		case 4 : return "Administrador de &eacute;ste grupo"; break;
-	    	}
-	    }
-	    function callbackSetRole(data) {
-	    	if (data["saved"]){
-		    	setAlertMessage("Permiso agregado", data['u'] + " ahora es " + getRoleName(data['role']))
+		{% if rel_user.is_admin or user_is_org_admin %}
+			$(".user-list").niceScroll();
+			function load_org_member_list () {
+				users = {};
+				{% for u in group.organization.get_members %}{% is_member_of_group "u" "group" as is_member %}
+				users[{{ forloop.counter0 }}] = {"id": "{{ u.id }}","email": "{{ u.email }}","username": "{{ u.username }}","image": "{{ u.email|showgravatar:32 }}","full_name": "{{ u.get_full_name }}", "is_member": {{ is_member|lower }}};{% endfor %}
+				$("#org-user-list").html(swig.render($("#org-user-template").html(), {locals: users}));
+			}
+			function append_org_member(u){
+				users = {};
+				users[0] = {"id": u.iid,"email": u.email, "username": u.username, "image": u['gravatar'],"full_name": u['full_name'], "is_member": true};
+				$("#org-user-list").append(swig.render($("#org-user-template").html(), {locals: users}));
+			}
+			change_actions_org_member = function (id){
+				var e = $("#org-user-"+id);
+				console.log(e);
+				e.find("span.glyphicon-ok").toggleClass("hidden");
+				e.find("a.link-to-invite").toggleClass("user-inv");
+			}
+		    showIconCloseOnHover()
+		    var MAX_LENGTH = 60
+		    function getRoleName (op) {
+		    	switch(op){
+		    		case 1 : return "{% trans 'Miembro. Los miembros aparecen en las actas' %}"; break;
+		    		case 2 : return "{% trans 'Redactor de Actas' %}"; break;
+		    		case 3 : return "{% trans 'Creador de reuniones para &eacute;ste grupo.' %}"; break;
+		    		case 4 : return "{% trans 'Administrador de &eacute;ste grupo' %}"; break;
+		    	}
 		    }
-		    else{
-		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    function callbackSetRole(data) {
+		    	if (data["saved"]){
+			    	setAlertMessage("{% trans 'Permiso agregado' %}", data['u'] + " ahora es " + getRoleName(data['role']))
+			    }
+			    else{
+			    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
+			    }
 		    }
-	    }
-	    function callbackRemoveRole(data) {
-	    	if (data["saved"]){
-		    	setAlertMessage("Rol removido", data['u'] + " ya no es " + getRoleName(data['role']))
+		    function callbackRemoveRole(data) {
+		    	if (data["saved"]){
+			    	setAlertMessage("{% trans 'Rol removido' %}", data['u'] + " ya no es " + getRoleName(data['role']))
+			    }
+			    else{
+			    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
+			    }
 		    }
-		    else{
-		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    function setRole(e) {
+		    	var checkbox = $(this);
+		    	var role = checkbox.attr("data-role")
+		    	var role_name = checkbox.attr("data-role-name")
+		    	var uid = checkbox.attr("data-uid")
+		    	if(checkbox.is(":checked")){
+		    		sendNewAjax("/groups/{{group.slug}}/setRole",
+		    			{"role":role, "uid": uid, "remove": 0},
+		    			callbackSetRole,
+		    			{"method":"post"})
+		    	}
+		    	else{
+		    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
+		    			sendNewAjax("/groups/{{group.slug}}/setRole",
+		    				{"role":role, "uid": uid, "remove": 1},
+		    				callbackRemoveRole,
+		    				{"load_elem": "#ac-load", "method":"post"})
+		    		}
+		    		else{
+		    			checkbox.attr("checked","checked");
+		    		}
+		    	}
 		    }
-	    }
-	    function setRole(e) {
-	    	var checkbox = $(this);
-	    	var role = checkbox.attr("data-role")
-	    	var role_name = checkbox.attr("data-role-name")
-	    	var uid = checkbox.attr("data-uid")
-	    	if(checkbox.is(":checked")){
-	    		sendAjax("/groups/{{group.slug}}/setRole",
-	    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
-	    	}
-	    	else{
-	    		if(confirm("Seguro que desea eliminarle este rol?")){
-	    			sendAjax("/groups/{{group.slug}}/setRole",
-	    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
-	    		}
-	    		else{
-	    			checkbox.attr("checked","checked")
-	    		}
-	    	}
-	    }
-	    function deleteInvitationDropdown(elem){
-	        if(confirm("Realmente desea eliminar la invitación a este Usuario"))
-	        {
-	            sendAjax(
-	                "/groups/{{group.slug}}/deleteInvitation",
-	                {"id_inv":elem.attr("data-invitation")},
-	                "",
-	                function(data){
-	                    if(data['deleted']){
-	                        elem.closest("tr").animate({"height":0},"slow",function(e){
-	                            $(this).fadeOut();
-	                            setAlertMessage("Invitaci&oacute;n cancelada",data['message'])
-	                        });
-	                    }
-	                    else{
-	                        setAlertError("Error","No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo")
-	                    }
-	                }
-                );
-	        }
-	    }
-	    function showIconAddMemberOnHover(){
-	        // mostrar flecha sobre usuario
-	        $(".user-li").hover(
-	            function(){
-	                $(this).find("i").removeClass("hidden");
-	            },
-	            function(){
-	                $(this).find("i").addClass("hidden");
-	        })
-	    }
-	    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
-	    	if(data.mail_is_valid){
-		        if(data.is_user){//es usuario de la base de datos
-		            user_to_invite = data['mail']+" ("+data['username']+")";
-		            if(user_to_invite.length > MAX_LENGTH)
-		                p="..."
-		            $("#message-search").html("<strong>" + data.username + "</strong> hace parte de Actarium, haz click en el nombre para invitar.");
-		            $("#search-result").html(
-		                "<li class='user-li'>"+
-		                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-		                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-		                user_to_invite.substring(0,MAX_LENGTH)+p+
-		                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-		                "</a>"+
-		                "</li>"
-		                );
+		    function deleteInvitationDropdown(elem){
+		        if(confirm("{% trans 'Realmente desea eliminar la invitación a este Usuario' %}"))
+		        {
+		            sendNewAjax(
+		                "{% url 'remove_from_group' group.slug %}",
+		                {"id_inv": elem.attr("data-invitation")},
+		                function(data){
+		                    if(data['deleted']){
+		                        elem.closest("tr").animate({"height": 0},"slow",function(e){
+		                            $(this).fadeOut();
+		                            setAlertMessage("{% trans 'Usuario eliminado del grupo' %}", data['message']);
+		                            change_actions_org_member(elem.attr("data-invitation"));
+		                        });
+		                    }
+		                    else{
+		                        setAlertError("{% trans 'Error' %}","{% trans 'No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo' %}")
+		                    }
+		                },
+		                {"method": "post"}
+	                );
 		        }
-		        else{//No es usuario de la base de datos
-		            if(data['mail'].length > MAX_LENGTH)
-		                p="..."
-		            var view = {
-		            	"mail": data['mail'],
-		            	"gravatar": data['gravatar'],
-		            	"username": data['username'],
-		            	"p": p
+		    }
+		    function showIconAddMemberOnHover(){
+		        // mostrar flecha sobre usuario
+		        $(".user-li").hover(
+		            function(){
+		                $(this).find("i").toggleClass("hidden");
+		        })
+		    }
+		    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
+		    	if(data.mail_is_valid){
+			        if(data.is_user){//es usuario de la base de datos
+			            user_to_invite = data['mail']+" ("+data['username']+")";
+			            if(user_to_invite.length > MAX_LENGTH)
+			                p="..."
+			            $("#message-search").html("<strong>" + data.username + "</strong> hace parte de Actarium, haz click en el nombre para invitar.");
+			            $("#search-result").html(
+			                "<li class='user-li'>"+
+			                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
+			                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
+			                user_to_invite.substring(0,MAX_LENGTH)+p+
+			                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
+			                "</a>"+
+			                "</li>"
+			                );
+			        }
+			        else{//No es usuario de la base de datos
+			            if(data['mail'].length > MAX_LENGTH)
+			                p="..."
+			            var view = {
+			            	"mail": data['mail'],
+			            	"gravatar": data['gravatar'],
+			            	"username": data['username'],
+			            	"p": p
+			            }
+			            $("#search-result").html(swig.render($("#new-user-template").html(), {locals:view}));
+			            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
+			            $("#add-new-user").on("click", sendInvitationToNewUser);
+			        }
+			        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
+			    }
+		    }
+		    invitationResult = function (data, append_to_org_list){//Resultados de la invitacion (agrega si TRUE, error si False)
+		        if(data['invited']){    //USUARIO INVITADO
+		        	var is_admin = "{{is_admin}}"
+		            var tr = '<tr><td>'+
+							'<div class="username-info user-pend-r">'+
+		                        '<img style="width:20px" src="'+data['gravatar']+'" alt=""> '+(data['email']).substring(0,MAX_LENGTH)+
+		                    '</div>'+
+						'</td>'+
+						'<td class="t-a-c">\
+							<label for="member'+data['iid']+'">\
+								<input id="member'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="'+data['iid']+'" checked>\
+							</label>\
+						</td>'+
+						'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
+							'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
+						'</label></td>'+
+						'</tr>';
+					$("#table-roles").append(tr);
+					setAlertMessage("{% trans 'Invitado' %}", data['message'])
+		            showIconCloseOnHover()
+					$("td input[type='checkbox']").on("click", setRole);
+		            $("#newmember").val("");
+		            if (!append_to_org_list){append_org_member(data);}
+		        }else{//EL USUARIO YA ESTA INVITADO
+		            if(data["message"]){
+		                setAlertError("{% trans 'Informaci&oacute;n' %}","("+data['email']+") "+data['message'])
 		            }
-		            $("#search-result").html(Mustache.to_html($("#new-user-template").html(),view));
-		            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
-		            $("#add-new-user").on("click", sendInvitationToNewUser);
+		            else{
+		                //si no hay mensaje, error desconocido
+		                if(data["error"]){
+		                	setAlertError("{% trans 'Ups! Algo sali&oacute; mal :(' %}",data['error'])
+		                }
+		                else{
+		                	setAlertError("{% trans 'Ups! Algo sali&oacute; mal :(' %}","{% trans 'Por favor recarga la p&aacute;gina e intenta de nuevo' %}")
+		                }
+		            }
 		        }
-		        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
 		    }
-	    }
-	    function invitationResult(data){//Resultados de la invitacion (agrega si TRUE, error si False)
-	        if(data['invited']){    //USUARIO INVITADO
-	        	console.log(data)
-	        	var is_admin = "{{is_admin}}"
-	            var tr = '<tr><td>'+
-						'<div class="username-info user-pend-r">'+
-	                        '<img style="width:20px" src="'+data['gravatar']+'" alt=""> '+(data['email']).substring(0,MAX_LENGTH)+
-	                    '</div>'+
-					'</td>'+
-					'<td class="t-a-c">\
-						<label for="member'+data['iid']+'">\
-							<input id="member'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="'+data['iid']+'" checked>\
-						</label>\
-					</td>'+
-					'<td class="t-a-c">\
-						<label for="writer{{m.id_user.id}}">\
-							<input id="writer'+data['iid']+'" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="'+data['iid']+'">\
-						</label>\
-					</td>'+
-					'<td class="t-a-c"><label for="convener'+data['iid']+'">'+
-					'<input  id="convener'+data['iid']+'" type="checkbox" data-role="3" data-role-name="Redactor" data-uid="'+data['iid']+'" checked>'+
-					'</label></td>'+
-					'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
-						'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
-					'</label></td>'+
-					'</tr>';
-				$("#table-roles").append(tr);
-				setAlertMessage("Invitado",data['message'])
-	            showIconCloseOnHover()
-				$("td input[type='checkbox']").on("click", setRole);
-	            $("#newmember").val("");
-	        }else{//EL USUARIO YA ESTA INVITADO
-	            if(data["message"]){
-	                setAlertError("Informaci&oacute;n","("+data['email']+") "+data['message'])
-	            }
-	            else{
-	                //si no hay mensaje, error desconocido
-	                if(data["error"]){
-	                	setAlertError("Ups! Algo sali&oacute; mal :(",data['error'])
-	                }
-	                else{
-	                	setAlertError("Ups! Algo sali&oacute; mal :(","Por favor recarga la p&aacute;gina e intenta de nuevo")
-	                }
-	            }
-	        }
-	    }
-	    function sendInvitationToNewUser(e){
-	    	e.preventDefault();
-	    	var ctx = {
-	    		"new": 1,
-	    		"pk": $("#group_id").val(),
-	    		"mail": $("#new-user-email").val(),
-	    		"uname": $("#new-user-uname").val(),
-	    		"firstname": $("#new-user-firstname").val(),
-	    		"lastname": $("#new-user-lastname").val(),
-	    		}
-			sendAjax("/groups/setInvitation",ctx,"",invitationResult);
-			$("#search-result").fadeOut(300,function (argument) {
-				$(this).empty().show().removeClass("user-li");;
-			});
-            $("#newmember").focus();
-            $("#message-search").html(message);
-	    }
-	    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
-	        $(".user-li > a").on("click",function(e){
-	            e.preventDefault();
-	            var mail = $(this).attr("data-email");
-	            var uname = $(this).attr("data-username");
-	            var group_id = $("#group_id").val();
-	            var group_name = $("#group_name").val();
-	            sendAjax("/groups/setInvitation",{"pk":group_id, "mail": mail},
-	                     "",invitationResult);
-	            $(this).parent().fadeOut(300, function (e){
-	            	$(this).empty().show().removeClass("user-li");
-	            });
+		    function sendInvitationToNewUser(e){
+		    	e.preventDefault();
+		    	var ctx = {
+		    		"new": 1,
+		    		"pk": $("#group_id").val(),
+		    		"mail": $("#new-user-email").val(),
+		    		"uname": $("#new-user-uname").val(),
+		    		"firstname": $("#new-user-firstname").val(),
+		    		"lastname": $("#new-user-lastname").val(),
+		    		}
+				sendAjax("/groups/setInvitation",ctx,"",invitationResult);
+				$("#search-result").fadeOut(300,function (argument) {
+					$(this).empty().show().removeClass("user-li");;
+				});
 	            $("#newmember").focus();
-	            $("#message-search").html(message)
-	        })
-	    }
-	    function listMembers(data){//lista los usuarios disponibles a invitar
-	        if(data){
-	            p="";
-	            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
-	                appendMemberToList(data)//Muestra la lista de posibles miembros a agregar
-	                sendInvitationOnClick()//escucha el evento click para agregar al usuario al grupo
-	            }
-	            else{//el correo es invalido o no hay resultados de usuarios existentes
-	            	$("#message-search").html("Asegurate de escribir correctamente el correo electr&oacute;nico.");
-	                $("#search-result").html("<li style='list-style:none'>"+
-	                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
-	                                            "</a>"+
-	                                        "</li>")
-	            }
-	        }else{//error en el server
-	            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
-	        }
-	    }
-	    function getSearch () {
-	    	var user=$("#newmember").val()
-	        sendAjax("/groups/getMembers",{search:user},"#load-member",listMembers)
-	    }
-	    function searchMember(e){//INVITACIONES MAIN
-	    	e.preventDefault();
-	        if(e.keyCode==13){
-			    getSearch();
-	        }
-	    }
-	    function showIconCloseOnHover(){
-	        $(".list-member-item").hover(function(){  
-	            $(this).find("i.icon-remove").show(10)  
-	        },function(){                      
-	            $(this).find("i.icon-remove").hide(30)
-	        })
-	    }
-	    function reSendInvitation (elem) {
-	    	var uid = $(elem).attr("data-uid");
-	    	sendAjax("/groups/{{group.slug}}/admin/resend-invitation/",{"uid":uid},"",function (data){
-	    		if(data.sent){
-	    			console.log("Reenviado "+data.sent);
-		    		setAlertMessage("Invitaci&oacute; reenviada", "Se ha enviado nuevamente una invitac&oacute;n por correo electr&oacute;nico a "+data.email);
-    			}
-    			else{
-    				console.log(data);
-    			}
-	    	})
-	    }
-	    function changeNames(elem){
-	    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
-	    	var first_menu = elem.closest(".first-menu");
+	            $("#message-search").html(message);
+		    }
+		    sendInvitation = function (elem, callback) {
+		    	var mail = elem.attr("data-email");
+	            var uname = elem.attr("data-username");
+	            var group_id = $("#group_id").val();
+	            sendNewAjax("/groups/setInvitation",{"pk":group_id, "mail": mail}, callback);
+		    }
+		    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
+		        $(".user-li > a").on("click",function(e){
+		            e.preventDefault();
+		            sendInvitation($(this), invitationResult);
+		            $(this).parent().fadeOut(300, function (e){
+		            	$(this).empty().show().removeClass("user-li");
+		            });
+		            $("#newmember").focus();
+		            $("#message-search").html(message);
+		        });
+		    }
+		    function listMembers(data){//lista los usuarios disponibles a invitar
+		        if(data){
+		        	if (data.forbbiden){
+		        		setAlertError("{% trans 'Error' %}", data.forbbiden);
+		        	}else{
+			            p="";
+			            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
+			                appendMemberToList(data);//Muestra la lista de posibles miembros a agregar
+			                sendInvitationOnClick();//escucha el evento click para agregar al usuario al grupo
+			            }
+			            else{//el correo es invalido o no hay resultados de usuarios existentes
+			            	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electr&oacute;nico.' %}");
+			                $("#search-result").html("<li style='list-style:none'>"+
+			                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
+			                                            "</a>"+
+			                                        "</li>")
+			            }
+		        	}
+		        }else{//error en el server
+		            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
+		        }
+		    }
+		    function getSearch () {
+		    	var user = $("#newmember").val();
+		        sendNewAjax("{% url 'get_users_list' group.organization.slug  %}", {search: user}, listMembers);
+		    }
+		    function searchMember(e){//INVITACIONES MAIN
+		    	e.preventDefault();
+		        if(e.keyCode==13){
+				    getSearch();
+		        }
+		    }
+		    function showIconCloseOnHover(){
+		        $(".list-member-item").hover(function(){  
+		            $(this).find("i.icon-remove").show(10)  
+		        },function(){                      
+		            $(this).find("i.icon-remove").hide(30)
+		        })
+		    }
+		    function reSendInvitation (elem) {
+		    	var uid = $(elem).attr("data-uid");
+		    	sendAjax("/groups/{{group.slug}}/admin/resend-invitation/",{"uid":uid},"",function (data){
+		    		if(data.sent){
+		    			console.log("Reenviado "+data.sent);
+			    		setAlertMessage("Invitaci&oacute; reenviada", "Se ha enviado nuevamente una invitac&oacute;n por correo electr&oacute;nico a "+data.email);
+	    			}
+	    			else{
+	    				console.log(data);
+	    			}
+		    	})
+		    }
+		    function changeNames(elem){
+		    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
+		    	var first_menu = elem.closest(".first-menu");
 
-	    	second_menu.slideDown(150);
-	    	first_menu.slideUp(200, function(){$(".first-element").focus();});
+		    	second_menu.slideDown(150);
+		    	first_menu.slideUp(200, function(){$(".first-element").focus();});
 
-	    	second_menu.find(".back").on("click", function (e) {
+		    	second_menu.find(".back").on("click", function (e) {
+		    		e.preventDefault();
+		    		e.stopPropagation();
+		    		first_menu.slideDown(150);
+		    		second_menu.slideUp(200);
+		    	});
+		    }
+		    function setNewNames(uid, fname, lname){
+
+		    }
+	    	$(".save-names").on("click", function (e){
 	    		e.preventDefault();
 	    		e.stopPropagation();
-	    		first_menu.slideDown(150);
-	    		second_menu.slideUp(200);
+	    		var fname = $(this).closest(".second-menu").find(".first-name").val();
+	    		var lname = $(this).closest(".second-menu").find(".last-name").val();
+	    		var uid = $(this).attr("data-uid");
+	    		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
+				var elem = $(this);
+	    		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
+	    			if(data.changed){
+	    				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
+	    				restartMenus();
+	    				setAlertMessage("Nombres Cambiados", "Los nombres se han actualizado con &eacute;xito.");
+	    			}else{
+	    				console.log("No se pudo guardar los nuevos nombres");
+	    				setAlertError("Error", "No se pudo guardar los nuevos nombres. Recarga la p&aacute;gina e intenta de nuevo.");
+	    			}
+	    		});
 	    	});
-	    }
-	    function setNewNames(uid, fname, lname){
-	    	
-	    }
-    	$(".save-names").on("click", function (e){
-    		e.preventDefault();
-    		e.stopPropagation();
-    		var fname = $(this).closest(".second-menu").find(".first-name").val();
-    		var lname = $(this).closest(".second-menu").find(".last-name").val();
-    		var uid = $(this).attr("data-uid");
-    		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
-			var elem = $(this);
-    		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
-    			if(data.changed){
-    				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
-    				restartMenus();
-    				setAlertMessage("Nombres Cambiados", "Los nombres se han actualizado con &eacute;xito.");
-    			}else{
-    				console.log("No se pudo guardar los nuevos nombres");
-    				setAlertError("Error", "No se pudo guardar los nuevos nombres. Recarga la p&aacute;gina e intenta de nuevo.");
-    			}
-    		});
-    	});
-	    $(".configuration-list a").on("click", function (e){  {%comment%} listen events on menu{%endcomment%}
-	    	e.preventDefault();
-	    	e.stopPropagation();
-	    	if($(this).attr("href") === "#resend-invitation"){
-	    		reSendInvitation(this);
-	    	}
-	    	if($(this).attr("href") === "#change-names"){
-	    		changeNames($(this));
-	    	}
-	    	if($(this).attr("href") === "#delete-from-group"){
-	    		deleteInvitationDropdown($(this));
-	    		$(this).closest(".dropdown-container").hide();
-	    	}
-	    })
-	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
-	    $("#button-search").on("click", function (e) {
-	    	e.preventDefault();
-	    	getSearch();
-	    	$("#newmember").focus();
-	    });
-	    $("#newmember").on("keyup",searchMember);//INVITACIONES MAIN 
-	    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
-	        $("#add-member-menu").addClass("disblock");
-	        $("#newmember").focus();//give the focus to the input to search members
-	    });
-	    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
-	        $("#add-member-menu").removeClass("disblock");//Close the dropdown menu to add members
-	    });
-		
-		/*Dropdown Actarium*/
-	    function restartMenus(){
-	    	$(".second-menu").slideUp(200);
-    		$(".first-menu").slideDown(150);
-	    }
-		$(".user-config").on("click", function (e){
-			e.preventDefault();
-			var this_dropdown = $(this).parent().find(".dropdown-container");
-			$(".dropdown-container").not(this_dropdown).hide();//hide every .dropdown-container except this_dropdown
-			this_dropdown.slideToggle(100);
-			restartMenus();
-		});
-		$(".close-popover").on("click", function (e){
-			/*Close dropdown container*/
-			e.preventDefault();
-			e.stopPropagation();
-			$(this).closest(".dropdown-container").hide();
-    		restartMenus();
-		});
-		/*Close Dropdown Actarium*/
+		    $(".configuration-list a").on("click", function (e){  {%comment%} listen events on menu{%endcomment%}
+		    	e.preventDefault();
+		    	e.stopPropagation();
+		    	if($(this).attr("href") === "#resend-invitation"){
+		    		reSendInvitation(this);
+		    	}
+		    	if($(this).attr("href") === "#change-names"){
+		    		changeNames($(this));
+		    	}
+		    	if($(this).attr("href") === "#delete-from-group"){
+		    		deleteInvitationDropdown($(this));
+		    		$(this).closest(".dropdown-container").hide();
+		    	}
+		    })
+		    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
+		    $("#button-search").on("click", function (e) {
+		    	e.preventDefault();
+		    	getSearch();
+		    	$("#newmember").focus();
+		    });
+		    $("#newmember").on("keyup", searchMember);//INVITACIONES MAIN 
+		    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
+		        $("#add-member-menu").addClass("disblock");
+		        $("#newmember").focus();//give the focus to the input to search members
+		    });
+		    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
+		        $("#add-member-menu").removeClass("disblock");//Close the dropdown menu to add members
+		    });
+		    load_org_member_list();
 		{% endif %}
-		$(".dropdown-body ul li a").hover(
-			function (){
-				$(this).find("i").addClass("icon-white");
-			},
-			function (){
-				$(this).find("i").removeClass("icon-white");
-			}
-		);
 	});
+	{% if rel_user.is_admin or user_is_org_admin %}
+	function sendInvitationFromAdmin(e){
+    	e.preventDefault();
+		sendInvitation($(this), function(data){
+			invitationResult(data, true);
+			change_actions_org_member(data.iid);
+		});
+    }
+    $(document).on("click", "a.user-inv", sendInvitationFromAdmin);
+    {% endif %}
 </script>
 {% endblock %}
 

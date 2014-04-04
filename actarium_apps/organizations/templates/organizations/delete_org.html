@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load gravatartag i18n %}
+{% block TITLE %}{% trans 'Eliminar organización' %}{% endblock %}
+
+{%block body%}
+<article>
+	
+    <header >
+        <div class="row">
+            <div class="col-md-8">
+                <div class="menu-icons icons-page icon-groups"></div>
+                <h3>{% trans 'Eliminar organización' %}</h3>
+            </div>
+        </div>
+    </header>
+    <hr/>
+    <div class="row-fluid">
+        <div class="white-box-container">
+            <h4>{% trans 'Archivar organización' %}</h4>
+            <p>{% trans 'Las organizaciones no se pueden eliminar del todo.' %}</p>
+            <p>{% trans 'Puedes archivar ésta organización para que desaparezca de tu lista de organizaciones.' %}</p>
+            <p>{% trans '¿Seguro que desea archivar esta organización?' %}</p>
+            <form class="" enctype="multipart/form-data" method="POST" action="">
+                {% csrf_token %}
+                <input type="hidden" name="archive" value="true">
+    			<a href="{% url 'profile_org' org.slug %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Cancelar' %}</a>
+                <button type="submit" class="btn btn-large btn-warning db"><span class="glyphicon glyphicon-remove"></span> {% trans 'Archivar' %}</button>
+            </form>
+    	</div>
+    </div>
+</article>
+{%endblock%}
+{%block style%}
+<style>
+	.white-box-container{width: 40%;margin: 0 auto;}
+</style>
+{%endblock%}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}

@@ -1,5 +1,5 @@
-{% extends "website/base.html" %}
-{% block TITLE %}Grupo {{group.name}} {% endblock %}
+{% extends "base.html" %}
+{% block TITLE %}Grupossss {{group.name}} {% endblock %}
 {% load gravatartag %}
 {%block body%}
 <article>
@@ -27,9 +27,9 @@
     </header>
     <hr/>
     <div class="row-fluid">
-        <div class="span6 row-fluid">
+        <div class="col-md-6 row-fluid">
             <section class="white-box-container">
-                <header class="span3">
+                <header class="col-md-3">
                     <h4 class="">Miembros</h4>
                 </header>
                 <div class="t-a-r button-group">
@@ -41,10 +41,10 @@
                     {%endif%}
 
                     <a href="{%if not current_member.is_admin%}#{%else%}/groups/{{ group.slug}}/admin#add-new-member{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_admin%}disabled{%endif%}" {%if not current_member.is_admin%}title="Necesitas ser administrador para habilitar esta opci&oacute;n"{%endif%}>
-                        <i class="icon-plus"></i> Agregar miembros</a>
+                        <span class="glyphicon glyphicon-plus"></span> Agregar miembros</a>
                 </div>
                 <hr style="margin-bottom:5px;">
-                <ul class="unstyled list-members" style="display:none">
+                <ul class="list-unstyled list-members" style="display:none">
                     {%for member in members%}
                     <li class="list-item {%if not member.is_active%}user-pend-r{%endif%}">
                         <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
@@ -58,9 +58,9 @@
                                 </span>
                                 <span class="pull-right roles-buttons">
                                     {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
-                                    {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es Redactor"  class="icon-pencil"></i> {%endif%}
+                                    {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es Redactor"  class="glyphicon glyphicon-pencil"></i> {%endif%}
                                     {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                    {% if not member.is_approver and not member.is_secretary and not member.is_admin and current_member.is_admin%}<i class="icon-plus"></i> Agregar Rol{%endif%}
+                                    {% if not member.is_approver and not member.is_secretary and not member.is_admin and current_member.is_admin%}<span class="glyphicon glyphicon-plus"></span> Agregar Rol{%endif%}
                                 </span>
                             </div>
                         </a>
@@ -71,7 +71,7 @@
                             <span>Info:</span>
                             <span title="El usuario pude agregar usuarios y roles"><i class="icon-wrench"></i> Administrador</span>
                             <!-- <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span> -->
-                            <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Redactor</span>
+                            <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> Redactor</span>
                             <span title="Usuarios que no han aceptado la invitaci&oacute;n a &eacute;ste grupo" class="user-pend-l"> Usuarios pendientes</span>
                             <span title="Usuarios que aceptaron la invitaci&oacute;n a &eacute;ste grupo" class="user-active-l"> Usuarios activos</span>
                         </div>
@@ -80,7 +80,7 @@
                         <a id="show-minus" class="btn btn-link btn-mini" href="#Ver-menos">Ver menos...</a>
                     </li>
                 </ul>
-                <ul class="unstyled list-member-pics">
+                <ul class="list-unstyled list-member-pics">
                     {%for member in members%}
                         <li style="display:inline" class="">
                             <a href="/groups/{{ group.slug}}/admin?u={{member.id_user.username}}">
@@ -92,7 +92,7 @@
                                     <div class="w48">
                                         {% if member.is_admin%}<i title="{{member.id_user.first_name}} es administrador" class="icon-wrench"></i>{%endif%}
                                         {% if member.is_approver%}<i title="{{member.id_user.first_name}} es aprobador"  class="icon-thumbs-up"></i>{%endif%}
-                                        {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es Redactor"  class="icon-pencil"></i> {%endif%}
+                                        {% if member.is_secretary%}<i title="{{member.id_user.first_name}} es Redactor"  class="glyphicon glyphicon-pencil"></i> {%endif%}
                                     </div>
                                 </div>
                             </a>
@@ -104,16 +104,16 @@
                 </ul>
             </section>
             <section class="white-box-container">
-                <header class="span6">
+                <header class="col-md-6">
                     <h4>Reuniones</h4>
                 </header>
                 <div class="t-a-r button-group">
                     <a href="{%if current_member.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_convener%}disabled{%endif%}" {%if not current_member.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
-                        <i class="icon-calendar"></i> Convocar Reuni&oacute;n
+                        <span class="glyphicon glyphicon-calendar"></span> Convocar Reuni&oacute;n
                     </a>
                 </div>
                 <hr>
-                <ul class="unstyled">
+                <ul class="list-unstyled">
                     {%if reunions%}
                     <li><strong>Pr&oacute;ximas:</strong></li>
                         {%for r in reunions%}
@@ -141,22 +141,22 @@
                 </ul>
             </section>
         </div>
-        <section class="span6 white-box-container" id="minutes-section">
-            <header class="span6">
+        <section class="col-md-6 white-box-container" id="minutes-section">
+            <header class="col-md-6">
                 <h4 class="">Listado de Actas</h4>
             </header>
             <div class="t-a-r button-group">
                 <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
-                    <i class="icon-plus"></i> Crear acta
+                    <span class="glyphicon glyphicon-plus"></span> Crear acta
                 </a>
                 {%if is_pro%}
                 <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
-                    <i class="icon-upload"></i> Subir acta
+                    <i class="glyphico glyphicon glyphicon-cloud-upload"></i> Subir acta
                 </a>
                 {%endif%}
             </div>
             <hr>
-            <ul class="unstyled minutes-list">
+            <ul class="list-unstyled minutes-list">
                 {%for minute in minutes%}
                     {%if current_member.is_admin or minute.rol.is_approver or minute.minutes.is_full_signed%}
                     <li title="{%if minute.minutes.is_full_signed%}

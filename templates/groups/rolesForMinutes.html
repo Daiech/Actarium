@@ -1,4 +1,4 @@
-{% extends "website/base.html" %}
+{% extends "base.html" %}
 {% block TITLE %}Administraci&oacute;n de {{group.name}}{% endblock %}
 {% block body %}
 {% load gravatartag %}
@@ -10,7 +10,7 @@
 		{% csrf_token %}
 		<section class="">
 			<div class="row-fluid mt40 mb50">
-				<div class="span6">
+				<div class="col-md-6">
 					<span>Presidente:</span>
 					<select id="sel-president">
 						<option value="0">Seleccione presidente</option>
@@ -18,9 +18,9 @@
 						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
                 	{%endfor%}
 					</select>
-					<span class="president-ok hidden"><i class="icon-ok"></i></span>
+					<span class="president-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 				</div>
-				<div class="span6">
+				<div class="col-md-6">
 					<span>Secretario:</span>
 					<select id="sel-secretary">
 						<option value="0">Seleccione secretario</option>
@@ -28,7 +28,7 @@
 						<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
                 	{%endfor%}
 					</select>
-					<span class="secretary-ok hidden"><i class="icon-ok"></i></span>
+					<span class="secretary-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 				</div>
 			</div>
 			<table id="table-roles" class="table table-bordered table-hover">
@@ -40,7 +40,7 @@
 					</th>
 					<th>
 						<div class="info-title" title="Personas que asistieron a la reuni&oacute;n">
-							<i class="icon-pencil"></i>
+							<i class="glyphicon glyphicon-pencil"></i>
 							<span class="th-name">Asistentes</span>
 						</div>
 					</th>
@@ -102,7 +102,7 @@
 			<div id="add-new-member" class="mt20 pull-left">
 				<div class="icons-info">
 	                <span>Info:</span>
-	                <span title="Tiene la responsabilidad de redactar actas"><i class="icon-pencil"></i> Asistente</span>
+	                <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> Asistente</span>
 	                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
 	                <span title="El usuario debe firmar el acta"><i class="icon-wrench"></i> Firmador</span>
 	                <span class="user-pend-l"> Usuarios pendientes</span>
@@ -112,7 +112,7 @@
             	</div>
             	<div class="more-info">
             		<div>
-            			<strong><i class="icon-pencil"></i> Asistente</strong>: Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de asistentes del Acta.
+            			<strong><i class="glyphicon glyphicon-pencil"></i> Asistente</strong>: Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de asistentes del Acta.
             		</div>
             		<div>
            				<strong><i class="icon-thumbs-up"></i> Aprobador</strong>: Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su totalidad.
@@ -127,10 +127,10 @@
             </div>
 			<div class="mt20 pull-right">
 				<a href="/groups/{{group.slug}}" class="btn">
-                	<i class="icon-arrow-left"></i> Volver al grupo
+                	<span class="glyphicon glyphicon-arrow-left"></span> Volver al grupo
                 </a>
                 <a href="{%if not is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{{id_reunion}}/{{template}}{%endif%}" class="btn btn-info">
-                    Siguiente <i class="icon-arrow-right icon-white"></i>
+                    Siguiente <i class="glyphicon glyphicon-arrow-right icon-white"></i>
                 </a>
 			</div>
 		</section>
