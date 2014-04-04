@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from actarium_apps.organizations.models import rel_user_group
 from apps.emailmodule.models import *
-# from apps.actions_log.views import saveActionLog, saveViewsLog
+from apps.actions_log.views import saveActionLog, saveViewsLog
 import json
 
 
