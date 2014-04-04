@@ -104,19 +104,27 @@ class CustomersServices(models.Model):
     
     objects = CustomersServicesManager()
     
+    def get_order_active(self):
+        order_related = self.orderitems_customer_service.get_or_none(order__status_id=2)
+        if order_related:
+            service_name =  order_related
+        else:
+            service_name = None 
+        return service_name
+
     def service_name(self):
-        orders_related = self.orderitems_customer_service.all()
-        try:
-            service_name =  orders_related[0].service.service_category.name
-        except:
-            service_name = _(u"Servicio no asignado a ninguna orden")
+        service = self.get_order_active().service
+        if service:
+            service_name =  service.service_category.name
+        else:
+            service_name = None #_(u"Servicio no asignado a ninguna orden")
         return service_name
     
     def service_category(self):
-        orders_related = self.orderitems_customer_service.all()
-        try:
-            service_category =  orders_related[0].service.service_category
-        except:
+        service = self.get_order_active().service
+        if service:
+            service_category =  service.service_category
+        else:
             service_category = None
         return service_category
     

@@ -54,12 +54,7 @@
 				{% for order_item in  order_items %}
 					<tr id="order_{{ order_item.id }}" >
 						<td>
-							{% if order_item.order.status.id == 1 %}
-								<span class="glyphicon glyphicon-arrow-up"></span>
-							{% elif order_item.order.status.id == 2 %}
-								<span class="glyphicon glyphicon-ok"></span>
-							{% endif %}
-
+							<span class="glyphicon {{ order_item.order.status.id|icon_status }}"></span>
 							{{ order_item.order.status.name }}</td>
 						<td>{{ order_item.order_quantity }}</td>
 						<td>{{ order_item.service.price_per_period }} / Mes</td>
