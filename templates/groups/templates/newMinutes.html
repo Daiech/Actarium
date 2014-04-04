@@ -176,22 +176,20 @@
 	.pager{margin: 5px auto;padding: 0;position: relative;top: 0;}
 	.minutes-form-btn{display:inline;}
     section{margin-top: 0px;padding-top: 0 !important}
-    .bootstrap-datetimepicker-widget{
+/*    .bootstrap-datetimepicker-widget{
 position: absolute;
 left: 0;
 right: 0;
 margin: auto;
-top: 100px}
+top: 100px}*/
 </style>
+<link rel="stylesheet" media="all" type="text/css" href="{{STATIC_PREFIX}}css/bootstrap-datetimepicker.min.css" />
 {%endblock%}
 
 {% block menu_content_js %}
-<script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js"></script>
-<script src="{{STATIC_PREFIX}}js/vendor/jquery-ui-sliderAccess.js"></script>
-<script src="{{STATIC_PREFIX}}js/vendor/jquery-ui-timepicker-addon.js"></script>
 <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
-<script src="{{STATIC_PREFIX}}js/vendor/bootstrap-datetimepicker.min.js"></script>
-<!-- <script src="{{STATIC_PREFIX}}js/textareas.js"></script> -->
+<script type="text/javascript" src="{{STATIC_PREFIX}}js/vendor/moment-with-langs.min.js"></script>
+<script type="text/javascript" src="{{STATIC_PREFIX}}js/vendor/bootstrap/bootstrap-datetimepicker.js"></script>
 
 <script type="text/javascript" >
    $(document).ready(function(){
@@ -200,29 +198,17 @@ top: 100px}
             e.preventDefault();
             e.stopPropagation();
             $("#form-new-minutes").submit();
-        })
-        // $('.date-pick').datetimepicker({
-        //     monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-        //     dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-        //     nextText: 'Siguiente',
-        //     prevText: 'Anterior',
-        //     currentText: "Ahora",
-        //     closeText: "Hecho",
-        //     changeMonth: true,
-        //     changeYear: true,
-        //     dateFormat: 'yy-mm-dd',
-        //     controlType: 'select',
-        //     ampm: true
-        // }).css({"z-index":"1034"});
-       $('.date-pick').datetimepicker({
-        format: 'yyyy-MM-dd HH:mm PP',
-      });
-       url_s = location.pathname.split("/")
-	   $(".template_btn").click(function(){
-			//console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
-			window.location = "/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug')
-	   });
-       tinyMCE.init({
+        });
+        // moment().format('YYYY-MM-DD h:mm a');
+        dp = $('.date-pick').datetimepicker({
+            format: 'YYYY-MM-DD h:mm a',
+        });
+        url_s = location.pathname.split("/")
+        $(".template_btn").click(function(){
+            //console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
+            window.location = "/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug')
+        });
+        tinyMCE.init({
             theme : "advanced",
             theme_advanced_toolbar_location : "top",
             theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,outdent,indent,|,undo,redo",
@@ -234,14 +220,14 @@ top: 100px}
             height : "300",
             width : "100%",
             content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
-        });
-       // $("#template-list").modal("show");
-       $("#close-template-list").on("click",function(e){
+         });
+        // $("#template-list").modal("show");
+        $("#close-template-list").on("click",function(e){
             e.preventDefault();
             $("#template-list").modal("hide");
-       })
+        })
 
-       function setTemplateSelectedColors (elem) {
+        function setTemplateSelectedColors (elem) {
            //reset selected items
             $(".template-item").removeClass("template-item-selected");
             // $(".template-item").css({"border": "solid thin #ccc", "background-color":"white"});
@@ -251,16 +237,16 @@ top: 100px}
             //set border and background to selected item
             $(elem).parent().parent().addClass("template-item-selected");
             $(elem).parent().addClass("template-item-child-selected");
-       }
+        }
 
-       $(".template-thumbnail").on("click",function(e){
+        $(".template-thumbnail").on("click",function(e){
             e.preventDefault();
             setTemplateSelectedColors($(this));
             var href = $(this).attr("data-href");
             $("#change-template").attr("href",href);
-       })
-	});
+        });
+        {% include minutesTemplateJs %}
+    });
 </script>
-{% include minutesTemplateJs %}
  
 {% endblock %}

@@ -1,4 +1,3 @@
-<script type="text/javascript">
 	{% ifequal is_form 1 %}
 		function copyDate(){
 			$(".date_mirror").empty().text(""+$("#id_date_start").val());
@@ -24,23 +23,27 @@
 		{% else %}
 			$(".date_mirror").text(""+$("#first_date input").val());
 		{% endif%}
-		
-		$('.date-pick').datetimepicker({
-			monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-            nextText: 'Siguiente',
-            prevText: 'Anterior',
-            currentText: "Ahora",
-            closeText: "Hecho",
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'yy-mm-dd',
-            controlType: 'select',
-            ampm: true,
-			onSelect: function(d){
-            	copyDate();
-        	}
+		// $('.date-pick').datetimepicker({
+		// 	monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+  //           dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+  //           nextText: 'Siguiente',
+  //           prevText: 'Anterior',
+  //           currentText: "Ahora",
+  //           closeText: "Hecho",
+  //           changeMonth: true,
+  //           changeYear: true,
+  //           dateFormat: 'yy-mm-dd',
+  //           controlType: 'select',
+  //           ampm: true,
+		// 	onSelect: function(d){
+  //           	copyDate();
+  //       	}
+  //   	});
+    	dp.change(function (e) {
+    		console.log("HA CAMBIADO");
+    		copyDate();
     	});
+
 		$("#id_location").css('width','130px');
 		$("#id_date_start").css('width','150px');
 		$("#id_code").css('width','100px');
@@ -50,4 +53,3 @@
 		$(".date_mirror").html(""+$("#minutes-container #first_date").text())
 		console.log("this is Not a form");
 	{% endifequal %}
-</script>

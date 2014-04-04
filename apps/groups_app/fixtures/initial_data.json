@@ -42,7 +42,7 @@
     "fields": {
       "name": "Plantilla Institucional Parquesoft",
       "address_template": "groups/minutesTemplates/minutesTemplate2.html",
-      "address_js": "groups/minutesTemplates/minutesTemplate2js.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate2.js",
       "id_type": 1,
       "is_public": 0,
       "date_joined": "2013-12-20T23:37:01Z",
