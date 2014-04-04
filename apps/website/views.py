@@ -8,7 +8,6 @@ from django.template import RequestContext
 from django.utils import translation
 from django.conf import settings
 
-from actarium_apps.organizations.models import rel_user_group
 from actarium_apps.organizations.views import listOrgs
 from apps.groups_app.models import reunions, assistance, DNI_permissions
 from apps.groups_app.views import dateTimeFormatForm
