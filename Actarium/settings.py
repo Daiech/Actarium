@@ -26,6 +26,7 @@ if DEBUG:
     APPS += ["django_extensions"]
     pass
 
+
 try:
     from .settings_db import DATABASES
 except ImportError:
@@ -285,3 +286,20 @@ GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,
 }
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+try:
+    from .local_settings import EMAIL_HOST_USER
+except:
+    EMAIL_HOST_USER = ""
+try:
+    from .local_settings import EMAIL_HOST_PASSWORD
+except:
+    EMAIL_HOST_PASSWORD = ""
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
