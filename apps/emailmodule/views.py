@@ -105,13 +105,22 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
 
     to = groupAdminFilter(to, email_type, _group)
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-    msg.attach_alternative(html_content, "text/html")
     try:
-        msg.send()
-    except:
-        #        print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
-        saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
+        smtp = settings.EMAIL_HOST_PASSWORD and settings.EMAIL_HOST_USER
+    except NameError:
+        smtp = None
+    if smtp:
+        sendGmailEmail(to, subject, html_content)
+    else:
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+        msg.attach_alternative(html_content, "text/html")
+        try:
+            msg.send()
+        except Exception, e:
+            print e
+            print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
+            saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
+
 
 
 def groupAdminFilter(email_list, email_type, _group):
@@ -223,3 +232,39 @@ def emailAjax(request, slug_group):
     else:
         message = False
         return HttpResponse(message)
+
+
+
+
+def sendGmailEmail(to, subject, text, attach=False):
+    gmail_user = settings.EMAIL_HOST_USER
+    gmail_pwd = settings.EMAIL_HOST_PASSWORD
+    msg = MIMEMultipart()
+
+    msg['From'] = gmail_user
+    msg['To'] = ",".join(to)
+    # msg['Subject'] = subject
+    msg['Subject'] = "%s" % Header(subject, 'utf-8')
+
+    # msg.attach(MIMEText(text, "html"))
+    msg.attach(MIMEText(text, "html", 'utf-8'))
+
+    if attach:
+        from email import Encoders
+        from email.MIMEBase import MIMEBase
+        import os
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(open(attach, 'rb').read())
+        Encoders.encode_base64(part)
+        part.add_header('Content-Disposition',
+               'attachment; filename="%s"' % os.path.basename(attach))
+        msg.attach(part)
+
+    mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+    mailServer.ehlo()
+    mailServer.starttls()
+    mailServer.ehlo()
+    mailServer.login(gmail_user, gmail_pwd)
+    mailServer.sendmail(gmail_user, to, msg.as_string())
+    # Should be mailServer.quit(), but that crashes...
+    mailServer.close()
