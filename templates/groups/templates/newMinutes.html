@@ -1,20 +1,20 @@
 {% extends "groups/menu.html" %}
 {% block TITLE %}{% if title_edit %}{{title_edit}}{%else%}Crear Acta{%endif%}{% endblock %}
-{% load gravatartag %}
+{% load gravatartag i18n %}
 
 
 {% block toolbar_content %}
 <ul>
     <li>
         <a href="javascript:window.history.back()" class="">
-            <span class="glyphicon glyphicon-arrow-left"></span> Volver
+            <span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}
         </a>
     </li>
     <li>
-        <a href="#"  data-toggle="modal" data-target="#template-list"><i class="glyphicon glyphicon-list-alt"></i> Cambiar Plantilla</a>
+        <a href="#"  data-toggle="modal" data-target="#template-list"><i class="glyphicon glyphicon-list-alt"></i> {% trans 'Cambiar Plantilla' %}</a>
     </li>
     <li>
-        <a href="#" id="save-new-minutes" class="btn-submit"><i class="glyphicon glyphicon-hdd icon-white"></i> Guardar Acta</a>
+        <a href="#" id="save-new-minutes" class="btn-submit"><i class="glyphicon glyphicon-hdd icon-white"></i> {% trans 'Guardar Acta' %}</a>
     </li>
 </ul>
 {% endblock %}
@@ -22,11 +22,11 @@
 {% block menu_content %}
 <div class="white-box-container">
     <span class="">
-        &Uacute;ltimo c&oacute;digo de Acta:
+        {% trans '&Uacute;ltimo c&oacute;digo de Acta' %}:
         {%if last.code%}
         <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
         {%else%}
-        <small>No hay m&aacute;s actas</small>
+        <small>{% trans 'No hay m&aacute;s actas' %}</small>
         {%endif%}
     </span>
 </div>
@@ -36,10 +36,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3>Seleccionar plantilla</h3>
+                    <h3>{% trans 'Seleccionar plantilla' %}</h3>
                 </div>
                 <div class="modal-body">
-                    <span>Selecciona una plantilla:</span>
+                    <span>{% trans 'Selecciona una plantilla' %}:</span>
                     <ul class="list-unstyled">
                         {% for template in list_templates %}
                         <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
@@ -56,7 +56,7 @@
                             <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
                                 <a href="{{ template.id_template.slug }}" class="">
                                     {{ template.id_template.name }}
-                                    <span style="font-size:10px;" class="label label-info">Pro</span>
+                                    <span style="font-size:10px;" class="label label-info">{% trans 'Pro' %}</span>
                                 </a>
                                 <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
                                     <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
@@ -143,7 +143,7 @@
     .template-item-selected{background-color:rgb(240,255,240);border:solid thin #7bc779;}
     .template-item-child-selected{border:solid thin #7bc779}
 </style>
-<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" />
+<!-- <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.8.23/themes/smoothness/jquery-ui.css" /> -->
 <style >
     /*datetimepicker*/
     .ui-timepicker-div .ui-widget-header { margin-bottom: 8px;}
@@ -176,6 +176,12 @@
 	.pager{margin: 5px auto;padding: 0;position: relative;top: 0;}
 	.minutes-form-btn{display:inline;}
     section{margin-top: 0px;padding-top: 0 !important}
+    .bootstrap-datetimepicker-widget{
+position: absolute;
+left: 0;
+right: 0;
+margin: auto;
+top: 100px}
 </style>
 {%endblock%}
 
@@ -184,6 +190,7 @@
 <script src="{{STATIC_PREFIX}}js/vendor/jquery-ui-sliderAccess.js"></script>
 <script src="{{STATIC_PREFIX}}js/vendor/jquery-ui-timepicker-addon.js"></script>
 <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/bootstrap-datetimepicker.min.js"></script>
 <!-- <script src="{{STATIC_PREFIX}}js/textareas.js"></script> -->
 
 <script type="text/javascript" >
@@ -194,20 +201,20 @@
             e.stopPropagation();
             $("#form-new-minutes").submit();
         })
-        $('.date-pick').datetimepicker({
-            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-            nextText: 'Siguiente',
-            prevText: 'Anterior',
-            currentText: "Ahora",
-            closeText: "Hecho",
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'yy-mm-dd',
-            controlType: 'select',
-            ampm: true
-        }).css({"z-index":"1034"});
-       // $('.date-pick').datetimepicker( "option", "currentText", "Ahora" );
+        // $('.date-pick').datetimepicker({
+        //     monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        //     dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        //     nextText: 'Siguiente',
+        //     prevText: 'Anterior',
+        //     currentText: "Ahora",
+        //     closeText: "Hecho",
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     dateFormat: 'yy-mm-dd',
+        //     controlType: 'select',
+        //     ampm: true
+        // }).css({"z-index":"1034"});
+       $('.date-pick').datetimepicker();
        url_s = location.pathname.split("/")
 	   $(".template_btn").click(function(){
 			//console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
