@@ -31,42 +31,46 @@
     </span>
 </div>
 <article>
-    <div id="template-list" class="modal hide fade"> <!--  -->
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Seleccionar plantilla</h3>
-        </div>
-        <div class="modal-body">
-            <span>Selecciona una plantilla:</span>
-            <ul class="list-unstyled">
-                {% for template in list_templates %}
-                <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
-                    <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
-                        <a href="{{ template.slug }}" style="width:90%">{{ template.name }}</a>
-                        <div class="template-thumbnail" data-href="{{ template.slug }}">
-                            <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
-                        </div>
-                    </div>
-                </li>
-                {% endfor %}
-                {% for template in list_private_templates %}
-                <li class="template-item {%ifequal slug_template template.id_template.slug%}template-item-selected{%endifequal%}">
-                    <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
-                        <a href="{{ template.id_template.slug }}" class="">
-                            {{ template.id_template.name }}
-                            <span style="font-size:10px;" class="label label-info">Pro</span>
-                        </a>
-                        <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
-                            <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
-                        </div>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn" id="close-template-list">Cerrar</a>
-            <a id="change-template" href="#" class="btn btn-info">Aplicar Plantilla</a>
+    <div id="template-list" class="modal fade"> <!--  -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Seleccionar plantilla</h3>
+                </div>
+                <div class="modal-body">
+                    <span>Selecciona una plantilla:</span>
+                    <ul class="list-unstyled">
+                        {% for template in list_templates %}
+                        <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
+                            <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
+                                <a href="{{ template.slug }}" style="width:90%">{{ template.name }}</a>
+                                <div class="template-thumbnail" data-href="{{ template.slug }}">
+                                    <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% for template in list_private_templates %}
+                        <li class="template-item {%ifequal slug_template template.id_template.slug%}template-item-selected{%endifequal%}">
+                            <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
+                                <a href="{{ template.id_template.slug }}" class="">
+                                    {{ template.id_template.name }}
+                                    <span style="font-size:10px;" class="label label-info">Pro</span>
+                                </a>
+                                <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
+                                    <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn" id="close-template-list">Cerrar</a>
+                    <a id="change-template" href="#" class="btn btn-info">Aplicar Plantilla</a>
+                </div>
+            </div>
         </div>
     </div> <!-- close template-list -->
     <div id="minutes-container">
