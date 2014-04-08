@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
-from apps.groups_app.models import GenericManager
+from .managers import GenericManager
 
 from libs.thumbs import ImageWithThumbsField
 from uuslug import uuslug

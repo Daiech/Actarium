@@ -3,25 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template import defaultfilters
 from django.conf import settings
-
-
-class GenericManager(models.Manager):
-
-    def get_all_active(self):
-        return self.filter(is_active=True).distinct().order_by('-date_modified')
-
-    def get_or_none(self, **kwargs):
-        try:
-            return self.get(**kwargs)
-        except self.model.DoesNotExist:
-            return None
-        except self.model.MultipleObjectsReturned:
-            return None
-
-    def get_active_or_none(self, **kwargs):
-        return self.get_or_none(is_active=True, **kwargs)
-
-from actarium_apps.organizations.models import Organizations, Groups
+from actarium_apps.organizations.models import Groups
 
 
 class minutes_type_1(models.Model):
