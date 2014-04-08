@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 {% ifequal is_form 1 %}	
 	{% if not title_edit and not minutes_saved.error %}
 	function newMinutesText(){
@@ -29,4 +27,3 @@
 	newMinutesText();
 	{% endif %}
 {% endifequal%}
-</script>
