@@ -13,8 +13,7 @@ class OrganizationForm(forms.ModelForm):
 
     def clean_name(self):
     	name = self.cleaned_data.get('name')
-    	if name in settings.RESERVED_WORDS:
-    		print "ESTE NOMBRE NO SE PUEDE PONER"
+    	if name.lower() in settings.RESERVED_WORDS:
     		raise ValidationError(_(u"No puedes usar este nombre para tu organización."))
     	return name
 
