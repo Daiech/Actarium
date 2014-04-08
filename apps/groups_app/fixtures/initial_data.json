@@ -27,18 +27,31 @@
     "model": "groups_app.templates",
     "pk": 1,
     "fields": {
+      "name": "Plantilla Básica 1 Actarium",
+      "address_template": "groups/minutesTemplates/minutesTemplate0.html",
+      "address_js": "groups/minutesTemplates/minutesTemplate0.js",
+      "id_type": 1,
+      "is_public": 1,
+      "date_joined": "2013-12-20T23:37:01Z",
+      "slug": "plantilla-basica-1-actarium-1"
+    }
+  },
+  {
+    "model": "groups_app.templates",
+    "pk": 2,
+    "fields": {
       "name": "Plantilla Básica  Actarium",
       "address_template": "groups/minutesTemplates/minutesTemplate1.html",
       "address_js": "groups/minutesTemplates/minutesTemplate1.js",
       "id_type": 1,
       "is_public": 1,
       "date_joined": "2013-12-20T23:37:01Z",
-      "slug": "plantilla-basica-actarium-1"
+      "slug": "plantilla-basica-actarium-2"
     }
   },
   {
     "model": "groups_app.templates",
-    "pk": 2,
+    "pk": 3,
     "fields": {
       "name": "Plantilla Institucional Parquesoft",
       "address_template": "groups/minutesTemplates/minutesTemplate2.html",
@@ -46,12 +59,12 @@
       "id_type": 1,
       "is_public": 0,
       "date_joined": "2013-12-20T23:37:01Z",
-      "slug": "plantilla-institucional-parquesoft-2"
+      "slug": "plantilla-institucional-parquesoft-3"
     }
   },
   {
     "model": "groups_app.templates",
-    "pk": 3,
+    "pk": 4,
     "fields": {
       "name": "Plantilla Comite Parquesoft",
       "address_template": "groups/minutesTemplates/minutesTemplate3.html",
@@ -59,12 +72,12 @@
       "id_type": 1,
       "is_public": 0,
       "date_joined": "2013-12-20T23:37:01Z",
-      "slug": "plantilla-comite-parquesoft-3"
+      "slug": "plantilla-comite-parquesoft-4"
     }
   },
   {
     "model": "groups_app.templates",
-    "pk": 4,
+    "pk": 5,
     "fields": {
       "name": "Actas subidas",
       "address_template": "groups/minutesTemplates/minutesTemplate4.html",
@@ -72,7 +85,7 @@
       "id_type": 2,
       "is_public": 0,
       "date_joined": "2013-12-20T23:37:01Z",
-      "slug": "actas-subidas-4"
+      "slug": "actas-subidas-5"
     }
   },
   {

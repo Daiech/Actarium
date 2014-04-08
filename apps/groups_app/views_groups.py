@@ -612,10 +612,10 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
 
             ######## <LOGO> #########
             url_logo = URL_BASE + '/static/img/logo_email.png'
-            if isProGroup(group):
-                _pro = getProGroup(group)
-                if _pro:
-                    url_logo = URL_BASE + _pro.id_organization.logo_address
+            # if isProGroup(group):
+            #     _pro = getProGroup(group)
+            #     if _pro:
+            #         url_logo = URL_BASE + _pro.id_organization.logo_address
             ######## </LOGO> #########
 
             ######## <SAVE_THE_MINUTE> #########
