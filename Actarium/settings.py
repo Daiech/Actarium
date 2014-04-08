@@ -8,8 +8,11 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 # PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(".")
-URL_BASE = "http://actarium.com:8000"
-
+try:
+    from .local_settings import URL_BASE
+except ImportError:
+    URL_BASE = "http://actarium.com"
+    
 ADMINS = (
     ('Mauricio Aizaga', 'maizaga@daiech.com'),
     ('Edwin Mesa', 'emesa@daiech.com'),
