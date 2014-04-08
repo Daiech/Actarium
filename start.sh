@@ -1,4 +1,4 @@
 #!/bin/bash
-uwsgi --socket :9000 --wsgi-file Actarium/wsgi.py -d logfile.log
+uwsgi --socket :9010 --wsgi-file Actarium/wsgi.py -d logfile.log
 
 
