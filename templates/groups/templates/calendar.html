@@ -24,7 +24,7 @@
                 {% if r.date_reunion|date:"Y-d-m" >= now_|date:"Y-d-m" %}
                     <li class="list-item">
                         <div class="ml10 list-item-next">
-                            {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                            {{r.id_convener}}: <a href="/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
                         </div>
                     </li>
                 {%endif%}
@@ -34,7 +34,7 @@
                 {% if r.date_reunion|date:"Y-d-m" < now_|date:"Y-d-m" %}
                     <li class="list-item">
                         <div class="ml10 list-item-next">
-                            {{r.id_convener}}: <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/groups/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
+                            {{r.id_convener}}: <a href="/calendar/{{r.date_reunion|date:"Y-m-d"}}?r={{r.id}}">{{r.title}}</a> para el <a href="/calendar/{{r.date_reunion|date:"Y-m-d"}}">{{r.date_reunion}}</a>
                         </div>
                     </li>
                 {%endif%}

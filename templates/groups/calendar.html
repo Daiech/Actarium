@@ -1,4 +1,4 @@
-{% extends "groups/menu.html" %}
+{% extends "base.html" %}
 {% load gravatartag %}
 {% load i18n %}
 {% load humanize %}
@@ -6,11 +6,11 @@
 {% block toolbar_content %}
 {% endblock %}
 
-{% block menu_content %}
+{% block body %}
 
 <article>
 		<header class="">
-	    	<div class="span4">
+	    	<div class="col-md-4">
 	    		<div class="menu-icons icons-page icon-reunions"></div>
 	    		<h3>Reuniones</h3>
 	    	</div>
@@ -18,38 +18,46 @@
 	    	<div class="span3 offset1 botonera-calendar"> 
 	    		<a  href="#newReunionModal" data-toggle="modal" class="btn ">
 	    			<i class="glyphicon glyphicon-plus"></i> Nueva reuni&oacute;n</a>
-	    		<a  href="/groups/calendar" class="btn ">
+	    		<a  href="/calendar" class="btn ">
 	    			<i class="glyphicon glyphicon-calendar"></i> Ver todas</a>
 	    	</div>
 		    <div  class="span12" style="margin-left:0px;" ><hr></div>
         </header>
 		<div class="row-fluid">
-		    <section id="calendar" class="white-box-container span4" >
+		    <section id="calendar" class="white-box-container col-md-4" >
 		        <div id="datepicker">
 		            <img src="/static/img/load.gif" title="cargando calendario" style="width:80px" />
 		        </div>
-		        <div class="modal hide fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
-					<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3>Detalles de la Reuni&oacute;n</h3>
-					</div>
-					<div class="modal-body">
-						<div id="reunion-data">
-							<div id="loading-reunion"></div>
-			        	</div>
+		        <div class="modal fade" id="myReunionModal"> <!-- Ventana Modal para visualizar informacion de reuniones -->
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3>Detalles de la Reuni&oacute;n</h3>
+							</div>
+							<div class="modal-body">
+								<div id="reunion-data">
+									<div id="loading-reunion"></div>
+					        	</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="modal hide fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3>Convocar nueva reuni&oacute;n</h3>
-						<hr>
-						<h4>Elige un grupo</h4>
-					</div>
-					<div class="modal-body">
-						<select id="select-group">
-							<option value="0">Selecciona un grupo</option>
-						</select>
+				<div class="modal fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
+					<div class="modal-dialog">
+					    <div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h3>Convocar nueva reuni&oacute;n</h3>
+								<hr>
+								<h4>Elige un grupo</h4>
+							</div>
+							<div class="modal-body">
+								<select id="select-group">
+									<option value="0">Selecciona un grupo</option>
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 		        <div class="center">
@@ -58,7 +66,7 @@
 		        </div>
 		    </section>
 		    
-		    <section id="date_reunions2" class="white-box-container span8" >
+		    <section id="date_reunions2" class="white-box-container col-md-8" >
 			    <section class="tabbable reunion-tabs"> 
 					  <ul class="nav nav-tabs">
 					    <li class="active"><a href="#tab1" data-toggle="tab">Sin responder (<span id="size-pendientes">0</span>)</a></li>
@@ -86,7 +94,7 @@
 	    </div>
 </article>
 {%endblock%}
-{%block menu_content_style%}
+{%block style%}
 <style>
     .form-horizontal table{
         margin: auto;
@@ -190,13 +198,16 @@
 	.text-sub{text-decoration: underline;}
 
 </style>
-<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
+<!-- <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" /> -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 {%endblock%}
 
-{% block menu_content_js %}
-<script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
+{% block js %}
+<!-- <script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script> -->
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
 <script type="text/javascript" ><!--
-$(document).on("ready", function() {
+$(document).ready(function() {
 
 	$("#menu-reunions").addClass("menu-active")
 	$("#menu-reunions .navbar-item").addClass("navbar-item-hover");
@@ -228,7 +239,7 @@ $(document).on("ready", function() {
 	    			function(data){
 		    			//console.log(data);
 		    			url = location.pathname;
-		    			url2 = "/groups/calendar";
+		    			url2 = "/calendar";
 		    			if (url == url2){
 			    			html5url = "calendar/"+dateText;
 		    			}
@@ -247,7 +258,7 @@ $(document).on("ready", function() {
     	}
 	});
     url = location.pathname;
-	url2 = "/groups/calendar";
+	url2 = "/calendar";
 	if (url != url2){
 		dp.datepicker("setDate", (url).substring(17,27));  
 		$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+(url).substring(17,27)+" </span> </h4>");
@@ -471,7 +482,7 @@ $(document).on("ready", function() {
 		$('#select-group').change(function(){
 			group_slug = $('#select-group option:selected').val()
 			if (group_slug != "0"){
-				window.location = "/groups/newReunion/"+group_slug;}
+				window.location = "/groups/" + group_slug + "/new_reunion";}
 		});
 		if( getUrlVars()["r"]){
 			var reu = $('#reunion_'+getUrlVars()["r"]);
@@ -502,9 +513,9 @@ $(document).on("ready", function() {
     			{},
     			"#loading-reunion",
     			function(data){
-    				next_reunions=""
+    				next_reunions = "";
     				$.each(data, function() { 
-    					next_reunions= next_reunions+ createList2(true,5,this.group_name,this.group_slug,this.date,this.id_r,this.title);
+    					next_reunions= next_reunions + createList2(true,5,this.group_name,this.group_slug,this.date,this.id_r,this.title);
     				});
     				if (next_reunions.length >= 1){
 	    				var title = '<div class="ml20"><h3>Pr&oacute;ximas reuniones</h3></div>';

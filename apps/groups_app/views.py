@@ -811,7 +811,7 @@ def calendar(request):
             is_confirmed = False
             is_saved = 0
         json_array[i] = {"id_r": str(reunion.id),
-                         "group":gr,
+                         # "group":gr,
                          "group_slug": reunion.id_group.slug,
                          "group_name": reunion.id_group.name,
                          "date": humanize.naturaltime(reunion.date_reunion),
