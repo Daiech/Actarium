@@ -163,7 +163,15 @@ def getGlobalVar(name):
 
 
 def services(request):
-    pdf = open(settings.STATICFILES_DIRS[0] + "/Actarium.pdf", "r")
+    pdf = open(settings.STATICFILES_DIRS[0] + "/pdf/actarium_services.pdf", "r")
+    response = HttpResponse(pdf.read(), mimetype='application/pdf')
+    response['Content-Disposition'] = 'inline;filename=Services.pdf'
+    pdf.close()
+    return response
+
+
+def benefits(request):
+    pdf = open(settings.STATICFILES_DIRS[0] + "/pdf/actarium para cliente.pdf", "r")
     response = HttpResponse(pdf.read(), mimetype='application/pdf')
     response['Content-Disposition'] = 'inline;filename=Services.pdf'
     pdf.close()
