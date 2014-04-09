@@ -43,7 +43,7 @@ except ImportError:
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
-ALLOWED_HOSTS = ["actarium.com", ".actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost"]
+ALLOWED_HOSTS = ["actarium.com", "*.actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost", "162.243.207.189"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
