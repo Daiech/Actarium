@@ -388,7 +388,7 @@ def setMinutesApprove(request):
                 if is_full_signed == 1:
                     _minutes.is_full_signed = 1
                     _minutes.save()
-                    url_new_minute = "/groups/" + str(_minutes.id_group.slug) + "/minutes/" + str(_minutes.code)
+                    url_new_minute = reverse("show_minute", args=(_minutes.id_group.slug, _minutes.code, ))
                     link = URL_BASE + url_new_minute
                     email_ctx = {
                         'firstname': request.user.first_name,
@@ -465,17 +465,17 @@ def getPresidentAndSecretary(group, minutes_current=None):
 def newAnnotation(request, slug_group):
     saveViewsLog(request, "apps.groups_app.minutes.newAnnotation")
     if request.is_ajax():
-        if request.method == 'GET':
+        if request.method == 'POST':
             try:
                 g = getGroupBySlug(slug_group)
-                annon_text = request.GET['annotation']
-                minutes_id = getMinutesById(request.GET['minutes_id'])
+                annon_text = request.POST['annotation']
+                minutes_id = getMinutesById(request.POST['minutes_id'])
                 if minutes_id.id_group == g:
                     last_annon = getLastMinutesAnnotation(minutes_id)
                     annon = annotations(id_user=request.user, id_minutes=minutes_id, annotation_text=annon_text, id_minutes_annotation=last_annon + 1)
                     annon.save()
                     # saveActionLog
-                    # sendEmail to the approvers # investigar sobre hilos en python para retornarle al usuario y quedarse enviando los correos
+                    # sendEmail to the approvers # investigar sobre hilos en python para retornarle al usuario y quedarse enviando los correos (celery)
 
                     writter_group = getWritersOfGroup(g)
                     approver_list = getApproversFromMinutes(minutes_id)
@@ -491,7 +491,7 @@ def newAnnotation(request, slug_group):
                         "username": request.user.username,
                         "groupname": g.name,
                         "minutes_code": annon.id_minutes.code,
-                        "link": "/groups/" + g.slug + "/minutes/" + annon.id_minutes.code + "#annotation-" + str(annon.id_minutes_annotation),
+                        "link": reverse("show_minute", args=(g.slug, annon.id_minutes.code,)) + "#annotation-" + str(annon.id_minutes_annotation),
                         "annotation": annon.annotation_text,
                         "urlgravatar": showgravatar(request.user.email, 50)
                     }

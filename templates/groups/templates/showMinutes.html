@@ -208,7 +208,7 @@
 		USAR TEMPLATES: MUSTACHE
 		*/
 		var params = {"annotation": t, "minutes_id": {{minutes.id}}}
-		sendAjax("/groups/{{group.slug}}/add-new-annotation",params,"", function(data){
+		sendNewAjax("/groups/{{group.slug}}/add-new-annotation",params, function(data){
 			if(data){
 				// console.log(data)
 				var m = '<div class="annotation bb">\
@@ -229,7 +229,9 @@
 			else{
 				setAlertError("Error", "Algo ocurri&oacute;");
 			}
-		});
+		},
+		{"method": "post"}
+		);
 	}
 </script>
 {% include minutesTemplateJs %}
