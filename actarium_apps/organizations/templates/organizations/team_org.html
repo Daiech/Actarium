@@ -113,7 +113,7 @@
             $('#filter_members').fastLiveFilter('#org-list-members');
             $(".open-modal-groups").on("click", function (e) {
             	e.preventDefault();
-            	var uname = $(this).attr("data-username");
+            	var uname = $(this).closest(".org-user-options").attr("data-username");
             	sendNewAjax("{% url 'get_user_org_groups' org.slug %}",{"uname":uname}, function (data) {
             		console.log(data);
 	            	ctx = {"title": "{% trans 'Grupos de ' %}" + "@" + uname, "groups": data}
