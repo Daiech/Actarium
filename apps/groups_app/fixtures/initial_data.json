@@ -40,13 +40,13 @@
     "model": "groups_app.templates",
     "pk": 2,
     "fields": {
-      "name": "Plantilla Básica  Actarium",
+      "name": "Plantilla Básica 2 Actarium",
       "address_template": "groups/minutesTemplates/minutesTemplate1.html",
       "address_js": "groups/minutesTemplates/minutesTemplate1.js",
       "id_type": 1,
       "is_public": 1,
       "date_joined": "2013-12-20T23:37:01Z",
-      "slug": "plantilla-basica-actarium-2"
+      "slug": "plantilla-basica-2-actarium-2"
     }
   },
   {
