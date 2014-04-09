@@ -4,7 +4,7 @@
 {% block toolbar_content %}
 <ul class="list-unstyled">
     <li>
-        <a href="{%if rel_user.is_convener%}/groups/newReunion/{{ group.slug}}{%else%}#{%endif%}" class="title-on-disabled {%if not rel_user.is_convener%}disabled{%endif%}" {%if not rel_user.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
+        <a href="{%if rel_user.is_convener%}{% url 'new_reunion_group' group.slug %} {%else%}#{%endif%}" class="title-on-disabled {%if not rel_user.is_convener%}disabled{%endif%}" {%if not rel_user.is_convener%}title="No tienes permiso para convocar reuniones"{%endif%}>
             <span class="glyphicon glyphicon-plus"></span> {% trans " Convocar Reuni&oacute;n" %}
         </a>
     </li>

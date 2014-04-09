@@ -1,7 +1,13 @@
-{% extends "base.html" %}
-{% block TITLE %}Reuniones{% endblock %}
+{% extends "groups/menu.html" %}
+{% load gravatartag %}
+{% load i18n %}
 {% load humanize %}
-{%block body%}
+
+{% block toolbar_content %}
+{% endblock %}
+
+{% block menu_content %}
+
 <article>
 		<header class="">
 	    	<div class="span4">
@@ -80,7 +86,7 @@
 	    </div>
 </article>
 {%endblock%}
-{%block style%}
+{%block menu_content_style%}
 <style>
     .form-horizontal table{
         margin: auto;
@@ -187,7 +193,7 @@
 <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
 {%endblock%}
 
-{% block js %}
+{% block menu_content_js %}
 <script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script>
 <script type="text/javascript" ><!--
 $(document).on("ready", function() {

@@ -734,9 +734,9 @@ def getGroupBySlug(slug):
 
 
 @login_required(login_url='/account/login')
-def newReunion(request, slug):
-    saveViewsLog(request, "apps.groups_app.views.newReunion")
-    q = Groups.objects.get(slug=slug, is_active=True)
+def new_reunion(request, slug_group):
+    saveViewsLog(request, "apps.groups_app.views.new_reunion")
+    q = Groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
     if is_member:
         if request.method == "POST":
@@ -776,7 +776,7 @@ def newReunion(request, slug):
                 }
                 sendEmailHtml(2, email_ctx, email_list, q)
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
-                return HttpResponseRedirect("/groups/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
+                return HttpResponseRedirect("/groups/"+q.slug+"/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
 
         else:
             form = newReunionForm()
@@ -811,6 +811,7 @@ def calendar(request):
             is_confirmed = False
             is_saved = 0
         json_array[i] = {"id_r": str(reunion.id),
+                         "group":gr,
                          "group_slug": reunion.id_group.slug,
                          "group_name": reunion.id_group.name,
                          "date": humanize.naturaltime(reunion.date_reunion),
@@ -825,7 +826,8 @@ def calendar(request):
         "reunions_day": my_reu,
         "reunions": my_reu,
         "my_reu_day_json": json.dumps(response),
-        "groups": gr}
+        "groups": gr,
+        "group":gr[0]}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
