@@ -128,17 +128,17 @@ def saveViewsLog(request, page):
 
         return True
     except:
-        try:
-            import os
-            import commands
-            # os.chdir('/home2/anuncio3/bin/mongodb-linux-x86_64-2.4.1/bin')
-            mongoresponse = commands.getstatusoutput(
-                "mongod --fork --dbpath '/home2/anuncio3/mongodata_2014/data/db' --smallfiles --logpath '/home2/anuncio3/mongodata_2014/data/mongodb.log' --logappend")[1]
-            saveErrorLog("Se ha activado el servidor de MongoDB %s" % (mongoresponse))
-            print "Se ha activado el servidor de MongoDB %s" % (mongoresponse)
-        except:
-            saveErrorLog("Error: No se pudo establecer conexion con MongoDB")
-            print "Error: No se pudo establecer conexion con MongoDB"
+        # try:
+            # import os
+            # import commands
+            # # os.chdir('/home2/anuncio3/bin/mongodb-linux-x86_64-2.4.1/bin')
+            # mongoresponse = commands.getstatusoutput(
+            #     "mongod --fork --dbpath '/home2/anuncio3/mongodata_2014/data/db' --smallfiles --logpath '/home2/anuncio3/mongodata_2014/data/mongodb.log' --logappend")[1]
+            # saveErrorLog("Se ha activado el servidor de MongoDB %s" % (mongoresponse))
+            # print "Se ha activado el servidor de MongoDB %s" % (mongoresponse)
+        # except:
+        saveErrorLog("Error: No se pudo establecer conexion con MongoDB")
+        print "Error: No se pudo establecer conexion con MongoDB"
         return False
 
 
