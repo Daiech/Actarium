@@ -1,0 +1,62 @@
+
+
+INSTALACION DE MongoDB:
+
+Para instalar mongodb en el servidor de Digital Ocean con Ubuntu 12.04 se siguio al pie de la letra el siguiente tutorial
+
+https://www.digitalocean.com/community/articles/how-to-install-mongodb-on-ubuntu-12-04
+
+Se utilizo la siguiente documentacion para verificar los pasos del tutorial anterior
+
+http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+
+RESULTADOS DE LA INSTALACION:
+
+Se creo un usuario "mongodb"
+Se creo automaticamente un proceso con un servicio de mongo que basicamente ejecuta la siguiente instruccion
+
+ /usr/bin/mongod --config /etc/mongodb.conf
+
+ la cual indica que el archivo "mongod" que ejecuta el servidor de MongoDB se encuentra en la carpeta usr/bin/mongod
+ y el archivo de configuracion del servidor de MongoDB se encuentra en /etc/mongodb.conf
+
+ Este servicio se ejecuta hasta que se de la orden de detenerlo y permite acceder a la SHELL de MongoDB a traves de la instruccion  
+
+ mongo
+
+ Que fue agregada al PATH de ubuntu al instalar MongoDB y que toma automaticamente la informacion por defecto para iniciar la SHELL
+
+ Para utilizar una configuracion diferente hay que modificar el archivo /etc/mongodb.conf o crear un servicio diferente, tambien hay que especificcar esos nuevos valores al momento de utilizar la SHELL o conectarse desde un plugin externo.
+
+PYTHON PLUGIN
+
+El plugin de python "pymongo" permite acceder a la base de datos de MongoDB a travez de python
+primero se debe seleccionar el entorno, en este caso
+
+workon ac
+
+despues 
+
+pip install pymongo
+
+Para verificar que todo esta correcto se puede probar desde python, para esto iniciamos el shell de python
+
+python
+
+despues importamos y probamos pymongo
+
+from pymongo import MongoClient
+connection = MongoCLient('localhost',27017)
+db = connection.dbtest1
+collection1 = db.collection1
+collection1.insert({'message':'hello world'})
+
+para verificar que se guardo correctamente el mensaje de prueba ejecutamos
+
+db.collection1.find()
+
+y nos debe retornar el objeto recientemente creado.
+
+
+
+
