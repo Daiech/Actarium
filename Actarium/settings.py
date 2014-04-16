@@ -43,6 +43,16 @@ except ImportError:
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
+
+try:
+    from .settings_db import MONGODB
+except:
+    MONGODB = {
+        'USER':'admin',
+        'PORT': 27017,
+        'PASSWORD': '123456'
+    }
+    
 ALLOWED_HOSTS = ["www.actarium.com", "actarium.com", "actarium.co", "*.actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost", "162.243.207.189"]
 
 # Local time zone for this installation. Choices can be found here:
