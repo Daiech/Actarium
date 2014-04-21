@@ -15,15 +15,17 @@ def saveErrorLog(errordata):
 def connect_to_actarium_db():
     MONGODB = settings.MONGODB
     
-    uri = "localhost:27017/actarium"
+    uri = "mongodb://%s:%s@localhost/actarium"%(MONGODB['USER'],MONGODB['PASSWORD'])
     try:
-        connection = MongoClient('mongodb://admin:123456@localhost/admin')
-        print "----conected to localhost"
+        connection = MongoClient(uri,port=MONGODB['PORT'])
+        print "----conected to localhost, user %s "%(MONGODB['USER'])
+        actarium_db = connection.actarium
+        return actarium_db
     except:
-        error = "Error connecting to MongoDB"
+        error = "Error connecting to MongoDB: ",uri, " port: ", MONGODB['PORT']
         print error
-        saveErrorLog(mongodb_error)
+        saveErrorLog(error)
+        return False
     
-    actarium_db = connection.actarium
 
-    return actarium_db
+    
