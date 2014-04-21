@@ -1,6 +1,7 @@
 
+Version MongoDB 2.6
 
-INSTALACION DE MongoDB:
+---------------------------------INSTALACION DE MongoDB:
 
 Para instalar mongodb en el servidor de Digital Ocean con Ubuntu 12.04 se siguio al pie de la letra el siguiente tutorial
 
@@ -10,7 +11,7 @@ Se utilizo la siguiente documentacion para verificar los pasos del tutorial ante
 
 http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 
-RESULTADOS DE LA INSTALACION:
+------------------------------------RESULTADOS DE LA INSTALACION:
 
 Se creo un usuario "mongodb"
 Se creo automaticamente un proceso con un servicio de mongo que basicamente ejecuta la siguiente instruccion
@@ -28,7 +29,7 @@ Se creo automaticamente un proceso con un servicio de mongo que basicamente ejec
 
  Para utilizar una configuracion diferente hay que modificar el archivo /etc/mongodb.conf o crear un servicio diferente, tambien hay que especificcar esos nuevos valores al momento de utilizar la SHELL o conectarse desde un plugin externo.
 
-PYTHON PLUGIN
+--------------------------------------PYTHON PLUGIN
 
 El plugin de python "pymongo" permite acceder a la base de datos de MongoDB a travez de python
 primero se debe seleccionar el entorno, en este caso
@@ -57,6 +58,66 @@ db.collection1.find()
 
 y nos debe retornar el objeto recientemente creado.
 
+-------------------------------EJECUCION y SEGURIDAD
+
+Para ejecutar MongoDB de forma segura es necesario implementar un sistema de Autorizacion de usuarios, 
+El archivo Utils.py (Con el plugin PyMongo) de la aplicacion actions_log se encarga de realizar el proceso de conexion de 
+forma segura con MongoDB, para esto hay que tener en cuenta dos cosas.
+
+1. Configuracion:
+en el archivo de configuracion de MongoDB se debe habilitar la opcion de autorizacion y alli mismo se 
+configura lo necesario para ejecutar MongoDB como un servicio, este archivo tiene la extension .cfg o .conf
+y contiene basicamente lo siguiente:
+
+dbpath=data/db
+port=27017
+auth=true
+logpath=mongolog.log
+journal=true
+
+instalacion de MongoDB como un servicio para windows
+
+http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/#configure-a-windows-service-for-mongodb
+
+instalacion de MongoDB como un servicio de ubuntu
+
+http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/#run-mongodb
+
+2. Admin
+Se debe crear un usuario para cada base de datos que queramos configurar con seguridad, para esto es necesario
+crear primero un SuperAdmin que permitira el acceso a todas las bases de datos en general, para esto se debe iniciar
+el shell del cliente mongo escribiendo en consola:
+
+mongo
+
+(Si esta corriendo el servicio por los puertos por defecto no hay ningun problema, de lo contrario es necesario especificar 
+el puerto, ej, mongo --port 29027)
+
+A acontinuacion creamos el usuario administrador con algo como lo siguiente
+
+use admin
+db.createUser(
+  {
+    user: "myUserAdminName",
+    pwd: "mypassword",
+    roles:
+    [
+      {
+        role: "userAdminAnyDatabase",
+        db: "admin"
+      }
+    ]
+  }
+)
+
+en la parte donde dice db se especifica a que base de datos tiene acceso y en role se especifica que permisos tiene 
+sobre esta base de datos, en el ejemplo anterior se selecciona la base de datos admin (use admin) porque desde alli se 
+configura todos los permisos a las demas bases de datos
+y en el JSON se especifica db:"admin" porque alli estara ubicado el superUsuario
+A continuacion se debe reiniciar el servicio de MongoDB y ya queda la base de datos con requerimientos de Autorizacion
+
+Mas detalles en:
+http://docs.mongodb.org/manual/tutorial/enable-authentication/
 
 
 
