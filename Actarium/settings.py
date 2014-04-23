@@ -35,14 +35,24 @@ try:
 except ImportError:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'actarium',                      # Or path to database file if using sqlite3.
-            'USER': 'root',                      # Not used with sqlite3.
-            'PASSWORD': 'holamundo',                  # Not used with sqlite3.
+            'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'actarium.sqlite',                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
+
+try:
+    from .settings_db import MONGODB
+except:
+    MONGODB = {
+        'USER':'admin',
+        'PORT': 27017,
+        'PASSWORD': '123456'
+    }
+    
 ALLOWED_HOSTS = ["www.actarium.com", "actarium.com", "actarium.co", "*.actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost", "162.243.207.189"]
 
 # Local time zone for this installation. Choices can be found here:

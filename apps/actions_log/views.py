@@ -10,6 +10,7 @@ from pymongo import MongoClient, DESCENDING as pymongo_DESCENDING
 #from django.core.mail import EmailMessage
 import datetime
 import sys
+from .utils import connect_to_actarium_db, saveErrorLog
 #@login_required(login_url='/account/login')
 
 
@@ -92,21 +93,14 @@ def showUserActionsOrder(request, username, field):
         return HttpResponseRedirect('/')
 
 
-def saveErrorLog(errordata):
-    try:
-        logfile = open("error.log", "a")
-        try:
-            logfile.write('%s %s \n' % (datetime.datetime.now(), errordata))
-        finally:
-            logfile.close()
-    except IOError:
-        pass
+
 
 
 def saveViewsLog(request, page):
-    try:
-        connection = MongoClient('localhost', 27017)
-        db = connection.actarium
+    
+    db = connect_to_actarium_db()
+    print db 
+    if db:
         views = db.views
         try:
             if request.user.is_authenticated():
@@ -125,21 +119,14 @@ def saveViewsLog(request, page):
             views.insert(data)
         except:
             print "Error: %s" % (sys.exc_info()[0])
-
         return True
-    except:
-        try:
-            import os
-            import commands
-            # os.chdir('/home2/anuncio3/bin/mongodb-linux-x86_64-2.4.1/bin')
-            mongoresponse = commands.getstatusoutput(
-                "mongod --fork --dbpath '/home2/anuncio3/mongodata_2014/data/db' --smallfiles --logpath '/home2/anuncio3/mongodata_2014/data/mongodb.log' --logappend")[1]
-            saveErrorLog("Se ha activado el servidor de MongoDB %s" % (mongoresponse))
-            print "Se ha activado el servidor de MongoDB %s" % (mongoresponse)
-        except:
-            saveErrorLog("Error: No se pudo establecer conexion con MongoDB")
-            print "Error: No se pudo establecer conexion con MongoDB"
+    else:
+        print "Error con mongodb "
         return False
+    
+    
+    print "Error: No se pudo establecer conexion con MongoDB"
+    return False
 
 
 @login_required(login_url='/account/login')
@@ -147,8 +134,7 @@ def showViewsLog(request):
     saveViewsLog(request, 'actions_log.views.showViewsLog')
     if request.user.is_staff:
         try:
-            connection = MongoClient('localhost', 27017)
-            db = connection.actarium
+            db = connect_to_actarium_db()
             views = db.views
             try:
                 if request.method == "GET":
@@ -171,8 +157,7 @@ def showViewsStats(request):
     saveViewsLog(request, 'actions_log.views.showViewsStats')
     if request.user.is_staff:
         try:
-            connection = MongoClient('localhost', 27017)
-            db = connection.actarium
+            db = connect_to_actarium_db()
             from bson.code import Code
             _map = Code("function () {"
                         "var key = this.page;"

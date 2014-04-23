@@ -94,18 +94,5 @@
 "is_active":true,
 "modified":"2014-03-27T22:33:41Z"
 }
-},
-{
-"pk":2,
-"model":"core.discountcodes",
-"fields":{
-"code":"AF8776GTRX",
-"description":"Descuento que se realiza a Parquesoft por un paquete de 40 miembros",
-"created":"2014-03-27T22:28:28Z",
-"is_active":true,
-"modified":"2014-03-27T22:28:28Z",
-"value":17400.0,
-"user":1
-}
 }
 ]
