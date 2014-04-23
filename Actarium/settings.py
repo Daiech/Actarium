@@ -53,7 +53,7 @@ except:
         'PASSWORD': '123456'
     }
     
-ALLOWED_HOSTS = ["www.actarium.com", "actarium.com", "actarium.co", "*.actarium.com", "actarium.anunciosuniversitarios.com", "actarium.daiech.com", "localhost", "162.243.207.189"]
+ALLOWED_HOSTS = ["*"]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
