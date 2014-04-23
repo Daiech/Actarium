@@ -26,7 +26,7 @@ APPS = ['apps.groups_app','apps.account','apps.actions_log','apps.website','apps
 RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta"]
 
 if DEBUG:
-    APPS += ["django_extensions"]
+    APPS += ["django_extensions", "social.apps.django_app.default"]
     pass
 
 
@@ -208,7 +208,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 AUTHENTICATION_BACKENDS = (
     # 'social.backends.google.GoogleOAuth2',
     # 'social.backends.twitter.TwitterOAuth',
-    'social.backends.facebook.FacebookOAuth2',
+    # 'social.backends.facebook.FacebookOAuth2',
     'apps.account.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend'
 )
@@ -263,11 +263,11 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_uid', 
     'social.pipeline.social_auth.auth_allowed', 
     # 'social.pipeline.social_auth.social_user', 
-    'account.social_auth.social_user',
+    'apps.account.social_auth.social_user',
     'social.pipeline.user.get_username', 
     # 'social.pipeline.social_auth.associate_by_email', 
     # 'social.pipeline.mail.mail_validation',
-    'account.social_auth.mail_unique',
+    'apps.account.social_auth.mail_unique',
     'social.pipeline.user.create_user', 
     'social.pipeline.social_auth.associate_user', 
     'social.pipeline.social_auth.load_extra_data', 
