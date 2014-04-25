@@ -1,26 +1,23 @@
 #encoding:utf-8
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-
-from apps.account.forms import RegisterForm, UserForm , NewDNI
 from django.template import RequestContext  # para hacer funcionar {% csrf_token %}
-
-#Django Auth
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_complete, password_reset_confirm
-from apps.actions_log.views import saveActionLog, saveViewsLog
 from django.contrib.auth.models import User
-# from django.utils.hashcompat import sha_constructor
-from hashlib import sha256 as sha_constructor
-import random
+from django.core.urlresolvers import reverse
+
+from apps.account.forms import RegisterForm, UserForm , NewDNI
 from apps.emailmodule.views import sendEmailHtml
+from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.groups_app.models import DNI, DNI_type, DNI_permissions
-import json
-from django.core.urlresolvers import reverse
 from actarium_apps.organizations.models import rel_user_group
+from .models import activation_keys
+from hashlib import sha256 as sha_constructor
+import json
 
 #------------------------------- <Normal User>---------------------------
 @login_required(login_url='/account/login')
@@ -46,20 +43,16 @@ def newUser(request):
     if request.method == "POST":
         formulario = RegisterForm(request.POST)
         if formulario.is_valid():
-            # formulario.save()
-            # user_name = formulario['username'].data
             email_user = formulario.cleaned_data['email']
             name_newuser = formulario.cleaned_data['username']
-            activation_key = getActivationKey(email_user)
             new_user = formulario.save()
             new_user.is_active = False
             new_user.username = new_user.username.replace(" ", "-")
             try:
                 new_user.save()
-                from models import activation_keys
-                activation_keys(id_user=new_user, email=email_user, activation_key=activation_key).save()
-                saveActionLog(new_user, "SIGN_IN", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))  # Registro en el Action log
-                sendEmailHtml(1, {'username': name_newuser, 'activation_key': activation_key}, [str(email_user)])  # Envio de correo con clave de activacion
+                ak = activation_keys.objects.create_key_to_user(new_user)
+                saveActionLog(new_user, "NEW_USER_CREATED", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))  # Registro en el Action log
+                sendEmailHtml(1, {'username': name_newuser, 'activation_key': ak.activation_key}, [str(email_user)])  # Envio de correo con clave de activacion
                 return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
             except:
                 return HttpResponseRedirect('/#Error-de-registro-de-usuario')
@@ -70,10 +63,6 @@ def newUser(request):
     ctx = {'formNewUser': formulario, 'url_terms': getGlobalVar("URL_TERMS"), 'url_privacy': getGlobalVar("URL_PRIVACY")}
     return render_to_response('account/newUser.html', ctx, context_instance=RequestContext(request))
 #    return render_to_response('account/newUser.html',{}, context_instance = RequestContext(request))
-
-
-def getActivationKey(email_user):
-    return sha_constructor(sha_constructor(str(random.random())).hexdigest()[:5] + email_user).hexdigest()
 
 
 def getNextUsername(username):
@@ -117,34 +106,27 @@ def newInvitedUser(email_to_invite, _user_from, first_name=False, last_name=Fals
         first_name = _username
     if not last_name:
         last_name = ""
-    try:
-        _user = User(username=_username, first_name=first_name, last_name=last_name, email=email_to_invite, is_active=False)
-        activation_key = getActivationKey(email_to_invite)
-        _user.set_password(activation_key[:8])
+    
+    _user = User.objects.create(username=_username, first_name=first_name, last_name=last_name, email=email_to_invite, is_active=False)
+    
+    ak = activation_keys.objects.create_key_to_user(_user)
+    if _user and ak:
+        _user.set_password(ak.activation_key[:8])
         _user.save()
-    except Exception, e:
-        print "Error newInvitedUser: %s" % e
-        return False
-    try:
-        from models import activation_keys
-        activation_keys(id_user=_user, email=email_to_invite, activation_key=activation_key).save()
-    except Exception, e:
-        print "Error in activation_keys:", e
-        #ERROR log
-    if _user:
-        # saveAction Log: new user invited by _user_from
-        print reverse("confirm_account", args=(activation_key, 1, ))
-        id_inv = activation_key[5:20]
+        # saveActionLog: new user invited by _user_from
+        print reverse("confirm_account", args=(ak.activation_key, 1, ))
         ctx_email = {
             'username': _user_from.username,
-            'activation_key': activation_key,
-            'id_inv': id_inv,
+            'activation_key': ak.activation_key,
+            'inv_code': ak.activation_key[5:20], ## var to define a invitation. (only it is needed in the url to redirect)
             'newuser_username': _username,
-            'pass': activation_key[:8],
+            'pass': ak.activation_key[:8],
             'urlgravatar': showgravatar(_user_from.email, 50)
         }
         sendEmailHtml(7, ctx_email, [email_to_invite])
         return _user
+    else:
+        pass
 
 
 def log_in(request):
@@ -460,7 +442,7 @@ def confirm_account(request, activation_key, is_invited=False):
 
 def activate_account(request, activation_key):
     saveViewsLog(request, "apps.account.views.activate_account")
-    if activate_account_now(request, activation_key):
+    if True:# activate_account_now(request, activation_key):
         try:
             is_invited = request.GET['is_invited']
         except Exception:

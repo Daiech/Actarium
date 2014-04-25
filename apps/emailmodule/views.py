@@ -4,8 +4,8 @@ from django.template.loader import get_template
 from django.template import Context,  RequestContext
 from apps.actions_log.views import saveErrorLog
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from actarium_apps.organizations.models import rel_user_group
 from apps.emailmodule.models import *
@@ -268,3 +268,10 @@ def sendGmailEmail(to, subject, text, attach=False):
     mailServer.sendmail(gmail_user, to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
     mailServer.close()
+
+
+def show_template(request):
+    if request.user.is_staff:
+        return render(request, "emailmodule/" + request.GET.get("p"))
+    else:
+        raise Http404

@@ -516,7 +516,7 @@ def resendInvitation(request, slug_group):
             try:
                 group = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
-                if _user_rel.is_admin and _user_rel.is_active:
+                if group and _user_rel.is_admin and _user_rel.is_active:
                     try:
                         uid = str(request.GET['uid'])
                     except Exception:
@@ -538,11 +538,12 @@ def resendInvitation(request, slug_group):
                                 type_email = 10
                                 try:
                                     from apps.account.models import activation_keys
-                                    ak = activation_keys.objects.get(id_user=_user)
-                                    ctx_email["activation_key"] = ak.activation_key
-                                    ctx_email["id_inv"] = request.user.pk
-                                    ctx_email["newuser_username"] = _user.username
-                                    ctx_email["pass"] = ak.activation_key[:8]
+                                    ak = activation_keys.objects.get_or_none(id_user=_user, is_expired=False)
+                                    if ak:
+                                        ctx_email["activation_key"] = ak.activation_key
+                                        ctx_email["id_inv"] = request.user.pk
+                                        ctx_email["newuser_username"] = _user.username
+                                        ctx_email["pass"] = ak.activation_key[:8]
                                 except Exception, e:
                                     print e
                                     # Error log e

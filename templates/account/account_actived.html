@@ -1,4 +1,4 @@
-{% extends "website/layout_landing.html" %}
+{% extends "base.html" %}
 {% block TITLE %}Cuenta activada{% endblock %}
 {%block body %}		
 	<article class="message-box white-box-container">
@@ -7,21 +7,29 @@
 		{% if invited %}
 		<div class="change-pass">
 			<div class="alert">
-			  <strong>Atenci&oacute;n!</strong> Hemos generado una contraseña temporal para el inicio de tu sesi&oacute;n, para mayor seguridad debes cambiarla inmediatamente en tu <a href="/account#password-site">configuraci&oacute;n de cuenta</a>.
+			  <strong>Atenci&oacute;n!</strong> Hemos generado una contraseña temporal para el inicio de tu sesi&oacute;n, para mayor seguridad debes cambiarla inmediatamente en tu <a href="{% url 'change_password' %}">configuraci&oacute;n de cuenta</a>.
 			</div>
 		</div>
 		{% endif %}
-		<div class="menu-icons icon-about"></div><p>Conoce el funcionamiento general de <strong>Actarium</strong> en la secci&oacute;n <a href="/about">Acerca</a></p>
+		<div class="menu-icons glyphicon glyphicon-about"></div><p>Conoce el funcionamiento general de <strong>Actarium</strong> en la secci&oacute;n <a href="/about">Acerca</a></p>
 		<div class="menu-icons icon-faqs"></div><p>Necesitas ayuda? Accede a las <a href="/help/faq">Preguntas frecuentes</a>  </p>
-		<div class="menu-icons icon-blog"></div><p>Ent&eacute;rate de las actualizaciones de la plataforma en el <a href="/blog">Blog oficial de <strong>Actarium</strong></a>
+		<div class="menu-icons glyphicon glyphicon-blog"></div><p>Ent&eacute;rate de las actualizaciones de la plataforma en el <a href="/blog">Blog oficial de <strong>Actarium</strong></a>
 		<br><br>
 		<p>Si tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes hacerlo a trav&eacute;s del m&oacute;dulo <a href="#" id="callFeed">FeedBack</a> que esta disponible a la derecha en todas las ventanas</p>
+
+		<div class="get-started">
+		<a href="{% url 'tour' %}" class="btn btn-large btn-success">Empezar</a>
+		</div>
 	</article>
 {% endblock%}
 {%block style%}
 <style>
+	.message-box{margin-top: 40px !important;}
+	.message-box a{color: #00aeaa}
 	article .menu-icons{float: left;margin-right: 5px;}
-	article p{margin-bottom: 20px;}
+	article p{margin-bottom: 20px;text-align:justify;}
 	.change-pass{margin-bottom: 20px;}
+	.get-started{font-size: 25px;text-align: center;}
+	.get-started a{padding: 15px 45px;color: white;}
 </style>
 {%endblock%}

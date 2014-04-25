@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^actions/', include(actions_log_urls)),
     url(r'^settings/', include(asettings_urls)),
     url(r'^calendar/', 'apps.groups_app.views.calendar'),
+    url(r'^email/$', 'apps.emailmodule.views.show_template'),
 
     url(r'^ads/(?P<id_ads>[-\w]+)$', 'apps.ads.views.home'),
     url(r'^services.pdf$', 'apps.website.views.services', name='services'),
