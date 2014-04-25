@@ -377,6 +377,7 @@ FEED
     width: 500px;
     margin: auto;
 }
+#feed-modal .modal-dialog{width: 480px;}
 #feed-imput{
     margin-bottom: 15px;
 }

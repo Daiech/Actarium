@@ -36,7 +36,7 @@ $.ajaxSetup({
     }
 });
 
-function main(){
+$(document).ready(function(){
     $("#log-sup").on("click", function(e){
         e.preventDefault();
         $("#username").focus();
@@ -52,14 +52,6 @@ function main(){
         }
     );
     //-------------------</letra blanca del perfil on hover>-------------------------//
-
-    //------<No cierra el Menú de login al dar click>---------------/
-    // $(".next-li").focus(function(e){
-    //     $(".dropdown-menu").addClass("disblock");
-    // }).blur(function(e){
-    //     // $(".dropdown-menu").removeClass("disblock")
-    // });
-    //------ </No cierra el Menú de login al dar click>--------------/
 
     //------ <On Login Submit >--------------/
     $("#close-login-menu").on("click",function(e){
@@ -91,7 +83,7 @@ function main(){
     $("#close-feed, #cancel-feed").on("click", closeFeedBack);
     function openFeedBack(e){
         e.preventDefault();
-        $("#feed-modal").animate({
+        $("#feed-modal").modal().animate({
             'right':'0px'
         });
     }
@@ -99,7 +91,7 @@ function main(){
         e.preventDefault();
         $("#feed-modal").animate({
             'right':'-505px'
-        });
+        }).modal('hide');
     }
     var num = 0;
     $("#feed-imput > button.btn").on("click", function(){
@@ -158,7 +150,7 @@ function main(){
         }
     });
 
-}
+});
 
 
 function getUrlVars() {
@@ -266,4 +258,4 @@ function changeDropDownMenus(elem){
 /*Close Dropdown Actarium*/
 
 
-$(document).ready(main);
+// $(document).ready(main);
