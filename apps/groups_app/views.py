@@ -526,7 +526,7 @@ def resendInvitation(request, slug_group):
                     _user = getUserById(uid)
                     rel = getRelUserGroup(_user, group)
                     if rel:
-                        if not rel.is_active:
+                        if not rel.id_user.is_active:
                             ctx_email = {
                                 "firstname": request.user.first_name,
                                 "username": request.user.username,

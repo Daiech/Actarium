@@ -281,7 +281,7 @@
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
     .td-info-user .dropdown-container{right: 0}
     #dropdown-org-users{width: 283px;}
-    .org-user-img{width: 32px;height: 32px;display: inline-block;}
+    .org-user-img{width: 32px;height: 32px;display: inline-block;margin-right: 4px;}
     #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 240px;}
     #dropdown-org-users .dropdown-body ul li {position: relative;}
     #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;}
@@ -319,7 +319,7 @@
 			function load_org_member_list () {
 				users = {};
 				{% for u in group.organization.get_members %}{% is_member_of_group "u" "group" as is_member %}
-				users[{{ forloop.counter0 }}] = {"id": "{{ u.id }}","email": "{{ u.email }}","username": "{{ u.username }}","image": "{{ u.email|showgravatar:32 }}","full_name": "{{ u.get_full_name }}", "is_member": {{ is_member|lower }}};{% endfor %}
+				users[{{ forloop.counter0 }}] = {"id": "{{ u.id }}","email": "{{ u.email }}","username": "{{ u.username }}","image": "{{ u.email|showgravatar:32 }}","full_name": "{{ u.get_full_name|truncatewords:20 }}", "is_member": {{ is_member|lower }}};{% endfor %}
 				$("#org-user-list").html(swig.render($("#org-user-template").html(), {locals: users}));
 			}
 			function append_org_member(u){
