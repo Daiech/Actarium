@@ -22,6 +22,7 @@ class OrganizationServicesManager(GenericManager):
     
     def can_add(self):
         max_num_members = self.get_max_num_members()
+        print "MAX", max_num_members
         org = self.all()[0].organization
         try:
             current_num_members = org.get_num_members()

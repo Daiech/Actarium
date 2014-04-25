@@ -40,7 +40,6 @@
 {% endblock %}
 
 {% block menu_content %}
-	<!-- begin -->
 	<div class="white-box-container">
 		<div class="row">
 			<div class="col-md-6">
@@ -97,7 +96,7 @@
 						<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 							<td class="td-first">
 								<div class="td-info-user">
-									<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
+									<div class="username-info {%if not m.id_user.is_active%}user-pend-r{%endif%}"
 									{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
 				                        <img class="img-circle" style="width:24px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
 				                        <span class="names">
@@ -121,9 +120,9 @@
 				                    				{{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}} ({{m.id_user}}):
 				                    			</strong>
 				                    		</div>
-				                    		<div class="first-menu">	
+				                    		<div class="first-menu">
 				                    			<ul class="configuration-list">
-				                    				{%if not m.is_active%}
+				                    				{%if not m.id_user.is_active%}
 				                    				<li>
 				                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
 				                    						<!-- <i class="icon-refresh"></i>  --><i class="glyphicon glyphicon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
@@ -144,7 +143,7 @@
 				                    				</li>
 				                    			</ul>
 				                    		</div>
-				                    		{%if not m.is_active%}
+				                    		{%if not m.id_user.is_active%}
 		                					<div class="second-menu">
 		                						<div class="">
 		                							<label>
@@ -201,7 +200,6 @@
 			{% endif %}
 		</div>
 	</div>
-	<!-- end -->
 {% if rel_user.is_admin or user_is_org_admin %}
 <script type="text/template" id="new-user-template">
 	<li>
