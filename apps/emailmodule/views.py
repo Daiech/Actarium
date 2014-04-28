@@ -272,6 +272,7 @@ def sendGmailEmail(to, subject, text, attach=False):
 
 def show_template(request):
     if request.user.is_staff:
-        return render(request, "emailmodule/" + request.GET.get("p"))
+        agenda = "Socialización del proyecto a Oscar Granada"
+        return render(request, "emailmodule/" + request.GET.get("p"), locals())
     else:
         raise Http404

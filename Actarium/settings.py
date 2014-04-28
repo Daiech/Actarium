@@ -211,6 +211,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'apps.website.context_processors.gloval_vars_url',
     'apps.website.context_processors.is_debug',
+    'apps.website.context_processors.url_base',
     'actarium_apps.organizations.context_processors.my_orgs',
     'social.apps.django_app.context_processors.backends',
 )

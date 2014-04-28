@@ -759,7 +759,7 @@ def new_reunion(request, slug_group):
                 )
                 myNewReunion.save()
                 id_reunion = myNewReunion
-                relations = rel_user_group.objects.filter(id_group=q, is_active=1)
+                relations = rel_user_group.objects.filter(id_group=q, is_active=1).exclude(id_user=request.user)
                 email_list = []
                 for relation in relations:
                     email_list.append(str(relation.id_user.email)) # bug found at 25,07,2013
