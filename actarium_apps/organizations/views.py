@@ -62,7 +62,7 @@ def deleteOrg(request, slug_org):
 
 
 @login_required(login_url='/account/login')
-def profileOrg(request, slug_org):
+def settingsOrg(request, slug_org):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
     user_is_admin = org.has_user_role(request.user, "is_admin")
     if org and ('edit' in request.GET) and user_is_admin:

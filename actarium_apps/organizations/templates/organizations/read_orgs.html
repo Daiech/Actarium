@@ -14,7 +14,7 @@
                 <h3 class="panel-title">
                     <a href="{{ org.get_absolute_url }}">{{ org.name }}</a>
                     {% if user_is_admin %}
-                    <span><a href="{% url 'profile_org' org.slug %}"><i class="glyphicon glyphicon-cog"></i></a></span>
+                    <span><a href="{% url 'profile_org' org.slug %}"><i class="icon-config glyphicon glyphicon-cog"></i></a></span>
                     {% endif %}
                 </h3>
             </span>
@@ -58,6 +58,7 @@
     .organizations-list .panel-title{font-weight: bold;}
     .organizations-list .org-principal-image{width: 30px;height: 30px;margin-top: -6px;margin-right: 6px;}
     .organizations-list .org-principal-image img{width: 28px;margin-top: 1px;}
+    .icon-config{margin-left: 5px;}
 </style>
 {%endblock%}
 

@@ -7,11 +7,11 @@
         <span class="group-members-num" title="{{ g.get_num_members }} {% trans 'miembros' %}">{{ g.get_num_members }}</span>
         </div>
         <div class="group-permissions">
-            <span title="{% trans 'El usuario puede agregar usuarios y cambiar funciones' %}" class="glyphicon glyphicon-wrench"></span>
-            <span title="{% trans 'El usuario puede redactar actas' %}" class="glyphicon glyphicon-pencil"></span>
-            <span title="{% trans 'El usuario aparece en las actas' %}" class="glyphicon glyphicon-user"></span>
+            <span title="{% trans 'Administrador de grupo' %}" class="glyphicon glyphicon-wrench"></span>
+            <span title="{% trans 'Puedes redactar actas' %}" class="glyphicon glyphicon-pencil"></span>
+            <span title="{% trans 'Apareces en las actas' %}" class="glyphicon glyphicon-user"></span>
         </div>
-        <div class="group-name" title="{{ g.name }}">{{ g.name|truncatechars:18 }}</div>
+        <div class="group-name" title="{{ g.name }}"><p>{{ g.name }}</p></div>
     </div>
 </a>
 {% empty %}
