@@ -8,6 +8,7 @@ except ImportError:
 TEMPLATE_DEBUG = DEBUG
 # PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(".")
+PROJECT_NAME = "Actarium"
 try:
     from .local_settings import URL_BASE
 except ImportError:
@@ -285,11 +286,6 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.user_details' 
 ) 
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
-
 ORG_IMAGE_SIZE = ((50,50), (100,100))
 ORG_IMAGE_DEFAULT = "icons/org_default.jpg"
 
@@ -301,19 +297,26 @@ GRAPH_MODELS = {
   'group_models': True,
 }
 
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
+############## EMAIL CONFIGURATION #################
 try:
     from .local_settings import EMAIL_HOST_USER
 except:
-    EMAIL_HOST_USER = ""
+    EMAIL_HOST_USER = "no-reply@daiech.com"
 try:
     from .local_settings import EMAIL_HOST_PASSWORD
 except:
     EMAIL_HOST_PASSWORD = ""
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL="Actarium <{email}>".format(email=EMAIL_HOST_USER)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_SUBJECT_PREFIX = "[Actarium] "
+############## EMAIL CONFIGURATION #################
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

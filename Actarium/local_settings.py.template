@@ -16,3 +16,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH_SCOPE = [
     'https://www.googleapis.com/auth/drive',
     'https://www.googleapis.com/auth/userinfo.profile'
 ]
+EMAIL_HOST_USER = "no-reply@daiech.com"
+EMAIL_HOST_PASSWORD = ""
+
+URL_BASE = "http://actarium.co"
