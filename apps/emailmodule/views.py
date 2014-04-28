@@ -7,11 +7,15 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from actarium_apps.organizations.models import rel_user_group
 from apps.emailmodule.models import *
 from apps.actions_log.views import saveActionLog, saveViewsLog
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.header import Header
 import json
-
+import smtplib
 
 def sendEmailHtml(email_type, ctx, to, _group=None):
     """
@@ -95,6 +99,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         htmly = get_template('emailmodule/emailtest.html')
         subject, to = 'Mensaje de prueba', ['emesa@daiech.com']
     from_email = 'Actarium <no-reply@daiech.com>'
+    ctx["URL_BASE"] = settings.URL_BASE # Context proccessor no funciona con get_template
     d = Context(ctx)
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
@@ -120,7 +125,6 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
             print e
             print "Error al enviar correo electronico tipo: ", email_type, " con plantilla HTML."
             saveErrorLog('Ha ocurrido un error al intentar enviar un correo de tipo %s a %s' % (email_type, to))
-
 
 
 def groupAdminFilter(email_list, email_type, _group):
@@ -232,7 +236,6 @@ def emailAjax(request, slug_group):
     else:
         message = False
         return HttpResponse(message)
-
 
 
 
