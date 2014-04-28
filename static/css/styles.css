@@ -1,12 +1,5 @@
 
-body{
-    background-color: white;
-    /*background-image: url("/static/img/debut_light.png");*/
-    /*background-image: url("/static/img/ticks.png");*/
-    height: 100%;
-    /*font-family: "sans-serif"*/
-    /*margin-bottom: 84px;*/
-}
+body{background-color: white;height: 100%;}
 a {color: #555;text-decoration: none;}/*00aeaa*/
 .b{border: solid thin #dadada;}
 .bt{border-top: solid thin #dadada;}
@@ -14,38 +7,20 @@ a {color: #555;text-decoration: none;}/*00aeaa*/
 .bb{border-bottom: solid thin #dadada;}
 .bl{border-left: solid thin #dadada;}
 h1,h2,h3,h4,h5,h6, strong, .info-title{font-family: 'Oswald', sans-serif;}
-
 time{font-size: 14px;color: gray}
-
-#body-wrap{
-    min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by its height *
-  margin: 0 auto -20px;
-  padding: 0 0 60px;
-  * Pad bottom by footer height */
-}
+#body-wrap{min-height: 100%;height: auto !important;height: 100%;}
 .dib{display: inline-block;}
 
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
 **************************************************************************** */
-body > header{
-    background-repeat: repeat-x;
-    background-color: #ECECEC;
-    /*box-shadow: 0px 1px 7px rgba(0,0,0,0.5);*/
-    background-repeat: repeat-x;
-    background-image: url("/static/img/line-topbar.png");
-    background-position: bottom;
-    /*height: 55px;*/
-}
+body > header{background-repeat: repeat-x;background-color: #ECECEC;background-repeat: repeat-x;background-image: url("/static/img/line-topbar.png");background-position: bottom;}
 header #navbar-button-container > ul li a {
-    display:inline-block;
-    color:gray; 
-    margin: auto;
-    width:100%;
-    text-decoration:none;
+display:inline-block;
+color:gray; 
+margin: auto;
+width:100%;
+text-decoration:none;
 }
 #navbar-button-container{
     display: inline;

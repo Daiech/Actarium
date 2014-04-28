@@ -442,7 +442,7 @@ def confirm_account(request, activation_key, is_invited=False):
 
 def activate_account(request, activation_key):
     saveViewsLog(request, "apps.account.views.activate_account")
-    if True:# activate_account_now(request, activation_key):
+    if activate_account_now(request, activation_key):
         try:
             is_invited = request.GET['is_invited']
         except Exception:
