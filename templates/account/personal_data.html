@@ -4,7 +4,7 @@
 {% block bodysettings %}
 <div>
     <div class="uTop">
-        <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+        <img src="{{ user.email|showgravatar:'32'}}" width="32px"  class="img-circle"/>
         <strong>
             <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
                 {{ user.first_name }} ({{user.username}})
@@ -21,13 +21,13 @@
             {{formUser}}
             <tr>
             	<td class="t-a-r">{% trans 'Cambiar im&aacute;gen' %}:</td>
-            	<td><img src="{{ user.email|showgravatar:'32'}}" width="32px" />
+            	<td><img src="{{ user.email|showgravatar:'40'}}" width="40px" class="img-circle" />
                 {% trans 'Agrega una foto a tu correro en <a href="http://gravatar.com/">Gravatar.com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella.' %}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <button type="submit" class="btn btn-success btn-large">
+                    <button type="submit" class="btn btn-success btn-large mt10">
                         {% trans 'Actualizar Datos' %}
                     </button>
                 </td>
@@ -90,9 +90,6 @@
 	td{
 		padding-left:7px;
 	}
-    .uTop{
-        /*padding:10px;*/
-    }
     article p{
         font-size: 12px;
         line-height: 1;
@@ -124,6 +121,7 @@
     .title{
         text-align: center;
     }
+    .mt10{margin-top: 10px}
 
 </style>
 {% endblock %}
