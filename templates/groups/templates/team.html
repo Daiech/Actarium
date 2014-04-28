@@ -77,16 +77,22 @@
 					<table id="table-roles" class="table table-bordered table-hover">
 						<tr>
 							<th class="td-first">
-								<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">{% trans "Miembros del grupo" %}</div>
+								<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">{% trans "Miembros del grupo" %}</div>
 							</th>
 							<th>
-								<div class="info-title" title="Personas que aparecen en la lista de las actas">
+								<div class="info-title" title="{% trans 'Personas que aparecen en la lista de las actas' %}">
 									<i class="glyphicon glyphicon-user"></i>
 									<span class="th-name">{% trans "Aparece en actas" %}</span>
 								</div>
 							</th>
 							<th>
-								<div class="info-title" title="Personas encargadas de administrar el grupo">
+								<div class="info-title" title="{% trans 'Tiene permisos de crear actas' %}">
+									<i class="glyphicon glyphicon-file"></i>
+									<span class="th-name">{% trans "Puede redactar" %}</span>
+								</div>
+							</th>
+							<th>
+								<div class="info-title" title="{% trans 'Puede administrar el grupo' %}">
 									<i class="glyphicon glyphicon-wrench"></i> 
 									<span class="th-name">{% trans "Administrador" %}</span>
 								</div>
@@ -171,6 +177,15 @@
 									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
 								{% else %}
 								{%if m.is_member%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
+								{%endif%}
+								</label>
+							</td>
+							<td class="t-a-c">
+								<label for="writer{{m.id_user.id}}">
+								{% if rel_user.is_admin %}
+									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
+								{% else %}
+								{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
 								{%endif%}
 								</label>
 							</td>

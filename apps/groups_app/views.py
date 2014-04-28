@@ -82,7 +82,7 @@ def setRoltoUser(request, _user, _group, role, remove):
                 role_name = r[2]
             if role == 4:
                 rel.is_admin = True
-                rel.is_secretary = True
+                # rel.is_secretary = True
                 role_name = r[3]
         if remove:
             if role == 1:
@@ -93,7 +93,7 @@ def setRoltoUser(request, _user, _group, role, remove):
                 rel.is_convener = False
             if role == 4 and not rel.is_superadmin:
                 rel.is_admin = False
-                rel.is_secretary = False
+                # rel.is_secretary = False
         rel.save()
         # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
         if role_name:  # the rol has been assigned
