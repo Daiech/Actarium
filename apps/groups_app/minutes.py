@@ -34,7 +34,7 @@ def getEmailListByGroup(group):
         print e
 
 
-def getMinutesById(minutes_id):  # not called
+def getMinutesById(minutes_id):
     try:
         the_minutes = minutes.objects.get(id=minutes_id)
     except minutes.DoesNotExist:
@@ -1134,9 +1134,7 @@ def getMinutesVersions(id_minutes):
 
 @login_required(login_url='/account/login')
 def showMinutes(request, slug, minutes_code):
-    '''
-    Muestra toda la informacion de un Acta (minutes)
-    '''
+    '''Muestra toda la informacion de un Acta (minutes)'''
     saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
     pdf_address = 'false'
     if request.method == 'POST':
@@ -1274,7 +1272,7 @@ def showMinutes(request, slug, minutes_code):
 
             minutes_version = getMinutesVersions(minutes_current)
 
-            ctx = {
+            ctx = {"is_org_admin": group.organization.has_user_role(request.user, "is_admin"),
                 "group": group, "minutes": minutes_current, "prev": prev, "next": next, "is_secretary": rel_group.is_secretary,
                 "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
                 "url_minute": request.get_full_path(),
