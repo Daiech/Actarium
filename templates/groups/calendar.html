@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% load gravatartag %}
-{% load i18n %}
-{% load humanize %}
+{% load gravatartag i18n humanize %}
+{% block TITLE %}{% trans 'Calendario' %}{% endblock %}
 
 {% block toolbar_content %}
 {% endblock %}
@@ -12,14 +11,14 @@
 		<header class="">
 	    	<div class="col-md-4">
 	    		<div class="menu-icons icons-page icon-reunions"></div>
-	    		<h3>Reuniones</h3>
+	    		<h3>{% trans 'Reuniones' %}</h3>
 	    	</div>
 			<div class="span1 botonera-calendar"><div id="load_reunions"></div></div>
 	    	<div class="span3 offset1 botonera-calendar"> 
 	    		<a  href="#newReunionModal" data-toggle="modal" class="btn ">
-	    			<i class="glyphicon glyphicon-plus"></i> Nueva reuni&oacute;n</a>
+	    			<i class="glyphicon glyphicon-plus"></i> {% trans 'Nueva reuni&oacute;n' %}</a>
 	    		<a  href="/calendar" class="btn ">
-	    			<i class="glyphicon glyphicon-calendar"></i> Ver todas</a>
+	    			<i class="glyphicon glyphicon-calendar"></i> {% trans 'Ver todas' %}</a>
 	    	</div>
 		    <div  class="span12" style="margin-left:0px;" ><hr></div>
         </header>
@@ -33,7 +32,7 @@
 					    <div class="modal-content">
 							<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3>Detalles de la Reuni&oacute;n</h3>
+							<h3>{% trans 'Detalles de la Reuni&oacute;n' %}</h3>
 							</div>
 							<div class="modal-body">
 								<div id="reunion-data">
