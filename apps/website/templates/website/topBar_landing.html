@@ -9,16 +9,19 @@
     <div class="menu-container">
         {% if not user.is_authenticated %}
         <div id="social-buttons" class="pull-right">
-            <a href="https://www.facebook.com/actarium" target="_blank">
+            <a href="https://www.facebook.com/Actarium" target="_blank">
                 <div class="sprites social-button" id="fb-but"></div>
             </a>
-            <a href="https://www.twitter.com/actarium" target="_blank">
+            <a href="https://www.twitter.com/Actarium" target="_blank">
                 <div class="sprites social-button" id="gp-but"></div>
             </a>
-            <a href="https://plus.google.com/u/2/103573222326693941191/posts" target="_blank">
+            <a href="https://plus.google.com/+Actarium" target="_blank">
                 <div class="sprites social-button" id="tt-but"></div>
             </a>   
         </div>
+        <ul class="nav navbar-nav navbar-right pull-right">
+            <li><a href="{% url 'pricing'  %}">{% trans 'Precios' %}</a></li>
+        </ul>
         {% else %}
         <div id="account-menu" class="btn-group pull-right">
             <div id="log-sup" class="btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">

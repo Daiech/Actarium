@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.utils import translation
@@ -21,14 +21,6 @@ import re
 
 
 def home(request):
-    if request.user.is_authenticated():
-        saveViewsLog(request, "Home_authenticated")
-        return listOrgs(request)
-        template = 'website/index.html'
-    else:
-        saveViewsLog(request, "Home_anonymous")
-        ctx = {}
-        template = 'website/landing.html'
     if request.method == "GET" and 'lang' in request.GET:
         try:
             lang_available = False
@@ -42,6 +34,14 @@ def home(request):
                 ctx["no_supported"] = True
         except Exception, e:
             print e
+    if request.user.is_authenticated():
+        saveViewsLog(request, "Home_authenticated")
+        return listOrgs(request)
+        template = 'website/index.html'
+    else:
+        saveViewsLog(request, "Home_anonymous")
+        ctx = {}
+        template = 'website/landing.html'
     return render_to_response(template, ctx, context_instance=RequestContext(request))
 
 
@@ -120,6 +120,11 @@ def about(request):
 def blog(request):
     saveViewsLog(request, "website.views.blog")
     return render_to_response('website/blog.html', {}, context_instance=RequestContext(request))
+
+
+def pricing(request):
+    saveViewsLog(request, "website.views.pricing")
+    return render(request, 'website/pricing.html')
 
 
 def help(request):

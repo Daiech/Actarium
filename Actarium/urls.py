@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     url(r'^' + getGlobalVar("URL_PRIVACY") + '$', 'apps.website.views.privacy_'),
     url(r'^' + getGlobalVar("URL_TERMS") + '$', 'apps.website.views.terms'),
 
+    url(r'^pricing', 'apps.website.views.pricing', name="pricing"),
     url(r'^blog', 'apps.website.views.blog'),
     url(r'^update', 'apps.github.views.update'),
     url(r'^runMongo', 'apps.github.views.runMongo'),

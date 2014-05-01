@@ -10,7 +10,7 @@ class RegisterForm(UserCreationForm):
     email = forms.EmailField(label="Correo Electrónico", validators=[validate_email_unique], widget=forms.TextInput(attrs={'placeholder': 'Email'}))
     username = forms.CharField(
         label="Nombre de usuario",
-        widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario', "autofocus": "autofocus"}),
         help_text="Requerido. 30 caracteres o menos. Letras, dígitos y @/./+/-/_ solamente."
     )
 

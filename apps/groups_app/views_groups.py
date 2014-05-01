@@ -415,7 +415,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
                 ######## <Create a relation into reunion and the new minutes> #########
                 try:
-                    id_reunion = int(request.POST['reunion_id'])
+                    id_reunion = int(request.POST.get('reunion_id'))
                 except Exception:
                     id_reunion = None
                 if id_reunion:
