@@ -2,21 +2,20 @@
 {% load i18n %}
 {% spaceless %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block TITLE %}{%endblock%} - Actarium</title>
-
-    <!-- Bootstrap -->
     <meta name="description" content="La solucic&oacute;n para el resgistro de actas">
     <link href="{{ STATIC_PREFIX }}favicon.ico" rel="icon" type="image/x-icon" >
     <link href="{{ STATIC_PREFIX }}libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_PREFIX }}css/todc-bootstrap.css" rel="stylesheet" >
-    <link href='http://fonts.googleapis.com/css?family=Oswald:300,400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/todc-docs.css">
+    <!-- <link href='http://fonts.googleapis.com/css?family=Oswald:300,400' rel='stylesheet' type='text/css'> -->
     {% block style_libs %}{% endblock%}
-    <!-- <style>body {padding-top: 20px;}</style> -->
+    <style>body {padding-top: 20px;}</style>
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/styles.css">
     {%block style%}{%endblock%}
     <script src="{{ STATIC_PREFIX }}js/vendor/prefixfree.min.js"></script>
@@ -27,21 +26,20 @@
     <![endif]-->
   </head>
   <body>
-    <div id="">
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
-        <header class="navbar ">
-            {% include "public_top_bar.html" %}
-        </header>
-        <div id="body_container"  class="container">
-            <div id="body-container">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </div> <!-- /container -->
-    </div>
-    <footer id="daiech-footer">
+    {% include "feedback.html" %}
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+    <![endif]-->
+    <header class="navbar">
+        {% include "public_top_bar.html" %}
+    </header>
+    <div class="container">
+        <div id="body-container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div> <!-- /container -->
+    <div id="footer">
         <div id="cred-footer">
             <p>
                 <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
@@ -67,7 +65,7 @@
                 </select>
             </form>
         </div>
-    </footer>{% if not DEBUG %}
+    </div>{% if not DEBUG %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>{% endif %}
     <script>window.jQuery || document.write('<script src="{{STATIC_PREFIX}}libs/jquery-1.11.0.min.js"><\/script>')</script>
     <script src="{{ STATIC_PREFIX }}js/main.js"></script>

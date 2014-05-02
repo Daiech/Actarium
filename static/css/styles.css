@@ -1,5 +1,5 @@
 html {position: relative;min-height: 100%;}
-body{background-color: white;height: 100%;margin-bottom: 90px;}
+body{background-color: white;height: 100%;margin-bottom: 90px;position: initial !important;}
 a {color: #00aeaa;text-decoration: none;}/*00aeaa*/
 .b{border: solid thin #dadada;}
 .bt{border-top: solid thin #dadada;}
@@ -16,7 +16,6 @@ time{font-size: 14px;color: gray}
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
 **************************************************************************** */
-body > header{background-repeat: repeat-x;background-color: #ECECEC;background-repeat: repeat-x;background-image: url("/static/img/line-topbar.png");background-position: bottom;}
 header #navbar-button-container > ul li a {
 display:inline-block;
 color:gray; 
@@ -153,16 +152,17 @@ Termina barra superior Daiech
 /* **************************************************************************** 
 Footer
 **************************************************************************** */
-#daiech-footer {
+#footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 90px;
+  /*height: 90px;*/
 }
-#daiech-footer{
+#footer{
     background-color: white;
     text-align: center;
     border-top: solid thin #cbcccc;
+    border-bottom: solid thin #cbcccc;
 }
 #footer-bar{
     background-color: white;
@@ -191,10 +191,10 @@ Footer
     /*position: relative;*/
     width: 131px;
 }
-#daiech-footer a , #daiech-footer a:visited ,#daiech-footer a:link{
+#footer a , #footer a:visited ,#footer a:link{
     color: #333;
 }
-#daiech-footer a:hover{
+#footer a:hover{
     color: #00AEAA;
 
 }
@@ -417,11 +417,7 @@ article{
         padding-top:20px;
         margin-top: 20px;
     }
-#body_container{
-    clear: both;
-    color: #555;
-    /*margin-top:-20px;*/
-    min-height: 370px;
+body > .container{
     padding: 0;
 }
 .but{
