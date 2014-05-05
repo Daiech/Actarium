@@ -3,7 +3,7 @@
 from apps.groups_app.models import minutes
 # from django.contrib.auth.models import User
 # from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 # from django.template import RequestContext
 # from django.core.mail import EmailMessage
 import random
@@ -175,3 +175,13 @@ def minutesHtmlToPdf(html_string, name_pdf):
         startViewer(name_pdf)
     file_dir.close()
     return '/media%s' % (pdf_address)
+
+def generate_pdf_from_html(request, slug_group):
+    pdf_address = 'false'
+    if request.method == 'POST':
+        html_data = request.POST.get('minutes-html-data')
+        pdf_address = minutesHtmlToPdf(html_data, slug_group)
+        return HttpResponseRedirect(pdf_address)
+    else:
+        raise Http404
+    

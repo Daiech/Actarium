@@ -1135,13 +1135,7 @@ def getMinutesVersions(id_minutes):
 @login_required(login_url='/account/login')
 def showMinutes(request, slug, minutes_code):
     '''Muestra toda la informacion de un Acta (minutes)'''
-    saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
-    pdf_address = 'false'
-    if request.method == 'POST':
-        html_data = request.POST['minutes-html-data']
-        from apps.pdfmodule.views import minutesHtmlToPdf
-        pdf_address = minutesHtmlToPdf(html_data, slug)
-        return HttpResponseRedirect(pdf_address)
+    # saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
     group = getGroupBySlug(slug)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')

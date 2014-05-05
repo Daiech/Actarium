@@ -106,13 +106,7 @@ def showCalendarGroup(request, slug_group):
 @login_required(login_url='/account/login')
 def showMinuteGroup(request, slug_group, minutes_code):
     '''Muestra toda la informacion de un Acta dentro de un grupo (minutes)'''
-    saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
-    pdf_address = 'false'
-    if request.method == 'POST':
-        html_data = request.POST['minutes-html-data']
-        from apps.pdfmodule.views import minutesHtmlToPdf
-        pdf_address = minutesHtmlToPdf(html_data, slug_group)
-        return HttpResponseRedirect(pdf_address)
+    # saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
     group = Groups.objects.get_group(slug=slug_group)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
@@ -249,7 +243,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
             ctx = {
                 "group": group, "minutes": minutes_current, "prev": prev, "next": next,
                 "rel_user": rel_group, "is_secretary": is_s,
-                "m_assistance": m_assistance, "m_no_assistance": m_no_assistance, "pdf_address": pdf_address,
+                "m_assistance": m_assistance, "m_no_assistance": m_no_assistance,
                 "url_minute": request.get_full_path(),
                 "minute_template": loader.render_to_string(address_template, {
                     "URL_BASE": URL_BASE,
