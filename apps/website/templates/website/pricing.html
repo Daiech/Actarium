@@ -6,7 +6,7 @@
     <div class="container-fluid" id="pricing-container">
         <header>{% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1></header>
         <div class="row pricing-content">
-            <div class="col-xs-12 col-sm-2">
+            <div class="col-xs-12 col-sm-2 hidden-xs">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
                         <img src="{{ STATIC_URL }}img/pricing/1.png" width="120px">
@@ -16,8 +16,8 @@
             <div class="col-xs-12 col-sm-10">
                 <div class="row">
                     <div id="pricing-methods"></div>
-
-                    <div class="col-xs-6 col-sm-2">
+                    <div class="col-xs-6 col-md-2 pricing-personal">
+                        <a href="{% url 'new_user'  %}"><p>{% trans 'Calcula el precio adecuado para ti' %}<br>$</p></a>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
 <script type="text/template" id="pricing-template">
 {% verbatim %}
 {% for pr in pricing %}
-    <div class="col-xs-6 col-sm-2">
+    <div class="col-xs-6 col-md-2">
         <div class="pricing-block">
             <div class="pricing">
                 <p><sup>$</sup>{{ pr.price }}</p>
@@ -43,8 +43,8 @@
                 <p class="pricing-member-numbers">{{ pr.members_num.to }} <span class="pricing-a">{{ pr.members_num.inter_text }}</span> {{ pr.members_num.until }}</p>
                 <p>{{ pr.members_name }}</p>
             </div>
-        </div>
         <div class="pricing-suscripcion"><a href="{{ pr.url_suscribe }}">{{ pr.suscribe }}</a></div>
+        </div>
     </div>
 {% endfor %}
 {% endverbatim %}
@@ -67,7 +67,8 @@
     #pricing-container h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
 
     .pricing-content{margin-top: 25px;font-family: Helvetica}
-    .pricing-content .pricing-block{border:solid thin #dadada;min-height: 270px;line-height: 1}
+    .pricing-content >div, .pricing-content #pricing-methods > div{margin-bottom: 15px;}
+    .pricing-content .pricing-block{border:solid thin #dadada;min-height: 270px;line-height: 1;box-shadow: 0 4px 9px 0 #888;}
 
     .pricing-content .pricing-block .pricing{height: 108px;font-family: Bebas;margin-left: -13px;padding-top: 30px;}
     .pricing-content .pricing-block .pricing p.pricing-payment{font-family: HelveticaNeueLT;font-size: 24px;margin: 0}
@@ -78,6 +79,11 @@
     .pricing-suscripcion{font-size: 20px;position: relative;width: auto;padding: 0;bottom: 0;background-color: #B3DB35;padding: 7px;}
     .pricing-suscripcion a{color: white;}
     .pricing-a{font-size: 22px;}
+
+    .pricing-personal{font-family: HelveticaNeueLT;border:solid thin white;}
+    .pricing-personal a:hover{color: #00aeaa;}
+    .pricing-personal:hover{border-color: #dadada; cursor: pointer;box-shadow: 0 4px 9px #888;}
+    .pricing-personal p{line-height: 1.4;padding-top: 26px;}
 </style>
 {%endblock%}
 
