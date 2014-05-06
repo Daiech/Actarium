@@ -28,7 +28,7 @@
     <li>
     	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
 			{% csrf_token %}
-			<textarea class="hidden" id="minutes-html-data" name="minutes-html-data"></textarea>
+			<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
 			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" {%if not minutes.is_full_signed%}title="Los PDF solo son generados para actas aprobadas."{%endif%}><i class="glyphicon glyphicon-file"></i> PDF</a>
 		</form>
     </li>
