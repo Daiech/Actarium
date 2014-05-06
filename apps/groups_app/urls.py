@@ -1,12 +1,12 @@
 from django.conf.urls import url, patterns
 
-#Urls to new group design
+name = "groups"
 
-groups_urls = patterns('',
+urlpatterns = patterns('',
     # url(r'^(?P<slug_group>[-\w]+)/admin/emailNotifications', 'apps.emailmodule.views.emailNotifications', name='Email Notifications'),
     url(r'^(?P<slug_group>[-\w]+)/admin/emailAjax', 'apps.emailmodule.views.emailAjax', name='Email Ajax'),
 )
-groups_urls += patterns('apps.groups_app.minutes',
+urlpatterns += patterns('apps.groups_app.minutes',
     # url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'rolesForMinutes', name='set_role_for_minute'),
     url(r'^(?P<slug_group>[-\w]+)/set-rol-for-minute', 'setRolForMinute', name='Set Role'),
     url(r'^(?P<slug_group>[-\w]+)/set-show-dni', 'setShowDNI', name='Set Show DNI'),
@@ -19,7 +19,7 @@ groups_urls += patterns('apps.groups_app.minutes',
     url(r'^setApprove$', 'setMinutesApprove'),
 
 )
-groups_urls += patterns('apps.groups_app.views',
+urlpatterns += patterns('apps.groups_app.views',
     # url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groupInfoSettings', name='Admin Info Groups'),
     # url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groupDNISettings', name='Admin DNI Groups'),
     url(r'^(?P<slug_group>[-\w]+)/admin/request_dni', 'requestDNI', name='Request_DNI_ajax'),
@@ -42,7 +42,7 @@ groups_urls += patterns('apps.groups_app.views',
     url(r'^$', 'groupsList'),
 )
 
-groups_urls += patterns('apps.groups_app.views_groups',
+urlpatterns += patterns('apps.groups_app.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/config/edit-info$', 'editInfoGroup', name='edit_info_group'),
     url(r'^(?P<slug_group>[-\w]+)/config/email-notifications$', 'configEmailNotifications', name='email_notifications'),
     url(r'^(?P<slug_group>[-\w]+)/config/dni$', 'showGroupDNISettings', name='dni_group'),

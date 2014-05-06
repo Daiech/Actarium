@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
 
-account_urls = patterns('apps.account.views',
+name = "account"
+
+urlpatterns = patterns('apps.account.views',
     url(r'^$', 'personalData', name="personal_data"),
     url(r'^new', 'newUser', name="new_user"),
     url(r'^newInvited', 'newInvitedUser', name="new_invited_user"),

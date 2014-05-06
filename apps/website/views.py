@@ -118,6 +118,7 @@ def about(request):
 
 
 def blog(request):
+    print "BLLLLLOOOOOOOOOOOOOOOOOOOOGGGGGGGGGGGGGG"
     saveViewsLog(request, "website.views.blog")
     return render_to_response('website/blog.html', {}, context_instance=RequestContext(request))
 

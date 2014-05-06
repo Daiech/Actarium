@@ -1,5 +1,8 @@
 from django.conf.urls import url, patterns
-actions_log_urls = patterns('apps.actions_log.views',
+
+name = "actions"
+
+urlpatterns = patterns('apps.actions_log.views',
 	# url(r'^pdf', 'getPDF', name='getPDF'),
     url(r'^user/(?P<username>[-\w]+)/order/(?P<field>[-\w]+)$', 'showUserActionsOrder', name='user_actions_order'),
     url(r'^order/(?P<field>[-\w]+)$', 'showOrderActions', name='order_actions'),

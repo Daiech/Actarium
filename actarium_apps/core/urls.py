@@ -2,6 +2,9 @@ from django.conf.urls import url, patterns
 from .views import *
 from .views_ajax import *
 
+name = "actarium"
+namespace = 'core'
+
 urlpatterns = patterns('',
     url(r'^services/(?P<slug_org>[-\w]+)/$', read_organization_services, name='read_organization_services'),
     url(r'^get_price/$', get_total_price, name='get_total_price'),
