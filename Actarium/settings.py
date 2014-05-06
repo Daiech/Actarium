@@ -1,15 +1,15 @@
 # encoding:utf-8
-# Django settings for Actarium project.
 import os
+from django.conf import global_settings
 try:
     from .local_settings import DEBUG
 except ImportError:
-    print "ERROR DEBUG"
     DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-PROJECT_PATH = os.path.realpath(".")
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
 PROJECT_NAME = "Actarium"
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
 try:
     from .local_settings import URL_BASE
 except ImportError:
@@ -32,35 +32,24 @@ for app in folder_apps:
 RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta", "pricing"]
 
 if DEBUG:
-    APPS += tuple(["django_extensions", "social.apps.django_app.default"])
-print APPS
+    APPS += tuple(["django_extensions", "social.apps.django_app.default", "rosetta"])
+
 try:
     from .settings_db import DATABASES
 except ImportError:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'actarium.sqlite',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': '',
-        }
-    }
+    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3','NAME': 'actarium.sqlite','USER': '','PASSWORD': '','HOST': '','PORT': '',}}
 
 try:
     from .settings_db import MONGODB
 except:
-    MONGODB = {
-        'USER':'admin',
-        'PORT': 27017,
-        'PASSWORD': '123456'
-    }
-    
-ALLOWED_HOSTS = ["*"]
+    MONGODB = {'USER':'admin','PORT': 27017,'PASSWORD': '123456'}
+
+ALLOWED_HOSTS = [
+    ".actarium.com",
+    ".actarium.com."
+]
 
 TIME_ZONE = 'America/Bogota'
-
 LANGUAGE_CODE = 'es'
 
 SITE_ID = 1
@@ -68,50 +57,28 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+LOCALE_PATHS = tuple([os.sep.join([BASE_DIR,APP.replace('.',os.sep),'locale']) for APP in APPS])
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = "" #os.path.join(BASE_DIR , 'static')
+STATIC_ROOT = ""
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR , 'static').replace('\\','/'),
 )
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
-
 SECRET_KEY = 'qze=v_ylqke8q1_ptjp^v-ip)pk^^6^y=6%)&amp;*l$3j#us&amp;$+go'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates').replace('\\', '/')
 )
-
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+MIDDLEWARE_CLASSES = global_settings.MIDDLEWARE_CLASSES + (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'Actarium.urls'
-
-# Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Actarium.wsgi.application'
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates').replace('\\', '/')
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -147,19 +114,9 @@ LOGGING = {
     }
 }
 
-#Configurando from email por defecto
 DEFAULT_FROM_EMAIL = 'Actarium <no-reply@daiech.com>'
 
-ORGS_IMG_DIR = "orgs_img/"
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    # "django.contrib.messages.context_processors.messages",
+TEMPLATE_CONTEXT_PROCESSORS =  global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'apps.website.context_processors.gloval_vars_url',
     'apps.website.context_processors.is_debug',

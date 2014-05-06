@@ -5,6 +5,7 @@ from django.http import Http404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
+from django.conf import settings
 
 from actarium_apps.core.utils import create_default_service
 from apps.actions_log.views import saveActionLog, saveViewsLog
@@ -43,7 +44,10 @@ def readOrg(request, slug_org=False):
         if org and org.has_user_role(request.user, "is_member"):
             return render(request, "organizations/index.html", locals())
         else:
-            raise Http404
+            if not settings.DEBUG:
+                raise Http404
+            else:
+                return HttpResponse("[DEBUG=True] - Hola, soy tu padre Django. Me temo decirte que esta url la está interpretando la aplicación 'Organizations' sorry.")
     return listOrgs(request)
 
 

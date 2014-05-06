@@ -1,5 +1,5 @@
 from django.conf.urls import url, patterns
-
+# name = "orgs"
 urlpatterns = patterns('actarium_apps.organizations.views',
     url(r'^$', 'listOrgs', name="list_orgs"),
     url(r'^create/', 'createOrg', name="create_org"),

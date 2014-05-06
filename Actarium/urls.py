@@ -12,6 +12,10 @@ urlpatterns = patterns('',
     url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^meal/', include(admin.site.urls)),
 )
+if 'rosetta' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        url(r'^rosetta/', include('rosetta.urls')),
+    )
 
 for app in settings.APPS:
     try:
@@ -28,6 +32,7 @@ for app in settings.APPS:
     except Exception as e:
         print "Error: ",app, e
 
+print urlpatterns
 
 if settings.DEBUG:
     urlpatterns += patterns('',
@@ -36,7 +41,3 @@ if settings.DEBUG:
         }),
     )
 
-if 'rosetta' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('',
-        url(r'^rosetta/', include('rosetta.urls')),
-    )

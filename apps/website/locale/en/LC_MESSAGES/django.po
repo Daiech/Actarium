@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-25 18:10-0500\n"
-"PO-Revision-Date: 2013-08-02 15:24-0500\n"
-"Last-Translator: maoaiz  <maizaga@daiech.com>\n"
+"PO-Revision-Date: 2014-05-06 17:52-0500\n"
+"Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
-"X-Translated-Using: django-rosetta 0.7.3\n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: templates/landing.html:3
 msgid ""
@@ -63,7 +63,7 @@ msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
 msgstr "Password (Confirmation)"
 
 #: templates/landing.html:89
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
 "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "

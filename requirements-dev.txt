@@ -6,8 +6,9 @@ pillow
 pymongo
 south
 psycopg2
-reportlab==2.5
+reportlab==2.6
 xhtml2pdf
+django-rosetta
 
 Werkzeug>=0.9.4
 django-extensions>=1.2.5
