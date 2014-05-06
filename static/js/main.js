@@ -151,6 +151,11 @@ $(document).ready(function(){
     });
 
 });
+function goToByScroll(element, callback){// Scroll
+    $('html,body').animate({
+        scrollTop: $(element).offset().top - 100},
+        'slow', callback);
+}
 
 
 function getUrlVars() {

@@ -26,24 +26,29 @@
 <div class="container-fluid pricing-container" id="pricing-calculator">
     <header>{% trans 'Calcula el costo correcto para tu organización' %}</header>
     <p class="text-description">{% trans 'Los precios varían dependiendo del número de miembros de tu equipo, calcula el precio exacto antes de comprar' %}</p>
-    <div id="pricing-calculator-box">
-        <div class="row">
-            <div class="col-md-5 pricing-total" >
-                <input type="text" placeholder="5" value="5" id="team-number" />
-                <p>{% trans 'Miembros del quipo' %}</p>
-            </div>
-            <div class="col-md-2 arrow-right">
-                <img src="{{ STATIC_URL }}img/pricing/arrow-right.png">
-            </div>
-            <div class="col-md-5 pricing-total">
-                <div class="total">
-                    <span>$</span><span>4599</span>
+    <form method="post" action="">
+        {% csrf_token %}
+        <div id="pricing-calculator-box">
+            <div class="row">
+                <div class="col-md-5 pricing-total" >
+                    <input type="text" value="5" id="team-number" />
+                    <p>{% trans 'Miembros del quipo' %}</p>
                 </div>
-                <p>{% trans 'Costo total (COP)' %}</p>
+                <div class="col-md-1 arrow-right">
+                    <img src="{{ STATIC_URL }}img/pricing/arrow-right.png">
+                </div>
+                <div class="col-md-5 pricing-total">
+                    <div class="total">
+                        <span id="pricing-money">$0</span>
+                    </div>
+                    <p>{% trans 'Costo total mes (COP)' %}</p>
+                </div>
+                <div class="col-md-1 arrow-right">
+                </div>
             </div>
         </div>
-    </div>
-    <a href="#" class="btn btn-success btn-large">{% trans 'Comprar miembros extra para tu organización' %}</a>
+        <button type="submit" class="btn btn-success btn-large">{% blocktrans %} Comprar <span id="num"></span> cupos de miembros para tu organización {% endblocktrans %}</button>
+    </form>
 </div>
 <script type="text/template" id="btn-action">
     <a href="{% url 'log_in'  %}" class="btn btn-link">{% trans 'Inicia sesión' %}</a>
@@ -95,7 +100,7 @@
     .pricing-content .pricing-block{border:solid thin #dadada;min-height: 270px;line-height: 1;box-shadow: 0 4px 9px 0 #888;}
 
     .pricing-content .pricing-block .pricing{height: 108px;font-family: Bebas;margin-left: -13px;padding-top: 30px;}
-    .pricing-content .pricing-block .pricing p.pricing-payment{font-family: HelveticaNeueLT;font-size: 24px;margin: 0}
+    .pricing-content .pricing-block .pricing p.pricing-payment{font-family: HelveticaNeueLT;font-size: 20px;margin: 0;margin-left: 14px;}
     .pricing-content .pricing-block .arrow{height: 54px;}
     .pricing-content .pricing-block .members{height: 108px;}
     .pricing-content .pricing-block .members p.pricing-member-numbers{font-family: Bebas;font-size: 40px;}
@@ -117,30 +122,61 @@
     .arrow-right{margin-top: 12px;}
     .pricing-total p{font-size: 20px;margin-top: 10px;}
     .pricing-total .total{font-size: 60px;color: #00aeaa;margin-top: 10px;height: 60px;line-height: 1}
+
+    @media (max-width: 768px) {
+        #pricing-calculator #pricing-calculator-box{width: 90%}
+    }
 </style>
 {%endblock%}
 
 
 {% block js %}
 <script src="{{STATIC_PREFIX}}js/vendor/swig.min.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/jquery.formatCurrency-1.4.0.js"></script>
 <script>
     $(document).ready(function(e){
         $("#btn-group-action").html(swig.render($("#btn-action").html(), {locals:{}}));
         $("#feed-option").animate({"top": ($(window).height() - 210) + "px" }, 1000);
-
-        mn = "{% trans 'miembros' %}";
-        payment = "{% trans 'mes' %}";
-        to = " {% trans 'a' %} ";
-        suscribe = "{% trans 'Suscribirse' %}";
-        url_s = "{% url 'new_user' %}"
-        pricing = {
-            "0": {price: 0, payment: payment, members_num: {to: "", inter_text: "", until: 5}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-            "1": {price: 5000, payment: payment, members_num: {to: 6, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-            "2": {price: 4100, payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-            "3": {price: 3000, payment: payment, members_num: {to: 21, inter_text: to, until: 35}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-            "4": {price: 2900, payment: payment, members_num: {to: "", inter_text: "", until: "+35"}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+        $("a[href='#pricing-calculator']").on("click", function (e) {
+            e.preventDefault();
+            goToByScroll("#pricing-calculator",function (e) {
+                $("#team-number").focus();
+            });
+        })
+        $("#team-number").on("keyup", function (e) {
+            var num = $(this).val();
+            calculate_pricing(num);
+        });
+        calculate_pricing (5);
+        function calculate_pricing (num) {
+            if (parseInt(num) >= 5){
+                sendNewAjax("{% url 'core:get_total_price' %}",
+                    {"quantity": num},
+                    function (data) {
+                        $("#num").text(num);
+                        $("#pricing-money").text(data.quantity).formatCurrency({roundToDecimalPlace: -2});
+                    },
+                    {"method":"post"});
+            }else{
+                console.log("no puedes comprar menos de 5 usuarios.");
+            }
         }
-        $("#pricing-methods").html(swig.render($("#pricing-template").html(), {locals: pricing}));
+        set_initial_pricing_box ();
+        function set_initial_pricing_box () {
+            mn = "{% trans 'miembros' %}";
+            payment = "{% trans 'mes/miembro' %}";
+            to = " {% trans 'a' %} ";
+            suscribe = "{% trans 'Suscribirse' %}";
+            url_s = "{% url 'new_user' %}"
+            pricing = {
+                "0": {price: 0, payment: payment, members_num: {to: "", inter_text: "", until: 5}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "1": {price: 5000, payment: payment, members_num: {to: 6, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "2": {price: 4100, payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "3": {price: 3000, payment: payment, members_num: {to: 21, inter_text: to, until: 35}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "4": {price: 2900, payment: payment, members_num: {to: "", inter_text: "", until: "+35"}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+            }
+            $("#pricing-methods").html(swig.render($("#pricing-template").html(), {locals: pricing}));
+        }
     });
 </script>
 {% endblock %}
