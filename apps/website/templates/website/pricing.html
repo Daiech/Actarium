@@ -3,26 +3,48 @@
 {% block TITLE %}{% trans 'Precios' %}{% endblock %}
 
 {% block content %}
-    <div class="container-fluid" id="pricing-container">
-        <header>{% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1></header>
-        <div class="row pricing-content">
-            <div class="col-xs-12 col-sm-2 hidden-xs">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12">
-                        <img src="{{ STATIC_URL }}img/pricing/1.png" width="120px">
-                    </div>
+<div class="container-fluid pricing-container">
+    <header>{% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1></header>
+    <div class="row pricing-content">
+        <div class="col-xs-12 col-sm-2 hidden-xs">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <img src="{{ STATIC_URL }}img/pricing/1.png" width="120px">
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-10">
-                <div class="row">
-                    <div id="pricing-methods"></div>
-                    <div class="col-xs-6 col-md-2 pricing-personal">
-                        <a href="{% url 'new_user'  %}"><p>{% trans 'Calcula el precio adecuado para ti' %}<br>$</p></a>
-                    </div>
+        </div>
+        <div class="col-xs-12 col-sm-10">
+            <div class="row">
+                <div id="pricing-methods"></div>
+                <div class="col-xs-6 col-md-2 pricing-personal">
+                    <a href="#pricing-calculator"><p>{% trans 'Calcula el precio adecuado para ti' %}<br>$</p></a>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="container-fluid pricing-container" id="pricing-calculator">
+    <header>{% trans 'Calcula el costo correcto para tu organización' %}</header>
+    <p class="text-description">{% trans 'Los precios varían dependiendo del número de miembros de tu equipo, calcula el precio exacto antes de comprar' %}</p>
+    <div id="pricing-calculator-box">
+        <div class="row">
+            <div class="col-md-5 pricing-total" >
+                <input type="text" placeholder="5" value="5" id="team-number" />
+                <p>{% trans 'Miembros del quipo' %}</p>
+            </div>
+            <div class="col-md-2 arrow-right">
+                <img src="{{ STATIC_URL }}img/pricing/arrow-right.png">
+            </div>
+            <div class="col-md-5 pricing-total">
+                <div class="total">
+                    <span>$</span><span>4599</span>
+                </div>
+                <p>{% trans 'Costo total (COP)' %}</p>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="btn btn-success btn-large">{% trans 'Comprar miembros extra para tu organización' %}</a>
+</div>
 <script type="text/template" id="btn-action">
     <a href="{% url 'log_in'  %}" class="btn btn-link">{% trans 'Inicia sesión' %}</a>
     <a href="{% url 'new_user'  %}" class="btn btn-success btn-large">{% trans 'Registrate gratis' %}</a>
@@ -63,10 +85,12 @@
     #public_topbar{height: 90px;background-color: white;}
     #public_topbar #public_logo{display: inline-block;}
 
-    #pricing-container{text-align: center;font-size: 35px;color: #888;font-family: HelveticaNeueLT;}
-    #pricing-container h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
+    .pricing-container{text-align: center;color: #888;font-family: HelveticaNeueLT;}
+    .pricing-container header h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
+    .pricing-container header{font-size: 35px;}
+    .pricing-container p.text-description{font-size: 20px;padding: 15px 0}
 
-    .pricing-content{margin-top: 25px;font-family: Helvetica}
+    .pricing-content{margin-top: 25px;font-family: Helvetica;font-size: 35px;}
     .pricing-content >div, .pricing-content #pricing-methods > div{margin-bottom: 15px;}
     .pricing-content .pricing-block{border:solid thin #dadada;min-height: 270px;line-height: 1;box-shadow: 0 4px 9px 0 #888;}
 
@@ -84,6 +108,15 @@
     .pricing-personal a:hover{color: #00aeaa;}
     .pricing-personal:hover{border-color: #dadada; cursor: pointer;box-shadow: 0 4px 9px #888;}
     .pricing-personal p{line-height: 1.4;padding-top: 26px;}
+
+
+    #pricing-calculator{margin: 120px auto;margin-bottom: 80px}
+    #pricing-calculator #pricing-calculator-box{border: solid thin #dadada; width: 50%;margin: 40px auto;font-size: 30px;padding: 40px;}
+    #pricing-calculator #pricing-calculator-box input{text-align: center;width: 180px;font-size: 50px;color: #00aeaa}
+    #pricing-calculator #pricing-calculator-box input:focus{outline: 0;border-color:#00aeaa;}
+    .arrow-right{margin-top: 12px;}
+    .pricing-total p{font-size: 20px;margin-top: 10px;}
+    .pricing-total .total{font-size: 60px;color: #00aeaa;margin-top: 10px;height: 60px;line-height: 1}
 </style>
 {%endblock%}
 
