@@ -31,7 +31,7 @@
         <div id="pricing-calculator-box">
             <div class="row">
                 <div class="col-md-5 pricing-total" >
-                    <input type="text" value="5" id="team-number" />
+                    <input type="text" value="5" id="team-number" autocomplete="off" />
                     <p>{% trans 'Miembros del quipo' %}</p>
                 </div>
                 <div class="col-md-1 arrow-right">
@@ -51,8 +51,10 @@
     </form>
 </div>
 <script type="text/template" id="btn-action">
-    <a href="{% url 'log_in'  %}" class="btn btn-link">{% trans 'Inicia sesión' %}</a>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'log_in'  %}?next={% url 'pricing'  %}" class="btn btn-link">{% trans 'Inicia sesión' %}</a>
     <a href="{% url 'new_user'  %}" class="btn btn-success btn-large">{% trans 'Registrate gratis' %}</a>
+    {% endif %}
 </script>
 <script type="text/template" id="pricing-template">
 {% verbatim %}
