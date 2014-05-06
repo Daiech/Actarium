@@ -6,7 +6,7 @@ import json
 
 
 
-@login_required(login_url='/account/login')
+#@login_required(login_url='/account/login')
 def get_total_price(request):
     # saveViewsLog(request, "actarium_apps.organizations.views_ajax.getListMembers")
     if request.is_ajax():
