@@ -10,6 +10,8 @@ h1,h2,h3,h4,h5,h6, strong, .info-title{font-family: 'Oswald', sans-serif;}
 time{font-size: 14px;color: gray}
 #body-wrap{min-height: 100%;height: auto !important;height: 100%;}
 .dib{display: inline-block;}
+.flag-icon{width: 16px;height: 11px;border:0;margin: 5px;}
+.language-selected{}
 
 
 

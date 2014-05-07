@@ -262,5 +262,6 @@ function changeDropDownMenus(elem){
 }
 /*Close Dropdown Actarium*/
 
+$("#language-form button").on("click", function (e){e.preventDefault();$("#language-selected").val($(this).attr("data-language"));$("#language-form").submit();})
 
 // $(document).ready(main);
