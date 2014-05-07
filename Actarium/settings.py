@@ -28,9 +28,6 @@ folder_apps = ["apps", "actarium_apps"]
 
 for app in folder_apps:
     APPS += tuple([app+"."+x for x in os.listdir(os.sep.join([BASE_DIR,app])) if os.path.isdir(os.sep.join([BASE_DIR,app,x]))])
-print "APPS 1", APPS
-# APPS = tuple(sorted(APPS, reverse=True))
-# print "APPS 2", APPS
 
 RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta", "pricing"]
 
