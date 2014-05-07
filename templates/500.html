@@ -1,6 +1,8 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Actarium - Error 500 - Error de Aplicaci&oacute;n{% endblock %}
-{% load gravatartag %}
-{% block body %}
-<h1>Error 500 - Error de aplicaci&oacute;n</h1>
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Error 500 - Error de Aplicación' %}{% endblock %}
+{% block content %}
+<h1>{% trans 'Error 500 - Error de Aplicación' %}</h1>
+<p class="">{% trans 'Ops! algo salió mal :( Ocurrió un error en nuestros servidores, pero no te preocupes, ya estamos buscándolo para sacarlo de nuestro sistema.' %}</p>
+<p class="">{% blocktrans %}Por favor intenta <a href="javascript:location.reload()">recargando la página</a> o ve al <a href="/">Inicio</a>{% endblocktrans %}</p>
 {% endblock%}

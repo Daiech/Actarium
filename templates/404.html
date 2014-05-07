@@ -1,6 +1,8 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Actarium - Error 404 P&aacute;gina no encontrada{% endblock %}
-{% load gravatartag %}
-{% block body %}
-<h1>Error 404 P&aacute;gina no encontrada</h1>
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Error 404 Página no encontrada' %}{% endblock %}
+{% block content %}
+<h1>{% trans 'Error 404. P&aacute;gina no encontrada' %}</h1>
+<p class="">{% trans 'Estás seguro que ésta es la página que buscabas? Al parecer no existe o hay algo malo en la url, por favor revisa e intenta otra vez ;)' %}</p>
+<p class="">{% blocktrans %}Por favor intenta <a href="javascript:location.reload()">recargando la página</a> o ve al <a href="/">Inicio</a>{% endblocktrans %}</p>
 {% endblock%}
