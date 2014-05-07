@@ -11,11 +11,11 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for Django User class"""
 
-    organizaciones = serializers.RelatedField(many=True)
+    organizations = serializers.RelatedField(many=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email','organizaciones')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'organizations')
 
 
 class OrganizationsSerializer(serializers.ModelSerializer):

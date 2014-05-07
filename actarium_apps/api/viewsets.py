@@ -28,14 +28,14 @@ class UserViewSet( #mixins.CreateModelMixin,
  
     @action(methods=["GET"])
     def mydata(self, request, pk=None):
-        if pk:
-            user = User.objects.get(id=pk)
-            user.organizaciones = [
-                OrganizationsSerializer(ou.organization).data for ou in OrganizationsUser.objects.filter(user=user)
+        if pk and request.user.is_authenticated():
+            user = request.user #User.objects.get(id=pk)
+            user.organizations = [
+                OrganizationsSerializer(ou).data for ou in user.organizationsuser_user.get_orgs_by_role_code("is_member")
             ]
             serializer = UserSerializer(user)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors,
+            return Response({"status":"error", "message": "inavlid user"},
                             status=status.HTTP_400_BAD_REQUEST)
 

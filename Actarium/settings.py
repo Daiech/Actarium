@@ -28,11 +28,14 @@ folder_apps = ["apps", "actarium_apps"]
 
 for app in folder_apps:
     APPS += tuple([app+"."+x for x in os.listdir(os.sep.join([BASE_DIR,app])) if os.path.isdir(os.sep.join([BASE_DIR,app,x]))])
+print "APPS 1", APPS
+# APPS = tuple(sorted(APPS, reverse=True))
+# print "APPS 2", APPS
 
 RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta", "pricing"]
 
 if DEBUG:
-    APPS += tuple(["django_extensions", "social.apps.django_app.default", "rosetta"])
+    APPS += tuple(["django_extensions"])
 
 try:
     from .settings_db import DATABASES
@@ -88,6 +91,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.contrib.admin',
+    "social.apps.django_app.default",
+    "rosetta",
+    "rest_framework",
 ) + APPS
 
 LOGGING = {
@@ -228,3 +234,6 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+if 'api' in APPS:
+    from actarium_apps.api import *

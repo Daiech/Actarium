@@ -32,7 +32,6 @@ for app in settings.APPS:
     except Exception as e:
         print "Error: ",app, e
 
-print urlpatterns
 
 if settings.DEBUG:
     urlpatterns += patterns('',
@@ -41,3 +40,6 @@ if settings.DEBUG:
         }),
     )
 
+urlpatterns += patterns("",
+    url(r'^$', 'actarium_apps.organizations.views.listOrgs', name="list_orgs"),
+)

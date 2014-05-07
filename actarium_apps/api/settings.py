@@ -1,10 +1,4 @@
 
-REST_APPS = (
-    'rest_framework',
-    "api",
-)
-
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
