@@ -71,17 +71,17 @@
                     </div>
                 </div>
             </div>
-            {% comment %}
-            <div class="btn-login-nets">
+            <div class="btn-login-nets" style="display:none">
                 {% trans "Inicia con" %} 
+                {% comment %}
                 <a href="{% url 'social:begin' 'facebook' %}">
                     <span class="login-face"></span>
                 </a>
+                {% endcomment %}
                 <a href="{% url 'social:begin' "google-oauth2" %}">
                     <span class="login-google"></span>
                 </a>
             </div>
-            {% endcomment %}
         </div>
     </div>
 </div>

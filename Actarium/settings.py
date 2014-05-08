@@ -129,7 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS =  global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 )
 
 AUTHENTICATION_BACKENDS = (
-    # 'social.backends.google.GoogleOAuth2',
+    'social.backends.google.GoogleOAuth2',
     # 'social.backends.twitter.TwitterOAuth',
     # 'social.backends.facebook.FacebookOAuth2',
     'apps.account.backends.EmailOrUsernameModelBackend',
