@@ -39,10 +39,10 @@
 	    		{% block toolbar_content %}{% endblock %}
 	    	</div>
 	    	<div id="group-aside" class="">
-	    		<div id="ads-title" class="bb bt">
+	    		<!-- <div id="ads-title" class="bb bt">
 	    			Anuncios
 	    			<span class="pull-right"><a href="#">crear anuncio</a></span>
-	    		</div>
+	    		</div> -->
 	    		<div id="content-ads">
 	    			<div>
 		    		</div>
@@ -100,6 +100,8 @@
 {% endblock %}
 {% block style%}
 	<style>
+		header.navbar{border-bottom:0;}
+		#topbar{border-bottom: 1px solid #CBCCCC;}
 		.selected-annontation{background-color: rgb(240, 240, 240);;}
 		.content-annotation{margin-left: 40px}
 		.comment-annotation p{font-size: 14px;}
@@ -170,10 +172,10 @@
 		@media (max-width: 979px) {
 			#groups-container{margin-top: 0px}
 			/*#group-menu{float: none;position: relative;width: 100%}*/
-			#toolbar-btn{font-size: 12px;}
+			#toolbar-btn{font-size: 12px;margin-right: 0}
 			#group-menu-list{display: none;}
 			#group-menu{margin-top: 42px;/*margin-top: -31px;z-index: 6000;*/}
-			#toolbar-btn > ul > li{margin-left: -3px;}
+			/*#toolbar-btn > ul > li{margin-left: -3px;}*/
 			/*#header-toolbar{display: none;visibility: hidden;}*/
 		}
 
@@ -184,6 +186,7 @@
 			#topbar-btn-logo{position: fixed;}
 			#menu-title{display: none;}
 			#group-menu-list{margin-left: 190px;}
+			#topbar-group-name{padding: 0 0 0 190px;}
 		}
 		@media (min-width: 768px) {
 			#toolbar-btn{margin-left: 190px;/*margin-top: -30px;margin-right: 227px;*/}
@@ -194,7 +197,7 @@
 		    .topbar-btn > .dinline{display: none}
 		    #topbar-group-name{font-size: 16px;}
 			#group-content{padding: 15px;}
-			#group-aside{float: none;position: relative;width: 93%;height: 120px;min-height: 120px;margin-top: 1px;border-right: none;margin: 10px auto;border: solid thin #dadada;}
+			#group-aside{float: none;position: relative;width: 93%;height: 120px;min-height: 120px;margin-top: 1px;border-right: none;margin: 10px auto;border: solid thin #dadada;display: none !important;}
 			#ads-title{border-top: none;width: auto !important;}
 			#content-ads *{display: inline-block;}
 			#menu-title{display: none;}

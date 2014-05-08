@@ -1,9 +1,10 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Registro{% endblock %}
-{%block body%}
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Registro' %}{% endblock %}
+{% block content %}
 <article class="message-box white-box-container">
-        <h3>Registro de Usuario</h3>
-        <p class="lead">llena el siguiente formulario para registrarte en <strong>Actarium</strong></p>
+        <h3>{% trans 'Registro de Usuario' %}</h3>
+        <p>{% trans 'Necesitamos identificarte para restringir tu contenido solo a las personas que tu desees.' %}</p>
         <form class="form-horizontal" method="POST">
             {% csrf_token %}
             <table>{{ formNewUser }}</table>

@@ -41,7 +41,7 @@
 			</div>
 			{% if is_org_admin %}
 			<div class="col-md-4">
-				<a href="#" class="btn btn-large "><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a>
+				<a href="#" class="btn btn-large disabled" title="{% trans 'Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando esté disponible.' %}"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a>
 			</div>
 			{% endif %}
 		</div>
@@ -51,7 +51,7 @@
 			{% for u in org.organizationsuser_organization.get_members %}
 				<li>
 					<div class="org-user-box row">
-						<div class="col-md-7">
+						<div class="col-md-6 col-xs-12">
 							<span class="pull-left org-user-image"><img src="{{ u.email|showgravatar:'32'}}" width="32px" class="img-circle" /></span>
 							<div class="pull-left org-user-info">
 								<strong>{{ u.get_full_name }}</strong>
@@ -59,7 +59,7 @@
 							</div>
 						</div>
 						{% has_role "u" "org" "is_admin" as u_is_admin %}
-						<div class="col-md-5 org-user-options" data-username="{{ u.username }}" >
+						<div class="col-md-6 col-xs-12 org-user-options" data-username="{{ u.username }}" >
 							<span><a href="#" class="btn btn-link open-modal-groups">{% trans 'Ver grupos' %}</a></span>
 						{% if is_org_admin %}
 							<span>
@@ -109,6 +109,7 @@
             $(".org-menu-container #org-team").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
 
+            $("a.disabled").tooltip();
             $("#org-num-members").css({"width": {{ total }} + "%"});
             $('#filter_members').fastLiveFilter('#org-list-members');
             $(".open-modal-groups").on("click", function (e) {

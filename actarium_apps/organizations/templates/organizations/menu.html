@@ -5,7 +5,7 @@
 {% has_role "user" "org" "is_admin" as user_is_admin %}
 <article>
     <div class="row-fluid org-menu-container">
-        <nav class="nav-menu col-md-2" >
+        <nav class="nav-menu col-md-2 col-sm-3" >
             <div class="bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav">
                     <li>
@@ -20,7 +20,6 @@
                                 {% endif %}
                             </span>
                         </div>
-                        <!-- <hr> -->
                     </li>
                     <li id="org-groups" ><a href="{{ org.get_absolute_url }}"><span></span>{% trans 'Grupos' %}</a></li>
                     <li id="org-team"><a href="{% url 'team_org' org.slug %}"><span></span>{% trans 'Miembros' %}</a></li>
@@ -30,7 +29,7 @@
                 </ul>
             </div>
         </nav>
-        <div id="content_menu" class="col-md-10">
+        <div id="content_menu" class="col-md-10 col-sm-9">
             <div class="bt bb">
                 {% block content_menu %}{% endblock %}
             </div>

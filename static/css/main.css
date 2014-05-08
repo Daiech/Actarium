@@ -1122,7 +1122,7 @@ only screen and (min-resolution: 144dpi) {
     .modal.fade.in{top: 10%;}
     .message-box{width: 85%}
     #feed-modal{width: 100%}
-    .menu-container{padding-top: 3px;}
+    .menu-container{padding-top: 12px;}
     /*landing*/
     .input-form{width: 70%;}
 }
