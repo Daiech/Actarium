@@ -71,17 +71,17 @@
                     </div>
                 </div>
             </div>
-            {% comment %}
-            <div class="btn-login-nets">
+            <div class="btn-login-nets" style="display:none">
                 {% trans "Inicia con" %} 
+                {% comment %}
                 <a href="{% url 'social:begin' 'facebook' %}">
                     <span class="login-face"></span>
                 </a>
+                {% endcomment %}
                 <a href="{% url 'social:begin' "google-oauth2" %}">
                     <span class="login-google"></span>
                 </a>
             </div>
-            {% endcomment %}
         </div>
     </div>
 </div>
@@ -148,7 +148,7 @@
               <div class="media-body">
                     <a href="#"><h4 class="media-heading">Aprobación inmediata de actas</h4></a>
                     Después de redactar un acta, inmediatamente la puede compartir con su equipo 
-                    de trabajo para ser aprobada o rechazada.
+                    de trabajo para ser aprobada o corregida.
               </div>
             </div>
             <div class="media">
@@ -169,7 +169,7 @@
                     <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Grabaci&oacute;n de actas</h4></a>
+                    <a href="#"><h4 class="media-heading">Grabaci&oacute;n de actas (muy pronto)</h4></a>
                     Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos tomados, 
                     además adjunte las grabaciones si lo desea en las actas.
               </div>
@@ -179,7 +179,7 @@
                     <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Integraci&oacute;n con Google</h4></a>
+                    <a href="#"><h4 class="media-heading">Integraci&oacute;n con Google (muy pronto)</h4></a>
                     Conéctate con los servicios de gestión empresarial. (Calendar, drive, e inicia 
                     sesión con la cuenta tus cuentas de google)
               </div>
@@ -189,8 +189,8 @@
                     <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Local storage</h4></a>
-                    Almacena datos en el navegador sin necesidad de internet...
+                    <a href="#"><h4 class="media-heading">Local storage (muy pronto)</h4></a>
+                    Almacena datos en el navegador sin necesidad de internet.
               </div>
             </div>
         </div>
@@ -226,12 +226,12 @@
     #btn-accion{min-height: 360px;}
     #action-container{margin: 0 auto;margin:30px auto;width: 70%;}
     #action-container .pull-left{width: 560px;}
-    #value-proposition strong{text-transform: uppercase;border-bottom: solid thin #aaa;padding-bottom: 10px;font-size: 15px;}
+    #value-proposition strong{text-transform: uppercase;/*border-bottom: solid thin #aaa;*/padding-bottom: 10px;font-size: 15px;}
     #value-proposition p{color: #888;margin-top: 10px;padding: 10px;}
     #line-separator{background-color: #394264; height: 100px;}
     #line-separator div{padding-top:40px;}
     #line-separator p{color: #ddd6d6;font-size: 28px;margin: 0;padding: 0;text-transform:uppercase; text-align: center;}
-    #line-separator p span{border-bottom: solid thin #ccc;border-top: solid thin #ccc;padding: 5px;}
+    #line-separator p span{/*border-bottom: solid thin #ccc;border-top: solid thin #ccc;*/padding: 5px;}
     .form-box{color: #c8c8c8;background-color: #394264;padding:15px;overflow: hidden;position: relative;}
     .form-box h4{text-align: center;margin-top: 5px;margin-bottom: 20px;}
     .form-box a{color: #fff}

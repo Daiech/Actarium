@@ -1,12 +1,16 @@
 #encoding:utf-8
 from django.db import models
 from django.contrib.auth.models import User
-from libs.generic_managers import GenericManager
+from libs.generic_managers import GenericManager, CustomUserManager
+from django.utils.translation import ugettext_lazy as _
 
 from hashlib import sha256 as sha_constructor
 import random
 
-User.add_to_class('objects', GenericManager())
+User.add_to_class('objects', CustomUserManager())
+# email = models.EmailField(_('email address'), blank=False, null=False, unique=True)
+# User.add_to_class('email', email)
+
 
 
 class ActivationManager(GenericManager):
