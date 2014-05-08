@@ -37,12 +37,14 @@ def home(request):
     if request.user.is_authenticated():
         saveViewsLog(request, "Home_authenticated")
         return listOrgs(request)
-        template = 'website/index.html'
     else:
-        saveViewsLog(request, "Home_anonymous")
-        ctx = {}
-        template = 'website/landing.html'
-    return render_to_response(template, ctx, context_instance=RequestContext(request))
+        saveViewsLog(request, "landing anonymous")
+        return landing(request)
+
+
+def landing(request):
+    saveViewsLog(request, "landing anonymous")
+    return render(request, 'website/landing.html')
 
 
 def sendFeedBack(request):

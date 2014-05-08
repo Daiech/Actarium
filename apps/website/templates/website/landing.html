@@ -4,13 +4,14 @@
 {% block body %}
 <div id="btn-accion">
     <div id="action-container" class="row-fluid">
-        <div class="span8">
+        <div class="{% if not user.is_authenticated %}span8{% endif %}">
             <div><img src="/static/img/actarium_grande.png" alt="Actarium"></div>
             <div id="value-proposition">
                 <strong>{% trans "El espacio más cómodo para registrar el resultado de tus reuniones" %}</strong>
                 <p>{% trans "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel." %}</p>
             </div>
         </div>
+        {% if not user.is_authenticated %}
         <div class="span4">
             <div id="sign-up-form" style="display:none;">
                 <div class="form-box">
@@ -83,6 +84,7 @@
                 </a>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 <div id="line-separator">
@@ -224,7 +226,7 @@
 <style>
     /*new design*/
     #btn-accion{min-height: 360px;}
-    #action-container{margin: 0 auto;margin:30px auto;width: 70%;}
+    #action-container{margin: 0 auto;margin:30px auto;width: 70%;text-align: center;}
     #action-container .pull-left{width: 560px;}
     #value-proposition strong{text-transform: uppercase;/*border-bottom: solid thin #aaa;*/padding-bottom: 10px;font-size: 15px;}
     #value-proposition p{color: #888;margin-top: 10px;padding: 10px;}

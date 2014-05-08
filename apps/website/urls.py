@@ -14,4 +14,5 @@ urlpatterns = patterns('apps.website.views',
     url(r'^about$', 'benefits', name='benefits'),
     url(r'^pricing', 'pricing', name="pricing"),
     url(r'^blog', 'blog'),
+    url(r'^landing', 'landing'),
 )
