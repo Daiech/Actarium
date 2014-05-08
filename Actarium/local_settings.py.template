@@ -20,3 +20,4 @@ EMAIL_HOST_USER = "no-reply@daiech.com"
 EMAIL_HOST_PASSWORD = ""
 
 URL_BASE = "http://actarium.co"
+STATIC_ROOT = "/django/actarium/static"
