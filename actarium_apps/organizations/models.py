@@ -59,11 +59,8 @@ class Organizations(models.Model):
     def get_groups(self):
         return self.groups_org.filter(is_active=True)
 
-    def get_my_groups(self):
-        ids = []
-        for g in self.groups_org.filter(is_active=True):
-            if rel_user_group.objects.get_rel():
-                ids.append(g.id)
+    def get_my_groups(self, user):
+        return [g for g in self.get_groups() if rel_user_group.objects.get_rel(user, g)]
 
     def has_user_role(self, user, role):
         qs = self.organizationsuser_organization.filter(role__code=role, user=user, is_active=True)

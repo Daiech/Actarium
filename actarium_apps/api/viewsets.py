@@ -15,7 +15,7 @@ from rest_framework.response import Response
 # import custom elements
 from .serializers import UserSerializer
 from .serializers import OrganizationsSerializer
-
+from .serializers import GroupsSerializer
 
 
 class UserViewSet( #mixins.CreateModelMixin,
@@ -29,10 +29,13 @@ class UserViewSet( #mixins.CreateModelMixin,
     @action(methods=["GET"])
     def mydata(self, request, pk=None):
         if pk and request.user.is_authenticated():
-            user = request.user #User.objects.get(id=pk)
-            user.organizations = [
-                OrganizationsSerializer(ou).data for ou in user.organizationsuser_user.get_orgs_by_role_code("is_member")
-            ]
+            user = request.user
+            orgs = [ou for ou in user.organizationsuser_user.get_orgs_by_role_code("is_member")]
+            user.organizations = []
+            for org in orgs:
+                group_list = org.get_groups() if org.has_user_role(user, "is_admin") else org.get_my_groups(user)
+                org.groups = [GroupsSerializer(gr).data for gr in group_list]
+                user.organizations.append(OrganizationsSerializer(org).data)
             serializer = UserSerializer(user)
             return Response(serializer.data)
         else:
