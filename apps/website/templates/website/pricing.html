@@ -3,22 +3,20 @@
 {% block TITLE %}{% trans 'Precios' %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid pricing-container">
+<div class="container-fluid pricing-container" id="pricing-info">
     <header>{% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1></header>
     <div class="row pricing-content">
-        <div class="col-xs-12 col-sm-2 hidden-xs">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12">
-                    <img src="{{ STATIC_URL }}img/pricing/1.png" width="120px">
-                </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-2 visible-lg visible-md">
+                <img src="{{ STATIC_URL }}img/pricing/1.png" width="120px">
+            </div>
+            <div id="pricing-methods"></div>
+            <div class="col-xs-12 col-md-2 pricing-personal">
+                <a href="#pricing-calculator"><p>{% trans 'Calcula el precio adecuado para ti' %}<br>$</p></a>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-10">
-            <div class="row">
-                <div id="pricing-methods"></div>
-                <div class="col-xs-6 col-md-2 pricing-personal">
-                    <a href="#pricing-calculator"><p>{% trans 'Calcula el precio adecuado para ti' %}<br>$</p></a>
-                </div>
+        <div class="col-xs-12 col-sm-12">
+            <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ min_monthly_payment }} meses{% endblocktrans %}
             </div>
         </div>
     </div>
@@ -41,12 +39,13 @@
                     <div class="total">
                         <span id="pricing-money">$0</span>
                     </div>
-                    <p>{% trans 'Costo total mes (COP)' %}</p>
+                    <p>{% trans 'Costo mensual (COP)' %}*</p>
                 </div>
                 <div class="col-md-1 arrow-right">
                 </div>
             </div>
         </div>
+        <!-- <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ min_monthly_payment }} meses{% endblocktrans %}</div> -->
         <button type="submit" class="btn btn-success btn-large">{% blocktrans %} Comprar <span id="num"></span> cupos de miembros para tu organización {% endblocktrans %}</button>
     </form>
 </div>
@@ -61,16 +60,16 @@
 {% for pr in pricing %}
     <div class="col-xs-6 col-md-2">
         <div class="pricing-block">
-            <div class="pricing">
-                <p><sup>$</sup>{{ pr.price }}</p>
-                <p class="pricing-payment">{{ pr.payment }}</p>
+            <div class="members">
+                <p class="pricing-member-numbers">{{ pr.members_num.to }} <span class="pricing-a">{{ pr.members_num.inter_text }}</span> {{ pr.members_num.until }}</p>
+                <p>{{ pr.members_name }}</p>
             </div>
             <div class="arrow">
                 <img src="/static/img/pricing/arrow.png">
             </div>
-            <div class="members">
-                <p class="pricing-member-numbers">{{ pr.members_num.to }} <span class="pricing-a">{{ pr.members_num.inter_text }}</span> {{ pr.members_num.until }}</p>
-                <p>{{ pr.members_name }}</p>
+            <div class="pricing">
+                <p><sup>$</sup>{{ pr.price }}</p>
+                <p class="pricing-payment">{{ pr.payment }}</p>
             </div>
         <div class="pricing-suscripcion"><a href="{{ pr.url_suscribe }}">{{ pr.suscribe }}</a></div>
         </div>
@@ -91,9 +90,9 @@
     #public_topbar{height: 90px;background-color: white;}
     #public_topbar #public_logo{display: inline-block;}
 
-    .pricing-container{text-align: center;color: #888;font-family: HelveticaNeueLT;}
+    .pricing-container{text-align: center;color: #888;font-family: HelveticaNeueLT;line-height: 1}
     .pricing-container header h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
-    .pricing-container header{font-size: 35px;}
+    .pricing-container header{font-size: 35px;color: #444;}
     .pricing-container p.text-description{font-size: 20px;padding: 15px 0}
 
     .pricing-content{margin-top: 25px;font-family: Helvetica;font-size: 35px;}
@@ -103,9 +102,9 @@
     .pricing-content .pricing-block .pricing{height: 108px;font-family: Bebas;margin-left: -13px;padding-top: 30px;}
     .pricing-content .pricing-block .pricing p.pricing-payment{font-family: HelveticaNeueLT;font-size: 20px;margin: 0;margin-left: 14px;}
     .pricing-content .pricing-block .arrow{height: 54px;}
-    .pricing-content .pricing-block .members{height: 108px;}
+    .pricing-content .pricing-block .members{height: 108px;padding-top: 30px;}
     .pricing-content .pricing-block .members p.pricing-member-numbers{font-family: Bebas;font-size: 40px;}
-    .pricing-content .pricing-block .members p{font-size: 24px;font-family: HelveticaNeueLT;}
+    .pricing-content .pricing-block .members p{font-size: 20px;font-family: HelveticaNeueLT;}
     .pricing-suscripcion{font-size: 20px;position: relative;width: auto;padding: 0;bottom: 0;background-color: #B3DB35;padding: 7px;}
     .pricing-suscripcion a{color: white;}
     .pricing-a{font-size: 22px;}
@@ -116,7 +115,9 @@
     .pricing-personal p{line-height: 1.4;padding-top: 26px;}
 
 
-    #pricing-calculator{margin: 120px auto;margin-bottom: 80px}
+    #pricing-info{}
+    .note-payment{font-size: 18px;}
+    #pricing-calculator{margin: 120px auto;margin-bottom: 80px;padding-top: 80px;border-top: solid 2px #B3DB35;}
     #pricing-calculator #pricing-calculator-box{border: solid thin #dadada; width: 50%;margin: 40px auto;font-size: 30px;padding: 40px;}
     #pricing-calculator #pricing-calculator-box input{text-align: center;width: 180px;font-size: 50px;color: #00aeaa}
     #pricing-calculator #pricing-calculator-box input:focus{outline: 0;border-color:#00aeaa;}
@@ -150,17 +151,13 @@
         });
         calculate_pricing (5);
         function calculate_pricing (num) {
-            if (parseInt(num) >= 5){
-                sendNewAjax("{% url 'core:get_total_price' %}",
-                    {"quantity": num},
-                    function (data) {
-                        $("#num").text(num);
-                        $("#pricing-money").text(data.quantity).formatCurrency({roundToDecimalPlace: -2});
-                    },
-                    {"method":"post"});
-            }else{
-                console.log("no puedes comprar menos de 5 usuarios.");
-            }
+            sendNewAjax("{% url 'core:get_total_price' %}",
+                {"quantity": num},
+                function (data) {
+                    $("#num").text(num);
+                    $("#pricing-money").text(data.quantity).formatCurrency({roundToDecimalPlace: -2});
+                },
+                {"method":"post"});
         }
         set_initial_pricing_box ();
         function set_initial_pricing_box () {
@@ -170,8 +167,7 @@
             suscribe = "{% trans 'Suscribirse' %}";
             url_s = "{% url 'new_user' %}"
             pricing = {
-                "0": {price: 0, payment: payment, members_num: {to: "", inter_text: "", until: 5}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "1": {price: 5000, payment: payment, members_num: {to: 6, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "1": {price: 5000, payment: payment, members_num: {to: 1, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
                 "2": {price: 4100, payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
                 "3": {price: 3000, payment: payment, members_num: {to: 21, inter_text: to, until: 35}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
                 "4": {price: 2900, payment: payment, members_num: {to: "", inter_text: "", until: "+35"}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},

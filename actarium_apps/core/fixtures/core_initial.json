@@ -52,7 +52,7 @@
 "model":"core.servicesranges",
 "fields":{
 "upper":10,
-"lower":5,
+"lower":1,
 "service":4,
 "created":"2014-03-27T22:32:45Z",
 "is_active":true,

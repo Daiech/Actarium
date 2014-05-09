@@ -126,7 +126,8 @@ def blog(request):
 
 def pricing(request):
     saveViewsLog(request, "website.views.pricing")
-    return render(request, 'website/pricing.html')
+    min_monthly_payment = 6
+    return render(request, 'website/pricing.html', locals())
 
 
 def help(request):
