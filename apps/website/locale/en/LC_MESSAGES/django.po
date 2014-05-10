@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 18:10-0500\n"
-"PO-Revision-Date: 2014-05-06 17:52-0500\n"
-"Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
+"POT-Creation-Date: 2014-05-10 13:00-0500\n"
+"PO-Revision-Date: 2014-05-10 13:24-0500\n"
+"Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,52 +18,81 @@ msgstr ""
 "Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: templates/landing.html:3
+#: views.py:70
+msgid "General"
+msgstr "General"
+
+#: views.py:72
+msgid "Sugerencia"
+msgstr "Suggestion"
+
+#: views.py:74
+msgid "Error"
+msgstr "Error"
+
+#: views.py:76
+msgid "Pregunta"
+msgstr "Question"
+
+#: views.py:78
+msgid "No definido"
+msgstr "Not defined"
+
+#: views.py:87
+msgid "Correo invalido"
+msgstr "Email sent"
+
+#: views.py:148
+msgid "Políticas de privacidad"
+msgstr "Privacy Policy"
+
+#: views.py:159
+msgid "Términos y condiciones"
+msgstr "Terms and conditions"
+
+#: templates/website/landing.html:3
 msgid ""
-"Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones"
-msgstr "Actarium - The ideal platform for managing Minutes and Meeting"
+"Actarium - El espacio más cómodo para registrar el resultado de tus "
+"reuniones"
+msgstr ""
+"Actarium - The most convenient place to record the results of your meetings"
 
-#: templates/landing.html:40
-msgid "Formulario de Inicio"
-msgstr "Login Form"
+#: templates/website/landing.html:10
+msgid "El espacio más cómodo para registrar el resultado de tus reuniones"
+msgstr "The most convenient place to record the results of your meetings"
 
-#: templates/landing.html:43 templates/landing.html.py:44
-#: templates/landing.html:79 templates/landing.html.py:80
+#: templates/website/landing.html:11
+msgid ""
+"Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y "
+"crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran "
+"tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel."
+msgstr ""
+"Invite your team, everyone can schedule meetings and create your Minutes "
+"quickly and effectively as well; Save time, money and protect the "
+"environment by reducing paper consumption."
+
+#: templates/website/landing.html:18 templates/website/landing.html.py:71
+msgid "Reg&iacute;strate gratis"
+msgstr "Sign up Free"
+
+#: templates/website/landing.html:23 templates/website/landing.html.py:57
 msgid "Nombre de usuario"
 msgstr "Username"
 
-#: templates/landing.html:45 templates/landing.html.py:46
-#: templates/landing.html:83
-msgid "Contrase&ntilde;a"
-msgstr "Password"
-
-#: templates/landing.html:50 templates/landing.html.py:61
-#: templates/topBar.html:88 templates/topBar.html.py:113
-msgid "Iniciar Sesi&oacute;n"
-msgstr "Login"
-
-#: templates/landing.html:52
-msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
-msgstr "Forgot your password?"
-
-#: templates/landing.html:61
-msgid "Tengo una cuenta"
-msgstr "I have an account"
-
-#: templates/landing.html:76
-msgid "Formulario de registro"
-msgstr "Sign Up Form"
-
-#: templates/landing.html:81 templates/landing.html.py:82
+#: templates/website/landing.html:26
 msgid "Correo Electr&oacute;nico"
 msgstr "Email"
 
-#: templates/landing.html:85
+#: templates/website/landing.html:29 templates/website/landing.html.py:58
+msgid "Contrase&ntilde;a"
+msgstr "Password"
+
+#: templates/website/landing.html:32
 msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
 msgstr "Password (Confirmation)"
 
-#: templates/landing.html:89
-#, python-format, fuzzy
+#: templates/website/landing.html:36
+#, fuzzy, python-format
 msgid ""
 "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
 "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "
@@ -73,20 +102,51 @@ msgstr ""
 "Use</a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy "
 "Policy</a>"
 
-#: templates/landing.html:92 templates/landing.html.py:101
-#: templates/topBar.html:119
+#: templates/website/landing.html:39
 msgid "Registrarme"
 msgstr "Sign Up"
 
-#: templates/landing.html:101
-msgid "No tengo cuenta"
+#: templates/website/landing.html:46
+msgid "¿Ya tienes cuenta?"
 msgstr "I don't have an account"
 
-#: templates/landing.html:205
+#: templates/website/landing.html:47 templates/website/landing.html.py:53
+msgid "Iniciar sesi&oacute;n"
+msgstr "Login"
+
+#: templates/website/landing.html:61 templates/website/topBar_landing.html:30
+msgid "Iniciar Sesi&oacute;n"
+msgstr "Login"
+
+#: templates/website/landing.html:63
+msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
+msgstr "Forgot your password?"
+
+#: templates/website/landing.html:70
+msgid "¿Eres nuevo?"
+msgstr "Your first time?"
+
+#: templates/website/landing.html:76
+msgid "Inicia con"
+msgstr "Login with"
+
+#: templates/website/landing.html:93
+msgid "tus actas en un solo lugar"
+msgstr "Your Minutes only in a place"
+
+#: templates/website/landing.html:129
+msgid "¿Beneficios? mucho m&aacute;s..."
+msgstr "Benefits? much more..."
+
+#: templates/website/landing.html:204
+msgid "Aliados"
+msgstr "Partners"
+
+#: templates/website/landing.html:357
 msgid "Idioma no soportado"
 msgstr "Language not supported"
 
-#: templates/landing.html:206
+#: templates/website/landing.html:358
 msgid ""
 "Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
 "para recibir actualizaciones de nuestra plataforma"
@@ -94,14 +154,127 @@ msgstr ""
 "Actarium is not translated to this language: (<br> Subscribe to our channel "
 "to receive updates from our platform"
 
-#: templates/layout.html:90
-msgid "Powered By"
-msgstr "Powered By"
+#: templates/website/layout_landing.html:12
+msgid "El espacio más cómodo para registrar el resultado de sus reuniones"
+msgstr "The most convenient place to record the results of your meetings"
 
-#: templates/layout.html:113
+#: templates/website/layout_landing.html:86
 msgid "Todos los derechos reservados"
 msgstr "All rights reserved"
 
-#: templates/topBar.html:120
-msgid "Entrar"
-msgstr "Enter"
+#: templates/website/pricing.html:3 templates/website/topBar_landing.html:23
+msgid "Precios"
+msgstr "Pricing"
+
+#: templates/website/pricing.html:7
+msgid "Costo por miembro en una organización"
+msgstr "Cost per member in an organization"
+
+#: templates/website/pricing.html:7
+msgid "PRECIOS"
+msgstr "PRICING"
+
+#: templates/website/pricing.html:15
+msgid "Calcula el precio adecuado para ti"
+msgstr "Calculate the right price for you"
+
+#: templates/website/pricing.html:19 templates/website/pricing.html.py:48
+#, python-format
+msgid "El tiempo mínimo de compra es de %(min_monthly_payment)s meses"
+msgstr "The minimum purchase is %(min_monthly_payment)s months "
+
+#: templates/website/pricing.html:25
+msgid "Calcula el costo correcto para tu organización"
+msgstr "Calculate the correct cost for your organization"
+
+#: templates/website/pricing.html:26
+msgid ""
+"Los precios varían dependiendo del número de miembros de tu equipo, calcula "
+"el precio exacto antes de comprar"
+msgstr ""
+"Prices vary depending on number of your team members, calculates the exact "
+"price before buying"
+
+#: templates/website/pricing.html:33
+msgid "Miembros del quipo"
+msgstr "Members team"
+
+#: templates/website/pricing.html:42
+msgid "Costo mensual (COP)"
+msgstr "Monthly cost (COP)"
+
+#: templates/website/pricing.html:49
+msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
+msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
+
+#: templates/website/pricing.html:54
+msgid "Inicia sesión"
+msgstr "Login"
+
+#: templates/website/pricing.html:55
+msgid "Registrate gratis"
+msgstr "Sign Up"
+
+#: templates/website/pricing.html:164
+msgid "miembros"
+msgstr "members"
+
+#: templates/website/pricing.html:165
+msgid "mes/miembro"
+msgstr "month/member"
+
+#: templates/website/pricing.html:166
+msgid "a"
+msgstr "to"
+
+#: templates/website/pricing.html:167
+msgid "Suscribirse"
+msgstr "Subscribe"
+
+#: templates/website/topBar_landing.html:40
+msgid "Editar configuraci&oacute;n"
+msgstr "Password (Confirmation)"
+
+#: templates/website/topBar_landing.html:44
+msgid "Privacidad"
+msgstr "Privacy"
+
+#: templates/website/topBar_landing.html:45
+msgid "Comentarios"
+msgstr "Comments"
+
+#: templates/website/topBar_landing.html:47
+msgid "Cerrar sesi&oacute;n"
+msgstr "Login"
+
+#: templates/website/topBar_landing.html:52
+#: templates/website/topBar_landing.html:54
+msgid "Grupos"
+msgstr "Groups"
+
+#: templates/website/topBar_landing.html:68
+msgid "Ver todos"
+msgstr "See all"
+
+#: templates/website/topBar_landing.html:69
+msgid "Crear grupo"
+msgstr "Create group"
+
+#~ msgid ""
+#~ "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones"
+#~ msgstr "Actarium - The ideal platform for managing Minutes and Meeting"
+
+#~ msgid "Formulario de Inicio"
+#~ msgstr "Login Form"
+
+#~ msgid "Tengo una cuenta"
+#~ msgstr "I have an account"
+
+#~ msgid "Formulario de registro"
+#~ msgstr "Sign Up Form"
+
+#~ msgid "Powered By"
+#~ msgstr "Powered By"
+
+#~ msgid "Entrar"
+#~ msgstr "Enter"
