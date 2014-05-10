@@ -1,0 +1,319 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-10 13:43-0500\n"
+"PO-Revision-Date: 2014-05-10 14:15-0500\n"
+"Last-Translator:   <>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
+
+#: forms.py:10
+msgid "Nombre de Organización"
+msgstr "Organization Name"
+
+#: forms.py:10
+msgid "Nombre de organización"
+msgstr "Organization name"
+
+#: forms.py:11
+msgid "Descripción (opcional)"
+msgstr "Description (Optional)"
+
+#: forms.py:11
+msgid "Máx. 100 caractéres."
+msgstr "Max. 100 characters"
+
+#: forms.py:12
+msgid "Logo (opcional)"
+msgstr "Logo (Optional)"
+
+#: forms.py:12
+msgid "URL del logo"
+msgstr "Logo URL"
+
+#: forms.py:12
+msgid "No seleccionar para conservar el actual"
+msgstr "Not choose to keep the current"
+
+#: forms.py:17
+msgid "No puedes usar este nombre para tu organización."
+msgstr "You can not use this name for your organization."
+
+#: models.py:125 models.py:200
+msgid "Nombre"
+msgstr "Name"
+
+#: models.py:126
+msgid "Slug"
+msgstr "Slug"
+
+#: models.py:128
+msgid "Imagen"
+msgstr "Image"
+
+#: models.py:199
+msgid "Código"
+msgstr "Code"
+
+#: models.py:201
+msgid "Descripción"
+msgstr "Description"
+
+#: views_ajax.py:81 views_ajax.py:117 views_ajax.py:143
+msgid "No tienes permiso para agregar usuarios."
+msgstr "You can't add users"
+
+#: views_ajax.py:108
+msgid "ahora es administrador de la organización."
+msgstr "now is organization admin."
+
+#: views_ajax.py:111
+msgid "ya no podrá administrar la organización."
+msgstr "will not admin the organization."
+
+#: views_ajax.py:113
+msgid "Este usuario no pertenece al grupo"
+msgstr "This user belongs to the group"
+
+#: views_ajax.py:115
+msgid ""
+"Ocurrió un error extraño, por favor recargue la página e intente de nuevo."
+msgstr "Strange error occured, please refresh and try again."
+
+#: views_ajax.py:137
+msgid "ya no podrá acceder a la organización."
+msgstr "will not access to the organization"
+
+#: views_ajax.py:139
+msgid "Este usuario no pertenece a la organización"
+msgstr "This user belongs to the organization"
+
+#: views_ajax.py:141
+msgid ""
+"Faltan variables para realizar la operación, por favor recargue la página e "
+"intente de nuevo."
+msgstr ""
+"Missing variables to perform the operation, please refresh and try again."
+
+#: templates/organizations/create_org.html:3
+#: templates/organizations/create_org.html:12
+#: templates/organizations/read_orgs.html:47
+msgid "Crear organización"
+msgstr "Create organization"
+
+#: templates/organizations/create_org.html:27
+#: templates/organizations/update_org.html:23
+msgid "Volver"
+msgstr "Back"
+
+#: templates/organizations/create_org.html:28
+msgid "Crear"
+msgstr "Create"
+
+#: templates/organizations/delete_org.html:3
+#: templates/organizations/delete_org.html:12
+msgid "Eliminar organización"
+msgstr "Delete organization"
+
+#: templates/organizations/delete_org.html:19
+#: templates/organizations/profile_org.html:36
+msgid "Archivar organización"
+msgstr "Archive organization"
+
+#: templates/organizations/delete_org.html:20
+msgid "Las organizaciones no se pueden eliminar del todo."
+msgstr "Organizations can not be eliminated entirely."
+
+#: templates/organizations/delete_org.html:21
+msgid ""
+"Puedes archivar ésta organización para que desaparezca de tu lista de "
+"organizaciones."
+msgstr ""
+"You can archive this organization to disappear from your organization list."
+
+#: templates/organizations/delete_org.html:22
+msgid "¿Seguro que desea archivar esta organización?"
+msgstr "Are you sure you want to archive this organization?"
+
+#: templates/organizations/delete_org.html:26
+#: templates/organizations/form_org.html:7
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/organizations/delete_org.html:27
+msgid "Archivar"
+msgstr "Archive"
+
+#: templates/organizations/form_org.html:8
+#: templates/organizations/update_org.html:24
+msgid "Actualizar"
+msgstr "Update"
+
+#: templates/organizations/group_list.html:7
+#: templates/organizations/read_orgs.html:21
+msgid "miembros"
+msgstr "members"
+
+#: templates/organizations/group_list.html:10
+msgid "Administrador de grupo"
+msgstr "Group admin"
+
+#: templates/organizations/group_list.html:11
+msgid "Puedes redactar actas"
+msgstr "You can write minutes"
+
+#: templates/organizations/group_list.html:12
+msgid "Apareces en las actas"
+msgstr "You appear in the minutes."
+
+#: templates/organizations/group_list.html:18
+msgid "No tienes ning&uacute;n grupo :("
+msgstr "You don't have any group :("
+
+#: templates/organizations/group_list.html:29
+msgid "Crear grupo"
+msgstr "Create group"
+
+#: templates/organizations/index.html:3 templates/organizations/menu.html:3
+#: templates/organizations/profile_org.html:3
+#: templates/organizations/read_orgs.html:3
+#: templates/organizations/team_org.html:3
+#: templates/organizations/template.html:3
+msgid "Home"
+msgstr "Home"
+
+#: templates/organizations/menu.html:17
+msgid "Editar"
+msgstr "Edit"
+
+#: templates/organizations/menu.html:24
+msgid "Grupos"
+msgstr "Groups"
+
+#: templates/organizations/menu.html:25
+#: templates/organizations/profile_org.html:21
+msgid "Miembros"
+msgstr "Members"
+
+#: templates/organizations/menu.html:26
+msgid "Configuración"
+msgstr "Configuration"
+
+#: templates/organizations/menu.html:27
+msgid "Servicios"
+msgstr "Services"
+
+#: templates/organizations/profile_org.html:12
+msgid "Información de organización"
+msgstr "Information organization "
+
+#: templates/organizations/profile_org.html:22
+msgid "de"
+msgstr "of"
+
+#: templates/organizations/profile_org.html:29
+msgid "Actualizar miembros"
+msgstr "Upgrade members"
+
+#: templates/organizations/profile_org.html:35
+msgid "Editar perfil"
+msgstr "Edit profile"
+
+#: templates/organizations/profile_org.html:60
+msgid "Información actualizada"
+msgstr "Updated information"
+
+#: templates/organizations/profile_org.html:60
+msgid "La información de su organización ha sido actualizada con éxito"
+msgstr "The information of your organization has been successfully updated"
+
+#: templates/organizations/read_orgs.html:21
+#, python-format
+msgid "%(name)s tiene %(num)s miembros"
+msgstr "%(name)s have %(num)s members"
+
+#: templates/organizations/read_orgs.html:32
+msgid "No tienes ninguna organización :("
+msgstr "You don't have any organization :("
+
+#: templates/organizations/read_orgs.html:35
+msgid ""
+"Las organizaciones te permiten tener un mejor control de los equipos de "
+"trabajo."
+msgstr "Organizations allow you to have better control of work teams."
+
+#: templates/organizations/team_org.html:30
+#, python-format
+msgid "Miembros de %(n)s"
+msgstr "Members of %(n)s"
+
+#: templates/organizations/team_org.html:37
+msgid "Filtrar usuarios"
+msgstr "Filter members"
+
+#: templates/organizations/team_org.html:44
+msgid ""
+"Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando"
+" esté disponible."
+msgstr ""
+
+#: templates/organizations/team_org.html:44
+msgid "Agregar miembro"
+msgstr "Add member"
+
+#: templates/organizations/team_org.html:63
+msgid "Ver grupos"
+msgstr "View groups"
+
+#: templates/organizations/team_org.html:66
+msgid "Administrador"
+msgstr "Administrator"
+
+#: templates/organizations/team_org.html:69
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/organizations/team_org.html:73
+msgid "Miembro administrador"
+msgstr "Administrator member"
+
+#: templates/organizations/team_org.html:75
+msgid "Miembro normal"
+msgstr "Normal member"
+
+#: templates/organizations/team_org.html:120
+msgid "Grupos de "
+msgstr "Groups of "
+
+#: templates/organizations/team_org.html:139
+#: templates/organizations/team_org.html:151
+msgid "Error"
+msgstr "Error"
+
+#: templates/organizations/team_org.html:142
+msgid "Rol cambiado"
+msgstr "Role changed"
+
+#: templates/organizations/team_org.html:148
+msgid "Seguro que desea eliminar a"
+msgstr "Are you sure to want remove to"
+
+#: templates/organizations/team_org.html:154
+msgid "Usuario eliminado de la organización"
+msgstr "Member removed from organization"
+
+#: templates/organizations/update_org.html:3
+#: templates/organizations/update_org.html:11
+msgid "Editar organización"
+msgstr "Edit organization"
