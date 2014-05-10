@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-10 13:00-0500\n"
-"PO-Revision-Date: 2014-05-10 13:24-0500\n"
+"PO-Revision-Date: 2014-05-10 14:16-0500\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -245,7 +245,7 @@ msgstr "Comments"
 
 #: templates/website/topBar_landing.html:47
 msgid "Cerrar sesi&oacute;n"
-msgstr "Login"
+msgstr "Logout"
 
 #: templates/website/topBar_landing.html:52
 #: templates/website/topBar_landing.html:54
