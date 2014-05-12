@@ -17,6 +17,7 @@
     {% block style_libs %}{% endblock%}
     <style>body {padding-top: 20px;}</style>
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/styles.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/public_styles.css">
     {%block style%}{%endblock%}
     <script src="{{ STATIC_PREFIX }}js/vendor/prefixfree.min.js"></script>
     {%block js_libs%}{%endblock%}
@@ -40,30 +41,7 @@
         </div>
     </div> <!-- /container -->
     <div id="footer">
-        <div id="cred-footer">
-            <p>
-                <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
-            </p>
-            <p>{% trans "Todos los derechos reservados" %}</p>
-            <p><script>
-                var f = new Date();
-                document.write(f.getFullYear());
-                </script>
-            </p>
-        </div>
-        {% if user.is_authenticated or user.is_staff %}
-        <div style="">
-            <form action="/i18n/setlang/" method="post" id="language-form">
-                {% csrf_token %}
-                <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                <input name="language" type="hidden" id="language-selected" />
-                {% get_language_info_list for LANGUAGES as languages %}
-                {% for language in languages %}
-                <button class="flag-icon {% if language.code == LANGUAGE_CODE %} selected="language-selected"{% endif %}" type="button" title="{{ language.name_local }} ({{ language.code }})" style="background: url('{{ STATIC_URL }}img/flags/{{ language.code }}.png')" data-language="{{ language.code }}"></button>
-                {% endfor %}
-            </form>
-        </div>
-        {% endif %}
+        {% include "website/public_footer.html" %}
     </div>{% if not DEBUG %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>{% endif %}
     <script>window.jQuery || document.write('<script src="{{STATIC_PREFIX}}libs/jquery-1.11.0.min.js"><\/script>')</script>

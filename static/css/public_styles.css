@@ -1,0 +1,12 @@
+body{margin-bottom: 160px;}
+#public_topbar{height: 90px;background-color: white;}
+#public_topbar #public_logo{display: inline-block;}
+#btn-group-action {margin-top: 20px}
+#btn-group-action a{margin: 4px 5px;}
+#btn-group-action a.btn-large{padding: 9px;margin-top: 3px;}
+/*#cred-footer{height: 120px}*/
+#cred-footer a{text-decoration: underline;}
+.footer-text{width: 60%;margin: auto;text-align: left;}
+.language{}
+.language label{font-weight: normal;cursor: pointer;}
+.language label:hover{text-decoration: underline;}

@@ -136,7 +136,7 @@ def help(request):
         faqs = faq.objects.filter(is_active=True)
     except faq.DoesNotExist:
         faqs = None
-    return render_to_response('website/help.html', {"faqs": faqs}, context_instance=RequestContext(request))
+    return render(request, 'website/help.html', {"faqs": faqs})
 
 
 def privacy_(request):
@@ -147,7 +147,7 @@ def privacy_(request):
         p = None
     title = _(u"Políticas de privacidad")
     ctx = {"title": title, "content": p, "privacy": True, "terms": False}
-    return render_to_response('website/conditions_privacy.html', ctx, context_instance=RequestContext(request))
+    return render(request, 'website/conditions_privacy.html', ctx)
 
 
 def terms(request):
@@ -158,7 +158,7 @@ def terms(request):
         t = None
     title = _(u"Términos y condiciones")
     ctx = {"title": title, "content": t, "privacy": False, "terms": True}
-    return render_to_response('website/conditions_privacy.html', ctx, context_instance=RequestContext(request))
+    return render(request, 'website/conditions_privacy.html', ctx)
 
 
 def getGlobalVar(name):

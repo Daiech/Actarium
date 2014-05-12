@@ -13,7 +13,8 @@ time{font-size: 14px;color: gray}
 .flag-icon{width: 16px;height: 11px;border:0;margin: 5px;}
 .language-selected{}
 header.navbar{border-bottom: solid 10px #B3DB35;border-radius: 0}
-
+#public_topbar{height: 90px;background-color: white;}
+#public_topbar #public_logo{display: inline-block;}
 
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
@@ -200,9 +201,7 @@ Footer
     color: #00AEAA;
 
 }
-#cred-footer{
-    margin-top: 20px;
-}
+#footer{padding: 15px 0;padding-bottom: 3px;}
 #cred-footer > p{
     margin-bottom: 1px;
     font-size: 13px;
@@ -221,7 +220,10 @@ Footer
     background-position: -88px -110px;
 
 }
-
+.footer-text-platform{padding-left: 0}
+.footer-text-platform li{display: inline;padding-right: 5px;}
+.footer-text-platform li:before{content: "| ";}
+.footer-text-platform li:first-child:before{content: "";}
 /* **************************************************************************** 
 Termina Footer
 **************************************************************************** */
@@ -410,8 +412,6 @@ article{
     border-bottom-left-radius: 5px;
     margin: 0 auto;
     margin-bottom: 10px;
-    min-height: 400px;
-    /*overflow: hidden;*/
     padding-bottom: 20px;
     width: 100%;
 }
@@ -632,7 +632,7 @@ article header img{
 }
 article header h3{
     margin:0;
-    margin-left:40px;
+    /*margin-left:40px;*/
 }
 .d-in{
     display: inline;
@@ -646,7 +646,6 @@ h3 a:hover{text-decoration:underline;}
 .button-group{min-height: 25px;}
 .icons-info {margin-top:20px;margin-bottom: -5px;}
 .icons-info span{font-size: 12px;margin-right: 15px;padding-left: 2px;}
-.message-box{margin: 0 auto;width: 55%;margin-bottom: 20px;}
 /*.control-group{width: 70%;}*/
 .control-group input[type="checkbox"]{float: none;}
 .td-first{text-align: left;/*width: 45%;*/}
@@ -681,7 +680,8 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 
 
 .icons-page{margin-right: 5px;}
-#message-box{margin: 10px auto;width: 70%}
+#message-box{/*margin: 10px auto;*/width: 70%}
+.message-box{width: 50%}
 #more-info{min-height: 25px; margin: 10px auto;width: 70%;}
 
 
@@ -836,7 +836,7 @@ cierra Show Minutes
     .btn-groups-admin{width: 470px;}
     .minutes, #minutes{width: 99%;}
 }
-@media (min-width: 980px){
+@media (min-width: 992px){
     #topbar-menu{min-width: 224px;}
     /*#topbar-menu > div {min-width: 111px;}*/
 }
@@ -868,6 +868,9 @@ cierra Show Minutes
     .input-form{width: 80%;}
     .header-group{margin-top: 0;}
     #topbar-group-name{font-size: 18px;}
+}
+@media (max-width: 992px){
+    body{padding-bottom: 45px !important;}
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {

@@ -1,7 +1,7 @@
-{% extends "website/layout_landing.html" %}
+{% extends "public_base.html" %}
 {% block TITLE %}{{title}}{% endblock %}
 
-{%block body%}
+{% block content %}
 <article id="more-info" class="white-box-container">
     <strong>M&aacute;s informaci&oacute;n</strong>:
     {%if not terms%}

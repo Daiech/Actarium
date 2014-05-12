@@ -1,19 +1,20 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Ayuda{% endblock %}
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Ayuda' %}{% endblock %}
 
-{%block body%}
+{% block content %}
 <article class="row-fluid">
     <header class="row-fluid ">
-        <div class="span12">
-            <div class="menu-icons icons-page icon-faqs"></div>
-            <h3 class="">Servicio de Ayuda</h3>
+        <div class="col-md-12">
+            <div class="menu-icons"></div>
+            <h3 class="">{% trans 'Servicio de Ayuda' %}</h3>
         </div>
     </header>
     <hr>
-    <p>Toda la ayuda referente a <strong>Actarium</strong></p>
+    <!-- <p>Toda la ayuda referente a <strong>Actarium</strong></p> -->
     <div class="row-fluid">
-        <section class="white-box-container span3">
-            <h4>Preguntas frecuentes</h4>
+        <section class="white-box-container col-md-3">
+            <h4>{% trans 'Preguntas frecuentes' %}</h4>
             <hr>
             <ul class="list-unstyled">
                 {% for f in faqs%}
@@ -23,8 +24,8 @@
                 {%endfor%}
             </ul>
         </section>
-        <section class="white-box-container span9">
-            <h4>Preguntas y respuestas</h4>
+        <section class="white-box-container col-md-9">
+            <h4>{% trans 'Preguntas y respuestas' %}</h4>
             <hr>
             <ul class="list-unstyled questions">
                 {% for f in faqs%}
@@ -49,7 +50,6 @@
 {% block js %}
 <script>
     $(document).on("ready",function(e){
-        $("#faq").addClass("menu-active");
     });
 </script>
 {% endblock %}

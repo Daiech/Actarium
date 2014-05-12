@@ -1,0 +1,40 @@
+{% load i18n %}
+<div class="container-fluid"  id="cred-footer">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="footer-text">
+                <p><a href="{% url 'services' %}">{% trans 'Servicios' %}</a></p>
+                <p><a href="{% url 'about' %}">{% trans 'Acerca de' %}</a></p>
+                <p><a href="{% url 'help' %}">{% trans 'Preguntas frecuentes' %}</a></p>
+                <p><a href="{% url 'pricing' %}">{% trans 'Precios' %}</a></p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            {% if user.is_authenticated or user.is_staff %}
+            <div class="footer-text">
+                <form action="/i18n/setlang/" method="post" id="language-form">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                    <input name="language" type="hidden" id="language-selected" />
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                    <div class="language">
+                        <label>
+                            <button class="flag-icon {% if language.code == LANGUAGE_CODE %} selected="language-selected"{% endif %}" type="button" title="{{ language.name_local }} ({{ language.code }})" style="background: url('{{ STATIC_URL }}img/flags/{{ language.code }}.png')" data-language="{{ language.code }}"></button>
+                            {{ language.name_local }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="footer-text">
+                <p>{% trans "Todos los derechos reservados" %}</p>
+                <p>{% blocktrans %}Un producto <a href="http://www.daiech.com" target="_blank"><img src="{{ STATIC_URL }}img/daiech.png" style="width: 80px;"></a>{% endblocktrans %}&nbsp;</p>
+                <p><script>var f = new Date();document.write(f.getFullYear());</script></p>
+            </div>
+        </div>
+    </div>
+</div>

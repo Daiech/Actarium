@@ -40,31 +40,7 @@
         </div>
     </div> <!-- /container -->
     <div id="footer">
-        <div id="cred-footer">
-            <p>
-                <a href="http://www.daiech.com" target="_blank">www.daiech.com</a>
-            </p>
-            <p>{% trans "Todos los derechos reservados" %}</p>
-            <p><script>
-                var f = new Date();
-                document.write(f.getFullYear());
-                </script>
-            </p>
-        </div>
-        <div style="display:none">
-            <form action="/i18n/setlang/" method="post" id="language-form">
-                {% csrf_token %}
-                <input name="next" type="hidden" value="/" />
-                <select id="switch-language" name="language">
-                {% get_language_info_list for LANGUAGES as languages %}
-                {% for language in languages %}
-                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
-                    {{ language.name_local }} ({{ language.code }})
-                </option>
-                {% endfor %}
-                </select>
-            </form>
-        </div>
+        {% include "website/footer.html" %}
     </div>{% if not DEBUG %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>{% endif %}
     <script>window.jQuery || document.write('<script src="{{STATIC_PREFIX}}libs/jquery-1.11.0.min.js"><\/script>')</script>

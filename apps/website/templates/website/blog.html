@@ -1,11 +1,12 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Blog{% endblock %}
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Blog' %}{% endblock %}
 
-{%block body%}
+{% block content %}
 <article id='blog-container' class="white-box-container">
         <section  class="row-fluid post">
         	<div class="span4 post-img">
-        		<img src="/static/img/blog.jpg" class="img-polaroid" />
+        		<img src="/static/img/actarium_blog.png" class="img-polaroid" />
         	</div>
         	<div class="span8">
         		<header>

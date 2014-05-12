@@ -49,12 +49,6 @@
         <button type="submit" class="btn btn-success btn-large">{% blocktrans %} Comprar <span id="num"></span> cupos de miembros para tu organización {% endblocktrans %}</button>
     </form>
 </div>
-<script type="text/template" id="btn-action">
-    {% if not user.is_authenticated %}
-    <a href="{% url 'log_in'  %}?next={% url 'pricing'  %}" class="btn btn-link">{% trans 'Inicia sesión' %}</a>
-    <a href="{% url 'new_user'  %}" class="btn btn-success btn-large">{% trans 'Registrate gratis' %}</a>
-    {% endif %}
-</script>
 <script type="text/template" id="pricing-template">
 {% verbatim %}
 {% for pr in pricing %}
@@ -84,12 +78,7 @@
     @font-face{font-family: HelveticaNeueLT;src: url({{ STATIC_URL }}fonts/HELVETICANEUELTSTD-TH.OTF);}
     @font-face{font-family: Bebas;src: url({{ STATIC_URL }}fonts/BEBAS.TTF);}
     #social-buttons{display: none;visibility: hidden;}
-    #btn-group-action {margin-top: 20px}
-    #btn-group-action a{margin: 4px 5px;}
-    #btn-group-action a.btn-large{padding: 9px;margin-top: 3px;}
-    #public_topbar{height: 90px;background-color: white;}
-    #public_topbar #public_logo{display: inline-block;}
-
+    
     .pricing-container{text-align: center;color: #888;font-family: HelveticaNeueLT;line-height: 1}
     .pricing-container header h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
     .pricing-container header{font-size: 35px;color: #444;}
@@ -117,7 +106,7 @@
 
     #pricing-info{}
     .note-payment{font-size: 18px;}
-    #pricing-calculator{margin: 120px auto;margin-bottom: 80px;padding-top: 80px;border-top: solid 2px #B3DB35;}
+    #pricing-calculator{margin: 120px auto;/*margin-bottom: 80px;*/padding-top: 80px;border-top: solid 2px #B3DB35;}
     #pricing-calculator #pricing-calculator-box{border: solid thin #dadada; width: 50%;margin: 40px auto;font-size: 30px;padding: 40px;}
     #pricing-calculator #pricing-calculator-box input{text-align: center;width: 180px;font-size: 50px;color: #00aeaa}
     #pricing-calculator #pricing-calculator-box input:focus{outline: 0;border-color:#00aeaa;}
@@ -137,8 +126,7 @@
 <script src="{{STATIC_PREFIX}}js/vendor/jquery.formatCurrency-1.4.0.js"></script>
 <script>
     $(document).ready(function(e){
-        $("#btn-group-action").html(swig.render($("#btn-action").html(), {locals:{}}));
-        $("#feed-option").animate({"top": ($(window).height() - 210) + "px" }, 1000);
+        $("#feed-option").animate({"top": ($(window).height() - 120) + "px" }, 1000);
         $("a[href='#pricing-calculator']").on("click", function (e) {
             e.preventDefault();
             goToByScroll("#pricing-calculator",function (e) {
