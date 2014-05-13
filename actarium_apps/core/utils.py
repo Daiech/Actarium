@@ -30,13 +30,14 @@ def create_default_service(user,org):
             
         import datetime
         from apps.website.views import getGlobalVar
-        number_of_periods = int(getGlobalVar('TRIAL'))
+        number_of_periods = int(getGlobalVar('TRIAL_MONTH'))
+        number_of_members = int(getGlobalVar('TRIAL_MEMBERS'))
         date_expiration = datetime.date.today() + datetime.timedelta(number_of_periods*30,0,0)
-        customer_service = CustomersServices.objects.create(quantity=5,date_expiration = date_expiration)
+        customer_service = CustomersServices.objects.create(quantity=number_of_members,date_expiration = date_expiration)
         
         OrderItems(service=service,
                    order=customer_order,
-                   order_quantity=5, 
+                   order_quantity=number_of_members, 
                    number_of_periods=number_of_periods,
                    customer_service= customer_service,
                    discount = 0).save()

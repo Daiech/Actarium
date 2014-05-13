@@ -23,9 +23,19 @@
     "model": "website.globalvars",
     "pk": 3,
     "fields": {
-      "name": "TRIAL",
+      "name": "TRIAL_MONTH",
       "url": "1",
       "description": "Numero de meses para la version trial",
+      "date_created": "2013-12-20T23:37:01Z"
+    }
+  },
+  {
+    "model": "website.globalvars",
+    "pk": 4,
+    "fields": {
+      "name": "TRIAL_MEMBERS",
+      "url": "10",
+      "description": "Numero de mimbros para la version trial",
       "date_created": "2013-12-20T23:37:01Z"
     }
   }
