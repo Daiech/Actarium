@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-10 13:00-0500\n"
-"PO-Revision-Date: 2014-05-10 14:23-0500\n"
-"Last-Translator: Admin  <grupodaiech@gmail.com>\n"
+"POT-Creation-Date: 2014-05-13 10:19-0500\n"
+"PO-Revision-Date: 2014-05-13 10:29-0500\n"
+"Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,6 +49,66 @@ msgstr "Privacy Policy"
 #: views.py:159
 msgid "Términos y condiciones"
 msgstr "Terms and conditions"
+
+#: templates/website/blog.html:3
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/website/footer.html:6 templates/website/public_footer.html:7
+msgid "Acerca de"
+msgstr "About"
+
+#: templates/website/footer.html:7 templates/website/public_footer.html:6
+msgid "Servicios"
+msgstr "Services"
+
+#: templates/website/footer.html:8
+msgid "FAQ's"
+msgstr "FAQ's"
+
+#: templates/website/footer.html:9 templates/website/pricing.html:3
+#: templates/website/public_footer.html:9
+#: templates/website/topBar_landing.html:23
+msgid "Precios"
+msgstr "Pricing"
+
+#: templates/website/footer.html:10
+msgid "Facebook"
+msgstr "Facebook"
+
+#: templates/website/footer.html:11
+msgid "Twitter"
+msgstr "Twitter"
+
+#: templates/website/footer.html:18 templates/website/layout_landing.html:86
+#: templates/website/public_footer.html:34
+msgid "Todos los derechos reservados"
+msgstr "All rights reserved"
+
+#: templates/website/footer.html:24 templates/website/public_footer.html:35
+#, python-format
+msgid ""
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
+msgstr ""
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+
+#: templates/website/help.html:3
+msgid "Ayuda"
+msgstr "Help"
+
+#: templates/website/help.html:10
+msgid "Servicio de Ayuda"
+msgstr "Help system"
+
+#: templates/website/help.html:17 templates/website/public_footer.html:8
+msgid "Preguntas frecuentes"
+msgstr "I have an account"
+
+#: templates/website/help.html:28
+msgid "Preguntas y respuestas"
+msgstr "Questions and Answers"
 
 #: templates/website/landing.html:3
 msgid ""
@@ -158,14 +218,6 @@ msgstr ""
 msgid "El espacio más cómodo para registrar el resultado de sus reuniones"
 msgstr "The most convenient place to record the results of your meetings"
 
-#: templates/website/layout_landing.html:86
-msgid "Todos los derechos reservados"
-msgstr "All rights reserved"
-
-#: templates/website/pricing.html:3 templates/website/topBar_landing.html:23
-msgid "Precios"
-msgstr "Pricing"
-
 #: templates/website/pricing.html:7
 msgid "Costo por miembro en una organización"
 msgstr "Cost per member in an organization"
@@ -207,27 +259,19 @@ msgstr "Monthly cost (COP)"
 msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
 msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
 
-#: templates/website/pricing.html:54
-msgid "Inicia sesión"
-msgstr "Login"
-
-#: templates/website/pricing.html:55
-msgid "Registrate gratis"
-msgstr "Sign Up"
-
-#: templates/website/pricing.html:164
+#: templates/website/pricing.html:152
 msgid "miembros"
 msgstr "members"
 
-#: templates/website/pricing.html:165
+#: templates/website/pricing.html:153
 msgid "mes/miembro"
 msgstr "month/member"
 
-#: templates/website/pricing.html:166
+#: templates/website/pricing.html:154
 msgid "a"
 msgstr "to"
 
-#: templates/website/pricing.html:167
+#: templates/website/pricing.html:155
 msgid "Suscribirse"
 msgstr "Subscribe"
 
@@ -260,15 +304,18 @@ msgstr "See all"
 msgid "Crear grupo"
 msgstr "Create group"
 
+#~ msgid "Inicia sesión"
+#~ msgstr "Login"
+
+#~ msgid "Registrate gratis"
+#~ msgstr "Sign Up"
+
 #~ msgid ""
 #~ "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones"
 #~ msgstr "Actarium - The ideal platform for managing Minutes and Meeting"
 
 #~ msgid "Formulario de Inicio"
 #~ msgstr "Login Form"
-
-#~ msgid "Tengo una cuenta"
-#~ msgstr "I have an account"
 
 #~ msgid "Formulario de registro"
 #~ msgstr "Sign Up Form"
