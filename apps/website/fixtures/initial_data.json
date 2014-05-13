@@ -18,5 +18,15 @@
       "description": "Url de las politicas-de-privacidad",
       "date_created": "2013-12-20T23:37:01Z"
     }
+  },
+  {
+    "model": "website.globalvars",
+    "pk": 3,
+    "fields": {
+      "name": "TRIAL",
+      "url": "1",
+      "description": "Numero de meses para la version trial",
+      "date_created": "2013-12-20T23:37:01Z"
+    }
   }
 ]

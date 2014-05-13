@@ -3,6 +3,7 @@ from actarium_apps.organizations.models import Organizations
 from .models import *
 
 
+
 def create_default_service(user,org):
         actarium_customer = ActariumCustomers.objects.get_or_none(user=user)
         if actarium_customer:
@@ -28,7 +29,8 @@ def create_default_service(user,org):
         customer_order = CustomerOrders.objects.create(customer=customer,status=order_status)
             
         import datetime
-        number_of_periods = 3
+        from apps.website.views import getGlobalVar
+        number_of_periods = int(getGlobalVar('TRIAL'))
         date_expiration = datetime.date.today() + datetime.timedelta(number_of_periods*30,0,0)
         customer_service = CustomersServices.objects.create(quantity=5,date_expiration = date_expiration)
         
