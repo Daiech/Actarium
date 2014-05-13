@@ -47,7 +47,7 @@
     <script src="{{ STATIC_PREFIX }}js/main.js"></script>
     <script src="{{ STATIC_PREFIX }}js/vendor/bootstrap/bootstrap.min.js"></script>
     {% block js %}{% endblock%}
-    {% if not DEBUG %}
+    {% if not DEBUG and not user.is_staff %}
     <script>
     $(document).ready(twitter);
     $("#switch-language").on("change", function (e){$("#language-form").submit();})
