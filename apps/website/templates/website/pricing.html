@@ -4,7 +4,9 @@
 
 {% block content %}
 <div class="container-fluid pricing-container" id="pricing-info">
-    <header>{% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1></header>
+    <header>
+        {% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1>
+    </header>
     <div class="row pricing-content">
         <div class="row">
             <div class="col-xs-12 col-sm-2 visible-lg visible-md">
@@ -16,14 +18,16 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12">
-            <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ min_monthly_payment }} meses{% endblocktrans %}
-            </div>
         </div>
+    </div>
+    <div id="try-trial" class="white-box-container">
+        {% trans 'Pruébalo por 30 días' %} <h2>{% trans 'GRATIS' %}</h2>
+        <p>{% trans 'Cuando tu trial caduque podrás elegir el plan que quieras.' %}</p>
     </div>
 </div>
 <div class="container-fluid pricing-container" id="pricing-calculator">
     <header>{% trans 'Calcula el costo correcto para tu organización' %}</header>
-    <p class="text-description">{% trans 'Los precios varían dependiendo del número de miembros de tu equipo, calcula el precio exacto antes de comprar' %}</p>
+    <p class="text-description">{% trans 'Los precios varían dependiendo del número de miembros de tu equipo, calcula el precio exacto antes de comprar' %}.</p>
     <form method="post" action="">
         {% csrf_token %}
         <div id="pricing-calculator-box">
@@ -45,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ min_monthly_payment }} meses{% endblocktrans %}</div> -->
+        <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ min_monthly_payment }} meses{% endblocktrans %}</div>
         <button type="submit" class="btn btn-success btn-large">{% blocktrans %} Comprar <span id="num"></span> cupos de miembros para tu organización {% endblocktrans %}</button>
     </form>
 </div>
@@ -78,6 +82,10 @@
     @font-face{font-family: HelveticaNeueLT;src: url({{ STATIC_URL }}fonts/HELVETICANEUELTSTD-TH.OTF);}
     @font-face{font-family: Bebas;src: url({{ STATIC_URL }}fonts/BEBAS.TTF);}
     #social-buttons{display: none;visibility: hidden;}
+
+    #try-trial{line-height: 1;/*min-width: 380px;*/margin: auto;width: 50%;font-size: 30px;margin-top: 30px;}
+    #try-trial h2{display: inline-block;font-family: Bebas;color: #B3DB35;margin-top: 0;}
+    #try-trial p{display: inline-block;font-family: HelveticaNeueLT;color: #999;font-size: 20px}
     
     .pricing-container{text-align: center;color: #888;font-family: HelveticaNeueLT;line-height: 1}
     .pricing-container header h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
@@ -105,7 +113,7 @@
 
 
     #pricing-info{}
-    .note-payment{font-size: 18px;}
+    .note-payment{font-size: 18px;margin-bottom: 15px;margin-top: 0}
     #pricing-calculator{margin: 120px auto;/*margin-bottom: 80px;*/padding-top: 80px;border-top: solid 2px #B3DB35;}
     #pricing-calculator #pricing-calculator-box{border: solid thin #dadada; width: 50%;margin: 40px auto;font-size: 30px;padding: 40px;}
     #pricing-calculator #pricing-calculator-box input{text-align: center;width: 180px;font-size: 50px;color: #00aeaa}
@@ -116,6 +124,7 @@
 
     @media (max-width: 768px) {
         #pricing-calculator #pricing-calculator-box{width: 90%}
+        #try-trial{width: 90%;}
     }
 </style>
 {%endblock%}
