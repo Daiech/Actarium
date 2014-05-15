@@ -2,12 +2,14 @@
 <div class="container-fluid"  id="cred-footer">
     <div class="row">
         <div class="col-md-4">
-            <div class="footer-text">
-                <p><a href="{% url 'services' %}">{% trans 'Servicios' %}</a></p>
-                <p><a href="{% url 'about' %}">{% trans 'Acerca de' %}</a></p>
-                <p><a href="{% url 'help' %}">{% trans 'Preguntas frecuentes' %}</a></p>
-                <p><a href="{% url 'pricing' %}">{% trans 'Precios' %}</a></p>
-            </div>
+            <ul class="footer-text-platform">
+                <li><a href="{% url 'services' %}">{% trans 'Servicios' %}</a></li>
+                <li><a href="{% url 'about' %}">{% trans 'Acerca de' %}</a></li>
+                <li><a href="{% url 'help' %}">{% trans "FAQ's" %}</a></li>
+                <li><a href="{% url 'pricing' %}">{% trans 'Precios' %}</a></li>
+                <li><a href="https://facebook.com/Actarium" target="_blank">Facebook</a></li>
+                <li><a href="https://twitter.com/Actarium" target="_blank">Twitter</a></li>
+            </ul>
         </div>
         <div class="col-md-4">
             {% if user.is_authenticated or user.is_staff %}
@@ -31,9 +33,9 @@
         </div>
         <div class="col-md-4">
             <div class="footer-text">
-                <p>{% trans "Todos los derechos reservados" %}</p>
-                <p>{% blocktrans %}Un producto <a href="http://www.daiech.com" target="_blank"><img src="{{ STATIC_URL }}img/daiech.png" style="width: 80px;"></a>{% endblocktrans %}&nbsp;</p>
-                <p><script>var f = new Date();document.write(f.getFullYear());</script></p>
+                <p><script>var f = new Date();document.write(f.getFullYear());</script>.&nbsp;{% trans "Todos los derechos reservados" %}</p>
+                <p>{% blocktrans %}Un producto <a href="http://www.daiech.com" target="_blank"><img src="{{ STATIC_URL }}img/daiech.png" style="width: 80px;"></a>{% endblocktrans %}</p>
+                <p></p>
             </div>
         </div>
     </div>
