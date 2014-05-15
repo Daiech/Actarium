@@ -115,12 +115,12 @@
 </div>
 <div class="container-fluid" id="actarium-info">
     <div class="row">
-        <div class="col-md-12 text-center">
+        <div class="col-md-12 text-center" id="benefits">
             <h2>{% trans "¿Beneficios? mucho m&aacute;s..." %}</h2>
         </div>
     </div>
     <div class="row ac-info" >
-        <div class="col-md-3 hidden-xs">
+        <div class="col-md-3 hidden-sm">
             <img src="{{ STATIC_URL }}img/silueta.png" alt="Actarium">
         </div>
         <div class="col-md-5 ">
@@ -167,8 +167,8 @@
                     <img class="media-object" src="">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">{% trans 'Integraci&oacute;n con Google (muy pronto)' %}</h4></a>
-                    {% trans 'Conéctate con los servicios de gestión empresarial. (Calendar, drive, e inicia sesión con la cuenta tus cuentas de google)' %}
+                    <a href="#"><h4 class="media-heading">{% trans 'Integración con Google (muy pronto)' %}</h4></a>
+                    {% trans 'Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail o simplemente inicia sesión con tu cuenta de Google)' %}
               </div>
             </div>
             <div class="media">
@@ -236,7 +236,7 @@
     .login-face{background-position: 0 0;margin-left: 5px}
     .login-google{background-position: -31px 0;margin-left: 5px}
 
-    #actarium-info{margin: 0 auto; width: 80%;}
+    #actarium-info{margin: 0 auto; width: 90%;}
     #actarium-info .span12 h2{margin: 40px auto; text-align: center;}
     #actarium-info a h4{color: #555}
     #actarium-info a h4:hover{text-decoration: underline;}
@@ -244,13 +244,14 @@
     #ac-alliances{padding: 40px 0 15px 0;background-color: white;}
     .input-form{width: 80%;margin-left: 10px;}
     #logo-actarium img{margin: auto;}
+    #value-proposition h1{font-size: 30px}
+    #benefits{margin: 30px; margin-bottom: 40px}
     @media (min-width: 768px) and (max-width: 979px) {
         #action-container{width: 90%}
         #sign-in-form{width: 50%;margin: auto;}
     }
     @media (max-width: 767px) {
         .form-box input{width: 100%;}
-        #value-proposition h1{font-size: 30px}
     }
 
 

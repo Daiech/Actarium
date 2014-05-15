@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 20:06-0500\n"
-"PO-Revision-Date: 2014-05-14 20:19-0500\n"
+"POT-Creation-Date: 2014-05-15 15:08-0500\n"
+"PO-Revision-Date: 2014-05-15 15:11-0500\n"
 "Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -131,28 +131,28 @@ msgstr ""
 "quickly and effectively as well; Save time, money and protect the "
 "environment by reducing paper consumption."
 
-#: templates/website/landing.html:18 templates/website/landing.html.py:71
+#: templates/website/landing.html:18 templates/website/landing.html.py:62
 msgid "Reg&iacute;strate gratis"
 msgstr "Sign up Free"
 
-#: templates/website/landing.html:23 templates/website/landing.html.py:57
+#: templates/website/landing.html:22 templates/website/landing.html.py:49
 msgid "Nombre de usuario"
 msgstr "Username"
 
-#: templates/website/landing.html:26
+#: templates/website/landing.html:23
 msgid "Correo Electr&oacute;nico"
 msgstr "Email"
 
-#: templates/website/landing.html:29 templates/website/landing.html.py:58
+#: templates/website/landing.html:24 templates/website/landing.html.py:50
 msgid "Contrase&ntilde;a"
 msgstr "Password"
 
-#: templates/website/landing.html:32
+#: templates/website/landing.html:25
 msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
 msgstr "Password (Confirmation)"
 
-#: templates/website/landing.html:36
-#, fuzzy, python-format
+#: templates/website/landing.html:28
+#, python-format
 msgid ""
 "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
 "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "
@@ -162,51 +162,121 @@ msgstr ""
 "Use</a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy "
 "Policy</a>"
 
-#: templates/website/landing.html:39
+#: templates/website/landing.html:31
 msgid "Registrarme"
 msgstr "Sign Up"
 
-#: templates/website/landing.html:46
+#: templates/website/landing.html:38
 msgid "¿Ya tienes cuenta?"
 msgstr "I don't have an account"
 
-#: templates/website/landing.html:47 templates/website/landing.html.py:53
+#: templates/website/landing.html:39 templates/website/landing.html.py:45
 msgid "Iniciar sesi&oacute;n"
 msgstr "Login"
 
-#: templates/website/landing.html:61 templates/website/topBar_landing.html:30
+#: templates/website/landing.html:52 templates/website/topBar_landing.html:30
 msgid "Iniciar Sesi&oacute;n"
 msgstr "Login"
 
-#: templates/website/landing.html:63
+#: templates/website/landing.html:54
 msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
 msgstr "Forgot your password?"
 
-#: templates/website/landing.html:70
+#: templates/website/landing.html:61
 msgid "¿Eres nuevo?"
 msgstr "Your first time?"
 
-#: templates/website/landing.html:76
+#: templates/website/landing.html:67
 msgid "Inicia con"
 msgstr "Login with"
 
-#: templates/website/landing.html:93
+#: templates/website/landing.html:84
 msgid "tus actas en un solo lugar"
 msgstr "Your Minutes only in a place"
 
-#: templates/website/landing.html:129
+#: templates/website/landing.html:120
 msgid "¿Beneficios? mucho m&aacute;s..."
 msgstr "Benefits? much more..."
 
-#: templates/website/landing.html:204
+#: templates/website/landing.html:133
+msgid "Bolsa de Plantillas"
+msgstr "Bag Templates"
+
+#: templates/website/landing.html:134
+msgid ""
+"Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, "
+"además cree sus propias plantillas!"
+msgstr ""
+"Choose minutes templates to accelerate your processes and save time, also "
+"create your own templates!"
+
+#: templates/website/landing.html:142
+msgid "Aprobación inmediata de actas"
+msgstr "Instant approval of minutes"
+
+#: templates/website/landing.html:143
+msgid ""
+"Después de redactar un acta, inmediatamente la puede compartir con su equipo"
+" de trabajo para ser aprobada o corregida."
+msgstr ""
+"After writing the minutes, immediately can share with your team to be "
+"approved or corrected."
+
+#: templates/website/landing.html:151
+msgid "Acceda desde cualquier dispositivo!"
+msgstr "Access from any device!"
+
+#: templates/website/landing.html:152
+msgid ""
+"En cualquier momento que necesite registrar sus decisiones de reuniones "
+"informales, reuniones imprevistas que se presentan en cualquier sitio puede "
+"crear actas desde móviles, tabletas, computadores..."
+msgstr ""
+"Anytime you need to record your decisions for informal meetings, impromptu "
+"meetings that occur at any site can create minutes from phones, tablets, "
+"computers."
+
+#: templates/website/landing.html:162
+msgid "Grabación de actas (muy pronto)"
+msgstr "Recording of minutes (coming soon)"
+
+#: templates/website/landing.html:163
+msgid ""
+"Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos "
+"tomados, además adjunte las grabaciones si lo desea en las actas."
+msgstr ""
+"Record audio of your meetings to have a better support the decisions taken, "
+"as well attach if desired recordings in the minutes."
+
+#: templates/website/landing.html:171
+msgid "Integración con Google (muy pronto)"
+msgstr "Google integrations (coming soon)"
+
+#: templates/website/landing.html:172
+msgid ""
+"Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
+"o simplemente inicia sesión con tu cuenta de Google)"
+msgstr ""
+"Connect with business management services. (Calendar, Drive, Gmail or simply"
+" sign in with your Google Account)"
+
+#: templates/website/landing.html:180
+msgid "Local storage (muy pronto)"
+msgstr "Local storage (coming soon)"
+
+#: templates/website/landing.html:181
+msgid "Almacena datos en el navegador sin necesidad de internet."
+msgstr "Stores data in the browser without internet."
+
+#: templates/website/landing.html:189
 msgid "Aliados"
 msgstr "Partners"
 
-#: templates/website/landing.html:357
+#: templates/website/landing.html:346
 msgid "Idioma no soportado"
 msgstr "Language not supported"
 
-#: templates/website/landing.html:358
+#: templates/website/landing.html:347
 msgid ""
 "Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
 "para recibir actualizaciones de nuestra plataforma"
@@ -280,19 +350,19 @@ msgstr "The minimum purchase is %(MIN_MONTHLY_PAYMENT)s months "
 msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
 msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
 
-#: templates/website/pricing.html:162
+#: templates/website/pricing.html:160
 msgid "miembros"
 msgstr "members"
 
-#: templates/website/pricing.html:163
+#: templates/website/pricing.html:161
 msgid "mes/miembro"
 msgstr "month/member"
 
-#: templates/website/pricing.html:164
+#: templates/website/pricing.html:162
 msgid "a"
 msgstr "to"
 
-#: templates/website/pricing.html:165
+#: templates/website/pricing.html:163
 msgid "Suscribirse"
 msgstr "Subscribe"
 
