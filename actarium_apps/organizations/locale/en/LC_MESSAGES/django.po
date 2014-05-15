@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-10 13:43-0500\n"
-"PO-Revision-Date: 2014-05-10 14:15-0500\n"
-"Last-Translator:   <>\n"
+"POT-Creation-Date: 2014-05-14 20:12-0500\n"
+"PO-Revision-Date: 2014-05-14 20:16-0500\n"
+"Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -107,19 +107,48 @@ msgstr ""
 "Missing variables to perform the operation, please refresh and try again."
 
 #: templates/organizations/create_org.html:3
-#: templates/organizations/create_org.html:12
+#: templates/organizations/create_org.html:11
 #: templates/organizations/read_orgs.html:47
 msgid "Crear organización"
 msgstr "Create organization"
 
-#: templates/organizations/create_org.html:27
+#: templates/organizations/create_org.html:19
+msgid "Pruébalo"
+msgstr "Try it!"
+
+#: templates/organizations/create_org.html:19
+msgid "¡GRATIS!"
+msgstr "¡Free!"
+
+#: templates/organizations/create_org.html:19
+msgid "por 30 días"
+msgstr "for 30 days"
+
+#: templates/organizations/create_org.html:20
+#, python-format
+msgid ""
+"Crea una organización trial, puedes invitar a %(members)s miembro%(mem)s y "
+"probar los beneficios de Actarium gratis por %(months)s mes%(mon)s."
+msgstr ""
+"Create a trial organization, you can invite to %(members)s member%(mem)s and"
+" test the benefits of free Actarium for %(months)s month%(mon)s."
+
+#: templates/organizations/create_org.html:30
 #: templates/organizations/update_org.html:23
 msgid "Volver"
 msgstr "Back"
 
-#: templates/organizations/create_org.html:28
+#: templates/organizations/create_org.html:31
 msgid "Crear"
 msgstr "Create"
+
+#: templates/organizations/create_org.html:35
+msgid ""
+"No te preocupes, puedes ampliar tus cupos cuando quieras, tu información "
+"seguirá ahí :)"
+msgstr ""
+"Don't worry, you can expand your quota anytime, your information will be "
+"there :)"
 
 #: templates/organizations/delete_org.html:3
 #: templates/organizations/delete_org.html:12

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-13 10:19-0500\n"
-"PO-Revision-Date: 2014-05-13 10:29-0500\n"
+"POT-Creation-Date: 2014-05-14 20:06-0500\n"
+"PO-Revision-Date: 2014-05-14 20:12-0500\n"
 "Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,11 +42,11 @@ msgstr "Not defined"
 msgid "Correo invalido"
 msgstr "Email sent"
 
-#: views.py:148
+#: views.py:150
 msgid "Políticas de privacidad"
 msgstr "Privacy Policy"
 
-#: views.py:159
+#: views.py:161
 msgid "Términos y condiciones"
 msgstr "Terms and conditions"
 
@@ -62,7 +62,7 @@ msgstr "About"
 msgid "Servicios"
 msgstr "Services"
 
-#: templates/website/footer.html:8
+#: templates/website/footer.html:8 templates/website/public_footer.html:8
 msgid "FAQ's"
 msgstr "FAQ's"
 
@@ -81,11 +81,11 @@ msgid "Twitter"
 msgstr "Twitter"
 
 #: templates/website/footer.html:18 templates/website/layout_landing.html:86
-#: templates/website/public_footer.html:34
+#: templates/website/public_footer.html:36
 msgid "Todos los derechos reservados"
 msgstr "All rights reserved"
 
-#: templates/website/footer.html:24 templates/website/public_footer.html:35
+#: templates/website/footer.html:24 templates/website/public_footer.html:37
 #, python-format
 msgid ""
 "Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
@@ -102,7 +102,7 @@ msgstr "Help"
 msgid "Servicio de Ayuda"
 msgstr "Help system"
 
-#: templates/website/help.html:17 templates/website/public_footer.html:8
+#: templates/website/help.html:17
 msgid "Preguntas frecuentes"
 msgstr "I have an account"
 
@@ -218,28 +218,44 @@ msgstr ""
 msgid "El espacio más cómodo para registrar el resultado de sus reuniones"
 msgstr "The most convenient place to record the results of your meetings"
 
-#: templates/website/pricing.html:7
+#: templates/website/pricing.html:8
 msgid "Costo por miembro en una organización"
 msgstr "Cost per member in an organization"
 
-#: templates/website/pricing.html:7
+#: templates/website/pricing.html:8
 msgid "PRECIOS"
 msgstr "PRICING"
 
-#: templates/website/pricing.html:15
+#: templates/website/pricing.html:17
 msgid "Calcula el precio adecuado para ti"
 msgstr "Calculate the right price for you"
 
-#: templates/website/pricing.html:19 templates/website/pricing.html.py:48
-#, python-format
-msgid "El tiempo mínimo de compra es de %(min_monthly_payment)s meses"
-msgstr "The minimum purchase is %(min_monthly_payment)s months "
+#: templates/website/pricing.html:26
+msgid "Pruébalo por 30 días"
+msgstr "Try it for 30 days"
 
-#: templates/website/pricing.html:25
+#: templates/website/pricing.html:26
+msgid "¡GRATIS!"
+msgstr "¡FREE!"
+
+#: templates/website/pricing.html:27
+#, python-format
+msgid "El trial incluye %(members)s miembros por %(months)s mes%(s)s "
+msgstr "The Trial includes  %(members)s members for %(months)s month%(s)s"
+
+#: templates/website/pricing.html:28
+msgid "Cuando finalice tu trial podrás elegir el plan que quieras."
+msgstr "When your trial ends you can choose the plan you want."
+
+#: templates/website/pricing.html:29
+msgid "¡Pruébalo ahora!"
+msgstr "Try it now!"
+
+#: templates/website/pricing.html:34
 msgid "Calcula el costo correcto para tu organización"
 msgstr "Calculate the correct cost for your organization"
 
-#: templates/website/pricing.html:26
+#: templates/website/pricing.html:35
 msgid ""
 "Los precios varían dependiendo del número de miembros de tu equipo, calcula "
 "el precio exacto antes de comprar"
@@ -247,31 +263,36 @@ msgstr ""
 "Prices vary depending on number of your team members, calculates the exact "
 "price before buying"
 
-#: templates/website/pricing.html:33
+#: templates/website/pricing.html:42
 msgid "Miembros del quipo"
 msgstr "Members team"
 
-#: templates/website/pricing.html:42
+#: templates/website/pricing.html:51
 msgid "Costo mensual (COP)"
 msgstr "Monthly cost (COP)"
 
-#: templates/website/pricing.html:49
+#: templates/website/pricing.html:57
+#, python-format
+msgid "El tiempo mínimo de compra es de %(MIN_MONTHLY_PAYMENT)s meses"
+msgstr "The minimum purchase is %(min_monthly_payment)s months "
+
+#: templates/website/pricing.html:58
 msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
 msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
 
-#: templates/website/pricing.html:152
+#: templates/website/pricing.html:162
 msgid "miembros"
 msgstr "members"
 
-#: templates/website/pricing.html:153
+#: templates/website/pricing.html:163
 msgid "mes/miembro"
 msgstr "month/member"
 
-#: templates/website/pricing.html:154
+#: templates/website/pricing.html:164
 msgid "a"
 msgstr "to"
 
-#: templates/website/pricing.html:155
+#: templates/website/pricing.html:165
 msgid "Suscribirse"
 msgstr "Subscribe"
 
