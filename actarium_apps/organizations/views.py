@@ -9,6 +9,7 @@ from django.conf import settings
 
 from actarium_apps.core.utils import create_default_service
 from apps.actions_log.views import saveActionLog, saveViewsLog
+from apps.website.views import getGlobalVar
 from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles
 from .forms import OrganizationForm
 from .utils import saveOrganization
@@ -34,6 +35,8 @@ def createOrg(request):
             return HttpResponseRedirect(org.get_absolute_url())
     else:
         form = OrganizationForm()
+    TRIAL_MEMBERS = getGlobalVar("TRIAL_MEMBERS")
+    TRIAL_MONTH = getGlobalVar("TRIAL_MONTH")
     return render(request, "organizations/create_org.html", locals())
 
 

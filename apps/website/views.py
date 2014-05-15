@@ -8,7 +8,6 @@ from django.template import RequestContext
 from django.utils import translation
 from django.conf import settings
 
-from actarium_apps.organizations.views import listOrgs
 from apps.groups_app.models import reunions, assistance, DNI_permissions
 from apps.groups_app.views import dateTimeFormatForm
 from apps.actions_log.views import saveActionLog, saveViewsLog
@@ -36,6 +35,7 @@ def home(request):
             print e
     if request.user.is_authenticated():
         saveViewsLog(request, "Home_authenticated")
+        from actarium_apps.organizations.views import listOrgs
         return listOrgs(request)
     else:
         saveViewsLog(request, "landing anonymous")
@@ -126,7 +126,9 @@ def blog(request):
 
 def pricing(request):
     saveViewsLog(request, "website.views.pricing")
-    min_monthly_payment = 6
+    MIN_MONTHLY_PAYMENT = getGlobalVar("MIN_MONTHLY_PAYMENT")
+    TRIAL_MEMBERS = getGlobalVar("TRIAL_MEMBERS")
+    TRIAL_MONTH = getGlobalVar("TRIAL_MONTH")
     return render(request, 'website/pricing.html', locals())
 
 

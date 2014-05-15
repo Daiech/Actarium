@@ -15,7 +15,10 @@ time{font-size: 14px;color: gray}
 header.navbar{border-bottom: solid 10px #B3DB35;border-radius: 0}
 #public_topbar{height: 90px;background-color: white;}
 #public_topbar #public_logo{display: inline-block;}
-
+#try-trial{line-height: 1;position: relative; margin: auto;width: 50%;font-size: 30px;margin-top: 30px;}
+#try-trial h2{display: inline-block;font-family: Bebas;color: #B3DB35;margin-top: 0;/*transform: rotate(5deg);*/font-size: 36px;}
+#try-trial p{display: inline-block;font-family: HelveticaNeueLT;color: #999;font-size: 20px}
+#giftbox{width: 64px;height: 64px;background-image: url(/static/img/pricing/giftbox.png);position: absolute;top: -30px;left: -30px;transform: rotate(325deg);transition: all 1s ease;}
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
 **************************************************************************** */
@@ -871,6 +874,7 @@ cierra Show Minutes
 }
 @media (max-width: 992px){
     body{padding-bottom: 45px !important;}
+    .info-box{width: 90% !important;}
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {

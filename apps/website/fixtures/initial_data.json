@@ -38,5 +38,15 @@
       "description": "Numero de mimbros para la version trial",
       "date_created": "2013-12-20T23:37:01Z"
     }
+  },
+  {
+    "model": "website.globalvars",
+    "pk": 5,
+    "fields": {
+      "name": "MIN_MONTHLY_PAYMENT",
+      "url": "6",
+      "description": "Numero de meses minimos para hacer una compra",
+      "date_created": "2013-12-20T23:37:01Z"
+    }
   }
 ]

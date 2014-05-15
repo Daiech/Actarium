@@ -23,8 +23,10 @@
     <a href="{% url 'create_org' %}">
         <div id="try-trial" class="white-box-container">
             <div id="giftbox"></div>
-            {% trans 'Pruébalo por 30 días' %} <h2>{% trans 'GRATIS' %}</h2>
+            {% trans 'Pruébalo por 30 días' %} <h2>{% trans '¡GRATIS!' %}</h2>
+            <p>{% blocktrans with members=TRIAL_MEMBERS months=TRIAL_MONTH s=TRIAL_MONTH|pluralize %}El trial incluye {{ members }} miembros por {{ months }} mes{{ s }} {% endblocktrans %}</p>
             <p>{% trans 'Cuando finalice tu trial podrás elegir el plan que quieras.' %}</p>
+            <div><span class="btn btn-large">{% trans '¡Pruébalo ahora!' %}</span></div>
         </div>
     </a>
 </div>
@@ -52,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ min_monthly_payment }} meses{% endblocktrans %}</div>
+        <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ MIN_MONTHLY_PAYMENT }} meses{% endblocktrans %}</div>
         <button type="submit" class="btn btn-success btn-large">{% blocktrans %} Comprar <span id="num"></span> cupos de miembros para tu organización {% endblocktrans %}</button>
     </form>
 </div>
@@ -85,10 +87,6 @@
     @font-face{font-family: HelveticaNeueLT;src: url({{ STATIC_URL }}fonts/HELVETICANEUELTSTD-TH.OTF);}
     @font-face{font-family: Bebas;src: url({{ STATIC_URL }}fonts/BEBAS.TTF);}
     #social-buttons{display: none;visibility: hidden;}
-    #try-trial{line-height: 1;position: relative; margin: auto;width: 50%;font-size: 30px;margin-top: 30px;}
-    #try-trial h2{display: inline-block;font-family: Bebas;color: #B3DB35;margin-top: 0;}
-    #try-trial p{display: inline-block;font-family: HelveticaNeueLT;color: #999;font-size: 20px}
-    #giftbox{width: 64px;height: 64px;background-image: url({{ STATIC_URL }}img/pricing/giftbox.png);position: absolute;top: -30px;left: -30px;transform: rotate(-35deg);}
     
     .pricing-container{text-align: center;color: #888;font-family: HelveticaNeueLT;line-height: 1}
     .pricing-container header h1{display: inline-block;color: #00aeaa;font-size: 50px;font-family: Bebas;}
@@ -165,7 +163,7 @@
             payment = "{% trans 'mes/miembro' %}";
             to = " {% trans 'a' %} ";
             suscribe = "{% trans 'Suscribirse' %}";
-            url_s = "{% url 'new_user' %}"
+            url_s = "{% url 'create_org' %}"
             pricing = {
                 "1": {price: 5000, payment: payment, members_num: {to: 1, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
                 "2": {price: 4100, payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
