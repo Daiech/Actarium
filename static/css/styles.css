@@ -1,5 +1,7 @@
 html {position: relative;min-height: 100%;}
 body{background-color: white;height: 100%;margin-bottom: 90px;position: initial !important;}
+@font-face{font-family: HelveticaNeueLT;src: url(/static/fonts/HELVETICANEUELTSTD-TH.OTF);}
+@font-face{font-family: Bebas;src: url(/static/fonts/BEBAS.TTF);}
 a {color: #00aeaa;text-decoration: none;}/*00aeaa*/
 .b{border: solid thin #dadada;}
 .bt{border-top: solid thin #dadada;}
@@ -19,6 +21,10 @@ header.navbar{border-bottom: solid 10px #B3DB35;border-radius: 0}
 #try-trial h2{display: inline-block;font-family: Bebas;color: #B3DB35;margin-top: 0;/*transform: rotate(5deg);*/font-size: 36px;}
 #try-trial p{display: inline-block;font-family: HelveticaNeueLT;color: #999;font-size: 20px}
 #giftbox{width: 64px;height: 64px;background-image: url(/static/img/pricing/giftbox.png);position: absolute;top: -30px;left: -30px;transform: rotate(325deg);transition: all 1s ease;}
+
+form table th{padding-right: 10px;}
+/*body{font-family: HelveticaNeueLT !important; }*/
+
 /* ****************************************************************************
     Barra superior DAIECH Contenedor y elementos
 **************************************************************************** */

@@ -1,36 +1,28 @@
-{% extends "website/layout_landing.html" %}
+{% extends "public_base.html" %}
 {% load i18n %}
 {% block TITLE %} {% trans "Actarium - El espacio más cómodo para registrar el resultado de tus reuniones" %}  {% endblock %}
-{% block body %}
+{% block content %}
 <div id="btn-accion">
-    <div id="action-container" class="row-fluid">
-        <div class="{% if not user.is_authenticated %}span8{% endif %}">
-            <div><img src="/static/img/actarium_grande.png" alt="Actarium"></div>
+    <div id="action-container" class="row">
+        <div class="{% if not user.is_authenticated %}col-md-8{% endif %}">
+            <div id="logo-actarium" ><img src="{{ STATIC_URL }}img/actarium_grande.png" alt="Actarium" class="img-responsive"></div>
             <div id="value-proposition">
-                <strong>{% trans "El espacio más cómodo para registrar el resultado de tus reuniones" %}</strong>
+                <h1>{% trans "El espacio más cómodo para registrar el resultado de tus reuniones" %}</h1>
                 <p>{% trans "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel." %}</p>
             </div>
         </div>
         {% if not user.is_authenticated %}
-        <div class="span4">
+        <div class="col-md-4">
             <div id="sign-up-form" style="display:none;">
                 <div class="form-box">
                     <h4>{% trans "Reg&iacute;strate gratis" %}</h4>
                     <div>
                         <form name="" action="/account/new" method="POST" class="form-horizontal">
                             {% csrf_token %}
-                            <div>
-                            <input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" class="first-input" />
-                            </div>
-                            <div>
-                            <input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" />
-                            </div>
-                            <div>
-                            <input type="password" name="password1" id="id_password1" placeholder='{% trans "Contrase&ntilde;a" %}' />
-                            </div>
-                            <div>
-                            <input type="password" name="password2" id="id_password2" placeholder='{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}' />
-                            </div>
+                            <div><input id="id_username-register" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" class="first-input" /></div>
+                            <div><input type="text" name="email" id="id_email"  placeholder="{% trans 'Correo Electr&oacute;nico' %}" /></div>
+                            <div><input type="password" name="password1" id="id_password1" placeholder='{% trans "Contrase&ntilde;a" %}' /></div>
+                            <div><input type="password" name="password2" id="id_password2" placeholder='{% trans "Contrase&ntilde;a (Confirmaci&oacute;n)" %}' /></div>
                             <!-- <label class="checkbox">
                                 <input type="checkbox" name="term_privacy" id="term_privacy" checked>
                                 {% blocktrans%}Acepto los <a href="{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a><br> y las <a href="{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>{% endblocktrans%}
@@ -52,15 +44,14 @@
                 <div class="form-box">
                     <h4>{% trans "Iniciar sesi&oacute;n" %}</h4>
                     <div>
-                        <form name="" action="/account/login" method="POST" class="form-horizontal ">
+                        <form name="" action="{% url 'log_in'  %}" method="POST" class="form-horizontal ">
                             <div>{% csrf_token %}</div>
                             <div class="input-form"><input id="id_username-login" type="text" name="username" maxlength="30" placeholder="{% trans 'Nombre de usuario' %}" autofocus class="first-input" /></div>
                             <div class="input-form"><input type="password" name="password" id="id_password-login" placeholder="{% trans 'Contrase&ntilde;a' %}" /></div>
                             <div class="box btn-sumbit">
-                                <button type="submit" name="submit" class="btn btn-danger link-daiech">
-                                    {% trans "Iniciar Sesi&oacute;n" %}</button>
-                                <label>
-                                <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></label>
+                                <button type="submit" name="submit" class="btn btn-danger link-daiech">{% trans "Iniciar Sesi&oacute;n" %}</button>
+                                <div>
+                                <a href="/account/password/reset/" class="">{% trans "&iquest;Olvidaste tu contrase&ntilde;a?" %}</a></div>
                             </div>
                         </form>
                     </div>
@@ -122,77 +113,71 @@
       <!-- <a class="carousel-control left" href="#actarium-slide" data-slide="prev">&lsaquo;</a>
       <a class="carousel-control right" href="#actarium-slide" data-slide="next">&rsaquo;</a> -->
 </div>
-<div class="" id="actarium-info">
-    <div class="row-fluid">
-        <div class="span12">
+<div class="container-fluid" id="actarium-info">
+    <div class="row">
+        <div class="col-md-12 text-center">
             <h2>{% trans "¿Beneficios? mucho m&aacute;s..." %}</h2>
         </div>
     </div>
-    <div class="row-fluid ac-info" >
-        <div class="span2 hidden-phone">
-            <img src="{{STATIC_PREFIX}}img/silueta.png" alt="Actarium">
+    <div class="row ac-info" >
+        <div class="col-md-3 hidden-xs">
+            <img src="{{ STATIC_URL }}img/silueta.png" alt="Actarium">
         </div>
-        <div class="span5 ">
+        <div class="col-md-5 ">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+                    <img class="media-object" src="">
                 </a>
                 <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Bolsa de Plantillas</h4></a>
-                    Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, 
-                    además cree sus propias plantillas!
+                    <a href="#"><h4 class="media-heading">{% trans 'Bolsa de Plantillas' %}</h4></a>
+                    {% trans 'Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, además cree sus propias plantillas!' %}
                 </div>
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+                    <img class="media-object" src="">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Aprobación inmediata de actas</h4></a>
-                    Después de redactar un acta, inmediatamente la puede compartir con su equipo 
-                    de trabajo para ser aprobada o corregida.
+                    <a href="#"><h4 class="media-heading">{% trans 'Aprobación inmediata de actas' %}</h4></a>
+                    {% trans 'Después de redactar un acta, inmediatamente la puede compartir con su equipo de trabajo para ser aprobada o corregida.' %}
               </div>
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+                    <img class="media-object" src="">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Acceda desde cualquier dispositivo!</h4></a>
-                    En cualquier momento que necesite registrar sus decisiones de reuniones 
-                    informales, reuniones imprevistas que se presentan en cualquier sitio puede 
-                    crear actas desde móviles, tabletas, computadores...
+                    <a href="#"><h4 class="media-heading">{% trans 'Acceda desde cualquier dispositivo!' %}</h4></a>
+                    {% trans 'En cualquier momento que necesite registrar sus decisiones de reuniones informales, reuniones imprevistas que se presentan en cualquier sitio puede crear actas desde móviles, tabletas, computadores...' %}
               </div>
             </div>
         </div>
-        <div class="span5">
+        <div class="col-md-4">
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+                    <img class="media-object" src="">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Grabaci&oacute;n de actas (muy pronto)</h4></a>
-                    Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos tomados, 
-                    además adjunte las grabaciones si lo desea en las actas.
+                    <a href="#"><h4 class="media-heading">{% trans 'Grabación de actas (muy pronto)' %}</h4></a>
+                    {% trans 'Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos tomados, además adjunte las grabaciones si lo desea en las actas.' %}
               </div>
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+                    <img class="media-object" src="">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Integraci&oacute;n con Google (muy pronto)</h4></a>
-                    Conéctate con los servicios de gestión empresarial. (Calendar, drive, e inicia 
-                    sesión con la cuenta tus cuentas de google)
+                    <a href="#"><h4 class="media-heading">{% trans 'Integraci&oacute;n con Google (muy pronto)' %}</h4></a>
+                    {% trans 'Conéctate con los servicios de gestión empresarial. (Calendar, drive, e inicia sesión con la cuenta tus cuentas de google)' %}
               </div>
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACZ0lEQVR4Xu2Y66uhURTGn0NRboko5FZOktyTj/56uXxAlEQHiUJyC7k7s3bRTNOZM+23M3Ni7Xpz3Wu/61nPXj/2y2w2u+KJxwsLwA7gLcA94Il7ILgJMgWYAkwBpgBT4IkVYAwyBhmDjEHG4BNDgP8MMQYZg4xBxiBjkDH4xAowBpVicLfbYTAYYDQawWAw4PX1FXq9/hdPdbtdvL29IZFIwGq1fuq3r4j50aKKHHA+n5HP56FSqeD1etHpdGA0GhGPx+/rzedzlMtlXK/XvxLgK2L+SXFFAkwmE9RqNYTDYTgcDmy3W7GWTqcTj4fDAcViEVqtFqvV6i7AzRGBQAAulwuFQkGImMlk8MORUjE/tdUHX1AkQL/fR6vVgtPpxGKxEFvA7/cLF9CoVCqgirrdbtTr9bsA5Ab6jOaYzWaQS9LpNEwmE2Rj/lcBLBaL2ALtdhtqtVok0+v1xJVMJrFer9FoNBCJRGCz2US19/u9qPzxeAQ5wefziRxuAsjElBFBkQPG47GobDAYFFWmHkBXNptFtVrFcrn87Z6i0SjsdrsQpVQq4XK5iNf0Pg0lMf+5AKfTCblcDhqNBh6PR1SPnqdSKWFvsj8NEoKEoUrTdiGXUPJUfXLEcDhEKBQS/UA2Jq0rMxQ5gBbcbDYi8el0ipttqRf8PG7N8obBZrMp0BmLxQQWqVES+mjr0FyZmDLJ0xzFAsgu/F3msQBKfwl+l0rK3gc7gB3AR2J8JMZHYrId9BHmMQWYAkwBpgBT4BG6uWwOTAGmAFOAKcAUkO2gjzCPKcAUYAowBZgCj9DNZXN4egq8A5COTp+2VG3zAAAAAElFTkSuQmCC">
+                    <img class="media-object" src="">
               </a>
               <div class="media-body">
-                    <a href="#"><h4 class="media-heading">Local storage (muy pronto)</h4></a>
-                    Almacena datos en el navegador sin necesidad de internet.
+                    <a href="#"><h4 class="media-heading">{% trans 'Local storage (muy pronto)' %}</h4></a>
+                    {% trans 'Almacena datos en el navegador sin necesidad de internet.' %}
               </div>
             </div>
         </div>
@@ -258,11 +243,14 @@
     .ac-info{margin-bottom: 35px;font-size: 14px;}
     #ac-alliances{padding: 40px 0 15px 0;background-color: white;}
     .input-form{width: 80%;margin-left: 10px;}
+    #logo-actarium img{margin: auto;}
     @media (min-width: 768px) and (max-width: 979px) {
         #action-container{width: 90%}
+        #sign-in-form{width: 50%;margin: auto;}
     }
     @media (max-width: 767px) {
         .form-box input{width: 100%;}
+        #value-proposition h1{font-size: 30px}
     }
 
 

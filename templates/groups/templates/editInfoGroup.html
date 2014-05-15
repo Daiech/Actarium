@@ -7,7 +7,9 @@
 	<div>
 		<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 			{% csrf_token %}
-			{{form}}
+			<table>
+			{{ form.as_table }}
+			</table>
 			<hr>
 			<input type="submit" class="btn btn-large btn-info db" value="Actualizar" >
 		</form>
@@ -16,14 +18,8 @@
 {% endblock %}
 {%block menu_content_style%}
 <style type="text/css">
-	.form-horizontal input[type='text']{
-		font-size: 16px;
-		padding: 10px;
-	}
-	.form-horizontal label{
-		font-weight: bold;
-		margin-top: 10px;
-	}
+	.form-horizontal input[type='text']{font-size: 16px;padding: 10px;}
+	.form-horizontal label{font-weight: bold;margin-top: 10px;}
 </style>
 {% endblock %}
 {% block menu_content_js %}
