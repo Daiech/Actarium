@@ -10,3 +10,5 @@ body{margin-bottom: 160px;}
 .language{}
 .language label{font-weight: normal;cursor: pointer;}
 .language label:hover{text-decoration: underline;}
+#ac-load{margin-top: 25px;}
+#ac-load img{margin-top: 0}

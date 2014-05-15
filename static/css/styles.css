@@ -13,6 +13,7 @@ time{font-size: 14px;color: gray}
 #body-wrap{min-height: 100%;height: auto !important;height: 100%;}
 .dib{display: inline-block;}
 .flag-icon{width: 16px;height: 11px;border:0;margin: 5px;}
+.language{margin-right: 10px;}
 .language-selected{}
 header.navbar{border-bottom: solid 10px #B3DB35;border-radius: 0}
 #public_topbar{height: 90px;background-color: white;}
@@ -85,10 +86,7 @@ text-decoration:none;
 .navbar .brand{
     padding: 10px 10px 10px;
 }
-#social-buttons{
-    margin-top: -6px;
-    width: 140px;
-}
+#social-buttons{margin-top: 21px;width: 140px;}
 .social-button{
     height: 40px;
     margin:0;
