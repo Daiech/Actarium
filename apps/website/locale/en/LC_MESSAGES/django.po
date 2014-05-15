@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-14 20:06-0500\n"
-"PO-Revision-Date: 2014-05-14 20:12-0500\n"
+"PO-Revision-Date: 2014-05-14 20:19-0500\n"
 "Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -274,7 +274,7 @@ msgstr "Monthly cost (COP)"
 #: templates/website/pricing.html:57
 #, python-format
 msgid "El tiempo mínimo de compra es de %(MIN_MONTHLY_PAYMENT)s meses"
-msgstr "The minimum purchase is %(min_monthly_payment)s months "
+msgstr "The minimum purchase is %(MIN_MONTHLY_PAYMENT)s months "
 
 #: templates/website/pricing.html:58
 msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
