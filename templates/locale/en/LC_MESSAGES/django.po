@@ -1,0 +1,620 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-16 12:41-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: 404.html:3
+msgid "Error 404 Página no encontrada"
+msgstr ""
+
+#: 404.html:5
+msgid "Error 404. P&aacute;gina no encontrada"
+msgstr ""
+
+#: 404.html:6
+msgid ""
+"Estás seguro que ésta es la página que buscabas? Al parecer no existe o hay "
+"algo malo en la url, por favor revisa e intenta otra vez ;)"
+msgstr ""
+
+#: 404.html:7 500.html:7
+msgid ""
+"Por favor intenta <a href=\"javascript:location.reload()\">recargando la "
+"página</a> o ve al <a href=\"/\">Inicio</a>"
+msgstr "Please try <a href=\"javascript:location.reload()\">reloading "
+"the page</a> oo go to <a href=\"/\">home</a>"
+
+#: 500.html:3 500.html.py:5
+msgid "Error 500 - Error de Aplicación"
+msgstr "Error 500 - Aplication error"
+
+#: 500.html:6
+msgid ""
+"Ops! algo salió mal :( Ocurrió un error en nuestros servidores, pero no te "
+"preocupes, ya estamos buscándolo para sacarlo de nuestro sistema."
+msgstr ""
+
+#: top_bar.html:35
+msgid "Iniciar Sesi&oacute;n"
+msgstr ""
+
+#: top_bar.html:45
+msgid "Editar configuraci&oacute;n"
+msgstr ""
+
+#: top_bar.html:49
+msgid "Privacidad"
+msgstr ""
+
+#: top_bar.html:50
+msgid "Comentarios"
+msgstr ""
+
+#: top_bar.html:52
+msgid "Cerrar sesi&oacute;n"
+msgstr ""
+
+#: top_bar.html:57 top_bar.html.py:58
+msgid "Grupos"
+msgstr ""
+
+#: top_bar.html:71
+msgid "Ver organización"
+msgstr ""
+
+#: top_bar.html:75
+msgid "Ver todas mis organizaciones"
+msgstr ""
+
+#: account/complete_registration.html:3
+msgid "Confirmaci&oacute;n de cuenta"
+msgstr ""
+
+#: account/complete_registration.html:8
+msgid "Configura tu perf&iacute;l"
+msgstr ""
+
+#: account/complete_registration.html:20
+msgid "Omitir"
+msgstr ""
+
+#: account/complete_registration.html:22
+msgid "Confirmar"
+msgstr ""
+
+#: account/login.html:3 account/login.html.py:7
+msgid "Iniciar Sesión"
+msgstr ""
+
+#: account/login.html:8
+msgid ""
+"Ingresa tus datos de usuario para acceder a tu cuenta en <strong>Actarium</"
+"strong>"
+msgstr ""
+
+#: account/login.html:21
+msgid "Registrarse"
+msgstr ""
+
+#: account/login.html:22
+msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
+msgstr ""
+
+#: account/newUser.html:3
+msgid "Registro"
+msgstr ""
+
+#: account/newUser.html:6
+msgid "Registro de Usuario"
+msgstr ""
+
+#: account/newUser.html:7
+msgid ""
+"Necesitamos identificarte para restringir tu contenido solo a las personas "
+"que tu desees."
+msgstr ""
+
+#: account/personal_data.html:19
+msgid "Tus datos"
+msgstr ""
+
+#: account/personal_data.html:23
+msgid "Cambiar im&aacute;gen"
+msgstr ""
+
+#: account/personal_data.html:25
+msgid ""
+"Agrega una foto a tu correro en <a href=\"http://gravatar.com/\">Gravatar."
+"com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella."
+msgstr ""
+
+#: account/personal_data.html:31
+msgid "Actualizar Datos"
+msgstr ""
+
+#: account/personal_data.html:46
+msgid "Los datos con * son de caracter obligatorio."
+msgstr ""
+
+#: account/personal_data.html:53
+msgid "Cuantas asociadas"
+msgstr ""
+
+#: account/personal_data.html:60
+msgid "Desconectar"
+msgstr ""
+
+#: account/personal_data.html:65
+msgid "Conectate con"
+msgstr ""
+
+#: account/personal_data.html:81
+msgid "Eres miembro desde el"
+msgstr ""
+
+#: account/personal_data.html:82
+msgid "Ultimo logueo"
+msgstr ""
+
+#: groups/calendar.html:3
+msgid "Calendario"
+msgstr ""
+
+#: groups/calendar.html:14
+msgid "Reuniones"
+msgstr ""
+
+#: groups/calendar.html:19
+msgid "Nueva reuni&oacute;n"
+msgstr ""
+
+#: groups/calendar.html:21
+msgid "Ver todas"
+msgstr ""
+
+#: groups/calendar.html:35
+msgid "Detalles de la Reuni&oacute;n"
+msgstr ""
+
+#: groups/menu.html:12
+msgid "Men&uacute; de Grupo"
+msgstr ""
+
+#: groups/menu.html:19 groups/minutesTemplates/minutesTemplate0.html:95
+msgid "Inicio"
+msgstr ""
+
+#: groups/menu.html:20
+msgid "Libro de Actas"
+msgstr ""
+
+#: groups/menu.html:21 groups/templates/team.html:46
+msgid "Equipo de trabajo"
+msgstr ""
+
+#: groups/menu.html:22
+msgid "Deshabilitado temporalmente"
+msgstr ""
+
+#: groups/menu.html:22 groups/menu.html.py:23
+msgid "Agenda de reuniones"
+msgstr ""
+
+#: groups/menu.html:25
+msgid "Configuraci&oacute;n de grupo"
+msgstr ""
+
+#: groups/menu.html:27
+msgid "Notificaciones de correo"
+msgstr ""
+
+#: groups/menu.html:28
+msgid "DNI"
+msgstr ""
+
+#: groups/menu.html:31
+msgid "Editar informaci&oacute;n"
+msgstr ""
+
+#: groups/siteToApprove.html:6
+msgid "Comisi&oacute;n aprobatoria de &eacute;sta Acta"
+msgstr ""
+
+#: groups/siteToApprove.html:13
+msgid "Comisi&oacute;n aprobatoria"
+msgstr ""
+
+#: groups/siteToApprove.html:43
+msgid "Anotaciones"
+msgstr ""
+
+#: groups/siteToApprove.html:44
+msgid "Anotaciones y correcciones de la comisi&oacute;n aprobatoria"
+msgstr ""
+
+#: groups/siteToApprove.html:48
+msgid "Crear anotaci&oacute;n"
+msgstr ""
+
+#: groups/siteToApprove.html:51
+msgid "Crear nueva anotaci&oacute;n"
+msgstr ""
+
+#: groups/siteToApprove.html:52
+msgid ""
+"Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una "
+"anotaci&oacute;n al redactor."
+msgstr ""
+
+#: groups/siteToApprove.html:53
+msgid "Publicar"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:85
+#: groups/minutesTemplates/minutesTemplate3.html:89
+msgid "FECHA / HORA"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:96
+msgid "Final"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:102
+#: groups/minutesTemplates/minutesTemplate3.html:103
+msgid "ASISTENTES"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:121
+#: groups/minutesTemplates/minutesTemplate3.html:122
+msgid "ORDEN DEL D&Iacute;A"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:130
+#: groups/minutesTemplates/minutesTemplate3.html:131
+msgid "DESARROLLO ORDEN DEL D&Iacute;A"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:148
+#: groups/minutesTemplates/minutesTemplate3.html:149
+msgid "Presidente"
+msgstr ""
+
+#: groups/minutesTemplates/minutesTemplate0.html:158
+#: groups/minutesTemplates/minutesTemplate3.html:159
+msgid "Secretario"
+msgstr ""
+
+#: groups/templates/calendar.html:8 groups/templates/home.html:13
+msgid " Convocar Reuni&oacute;n"
+msgstr ""
+
+#: groups/templates/calendar.html:17
+msgid "Agenda de Reuniones"
+msgstr ""
+
+#: groups/templates/calendar.html:22
+msgid "Pr&oacute;ximas"
+msgstr ""
+
+#: groups/templates/calendar.html:32
+msgid "Anteriores"
+msgstr ""
+
+#: groups/templates/calendar.html:43
+msgid "No hay reuniones para este grupo"
+msgstr ""
+
+#: groups/templates/folder.html:7 groups/templates/folder.html.py:12
+#: groups/templates/home.html:7 groups/templates/showMinutes.html:9
+#: groups/templates/showMinutes.html:14
+msgid "Necesitas ser redactor para habilitar esta opci&oacute;n"
+msgstr ""
+
+#: groups/templates/folder.html:8 groups/templates/home.html:8
+#: groups/templates/showMinutes.html:10
+msgid "Crear acta"
+msgstr ""
+
+#: groups/templates/folder.html:13 groups/templates/showMinutes.html:15
+msgid "Subir acta"
+msgstr ""
+
+#: groups/templates/folder.html:22
+msgid "Folder de Actas"
+msgstr ""
+
+#: groups/templates/folder.html:29
+msgid "Esta Acta ha sido aprobada y es visible a todo el grupo"
+msgstr ""
+
+#: groups/templates/folder.html:31
+msgid "Debes aprobar esta Acta para ser publicada"
+msgstr ""
+
+#: groups/templates/folder.html:32
+msgid ""
+"Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres "
+"administrador del grupo."
+msgstr ""
+
+#: groups/templates/folder.html:46
+msgid "Aún no tienes actas!"
+msgstr ""
+
+#: groups/templates/folder.html:52 groups/templates/team.html:205
+msgid "Info"
+msgstr ""
+
+#: groups/templates/folder.html:53
+msgid ""
+"Actas que han sido aprobadas por la comisi&oacute;n aprobatoria del Acta"
+msgstr ""
+
+#: groups/templates/folder.html:53
+msgid "Actas aprobadas y publicadas"
+msgstr ""
+
+#: groups/templates/folder.html:54
+msgid "Actas que necesitan tu aprobaci&oacute;n"
+msgstr ""
+
+#: groups/templates/folder.html:54
+msgid "Actas sin tu aprobaci&oacute;n"
+msgstr ""
+
+#: groups/templates/folder.html:55
+msgid "Puedes ver porque eres administrador del grupo"
+msgstr ""
+
+#: groups/templates/folder.html:55
+msgid "Actas sin aprobar"
+msgstr ""
+
+#: groups/templates/home.html:18 groups/templates/team.html:9
+msgid "Agregar miembro"
+msgstr ""
+
+#: groups/templates/home.html:28
+msgid "No hay actividad reciente para mostrar"
+msgstr ""
+
+#: groups/templates/newMinutes.html:10
+msgid "Volver"
+msgstr ""
+
+#: groups/templates/newMinutes.html:14
+msgid "Cambiar Plantilla"
+msgstr ""
+
+#: groups/templates/newMinutes.html:17
+msgid "Guardar Acta"
+msgstr ""
+
+#: groups/templates/newMinutes.html:25
+msgid "&Uacute;ltimo c&oacute;digo de Acta"
+msgstr ""
+
+#: groups/templates/newMinutes.html:29
+msgid "No hay m&aacute;s actas"
+msgstr ""
+
+#: groups/templates/newMinutes.html:39
+msgid "Seleccionar plantilla"
+msgstr ""
+
+#: groups/templates/newMinutes.html:42
+msgid "Selecciona una plantilla"
+msgstr ""
+
+#: groups/templates/newMinutes.html:59
+msgid "Pro"
+msgstr ""
+
+#: groups/templates/new_group.html:3
+msgid "Crear grupo"
+msgstr ""
+
+#: groups/templates/new_group.html:70
+msgid "Aparecer en las actas"
+msgstr ""
+
+#: groups/templates/showMinutes.html:232 groups/templates/team.html:415
+#: groups/templates/team.html.py:537
+msgid "Error"
+msgstr ""
+
+#: groups/templates/showMinutes.html:232
+msgid "No puedes agregar una anotación vacía"
+msgstr ""
+
+#: groups/templates/team.html:15
+msgid "Miembros"
+msgstr ""
+
+#: groups/templates/team.html:47
+msgid "Éste es tu equipo de trabajo con sus roles en el grupo."
+msgstr ""
+
+#: groups/templates/team.html:51
+msgid "Agregar miembro de la organización"
+msgstr ""
+
+#: groups/templates/team.html:54
+#, python-format
+msgid "Miembros de %(org)s "
+msgstr ""
+
+#: groups/templates/team.html:63 groups/templates/team.html.py:163
+msgid "Regresar"
+msgstr ""
+
+#: groups/templates/team.html:80
+msgid "Lista de todos los miembros del grupo"
+msgstr ""
+
+#: groups/templates/team.html:80
+msgid "Miembros del grupo"
+msgstr ""
+
+#: groups/templates/team.html:83
+msgid "Personas que aparecen en la lista de las actas"
+msgstr ""
+
+#: groups/templates/team.html:85 groups/templates/team.html.py:206
+msgid "Aparece en actas"
+msgstr ""
+
+#: groups/templates/team.html:89
+msgid "Tiene permisos de crear actas"
+msgstr ""
+
+#: groups/templates/team.html:91
+msgid "Puede redactar"
+msgstr ""
+
+#: groups/templates/team.html:95
+msgid "Puede administrar el grupo"
+msgstr ""
+
+#: groups/templates/team.html:97 groups/templates/team.html.py:209
+msgid "Administrador"
+msgstr ""
+
+#: groups/templates/team.html:120
+msgid "Configuraci&oacute;n"
+msgstr ""
+
+#: groups/templates/team.html:134
+msgid "Reenviar invitaci&oacute;n"
+msgstr ""
+
+#: groups/templates/team.html:140
+msgid "Cambiar nombres"
+msgstr ""
+
+#: groups/templates/team.html:147
+msgid "Eliminar de grupo"
+msgstr ""
+
+#: groups/templates/team.html:156
+msgid "Nombres"
+msgstr ""
+
+#: groups/templates/team.html:160
+msgid "Apellidos"
+msgstr ""
+
+#: groups/templates/team.html:206
+msgid "Miembros que aparecen en las actas"
+msgstr ""
+
+#: groups/templates/team.html:207
+msgid "Redactor"
+msgstr ""
+
+#: groups/templates/team.html:208
+msgid "Convocador de reuniones"
+msgstr ""
+
+#: groups/templates/team.html:209
+msgid ""
+"El usuario pude agregar miembros, crear actas y administrar la información "
+"del grupo"
+msgstr ""
+
+#: groups/templates/team.html:210
+msgid "Usuarios pendientes"
+msgstr ""
+
+#: groups/templates/team.html:222
+msgid "Nombres y Apellidos"
+msgstr ""
+
+#: groups/templates/team.html:232
+msgid "Enviar invitaci&oacute;n"
+msgstr ""
+
+#: groups/templates/team.html:325
+msgid ""
+"Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro "
+"del grupo."
+msgstr ""
+
+#: groups/templates/team.html:355
+msgid "Miembro. Los miembros aparecen en las actas"
+msgstr ""
+
+#: groups/templates/team.html:356
+msgid "Redactor de Actas"
+msgstr ""
+
+#: groups/templates/team.html:357
+msgid "Creador de reuniones para &eacute;ste grupo."
+msgstr ""
+
+#: groups/templates/team.html:358
+msgid "Administrador de &eacute;ste grupo"
+msgstr ""
+
+#: groups/templates/team.html:363
+msgid "Permiso agregado"
+msgstr ""
+
+#: groups/templates/team.html:366 groups/templates/team.html.py:374
+msgid "Ocurri&oacute; un error"
+msgstr ""
+
+#: groups/templates/team.html:371
+msgid "Rol removido"
+msgstr ""
+
+#: groups/templates/team.html:389
+msgid "Seguro que desea eliminarle este rol?"
+msgstr ""
+
+#: groups/templates/team.html:401
+msgid "Realmente desea eliminar la invitación a este Usuario"
+msgstr ""
+
+#: groups/templates/team.html:410
+msgid "Usuario eliminado del grupo"
+msgstr ""
+
+#: groups/templates/team.html:415
+msgid ""
+"No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo"
+msgstr ""
+
+#: groups/templates/team.html:480
+msgid "Invitado"
+msgstr ""
+
+#: groups/templates/team.html:487
+msgid "Informaci&oacute;n"
+msgstr ""
+
+#: groups/templates/team.html:492 groups/templates/team.html.py:495
+msgid "Ups! Algo sali&oacute; mal :("
+msgstr ""
+
+#: groups/templates/team.html:495
+msgid "Por favor recarga la p&aacute;gina e intenta de nuevo"
+msgstr ""
+
+#: groups/templates/team.html:545
+msgid "Asegurate de escribir correctamente el correo electr&oacute;nico."
+msgstr ""
