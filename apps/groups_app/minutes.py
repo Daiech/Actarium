@@ -399,7 +399,7 @@ def setMinutesApprove(request):
                     }
                     sendEmailHtml(3, email_ctx, getEmailListByGroup(_minutes.id_group), _minutes.id_group)
             except Exception, e:
-                print "Error Al Firmar" % e
+                print "Error Al Firmar: %s" % e
             response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
     else:
         response = "Error invitacion"
