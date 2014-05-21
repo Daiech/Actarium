@@ -49,7 +49,7 @@
 		<div class="org-user-list">
 			<ul id="org-list-members" class="list-unstyled">
 			{% for u in org.organizationsuser_organization.get_members %}
-				<li>
+				<li class="org-user-options" data-username="{{ u.username }}">
 					<div class="org-user-box row">
 						<div class="col-md-6 col-xs-12">
 							<span class="pull-left org-user-image"><img src="{{ u.email|showgravatar:'32'}}" width="32px" class="img-circle" /></span>
@@ -59,14 +59,14 @@
 							</div>
 						</div>
 						{% has_role "u" "org" "is_admin" as u_is_admin %}
-						<div class="col-md-6 col-xs-12 org-user-options" data-username="{{ u.username }}" >
+						<div class="col-md-6 col-xs-12" >
 							<span><a href="#" class="btn btn-link open-modal-groups">{% trans 'Ver grupos' %}</a></span>
 						{% if is_org_admin %}
 							<span>
 								<label for="is_admin_{{ u.id }}" class="btn">{% trans 'Administrador' %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u_is_admin %}checked{% endif %} /></label>
 							</span>
 							<span>
-							<button type="button" class="btn org-user-delete"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</button>
+							<button type="button" class="btn org-user-delete {% ifequal u user %}disabled{% endifequal %}"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</button>
 							</span>
 						{% else %}
 							{% if u_is_admin %}
@@ -144,7 +144,8 @@
             	},{"method": "post"});
             }
             function delete_user (e) {
-            	var uname = $(this).closest(".org-user-options").attr("data-username");
+            	var li = $(this).closest(".org-user-options");
+            	var uname = li.attr("data-username");
             	if ( confirm("{% trans 'Seguro que desea eliminar a' %} @" + uname + "?") ){
 	            	sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
 	            		if (data.error){
@@ -152,6 +153,7 @@
 	            		}
 	            		else{
 	            			setAlertMessage("{% trans 'Usuario eliminado de la organización' %}", data.msj);
+	            			li.fadeOut();
 	            		}
 	            	},{"method": "post"});
             	}else{
