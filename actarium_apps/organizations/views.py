@@ -61,6 +61,7 @@ def deleteOrg(request, slug_org):
         if request.method == "POST" and "archive" in request.POST:
             org.is_archived = True
             org.save()
+            saveActionLog(request.user, 'DEL_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
             return HttpResponseRedirect(reverse("home") + "?org_archived=1")
         return render(request, "organizations/delete_org.html", locals())
     else:
@@ -78,7 +79,7 @@ def settingsOrg(request, slug_org):
             form = OrganizationForm(request.POST, request.FILES, instance=org)
             if form.is_valid() and form.is_multipart():
                 form.save()
-                updated = saveActionLog(request.user, 'UPDATE_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
+                updated = saveActionLog(request.user, 'EDIT_ORG', "name: %s" % (form.cleaned_data['name']), request.META['REMOTE_ADDR'])
                 return HttpResponseRedirect(reverse("profile_org", args=(org.slug,)))
         else:
             form = OrganizationForm(instance=org)

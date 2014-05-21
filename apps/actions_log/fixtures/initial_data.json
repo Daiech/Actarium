@@ -153,5 +153,27 @@
 			"description": "Editar una organización",
 			"date_created": "2013-12-20T23:37:01Z"
 		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 15,
+		"fields":
+		{
+			"name": "Eliminar organización",
+			"code": "DEL_ORG",
+			"description": "elimina una organización",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 16,
+		"fields":
+		{
+			"name": "Eliminar usuario de organización",
+			"code": "DEL_USER_ORG",
+			"description": "elimina un usuario de una organización",
+			"date_created": "2013-12-20T23:37:01Z"
+		}
 	}
 ]

@@ -121,7 +121,7 @@ def config_admin_to_org(request, slug_org):
 
 @login_required(login_url='/account/login')
 def delete_member_org(request, slug_org):
-    """uname and set_admin come in POST method.
+    """uname come in POST method.
     set_admin is a number: 1=set admin, 0=remove admin"""
     if request.is_ajax():
         if request.method == "POST":
@@ -134,12 +134,14 @@ def delete_member_org(request, slug_org):
                         org.delete_role(_user, is_member=True) ## el True se ignora, solo es para pasar como **kwarg
                         org.delete_role(_user, is_admin=True) ## el True se ignora, solo es para pasar como **kwarg
                         # eliminar cascada (los grupos)
+                        # Habilitar cupo
                         message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ya no podrá acceder a la organización.")}
+                        saveActionLog(request.user, 'DEL_USER_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
                     else:
                         message = {"error": _(u"Este usuario no pertenece a la organización")}
                 else:
                     message = {"error": _(u"Faltan variables para realizar la operación, por favor recargue la página e intente de nuevo.")}
             else:
-                message = {"forbbiden": _(u"No tienes permiso para agregar usuarios.")}
+                message = {"forbbiden": _(u"No tienes permiso para eliminar miembros.")}
             return HttpResponse(json.dumps(message), mimetype="application/json")
     raise Http404
