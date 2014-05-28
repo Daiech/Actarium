@@ -552,9 +552,9 @@ def resendInvitation(request, slug_group):
                         else:
                             message = {"error": "el usuario ya está activo"}
                     else:
-                        message = {"error": "El usuario no pertenece a este grupo", "sent": False}
+                        message = {"error": _(u"El usuario no pertenece a este grupo"), "sent": False}
                 else:
-                    message = "No tienes permisos para hacer eso."
+                    message = _(u"No tienes permisos para hacer eso.")
             except Exception:
                 message = False
         else:
