@@ -724,7 +724,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
     This function creates a minutes with the form for this.
     '''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
-    group = getGroupBySlug(slug_group)
+    group = Groups.objects.get_group(slug=slug_group)
 
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_secretary and _user_rel.is_active:
@@ -771,20 +771,26 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
         ######## <LOGO> #########
         url_logo = URL_BASE + '/static/img/logo_email.png'
-        # _pro = getProGroup(group)
-        # if _pro:
-        #     url_logo = URL_BASE + _pro.id_organization.logo_address
+        # if isProGroup(group):
+        #     _pro = getProGroup(group)
+        #     if _pro:
+        #         url_logo = URL_BASE + _pro.id_organization.logo_address
         ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########
         if request.method == "POST":
             form = newMinutesForm(request.POST)
+            print "request.post------------------------------------"
+            print request.POST 
+            print "formulario--------------------------------"
+            print form 
             if form.is_valid():
+                print "form valid---------------------"
                 _minute = saveMinute(request, group, form, _template)
 
                 ######## <Create a relation into reunion and the new minutes> #########
                 try:
-                    id_reunion = int(request.POST['reunion_id'])
+                    id_reunion = int(request.POST.get('reunion_id'))
                 except Exception:
                     id_reunion = None
                 if id_reunion:
@@ -808,6 +814,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                     saved = False
                     error = "e2"  # error, mismo código de acta, o error al guardar en la db
             else:
+                print "form Invalid---------------------"
                 saved = False
                 error = "e0"  # error, el formulario no es valido
         ######## </SAVE_THE_MINUTE> #########
@@ -828,6 +835,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ctx = {'TITLE': "Nueva Acta",
                "newMinutesForm": form,
                "group": group,
+               "rel_user": _user_rel,
                "reunion": _reunion,
                "minutes_saved": {"saved": saved, "error": error},
                "last": last,
@@ -845,7 +853,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "show_dni": show_dni,
                "is_form": 1
                }
-        return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
+        return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
 
@@ -906,14 +914,15 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
     This function creates a minutes with the form for this.
     '''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
-    group = getGroupBySlug(slug_group)
+    group = Groups.objects.get_group(slug=slug_group)
 
     _user_rel = getRelUserGroup(request.user, group.id)
     if _user_rel.is_secretary and _user_rel.is_active:
         saved = False
         error = False
         _reunion = None
-        _minute = getMinutesByCode(group, minutes_code)
+        # _minute = getMinutesByCode(group, minutes_code)
+        _minute = group.get_minutes_by_code(code=minutes_code)
         _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
         if _minute:
             ######## <SLUG TEMPLATE> #########
@@ -974,7 +983,8 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                     # print "------------------------", request.POST['date_start']
                     # print "------------------------", form.cleaned_data['date_start']
                     if form.cleaned_data['code'] != minutes_code:
-                        is_other = getMinutesByCode(group, form.cleaned_data['code'])
+                        # is_other = getMinutesByCode(group, form.cleaned_data['code'])
+                        is_other = group.get_minutes_by_code(code=form.cleaned_data['code'])
                     if not is_other:
                         #guardad version
                         setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
@@ -1051,9 +1061,10 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                    "president": president,
                    "secretary": secretary,
                    "show_dni": show_dni,
-                   "is_form": 1
+                   "is_form": 1,
+                   "is_edit": True,
                    }
-            return render_to_response('groups/newMinutes.html', ctx, context_instance=RequestContext(request))
+            return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
         else:
             return HttpResponseRedirect("/groups/" + group.slug + "#No-existe-un-acta-con-codigo-" + minutes_code)
     else:
