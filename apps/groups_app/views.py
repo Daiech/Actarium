@@ -18,7 +18,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
 from apps.groups_app.validators import validateEmail
-from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGroup, setRelUserGroup, sendInvitationToGroup, newUserWithInvitation, can_group_add_a_user
+from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGroup, setRelUserGroup, sendInvitationToGroup, newUserWithInvitation, has_org_quota_for_user
 import datetime
 import json
 URL_BASE = settings.URL_BASE
@@ -429,7 +429,7 @@ def newInvitationToGroup(request):
     if request.is_ajax():
         if request.method == 'GET':
             _user_rel = False
-            gid=request.GET.get('pk')
+            gid = request.GET.get('pk')
             if gid:
                 try:
                     g = Groups.objects.get_group(id=gid)
@@ -456,7 +456,7 @@ def newInvitationToGroup(request):
                             gravatar = False
                             response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar}
                             return HttpResponse(json.dumps(response), mimetype="application/json")
-                    if can_group_add_a_user(g):
+                    if has_org_quota_for_user(g.organization):
                         agregar = True
                     else:
                         response = {"error": _(u"Ya no se puede agregar miembros a este grupo. Su cupo de miembros de organización está lleno.")}
@@ -472,14 +472,14 @@ def newInvitationToGroup(request):
                             except:
                                 pass #relax, simplemente no hay nombres
                             _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)
-                        # aqui ya esta el usuario en _user. y es existente (y no pertenece a la org) o nuevo.
+                        # aqui ya esta el usuario en _user. es existente (y no pertenece a la org) o es nuevo.
                         if _user and not (_user is 0):  # 0 => is email failed
                             if sendInvitationToGroup(_user, request.user, g):
                                 try:
                                     invited = True
                                     iid = str(_user.id)  # get de id from invitation
                                     gravatar = showgravatar(email, 30)
-                                    message = u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>"
+                                    message = _(u"Se ha enviado la invitación a " + str(email) + " al grupo <strong>" + g.name + "</strong>")
                                     saveActionLog(request.user, 'SEN_INVITA', "email: %s" % (email), request.META['REMOTE_ADDR'])  # Accion de aceptar invitacion a grupo
                                 except Exception, e:
                                     print e

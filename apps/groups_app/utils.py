@@ -21,9 +21,9 @@ def isMemberOfOrg(user, org):
     else:
         return False
 
-def can_group_add_a_user(group):
+def has_org_quota_for_user(org):
     """Consultar con los servicios activos de la organización"""
-    return group.organization.organizationservices_organization.can_add()
+    return org.organizationservices_organization.can_add()
 
 
 def sendInvitationToGroup(user_invited, user_from, group):

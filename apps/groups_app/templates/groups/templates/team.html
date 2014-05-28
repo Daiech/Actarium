@@ -507,7 +507,7 @@
 		    		"firstname": $("#new-user-firstname").val(),
 		    		"lastname": $("#new-user-lastname").val(),
 		    		}
-				sendAjax("/groups/setInvitation",ctx,"",invitationResult);
+				sendAjax("{% url 'set_invitation' %}",ctx,"",invitationResult);
 				$("#search-result").fadeOut(300,function (argument) {
 					$(this).empty().show().removeClass("user-li");;
 				});
@@ -518,7 +518,7 @@
 		    	var mail = elem.attr("data-email");
 	            var uname = elem.attr("data-username");
 	            var group_id = $("#group_id").val();
-	            sendNewAjax("/groups/setInvitation",{"pk":group_id, "mail": mail}, callback);
+	            sendNewAjax("{% url 'set_invitation' %}", {"pk":group_id, "mail": mail}, callback);
 		    }
 		    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
 		        $(".user-li > a").on("click",function(e){
