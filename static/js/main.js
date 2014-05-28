@@ -227,21 +227,21 @@ function restartMenus(){
     $(".second-menu").slideUp(200);
     $(".first-menu").slideDown(150);
 }
-$(".actarium-dropdown").on("click", function (e){
+$(document).on("click", ".actarium-dropdown", function (e){
     e.preventDefault();
     var this_dropdown = $(this).parent().find(".dropdown-container");
     $(".dropdown-container").not(this_dropdown).hide();//hide every .dropdown-container except this_dropdown
     this_dropdown.slideToggle(100);
     restartMenus();
 });
-$(".close-popover").on("click", function (e){
+$(document).on("click", ".close-popover", function (e){
     /*Close dropdown container*/
     e.preventDefault();
     e.stopPropagation();
     $(this).closest(".dropdown-container").hide();
     restartMenus();
 });
-$(".actarium-dropdown + .dropdown-container .open-second-menu").on("click", function (e) {
+$(document).on("click", ".actarium-dropdown + .dropdown-container .open-second-menu", function (e) {
     e.preventDefault();
     console.log("hola")
     changeDropDownMenus($(this));

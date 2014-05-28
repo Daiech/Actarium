@@ -1,0 +1,95 @@
+{% verbatim %}
+{% for m in team.members %}
+<tr id="user-{{ m.id }}">
+	<td class="td-first">
+		<div class="td-info-user">
+			<div class="username-info {% if not m.is_active %}user-pend-r{% endif %}"
+			{% if not m.is_active %}title="{{ m.username }} ({{ m.email }}) {{ team.texts.msj_invitation }}"{% endif %}>
+                <img class="img-circle" style="width:24px" src="{{ m.gravatar }}" alt="{{ m.username }}">
+                <span class="names">{{ m.get_full_name }}</span> {% if team.user.id == m.id %}({{ team.texts.msj_me }}){% else %}({{ m.username }}){% endif %}
+            </div>
+            <!-- comienza -->
+			{% if team.user.is_group_admin or team.user.is_org_admin %}
+            <div class="user-config actarium-dropdown" title="{{ team.msj_configuration_of }} {{ m.username }} ({{m.email}})">
+            	<a href="#"><i class="glyphicon glyphicon-cog"></i></a>
+            </div>
+            <div class="dropdown-container">
+        		<div class="header-title">
+                	<span>{{ team.texts.msj_configuration }}</span>
+                	<div class="close close-popover glyphicon glyphicon-remove"></div>
+            	</div>
+            	<div class="dropdown-body">
+            		<div><strong>{{ m.get_full_name }} ({{ m.username }}):</strong></div>
+            		<div class="first-menu">
+            			<ul class="configuration-list list-unstyled">
+            				{% if not m.is_active %}
+            				<li>
+            					<a data-uid="{{ m.id }}" href="#resend-invitation">
+            						<i class="glyphicon glyphicon-envelope"></i> {{ team.texts.msj_resend }}
+            					</a>
+            				</li>
+            				<li>
+            					<a href="#" class="open-second-menu">
+            						<i class="glyphicon glyphicon-edit"></i> {{ team.texts.msj_change_names }}
+            					</a>
+            				</li>
+            				{% endif %}
+            				<li>
+            					<a href="#delete-from-group" data-invitation="{{ m.id }}">
+            						<i class="glyphicon glyphicon-remove"></i> {{ team.texts.msj_delete }}
+            					</a>
+            				</li>
+            			</ul>
+            		</div>
+            		{%if not m.is_active%}
+					<div class="second-menu">
+						<div class="">
+							<label>
+								{{ team.texts.msj_first_name }}:
+								<input class="first-element first-name" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.first_name }}">
+							</label>
+							<label>
+								{{ team.texts.msj_first_name }}:
+								<input class="last-name" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.last_name }}" >
+							</label>
+                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {{ team.texts.msj_back }}</a>
+							<input type="button" data-uid="{{ m.id }}" class="btn btn-info save-names" value="{{ team.texts.msj_save }}">
+						</div>
+					</div>
+					{%endif%}
+            	</div>
+            </div>
+			{%endif%}
+            <!-- termina -->
+		</div>
+	</td>
+	<td class="t-a-c">
+		<label for="member{{ m.id }}">
+		{% if team.user.is_group_admin or team.user.is_org_admin %}
+			<input id="member{{ m.id }}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{ m.id }}" {%if m.roles.is_member %}checked{%endif%}> 
+		{% else %}
+		{%if m.roles.is_member%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
+		{%endif%}
+		</label>
+	</td>
+	<td class="t-a-c">
+		<label for="writer{{ m.id }}">
+		{% if team.user.is_group_admin %}
+			<input id="writer{{ m.id }}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{ m.id }}" {%if m.roles.is_secretary %}checked{%endif%}> 
+		{% else %}
+		{% if m.roles.is_secretary %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+		{% endif %}
+		</label>
+	</td>
+	<td class="t-a-c">
+		<label for="admin{{ m.id }}">
+		{% if team.user.is_group_admin or team.user.is_org_admin %}
+			<input id="admin{{ m.id }}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{ m.id }}" {%if m.roles.is_admin%}checked{%endif%} {%if m.id == team.user.id %}disabled{%endif%}>
+		{% else %}
+		{% if m.roles.is_admin %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+		{% endif %}
+		</label>
+	</td>
+</tr>
+{%endfor%}
+{% endverbatim %}

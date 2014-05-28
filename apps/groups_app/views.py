@@ -500,7 +500,7 @@ def newInvitationToGroup(request):
                                     message = "El correo electronico no es valido"
                                 else:
                                     message = "Error desconocido. Lo sentimos"
-                        response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar, "username": _user.username, "full_name": _user.get_full_name()}
+                        response = {"invited": invited, "message": message, "email": email, "iid": iid, "gravatar": gravatar, "username": _user.username, "full_name": _user.get_full_name(), "is_active": _user.is_active, "first_name": _user.first_name, "last_name": _user.last_name}
                 else:
                     response = {"error": _(u"No tienes permiso para hacer eso")}
             else:
@@ -552,9 +552,9 @@ def resendInvitation(request, slug_group):
                         else:
                             message = {"error": "el usuario ya está activo"}
                     else:
-                        message = {"error": "El usuario no pertenece a este grupo", "sent": False}
+                        message = {"error": _(u"El usuario no pertenece a este grupo"), "sent": False}
                 else:
-                    message = "No tienes permisos para hacer eso."
+                    message = _(u"No tienes permisos para hacer eso.")
             except Exception:
                 message = False
         else:

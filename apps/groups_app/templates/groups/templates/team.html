@@ -75,131 +75,32 @@
 			{% endif %}
 				<section class="">
 					<table id="table-roles" class="table table-bordered table-hover">
-						<tr>
-							<th class="td-first">
-								<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">{% trans "Miembros del grupo" %}</div>
-							</th>
-							<th>
-								<div class="info-title" title="{% trans 'Personas que aparecen en la lista de las actas' %}">
-									<i class="glyphicon glyphicon-user"></i>
-									<span class="th-name">{% trans "Aparece en actas" %}</span>
-								</div>
-							</th>
-							<th>
-								<div class="info-title" title="{% trans 'Tiene permisos de crear actas' %}">
-									<i class="glyphicon glyphicon-file"></i>
-									<span class="th-name">{% trans "Puede redactar" %}</span>
-								</div>
-							</th>
-							<th>
-								<div class="info-title" title="{% trans 'Puede administrar el grupo' %}">
-									<i class="glyphicon glyphicon-wrench"></i> 
-									<span class="th-name">{% trans "Administrador" %}</span>
-								</div>
-							</th>
-						</tr>
-						{% for m in members %}
-						<tr {%if m.id_user.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
-							<td class="td-first">
-								<div class="td-info-user">
-									<div class="username-info {%if not m.id_user.is_active%}user-pend-r{%endif%}"
-									{%if not m.is_active%}title="{{m.id_user.username}} ({{m.id_user.email}}) a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
-				                        <img class="img-circle" style="width:24px" src="{{m.id_user.email|showgravatar:'20'}}" alt="{{m.id_user}}">
-				                        <span class="names">
-				                        {{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}}
-				                        </span>
-				                        {%if m.id_user == user%}(yo){%else%}({{m.id_user}}){%endif%}
-				                    </div>
-				                    <!-- comienza -->
-									{% if rel_user.is_admin or user_is_org_admin %}
-				                    <div class="user-config actarium-dropdown" title="Configuraci&oacute;n de {{m.id_user}} ({{m.id_user.email}})">
-				                    	<a href="#"><i class="glyphicon glyphicon-cog"></i></a>
-				                    </div>
-				                    <div class="dropdown-container">
-			                    		<div class="header-title">
-				                        	<span>{% trans "Configuraci&oacute;n" %}</span>
-				                        	<div class="close close-popover glyphicon glyphicon-remove"></div>
-				                    	</div>
-				                    	<div class="dropdown-body">
-				                    		<div>
-				                    			<strong>
-				                    				{{m.id_user.first_name|capfirst}} {{m.id_user.last_name|capfirst}} ({{m.id_user}}):
-				                    			</strong>
-				                    		</div>
-				                    		<div class="first-menu">
-				                    			<ul class="configuration-list">
-				                    				{%if not m.id_user.is_active%}
-				                    				<li>
-				                    					<a data-uid="{{m.id_user.pk}}" href="#resend-invitation">
-				                    						<!-- <i class="icon-refresh"></i>  --><i class="glyphicon glyphicon-envelope"></i> {% trans "Reenviar invitaci&oacute;n" %}
-				                    					</a>
-				                    				</li>
-				                    				{%if not m.id_user.is_active%}
-				                    				<li>
-				                    					<a href="#" class="open-second-menu">
-				                    						<i class="glyphicon glyphicon-edit"></i> {% trans "Cambiar nombres" %}
-				                    					</a>
-				                    				</li>
-				                    				{%endif%}
-				                    				{%endif%}
-				                    				<li>
-				                    					<a href="#delete-from-group" data-invitation="{{m.id_user.id}}">
-				                    						<i class="glyphicon glyphicon-remove"></i> {% trans "Eliminar de grupo" %}
-				                    					</a>
-				                    				</li>
-				                    			</ul>
-				                    		</div>
-				                    		{%if not m.id_user.is_active%}
-		                					<div class="second-menu">
-		                						<div class="">
-		                							<label>
-		                								{% trans "Nombres" %}:
-		                								<input class="first-element first-name" type="text" placeholder="Nombres" value="{{m.id_user.first_name|capfirst}}">
-		                							</label>
-		                							<label>
-		                								{% trans "Apellidos" %}:
-		                								<input class="last-name" type="text" placeholder="Apellidos" value="{{m.id_user.last_name|capfirst}}" >
-		                							</label>
-						                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
-		                							<input type="button" data-uid="{{m.id_user.pk}}" class="btn btn-info save-names" value="Guardar">
-		                						</div>
-		                					</div>
-		                					{%endif%}
-				                    	</div>
-				                    </div>
-									{%endif%}
-				                    <!-- termina -->
-								</div>
-							</td>
-							<td class="t-a-c">
-								<label for="member{{m.id_user.id}}">
-								{% if rel_user.is_admin or user_is_org_admin %}
-									<input id="member{{m.id_user.id}}" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="{{m.id_user.id}}" {%if m.is_member%}checked{%endif%}> 
-								{% else %}
-								{%if m.is_member%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-							<td class="t-a-c">
-								<label for="writer{{m.id_user.id}}">
-								{% if rel_user.is_admin %}
-									<input id="writer{{m.id_user.id}}" type="checkbox" data-role="2" data-role-name="Redactor" data-uid="{{m.id_user.id}}" {%if m.is_secretary%}checked{%endif%}> 
-								{% else %}
-								{%if m.is_secretary%}<i class="icon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-							<td class="t-a-c">
-								<label for="admin{{m.id_user.id}}">
-								{% if rel_user.is_admin or user_is_org_admin %}
-									<input id="admin{{m.id_user.id}}" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="{{m.id_user.id}}" {%if m.is_admin%}checked{%endif%} {%if m.is_superadmin or m.id_user == user%}disabled{%endif%}>
-								{% else %}
-								{%if m.is_admin%}<i class="glyphicon glyphicon-ok"></i>{% endif%}
-								{%endif%}
-								</label>
-							</td>
-						</tr>
-		                {%endfor%}
+						<thead>
+							<tr>
+								<th class="td-first">
+									<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">{% trans "Miembros del grupo" %}</div>
+								</th>
+								<th>
+									<div class="info-title" title="{% trans 'Personas que aparecen en la lista de las actas' %}">
+										<i class="glyphicon glyphicon-user"></i>
+										<span class="th-name">{% trans "Aparece en actas" %}</span>
+									</div>
+								</th>
+								<th>
+									<div class="info-title" title="{% trans 'Tiene permisos de crear actas' %}">
+										<i class="glyphicon glyphicon-file"></i>
+										<span class="th-name">{% trans "Puede redactar" %}</span>
+									</div>
+								</th>
+								<th>
+									<div class="info-title" title="{% trans 'Puede administrar el grupo' %}">
+										<i class="glyphicon glyphicon-wrench"></i> 
+										<span class="th-name">{% trans "Administrador" %}</span>
+									</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody id="teamList"></tbody>
 					</table>
 					<div class="icons-info">
 		                <span>{% trans "Info" %}:</span>
@@ -215,6 +116,9 @@
 			{% endif %}
 		</div>
 	</div>
+<script type="text/template" id="teamListTpl">
+	{% include "groups/templates/user_roles.html" %}
+</script>
 {% if rel_user.is_admin or user_is_org_admin %}
 <script type="text/template" id="new-user-template">
 	<li>
@@ -256,6 +160,7 @@
 	div.info-title{text-align: center;font-size: 14px;
 		height: 18px;margin: 0;overflow: hidden;padding: 0px;}
 	.username-info{padding: 8px;font-size: 13px;}
+	.username-info .names{margin-left: 3px;}
 	.remove-invitation-container{margin-top: 7px;}
 	td input[type='checkbox']{margin-top: 0;}
 	#table-roles td{padding: 0;}
@@ -329,6 +234,46 @@
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
+		team = {
+			user: {
+				id: {{ user.id }},
+				is_org_admin: {{ user_is_org_admin|lower }},
+				is_group_admin: {{ rel_user.is_admin|lower }}
+			},
+			members: [
+				{% for m in members %}
+				{
+					id: {{ m.id_user.id }},
+					username: "{{ m.id_user.username }}",
+					first_name: "{{ m.id_user.first_name }}",
+					last_name: "{{ m.id_user.last_name }}",
+					get_full_name: "{{ m.id_user.get_full_name }}",
+					email: "{{ m.id_user.email }}",
+					gravatar: "{{ m.id_user.email|showgravatar:20 }}",
+					is_active: {{ m.id_user.is_active|lower }},
+					roles: {
+						is_member: {{ m.is_member|lower }},
+						is_secretary: {{ m.is_secretary|lower }},
+						is_admin: {{ m.is_admin|lower }},
+					}
+				},
+				{% endfor %}
+			],
+			texts: {
+				msj_invitation: "{% trans 'aún no ha aceptado la invitación' %}",
+				msj_configuration_of: "{% trans 'Configuración de' %}",
+				msj_configuration: "{% trans 'Configuración' %}",
+				msj_resend: '{% trans "Reenviar invitación" %}',
+				msj_change_names: '{% trans "Cambiar nombres" %}',
+				msj_delete: '{% trans "Eliminar de grupo" %}',
+				msj_first_name: '{% trans "Nombres" %}',
+				msj_last_name: '{% trans "Apellidos" %}',
+				msj_back: '{% trans "Regresar" %}',
+				msj_save: "{% trans 'Guardar' %}",
+				msj_me: "{% trans 'yo' %}"
+			}
+		}
+		$("#teamList").html(swig.render($("#teamListTpl").html(),{locals: team}));
 		{% if rel_user.is_admin or user_is_org_admin %}
 			$(".user-list").niceScroll();
 			function load_org_member_list () {
@@ -344,7 +289,6 @@
 			}
 			change_actions_org_member = function (id){
 				var e = $("#org-user-"+id);
-				console.log(e);
 				e.find("span.glyphicon-ok").toggleClass("hidden");
 				e.find("a.link-to-invite").toggleClass("user-inv");
 			}
@@ -380,44 +324,22 @@
 		    	var role_name = checkbox.attr("data-role-name")
 		    	var uid = checkbox.attr("data-uid")
 		    	if(checkbox.is(":checked")){
-		    		sendNewAjax("/groups/{{group.slug}}/setRole",
+		    		sendNewAjax("{% url 'set_role_in_group' group.slug %}",
 		    			{"role":role, "uid": uid, "remove": 0},
 		    			callbackSetRole,
 		    			{"method":"post"})
 		    	}
 		    	else{
 		    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
-		    			sendNewAjax("/groups/{{group.slug}}/setRole",
+		    			sendNewAjax("{% url 'set_role_in_group' group.slug %}",
 		    				{"role":role, "uid": uid, "remove": 1},
 		    				callbackRemoveRole,
 		    				{"load_elem": "#ac-load", "method":"post"})
 		    		}
 		    		else{
-		    			checkbox.attr("checked","checked");
+		    			checkbox.prop("checked",true);
 		    		}
 		    	}
-		    }
-		    function deleteInvitationDropdown(elem){
-		        if(confirm("{% trans 'Realmente desea eliminar la invitación a este Usuario' %}"))
-		        {
-		            sendNewAjax(
-		                "{% url 'remove_from_group' group.slug %}",
-		                {"id_inv": elem.attr("data-invitation")},
-		                function(data){
-		                    if(data['deleted']){
-		                        elem.closest("tr").animate({"height": 0},"slow",function(e){
-		                            $(this).fadeOut();
-		                            setAlertMessage("{% trans 'Usuario eliminado del grupo' %}", data['message']);
-		                            change_actions_org_member(elem.attr("data-invitation"));
-		                        });
-		                    }
-		                    else{
-		                        setAlertError("{% trans 'Error' %}","{% trans 'No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo' %}")
-		                    }
-		                },
-		                {"method": "post"}
-	                );
-		        }
 		    }
 		    function showIconAddMemberOnHover(){
 		        // mostrar flecha sobre usuario
@@ -461,22 +383,18 @@
 		    }
 		    invitationResult = function (data, append_to_org_list){//Resultados de la invitacion (agrega si TRUE, error si False)
 		        if(data['invited']){    //USUARIO INVITADO
-		        	var is_admin = "{{is_admin}}"
-		            var tr = '<tr><td>'+
-							'<div class="username-info user-pend-r">'+
-		                        '<img style="width:20px" src="'+data['gravatar']+'" alt=""> '+(data['email']).substring(0,MAX_LENGTH)+
-		                    '</div>'+
-						'</td>'+
-						'<td class="t-a-c">\
-							<label for="member'+data['iid']+'">\
-								<input id="member'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="'+data['iid']+'" checked>\
-							</label>\
-						</td>'+
-						'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
-							'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
-						'</label></td>'+
-						'</tr>';
-					$("#table-roles").append(tr);
+		        	var is_admin = "{{is_admin}}";
+		        	var user = {
+						id: data['iid'], is_active: data['is_active'],
+						username: data['username'], first_name: data['first_name'], last_name: data['last_name'],
+						get_full_name: data['full_name'], email: data['email'], gravatar: data['gravatar'],
+						roles: {is_member: true,is_secretary: false,is_admin: false}
+					}
+		        	var team_members = team.members;
+		        	team.members = [user]; 
+					$("#teamList").append(swig.render($("#teamListTpl").html(),{locals: team}));
+					team.members = team_members;
+					team.members.push(user);
 					setAlertMessage("{% trans 'Invitado' %}", data['message'])
 		            showIconCloseOnHover()
 					$("td input[type='checkbox']").on("click", setRole);
@@ -570,18 +488,6 @@
 		            $(this).find("i.icon-remove").hide(30)
 		        })
 		    }
-		    function reSendInvitation (elem) {
-		    	var uid = $(elem).attr("data-uid");
-		    	sendAjax("/groups/{{group.slug}}/admin/resend-invitation/",{"uid":uid},"",function (data){
-		    		if(data.sent){
-		    			console.log("Reenviado "+data.sent);
-			    		setAlertMessage("Invitaci&oacute; reenviada", "Se ha enviado nuevamente una invitac&oacute;n por correo electr&oacute;nico a "+data.email);
-	    			}
-	    			else{
-	    				console.log(data);
-	    			}
-		    	})
-		    }
 		    function changeNames(elem){
 		    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
 		    	var first_menu = elem.closest(".first-menu");
@@ -599,39 +505,6 @@
 		    function setNewNames(uid, fname, lname){
 
 		    }
-	    	$(".save-names").on("click", function (e){
-	    		e.preventDefault();
-	    		e.stopPropagation();
-	    		var fname = $(this).closest(".second-menu").find(".first-name").val();
-	    		var lname = $(this).closest(".second-menu").find(".last-name").val();
-	    		var uid = $(this).attr("data-uid");
-	    		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
-				var elem = $(this);
-	    		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
-	    			if(data.changed){
-	    				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
-	    				restartMenus();
-	    				setAlertMessage("Nombres Cambiados", "Los nombres se han actualizado con &eacute;xito.");
-	    			}else{
-	    				console.log("No se pudo guardar los nuevos nombres");
-	    				setAlertError("Error", "No se pudo guardar los nuevos nombres. Recarga la p&aacute;gina e intenta de nuevo.");
-	    			}
-	    		});
-	    	});
-		    $(".configuration-list a").on("click", function (e){  {%comment%} listen events on menu{%endcomment%}
-		    	e.preventDefault();
-		    	e.stopPropagation();
-		    	if($(this).attr("href") === "#resend-invitation"){
-		    		reSendInvitation(this);
-		    	}
-		    	if($(this).attr("href") === "#change-names"){
-		    		changeNames($(this));
-		    	}
-		    	if($(this).attr("href") === "#delete-from-group"){
-		    		deleteInvitationDropdown($(this));
-		    		$(this).closest(".dropdown-container").hide();
-		    	}
-		    })
 		    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
 		    $("#button-search").on("click", function (e) {
 		    	e.preventDefault();
@@ -650,6 +523,39 @@
 		{% endif %}
 	});
 	{% if rel_user.is_admin or user_is_org_admin %}
+	function reSendInvitation (elem) {
+    	var uid = $(elem).attr("data-uid");
+    	sendAjax("{% url 'resend_invitation' group.slug %}",{"uid":uid},"",function (data){
+    		if(data.sent){
+	    		setAlertMessage("{% trans 'Invitación reenviada' %}", "{% trans 'Se ha enviado nuevamente una invitacón por correo electrónico a ' %}" + data.email);
+			}
+			else{
+				setAlertError("{% trans 'Error' %}", "{% trans 'Algo salió mal. No se envió el correo recordatorio. Por favor recargue la página e intente de nuevo.' %}");
+			}
+    	})
+    }
+    function deleteInvitationDropdown(elem){
+        if(confirm("{% trans 'Realmente desea eliminar la invitación a este Usuario?' %}"))
+        {
+            sendNewAjax(
+                "{% url 'remove_from_group' group.slug %}",
+                {"id_inv": elem.attr("data-invitation")},
+                function(data){
+                    if(data['deleted']){
+                        elem.closest("tr").animate({"height": 0},"slow",function(e){
+                            $(this).fadeOut();
+                            setAlertMessage("{% trans 'Usuario eliminado del grupo' %}", data['message']);
+                            change_actions_org_member(elem.attr("data-invitation"));
+                        });
+                    }
+                    else{
+                        setAlertError("{% trans 'Error' %}","{% trans 'No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo' %}")
+                    }
+                },
+                {"method": "post"}
+            );
+        }
+    }
 	function sendInvitationFromAdmin(e){
     	e.preventDefault();
 		sendInvitation($(this), function(data){
@@ -657,6 +563,38 @@
 			change_actions_org_member(data.iid);
 		});
     }
+	$(document).on("click", ".save-names", function (e){
+		e.preventDefault();
+		e.stopPropagation();
+		var fname = $(this).closest(".second-menu").find(".first-name").val();
+		var lname = $(this).closest(".second-menu").find(".last-name").val();
+		var uid = $(this).attr("data-uid");
+		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
+		var elem = $(this);
+		sendAjax("{% url 'change_names' group.slug %}",ctx,"",function(data){
+			if(data.changed){
+				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
+				restartMenus();
+				setAlertMessage("{% trans 'Nombres Cambiados' %}", "{% trans 'Los nombres se han actualizado con éxito.' %}");
+			}else{
+				setAlertError("Error", "{% trans 'No se pudo guardar los nuevos nombres. Recarga la página e intenta de nuevo.' %}");
+			}
+		});
+	});
+    $(document).on("click", ".configuration-list a", function (e){
+    	e.preventDefault();
+    	e.stopPropagation();
+    	if($(this).attr("href") === "#resend-invitation"){
+    		reSendInvitation(this);
+    	}
+    	if($(this).attr("href") === "#change-names"){
+    		changeNames($(this));
+    	}
+    	if($(this).attr("href") === "#delete-from-group"){
+    		deleteInvitationDropdown($(this));
+    		$(this).closest(".dropdown-container").hide();
+    	}
+    });
     $(document).on("click", "a.user-inv", sendInvitationFromAdmin);
     {% endif %}
 </script>
