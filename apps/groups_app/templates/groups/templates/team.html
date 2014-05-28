@@ -160,6 +160,7 @@
 	div.info-title{text-align: center;font-size: 14px;
 		height: 18px;margin: 0;overflow: hidden;padding: 0px;}
 	.username-info{padding: 8px;font-size: 13px;}
+	.username-info .names{margin-left: 3px;}
 	.remove-invitation-container{margin-top: 7px;}
 	td input[type='checkbox']{margin-top: 0;}
 	#table-roles td{padding: 0;}
@@ -268,7 +269,8 @@
 				msj_first_name: '{% trans "Nombres" %}',
 				msj_last_name: '{% trans "Apellidos" %}',
 				msj_back: '{% trans "Regresar" %}',
-				msj_save: "{% trans 'Guardar' %}"
+				msj_save: "{% trans 'Guardar' %}",
+				msj_me: "{% trans 'yo' %}"
 			}
 		}
 		$("#teamList").html(swig.render($("#teamListTpl").html(),{locals: team}));
@@ -322,21 +324,20 @@
 		    	var role_name = checkbox.attr("data-role-name")
 		    	var uid = checkbox.attr("data-uid")
 		    	if(checkbox.is(":checked")){
-		    		sendNewAjax("/groups/{{group.slug}}/setRole",
+		    		sendNewAjax("{% url 'set_role_in_group' group.slug %}",
 		    			{"role":role, "uid": uid, "remove": 0},
 		    			callbackSetRole,
 		    			{"method":"post"})
 		    	}
 		    	else{
 		    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
-		    			sendNewAjax("/groups/{{group.slug}}/setRole",
+		    			sendNewAjax("{% url 'set_role_in_group' group.slug %}",
 		    				{"role":role, "uid": uid, "remove": 1},
 		    				callbackRemoveRole,
 		    				{"load_elem": "#ac-load", "method":"post"})
 		    		}
 		    		else{
 		    			checkbox.prop("checked",true);
-		    			// debugger;
 		    		}
 		    	}
 		    }
@@ -382,22 +383,18 @@
 		    }
 		    invitationResult = function (data, append_to_org_list){//Resultados de la invitacion (agrega si TRUE, error si False)
 		        if(data['invited']){    //USUARIO INVITADO
-		        	var is_admin = "{{is_admin}}"
-		            var tr = '<tr><td>'+
-							'<div class="username-info user-pend-r">'+
-		                        '<img style="width:20px" src="'+data['gravatar']+'" alt=""> '+(data['email']).substring(0,MAX_LENGTH)+
-		                    '</div>'+
-						'</td>'+
-						'<td class="t-a-c">\
-							<label for="member'+data['iid']+'">\
-								<input id="member'+data['iid']+'" type="checkbox" data-role="1" data-role-name="Miembro" data-uid="'+data['iid']+'" checked>\
-							</label>\
-						</td>'+
-						'<td class="t-a-c"><label for="admin'+data['iid']+'">'+
-							'<input id="admin'+data['iid']+'" type="checkbox" data-role="4" data-role-name="Administrador" data-uid="'+data['iid']+'">'+
-						'</label></td>'+
-						'</tr>';
-					$("#table-roles").append(tr);
+		        	var is_admin = "{{is_admin}}";
+		        	var user = {
+						id: data['iid'], is_active: data['is_active'],
+						username: data['username'], first_name: data['first_name'], last_name: data['last_name'],
+						get_full_name: data['full_name'], email: data['email'], gravatar: data['gravatar'],
+						roles: {is_member: true,is_secretary: false,is_admin: false}
+					}
+		        	var team_members = team.members;
+		        	team.members = [user]; 
+					$("#teamList").append(swig.render($("#teamListTpl").html(),{locals: team}));
+					team.members = team_members;
+					team.members.push(user);
 					setAlertMessage("{% trans 'Invitado' %}", data['message'])
 		            showIconCloseOnHover()
 					$("td input[type='checkbox']").on("click", setRole);
@@ -508,24 +505,6 @@
 		    function setNewNames(uid, fname, lname){
 
 		    }
-	    	$(".save-names").on("click", function (e){
-	    		e.preventDefault();
-	    		e.stopPropagation();
-	    		var fname = $(this).closest(".second-menu").find(".first-name").val();
-	    		var lname = $(this).closest(".second-menu").find(".last-name").val();
-	    		var uid = $(this).attr("data-uid");
-	    		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
-				var elem = $(this);
-	    		sendAjax("/groups/{{group.slug}}/admin/change-names/",ctx,"",function(data){
-	    			if(data.changed){
-	    				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
-	    				restartMenus();
-	    				setAlertMessage("Nombres Cambiados", "Los nombres se han actualizado con &eacute;xito.");
-	    			}else{
-	    				setAlertError("Error", "No se pudo guardar los nuevos nombres. Recarga la p&aacute;gina e intenta de nuevo.");
-	    			}
-	    		});
-	    	});
 		    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
 		    $("#button-search").on("click", function (e) {
 		    	e.preventDefault();
@@ -548,7 +527,7 @@
     	var uid = $(elem).attr("data-uid");
     	sendAjax("{% url 'resend_invitation' group.slug %}",{"uid":uid},"",function (data){
     		if(data.sent){
-	    		setAlertMessage("Invitaci&oacute; reenviada", "Se ha enviado nuevamente una invitac&oacute;n por correo electr&oacute;nico a "+data.email);
+	    		setAlertMessage("{% trans 'Invitación reenviada' %}", "{% trans 'Se ha enviado nuevamente una invitacón por correo electrónico a ' %}" + data.email);
 			}
 			else{
 				setAlertError("{% trans 'Error' %}", "{% trans 'Algo salió mal. No se envió el correo recordatorio. Por favor recargue la página e intente de nuevo.' %}");
@@ -577,6 +556,31 @@
             );
         }
     }
+	function sendInvitationFromAdmin(e){
+    	e.preventDefault();
+		sendInvitation($(this), function(data){
+			invitationResult(data, true);
+			change_actions_org_member(data.iid);
+		});
+    }
+	$(document).on("click", ".save-names", function (e){
+		e.preventDefault();
+		e.stopPropagation();
+		var fname = $(this).closest(".second-menu").find(".first-name").val();
+		var lname = $(this).closest(".second-menu").find(".last-name").val();
+		var uid = $(this).attr("data-uid");
+		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
+		var elem = $(this);
+		sendAjax("{% url 'change_names' group.slug %}",ctx,"",function(data){
+			if(data.changed){
+				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
+				restartMenus();
+				setAlertMessage("{% trans 'Nombres Cambiados' %}", "{% trans 'Los nombres se han actualizado con éxito.' %}");
+			}else{
+				setAlertError("Error", "{% trans 'No se pudo guardar los nuevos nombres. Recarga la página e intenta de nuevo.' %}");
+			}
+		});
+	});
     $(document).on("click", ".configuration-list a", function (e){
     	e.preventDefault();
     	e.stopPropagation();
@@ -591,13 +595,6 @@
     		$(this).closest(".dropdown-container").hide();
     	}
     });
-	function sendInvitationFromAdmin(e){
-    	e.preventDefault();
-		sendInvitation($(this), function(data){
-			invitationResult(data, true);
-			change_actions_org_member(data.iid);
-		});
-    }
     $(document).on("click", "a.user-inv", sendInvitationFromAdmin);
     {% endif %}
 </script>

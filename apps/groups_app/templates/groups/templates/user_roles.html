@@ -6,7 +6,7 @@
 			<div class="username-info {% if not m.is_active %}user-pend-r{% endif %}"
 			{% if not m.is_active %}title="{{ m.username }} ({{ m.email }}) {{ team.texts.msj_invitation }}"{% endif %}>
                 <img class="img-circle" style="width:24px" src="{{ m.gravatar }}" alt="{{ m.username }}">
-                <span class="names">{{ m.get_full_name }}</span>({{ m.username }})
+                <span class="names">{{ m.get_full_name }}</span> {% if team.user.id == m.id %}({{ team.texts.msj_me }}){% else %}({{ m.username }}){% endif %}
             </div>
             <!-- comienza -->
 			{% if team.user.is_group_admin or team.user.is_org_admin %}
