@@ -34,7 +34,7 @@ def showHomeGroup(request, slug_group):
 
 @login_required(login_url='/account/login')
 def showTeamGroup(request, slug_group):
-    saveViewsLog(request, "apps.groups_app.views.groupSettings")
+    saveViewsLog(request, "apps.groups_app.views.showTeamGroup")
     try:
         u_selected = None
         if request.method == "GET":
@@ -62,6 +62,7 @@ def showTeamGroup(request, slug_group):
 
 @login_required(login_url='/account/login')
 def showFolderGroup(request, slug_group):
+    saveViewsLog(request, "apps.groups_app.views.showFolderGroup")
     g = Groups.objects.get_group(slug=slug_group)
     _user = getRelUserGroup(request.user, g)
     is_org_admin = g.organization.has_user_role(request.user, "is_admin")
@@ -91,6 +92,7 @@ def showFolderGroup(request, slug_group):
 
 @login_required(login_url='/account/login')
 def showCalendarGroup(request, slug_group):
+    saveViewsLog(request, "apps.groups_app.views.showCalendarGroup")
     g = Groups.objects.get_group(slug=slug_group)
     _user = getRelUserGroup(request.user, g)
     is_org_admin = g.organization.has_user_role(request.user, "is_admin")
@@ -106,7 +108,7 @@ def showCalendarGroup(request, slug_group):
 @login_required(login_url='/account/login')
 def showMinuteGroup(request, slug_group, minutes_code):
     '''Muestra toda la informacion de un Acta dentro de un grupo (minutes)'''
-    # saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
+    saveViewsLog(request, "apps.groups_app.views.showMinuteGroup")
     group = Groups.objects.get_group(slug=slug_group)
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
