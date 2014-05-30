@@ -75,7 +75,7 @@
                 </tr>
             </table>
         </div>
-    	<div id="minutesContent">
+        <div id="minutesContent">
             <div class="hidden" style="display:none">{{newMinutesForm.type_reunion}}</div>
             <div class="hidden">
                 <input type="text" placeholder="Lugar" name="location" id="id_location" value="&nbsp;" />
@@ -83,61 +83,64 @@
             <div class="hidden">
                 <input id="id_date_end" type="text" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
             </div>
-    		
-    		<table border="1" style="width:100%; margin-bottom:10px">
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'FECHA / HORA' %}</strong></td>
-    				<td style="padding:5px">
+            
+            <table border="1" style="width:100%; margin-bottom:10px">
+                <tr>
+                    <td style="padding:5px"><strong>{% trans 'FECHA / HORA' %}</strong></td>
+                    <td style="padding:5px">
                         {% if is_form%}
-                        <div class="">
-                            <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
-                        </div>
-                    </div>
+                            <div class="">
+                                {% if is_edit %}
+                                    <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+                                {% else %}
+                                    {{ newMinutesForm.date_start|safe }}
+                                {% endif %}
+                            </div>
                         {%else%}
-                        {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}
+                            {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}
                         {% endif%}
                         <span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
                     </td>
-    			</tr>
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'ASISTENTES' %}</strong></td>
-    				<td style="padding:5px">
+                </tr>
+                <tr>
+                    <td style="padding:5px"><strong>{% trans 'ASISTENTES' %}</strong></td>
+                    <td style="padding:5px">
                         <ul class="list-unstyled">
-                        {% for member in members_selected%}
+                            {% for member in members_selected%}
                                <li>
-                               {{member.id_user.first_name}} {{member.id_user.last_name}}
-                               {%comment%}
-                               {% if not forloop.last %},{%endif%}
-                               {%endcomment%}
+                                   {{member.id_user.first_name}} {{member.id_user.last_name}}
+                                   {%comment%}
+                                   {% if not forloop.last %},{%endif%}
+                                   {%endcomment%}
                                </li>
-                        {% endfor%}
+                            {% endfor%}
                         </ul>
                    </td>
-    			</tr>
-    		</table>
-    		
-    		<table border="1" style="width:100%; margin-bottom:10px">
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'ORDEN DEL D&Iacute;A' %}</strong></td>
-    			</tr>
-    			<tr>
-    				<td class="tinymce-textareas">
+                </tr>
+            </table>
+            
+            <table border="1" style="width:100%; margin-bottom:10px">
+                <tr>
+                    <td style="padding:5px"><strong>{% trans 'ORDEN DEL D&Iacute;A' %}</strong></td>
+                </tr>
+                <tr>
+                    <td class="tinymce-textareas">
                         {{ newMinutesForm.agenda|safe }}
                         <span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> 
                     </td>
-    			</tr>
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'DESARROLLO ORDEN DEL D&Iacute;A' %}</strong></td>
-    			</tr>
-    			<tr>
-    				<td class="tinymce-textareas">
+                </tr>
+                <tr>
+                    <td style="padding:5px"><strong>{% trans 'DESARROLLO ORDEN DEL D&Iacute;A' %}</strong></td>
+                </tr>
+                <tr>
+                    <td class="tinymce-textareas">
                         {{ newMinutesForm.agreement|safe }}
                         <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
                     </td>
-    			</tr>
-    			
-    		</table>
-    		<br /><br />
+                </tr>
+                
+            </table>
+            <br /><br />
             <div id="firmas">
                 <table>
                     <tr>
@@ -166,11 +169,11 @@
                         <tr>
                             {% for m in members %}
                             <td style="padding-left:10px;padding-top:20px;">
-                                    _______________________________ <br />
-                                    {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper  }}
-                                    {% if show_dni %}
-                                    </br>{{ m.dni_type }} {{ m.dni }}
-                                    {% endif %}
+                                _______________________________ <br />
+                                {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper  }}
+                                {% if show_dni %}
+                                </br>{{ m.dni_type }} {{ m.dni }}
+                                {% endif %}
                             </td>
                             {% endfor %}
                        </tr>
@@ -178,7 +181,7 @@
                 </table>
             </div>
             <br /><br /><br /><br />
-    	</div>
+        </div>
         <div id="footerContent">
         </div>
     </article>

@@ -2,182 +2,181 @@
 <section class="row-fluid">
     <article id="minutes" class="minutes hoja">
         <style type="text/css">
-            body{font-family:Helvetica;color: #555;}
-            .minutes{
-                border: solid thin #ddd;
-                background-color: #fff;
-                box-shadow: 8px 8px 6px -6px gray;
-                border-radius: 3px;
-                padding-top: 40px;
-                width: 99%;
-                margin: 0 auto;
-            }
-            .minutes header{
-                width: auto;
-                margin:30px 0;
-                margin-top: 40px;
-                margin-left: 0;
-                padding: 0 80px;
-            }
-            .minutes header img{
-                margin-top: 0;
-            }
-            .minutes header h3{
-                margin: 0;
-            }
-            #footerContent{
-                margin: 0;
-                padding: 0;
-                width: 100%;
-            }
-            ul.errorList, ul.errorList li{display: inline;}
-            #minutes ul{list-style-type: none;}
-            #headerContent{margin: 0;height: 40px;}
-            #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
-            .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
-            #minutesContent{line-height: 1.8;margin: 0}
-            #firmas td{padding-top: 60px;width: 100%;}
-            #firmas table{width: 100%}
-            #table-list-members{margin-bottom: 20px;width: 100%;}
-            #footerContent img { zoom: 100%; }
-            @page {
-              margin: 2.5cm;
-              margin-top: 3cm;
-              margin-bottom: 2.5cm;
-              font-size: 26px;
-              colordisplay:#555;
-              @frame header {
-                -pdf-frame-content: headerContent;
-                top: 1cm;
-                margin-left: 2.1cm;
-                margin-right: 1cm;
-                height: 2.5cm;
-              }
-              @frame footer {
-                -pdf-frame-content: footerContent;
-                bottom: 0.5cm;
-                margin-left: 0.5cm;
-                margin-right: 0.5cm;
-                margin-top: 1.5cm;
-                height: 3cm;
-              }
-            }
+                body{font-family:Helvetica;color: #555;}
+                .minutes{
+                        border: solid thin #ddd;
+                        background-color: #fff;
+                        box-shadow: 8px 8px 6px -6px gray;
+                        border-radius: 3px;
+                        padding-top: 40px;
+                        width: 99%;
+                        margin: 0 auto;
+                }
+                .minutes header{
+                        width: auto;
+                        margin:30px 0;
+                        margin-top: 40px;
+                        margin-left: 0;
+                        padding: 0 80px;
+                }
+                .minutes header img{
+                        margin-top: 0;
+                }
+                .minutes header h3{
+                        margin: 0;
+                }
+                #footerContent{
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                }
+                ul.errorList, ul.errorList li{display: inline;}
+                #minutes ul{list-style-type: none;}
+                #headerContent{margin: 0;height: 40px;}
+                #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
+                .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
+                #minutesContent{line-height: 1.8;margin: 0}
+                #firmas td{padding-top: 60px;width: 100%;}
+                #firmas table{width: 100%}
+                #table-list-members{margin-bottom: 20px;width: 100%;}
+                #footerContent img { zoom: 100%; }
+                @page {
+                    margin: 2.5cm;
+                    margin-top: 3cm;
+                    margin-bottom: 2.5cm;
+                    font-size: 26px;
+                    colordisplay:#555;
+                    @frame header {
+                        -pdf-frame-content: headerContent;
+                        top: 1cm;
+                        margin-left: 2.1cm;
+                        margin-right: 1cm;
+                        height: 2.5cm;
+                    }
+                    @frame footer {
+                        -pdf-frame-content: footerContent;
+                        bottom: 0.5cm;
+                        margin-left: 0.5cm;
+                        margin-right: 0.5cm;
+                        margin-top: 1.5cm;
+                        height: 3cm;
+                    }
+                }
         </style>
         <div id="headerContent">
         </div>
         <div id="minutesContent">
-          <div style="text-align:center; padding:0 0 15px 0">
-            <div class="hidden">
-              <input id="id_date_end" type="hidden" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
+            <div style="text-align:center; padding:0 0 15px 0">
+                <div class="hidden">
+                    <input id="id_date_end" type="hidden" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
+                </div>
+                <strong>
+                    ACTA No. 
+                    <span id="id_code_title" title="El &uacute;ltimo c&oacute;digo de acta asignado es: {{last.code}}">
+                        {{ newMinutesForm.code }}
+                    </span>
+                    <br /> 
+                    <span style="display:inline-block; float:right">{{ newMinutesForm.code.errors }}</span>
+                    {{ group.name|upper }} 
+                    <span style="display:inline-block;">{{ newMinutesForm.type_reunion }}</span>
+                    <br /> 
+                    PARQUESOFT PEREIRA
+                </strong>
+                <br /><br />
             </div>
-            <strong>
-              ACTA No. 
-              <span id="id_code_title" title="El &uacute;ltimo c&oacute;digo de acta asignado es: {{last.code}}">
-                {{ newMinutesForm.code }}
-              </span>
-              <br /> 
-              <span style="display:inline-block; float:right">{{ newMinutesForm.code.errors }}</span>
-        		  {{ group.name|upper }} 
-              <span style="display:inline-block;">{{ newMinutesForm.type_reunion }}</span>
-              <br /> 
-              PARQUESOFT PEREIRA
-            </strong>
+            <p style="text-align : justify;">
+                En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, el d&iacute;a <span id="first_date">
+                {% if is_form%}
+                    {%if is_edit%}
+                        <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+                    {%else%}
+                        {{newMinutesForm.date_start}}
+                    {%endif%}
+                {%else%}
+                    {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}
+                {% endif%}
+                </span><span style="">{{ newMinutesForm.date_start.errors }}</span> se
+                reunieron los miembros de la {{ group.name }}    de la Fundaci&oacute;n Parque Tecnol&oacute;gico
+                de Software de Pereira por derecho propio, atendiendo a la convocatoria efectuada de
+                conformidad con los estatutos o la ley.
+            </p>
+            <p style="text-align : justify;">
+                Que el d&iacute;a <span class ="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
+                miembros activos de la {{ group.name }} de la fundaci&oacute;n Parque Tecnol&oacute;gico de
+                Software de Pereira, dando cumplimiento al qu&oacute;rum necesario para iniciar, deliberar y
+                decidir, exigido en los estatutos.
+            </p>
+            <br />
+            <p>El siguiente fue el orden del d&iacute;a:</p>
+            <p>
+                {{ newMinutesForm.agenda|safe }}
+                <span style="display:inline-block; float:right">{{ newMinutesForm.agenda.errors }}</span>    
+            </p>
+            <br />
+            <p>Desarrollo del orden del d&iacute;a:</p>
+            <p>
+                {{ newMinutesForm.agreement|safe }}
+                <span style="display:inline-block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+            </p>
             <br /><br />
-        	</div>
-
-          <p style="text-align : justify;">
-      			En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, el d&iacute;a <span id="first_date">
-            {% if is_form%}
-              {%if title_edit%}
-              <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
-              {%else%}
-              {{newMinutesForm.date_start}}
-              {%endif%}
-            {%else%}
-            {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}
-            {% endif%}
-          </span><span style="">{{ newMinutesForm.date_start.errors }}</span> se
-      			reunieron los miembros de la {{ group.name }}  de la Fundaci&oacute;n Parque Tecnol&oacute;gico
-      			de Software de Pereira por derecho propio, atendiendo a la convocatoria efectuada de
-      			conformidad con los estatutos o la ley.
-      		</p>
-      		<p style="text-align : justify;">
-      			Que el d&iacute;a <span class ="date_mirror"></span>, se reunieron m&aacute;s de la tercera parte de
-      			miembros activos de la {{ group.name }} de la fundaci&oacute;n Parque Tecnol&oacute;gico de
-      			Software de Pereira, dando cumplimiento al qu&oacute;rum necesario para iniciar, deliberar y
-      			decidir, exigido en los estatutos.
-      		</p>
-      		<br />
-      		<p>El siguiente fue el orden del d&iacute;a:</p>
-      		<p>
-      			{{ newMinutesForm.agenda|safe }}
-            <span style="display:inline-block; float:right">{{ newMinutesForm.agenda.errors }}</span>	
-      		</p>
-          <br />
-          <p>Desarrollo del orden del d&iacute;a:</p>
-      		<p>
-      			{{ newMinutesForm.agreement|safe }}
-            <span style="display:inline-block; float:right">{{ newMinutesForm.agreement.errors }}</span>
-      		</p>
-      		<br /><br />
-          {%if reunion%}
-            <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
-          {%endif%}
-          <div id="assistance_hidden" style="display:none">
-            <ul class="list-unstyled">
-              {% for member in members_selected%}
-                <li>
-                  <div class="">
-                    {{member.id_user.first_name|upper}} {{member.id_user.last_name|upper}}
-                  </div>
-                </li>
-              {% endfor%}
-            </ul> 
-          </div>
-      		<br />
-          <div id="firmas">
-              <table>
-                  <tr>
-                  {% if president.user %}
-                        <td style="padding-left:10px;padding-top:60px;">
-                            _______________________________ <br />
-                            {{president.user.id_user.first_name|upper}} {{president.user.id_user.last_name|upper}}<br />
-                            Presidente
-                            {% if show_dni %}
-                                </br>{{ president.dni_type }} {{ president.dni }}
-                            {% endif %}
-                        </td>
-                    {% endif %}
-                    {% if secretary.user %}
-                        <td style="padding-left:10px;padding-top:60px;">
-                            _______________________________ <br />
-                            {{secretary.user.id_user.first_name|upper}} {{secretary.user.id_user.last_name|upper}}<br />
-                            Secretario
-                            {% if show_dni %}
-                                </br>{{ secretary.dni_type }} {{ secretary.dni }}
-                            {% endif %}
-                        </td>
-                    {% endif %}
-                  </tr>
-                  {% for members in members_signers%}
+            {%if reunion%}
+                <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
+            {%endif%}
+            <div id="assistance_hidden" style="display:none">
+                <ul class="list-unstyled">
+                    {% for member in members_selected%}
+                        <li>
+                            <div class="">
+                                {{member.id_user.first_name|upper}} {{member.id_user.last_name|upper}}
+                            </div>
+                        </li>
+                    {% endfor%}
+                </ul> 
+            </div>
+            <br />
+            <div id="firmas">
+                <table>
                     <tr>
-                        {% for m in members %}
-                        <td style="padding-left:10px;padding-top:40px;">
-                          _______________________________ <br />
-                          {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper}}
-                          {% if show_dni %}
-                              </br>{{ m.dni_type }} {{ m.dni }}
-                          {% endif %}
-                        </td>
-                        {% endfor %}
-                   </tr>
-                  {% endfor%}
-              </table>
-          </div>
-          <br /><br />
-      	</div>
+                        {% if president.user %}
+                            <td style="padding-left:10px;padding-top:60px;">
+                                _______________________________ <br />
+                                {{president.user.id_user.first_name|upper}} {{president.user.id_user.last_name|upper}}<br />
+                                Presidente
+                                {% if show_dni %}
+                                        </br>{{ president.dni_type }} {{ president.dni }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        {% if secretary.user %}
+                            <td style="padding-left:10px;padding-top:60px;">
+                                _______________________________ <br />
+                                {{secretary.user.id_user.first_name|upper}} {{secretary.user.id_user.last_name|upper}}<br />
+                                Secretario
+                                {% if show_dni %}
+                                        </br>{{ secretary.dni_type }} {{ secretary.dni }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% for members in members_signers%}
+                        <tr>
+                            {% for m in members %}
+                                <td style="padding-left:10px;padding-top:40px;">
+                                    _______________________________ <br />
+                                    {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper}}
+                                    {% if show_dni %}
+                                            </br>{{ m.dni_type }} {{ m.dni }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor%}
+                </table>
+            </div>
+            <br /><br />
+        </div>
         <div id="footerContent">
-          <img src="{{URL_BASE}}/media/orgs_img/parquesoft/footer.jpg" width="915px">
+            <img src="{{URL_BASE}}/media/orgs_img/parquesoft/footer.jpg" width="915px">
         </div>
     </article>
 </section>
