@@ -2,7 +2,7 @@ html {position: relative;min-height: 100%;}
 body{background-color: white;height: 100%;margin-bottom: 90px;position: initial !important;}
 @font-face{font-family: HelveticaNeueLT;src: url(/static/fonts/HELVETICANEUELTSTD-TH.OTF);}
 @font-face{font-family: Bebas;src: url(/static/fonts/BEBAS.TTF);}
-a {color: #00aeaa;text-decoration: none;}/*00aeaa*/
+a {color: #428bca;text-decoration: none;}/*00aeaa*/
 .b{border: solid thin #dadada;}
 .bt{border-top: solid thin #dadada;}
 .br{border-right: solid thin #dadada;}
@@ -15,7 +15,8 @@ time{font-size: 14px;color: gray}
 .flag-icon{width: 16px;height: 11px;border:0;margin: 5px;}
 .language{margin-right: 10px;}
 .language-selected{}
-header.navbar{border-bottom: solid 10px #B3DB35;border-radius: 0}
+header.navbar{border-bottom: solid 10px #97C02C;border-radius: 0}
+.progress-bar-success{background-color: #79B632;}
 #public_topbar{height: 90px;background-color: white;}
 #public_topbar #public_logo{display: inline-block;}
 #try-trial{line-height: 1;position: relative; margin: auto;width: 50%;font-size: 30px;margin-top: 30px;}
@@ -109,7 +110,7 @@ text-decoration:none;
 #account-menu{margin-left: 2px;margin-top: 0;}
 #groups-menu{margin-top: 0;margin-left: 0;}
 #topbar-menu > div > div{height: 42px;min-width: 54px;padding-right: 3px;}
-#groups-menu .group-link{color: #00aeaa;font-weight: normal;}
+#groups-menu .group-link{color: #428bca;font-weight: normal;}
 #groups-menu .group-link:hover{color: #fff}
 #groups-menu li a{font-weight: bold;}
 .btn-group{margin-top: 0px;}
@@ -205,7 +206,7 @@ Footer
     color: #333;
 }
 #footer a:hover{
-    color: #00AEAA;
+    color: #428bca;
 
 }
 #footer{padding: 15px 0;padding-bottom: 3px;}
@@ -764,9 +765,8 @@ cierra Show Minutes
 
 
 
-.nav-list > .active > a, .nav-list > .active > a:hover{background-color:#00aeaa;color: white;}
-.btn-link{color:#00aeaa;}
-.btn-link:hover{color:#00aeaa;}
+.nav-list > .active > a, .nav-list > .active > a:hover{background-color:#97C02C;color: white;}
+.btn-link{color:#428bca;}
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a:hover,.btn-info{
     background-color:#00aeaa;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));
