@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 # from django.http import Http404
-from apps.groups_app.models import templates, rel_user_private_templates, private_templates
+from apps.groups_app.models import templates, rel_user_private_templates, private_templates, Groups
 from apps.actions_log.views import saveActionLog, saveErrorLog, saveViewsLog
 from actarium_apps.organizations.models import rel_user_group
 
@@ -36,19 +36,22 @@ def assignTemplateAjax(request):
             try:
                 id_template = str(request.GET['id_template'])
                 id_group = str(request.GET['id_group'])
-                try:
-                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
-                    _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
-                    try:
-                        response = "True"
-                        private_templates(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).save()
-                    except:
-                        response = 'Error al guardar los datos, probablemente la plantilla que desea asignar ya se encuentra relacionada con el grupo seleccionado, por favor verifica los datos'
-                except:
-                    response = "Error: No se ha podido guardar la asignacion."
-                print id_template, id_group
             except:
-                response = "Problema con los parametros get"
+                response = "Problema al intentar recibir los parametros para realizar esta operaci&oacute;n"
+                return HttpResponse(json.dumps(response), mimetype="application/json")
+            try:
+                _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
+                _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
+            except:
+                response = "Error: No se ha podido guardar la asignacion."
+                return HttpResponse(json.dumps(response), mimetype="application/json")
+            try:
+                private_templates(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).save()
+                response = "True"
+            except:
+                response = 'Error al guardar los datos, probablemente la plantilla que desea asignar ya se encuentra relacionada con el grupo seleccionado, por favor verifica los datos'
+                return HttpResponse(json.dumps(response), mimetype="application/json")
+            # print id_template, id_group
         else:
             response = "No se recibio una peticion get"
     else:
@@ -64,20 +67,22 @@ def unassignTemplateAjax(request):
             try:
                 id_template = str(request.GET['id_template'])
                 id_group = str(request.GET['id_group'])
-                try:
-                    _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
-                    _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
-                    response = "True"
-                    try:
-                        response = "True"
-                        private_templates.objects.get(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).delete()
-                    except:
-                        response = 'La plantilla seleccionada no esta asignada al grupo seleccionado'
-                except:
-                    response = "Error: los datos no coinciden con los datos guardados"
-                print id_template, id_group
             except:
                 response = "Problema con los parametros get"
+                return HttpResponse(json.dumps(response), mimetype="application/json")
+            try:
+                _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
+                _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
+            except:
+                response = "Error: los datos no coinciden con los datos guardados"
+                return HttpResponse(json.dumps(response), mimetype="application/json")
+            try:
+                private_templates.objects.get(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).delete()
+                response = "True"
+            except:
+                response = 'La plantilla seleccionada no esta asignada al grupo seleccionado'
+                return HttpResponse(json.dumps(response), mimetype="application/json")
+            # print id_template, id_group
         else:
             response = "No se recibio una peticion get"
     else:

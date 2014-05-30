@@ -61,7 +61,7 @@
 		<tr id="id_template_{{l.id_template.pk}}_id_group_{{ l.id_group.pk}}">
 			<td>{{ l.id_template.name }}</td>
 			<td><a href="/groups/{{ l.id_group.slug }}">{{ l.id_group.name }}</a></td>
-			<td><button class="button-action btn_unassign_template no" data-id-template="{{ l.id_template.pk }}" data-id-group="{{ l.id_group.pk}}"><li class="icon-remove"></li></a></td>
+			<td><button class="button-action btn_unassign_template no" data-id-template="{{ l.id_template.pk }}" data-id-group="{{ l.id_group.pk}}"><li class="glyphicon glyphicon-remove"></li></a></td>
 		</tr>
 	{% endfor %}
 </table>
@@ -97,7 +97,7 @@
 			    			slug_group = $("#option_group_"+id_group).attr("data-group-slug")
 			    			$("#private_templates").append("<tr id='id_template_"+id_template+"_id_group_"+id_group+"'><td>"+name_template+
 					    			"</td><td><a href='/groups/"+slug_group+"'>"+name_group+"</a></td>"+
-					    			"<td><button class='button-action btn_unassign_template no' data-id-template='"+id_template+"' data-id-group='"+id_group+"'><li class='icon-remove'></li></button></td></tr>")
+					    			"<td><button class='button-action btn_unassign_template no' data-id-template='"+id_template+"' data-id-group='"+id_group+"'><li class='glyphicon glyphicon-remove'></li></button></td></tr>")
 					    	setButtons()
 					    	setAlertMessage("Plantilla asignada!", "La plantilla "+name_template+" a sido asignada correctamente al grupo "+name_group)
 			    		    
