@@ -9,7 +9,7 @@ from django.utils import translation
 from django.conf import settings
 
 from apps.groups_app.models import reunions, assistance, DNI_permissions
-from apps.groups_app.views import dateTimeFormatForm
+from apps.groups_app.utils_meetings import date_time_format_form
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar

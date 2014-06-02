@@ -1,27 +1,26 @@
-{% extends "base.html" %}
+{% extends "groups/menu.html" %}
 {% load gravatartag i18n humanize %}
 {% block TITLE %}{% trans 'Calendario' %}{% endblock %}
 
 {% block toolbar_content %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'new_reunion_group' group.slug %}" >
+            <span class="glyphicon glyphicon-plus"></span> {% trans " Convocar Reuni&oacute;n" %}
+        </a>
+    </li>
+    <li>
+    	<a  href="{% url 'read_meetings' group.slug %}" >
+	    	<span class="glyphicon glyphicon-calendar"></span> 
+	    	{% trans 'Ver todas' %}
+	    </a>
+    </li>
+</ul>
 {% endblock %}
 
-{% block body %}
+{% block menu_content %}
 
 <article>
-		<header class="">
-	    	<div class="col-md-4">
-	    		<div class="menu-icons icons-page icon-reunions"></div>
-	    		<h3>{% trans 'Reuniones' %}</h3>
-	    	</div>
-			<div class="span1 botonera-calendar"><div id="load_reunions"></div></div>
-	    	<div class="span3 offset1 botonera-calendar"> 
-	    		<a  href="#newReunionModal" data-toggle="modal" class="btn ">
-	    			<i class="glyphicon glyphicon-plus"></i> {% trans 'Nueva reuni&oacute;n' %}</a>
-	    		<a  href="/calendar" class="btn ">
-	    			<i class="glyphicon glyphicon-calendar"></i> {% trans 'Ver todas' %}</a>
-	    	</div>
-		    <div  class="span12" style="margin-left:0px;" ><hr></div>
-        </header>
 		<div class="row-fluid">
 		    <section id="calendar" class="white-box-container col-md-4" >
 		        <div id="datepicker">
@@ -92,8 +91,9 @@
 		    <section id="date_reunions1"></section>
 	    </div>
 </article>
-{%endblock%}
-{%block style%}
+{% endblock %}
+
+{% block menu_content_style %}
 <style>
     .form-horizontal table{
         margin: auto;
@@ -197,13 +197,13 @@
 	.text-sub{text-decoration: underline;}
 
 </style>
-<!-- <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" /> -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-{%endblock%}
+<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}css/jquery-ui-1.9.1.custom.css" />
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"> -->
 
-{% block js %}
-<!-- <script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui.min.js"></script> -->
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+{% endblock %}
+
+{% block menu_content_js %}
+<script src="{{ STATIC_PREFIX }}js/vendor/jquery-ui-1.10.4.js"></script> 
 
 <script type="text/javascript" ><!--
 $(document).ready(function() {
@@ -238,9 +238,9 @@ $(document).ready(function() {
 	    			function(data){
 		    			//console.log(data);
 		    			url = location.pathname;
-		    			url2 = "/calendar";
+		    			url2 = "{% url 'read_meetings' group.slug %}";
 		    			if (url == url2){
-			    			html5url = "calendar/"+dateText;
+			    			html5url = "{% url 'read_meetings' group.slug %}"+dateText;
 		    			}
 		    			else{     
 			    			html5url = dateText;
@@ -256,11 +256,17 @@ $(document).ready(function() {
 	    	)
     	}
 	});
+
+	//var dp = $("#datepicker").datepicker();
+
+
+
     url = location.pathname;
-	url2 = "/calendar";
+	url2 = "{% url 'read_meetings' group.slug %}";
 	if (url != url2){
-		dp.datepicker("setDate", (url).substring(17,27));  
-		$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+(url).substring(17,27)+" </span> </h4>");
+		var date = url.substr(url.lenght - 10)
+		dp.datepicker("setDate", date);  
+		$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+date+" </span> </h4>");
 	}
 	
 	function show_data(data){
@@ -358,7 +364,7 @@ $(document).ready(function() {
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n a&uacute;n no ha sido realizada";
     	    			else
     	    				reunion_list = reunion_list + "Esta reuni&oacute;n ya ha sido realizada";
-    	    			console.log("iconf: "+data.iconf+" has_minute: "+data.has_minute)
+    	    			// console.log("iconf: "+data.iconf+" has_minute: "+data.has_minute)
    	    				if (data.has_minute == 1)
   	   	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/minutes/"+data.minute_code+"' class='btn btn-info' >Ver Acta</a>";
    	    				if (data.iconf == 1 && data.has_minute == 0)
@@ -487,7 +493,7 @@ $(document).ready(function() {
 			var reu = $('#reunion_'+getUrlVars()["r"]);
 			reu.css('background-color',COLOR_FROM);
 			reu.animate({'background-color': COLOR_TO},3500,function(){ });
-			console.log(reu)
+			// console.log(reu)
 			switch(reu.parent()[0].id){
 				case "tab-pendientes": $(".reunion-tabs ul li a[href='#tab1']").click(); break;
 				case "tab-confirmadas": $(".reunion-tabs ul li a[href='#tab2']").click(); break;
@@ -508,7 +514,7 @@ $(document).ready(function() {
 	}
 
 	function setNextReunions(){
-		sendAjax("/groups/getNextReunions",
+		sendAjax("{% url 'getNextReunions' group.slug %}",
     			{},
     			"#loading-reunion",
     			function(data){
@@ -527,7 +533,7 @@ $(document).ready(function() {
     	);
 	}
 
-
+	$("#group-menu-calendar").addClass("active");
 
 	chargeWindow();
 	setNextReunions();

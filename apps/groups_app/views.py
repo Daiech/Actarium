@@ -21,6 +21,7 @@ from .utils import get_user_or_email, setUserRoles, getUserByEmail, getRelUserGr
 import datetime
 import json
 URL_BASE = settings.URL_BASE
+from .utils_meetings import date_time_format_form, date_time_format_db, remove_gmt
 
 
 def getUserById(id_user):
@@ -509,6 +510,7 @@ def newInvitationToGroup(request):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
+
 def resendInvitation(request, slug_group):
     if request.is_ajax():
         if request.method == "GET":
@@ -766,8 +768,9 @@ def new_reunion(request, slug_group):
                     'firstname': request.user.first_name,
                     'username': request.user.username,
                     'groupname': q.name,
+                    'groupslug': q.slug,
                     'titlereunion': str(df['title'].encode('utf8', 'replace')),
-                    'datereunion': dateTimeFormatForm(df['date_reunion']),
+                    'datereunion':     (df['date_reunion']),
                     'locale': str(df['locale'].encode('utf8', 'replace')),
                     'agenda': str(df['agenda'].encode('utf8', 'replace')),
                     'datereunionshort': str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")),
@@ -789,48 +792,6 @@ def new_reunion(request, slug_group):
     else:
         return HttpResponseRedirect('/groups/#error-view-group')
 
-
-@login_required(login_url='/account/login')
-def calendar(request):
-    saveViewsLog(request, "apps.groups_app.views.calendar")
-    gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-    my_reu = reunions.objects.filter(id_group__in=gr, is_done=False).order_by("-date_convened")  # reuniones
-    my_reu_day = reunions.objects.filter(id_group__in=gr).order_by("-date_convened")  # reuniones para un dia
-    i = 0
-    json_array = {}
-    for reunion in my_reu_day:
-        td = make_naive(reunion.date_reunion, get_default_timezone()) - datetime.datetime.now()
-        if not(td.days >= 0 and td.seconds >= 0 and td.microseconds >= 0):
-            is_last = 1
-        else:
-            is_last = 0
-        try:
-            confirm = assistance.objects.get(id_user=request.user, id_reunion=reunion.pk)
-            is_confirmed = confirm.is_confirmed
-            is_saved = 1
-        except assistance.DoesNotExist:
-            is_confirmed = False
-            is_saved = 0
-        json_array[i] = {"id_r": str(reunion.id),
-                         # "group":gr,
-                         "group_slug": reunion.id_group.slug,
-                         "group_name": reunion.id_group.name,
-                         "date": humanize.naturaltime(reunion.date_reunion),
-                         "date_normal": dateTimeFormatForm(reunion.date_reunion),
-                         'is_confirmed': str(is_confirmed),
-                         'is_saved': is_saved,
-                         "title": reunion.title,
-                         'is_last': is_last}
-        i = i + 1
-    response = json_array
-    ctx = {
-        "reunions_day": my_reu,
-        "reunions": my_reu,
-        "my_reu_day_json": json.dumps(response),
-        "groups": gr,
-        "group":gr[0],
-        "breadcrumb":_("Mis reuniones")}
-    return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/account/login')
@@ -860,7 +821,7 @@ def calendarDate(request, slug=None):
                          "group_slug": reunion.id_group.slug,
                          "group_name": reunion.id_group.name,
                          "date": humanize.naturaltime(reunion.date_reunion),
-                         "date_normal": dateTimeFormatForm(reunion.date_reunion),
+                         "date_normal": date_time_format_form(reunion.date_reunion),
                          'is_confirmed': str(is_confirmed),
                          'is_saved': is_saved,
                          'title': reunion.title,
@@ -904,7 +865,7 @@ def getReunions(request):
                                  "group_slug": reunion.id_group.slug,
                                  "group_name": reunion.id_group.name,
                                  "date": humanize.naturaltime(reunion.date_reunion),
-                                 "date_normal": dateTimeFormatForm(reunion.date_reunion),
+                                 "date_normal": date_time_format_form(reunion.date_reunion),
                                  'is_confirmed': is_confirmed,
                                  'is_saved': is_saved,
                                  "title": reunion.title,
@@ -917,14 +878,14 @@ def getReunions(request):
 
 
 @login_required(login_url='/account/login')
-def getNextReunions(request):
+def getNextReunions(request, slug_group):
     """
         Se muestra debajo del calendario las proximas 3 reuniones a las cuales ya ha sido confirmada la asistencia.
     """
     saveViewsLog(request, "apps.groups_app.views.getNextReunions")
     if request.is_ajax():
-        gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
-        my_reu_day = reunions.objects.filter(id_group__in=gr, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
+        gr = Groups.objects.get(slug=slug_group)
+        my_reu_day = reunions.objects.filter(id_group=gr.id, date_reunion__gt=datetime.date.today()).order_by("date_reunion")  # reuniones para un dia
         i = 0
         json_array = {}
         for reunion in my_reu_day:
@@ -938,7 +899,7 @@ def getNextReunions(request):
                                          "group_slug": reunion.id_group.slug,
                                          "group_name": reunion.id_group.name,
                                          "date": humanize.naturaltime(reunion.date_reunion),
-                                         "date_normal": dateTimeFormatForm(reunion.date_reunion),
+                                         "date_normal": date_time_format_form(reunion.date_reunion),
                                          'is_confirmed': is_confirmed,
                                          'is_saved': is_saved,
                                          "title": reunion.title}
@@ -1012,9 +973,9 @@ def getReunionData(request):
             reunion = reunions.objects.get(pk=id_reunion)
             convener = reunion.id_convener.first_name + " " + reunion.id_convener.last_name + " (" + reunion.id_convener.username + ")"
             date_convened = reunion.date_convened
-            date_convened = removeGMT(date_convened)
+            date_convened = remove_gmt(date_convened)
             date_reunion = reunion.date_reunion
-            date_reunion = removeGMT(date_reunion)
+            date_reunion = remove_gmt(date_reunion)
             locale = reunion.locale
             title = reunion.title
             group = reunion.id_group.name
@@ -1063,8 +1024,8 @@ def getReunionData(request):
                 minute_code = 0
             reunion_data = {
                 "convener": convener,
-                "date_convened": str(dateTimeFormatDb(date_convened)),
-                "date_reunion": str(dateTimeFormatDb(date_reunion)),
+                "date_convened": str(date_time_format_db(date_convened)),
+                "date_reunion": str(date_time_format_db(date_reunion)),
                 "group": group,
                 "agenda": agenda,
                 "locale": locale,
@@ -1080,19 +1041,3 @@ def getReunionData(request):
         reunion_data = "Error Calendar"
     return HttpResponse(json.dumps(reunion_data), mimetype="application/json")
 
-
-def dateTimeFormatForm(datetime_var):
-    return str(datetime.datetime.strftime(make_naive(datetime_var, get_default_timezone()), "%d de %B de %Y a las %I:%M %p"))
-
-
-def dateTimeFormatDb(datetime_var):
-    UTC_OFFSET_TIMEDELTA = datetime.datetime.utcnow() - datetime.datetime.now()
-    local_datetime = datetime.datetime.strptime(str(datetime_var), "%Y-%m-%d %H:%M:%S")
-    result_utc_datetime = local_datetime - UTC_OFFSET_TIMEDELTA
-    return str(result_utc_datetime.strftime("%d de %B de %Y a las %I:%M %p"))
-
-
-def removeGMT(datetime_var):
-    dt = str(datetime_var)
-    dt_s = dt[:19]
-    return str(datetime.datetime.strptime("%s" % (dt_s), "%Y-%m-%d %H:%M:%S"))

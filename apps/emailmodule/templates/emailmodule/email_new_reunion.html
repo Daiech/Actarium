@@ -23,9 +23,9 @@
 				Titulo de la reuni&oacute;n: <strong>{{ titlereunion }}</strong> <br><br>
 				La reuni&oacute;n se program&oacute; para el d&iacute;a <strong>{{ datereunion }}</strong> en <strong>{{ locale }}</strong><br><br>
 				Los objetivos propuestos por <strong>{{ firstname }}</strong> son: <br>
-				<div style="background-color:#F7F7F7;padding: 1px 25px;margin-top: 10px;">{{ agenda|truncatewords:4 }} <a href="{{ URL_BASE }}{% url 'calendar' %}{{ datereunionshort }}?r={{ id_reunion }}">Ver completo</a></div><br><br >
+				<div style="background-color:#F7F7F7;padding: 1px 25px;margin-top: 10px;">{{ agenda|truncatewords:4 }} <a href="{{ URL_BASE }}{% url 'read_meetings' groupslug %}{{ datereunionshort }}?r={{ id_reunion }}">Ver completo</a></div><br><br >
 				
-				Responde a la invitaci&oacute;n en: <a href="{{ URL_BASE }}{% url 'calendar' %}{{ datereunionshort }}?r={{ id_reunion }}" >{{ URL_BASE }}{% url 'calendar' %}{{ datereunionshort }}?r={{ id_reunion }}</a><br>
+				Responde a la invitaci&oacute;n en: <a href="{{ URL_BASE }}{% url 'read_meetings' groupslug %}{{ datereunionshort }}?r={{ id_reunion }}" >{{ URL_BASE }}{% url 'read_meetings' groupslug %}{{ datereunionshort }}?r={{ id_reunion }}</a><br>
 			</div> 
 			
 		</div> 

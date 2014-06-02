@@ -6,7 +6,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # to change:
-    url(r'^calendar/', 'apps.groups_app.views.calendar', name="calendar"),
 
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),

@@ -14,7 +14,8 @@ from Actarium.settings import URL_BASE, MEDIA_URL
 from apps.account.templatetags.gravatartag import showgravatar
 
 # Imports from views.py
-from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email, dateTimeFormatForm, dateTimeFormatDb, removeGMT
+from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email
+from .utils_meetings import date_time_format_form, date_time_format_db, remove_gmt
 from apps.actions_log.views import saveActionLog, saveViewsLog
 # from Actarium.settings import URL_BASE
 from apps.emailmodule.views import sendEmailHtml

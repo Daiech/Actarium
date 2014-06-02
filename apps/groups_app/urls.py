@@ -21,6 +21,12 @@ urlpatterns += patterns('apps.groups_app.minutes',
     url(r'^(?P<slug_group>[-\w]+)/minutes-code/edit/(?P<minutes_code>[-\w.\ ]+)/(?P<slug_template>.*)$', 'editMinutes', name="edit_minutes"),
 
 )
+
+# Mettings
+urlpatterns += patterns('apps.groups_app.views_meetings',
+    url(r'^(?P<slug_group>[-\w]+)/read_meetings/$', 'read_meetings', name='read_meetings'),
+)
+
 urlpatterns += patterns('apps.groups_app.views',
     # url(r'^(?P<slug_group>[-\w]+)/admin/info', 'groupInfoSettings', name='Admin Info Groups'),
     # url(r'^(?P<slug_group>[-\w]+)/admin/dni', 'groupDNISettings', name='Admin DNI Groups'),
@@ -36,7 +42,7 @@ urlpatterns += patterns('apps.groups_app.views',
     url(r'^(?P<slug_group>[-\w]+)calendarDate/', 'calendarDate'),
     url(r'^setInvitation$', 'newInvitationToGroup', name="set_invitation"),
     url(r'^getReunions$', 'getReunions'),
-    url(r'^getNextReunions$', 'getNextReunions'),
+    url(r'^(?P<slug_group>[-\w]+)/getNextReunions$', 'getNextReunions', name='getNextReunions'),
     url(r'^getReunion', 'getReunionData'),
     url(r'^setAssistance$', 'setAssistance'),
     url(r'^acceptInvitation$', 'acceptInvitation'),
@@ -56,3 +62,5 @@ urlpatterns += patterns('apps.groups_app.views_groups',
     url(r'^(?P<slug_group>[-\w]+)/', 'showHomeGroup', name="show_home"),
     url(r'^create$', 'newGeneralGroup', name='new_group'),
 )
+
+
