@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 import json
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 # imports from application
 from apps.groups_app.models import *
@@ -851,7 +852,8 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "president": president,
                "secretary": secretary,
                "show_dni": show_dni,
-               "is_form": 1
+               "is_form": 1,
+               "breadcrumb": _("Crear Acta")
                }
         return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
     else:
@@ -1063,6 +1065,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                    "show_dni": show_dni,
                    "is_form": 1,
                    "is_edit": True,
+                   "breadcrumb": _("Editar acta ")+minutes_code
                    }
             return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
         else:

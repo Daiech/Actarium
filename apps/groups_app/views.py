@@ -1,4 +1,3 @@
-# Create your views here.
 #encoding:utf-8
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
@@ -783,7 +782,8 @@ def new_reunion(request, slug_group):
             form = newReunionForm()
         ctx = {'TITLE': "Actarium",
                "newReunionForm": form,
-               "group": q
+               "group": q,
+               "breadcrumb":_(u"Nueva reunión")
                }
         return render_to_response('groups/newReunion.html', ctx, context_instance=RequestContext(request))
     else:
@@ -828,7 +828,8 @@ def calendar(request):
         "reunions": my_reu,
         "my_reu_day_json": json.dumps(response),
         "groups": gr,
-        "group":gr[0]}
+        "group":gr[0],
+        "breadcrumb":_("Mis reuniones")}
     return render_to_response('groups/calendar.html', ctx, context_instance=RequestContext(request))
 
 
