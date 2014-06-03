@@ -275,7 +275,17 @@ def sendGmailEmail(to, subject, text, attach=False):
 
 def show_template(request):
     if request.user.is_staff:
+
+        # variables for testing
         agenda = "Socialización del proyecto a Oscar Granada"
+        groupslug = "Grupo-1-1"
+        username = "Enriqueto"
+        firstname = "Luis"
+        titlereunion = u"La reunion del año"
+        datereunion = "23 de marzo de 2015"
+        locale = "Pereira"
+        id_reunion = 4
+
         return render(request, "emailmodule/" + request.GET.get("p"), locals())
     else:
         raise Http404
