@@ -703,56 +703,58 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 /*
 Show Minutes 
 */
-    .hoja{/*width: 70%;*/margin:auto;}
-    #sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
-    .minute{
-        border: solid thin #ddd;
-        background-color: #fff;
-        box-shadow: 8px 8px 6px -6px gray;
-        border-radius: 3px;
-        padding-top: 40px;
-    }
-    .minutes, #headerContent, #minutesContent, #footerContent{display: block;}
-    .minutes{width: 99%;}
-    .minutes *, #minutes *{font-family: Arial}
-    #headerContent, #minutesContent, #footerContent{padding: 0 80px;}
+#minutes-container{max-width: 915px;margin: auto;}
 
-    .minute header{
-        width: auto;
-        margin:30px 0;
-        margin-top: 40px;
-        margin-left: 0;
-        /*padding: 40px;*/
-        padding: 0 80px;
-    }
-    .minute header img{
-        margin-top: 0;
-    }
-    .minute header h3{
-        margin: 0;
-    }
-    .minute > div{
-        padding: 0 80px;
-        /*border: solid thin gray;*/
-    }
-    .minute footer{
-        border: none;
-        bottom: 0;
-        font-size: 14px;
-        left: 0;
-        margin:0;
-        padding: 20px 40px;
-        width: auto;
-    }
-    .pager{
-        margin: 5px auto;
-        padding: 0;
-        position: relative;
-        top: 0;
-    }
-    .minutes-form-btn{
-        display:inline;
-    }
+.hoja{/*width: 70%;*/margin:auto;}
+#sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
+.minute{
+    border: solid thin #ddd;
+    background-color: #fff;
+    box-shadow: 8px 8px 6px -6px gray;
+    border-radius: 3px;
+    padding-top: 40px;
+}
+.minutes, #headerContent, #minutesContent, #footerContent{display: block;}
+.minutes{width: 99%;}
+.minutes *, #minutes *{font-family: Arial}
+#headerContent, #minutesContent, #footerContent{padding: 0 80px;}
+
+.minute header{
+    width: auto;
+    margin:30px 0;
+    margin-top: 40px;
+    margin-left: 0;
+    /*padding: 40px;*/
+    padding: 0 80px;
+}
+.minute header img{
+    margin-top: 0;
+}
+.minute header h3{
+    margin: 0;
+}
+.minute > div{
+    padding: 0 80px;
+    /*border: solid thin gray;*/
+}
+.minute footer{
+    border: none;
+    bottom: 0;
+    font-size: 14px;
+    left: 0;
+    margin:0;
+    padding: 20px 40px;
+    width: auto;
+}
+.pager{
+    margin: 5px auto;
+    padding: 0;
+    position: relative;
+    top: 0;
+}
+.minutes-form-btn{
+    display:inline;
+}
 
 
 /*
@@ -811,6 +813,7 @@ cierra Show Minutes
 .nud{text-decoration: none !important;}
 
 
+#toolbar-btn{overflow: visible;position: fixed;width: 100%;}
 /*Dropdown Actarium*/
 .dropdown-container{display:none;position:absolute;z-index:1001;background-color:rgb(253,253,253);border:solid thin #ccc;box-shadow: 0 5px 10px rgba(0,0,0,0.15);border-radius:3px;padding:10px;width:200px;}
 .header-title{border-bottom: 1px solid #dcdcdc;height:26px;text-align:center;color:#939393;font-weight: bold;font-size:14px;}
@@ -826,7 +829,6 @@ cierra Show Minutes
 .back{margin-top: 5px;padding: 5px;border-radius: 3px;}
 .back:hover{background-color: #dadada}
 /*section{padding-top: 10px;}*/
-#toolbar-btn{overflow: visible;}
 .btn{margin-left: 2px}
 @media (max-width: 768px) {
     .dropdown-container{right: auto;left: 0;}

@@ -112,11 +112,11 @@
 		#topbar-btn-logo{height: 73px;line-height: 85px;padding-left: 20px;border-bottom: 1px solid #cbcccc;}
 		.topbar-logo-center{margin-top: 15px}
 		#toolbar-group{border-bottom: 1px solid #cbcccc;height: 30px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
-		#toolbar-btn{background-color: #F7F7F7;min-height: 30px;line-height: 30px;font-size: 14px;margin-top: -31px}
+		#toolbar-btn{background-color: #F7F7F7;min-height: 30px;line-height: 30px;font-size: 14px;margin-top: -31px;top: 106px}
 		.toolbar-btn-waypoint{position: fixed;bottom: 0;z-index: 6000;width: 100%;background: #F7F7F7;border-top: solid thin #dadada;margin: 0 auto;left: 0;right: 0;}
 		#groups-container{margin-top: 73px;position: relative;}
 		#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 30px;vertical-align: middle;width: 226px;text-align: center;}
-		#group-left-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 191px;margin-top: 31px;position: fixed;height: 100%;/*margin-top: 0;*/}
+		#group-left-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 191px;margin-top: 31px;position: fixed;height: 100%;}
 		#group-left-menu ul{margin-top: 0;margin-bottom: 0;}
 		#content-ads > div{width: 110px;margin: 10px auto;}
 		#group-menu{background: #F7F7F7;border-left: 1px solid #cbcccc;width: 216px;position: absolute;right: 0;height: 100%;position: fixed;}
@@ -150,10 +150,11 @@
 		/*Responsive*/
 		@media (min-width: 980px) {
 			#group-menu{margin-top: -2px}
-			#toolbar-btn{margin-top: -31px !important;}
-			/*#group-left-menu{margin-top: -31px !important;}*/
+			/*#toolbar-btn{margin-top: -31px !important;}*/
+			#group-left-menu{margin-top: 0px;}
 		}
 		@media (max-width: 979px) {
+			#group-left-menu{margin-top: 73px;}
 			#groups-container{margin-top: 0px}
 			/*#group-menu{float: none;position: relative;width: 100%}*/
 			#toolbar-btn{font-size: 12px;margin-right: 0}
@@ -164,14 +165,14 @@
 		}
 
 		@media (min-width: 768px) and (max-width: 979px) {
-			#group-content{padding: 15px;padding-left: 210px;}
+			#group-content{padding: 15px;padding-left: 210px;padding-top: 80px;}
 			#group-menu{float: none;position: relative;margin-left: 190px;width: 100%;}
 			#topbar-btn-logo{position: fixed;}
 			#menu-title{display: none;}
 			#topbar-group-name{padding: 0 0 0 190px;}
 		}
 		@media (min-width: 768px) {
-			#toolbar-btn{margin-left: 190px;margin-top: 42px;/*margin-top: -30px;margin-right: 227px;*/}
+			#toolbar-btn{margin-left: 191px;margin-top: -64px;/*margin-top: -30px;margin-right: 227px;*/}
 		}
 		@media (max-width: 767px) {
 			#group-menu-list{display: none;}
@@ -180,7 +181,8 @@
 		    .topbar-btn > .dinline{display: none}
 		    #topbar-group-name{font-size: 16px;}
 			#group-content{padding: 15px;}
-			#group-left-menu{float: none;position: relative;width: 100%;/*height: 120px;min-height: 120px;*/border-right: none;margin: 30px auto;border: none;margin-top: 42px;}
+			body{margin-top: 106px;}
+			#group-left-menu{width: 100%;height: 34px;border-right: none;margin: 30px auto;border: none;margin-top: 42px;position: fixed;top: 0;z-index: 200;}
 			#ads-title{border-top: none;width: auto !important;}
 			#content-ads *{display: inline-block;}
 			#menu-title{display: none;}
