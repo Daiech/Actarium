@@ -24,7 +24,7 @@
 		$(".date_mirror").text(""+$("#first_date input").val());
 	{% endif%}
 	dp.change(function (e) {
-		console.log("HA CAMBIADO");
+		// console.log("HA CAMBIADO");
 		copyDate();
 	});
 
@@ -32,8 +32,8 @@
 	$("#id_date_start").css('width','150px');
 	$("#id_code").css('width','100px');
 	$("#id_code_title").tooltip();
-	console.log("this is a form")
+	// console.log("this is a form")
 {% else %}
 	$(".date_mirror").html(""+$("#minutes-container #first_date").text())
-	console.log("this is Not a form");
+	// console.log("this is Not a form");
 {% endifequal %}
