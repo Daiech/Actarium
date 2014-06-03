@@ -3,10 +3,9 @@
 {% load gravatartag %}
 {% load i18n %}
 {%block body%}
-<!-- <div> -->
     <div id="groups-container" class="">
     	<div class="row-fluid">
-	    	<div id="group-menu" class="pull-right"  data-spy="affix">
+	    	<div id="group-left-menu" class="" data-spy="affix">
 	    		<div class="t-a-l bb" id="title-menu">
 	    			<!-- &nbsp; -->
 	    			<strong>{% trans "Men&uacute; de Grupo" %}</strong>
@@ -37,16 +36,6 @@
 	    	<div id="toolbar-btn" class="bb">
 	    		{% block toolbar_content %}{% endblock %}
 	    	</div>
-	    	<div id="group-aside" class="">
-	    		<!-- <div id="ads-title" class="bb bt">
-	    			Anuncios
-	    			<span class="pull-right"><a href="#">crear anuncio</a></span>
-	    		</div> -->
-	    		<div id="content-ads">
-	    			<div>
-		    		</div>
-	    		</div>
-	    	</div>
 	    	<div id="group-content" class="">
 	    		{% if dni_request %}
 					<div class="white-box-container">dni</div>
@@ -57,19 +46,17 @@
 	    	</div>
 	    </div>
     </div>
-<!-- </div> -->
 {%endblock%}
 {% block js %}
 	<!-- <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script> -->
 	<!-- <script src="{{STATIC_PREFIX}}js/vendor/waypoints.min.js"></script> -->
 	<script>
 		$(document).on("ready",function(){
-			alert($(window).width());
 			$("#title-menu").on("click", function (e) {
 				$("#group-menu-list").slideToggle();
 			});
 			$("#feed-option").animate({"top": ($(window).height() - 120) + "px" }, 1000);
-			$("#group-menu > ul > li > a[href='#settings']").on("click", changeContent);
+			$("#group-left-menu > ul > li > a[href='#settings']").on("click", changeContent);
 
 			function changeContent (e) {
 				e.preventDefault();
@@ -125,23 +112,19 @@
 		#topbar-btn-logo{height: 73px;line-height: 85px;padding-left: 20px;border-bottom: 1px solid #cbcccc;}
 		.topbar-logo-center{margin-top: 15px}
 		#toolbar-group{border-bottom: 1px solid #cbcccc;height: 30px;box-shadow: 0 0 3px rgba(0,0,0,0.1);}
-		#toolbar-btn{/*display: inline-block;*/
-			/*padding-left: 192px;*/margin-right:216px;
-			background-color: #F7F7F7;min-height: 30px;line-height: 30px;font-size: 14px;
-		}
+		#toolbar-btn{background-color: #F7F7F7;min-height: 30px;line-height: 30px;font-size: 14px;margin-top: -31px}
 		.toolbar-btn-waypoint{position: fixed;bottom: 0;z-index: 6000;width: 100%;background: #F7F7F7;border-top: solid thin #dadada;margin: 0 auto;left: 0;right: 0;}
 		#groups-container{margin-top: 73px;position: relative;}
 		#menu-title{background: #F7F7F7;border-left: 1px solid #cbcccc;display:inline-block;height: 100%;line-height: 30px;vertical-align: middle;width: 226px;text-align: center;}
-		#group-aside{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 191px;min-height: 350px;margin-top: -1px;position: fixed;height: 100%;/*border-top: 1px solid #cbcccc;*/}
+		#group-left-menu{background: #F7F7F7;border-bottom: 1px solid #cbcccc;border-right: 1px solid #cbcccc;width: 191px;margin-top: 31px;position: fixed;height: 100%;/*margin-top: 0;*/}
+		#group-left-menu ul{margin-top: 0;margin-bottom: 0;}
 		#content-ads > div{width: 110px;margin: 10px auto;}
-		#ads-title{/*width: 174px !important;*/margin-top: -1px !important;font-size: 12px;padding: 0 8px}
 		#group-menu{background: #F7F7F7;border-left: 1px solid #cbcccc;width: 216px;position: absolute;right: 0;height: 100%;position: fixed;}
-		#group-menu ul{margin-top: 0;margin-bottom: 0;}
-		#group-content{padding: 15px 240px;padding-left: 210px;}
+		#group-content{padding: 15px /*240px*/;padding-left: 210px;}
 		.bs-docs-sidenav{width: 100%;}
-		.bs-docs-sidenav > li > a{border-left: none;}
-		/*#group-settings-submenu > li{border-bottom: 1px solid #e5e5e5;}*/
-		#group-settings-submenu > li > a{color:#777; display:block;line-height: 10px;padding-left: 35px !important;font-size: 14px;}
+		.bs-docs-sidenav > li > a{border-left: none;border-right: none}
+		#group-settings-submenu{margin: 0}
+		#group-settings-submenu > li > a{border-right: none;color:#777; display:block;line-height: 10px;padding-left: 20px !important;font-size: 14px;}
 		#group-settings-submenu > li.active > a{background-color: #97C02C;color: white;}
 
 		#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
@@ -166,15 +149,16 @@
 
 		/*Responsive*/
 		@media (min-width: 980px) {
-			#toolbar-btn{margin-top: -31px;}
 			#group-menu{margin-top: -2px}
+			#toolbar-btn{margin-top: -31px !important;}
+			/*#group-left-menu{margin-top: -31px !important;}*/
 		}
 		@media (max-width: 979px) {
 			#groups-container{margin-top: 0px}
 			/*#group-menu{float: none;position: relative;width: 100%}*/
 			#toolbar-btn{font-size: 12px;margin-right: 0}
-			#group-menu-list{display: none;}
-			#group-menu{margin-top: 42px;/*margin-top: -31px;z-index: 6000;*/}
+			/*#group-menu-list{display: none;}*/
+			/*#group-menu{margin-top: 42px;margin-top: -31px;z-index: 6000;}*/
 			/*#toolbar-btn > ul > li{margin-left: -3px;}*/
 			/*#header-toolbar{display: none;visibility: hidden;}*/
 		}
@@ -182,22 +166,21 @@
 		@media (min-width: 768px) and (max-width: 979px) {
 			#group-content{padding: 15px;padding-left: 210px;}
 			#group-menu{float: none;position: relative;margin-left: 190px;width: 100%;}
-			#group-aside{top:73px;}
 			#topbar-btn-logo{position: fixed;}
 			#menu-title{display: none;}
-			#group-menu-list{margin-left: 190px;}
 			#topbar-group-name{padding: 0 0 0 190px;}
 		}
 		@media (min-width: 768px) {
-			#toolbar-btn{margin-left: 190px;/*margin-top: -30px;margin-right: 227px;*/}
+			#toolbar-btn{margin-left: 190px;margin-top: 42px;/*margin-top: -30px;margin-right: 227px;*/}
 		}
 		@media (max-width: 767px) {
+			#group-menu-list{display: none;}
 		    .navbar-fixed-top{margin-bottom: 0;}
 		    .topbar-btn{width: 40px; min-width: 40px;}
 		    .topbar-btn > .dinline{display: none}
 		    #topbar-group-name{font-size: 16px;}
 			#group-content{padding: 15px;}
-			#group-aside{float: none;position: relative;width: 93%;height: 120px;min-height: 120px;margin-top: 1px;border-right: none;margin: 10px auto;border: solid thin #dadada;display: none !important;}
+			#group-left-menu{float: none;position: relative;width: 100%;/*height: 120px;min-height: 120px;*/border-right: none;margin: 30px auto;border: none;margin-top: 42px;}
 			#ads-title{border-top: none;width: auto !important;}
 			#content-ads *{display: inline-block;}
 			#menu-title{display: none;}
