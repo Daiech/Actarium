@@ -25,6 +25,7 @@ urlpatterns += patterns('apps.groups_app.minutes',
 # Mettings
 urlpatterns += patterns('apps.groups_app.views_meetings',
     url(r'^(?P<slug_group>[-\w]+)/read_meetings/$', 'read_meetings', name='read_meetings'),
+    url(r'^(?P<slug_group>[-\w]+)/read_meetings/(?P<date>[-\w]*)', 'read_meetings', name='read_meetings_date'),
 )
 
 urlpatterns += patterns('apps.groups_app.views',

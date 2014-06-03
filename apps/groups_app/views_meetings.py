@@ -23,7 +23,7 @@ import json
 
 
 @login_required(login_url='/account/login')
-def read_meetings(request, slug_group):
+def read_meetings(request, slug_group, date=None):
     from django.utils.timezone import make_aware, get_default_timezone, make_naive
     saveViewsLog(request, "apps.groups_app.views.calendar")
     # gr = Groups.objects.filter(rel_user_group__id_user=request.user)  # grupos
@@ -66,6 +66,7 @@ def read_meetings(request, slug_group):
         # "groups": gr,
         "group":gr,
         "breadcrumb":_("Mis reuniones"),
+        "current_date":date,
         }
     return render_to_response('groups/read_meetings.html', ctx, context_instance=RequestContext(request))
 
