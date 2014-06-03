@@ -4,14 +4,16 @@
     <a href="/" id="topbar-btn-logo">
         <div class="topbar-logo-center"><div id="logo-actarium-p" class="sprites"></div></div>
     </a>
-    <div id="topbar-group-name" class="pull-left">
-    {% if group %}
-    <ol class="breadcrumb">
-      <li><a href="{{ group.organization.get_absolute_url }}">{{ group.organization.name }}</a></li>
-      <li> <a href="{{group.get_absolute_url}}" >{{group.name|title}}</a></li>
-      <li class="active">{{breadcrumb}}</li>
-    </ol>
-    {% endif %}
+    <div id="topbar-group-name" class="">
+        {% if group %}
+        <div class="text-group-name">
+            <ol class="breadcrumb">
+              <li><a href="{{ group.organization.get_absolute_url }}">{{ group.organization.name }}</a></li>
+              <li><a href="{{group.get_absolute_url}}" >{{group.name|title}}</a></li>
+              <li class="active">{{ breadcrumb }}</li>
+            </ol>
+        </div>
+        {% endif %}
     </div>
     {% if not user.is_authenticated %}
     <div id="btn-group-action" class="pull-right">
@@ -28,7 +30,8 @@
         </a>   
     </div>
     {% else %}
-    <div id="topbar-menu" class="dib pull-right">
+    <div id="topbar-menu" class="dib">
+        <span class="suspension-points" style="display:none">...</span>
         <div id="account-menu" class="btn-group pull-right">
             <div id="log-sup" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
                 <span><img class="size22 avatar img-circle b" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" /></span>

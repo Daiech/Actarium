@@ -109,6 +109,7 @@ text-decoration:none;
 .menu-container .btn{height: 24px;padding: 2px 3px;padding-right: 6px}
 #account-menu{margin-left: 2px;margin-top: 0;}
 #groups-menu{margin-top: 0;margin-left: 0;}
+#topbar-menu{position: absolute;right: 0;top: 0;background-color: #F7F7F7;height: 41px;}
 #topbar-menu > div > div{height: 42px;min-width: 54px;padding-right: 3px;}
 #groups-menu .group-link{color: #428bca;font-weight: normal;}
 #groups-menu .group-link:hover{color: #fff}
@@ -123,9 +124,9 @@ text-decoration:none;
 #register-link:hover{text-decoration: underline;background-color: white;background-image:none;}
 
 /*nueva barra*/
-#topbar{background: #F7F7F7;/*border-bottom: 1px solid #CBCCCC;*/
-box-shadow: 0 0 3px rgba(0,0,0,0.1);height: 42px;left: 0;
-position: absolute;top: 0;width: 100%;z-index: 10;}
+#topbar{background: #F7F7F7;box-shadow: 0 0 3px rgba(0,0,0,0.1);height: 42px;left: 0;position: relative;top: 0;width: 100%;z-index: 10;}
+#topbar .breadcrumb{margin: 0;padding-top: 10px;}
+#topbar .breadcrumb li{margin-bottom: 20px;}
 #topbar-btn-logo{border-right: 1px solid #cbcccc;background: #F7F7F7;/*border-bottom: 1px solid #cbcccc;*/
 float: left;height: 42px;line-height: 42px;padding: 0 20px;position: relative;z-index: 5;}
 .topbar-logo-center{padding-top:4px;}
@@ -135,6 +136,7 @@ float: right;height: 32px;min-width: 80px; padding: 10px 10px 0 8px;width: auto;
 .topbar-caret{vertical-align: middle;}
 .dropdown-menu{min-width: 190px;}
 #topbar-group-name{font-size: 18px;height: 41px;}
+.suspension-points{position: relative;display: inline-block;padding-top: 13px;padding-right: 5px;}
 /*/nueva barra*/
 
 /* **************************************************************************** 
@@ -845,6 +847,7 @@ cierra Show Minutes
 }
 @media (min-width: 992px){
     #topbar-menu{min-width: 224px;}
+    #topbar .breadcrumb {display: inline-block;}
     /*#topbar-menu > div {min-width: 111px;}*/
 }
 @media (min-width: 980px) and (max-width: 1280px) {
@@ -875,6 +878,7 @@ cierra Show Minutes
     .input-form{width: 80%;}
     .header-group{margin-top: 0;}
     #topbar-group-name{font-size: 18px;}
+    #topbar .breadcrumb {display: inline-block;overflow: hidden;}
 }
 @media (max-width: 992px){
     body{padding-bottom: 45px !important;}
@@ -912,6 +916,7 @@ cierra Show Minutes
     #toolbar-btn{margin-right: 0}
     .topbar-btn > .dinline{display: none}
     .org-menu-container .nav-list .glyphicon-chevron-right{display: none;}
+    #topbar .breadcrumb {padding-left: 85px;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {
@@ -944,15 +949,13 @@ cierra Show Minutes
     /*landing*/
     .input-form{width: 70%;}
     #topbar-btn-logo{padding-right: 7px !important;padding-left: 3px !important;}
-    #topbar-group-name{overflow: hidden;max-width: 200px;}
-    #topbar-group-name > .breadcrumb{width: 260px;padding-right: 0;}
+    #topbar-group-name{overflow: hidden;}
+    #topbar .breadcrumb {padding-left: 10px;padding-right: 0;}
+    .suspension-points{display: inline-block !important;}
 }
 
 @media (max-width: 380px) {
-    .white-bar{
-        width: 95%;
-    }
-    /*landing*/
+    .white-bar{width: 95%;}
     .form-box input{width: 70%;}
 }
    /*==================================================*/

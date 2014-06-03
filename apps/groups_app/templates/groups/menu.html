@@ -64,6 +64,7 @@
 	<!-- <script src="{{STATIC_PREFIX}}js/vendor/waypoints.min.js"></script> -->
 	<script>
 		$(document).on("ready",function(){
+			alert($(window).width());
 			$("#title-menu").on("click", function (e) {
 				$("#group-menu-list").slideToggle();
 			});
@@ -161,11 +162,11 @@
 		#title-menu{padding: 6px 13px;cursor: pointer;}
 		#title-menu a{margin-top: -2px;padding: 2px 7px;padding-top: 4px;}
 		#group-menu-list > li:first-child a{border-top: none;}
-		.breadcrumb{background: none;margin-top: 3px;}
+		#topbar .breadcrumb{background: none;}
 
 		/*Responsive*/
 		@media (min-width: 980px) {
-			#toolbar-btn{margin-top: -31px;/*margin-right: 227px;*/}
+			#toolbar-btn{margin-top: -31px;}
 			#group-menu{margin-top: -2px}
 		}
 		@media (max-width: 979px) {
