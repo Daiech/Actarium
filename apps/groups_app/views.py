@@ -737,6 +737,7 @@ def getGroupBySlug(slug):
 
 @login_required(login_url='/account/login')
 def new_reunion(request, slug_group):
+    from django.core.urlresolvers import reverse
     saveViewsLog(request, "apps.groups_app.views.new_reunion")
     q = Groups.objects.get(slug=slug_group, is_active=True)
     is_member = rel_user_group.objects.filter(id_group=q.id, id_user=request.user)
@@ -779,7 +780,17 @@ def new_reunion(request, slug_group):
                 }
                 sendEmailHtml(2, email_ctx, email_list, q)
                 saveActionLog(request.user, 'NEW_REUNION', "Title: %s id_reunion: %s grupo: %s" % (df['title'], id_reunion.pk, q.name), request.META['REMOTE_ADDR'])  # Guardar accion de crear reunion
-                return HttpResponseRedirect("/groups/"+q.slug+"/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
+                # return HttpResponseRedirect("/groups/"+q.slug+"/calendar/" + str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) + "?r=" + str(id_reunion.pk))
+                formated_date = str(datetime.datetime.strftime(make_naive(df['date_reunion'], get_default_timezone()), "%Y-%m-%d")) 
+                print "-------------------------------------------------------------------"
+                print "________________FD",formated_date
+                read_meetings_date_url = reverse("read_meetings_date",args=(q.slug,formated_date))
+                print "________________RMDU",read_meetings_date_url
+                extra_data = "?r=" + str(id_reunion.pk)
+                print "________________ED", extra_data
+                complete_url = read_meetings_date_url+extra_data
+                print "________________CU",complete_url
+                return HttpResponseRedirect(complete_url)
 
         else:
             form = newReunionForm()

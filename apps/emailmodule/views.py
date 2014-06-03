@@ -285,6 +285,7 @@ def show_template(request):
         datereunion = "23 de marzo de 2015"
         locale = "Pereira"
         id_reunion = 4
+        datereunionshort="2014-06-11"
 
         return render(request, "emailmodule/" + request.GET.get("p"), locals())
     else:

@@ -41,7 +41,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="modal fade" id="newReunionModal">  <!-- Ventana modal para convocar nueva reunion -->
+				<!--<div class="modal fade" id="newReunionModal">   Ventana modal para convocar nueva reunion
 					<div class="modal-dialog">
 					    <div class="modal-content">
 							<div class="modal-header">
@@ -57,7 +57,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 		        <div class="center">
 		        	<div id="next-reunions">
 		        	</div>
@@ -221,17 +221,10 @@ $(document).ready(function() {
 		{% endfor %}                            
 	];
 	$( "#datepicker" ).text("")
-    var dp = $( "#datepicker" ).datepicker({ 
-        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-    	dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-    	nextText: 'Siguiente',
-    	prevText: 'Anterior',
-    	dateFormat: 'yy-mm-dd',
-    	beforeShowDay: function(date) {
-	    	var current = $.datepicker.formatDate('yy-mm-dd', date);
-	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'Aqui hay una reunión!'];
-    	},
-	    onSelect: function(dateText, inst) {
+
+
+
+	function loadReunionsByDate(dateText) {
 	    	sendAjax("/groups/getReunions",
 	    			{date:dateText},
 	    			"#load_reunions",
@@ -253,20 +246,52 @@ $(document).ready(function() {
 		    			setButtons();
 		    			
 	    		}
-	    	)
-    	}
+	   		)
+	   	}
+
+
+    var dp = $( "#datepicker" ).datepicker({ 
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+    	dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+    	nextText: 'Siguiente',
+    	prevText: 'Anterior',
+    	dateFormat: 'yy-mm-dd',
+    	beforeShowDay: function(date) {
+	    	var current = $.datepicker.formatDate('yy-mm-dd', date);
+	    	return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-disabled'] : [true, 'encima', 'Aqui hay una reunión!'];
+    	},
+	    onSelect: loadReunionsByDate,
 	});
 
 	//var dp = $("#datepicker").datepicker();
 
 
+	function loadData(){
+		// load data when date is definded on URL
+	    url = location.pathname;
+		url2 = "{% url 'read_meetings' group.slug %}";
+		if (url != url2){
+			var date = url.slice(-10)
+			// console.log("date",date,"url",url,"url2",url2)
+			dp.datepicker("setDate", date);  
+			loadReunionsByDate(date)
+			$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+date+" </span> </h4>");
 
-    url = location.pathname;
-	url2 = "{% url 'read_meetings' group.slug %}";
-	if (url != url2){
-		var date = url.substr(url.lenght - 10)
-		dp.datepicker("setDate", date);  
-		$("#date_reunions").html("<h4>Reuniones para la fecha:  <span id='bold_date'>"+date+" </span> </h4>");
+			if( getUrlVars()["r"]){
+				var reu = $('#reunion_'+getUrlVars()["r"]);
+				reu.css('background-color',COLOR_FROM);
+				reu.animate({'background-color': COLOR_TO},3500,function(){ });
+				// console.log(reu)
+				switch(reu.parent()[0].id){
+					case "tab-pendientes": $(".reunion-tabs ul li a[href='#tab1']").click(); break;
+					case "tab-confirmadas": $(".reunion-tabs ul li a[href='#tab2']").click(); break;
+					case "tab-rechazadas": $(".reunion-tabs ul li a[href='#tab3']").click(); break;
+					case "tab-anteriores": $(".reunion-tabs ul li a[href='#tab4']").click(); break;
+				}
+				reu.find(".get-reunion").click();
+			}
+		}
+
 	}
 	
 	function show_data(data){
@@ -480,8 +505,9 @@ $(document).ready(function() {
 		return li;
 	}
 		
+	{% comment %}
 	function chargeWindow(){
-		{% for group in groups %}
+		 {% for group in groups %}
 				$('#select-group').append('<option value="{{ group.slug }}" >{{ group.name }}</option>');
 		{% endfor %}
 		$('#select-group').change(function(){
@@ -489,6 +515,7 @@ $(document).ready(function() {
 			if (group_slug != "0"){
 				window.location = "/groups/" + group_slug + "/new_reunion";}
 		});
+		
 		if( getUrlVars()["r"]){
 			var reu = $('#reunion_'+getUrlVars()["r"]);
 			reu.css('background-color',COLOR_FROM);
@@ -503,6 +530,7 @@ $(document).ready(function() {
 			reu.find(".get-reunion").click();
 		}
 	}
+	{% endcomment %}
 
 	function setSizeTabReunion(sizetab,op){
 		//console.log(sizetab+" "+op)
@@ -535,7 +563,8 @@ $(document).ready(function() {
 
 	$("#group-menu-calendar").addClass("active");
 
-	chargeWindow();
+	// chargeWindow();
+	loadData();
 	setNextReunions();
 	setNextReunionButton();
 	setConfirmButton();
