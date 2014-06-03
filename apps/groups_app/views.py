@@ -958,8 +958,9 @@ def setAssistance(request):
                 'groupname': id_reunion.id_group.name,
                 'titlereunion':  id_reunion.title,
                 'datereunion': id_reunion.date_reunion,
-                'idreunion': id_reunion.pk,
-                'urlgravatar': showgravatar(request.user.email, 50)
+                'id_reunion': id_reunion.pk,
+                'urlgravatar': showgravatar(request.user.email, 50),
+                'groupslug': id_reunion.id_group.slug
             }
             saveActionLog(id_user, 'SET_ASSIST', "id_reunion: %s, is_confirmed: %s" % (id_reunion.pk, is_confirmed), request.META['REMOTE_ADDR'])
             datos = "id_reunion = %s , id_user = %s , is_confirmed = %s, created %s" % (id_reunion.pk, id_user, is_confirmed, created)
