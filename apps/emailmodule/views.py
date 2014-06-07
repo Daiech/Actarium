@@ -47,7 +47,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_reunion.html')
     elif email_type == 3:  # colocar restriccioin
-        subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + END_SUBJECT
+        subject = ctx['firstname'] + u", el acta " + ctx["code"] + u" ya está disponible en el grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes.html')
     elif email_type == 4:  # colocar restriccion

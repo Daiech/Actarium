@@ -396,6 +396,7 @@ def setMinutesApprove(request):
                         'firstname': request.user.first_name,
                         'username': request.user.username,
                         'groupname': _minutes.id_group.name,
+                        'code': _minutes.code,
                         'link': link,
                         'urlgravatar': showgravatar(request.user.email, 50)
                     }
