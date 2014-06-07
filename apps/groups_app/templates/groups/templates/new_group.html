@@ -3,29 +3,15 @@
 {% block TITLE %}{% trans 'Crear grupo' %}{% endblock %}
 {%block body%}
 <article>
-    <header >
-        <div class="row">
-            <div class="col-md-8">
-                <div class="menu-icons icons-page icon-groups"></div>
-                <h3>Crear grupo</h3>
-            </div>
-        </div>
-    </header>
-    <hr/>
     <div class="row-fluid">
-        <p>Disfruta de los beneficios que <strong>ACTARIUM</strong> tiene para ti creando grupos.</p>
         <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
             {% csrf_token %}
-            <div id="form-new-group" class="white-box-container">
+            <div id="form-new-group" class="white-box-container col-md-6s">
                 <div id="sel-type-group" class="">
                     <div class="type-group">
-                        <!-- <input id="pro" value="1" type="radio" name="type-group" class="btn btn-info pull-left"> -->
                         <div>
-                            <label for="pro">
-                                <i class="icon-cog"></i>
-                                Crear Grupo
-                            </label>
-                            <div class="text-info-smal">Crea organizaciones, sube actas anteriores, descargalas cuando quieras.</div>
+                            <h3>{% trans 'Crear grupo' %}</h3>
+                            <div class="text-info-smal">{% trans 'Organiza a tu equipo de trajabo en grupos como "Comite financiero", "Consejo Administración", etc.' %}</div>
                         </div>
                     </div>
                 </div>
@@ -36,10 +22,10 @@
                 </div>
                 <div class="">
                     <span class="pull-left">
-                        <label for="sel-org">Organizaci&oacute;n:</label>
+                        <label for="sel-org">{% trans 'Organización' %}:</label>
                     </span>
                     <span class="pull-right">
-                        <a href="/settings/organizations/new?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
+                        <a href="{% url 'create_org' %}?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
                     </span>
                     <select name="sel-organization" id="sel-org">
                         {% for org in organizations%}
@@ -66,18 +52,17 @@
                         
                     </ul>
                 </div>
-                <div id="is-memeber" class="">
+                <div id="is-memeber" class="hidden">
                     <label data-original-title="{% trans 'Aparecer en las actas' %}" for="is_member">
                         <input type="checkbox" id="is_member" name="is_member" value="1" checked>
                         Ser miembro del grupo
                     </label>
                 </div>
-                <div>
+                <div class="mt20">
                     <input type="hidden" id="group_name" value="{{group.name}}">
                     <input type="hidden" id="group_id" value="{{group.id}}">
                     <input type="hidden" value="{{sel_org}}" id="org-selected">
-                    <button type="submit" class="btn btn-info btn-large">Guardar</button>
-                    <a href="/groups" class="btn-link btn-small">Ver mis grupos</a>
+                    <button type="submit" class="btn btn-info btn-large">{% trans 'Guardar' %}</button>
                 </div>
             </div>
         </form>
@@ -97,7 +82,7 @@
     }
     #form-new-group{
         border-radius: 5px;
-        width: 40%;
+        /*width: 40%;*/
     }
     #sel-type-group{
         margin-bottom: 10px;
