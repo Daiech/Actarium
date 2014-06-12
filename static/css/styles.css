@@ -15,7 +15,7 @@ time{font-size: 14px;color: gray}
 .flag-icon{width: 16px;height: 11px;border:0;margin: 5px;}
 .language{margin-right: 10px;}
 .language-selected{}
-header.navbar{border-bottom: solid 10px #97C02C;border-radius: 0;margin-bottom: 0;z-index: 100;height: 50px}
+header.navbar{border-bottom: solid 10px #97C02C;border-radius: 0;margin-bottom: 0;z-index: 100;}
 .progress-bar-success{background-color: #79B632;}
 #public_topbar{height: 90px;background-color: white;}
 #public_topbar #public_logo{display: inline-block;}
