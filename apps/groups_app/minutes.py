@@ -373,10 +373,10 @@ def setRelationReunionMinutes(_reunion, _minute):
 def setMinutesApprove(request):
     saveViewsLog(request, "apps.groups_app.minutes.setMinutesApprove")
     if request.is_ajax():
-        if request.method == 'GET':
+        if request.method == 'POST':
             try:
-                minutes_id = str(request.GET['m_id'])
-                approved = 1 if int(request.GET['approve']) == 1 else 2
+                minutes_id = str(request.POST.get('m_id'))
+                approved = 1 if int(request.POST.get('approve')) == 1 else 2
                 _minutes = getMinutesById(minutes_id)
                 sign = getRelUserMinutesSigned(request.user, _minutes)
                 if sign.is_signed_approved == 0:
@@ -402,8 +402,10 @@ def setMinutesApprove(request):
                     }
                     sendEmailHtml(3, email_ctx, getEmailListByGroup(_minutes.id_group), _minutes.id_group)
             except Exception, e:
-                print "Error Al Firmar: %s" % e
-            response = {"approved": approved, "minutes": minutes_id, "user-id": request.user.id, "user-name": request.user.first_name + " " + request.user.last_name}
+                print "Error Al aprobar: %s" % e
+            response = {"approved": approved, "minutes": minutes_id,
+            "user-id": request.user.id, "is_full_signed": _minutes.is_full_signed,
+            "user-name": request.user.first_name + " " + request.user.last_name}
     else:
         response = "Error invitacion"
     return HttpResponse(json.dumps(response), mimetype="application/json")

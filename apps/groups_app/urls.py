@@ -16,7 +16,7 @@ urlpatterns += patterns('apps.groups_app.minutes',
     # url(r'^(?P<slug>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)$', 'showMinutes'),
     # url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_code>[-\w]+)/edit/(?P<slug_template>.*)$', 'editMinutes'),
     url(r'^uploadMinutesAjax', 'uploadMinutesAjax'),
-    url(r'^setApprove$', 'setMinutesApprove'),
+    url(r'^approve_minutes$', 'setMinutesApprove', name="approve_minutes"),
     url(r'^(?P<slug_group>[-\w]+)/minutes/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='create_minutes'),
     url(r'^(?P<slug_group>[-\w]+)/minutes-code/edit/(?P<minutes_code>[-\w.\ ]+)/(?P<slug_template>.*)$', 'editMinutes', name="edit_minutes"),
 
