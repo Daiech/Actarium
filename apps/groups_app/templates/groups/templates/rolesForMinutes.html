@@ -10,7 +10,7 @@
         </a>
     </li>
     <li class="pull-righst">
-        <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="btn-submit">
+        <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="btn-next  btn-submit">
             Siguiente <i class="glyphicon glyphicon-arrow-right icon-white"></i>
         </a>
         <!-- <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{{id_reunion}}/{{template}}{%endif%}" class="btn-submit">
@@ -143,14 +143,7 @@
 	            		</div>
 	            	</div>
 	            </div>
-				<div class="mt20 pull-right">
-					<a href="{% url 'show_folder' group.slug %}" class="btn">
-	                	<span class="glyphicon glyphicon-arrow-left"></span> Volver al Folder
-	                </a>
-	                <a id="btn-next" href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="btn btn-info">
-	                    Siguiente <i class="glyphicon glyphicon-arrow-right icon-white"></i>
-	                </a>
-				</div>
+
 			</section>
 		</form>
 	</article>
@@ -223,6 +216,7 @@
 			})
 
 			function isThereAprobers(e){
+				console.log('enter to  isThereAprobers');
 				approvers = $(".approver").filter(':checked');
 				if (approvers.length == 0){
 					e.preventDefault();
@@ -332,7 +326,7 @@
 		    $("#sel-president").on("change", setPresident);//roles MAIN
 		    $("#sel-secretary").on("change", setSecretary);//roles MAIN
 		    $("#show-dni").on('change', setShowDNI);
-		    $("#btn-next").on('click',isThereAprobers);
+		    $(".btn-next").on('click',isThereAprobers);
 		});
 	</script>
 {% endblock %}
