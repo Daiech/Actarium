@@ -6,12 +6,12 @@
 <ul class="list-unstyled">
     <li>
 		<a href="javascript:window.history.back()" class="">
-        	<span class="glyphicon glyphicon-arrow-left"></span> Volver
+        	<span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}
         </a>
     </li>
     <li class="pull-righst">
         <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="btn-next  btn-submit">
-            Siguiente <i class="glyphicon glyphicon-arrow-right icon-white"></i>
+            {% trans 'Siguiente' %} <i class="glyphicon glyphicon-arrow-right icon-white"></i>
         </a>
         <!-- <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/create-minutes{{id_reunion}}/{{template}}{%endif%}" class="btn-submit">
             Siguiente <i class="glyphicon glyphicon-arrow-right icon-white"></i>
@@ -22,16 +22,16 @@
 
 {% block menu_content %}
 	<article class="message-box white-box-container">
-		<h3>Crear nueva Acta</h3>
-		<p><strong>Roles de usuario:</strong> Debes registrar la asistencia de los miembros y definir sus roles antes de crear un acta</p>
+		<h3>{% trans 'Crear nueva Acta' %}</h3>
+		<p><strong>{% trans 'Roles de usuario:' %}</strong> {% trans 'Debes registrar la asistencia de los miembros y definir sus roles antes de crear un acta</p>' %}
 		<form class="form-horizontal" enctype="multipart/form-data" method="POST">
 			{% csrf_token %}
 			<section class="">
 				<div class="row mb50">
 					<div class="col-md-6">
-						<span>Presidente:</span>
+						<span>{% trans 'Presidente:' %}</span>
 						<select id="sel-president">
-							<option value="0">Seleccione presidente</option>
+							<option value="0">{% trans 'Seleccione presidente' %}</option>
 						{%for m in members%}
 							<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
 	                	{%endfor%}
@@ -39,9 +39,9 @@
 						<span class="president-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 					</div>
 					<div class="col-md-6">
-						<span>Secretario:</span>
+						<span>{% trans 'Secretario:' %}</span>
 						<select id="sel-secretary">
-							<option value="0">Seleccione secretario</option>
+							<option value="0">{% trans 'Seleccione secretario' %}</option>
 						{%for m in members%}
 							<option value="{{m.member.id_user.id}}">{{m.member.id_user.first_name}} {{m.member.id_user.last_name}} ({{m.member.id_user.username}})</option>
 	                	{%endfor%}
@@ -52,26 +52,26 @@
 				<table id="table-roles" class="table table-bordered table-hover">
 					<tr>
 						<th class="td-first">
-							<div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-								Usuarios del grupo
+							<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">
+								{% trans 'Usuarios del grupo' %}
 							</div>
 						</th>
 						<th>
-							<div class="info-title" title="Personas que asistieron a la reuni&oacute;n">
+							<div class="info-title" title="{% trans 'Personas que asistieron a la reuni&oacute;n' %}">
 								<i class="glyphicon glyphicon-pencil"></i>
-								<span class="th-name">Asistentes</span>
+								<span class="th-name">{% trans 'Asistentes' %}</span>
 							</div>
 						</th>
 						<th>
-							<div class="info-title" title="Personas encargadas de aprobar actas">
+							<div class="info-title" title="{% trans 'Personas encargadas de aprobar actas' %}">
 								<i class="icon-thumbs-up"></i> 
-								<span class="th-name">Aprobador</span>
+								<span class="th-name">{% trans 'Aprobador' %}</span>
 							</div>
 						</th>
 						<th>
-							<div class="info-title" title="Personas encargadas de firmar las actas">
+							<div class="info-title" title="{% trans 'Personas encargadas de firmar las actas' %}">
 								<i class="icon-wrench"></i> 
-								<span class="th-name">Firmador</span>
+								<span class="th-name">{% trans 'Firmador' %}</span>
 							</div>
 						</th>
 					</tr>
@@ -83,7 +83,7 @@
 		                        <img style="width:20px" src="{{m.member.id_user.email|showgravatar:'20'}}" alt="{{m.member.id_user}}">
 		                        {{m.member.id_user.first_name}} {{m.member.id_user.last_name}}
 		                        {%if m.member.id_user == user%}
-		                        (yo)
+		                        ({% trans 'yo' %})
 		                        {%else%}
 		                        ({{m.member.id_user}})
 		                        {%endif%}
@@ -109,9 +109,10 @@
 				</table>
 				<br />
 				<label for="show-dni">
-					<table><tr>
-					<td><input id="show-dni" type="checkbox" {%if show_dni %}checked{%endif%} > &nbsp;&nbsp;</td>
-					<td><span id="show-dni-message" >Mostrar el DNI de los encargados de firmar</span></td>
+					<table>
+					<tr>
+						<td><input id="show-dni" type="checkbox" {%if show_dni %}checked{%endif%} > &nbsp;&nbsp;</td>
+						<td><span id="show-dni-message" >{% trans 'Mostrar el DNI de los encargados de firmar' %}</span></td>
 					</tr>
 					</table>
 				</label>
@@ -119,27 +120,27 @@
 				<br>
 				<div id="add-new-member" class="mt20 pull-left">
 					<div class="icons-info">
-		                <span>Info:</span>
-		                <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> Asistente</span>
-		                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> Aprobador</span>
-		                <span title="El usuario debe firmar el acta"><i class="icon-wrench"></i> Firmador</span>
-		                <span class="user-pend-l"> Usuarios pendientes</span>
+		                <span>{% trans 'Info' %}:</span>
+		                <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans 'Asistente' %}</span>
+		                <span title="Tiene la responsabilidad de aprobar actas"><i class="icon-thumbs-up"></i> {% trans 'Aprobador' %}</span>
+		                <span title="El usuario debe firmar el acta"><i class="icon-wrench"></i> {% trans 'Firmador' %}</span>
+		                <span class="user-pend-l"> {% trans 'Usuarios pendientes' %}</span>
 					</div>
 	            	<div id="show-more-info" class="btn btn-link">
-	            		M&aacute;s informaci&oacute;n...
+	            		{% trans 'M&aacute;s informaci&oacute;n...' %}
 	            	</div>
 	            	<div class="more-info">
 	            		<div>
-	            			<strong><i class="glyphicon glyphicon-pencil"></i> Asistente</strong>: Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de asistentes del Acta.
+	            			<strong><i class="glyphicon glyphicon-pencil"></i> {% trans 'Asistente' %}</strong>: {% trans 'Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de asistentes del Acta.' %}
 	            		</div>
 	            		<div>
-	           				<strong><i class="icon-thumbs-up"></i> Aprobador</strong>: Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su totalidad.
+	           				<strong><i class="icon-thumbs-up"></i> {% trans 'Aprobador' %}</strong>: {% trans 'Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su totalidad.' %}
 	            		</div>
 	            		<div>
-	            			<strong><i class="icon-wrench"></i> Firmador</strong>: Persona encargada de firmar el Acta. Al final del Acta, solo aparece el listado de firmadores, no de aprobadores.
+	            			<strong><i class="icon-wrench"></i> {% trans 'Firmador' %}</strong>: {% trans 'Persona encargada de firmar el Acta. Al final del Acta, solo aparece el listado de firmadores, no de aprobadores.' %}
 	            		</div>
 	            		<div>
-	            			<strong class="user-pend-l">&nbsp;Usuarios pendientes</strong>: Usuarios que no han aceptado la solicitud de ingreso al grupo.
+	            			<strong class="user-pend-l">&nbsp;{% trans 'Usuarios pendientes' %}</strong>: {% trans 'Usuarios que no han aceptado la solicitud de ingreso al grupo.' %}
 	            		</div>
 	            	</div>
 	            </div>
