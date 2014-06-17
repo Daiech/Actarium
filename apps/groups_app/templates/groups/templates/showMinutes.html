@@ -137,6 +137,7 @@
 		}
 		{% endif %}
 		$("#print-minutes").on("click", function (e) {
+			alert("{% trans 'No olvides configurar las márgenes y las opciones de encabezado y pie de página antes de imprimir.' %}")
 			window.print();
 		});
 		$("#btn-generate-pdf").on("click", function (e) {
