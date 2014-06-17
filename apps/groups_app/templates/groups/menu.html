@@ -197,6 +197,18 @@
     		#toolbar-group{}
 		}
 		/*/Responsive*/
+		@media print {/* Style rules */  
+			#group-left-menu, #toolbar-btn, #footer, #feed-option, #sign, #annotations-approve
+			{display: none}
+			#minutes{border:none;margin-top: 0;margin: 0;}
+			body{margin: 0;padding: 0;}
+			#groups-container, #group-content{margin: 0;padding: 0;}
+			@page 
+	        {
+	            size: auto;   /* auto is the current printer page size */
+	            margin: 0mm;  /* this affects the margin in the printer settings */
+	        }
+		}
 	</style>
 {% block menu_content_style %}{% endblock %}
 {% endblock %}
