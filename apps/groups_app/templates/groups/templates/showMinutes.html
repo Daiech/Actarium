@@ -37,6 +37,11 @@
 			<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" title="{%if not minutes.is_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="bottom" ><i class="glyphicon glyphicon-file"></i> {% trans 'PDF' %}</a>
 		</form>
     </li>
+	{% if minutes.is_full_signed %}
+	<li class="print hidden">
+		<a href="#" id="print-minutes"><i class="glyphicon glyphicon-print"></i> {% trans 'Imprimir' %}</a>
+	</li>
+	{%endif%}
 </ul>
 <ul class="pull-right">
     <li class=" important">
@@ -126,6 +131,14 @@
 <script>
 	$(document).on("ready",function(){
 		$("#group-menu-folder").addClass("active");
+		{% if minutes.is_full_signed %}
+		if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
+			$(".print").removeClass("hidden");
+		}
+		{% endif %}
+		$("#print-minutes").on("click", function (e) {
+			window.print();
+		});
 		$("#btn-generate-pdf").on("click", function (e) {
 			e.preventDefault();
 			{% if minutes.is_full_signed %}
