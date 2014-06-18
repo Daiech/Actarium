@@ -9,6 +9,7 @@ from actarium_apps.organizations.models import Organizations, OrganizationsUser,
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.groups_app.validators import validateEmail
+from apps.groups_app.utils import send_email_full_signed
 import json
 
 
@@ -121,8 +122,7 @@ def config_admin_to_org(request, slug_org):
 
 @login_required(login_url='/account/login')
 def delete_member_org(request, slug_org):
-    """uname come in POST method.
-    set_admin is a number: 1=set admin, 0=remove admin"""
+    """uname comes in POST method."""
     if request.is_ajax():
         if request.method == "POST":
             org = request.user.organizationsuser_user.get_org(slug=slug_org)
@@ -131,10 +131,17 @@ def delete_member_org(request, slug_org):
                 if uname:
                     _user = User.objects.get_or_none(username=str(uname))
                     if _user and org.has_user_role(_user, "is_member"):
+                        #Eliminar de las comisiones aprobatorias
+                        minutes_full_signed = org.delete_from_all_approvers_list(_user) # Retorna un listado de actas que se aprobaron al 
+                        for m in minutes_full_signed: ## enviar correo notificando que se aprobo un acta
+                            send_email_full_signed(m)
+                        # eliminar grupos
+                        org.delete_from_all_groups(_user)
+                        # Eliminar de organizacion
                         org.delete_role(_user, is_member=True) ## el True se ignora, solo es para pasar como **kwarg
                         org.delete_role(_user, is_admin=True) ## el True se ignora, solo es para pasar como **kwarg
-                        # eliminar cascada (los grupos)
                         # Habilitar cupo
+
                         message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ya no podrá acceder a la organización.")}
                         saveActionLog(request.user, 'DEL_USER_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
                     else:

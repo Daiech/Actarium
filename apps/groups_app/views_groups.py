@@ -273,7 +273,8 @@ def showMinuteGroup(request, slug_group, minutes_code):
         # else:
         #     return HttpResponseRedirect("/groups/" + slug_group + "#no-tienes-rol")
     else:
-        return HttpResponseRedirect('/groups/#error-its-not-your-group')
+        raise Http404
+        # return HttpResponseRedirect('/groups/#error-its-not-your-group')
 
     if request.method == 'GET':
         try:
@@ -283,7 +284,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
     if only_minutes:
         return render_to_response('groups/onlyShowMinutes.html', ctx, context_instance=RequestContext(request))
     else:
-        return render_to_response('groups/templates/showMinutes.html', ctx, context_instance=RequestContext(request))
+        return render(request, 'groups/templates/showMinutes.html', ctx)
 
 
 @login_required(login_url='/account/login')

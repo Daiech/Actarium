@@ -1,12 +1,15 @@
 #encoding:utf-8
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+from django.conf import settings
+
 from actarium_apps.organizations.models import Organizations, Groups, rel_user_group
 from .validators import validateEmail
-from django.contrib.auth.models import User
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.account.views import newInvitedUser
 from apps.emailmodule.views import sendEmailHtml
-from django.utils.translation import ugettext as _
 
 
 def getUserByEmail(email):
@@ -197,3 +200,29 @@ def create_group(request, form):
         return False
 
 
+def getEmailListByGroup(group):
+    '''
+    Retorna los correos de los miembros activos de un grupo.
+    '''
+    try:
+        group_list = rel_user_group.objects.filter(id_group=group, is_active=True)
+        mails = list()
+        for member in group_list:
+            mails.append(member.id_user.email)
+        return mails
+    except Exception, e:
+        print e
+
+
+def send_email_full_signed(minutes):
+    try:
+        link = settings.URL_BASE + reverse("show_minute", args=(minutes.id_group.slug, minutes.code, ))
+        email_ctx = {
+            'groupname': minutes.id_group.name,
+            'code': minutes.code,
+            'link': link
+        }
+        sendEmailHtml(3, email_ctx, getEmailListByGroup(minutes.id_group), minutes.id_group)
+    except Exception, e:
+        #saveErrorLog
+        pass

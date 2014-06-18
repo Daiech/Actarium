@@ -549,7 +549,11 @@
                         });
                     }
                     else{
-                        setAlertError("{% trans 'Error' %}","{% trans 'No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo' %}")
+                    	msj = "{% trans 'No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo' %}";
+                    	if (data['message']){
+                    		msj = data['message'];
+                    	}
+                        setAlertError("{% trans 'Error' %}", msj);
                     }
                 },
                 {"method": "post"}

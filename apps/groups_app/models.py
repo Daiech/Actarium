@@ -93,6 +93,10 @@ class minutes(models.Model):
     minutesIsFullSigned.boolean = True
     minutesIsFullSigned.short_description = 'is full signed?'
 
+    def set_full_signed(self):
+        self.is_full_signed = True
+        self.save()
+
     class Meta:
         unique_together = ('id_group', 'code')
 

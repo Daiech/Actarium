@@ -700,17 +700,20 @@ def remove_from_group(request, slug_group):
                     if iid == "" or not iid:
                         return HttpResponse(False)
                     _user = getUserById(iid)
-                    rel = getRelUserGroup(_user, group)
-                    if rel:
-                        saveActionLog(
-                            request.user, 'DEL_INVITA',
-                            "user: %s, grupo: %s, id_user_invited=%s,  is_superadmin=%s, is_admin=%s, is_secretary=%s, is_member=%s, is_active=%s, is_convener=%s, date_joined=%s" % (_user, group, rel.id_user_invited, rel.is_superadmin, rel.is_admin, rel.is_secretary, rel.is_member, rel.is_active, rel.is_convener, rel.date_joined),
-                            request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
-                        rel.delete()
-                        message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
-                        response = {"deleted": True, "message": message}
+                    if _user.id != request.user.id:
+                        rel = getRelUserGroup(_user, group)
+                        if rel:
+                            saveActionLog(
+                                request.user, 'DEL_INVITA',
+                                "user: %s, grupo: %s, id_user_invited=%s,  is_superadmin=%s, is_admin=%s, is_secretary=%s, is_member=%s, is_active=%s, is_convener=%s, date_joined=%s" % (_user, group, rel.id_user_invited, rel.is_superadmin, rel.is_admin, rel.is_secretary, rel.is_member, rel.is_active, rel.is_convener, rel.date_joined),
+                                request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
+                            rel.delete()
+                            message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
+                            response = {"deleted": True, "message": message}
+                        else:
+                            response = _(u"Error de relación")
                     else:
-                        response = _(u"Error de relación")
+                        response = {"message": _(u"No puedes eliminarte tu mismo.")}
                 except:
                     return HttpResponse(False)
             else:
