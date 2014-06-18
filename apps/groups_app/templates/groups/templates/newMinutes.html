@@ -20,16 +20,17 @@
 {% endblock %}
 
 {% block menu_content %}
-<div class="white-box-container">
-    <span class="">
-        {% trans '&Uacute;ltimo c&oacute;digo de Acta' %}:
-        {%if last.code%}
-        <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
-        {%else%}
-        <small>{% trans 'No hay m&aacute;s actas' %}</small>
-        {%endif%}
-    </span>
-</div>
+{%if last.code%}
+    <div class="white-box-container">
+        <span class="">
+            {% trans '&Uacute;ltimo c&oacute;digo de Acta' %}:
+            
+            <a href="/groups/{{group.slug}}/minutes/{{last.code}}">{{last.code}}</a>
+           
+            
+        </span>
+    </div>
+{%endif%}
 <article>
     <div id="template-list" class="modal fade"> <!--  -->
         <div class="modal-dialog">
@@ -208,6 +209,7 @@ top: 100px}*/
             //console.log("/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug'))
             window.location = "/groups/{{ group.slug }}/"+url_s[3]+"/"+$(this).attr('data-slug')
         });
+
         tinyMCE.init({
             theme : "advanced",
             theme_advanced_toolbar_location : "top",
@@ -245,6 +247,12 @@ top: 100px}*/
             var href = $(this).attr("data-href");
             $("#change-template").attr("href",href);
         });
+
+        {% if last.code %}
+            $("#id_code_title").attr("title", "{% trans 'El último código de acta asignado es:' %} {{last.code}}" );
+            $("#id_code_title").tooltip();
+        {% endif %}
+
         {% include minutesTemplateJs %}
     });
 </script>

@@ -31,7 +31,7 @@
 	$("#id_location").css('width','130px');
 	$("#id_date_start").css('width','150px');
 	$("#id_code").css('width','100px');
-	$("#id_code_title").tooltip();
+	
 	// console.log("this is a form")
 {% else %}
 	$(".date_mirror").html(""+$("#minutes-container #first_date").text())
