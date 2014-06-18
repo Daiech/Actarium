@@ -25,19 +25,33 @@
 	  </div>
 	</script>
     <div class="org-team">
-    	<div class="">
-	    	<div>
-		    	<span class=""><h3>{% blocktrans with n=org.name %}Miembros de {{ n }}{% endblocktrans %}</h3></span>
+    	<div class="row-fluid menu-title">
+	    	<div class="col-md-8">
+	    		<h3>{% blocktrans with n=org.name %}Miembros de {{ n }}{% endblocktrans %}</h3>
+	    		<!-- <h4>{{ current_members }} {% trans 'de' %} {{ max_members }}</h4> -->
+		    	<span class="">
+		    	</span>
 			</div>
+            <div class="col-md-4 org-num-members">
+                <div class="box">
+                    <span class="pull-left">{% trans 'Miembros' %}</span>
+                    <span class="pull-right">{{ current_members }} {% trans 'de' %} {{ max_members }}</span>
+                </div>
+	    		<div class="progress">
+                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
+                    <span class="sr-only"></span>
+                  </div>
+                </div>
+            </div>
 		</div>
 		<div class="row">
 			<div class="col-md-8">
 				<form>
-					<div class="col-xs-6">
-					<input type="text" id="filter_members" class="form-control " placeholder="{% trans 'Filtrar usuarios' %}" autofocus />
+					<div class="col-xs-6 filter-members-container input-group">
+					  <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+					  <input type="text" id="filter_members" class="form-control " placeholder="{% trans 'Filtrar usuarios' %}" autofocus />
 					</div>
 				</form>
-				
 			</div>
 			{% if is_org_admin %}
 			<div class="col-md-4">
@@ -87,6 +101,11 @@
 {% block style_menu %}
 <style>
 	.org-team .org-team-box{width: 180px;}
+	.org-team .menu-title{margin-top: 20px}
+	.org-team .menu-title > div{padding-left: 0}
+	.org-team .menu-title h3{margin-top: 0}
+	.org-team .filter-members-container{padding: 0;}
+	.org-team .org-num-members{max-width: 200px}
 	.org-team .org-user-list > ul > li{position: relative;border-bottom: solid thin #eee;}
 	.org-team .org-user-list .org-user-box{padding: 5px 5px;}
 	.org-team .org-user-list .org-user-box input[type='checkbox']{margin-top: 0px;}
