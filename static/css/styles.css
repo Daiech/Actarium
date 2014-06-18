@@ -116,7 +116,7 @@ text-decoration:none;
 #groups-menu li a{font-weight: bold;}
 .btn-group{margin-top: 0px;}
 .dinline{display: inline;position: relative;top: 1px;}
-#ac-load{display: none;margin-right: 15px;padding: 5px 10px;text-align:center;width: 68px;}
+#ac-load{display: none;position: absolute;right: 0;top: 5px;margin-right: auto;margin-left: auto;width: 90px;left: 0;}
 #ac-load img{width: 65px;margin-top: 10px;}
 #close-login-menu{position: relative;left: 0}
 #li-register-link:hover{background-color: white}
