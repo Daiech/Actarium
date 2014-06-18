@@ -71,7 +71,7 @@ class private_templates(models.Model):
 class minutes(models.Model):
     id_group = models.ForeignKey(Groups, null=False, related_name='%(class)s_id_group')
     id_creator = models.ForeignKey(User, null=False, related_name='%(class)s_id_creator')
-    date_created = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     id_extra_minutes = models.IntegerField(max_length=5)
     id_template = models.ForeignKey(templates,  null=False, related_name='id_minutes_type')
     is_valid = models.BooleanField(default=True)
