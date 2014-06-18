@@ -29,6 +29,8 @@ class newMinutesForm(forms.Form):
     agreement = forms.CharField(label=_(u"Acuerdos"), widget=forms.Textarea(attrs={'placeholder': _(u'Acuerdos')}))
     type_reunion = forms.ChoiceField(widget=forms.Select(), choices=TYPES)
 
+    
+
 
 class newReunionForm(forms.Form):
     #formulario para agregar una nueva reunion
