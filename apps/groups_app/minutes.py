@@ -785,12 +785,12 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ######## <SAVE_THE_MINUTE> #########
         if request.method == "POST":
             form = newMinutesForm(request.POST)
-            print "request.post------------------------------------"
-            print request.POST 
-            print "formulario--------------------------------"
-            print form 
+            # print "request.post------------------------------------"
+            # print request.POST 
+            # print "formulario--------------------------------"
+            # print form 
             if form.is_valid():
-                print "form valid---------------------"
+                # print "form valid---------------------"
                 _minute = saveMinute(request, group, form, _template)
 
                 ######## <Create a relation into reunion and the new minutes> #########
@@ -819,7 +819,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                     saved = False
                     error = "e2"  # error, mismo código de acta, o error al guardar en la db
             else:
-                print "form Invalid---------------------"
+                # print "form Invalid---------------------"
                 saved = False
                 error = "e0"  # error, el formulario no es valido
         ######## </SAVE_THE_MINUTE> #########

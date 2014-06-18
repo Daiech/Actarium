@@ -248,10 +248,14 @@ top: 100px}*/
             $("#change-template").attr("href",href);
         });
 
+        $('#id_code').on('keyup',function(e){console.log('evento',e.keyCode); if(e.keyCode===32){$(this).val($(this).val().replace(/\ /i,'-'))}})
+        $("#id_code_title").attr("title", "{% trans 'El espacio se cambiará por un guión' %}" );
+
         {% if last.code %}
-            $("#id_code_title").attr("title", "{% trans 'El último código de acta asignado es:' %} {{last.code}}" );
-            $("#id_code_title").tooltip();
+            $("#id_code_title").attr("title", $("#id_code_title").attr("title")+" ({% trans 'El último código de acta asignado es:' %} {{last.code}})" );
         {% endif %}
+
+        $("#id_code_title").tooltip();
 
         {% include minutesTemplateJs %}
     });

@@ -96,6 +96,10 @@ class minutes(models.Model):
     class Meta:
         unique_together = ('id_group', 'code')
 
+    def save(self):
+        self.code = str(self.code).replace(" ","-")
+        super(minutes, self).save()
+
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')
