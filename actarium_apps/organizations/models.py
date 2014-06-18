@@ -62,6 +62,27 @@ class Organizations(models.Model):
     def get_my_groups(self, user):
         return [g for g in self.get_groups() if rel_user_group.objects.get_rel(user, g)]
 
+    def delete_from_all_approvers_list(self, user):
+        """Elimina a user de todas las listas de comisión aprobatoria"""
+        list_minutes_full_signeded = [] #  Lista con todas las actas que pasaron a estar aprobadas y que deben ser notificadas al correo de todos los miembros
+        for ug in self.get_my_groups(user):
+            for m in ug.minutes_id_group.filter(is_full_signed=False):
+                a = m.rel_user_minutes_signed_id_minutes.all()
+                for approve in a.filter(id_user=user, is_signed_approved=False):
+                    approve.delete()
+                count = 0
+                for ap in a:
+                    count = count + 1 if ap.is_signed_approved else count
+                if count == a.count(): # "esta acta se debe aprobar (full signed = True)"
+                    m.set_full_signed()
+                    list_minutes_full_signeded.append(m) # Agregar a la lista para que se notifique
+        return list_minutes_full_signeded
+
+    def delete_from_all_groups(self, user):
+        for ug in self.get_my_groups(user):
+            for rel in ug.rel_user_group_set.filter(id_user=user):
+                rel.delete() ## Elimina todas las relaciones de un usuario en un grupo
+
     def has_user_role(self, user, role):
         qs = self.organizationsuser_organization.filter(role__code=role, user=user, is_active=True)
         if qs.count() > 0:

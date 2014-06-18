@@ -16,24 +16,11 @@ from apps.account.templatetags.gravatartag import showgravatar
 # Imports from views.py
 from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email
 from .utils_meetings import date_time_format_form, date_time_format_db, remove_gmt
+from .utils import send_email_full_signed, getEmailListByGroup
 from apps.actions_log.views import saveActionLog, saveViewsLog
 # from Actarium.settings import URL_BASE
 from apps.emailmodule.views import sendEmailHtml
 from actarium_apps.organizations.models import rel_user_group
-
-
-def getEmailListByGroup(group):
-    '''
-    Retorna los correos de los miembros activos de un grupo.
-    '''
-    try:
-        group_list = rel_user_group.objects.filter(id_group=group, is_active=True)
-        mails = list()
-        for member in group_list:
-            mails.append(member.id_user.email)
-        return mails
-    except Exception, e:
-        print e
 
 
 def getMinutesById(minutes_id):
@@ -388,19 +375,8 @@ def setMinutesApprove(request):
                     if s.is_signed_approved == 0:
                         is_full_signed = 0
                 if is_full_signed == 1:
-                    _minutes.is_full_signed = 1
-                    _minutes.save()
-                    url_new_minute = reverse("show_minute", args=(_minutes.id_group.slug, _minutes.code, ))
-                    link = URL_BASE + url_new_minute
-                    email_ctx = {
-                        'firstname': request.user.first_name,
-                        'username': request.user.username,
-                        'groupname': _minutes.id_group.name,
-                        'code': _minutes.code,
-                        'link': link,
-                        'urlgravatar': showgravatar(request.user.email, 50)
-                    }
-                    sendEmailHtml(3, email_ctx, getEmailListByGroup(_minutes.id_group), _minutes.id_group)
+                    _munites.set_full_signed()
+                    send_email_full_signed(_minutes)
             except Exception, e:
                 print "Error Al aprobar: %s" % e
             response = {"approved": approved, "minutes": minutes_id,
@@ -1152,7 +1128,7 @@ def getMinutesVersions(id_minutes):
 
 @login_required(login_url='/account/login')
 def showMinutes(request, slug, minutes_code):
-    '''Muestra toda la informacion de un Acta (minutes)'''
+    '''Muestra toda la informacion de un Acta (minutes) (DEPRECATED)'''
     # saveViewsLog(request, "apps.groups_app.minutes.showMinutes")
     group = getGroupBySlug(slug)
     if not group:
