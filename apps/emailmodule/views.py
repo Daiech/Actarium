@@ -87,7 +87,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_annotation.html')
     elif email_type == 13:  # colocar restriccioin
-        subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó un acta en el grupo " + ctx['groupname'] + END_SUBJECT
+        subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó el acta "+ctx['code']+" en el grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
     elif email_type == 14:  # colocar restriccion
@@ -98,6 +98,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
         subject, to = 'Mensaje de prueba', ['emesa@daiech.com']
+    print subject 
     from_email = '%s <no-reply@daiech.com>' % settings.PROJECT_NAME
     ctx["URL_BASE"] = settings.URL_BASE # Context proccessor no funciona con get_template
     d = Context(ctx)
