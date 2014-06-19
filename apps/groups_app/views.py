@@ -32,28 +32,30 @@ def getUserById(id_user):
         return None
 
 
-@login_required(login_url='/account/login')
-def groupsList(request):
-    '''
-    lista los grupos del usuario registrado
-    '''
-    saveViewsLog(request, "apps.groups_app.views.groupList")
-    try:
-        #-----------------<INVITACIONES>-----------------
-        my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
-        #-----------------</INVITACIONES>-----------------
-        mygroups = rel_user_group.objects.filter(id_user=request.user, is_active=True, is_member=True)
-        my_admin_groups = rel_user_group.objects.filter(
-            id_user=request.user,
-            is_member=False,
-            is_active=True,
-            is_admin=True).order_by("date_joined")
-    except rel_user_group.DoesNotExist:
-        mygroups = "You Dont have any groups"
-        my_admin_groups = "You Dont administrate any groups"
 
-    ctx = {"groups": mygroups, "admin_groups": my_admin_groups, "invitations": my_inv}
-    return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
+# Deprecated 19-06-2014
+# @login_required(login_url='/account/login')
+# def groupsList(request):
+#     '''
+#     lista los grupos del usuario registrado
+#     '''
+#     saveViewsLog(request, "apps.groups_app.views.groupList")
+#     try:
+#         #-----------------<INVITACIONES>-----------------
+#         my_inv = rel_user_group.objects.filter(id_user=request.user, is_active=False, is_member=True)
+#         #-----------------</INVITACIONES>-----------------
+#         mygroups = rel_user_group.objects.filter(id_user=request.user, is_active=True, is_member=True)
+#         my_admin_groups = rel_user_group.objects.filter(
+#             id_user=request.user,
+#             is_member=False,
+#             is_active=True,
+#             is_admin=True).order_by("date_joined")
+#     except rel_user_group.DoesNotExist:
+#         mygroups = "You Dont have any groups"
+#         my_admin_groups = "You Dont administrate any groups"
+
+#     ctx = {"groups": mygroups, "admin_groups": my_admin_groups, "invitations": my_inv}
+#     return render_to_response('groups/groupsList.html', ctx, context_instance=RequestContext(request))
 
 
 def setRoltoUser(request, _user, _group, role, remove):
