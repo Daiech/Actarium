@@ -272,7 +272,9 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False):
     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
     url_new_minute = reverse("show_minute", args=(group.slug, _minute.code))
     link = URL_BASE + url_new_minute
+
     email_ctx = {
+        'code':_minute.code,
         'firstname': request.user.first_name,
         'username': request.user.username,
         'groupname': group.name,
