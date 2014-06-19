@@ -375,7 +375,7 @@ def setMinutesApprove(request):
                     if s.is_signed_approved == 0:
                         is_full_signed = 0
                 if is_full_signed == 1:
-                    _munites.set_full_signed()
+                    _minutes.set_full_signed()
                     send_email_full_signed(_minutes)
             except Exception, e:
                 print "Error Al aprobar: %s" % e
