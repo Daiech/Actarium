@@ -3,24 +3,13 @@
 {% load gravatartag i18n %}
 {% block bodysettings %}
 <div>
-    <div class="uTop">
-        <img src="{{ user.email|showgravatar:'32'}}" width="32px"  class="img-circle"/>
-        <strong>
-            <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
-                {{ user.first_name }} ({{user.username}})
-            </a>
-        </strong>
-    </div>
-    <hr>
-    <form method="POST"  action="/account/">
+    <form method="POST"  action="{% url 'personal_data' %}">
         {% csrf_token %}
         <table class="">
+            <tr><th colspan="2" class="title">{% trans 'Tus datos' %}</th></tr>
+            {{ formUser }}
             <tr>
-                <th colspan="2" class="title">{% trans 'Tus datos' %}</th>
-            </tr>
-            {{formUser}}
-            <tr>
-            	<td class="t-a-r">{% trans 'Cambiar im&aacute;gen' %}:</td>
+            	<td class="t-a-r">{% trans 'Cambiar imágen' %}:</td>
             	<td><img src="{{ user.email|showgravatar:'40'}}" width="40px" class="img-circle" />
                 {% trans 'Agrega una foto a tu correro en <a href="http://gravatar.com/">Gravatar.com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella.' %}</td>
             </tr>
@@ -32,22 +21,12 @@
                     </button>
                 </td>
             </tr>
-            <tr>
-                <td></td>
-
-                <!-- <td>
-                    <button id="new-pass" class="btn pull-right"><i class="icon-wrench"></i> Cambiar contrase&ntilde;a</button>
-                </td> -->
-            </tr>
-
         </table>
-
     </form>
     <p class="containterMargin">{% trans 'Los datos con * son de caracter obligatorio.' %}</p>
     <hr>
-    {% comment %}
-    {% endcomment %}
     <div class="white-box-container box-container">
+    <p class="pull-right"><a href="{% url 'help' %}?faq=associated-accounts">{% trans 'Qué son las cuentas asociadas?' %}</a></p>
         <form method="post" action="" id="disconnect-form">{% csrf_token %}</form>
         <p>{% trans 'Cuantas asociadas' %}:</p>
         <ul>
@@ -58,6 +37,8 @@
                 {% else %}{{ assoc.provider|title }}{% endifequal %}
               (<a href="{% url 'social:disconnect_individual' assoc.provider assoc.id %}" class="disconnect">{% trans 'Desconectar' %}</a>)
             </li>
+          {% empty %}
+            <li><p>{% trans 'No tienes cuentas asociadas' %}</p></li>
           {% endfor %}
         </ul>
         {% if backends.not_associated %}
@@ -71,81 +52,54 @@
                 {% else %}{{ name|title }}{% endifequal %}
               </a>
             </li>
+          {% empty %}
+            <li><p>{% trans 'No hay cuentas para asociar' %}</p></li>
           {% endfor %}
         </ul>
         {% endif %}
     </div>
     <hr>
-
     <p>{% trans 'Eres miembro desde el' %} {{ user.date_joined }} </p>
     <p>{% trans 'Ultimo logueo' %}: {{ user.last_login}}.</p>
 </div>
-
 {% endblock%}
-
-
 
 {% block settings_style %}
 <style>
-	td{
-		padding-left:7px;
-	}
-    article p{
-        font-size: 12px;
-        line-height: 1;
-        margin: 5px;
-    }
-
-    li hr{
-        margin:20px;
-    }
-    article form table tr th{
-        width: 40%;
-    }article form table tr td{
-        text-align: left;
-    }
-    table tr th label{
-        font-size: 16px;
-        margin-top: 5px;
-    }
-    table tr td input[type=password],table tr td input[type=text]{
-        /*height: 30px;*/
-        padding: 10px;
-        font-size: 16px;
-    }
-    article form table{
-        margin: 0 auto;
-        text-align: center;
-        width: 100%;
-    }
-    .title{
-        text-align: center;
-    }
+    td{padding-left:7px;}
+    article p{font-size: 12px;line-height: 1;margin: 5px;}
+    li hr{margin:20px;}
+    article form table tr th{width: 40%;}
+    article form table tr td{text-align: left;}
+    table tr th label{font-size: 16px;margin-top: 5px;}
+    table tr td input[type=password],table tr td input[type=text]{padding: 10px;font-size: 16px;}
+    article form table{margin: 0 auto;text-align: center;width: 100%;}
+    .title{text-align: center;}
     .mt10{margin-top: 10px}
-
 </style>
 {% endblock %}
 
 {% block settings_js %}
 <script>
-	$(document).on("ready", function() {
-		$("#settings-personal-data").addClass("active");
-        $("a.disconnect").on('click', function (e) {
-              e.preventDefault();
-              $('form#disconnect-form')
-                  .attr('action', $(this).attr('href'))
-                  .submit();
-          });
-	});
-	{% if error_email %}
-    setAlertError("Error al actualizar correo","Tu correo electronico no pudo ser actualizado")
+$(document).on("ready", function() {
+	$("#settings-personal-data").addClass("active");
+    $("a.disconnect").on('click', function (e) {
+          e.preventDefault();
+          $('form#disconnect-form')
+              .attr('action', $(this).attr('href'))
+              .submit();
+      });
+    {% if error_email %}
+    setAlertError("{% trans 'Error al actualizar correo' %}", "{% trans 'Tu correo electronico no pudo ser actualizado' %}")
+    {% endif %}{% if dataUpdate %}
+    setAlertMessage("{% trans 'Datos Actualizados' %}", "{% trans 'Tus datos fueron actualizados correctamente' %}")
+    {% endif %}{% if passwordUpdate %}
+    setAlertMessage("{% trans 'Constraseña Actualizada' %}", "{% trans 'Tu constraseÃ±a fue actualizada correctamente' %}")
     {% endif %}
-    {% if dataUpdate %}
-    setAlertMessage("Datos Actualizados","Tus datos fueron actualizados correctamente")
-    {% endif %}
-    {% if passwordUpdate %}
-    setAlertMessage("ConstraseÃ±a Actualizada","Tu constraseÃ±a fue actualizada correctamente")
-    {% endif %}
-
+    vars = getUrlVars();
+    if (vars.msg === "account-in-use"){
+        setAlertError("{% trans 'Cuenta en uso' %}", "{% trans 'Ya existe una cuenta en Actarium asociada a esta cuenta, por favor verifica que no tengas dos cuentas en Actarium.' %}");
+    }
+});
 </script>
 {% endblock %}
