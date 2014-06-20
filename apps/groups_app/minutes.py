@@ -272,7 +272,9 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False):
     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
     url_new_minute = reverse("show_minute", args=(group.slug, _minute.code))
     link = URL_BASE + url_new_minute
+
     email_ctx = {
+        'code':_minute.code,
         'firstname': request.user.first_name,
         'username': request.user.username,
         'groupname': group.name,
@@ -375,7 +377,7 @@ def setMinutesApprove(request):
                     if s.is_signed_approved == 0:
                         is_full_signed = 0
                 if is_full_signed == 1:
-                    _munites.set_full_signed()
+                    _minutes.set_full_signed()
                     send_email_full_signed(_minutes)
             except Exception, e:
                 print "Error Al aprobar: %s" % e
@@ -892,9 +894,7 @@ def setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
 
 @login_required(login_url='/account/login')
 def editMinutes(request, slug_group, slug_template, minutes_code):
-    '''
-    This function creates a minutes with the form for this.
-    '''
+    '''This function creates a minutes with the form for this.'''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
     group = Groups.objects.get_group(slug=slug_group)
 
@@ -903,10 +903,9 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
         saved = False
         error = False
         _reunion = None
-        # _minute = getMinutesByCode(group, minutes_code)
         _minute = group.get_minutes_by_code(code=minutes_code)
-        _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
-        if _minute:
+        if _minute and not _minute.is_full_signed:
+            _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
             ######## <SLUG TEMPLATE> #########
             _template = getTemplateMinutes(slug_template)
             list_templates = getAllPublicTemplates()
@@ -1056,10 +1055,8 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
 
 @login_required(login_url='/account/login')
 def saveMinute(request, group, form, _template, id_minutes_update=None):
-    '''
-    Save the minutes in the tables of data base: minutes_type_1, minutes
-    return:
-    '''
+    '''Save the minutes in the tables of data base: minutes_type_1, minutes
+    return:'''
     saveViewsLog(request, "apps.groups_app.minutes.saveMinute")
     if getRelUserGroup(request.user, group).is_secretary:
         df = {

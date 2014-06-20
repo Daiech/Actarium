@@ -68,7 +68,7 @@ def showFolderGroup(request, slug_group):
     is_org_admin = g.organization.has_user_role(request.user, "is_admin")
     if is_org_admin or _user:
         if is_org_admin or _user.is_active:
-            minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-code")
+            minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-date_created")
             m = list()
             for _minutes in minutes_group:
                 m.append({

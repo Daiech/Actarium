@@ -32,6 +32,7 @@ def social_user(strategy, uid, user=None, *args, **kwargs):
     social = strategy.storage.user.get_social_auth(provider, uid)
     if social:
         if user and social.user != user:
+            """the account has in use. Other user have it"""
             return HttpResponseRedirect(reverse("personal_data") + "?backend=" + format(provider) + "&msg=account-in-use")
             # msg = 'This {0} account is already in use.'.format(provider)
             # raise AuthAlreadyAssociated(strategy.backend, msg)

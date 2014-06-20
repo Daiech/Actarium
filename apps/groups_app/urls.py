@@ -48,7 +48,7 @@ urlpatterns += patterns('apps.groups_app.views',
     url(r'^setAssistance$', 'setAssistance'),
     url(r'^acceptInvitation$', 'acceptInvitation'),
     # url(r'^(?P<slug>[-\w]+)$', 'showGroup'),
-    url(r'^$', 'groupsList'),
+    # url(r'^$', 'groupsList'),
 )
 
 urlpatterns += patterns('apps.groups_app.views_groups',
