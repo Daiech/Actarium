@@ -94,11 +94,23 @@ $(document).on("ready", function() {
     {% endif %}{% if dataUpdate %}
     setAlertMessage("{% trans 'Datos Actualizados' %}", "{% trans 'Tus datos fueron actualizados correctamente' %}")
     {% endif %}{% if passwordUpdate %}
-    setAlertMessage("{% trans 'Constraseña Actualizada' %}", "{% trans 'Tu constraseÃ±a fue actualizada correctamente' %}")
+    setAlertMessage("{% trans 'Contraseña Actualizada' %}", "{% trans 'Tu contraseña fue actualizada correctamente' %}")
     {% endif %}
     vars = getUrlVars();
     if (vars.msg === "account-in-use"){
         setAlertError("{% trans 'Cuenta en uso' %}", "{% trans 'Ya existe una cuenta en Actarium asociada a esta cuenta, por favor verifica que no tengas dos cuentas en Actarium.' %}");
+    }
+    if (vars.msg === "new-association"){
+        setAlertError("{% trans 'Cuenta asociada' %}", "{% trans 'Ahora puedes iniciar sesión con tu nombre de usuario y contraseña o bien usando tu cuenta asociada.' %}");
+    }
+    if (vars.msg === "association-deleted"){
+        setAlertError("{% trans 'Cuenta liberada' %}", "{% trans 'Se ha quitado la asociación a tu cuenta.' %}");
+    }
+    if (vars.msg === "AuthCanceled"){
+        setAlertError("{% trans 'Procedimiento cancelado' %}", "{% trans 'No se ha completado la asociación.' %}");
+    }
+    if (vars.msg === "NotAllowedToDisconnect"){
+        setAlertError("{% trans 'Imposible Desconectar' %}", "{% trans 'No puedes desconectar esta cuenta ya que es la única forma acceder a tu cuenta. Por favor configure una contraseña e intente de nuevo.' %}");
     }
 });
 </script>

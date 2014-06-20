@@ -78,6 +78,8 @@ MIDDLEWARE_CLASSES = global_settings.MIDDLEWARE_CLASSES + (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'apps.account.middleware.MySocialAuthExceptionMiddleware',
+    # 'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'Actarium.urls'
@@ -152,7 +154,7 @@ LOGIN_URL = "/account/login"
 LOGOUT_URL = "/account/logout"
 LOGIN_REDIRECT_URL = "/"
 
-# LOGIN_ERROR_URL = "/except"
+# LOGIN_ERROR_URL = "/?error"
 URL_PATH = URL_BASE
 SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
@@ -160,13 +162,13 @@ SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/#welcome'
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/account/complete-registration"
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = "/account/?msj=new-association"
-SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = "/account/?msj=association-deleted"
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = "/account/?msg=association-deleted"
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/new-error-url/'
 SOCIAL_AUTH_COMPLETE_URL_NAME  = '/socialauth_complete'
 SOCIAL_AUTH_ASSOCIATE_URL_NAME = '/socialauth_associate_complete'
 
 SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
-# SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
 SOCIALredirect_AUTH_UID_LENGTH = 767
 SOCIAL_AUTH_UUID_LENGTH = 16
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
