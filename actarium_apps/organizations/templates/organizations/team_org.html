@@ -3,7 +3,7 @@
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {% block content_menu %}
-	<div id="modalGroups" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div id="genericModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	</div>
 	<script id="modalGroupsTemplate" type="text/template">
 	<div class="modal-dialog modal-sm">
@@ -23,6 +23,29 @@
 	    </div>
 	    {% endverbatim %}
 	  </div>
+	</script>
+    <script type="text/template" id="deleteUserTpl">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">{% trans 'Eliminar' %} {% verbatim %}@{{ user.name }}{% endverbatim %}</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<p>{% trans 'Al eliminar un usuario de la organización se elimina de:' %}</p>
+		      	<ul>
+		      		<li>{% trans 'Todas las listas de comisión aprobatoria a las que pertenece pero que aún no ha aprobado.' %}</li>
+		      		<li>{% trans 'Todos los grupos a los que pertenece.' %}</li>
+		      	</ul>
+		      	 
+		        <p>{% trans 'Seguro que desea eliminar a' %} {% verbatim %}@{{ user.name }}{% endverbatim %}?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancelar' %}</button>
+		        <button type="button" class="btn btn-warning" id="deleteUser-{% verbatim %}{{ user.name }}{% endverbatim %}">{% trans 'Si, Eliminar' %}</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
 	</script>
     <div class="org-team">
     	<div class="row-fluid menu-title">
@@ -138,7 +161,7 @@
             	var uname = $(this).closest(".org-user-options").attr("data-username");
             	sendNewAjax("{% url 'get_user_org_groups' org.slug %}",{"uname":uname}, function (data) {
 	            	ctx = {"title": "{% trans 'Grupos de ' %}" + "@" + uname, "groups": data}
-	            	$("#modalGroups").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
+	            	$("#genericModal").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
             	});
             })
 			{% if is_org_admin %}
@@ -166,8 +189,11 @@
             function delete_user (e) {
             	var li = $(this).closest(".org-user-options");
             	var uname = li.attr("data-username");
-            	if ( confirm("{% trans 'Seguro que desea eliminar a' %} @" + uname + "?") ){
-	            	sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
+            	user = {name: uname}
+            	$("#genericModal").html(swig.render($("#deleteUserTpl").html(), {locals: user})).modal();
+            	$("#deleteUser-" + uname).on("click", function (e){
+            		sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
+	            		$('#genericModal').modal('hide');
 	            		if (data.error){
 	            			setAlertError("{% trans 'Error' %}", data.error);
 	            		}
@@ -183,9 +209,7 @@
 	            			li.fadeOut();
 	            		}
 	            	},{"method": "post"});
-            	}else{
-            		e.preventDefault();
-            	}
+            	});
             }
             {% endif %}
         });
