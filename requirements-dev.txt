@@ -1,5 +1,5 @@
 django
-python-social-auth
+python-social-auth>=0.1.26
 python-slugify
 django-uuslug
 pillow
