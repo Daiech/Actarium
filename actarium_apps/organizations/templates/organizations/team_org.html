@@ -3,7 +3,7 @@
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {% block content_menu %}
-	<div id="modalGroups" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div id="genericModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	</div>
 	<script id="modalGroupsTemplate" type="text/template">
 	<div class="modal-dialog modal-sm">
@@ -24,6 +24,29 @@
 	    {% endverbatim %}
 	  </div>
 	</script>
+    <script type="text/template" id="deleteUserTpl">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">{% trans 'Eliminar' %} {% verbatim %}@{{ user.name }}{% endverbatim %}</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<p>{% trans 'Al eliminar un usuario de la organización se elimina de:' %}</p>
+		      	<ul>
+		      		<li>{% trans 'Todas las listas de comisión aprobatoria a las que pertenece pero que aún no ha aprobado.' %}</li>
+		      		<li>{% trans 'Todos los grupos a los que pertenece.' %}</li>
+		      	</ul>
+		      	 
+		        <p>{% trans 'Seguro que desea eliminar a' %} {% verbatim %}@{{ user.name }}{% endverbatim %}?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancelar' %}</button>
+		        <button type="button" class="btn btn-warning" id="deleteUser-{% verbatim %}{{ user.name }}{% endverbatim %}">{% trans 'Si, Eliminar' %}</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+	</script>
     <div class="org-team">
     	<div class="row-fluid menu-title">
 	    	<div class="col-md-8">
@@ -35,7 +58,7 @@
             <div class="col-md-4 org-num-members">
                 <div class="box">
                     <span class="pull-left">{% trans 'Miembros' %}</span>
-                    <span class="pull-right">{{ current_members }} {% trans 'de' %} {{ max_members }}</span>
+                    <span class="pull-right"><span id="num-current-members">{{ current_members }}</span> {% trans 'de' %} {{ max_members }}</span>
                 </div>
 	    		<div class="progress">
                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" id="org-num-members">
@@ -61,7 +84,7 @@
 		</div>
 		<hr>
 		<div class="org-user-list">
-			<ul id="org-list-members" class="list-unstyled">
+			<ol id="org-list-members" class="list-unstyleds">
 			{% for u in org.organizationsuser_organization.get_members %}
 				<li class="org-user-options" data-username="{{ u.username }}">
 					<div class="org-user-box row">
@@ -93,7 +116,7 @@
 					</div>
 				</li>
 			{% endfor %}
-			</ul>
+			</ol>
 		</div>
     </div>
 {% endblock %}
@@ -107,13 +130,14 @@
 	.org-team .filter-members-container{padding: 0;}
 	.org-team .org-num-members{max-width: 200px}
 	.org-team .org-user-list > ul > li{position: relative;border-bottom: solid thin #eee;}
-	.org-team .org-user-list .org-user-box{padding: 5px 5px;}
+	.org-team .org-user-list .org-user-box{padding: 5px 5px;vertical-align: middle;display: inline-block;width: 100%; }
 	.org-team .org-user-list .org-user-box input[type='checkbox']{margin-top: 0px;}
 	.org-team .org-user-list .org-user-box .org-user-info{margin-left: 6px}
 	.org-team .org-user-list .org-user-box .org-user-info strong{font-size: 15px}
 	.org-team .org-user-list .org-user-box .org-user-info p{color: #999;}
 	.org-team .org-user-list .org-user-box .org-user-image{margin-top: 5px;}
 	.org-team .org-user-list .org-user-box .org-user-options {margin-top: 10px}
+	.org-team .org-user-list .org-user-box .org-user-options:before {margin-top: 0px}
 	.org-team .org-user-list .org-user-box .org-user-options > span{margin-right: 2px}
 	/*.org-team .org-user-list .org-user-box .org-user-options ul.org-user-btn-list li{display: inline-block;}*/
 	.dropdown-menu{z-index: 900}
@@ -125,6 +149,7 @@
 	<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
     <script>
         $(document).ready(function(){
+			max_members = {{ max_members }};
             $(".org-menu-container #org-team").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
 
@@ -135,9 +160,8 @@
             	e.preventDefault();
             	var uname = $(this).closest(".org-user-options").attr("data-username");
             	sendNewAjax("{% url 'get_user_org_groups' org.slug %}",{"uname":uname}, function (data) {
-            		console.log(data);
 	            	ctx = {"title": "{% trans 'Grupos de ' %}" + "@" + uname, "groups": data}
-	            	$("#modalGroups").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
+	            	$("#genericModal").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
             	});
             })
 			{% if is_org_admin %}
@@ -165,19 +189,27 @@
             function delete_user (e) {
             	var li = $(this).closest(".org-user-options");
             	var uname = li.attr("data-username");
-            	if ( confirm("{% trans 'Seguro que desea eliminar a' %} @" + uname + "?") ){
-	            	sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
+            	user = {name: uname}
+            	$("#genericModal").html(swig.render($("#deleteUserTpl").html(), {locals: user})).modal();
+            	$("#deleteUser-" + uname).on("click", function (e){
+            		sendNewAjax("{% url 'delete_member_org' org.slug %}", {"uname":uname}, function (data){
+	            		$('#genericModal').modal('hide');
 	            		if (data.error){
 	            			setAlertError("{% trans 'Error' %}", data.error);
 	            		}
 	            		else{
+	            			var total = parseInt($("#org-num-members").closest(".progress").css("width").slice(0,-2));
+	            			var progress = parseInt($("#org-num-members").css("width").slice(0,-2));
+	            			var p = Math.ceil((progress*100)/total);
+	            			var new_w = (data.num_members*p/(data.num_members + 1));
+
+	            			$("#num-current-members").text(data.num_members);
+	            			$("#org-num-members").css("width", Math.ceil(new_w) + "%");
 	            			setAlertMessage("{% trans 'Usuario eliminado de la organización' %}", data.msj);
 	            			li.fadeOut();
 	            		}
 	            	},{"method": "post"});
-            	}else{
-            		e.preventDefault();
-            	}
+            	});
             }
             {% endif %}
         });

@@ -98,7 +98,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
         subject, to = 'Mensaje de prueba', ['emesa@daiech.com']
-    print subject 
+    
     from_email = '%s <no-reply@daiech.com>' % settings.PROJECT_NAME
     ctx["URL_BASE"] = settings.URL_BASE # Context proccessor no funciona con get_template
     d = Context(ctx)

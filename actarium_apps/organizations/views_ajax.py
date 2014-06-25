@@ -137,12 +137,11 @@ def delete_member_org(request, slug_org):
                             send_email_full_signed(m)
                         # eliminar grupos
                         org.delete_from_all_groups(_user)
-                        # Eliminar de organizacion
+                        # Eliminar de organizacion (Habilitar cupo)
                         org.delete_role(_user, is_member=True) ## el True se ignora, solo es para pasar como **kwarg
                         org.delete_role(_user, is_admin=True) ## el True se ignora, solo es para pasar como **kwarg
-                        # Habilitar cupo
 
-                        message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ya no podrá acceder a la organización.")}
+                        message = {"changed": True, "msj": "@" + _user.username + " " + _(u"ya no podrá acceder a la organización."), "num_members": org.get_num_members()}
                         saveActionLog(request.user, 'DEL_USER_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
                     else:
                         message = {"error": _(u"Este usuario no pertenece a la organización")}
