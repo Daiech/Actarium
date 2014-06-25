@@ -422,6 +422,7 @@ article{
     border-bottom-left-radius: 5px;
     margin: 0 auto;
     margin-bottom: 10px;
+    padding-right: 260px;
     padding-bottom: 20px;
     width: 100%;
 }
@@ -703,10 +704,10 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 /*
 Show Minutes 
 */
-#minutes-container{max-width: 915px;margin: auto;}
+#minutes-container{max-width: 815px;margin: auto;}
 
 .hoja{/*width: 70%;*/margin:auto;}
-#sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
+#sign{margin: 0 auto;margin-top: 8px;min-height: 100px;}
 .minute{
     border: solid thin #ddd;
     background-color: #fff;

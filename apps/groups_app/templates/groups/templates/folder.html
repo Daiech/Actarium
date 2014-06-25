@@ -35,7 +35,7 @@
                 {%else%}
                     {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
                 {%endif%}">
-                    <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}">
+                    <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}" target="_blank">
                         {{minute.minutes.code}}
                         <span class="date-minute-created" > el {{minute.minutes.date_created|date:"j \d\e M \d\e Y"}} </span>
                         <span class="date-minute-created" > Creada por {{minute.minutes.id_creator.first_name}} </span>

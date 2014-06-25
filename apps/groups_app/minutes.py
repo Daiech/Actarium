@@ -263,7 +263,7 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False):
         for r in rols:
             if r.is_approver:
                 email_list.append(r.id_user.email)
-                # print "SET:", setRelUserMinutesSigned(r.id_user, _minute, 0)
+                setRelUserMinutesSigned(r.id_user, _minute, 0)
 
         rols.update(is_active=True, id_minutes=_minute)
     except Exception, e:

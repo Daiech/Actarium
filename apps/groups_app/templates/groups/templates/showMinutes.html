@@ -1,7 +1,6 @@
-{% extends "groups/menu.html" %}
-{% block TITLE %}Acta {{minutes.code}} Grupo {{minutes.id_group.name}} {% endblock %}
-{% load gravatartag %}
-{% load i18n %}
+{% extends "minutes/menu.html" %}
+{% block title %}Acta {{ minutes.code }}, Grupo {{minutes.id_group.name}} {% endblock %}
+{% load gravatartag i18n %}
 
 {% block toolbar_content %}
 <ul class="list-unstyled">
@@ -53,57 +52,7 @@
 </ul>
 {% endblock %}
 
-{%block menu_content%}
-	{% if space_to_approve or is_secretary %}
-		{% if my_attending%}
-		<div id="message-temp" class="white-box-container">
-			<header>
-				<div id="first-point"></div>
-				<div class="pull-left ico-title"><img src="{{ STATIC_PREFIX }}img/groups/default.jpg"> </div> 
-				<h4> {{user.first_name}} &eacute;sta Acta necesita tu aprobaci&oacute;n</h4>
-				<p>
-					<small>&Eacute;sta Acta no ser&aacute; publicada a todo el grupo {{group.name}} hasta que los miembros asignados como comisi&oacute;n aprobatoria est&eacute;n de acuerdo con su redacci&oacute;n.</small>
-				</p>
-			</header>
-			<hr>
-			<div id="approve-message-up" class="div-sign alert ">
-	    		<strong>Tu voto: </strong> Apruebas &eacute;sta Acta?
-		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
-					<i class="glyphicon glyphicon-ok icon-white"></i> Si, apruebo <span></span>
-				</a>
-				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
-					<i class="glyphicon glyphicon-comment"></i> No, Necesita correcci&oacute;n <span></span>
-				</a>
-			</div>
-			<div class="mt20">
-				<strong class="mt20">Comisi&oacute;n aprobatoria:</strong>
-				<ol class="commission-approving-list" class="mt20">
-					{%for member in commission_approving%}
-						<li class="missing-{{member.id_user.id}}">
-							<div>
-								<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
-							</div>
-							<div>
-							{{member.id_user.first_name}} {{member.id_user.last_name}}
-							</div>
-							<div class="icon-approver-status">
-								{%ifequal member.is_signed_approved 0%}
-								<i class="glyphicon glyphicon-time"></i>
-								{%endifequal%}
-								{%ifequal member.is_signed_approved 1%}
-								<i class="glyphicon glyphicon-ok"></i>
-								{%endifequal%}
-								{%ifequal member.is_signed_approved 2%}
-								<i class="icon-remove-circle"></i>
-								{%endifequal%}
-							</div>
-						</li>
-					{%endfor%}
-				</ol>
-			</div>
-		</div>
-		{% endif %}
-	{% endif %}
+{%block menu_content %}
 	<article>
 	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
 	    	<p>Historial de versiones:</p>
@@ -119,18 +68,20 @@
 	    <div id="minutes-container">
 	    {{minute_template}}
 	    </div>
-
-		{% include "groups/siteToApprove.html" %}
 	</article>
 	<span id="is_form" style="display:none">{{is_form}}</span>
 
 {%endblock%}
+{% block activity_content %}
+	{% include "groups/siteToApprove.html" %}
+{% endblock %}
 {% block menu_content_js %}
 <script src="{{ STATIC_URL }}js/vendor/tiny_mce/tiny_mce.js"></script>
 <script src="{{ STATIC_URL }}js/vendor/waypoints.min.js"></script>
 <script>
 	$(document).on("ready",function(){
 		$("#group-menu-folder").addClass("active");
+		$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
 		{% if minutes.is_full_signed %}
 		if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
 			$(".print").removeClass("hidden");
@@ -173,9 +124,12 @@
 			$(window.location.hash+" > div").addClass("selected-annontation");
 		}
 		function callBackApprove(data){
-			$(".div-sign").fadeOut(300,function(){$(this).empty();$("#message-temp").hide(300, function () {
+			$(".div-sign").fadeOut(300,function(){
 				$(this).empty();
-			})});
+				$("#message-temp").hide(300, function () {
+					$(this).empty();
+				})
+			});
 			var u = $(".missing-"+data["user-id"]);
 			if(data['approved']==1){
 				u.find("div.icon-approver-status").html('<i class="glyphicon glyphicon-ok"></i>');
@@ -255,12 +209,13 @@
 		$(".btn-no-approve").on("click", newAnnotation);
 		$("#button-save").on("click", saveAnnotation);
 	});
-{% include minutesTemplateJs %}
+	{% include minutesTemplateJs %}
 </script>
 {% endblock %}
 
 {% block menu_content_style%}
 <style>
+	.white-box-container{width: 80%;margin: auto; }
 	.selected-annontation{background-color: rgb(240, 240, 240);;}
 	.content-annotation{margin-left: 40px}
 	.comment-annotation p{font-size: 14px;}
