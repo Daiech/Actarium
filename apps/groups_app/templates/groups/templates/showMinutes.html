@@ -53,7 +53,7 @@
 {% endblock %}
 
 {%block menu_content %}
-	<article>
+	<div id="minutes-processor-container">
 	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
 	    	<p>Historial de versiones:</p>
 	    	{%for minutes in minutes_version%}
@@ -68,7 +68,7 @@
 	    <div id="minutes-container">
 	    {{minute_template}}
 	    </div>
-	</article>
+	</div>
 	<span id="is_form" style="display:none">{{is_form}}</span>
 
 {%endblock%}
@@ -226,6 +226,7 @@
 	#button-save{margin-top: 5px;}
 	article header img{margin-top: 0px;}
 	#annotations-approve{margin-top: 20px;}
+	.commission-approving-list{padding-left: 20px;}
 	.commission-approving-list > li > div{display: inline;}
 	.icon-approver-status i{margin-top: 5px}
 	#body-container > article{margin-top:0;padding-top: 0;}
@@ -239,6 +240,8 @@
 	#toolbar-btn > ul > li > form{margin: 0}
 	.ico-title{margin-top: -4px;margin-right: 2px;}
 	.important{z-index: 2001}
+	#minutes-processor-container{padding-right: 260px;}
+	#minutes-version{width: 815px;margin: auto;}
 	@media (max-width: 979px) {
 		.minutes-bar-static{top: 0px;}
 	}
