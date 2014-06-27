@@ -7,7 +7,8 @@
 				<div id="first-point"></div>
 				<!-- <div class="pull-left ico-title"><img src="{{ STATIC_PREFIX }}img/groups/default.jpg"> </div>  -->
 				<!-- <h4> {{user.first_name}} ésta Acta necesita tu aprobaci&oacute;n</h4> -->
-				<h4 title="{% trans 'ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}">{% trans 'Comisión aprobatoria' %}</h4>
+				<div class="pull-right"><i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}" ></i></div>
+				<h4 title="{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}">{% trans 'Comisión aprobatoria' %}:</h4>
 			</header>
 			<!-- <hr> -->
 			{% if my_attending %}
@@ -49,46 +50,10 @@
 			</div>
 		</div>
 	{% endif %}
-<!-- <section id="sign" class="hoja white-box-container">
-	<header>
-		<div class="ico-title pull-left"><img src="{{ STATIC_PREFIX }}img/groups/default.jpg"> </div> 
-		<h4>{% trans 'Comisi&oacute;n aprobatoria de ésta Acta' %}</h4>
-		<p>
-			<small>ésta Acta no será publicada a todo el grupo {{group.name}} hasta que los miembros asignados como comisi&oacute;n aprobatoria estén de acuerdo con su redacci&oacute;n.</small>
-		</p>
-	</header>
-	<hr>
-	<div class="mt20">
-		<strong class="mt20">{% trans 'Comisi&oacute;n aprobatoria' %}:</strong>
-		<ol class="commission-approving-list" class="mt20">
-			{%for member in commission_approving%}
-				<li class="missing-{{member.id_user.id}}">
-					<div>
-						<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
-					</div>
-					<div>
-					{{member.id_user.first_name}} {{member.id_user.last_name}}
-					</div>
-					<div class="icon-approver-status">
-						{%ifequal member.is_signed_approved 0%}
-						<i class="glyphicon glyphicon-time"></i>
-						{%endifequal%}
-						{%ifequal member.is_signed_approved 1%}
-						<i class="glyphicon glyphicon-ok"></i>
-						{%endifequal%}
-						{%ifequal member.is_signed_approved 2%}
-						<i class="icon-remove-circle"></i>
-						{%endifequal%}
-					</div>
-				</li>
-			{%endfor%}
-		</ol>
-	</div>
-</section> -->
-
 <section class="hoja white-box-container" id="annotations-approve">
 	<header>
-		<span class="pull-left"><img src="{{ STATIC_URL }}/img/icon-writter.png" width="25px"></span>
+		<!-- <span class="pull-left"><img src="{{ STATIC_URL }}/img/icon-writter.png" width="25px"></span> -->
+		<div class="pull-right"><i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{% trans 'Cualquier miembro del grupo puede escribir anotaciones sobre esta acta.' %}"></i></div>
 		<h4>{% trans 'Anotaciones' %}</h4>
 		<!-- <small>{% trans 'Anotaciones y correcciones de la comisi&oacute;n aprobatoria' %}.</small> -->
 	</header>

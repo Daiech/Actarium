@@ -126,9 +126,6 @@
 		function callBackApprove(data){
 			$(".div-sign").fadeOut(300,function(){
 				$(this).empty();
-				$("#message-temp").hide(300, function () {
-					$(this).empty();
-				})
 			});
 			var u = $(".missing-"+data["user-id"]);
 			if(data['approved']==1){
@@ -141,7 +138,6 @@
 			}
 		}
 		function setApprove(e){
-			console.log("asdf")
 			e.preventDefault();
 			$(this).attr({"disabled": "disabled"});
 			var minutes_id = $(this).attr("data-minutes");

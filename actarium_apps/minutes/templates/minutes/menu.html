@@ -54,6 +54,8 @@
 			}
 			$("#activity-content").css("height", ($("#activity").height() - 70) + "px");
 			$("#activity-content").niceScroll();
+			$(".title").tooltip();
+			$(".popover-element").popover({trigger: 'hover'});
 		});
 	</script>
 	{% block menu_content_js %}{% endblock %}
@@ -128,9 +130,11 @@
 		#topbar .breadcrumb{background: none;}
     	#logo-actarium-p{width: 32px;}
 
-		#activity{background: white;border-left: solid thin #dadada; position: fixed;right: 0;width: 260px;height: 100%;top: 73px;overflow: hidden;padding-bottom: 10px;}
-		#activity-content{position: absolute;height: 400px;margin: 8px;}
+		#activity{background: white;border-left: solid thin #dadada; position: fixed;right: 0;width: 260px;height: 100%;top: 73px;/*overflow: hidden;*/padding-bottom: 10px;}
+		#activity-content{position: absolute;height: 400px;margin: 8px;width: 95%;}
 		#activity .white-box-container{width: 100% !important;margin: 0 !important;padding: 0px 6px;margin-bottom: 5px !important;}
+
+		/*.tooltip{top: 0 !important;}*/
 		/*Responsive*/
 		@media (min-width: 980px) {
 			#group-menu{margin-top: -2px}
