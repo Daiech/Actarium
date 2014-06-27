@@ -185,11 +185,12 @@
     		#toolbar-group{}
 		}
 		/*/Responsive*/
-		@media print {/* Style rules */  
-			#group-left-menu, #toolbar-btn, #footer, #feed-option, #sign, #annotations-approve
+		@media print {
+			#group-left-menu, #toolbar-btn, #footer, #feed-option, #sign, #annotations-approve,#activity
 			{display: none}
 			#minutes{border:none;margin-top: 0;margin: 0;}
 			body{margin: 0;padding: 0;}
+			#minutes-processor-container{padding-right: 0 !important;}
 			#groups-container, #group-content{margin: 0;padding: 0;}
 			@page 
 	        {
