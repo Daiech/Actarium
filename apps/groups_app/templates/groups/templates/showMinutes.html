@@ -42,7 +42,7 @@
 	</li>
 	{%endif%}
 </ul>
-<ul class="pull-right">
+<ul class="pull-right btn-pull-right">
     <li class=" important">
 		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
     </li>
@@ -53,7 +53,7 @@
 {% endblock %}
 
 {%block menu_content %}
-	<div id="minutes-processor-container">
+	<div id="minutes-processor-container" class="">
 	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
 	    	<p>Historial de versiones:</p>
 	    	{%for minutes in minutes_version%}
@@ -73,15 +73,28 @@
 
 {%endblock%}
 {% block activity_content %}
-	{% include "groups/siteToApprove.html" %}
+	{% include "groups/activity_content.html" %}
 {% endblock %}
 {% block menu_content_js %}
 <script src="{{ STATIC_URL }}js/vendor/tiny_mce/tiny_mce.js"></script>
 <script src="{{ STATIC_URL }}js/vendor/waypoints.min.js"></script>
+<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
+<script src="{{ STATIC_PREFIX }}js/actarium.panel.js"></script>
 <script>
-	$(document).on("ready",function(){
+	$(document).on("ready", function(){
 		$("#group-menu-folder").addClass("active");
 		$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
+		// var ctx = {
+		// 	"title": "Anotaciones",
+		// 	"info_text": "Este es el contenido de algo Este es el contenido de algo",
+		// }
+		// loadPanel(ctx, function () {
+		// 		sendNewAjax("/rest/api/users/1/mydata/",{}, function (data) {
+		// 			//TODO with your data. only give me a html in loadPanelContent
+		// 			loadPanelContent("<h1>" + data.username + "</h1>");
+		// 		})
+		// 	});
+
 		{% if minutes.is_full_signed %}
 		if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
 			$(".print").removeClass("hidden");
@@ -236,7 +249,8 @@
 	#toolbar-btn > ul > li > form{margin: 0}
 	.ico-title{margin-top: -4px;margin-right: 2px;}
 	.important{z-index: 2001}
-	#minutes-processor-container{padding-right: 260px;}
+	#minutes-processor-container{padding-right: 0;}
+	.mpc{padding-right: 260px !important;}
 	#minutes-version{width: 815px;margin: auto;}
 	@media (max-width: 979px) {
 		.minutes-bar-static{top: 0px;}

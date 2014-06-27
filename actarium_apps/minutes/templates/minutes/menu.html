@@ -8,10 +8,8 @@
 	    		{% block toolbar_content %}{% endblock %}
 				<span id="toolBarStatus">Acta creada el 26 de junio de 2014 a las 14:25</span>
 	    	</div>
-	    	<div id="activity">
-	    		<div id="activity-content" class="">
+	    	<div id="activity" class="hidden">
 	    		{% block activity_content %}{% endblock %}
-	    		</div>
 	    	</div>
 	    	<div id="group-content" class="">
 	    		{% if dni_request %}
@@ -55,7 +53,6 @@
 			$("#activity-content").css("height", ($("#activity").height() - 70) + "px");
 			$("#activity-content").niceScroll();
 			$(".title").tooltip();
-			$(".popover-element").popover({trigger: 'hover'});
 		});
 	</script>
 	{% block menu_content_js %}{% endblock %}
@@ -108,12 +105,12 @@
 		#toolbar-btn > ul {display: inline;padding: 0;margin: 0;}
 		#toolbar-btn > ul > li:after{border:none;}
 		#toolbar-btn > ul > li{display: inline-block;border-right: 1px solid #cbcccc;background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);}
-		#toolbar-btn > ul.pull-right > li{border-left: 1px solid #cbcccc;border-right: none;}
+		#toolbar-btn > ul.btn-pull-right > li{border-left: 1px solid #cbcccc;border-right: none;}
 		#toolbar-btn > ul > li > p{margin: 0 10px;}
 		#toolbar-btn > ul > li > a, #toolbar-btn > ul > li > form > a{color: #555; display: inline-block; height: 30px; line-height: 30px;padding: 0 12px;}
 		#toolbar-btn > ul > li > a:hover, #toolbar-btn > ul > li > form > a:hover{background-color: #f5f5f5;color: rgb(51, 118, 238)}
 		#toolbar-btn > ul > li > a > .caret, #toolbar-btn > ul > li > form > a > .caret{/*margin-top: 14px;*/}
-		#toolbar-btn > ul > li.pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
+		#toolbar-btn > ul > li.btn-pull-right{border-right: none;border-left: 1px solid #cbcccc;margin-left: 0px;}
 		#toolBarStatus{display: inline-block;margin: 0 10px;color: #A09999;}
 
 		.btn-submit{color:white !important;background-color: #00aeaa;
@@ -130,10 +127,18 @@
 		#topbar .breadcrumb{background: none;}
     	#logo-actarium-p{width: 32px;}
 
-		#activity{background: white;border-left: solid thin #dadada; position: fixed;right: 0;width: 260px;height: 100%;top: 73px;/*overflow: hidden;*/padding-bottom: 10px;}
+		#activity{background: white;border-left: solid thin #dadada; position: fixed;right: 0;width: 260px;height: 100%;top: 41px;padding-bottom: 10px;z-index: 100;}
 		#activity-content{position: absolute;height: 400px;margin: 8px;width: 95%;}
 		#activity .white-box-container{width: 100% !important;margin: 0 !important;padding: 0px 6px;margin-bottom: 5px !important;}
+		#activity .close-panel{cursor: pointer;}
+		#activity .groups-icons{position: absolute;right: 10px;}
+		#activity .groups-icons i{margin-left: 4px;}
+		#activity #minutesPanel header{padding: 8px 0;background-color:#97C02C;color: white;height: 32px;}
+		#activity #minutesPanel header h4{padding-left: 9px;margin: 0;font-size: 16px;}
 
+
+		.btn-pull-right{position: inherit;right: 0px;}
+		.btn-pull-right-with-panel{right: 260px;}
 		/*.tooltip{top: 0 !important;}*/
 		/*Responsive*/
 		@media (min-width: 980px) {
@@ -161,7 +166,7 @@
 		}
 		@media (min-width: 768px) {
 			#toolbar-btn{margin-left: 73px;margin-top: -64px;/*margin-top: -30px;margin-right: 227px;*/}
-			#toolbar-btn ul.pull-right{position: inherit;right: 0;}
+			#toolbar-btn ul.pull-right{}
 		}
 		@media (max-width: 767px) {
 			#group-menu-list{display: none;}
@@ -178,6 +183,7 @@
 			#group-menu{float: none;position: relative;margin-left: 0px;width: 100%;margin-top: 42px}
 			#topbar-btn-logo{height: 42px;}
 			.topbar-logo-center{margin-top: 0}
+			#toolbar-btn{top: 73px;}
 		}
 		@media (max-width: 480px) {
     		/*#title-menu a {margin-top: -24px;}*/
