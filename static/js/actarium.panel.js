@@ -20,7 +20,9 @@ function loadPanel (a, callback) {
 	$("#activity").removeClass("hidden");
 	$("#minutes-processor-container").addClass("mpc");
 	$(".popover-element").popover({trigger: 'hover'});
-	$("#activity-content").html("loading...");
+	$("#activity-content").html("loading...")
+		.css("height", ($("#activity").height() - 70) + "px")
+		.niceScroll();
 	callback();
 }
 function closePanel (e) {

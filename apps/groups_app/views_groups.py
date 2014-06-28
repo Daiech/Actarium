@@ -285,7 +285,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
     if only_minutes:
         return render_to_response('groups/onlyShowMinutes.html', ctx, context_instance=RequestContext(request))
     else:
-        return render(request, 'groups/templates/showMinutes.html', ctx)
+        return render(request, 'minutes/show_minutes.html', ctx)
 
 
 @login_required(login_url='/account/login')

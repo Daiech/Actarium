@@ -1,0 +1,84 @@
+{% load gravatartag i18n humanize %}
+{% if space_to_approve or is_secretary or is_org_admin %}
+	{% if space_to_approve or is_secretary %}
+	<script type="text/template" id="approvingCommissionTpl">
+		<div id="approvingCommission" class="">
+			{% if my_attending %}
+			<div id="approve-message-up" class="div-sign alert ">
+	    		<strong>Tu voto: </strong> Apruebas ésta Acta?
+		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+					<i class="glyphicon glyphicon-ok icon-white"></i> Si, apruebo <span></span>
+				</a>
+				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
+					<i class="glyphicon glyphicon-comment"></i> No, Necesita correcci&oacute;n <span></span>
+				</a>
+			</div>
+			{% endif %}
+			<div class="mt20">
+				<!-- <strong class="mt20">Comisi&oacute;n aprobatoria:</strong> -->
+				<ol class="commission-approving-list" class="mt20">
+					{%for member in commission_approving%}
+						<li class="missing-{{member.id_user.id}}">
+							<div>
+								<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+							</div>
+							<div>
+							{{member.id_user.first_name}} {{member.id_user.last_name}}
+							</div>
+							<div class="icon-approver-status">
+								{%ifequal member.is_signed_approved 0%}
+								<i class="glyphicon glyphicon-time"></i>
+								{%endifequal%}
+								{%ifequal member.is_signed_approved 1%}
+								<i class="glyphicon glyphicon-ok"></i>
+								{%endifequal%}
+								{%ifequal member.is_signed_approved 2%}
+								<i class="icon-remove-circle"></i>
+								{%endifequal%}
+							</div>
+						</li>
+					{%endfor%}
+				</ol>
+			</div>
+		</div>
+		<div class="" id="annotations-approve">
+			<div class="pull-right"><i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{% trans 'Cualquier miembro del grupo puede escribir anotaciones sobre esta acta.' %}"></i></div>
+			<h4>{% trans 'Anotaciones' %}</h4>
+			<hr>
+			<div>
+				<a href="#new-annotation"  class="btn-no-approve btn btn-link"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crear anotaci&oacute;n' %}</a>
+			</div>
+			<div id="new-annotation" class="hidden">
+				<strong>{% trans 'Crear nueva anotaci&oacute;n' %}:</strong>
+				<textarea id="textarea-new-annotation" placeholder="{% trans 'Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una anotaci&oacute;n al redactor.' %}" autofocus></textarea>
+				<button class="btn btn-info" id="button-save">{% trans 'Publicar' %}</button>
+			</div>
+			<hr>
+			<div class="mt20">
+				<ul id="annotations" class="mt20 list-unstyled">
+					{%for annon in annotations%}
+					<li class="row-fluid"  id="annotation-{{annon.id_minutes_annotation}}">
+						<div class="annotation bb span70">
+							<div class="user-gravatar pull-left">
+								<img class="size32 avatar" src="{{ annon.id_user.email|showgravatar:'32'}}" alt="{{annon.id_user.first_name}}" />
+							</div>
+							<div class="name-user-annotation">
+								<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
+								·
+								<time title="{{annon.date_joined|date}}" datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
+							</div>
+							<div class="content-annotation">{{annon.annotation_text|safe}}
+							</div>
+							<div>
+								<!-- <hr> -->
+								<!-- <textarea></textarea> -->
+							</div>
+						</div>
+					</li>
+					{%endfor%}
+				</ul>
+			</div>
+		</div>
+	</script>
+	{% endif %}
+{% endif %}

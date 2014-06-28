@@ -1,0 +1,181 @@
+{% extends "minutes/menu.html" %}
+{% block title %}Acta {{ minutes.code }}, Grupo {{minutes.id_group.name}} {% endblock %}
+{% load gravatartag i18n %}
+
+{% block toolbar_content %}
+	<ul class="list-unstyled">
+		<li>
+			<a href="{% url 'show_folder' group.slug %}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="bottom" >
+		            <span class="glyphicon glyphicon-folder-open"></span> {% trans "Ver folder" %}
+		        </a>
+		</li>
+		<li>
+			<a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="bottom" >
+		            <span class="glyphicon glyphicon-plus"></span> {% trans "Crear acta" %}
+		        </a>
+		</li>
+		<li>
+			<a href="#" id="asdf" data-placement="bottom" >
+		            <span class="glyphicon glyphicon-eye-open"></span> {% trans "Ver panel" %}
+		        </a>
+		</li>
+	   <!--  <li>
+	        <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
+	            <i class="glyphico glyphicon glyphicon-cloud-upload"></i> {% trans "Subir acta" %}
+	        </a>
+	    </li> -->
+		{% if is_secretary and not minutes.is_full_signed%}
+	    <li data-placement="bottom" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
+			<a href="#" class="" id="minutes-edit" ><i class="glyphicon glyphicon-pencil"></i> {% trans 'Editar' %}</a>
+	    </li>
+		{%endif%}
+		{%if minutes_version%}
+	    <li data-placement="bottom" title="{% trans 'Revisa los cambios que ha tenido esta acta hasta el momento' %}">
+			<a href="#" id="history" class="">{% trans 'Veriones' %} ({{minutes_version|length}})</a>
+	    </li>
+		{%endif%}
+	    <li>
+	    	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
+				{% csrf_token %}
+				<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
+				<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" title="{%if not minutes.is_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="bottom" ><i class="glyphicon glyphicon-file"></i> {% trans 'PDF' %}</a>
+			</form>
+	    </li>
+		{% if minutes.is_full_signed %}
+		<li class="print hidden">
+			<a href="#" id="print-minutes"><i class="glyphicon glyphicon-print"></i> {% trans 'Imprimir' %}</a>
+		</li>
+		{%endif%}
+	</ul>
+	<ul class="pull-right btn-pull-right">
+	    <li class=" important">
+			<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+	    </li>
+	    <li class=" important">
+			<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="glyphicon glyphicon-arrow-right"></i></a>
+	    </li>
+	</ul>
+{% endblock %}
+
+{%block menu_content %}
+	<div id="minutes-processor-container" class="">
+	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
+	    	<p>Historial de versiones:</p>
+	    	{%for minutes in minutes_version%}
+	    		{{minutes.full_html|safe}}
+	    		<hr>
+	    	{%endfor%}
+	    </div>
+		<!-- <div class="alert">
+		  <strong>Ayúdenos a mejorar!</strong><br>Por favor responda esta pequeña encuesta, le tomará sólo un minuto.
+		  <a href="#encuesta" role="button" class="btn btn-info btn-large" data-toggle="modal">Responder encuesta</a>
+		</div> -->
+	    <div id="minutes-container">
+	    {{minute_template}}
+	    </div>
+	</div>
+	<span id="is_form" style="display:none">{{is_form}}</span>
+{%endblock%}
+
+{% block panel_content %}
+	{% include "minutes/panel_tpl.html" %}
+	{% include "minutes/approving_commission/tpl.html" %}
+{% endblock %}
+
+{% block menu_content_js %}
+	<script src="{{ STATIC_URL }}js/vendor/tiny_mce/tiny_mce.js"></script>
+	<script src="{{ STATIC_URL }}js/vendor/waypoints.min.js"></script>
+	<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
+	<script src="{{ STATIC_PREFIX }}js/actarium.panel.js"></script>
+	<script type="text/javascript">{% include "minutes/approving_commission/scripts.js" %}</script>
+	<script>
+		$(document).on("ready", function(){
+			$("#group-menu-folder").addClass("active");
+			$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
+			$("#asdf").on("click", commission);
+			// loadPanel(ctx, function () {
+			// 		sendNewAjax("/rest/api/users/1/mydata/",{}, function (data) {
+			// 			//TODO with your data. only give me a html in loadPanelContent
+			// 			loadPanelContent("<h1>" + data.username + "</h1>");
+			// 		})
+			// 	});
+
+			{% if minutes.is_full_signed %}
+			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
+				$(".print").removeClass("hidden");
+			}
+			{% endif %}
+			$("#print-minutes").on("click", function (e) {
+				alert("{% trans 'No olvides configurar las márgenes y las opciones de encabezado y pie de página antes de imprimir.' %}")
+				window.print();
+			});
+			$("#btn-generate-pdf").on("click", function (e) {
+				e.preventDefault();
+				{% if minutes.is_full_signed %}
+				$("#pdf-form").submit();
+				{% endif %}
+			});
+			$("li, a").tooltip();
+			$('#first-point').waypoint(function() {
+				if($("#approve-message-up").hasClass("minutes-bar-static")){
+					$("#approve-message-up").removeClass("minutes-bar-static").css({"position": "relative"});
+				}
+				else{
+					$("#approve-message-up").addClass("minutes-bar-static").css({"position": "fixed"});
+				}
+			});
+			$('#minutes-html-data').val($('#minutes').html());
+
+			$("#history").on("click", function (e) {
+				e.preventDefault();
+				$("#minutes-version").slideToggle();
+			})
+
+			{% if is_secretary %}
+			$("#minutes-edit").on("click", function (e) {
+				if(confirm("{% trans 'Seguro que desea editar esta Acta?' %}")){
+					top.location = "{% url 'edit_minutes' group.slug minutes.code minutes.id_template.slug %}";
+				}
+			})
+			{% endif %}
+			
+		});
+		{% include minutesTemplateJs %}
+	</script>
+{% endblock %}
+
+{% block menu_content_style%}
+	<style>
+		.white-box-container{width: 80%;margin: auto; }
+		.selected-annontation{background-color: rgb(240, 240, 240);;}
+		.content-annotation{margin-left: 40px}
+		.comment-annotation p{font-size: 14px;}
+		.name-user-annotation{margin-left: 40px}
+		.name-user-annotation time{font-size: 14px;color: gray}
+		.annotation{padding: 10px;}
+		ul#annotations > li > div{margin-top: 25px;}
+		#button-save{margin-top: 5px;}
+		article header img{margin-top: 0px;}
+		#annotations-approve{margin-top: 20px;}
+		.commission-approving-list{padding-left: 20px;}
+		.commission-approving-list > li > div{display: inline;}
+		.icon-approver-status i{margin-top: 5px}
+		#body-container > article{margin-top:0;padding-top: 0;}
+		#minutes-bar{background-color: rgb(251, 251, 251); padding: 5px 0;position: absolute;left: 0;width:100%;margin-top: 0px;}
+		#minutes-bar-hoja{width: 75%;}
+		.header-minutes{background-color: rgb(251, 251, 251); padding: 15px 0;position: absolute;left: 0;width: 100%;margin: 0;}
+		.header-minutes > div{margin: 0 auto;margin-bottom: 8px;width: 90%;}
+		.minutes-bar-static{position: fixed;top: 73px;width: 50%;left: 0;right: 0;margin: 0 auto;}
+		#minutes-container > section{margin-top: 0px;padding-top: 0 !important}
+		#minutes{padding-right: 0;padding-left: 0;}
+		#toolbar-btn > ul > li > form{margin: 0}
+		.ico-title{margin-top: -4px;margin-right: 2px;}
+		.important{z-index: 2001}
+		#minutes-processor-container{padding-right: 0;}
+		.mpc{padding-right: 260px !important;}
+		#minutes-version{width: 815px;margin: auto;}
+		@media (max-width: 979px) {
+			.minutes-bar-static{top: 0px;}
+		}
+	</style>
+{% endblock %}

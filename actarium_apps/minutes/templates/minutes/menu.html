@@ -1,15 +1,16 @@
 {% extends "minutes/base.html" %}
 {% block title %}{{group.name|title}} {% endblock %}
 {% load gravatartag i18n %}
+
 {% block content %}
     <div id="groups-container" class="">
     	<div class="row-fluid">
 	    	<div id="toolbar-btn" class="bb">
 	    		{% block toolbar_content %}{% endblock %}
-				<span id="toolBarStatus">Acta creada el 26 de junio de 2014 a las 14:25</span>
+				<span id="toolBarStatus"></span>
 	    	</div>
 	    	<div id="activity" class="hidden">
-	    		{% block activity_content %}{% endblock %}
+	    		{% block panel_content %}{% endblock %}
 	    	</div>
 	    	<div id="group-content" class="">
 	    		{% if dni_request %}
@@ -22,6 +23,7 @@
 	    </div>
     </div>
 {%endblock%}
+
 {% block js %}
 	<script src="{{STATIC_PREFIX}}js/vendor/jquery.nicescroll.min.js"></script>
 	<script>
@@ -50,16 +52,16 @@
 						return false;
 				}
 			}
-			$("#activity-content").css("height", ($("#activity").height() - 70) + "px");
-			$("#activity-content").niceScroll();
 			$(".title").tooltip();
 		});
 	</script>
 	{% block menu_content_js %}{% endblock %}
 {% endblock %}
+
 {% block style_libs %}
 	{% block menu_style_libs %}{% endblock %}
 {% endblock %}
+
 {% block style%}
 	<style>
 		header.navbar{border-bottom:0;height: 50px}
