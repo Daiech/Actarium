@@ -1,0 +1,91 @@
+{% load i18n %}
+<ul class="list-unstyled">
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" id="dropdownFile" data-toggle="dropdown">
+		    {% trans 'Archivo' %}
+		    <span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownFile">
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="right" ><span class="glyphicon glyphicon-plus"></span> {% trans "Nueva acta" %}</a></li>
+		    <li role="presentation" class="divider"></li>
+		    <li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" title="{%if not minutes.is_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="right" >
+			    	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
+						{% csrf_token %}
+						<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
+							<span class="glyphicon glyphicon-file"></span> {% trans 'Descargar PDF' %}
+					</form>
+				</a>
+		    </li>
+			{% if minutes.is_full_signed %}
+			<li role="presentation" class="print hidden">
+				<a role="menuitem" tabindex="-1" href="#" id="print-minutes"><span class="glyphicon glyphicon-print"></span> {% trans 'Imprimir' %}</a>
+			</li>
+			{%endif%}
+		    <li role="presentation" class="divider"></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'show_folder' group.slug %}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="right" ><span class="glyphicon glyphicon-folder-open"></span> {% trans "Volver al folder" %}</a></li>
+		</ul>
+	</li>
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" id="dropdownEdit" data-toggle="dropdown">
+			{% trans 'Edición' %}
+		<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownEdit">
+		    {% if is_secretary and not minutes.is_full_signed%}
+		    <li role="presentation" data-placement="right" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
+				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
+		    </li>
+			{%endif%}
+			<li role="presentation" data-placement="right" title="{% trans 'Revisa los cambios que ha tenido esta acta hasta el momento' %}">
+				<a role="menuitem" tabindex="-1" href="#" id="history" class="{% if not minutes_version %}{% endif %}"><span class="glyphicon glyphicon-th-list"></span> {% trans 'Veriones' %} ({{minutes_version|length}})</a>
+		    </li>
+		</ul>
+	</li>
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" id="dropdownPanel" data-toggle="dropdown">
+			{% trans 'Paneles' %}
+		<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownPanel">
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="asdf" data-placement="right" >{% trans "Comisión aprobatoria, Anotaciones" %}</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="tasks" data-placement="right" >{% trans "Tareas" %}</a></li>
+		</ul>
+	</li>
+   <!--  <li>
+        <a role="menuitem" tabindex="-1" href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
+            <i class="glyphico glyphicon glyphicon-cloud-upload"></i> {% trans "Subir acta" %}
+        </a>
+    </li> -->
+</ul>
+
+
+
+
+<ul class="pull-right btn-pull-right">
+    <li class=" important">
+		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+    </li>
+    <li class=" important">
+		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="glyphicon glyphicon-arrow-right"></i></a>
+    </li>
+</ul>
+
+
+
+
+{% comment %}
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+    Dropdown
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+    <li role="presentation" class="divider"></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+  </ul>
+</li>
+{% endcomment %}

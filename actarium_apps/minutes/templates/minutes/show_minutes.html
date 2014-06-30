@@ -3,58 +3,7 @@
 {% load gravatartag i18n %}
 
 {% block toolbar_content %}
-	<ul class="list-unstyled">
-		<li>
-			<a href="{% url 'show_folder' group.slug %}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="bottom" >
-		            <span class="glyphicon glyphicon-folder-open"></span> {% trans "Ver folder" %}
-		        </a>
-		</li>
-		<li>
-			<a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="bottom" >
-		            <span class="glyphicon glyphicon-plus"></span> {% trans "Crear acta" %}
-		        </a>
-		</li>
-		<li>
-			<a href="#" id="asdf" data-placement="bottom" >
-		            <span class="glyphicon glyphicon-eye-open"></span> {% trans "Ver panel" %}
-		        </a>
-		</li>
-	   <!--  <li>
-	        <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title='{% trans "Necesitas ser redactor para habilitar esta opci&oacute;n" %}'{%endif%}>
-	            <i class="glyphico glyphicon glyphicon-cloud-upload"></i> {% trans "Subir acta" %}
-	        </a>
-	    </li> -->
-		{% if is_secretary and not minutes.is_full_signed%}
-	    <li data-placement="bottom" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
-			<a href="#" class="" id="minutes-edit" ><i class="glyphicon glyphicon-pencil"></i> {% trans 'Editar' %}</a>
-	    </li>
-		{%endif%}
-		{%if minutes_version%}
-	    <li data-placement="bottom" title="{% trans 'Revisa los cambios que ha tenido esta acta hasta el momento' %}">
-			<a href="#" id="history" class="">{% trans 'Veriones' %} ({{minutes_version|length}})</a>
-	    </li>
-		{%endif%}
-	    <li>
-	    	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
-				{% csrf_token %}
-				<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
-				<a href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" title="{%if not minutes.is_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="bottom" ><i class="glyphicon glyphicon-file"></i> {% trans 'PDF' %}</a>
-			</form>
-	    </li>
-		{% if minutes.is_full_signed %}
-		<li class="print hidden">
-			<a href="#" id="print-minutes"><i class="glyphicon glyphicon-print"></i> {% trans 'Imprimir' %}</a>
-		</li>
-		{%endif%}
-	</ul>
-	<ul class="pull-right btn-pull-right">
-	    <li class=" important">
-			<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
-	    </li>
-	    <li class=" important">
-			<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="glyphicon glyphicon-arrow-right"></i></a>
-	    </li>
-	</ul>
+	{% include "minutes/show_minutes_tool_bar.html" %}
 {% endblock %}
 
 {%block menu_content %}
@@ -66,10 +15,6 @@
 	    		<hr>
 	    	{%endfor%}
 	    </div>
-		<!-- <div class="alert">
-		  <strong>Ayúdenos a mejorar!</strong><br>Por favor responda esta pequeña encuesta, le tomará sólo un minuto.
-		  <a href="#encuesta" role="button" class="btn btn-info btn-large" data-toggle="modal">Responder encuesta</a>
-		</div> -->
 	    <div id="minutes-container">
 	    {{minute_template}}
 	    </div>
@@ -93,6 +38,7 @@
 			$("#group-menu-folder").addClass("active");
 			$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
 			$("#asdf").on("click", commission);
+			commission(jQuery.Event("keypress"));
 			// loadPanel(ctx, function () {
 			// 		sendNewAjax("/rest/api/users/1/mydata/",{}, function (data) {
 			// 			//TODO with your data. only give me a html in loadPanelContent
