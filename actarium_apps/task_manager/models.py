@@ -13,7 +13,7 @@ class Roles(models.Model):
     is_active = models.BooleanField(default=True)
     
     objects = GenericManager()
-    
+
     def __unicode__(self):
         return u"[%s] %s" % (self.code,self.name)
 
