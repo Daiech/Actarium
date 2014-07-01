@@ -37,14 +37,24 @@
 		$(document).on("ready", function(){
 			$("#group-menu-folder").addClass("active");
 			$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
-			$("#asdf").on("click", commission);
-			commission(jQuery.Event("keypress"));
-			// loadPanel(ctx, function () {
-			// 		sendNewAjax("/rest/api/users/1/mydata/",{}, function (data) {
-			// 			//TODO with your data. only give me a html in loadPanelContent
-			// 			loadPanelContent("<h1>" + data.username + "</h1>");
-			// 		})
-			// 	});
+			$("#commissionPanel").on("click", commission);
+			$("#commissionPanel").click(); //open the commission approving panel
+
+			$("#tasksPanel").on("click", tasksPanel);
+			function tasksPanel (e) {
+				e.preventDefault();
+				var ctx = {
+					id: $(this).attr("id"),
+					title: "{% trans 'Tareas' %}",
+					info_text: "{% trans 'Organiza todas las tareas que requieras para cada acta' %}",
+					callback: function () {
+						sendNewAjax("/rest/api/users/1/mydata/",{}, function (data) {
+							loadPanelContent("<h1>" + data.username + "</h1>");
+						});
+					}
+				}
+				loadPanel(ctx);
+			}
 
 			{% if minutes.is_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
@@ -120,6 +130,9 @@
 		#minutes-processor-container{padding-right: 0;}
 		.mpc{padding-right: 260px !important;}
 		#minutes-version{width: 815px;margin: auto;}
+
+		.dropdown-menu li > a{padding-right: 35px;}
+		.dropdown-menu li > a i{right: 10px !important;left: auto;}
 		@media (max-width: 979px) {
 			.minutes-bar-static{top: 0px;}
 		}

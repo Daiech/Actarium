@@ -2,13 +2,15 @@
 function commission (e) {
 	e.preventDefault();
 	var ctx = {
+		"id": $(this).attr("id"),
 		"title": "{% trans 'Comisión aprobatoria' %}",
 		"info_text": "{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}",
+		"callback":  function () {
+			loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: {} }));
+			$(".popover-element").popover({trigger: 'hover'});
+		}
 	}
-	loadPanel(ctx, function () {
-		loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: {} }));
-		$(".popover-element").popover({trigger: 'hover'});
-	});
+	loadPanel(ctx);
 }
 function callBackApprove(data){
 	$(".div-sign").fadeOut(300,function(){
