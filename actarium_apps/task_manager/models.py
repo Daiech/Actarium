@@ -39,7 +39,24 @@ class Tasks(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    objects = GenericManager()
+    def create_task():
+        pass
+
+    def edit_task():
+        pass
+
+    def delete_task():
+        pass
+
+    def task_done():
+        pass
+
+    def task_canceled():
+        pass
+
+    objects = TasksManager()
+
+
 
     def __unicode__(self):
         return u"%s" % (self.name)
