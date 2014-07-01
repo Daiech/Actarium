@@ -47,9 +47,15 @@
 			{% trans 'Paneles' %}
 		<span class="caret"></span>
 		</a>
-		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownPanel">
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="asdf" data-placement="right" >{% trans "Comisión aprobatoria, Anotaciones" %}</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="tasks" data-placement="right" >{% trans "Tareas" %}</a></li>
+		<ul class="dropdown-menu" id="dropdownPanelList" role="menu" aria-labelledby="dropdownPanel">
+			<li role="presentation">
+				<a role="menuitem" tabindex="-1" href="#" id="commissionPanel" data-placement="right" >
+					<span>{% trans "Comisión aprobatoria, Anotaciones" %}</span>
+					<i class="glyphicon"></i>
+				</a>
+			</li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="tasksPanel" data-placement="right" >
+			{% trans "Tareas" %}<i class="glyphicon"></i></a></li>
 		</ul>
 	</li>
    <!--  <li>
