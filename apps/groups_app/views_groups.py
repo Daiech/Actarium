@@ -220,7 +220,6 @@ def showMinuteGroup(request, slug_group, minutes_code):
             if sign:
                 space_to_approve = True
                 my_attending = True if sign.is_signed_approved == 0 else False
-            print "*****************my_attending:", my_attending
             ######## </ATTENDING> #########
 
             ######## <APPROVER LISTS> #########

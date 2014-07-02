@@ -1,5 +1,5 @@
 {% load i18n gravatartag %}
-function commission (e) {
+function showCommission (e) {
 	e.preventDefault();
 	var ctx = {
 		"id": $(this).attr("id"),
@@ -7,6 +7,25 @@ function commission (e) {
 		"info_text": "{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}",
 		"callback":  function () {
 			loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: {} }));
+			$(".popover-element").popover({trigger: 'hover'});
+		}
+	}
+	loadPanel(ctx);
+}
+function editCommission (e) {
+	e.preventDefault();
+	var ctx = {
+		"id": $(this).attr("id"),
+		"title": "{% trans 'Roles de acta' %}",
+		"info_text": "{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}",
+		"callback":  function () {
+			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug %}",{}, function (data){
+				ctx = {
+					members: data.members,
+					name: "nhommasdf"
+				}
+				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
+			});
 			$(".popover-element").popover({trigger: 'hover'});
 		}
 	}
@@ -67,7 +86,8 @@ function saveAnnotation(e){
 		/*
 		USAR TEMPLATES: SWIG
 		*/
-		var params = {"annotation": t, "minutes_id": {{minutes.id}}}
+		{% if minutes %}
+		var params = {"annotation": t, "minutes_id": {{ minutes.id }}}
 		sendNewAjax("/groups/{{group.slug}}/add-new-annotation",params, function(data){
 				if(data){
 					var m = '<div class="annotation bb">\
@@ -91,9 +111,49 @@ function saveAnnotation(e){
 			},
 			{"method": "post"}
 		);
+		{% endif %}
 	}else{
 		setAlertError("{% trans 'Error' %}", "{% trans 'No puedes agregar una anotación vacía' %}")
 	}
 }
 $(document).on("click", ".btn-no-approve", newAnnotation);
 $(document).on("click", "#button-save", saveAnnotation);
+
+
+
+function callbackSetRole(data) {
+	if (data["saved"]){
+    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+    }
+    else{
+    	setAlertError("Ocurri&oacute; un error", data['error'])
+    }
+}
+function callbackRemoveRole(data) {
+	if (data["saved"]){
+    	setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
+    }
+    else{
+    	setAlertError("Ocurri&oacute; un error", data['error'])
+    }
+}
+function setRole(e) {
+	var checkbox = $(this);
+	var role = checkbox.attr("data-role");
+	var role_name = checkbox.attr("data-role-name");
+	var uid = checkbox.attr("data-uid");
+	if(checkbox.is(":checked")){
+		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
+	}
+	else{
+		if(confirm("{% trans 'Seguro que desea remover esta característica?' %}")){
+			sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole);
+		}
+		else{
+			checkbox.attr("checked","checked");
+		}
+	}
+}
+$(document).on("click", ".set-role", setRole);

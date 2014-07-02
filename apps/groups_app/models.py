@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.template import defaultfilters
 from django.conf import settings
 from actarium_apps.organizations.models import Groups
+from libs.generic_managers import GenericManager
 
 
 class minutes_type_1(models.Model):
@@ -193,6 +194,8 @@ class rol_user_minutes(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=False)
 
+    objects = GenericManager()
+    
     def __unicode__(self):
         return "user: %s is_active: %s" % (self.id_user, self.is_active)
 
