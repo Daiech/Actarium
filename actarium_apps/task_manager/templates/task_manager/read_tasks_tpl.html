@@ -1,32 +1,33 @@
 {% load gravatartag i18n humanize %}
-	<script type="text/template" id="approvingCommissionTpl">
-		<div id="taskManager" class="">
+	<script type="text/template" id="taskManagerTpl">
+		<div id="taskManager" >
 			<div class="mt20">
-				<!-- <strong class="mt20">Tareas:</strong> -->
-				<ol class="commission-approving-list" class="mt20">
-					{%for member in commission_approving%}
-						<li class="missing-{{member.id_user.id}}">
-							<div>
-								<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
-							</div>
-							<div>
-							{{member.id_user.first_name}} {{member.id_user.last_name}}
-							</div>
-							<div class="icon-approver-status">
-								{%ifequal member.is_signed_approved 0%}
-								<i class="glyphicon glyphicon-time"></i>
-								{%endifequal%}
-								{%ifequal member.is_signed_approved 1%}
-								<i class="glyphicon glyphicon-ok"></i>
-								{%endifequal%}
-								{%ifequal member.is_signed_approved 2%}
-								<i class="icon-remove-circle"></i>
-								{%endifequal%}
-							</div>
-						</li>
-					{%endfor%}
-				</ol>
+				<div>Agregar tarea + </div>
+				<div id="tasksList">
+				</div>
 			</div>
 		</div>
-		
 	</script>
+
+	<script type="text/template" id="taskListTpl">
+		{% verbatim %}
+			{%for task in tasks %}
+				<div class="oneTask" id="{{task.id}}">
+					<div>
+						{{task.name}}
+					</div>
+					<div>
+						{{task.description}}
+					</div>
+					<div>
+						<img style="width:20px" src="{{task.img}}">
+					</div>
+					<div>
+						{{task.responsible}}
+					</div>
+				</div>
+			{%endfor%}
+		{% endverbatim %}
+	</script>
+
+	
