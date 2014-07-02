@@ -137,23 +137,122 @@ function callbackRemoveRole(data) {
     	setAlertError("Ocurri&oacute; un error", data['error'])
     }
 }
+
+
+/****roles for minutes ****/
+
+
+function isThereAprobers(e){
+	console.log('enter to  isThereAprobers');
+	approvers = $(".approver").filter(':checked');
+	if (approvers.length == 0){
+		e.preventDefault();
+		e.stopPropagation();
+		setAlertMessage("Se necesta aprobador", "Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta")
+	}
+}
+
+function getRoleName (op) {
+	switch(op){
+		case 1 : return "Administrador de &eacute;ste grupo"; break;
+		case 2 : return "Aprobador de actas"; break;
+		case 3 : return "Redactor (Puede redactar Actas)"; break;
+	}
+}
+function callbackSetRole(data) {
+	if (data["saved"]){
+    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+    }
+    else{
+    	setAlertError("Ocurri&oacute; un error", data['error'])
+    }
+}
+function callbackRemoveRole(data) {
+	if (data["saved"]){
+    	setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
+    }
+    else{
+    	setAlertError("Ocurri&oacute; un error", data['error'])
+    }
+}
 function setRole(e) {
 	var checkbox = $(this);
-	var role = checkbox.attr("data-role");
-	var role_name = checkbox.attr("data-role-name");
-	var uid = checkbox.attr("data-uid");
+	var role = checkbox.attr("data-role")
+	var role_name = checkbox.attr("data-role-name")
+	var uid = checkbox.attr("data-uid")
+	// console.log(checkbox.is(":checked"));
 	if(checkbox.is(":checked")){
 		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
 	}
 	else{
-		if(confirm("{% trans 'Seguro que desea remover esta característica?' %}")){
-			sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
-				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole);
-		}
-		else{
-			checkbox.attr("checked","checked");
-		}
+		// if(confirm("{% trans 'Seguro que desea remover esta característica?' %}")){
+		// }
+		// else{
+		// 	checkbox.attr("checked","checked")
+		// }
+		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
 	}
 }
-$(document).on("click", ".set-role", setRole);
+function callbackSetPresident (data) {
+	if (data["saved"]){
+    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+		$(".president-ok").removeClass("hidden");
+		//show all options for to set a secretary
+		$("#sel-secretary option").show();
+		//hide the president in the secretary select
+		$("#sel-secretary option[value=" + data['uid'] +"]").hide();
+		//Put checked the President checkbox: approver & signer
+		// $("#signer"+data['uid']).attr("disabled","disabled");
+    }
+    else{
+    	setAlertError("Ocurri&oacute; un error", data['error'])
+    	$("#sel-president").val(0);
+    }
+}
+function callbackSetSecretary (data) {
+	if (data["saved"]){
+    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+		$(".secretary-ok").removeClass("hidden");
+		$("#sel-president option").show();
+		$("#sel-president option[value=" + data['uid'] +"]").hide();
+		// $("#signer"+data['uid']).attr("disabled","disabled");
+    }
+    else{
+    	setAlertError("Ocurri&oacute; un error", data['error']);
+    	$("#sel-secretary").val(0);
+    }
+}
+function setPresident (e) {
+	$(".president-ok").addClass("hidden")
+	var uid = $(this).val();
+	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+		{"role":4, "uid": uid, "remove": 0},"",callbackSetPresident)
+}
+function setSecretary (e) {
+	$(".secretary-ok").addClass("hidden")
+	var uid = $(this).val();
+	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
+		{"role":5, "uid": uid, "remove": 0},"",callbackSetSecretary)
+}
+function setShowDNI(e){
+	sendAjax("/groups/{{group.slug}}/set-show-dni",
+		{},"", 
+		function(data){
+			if (data["saved"]){
+		    	setAlertMessage("Configuraci&oacute;n realizada", "Se ha guardado correctamente la configuraci&oacute;n de visualizaci&oacute;n de DNI en las actas")
+		    }
+		    else{
+		    	setAlertError("Ocurri&oacute; un error", data['error'])
+		    }
+		}
+	);
+}
+$(document).on("click", ".set-role", setRole);//roles MAIN
+$(document).on("change", "#sel-president", setPresident);//roles MAIN
+$(document).on("change", "#sel-secretary", setSecretary);//roles MAIN
+$(document).on('change', "#show-dni", setShowDNI);
+$(document).on('click', ".btn-next", isThereAprobers);
+
+/****close roles for minutes ****/

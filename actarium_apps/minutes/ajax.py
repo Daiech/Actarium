@@ -15,7 +15,12 @@ def get_approving_commission(request, slug_group):
                 "id": m.id_user.id,
                 "full_name": m.id_user.get_full_name(),
                 "img": showgravatar(m.id_user.email, 20),
-                "is_approver": m.is_approver
+                "is_active": m.id_user.is_active,
+                "role": {
+                    "is_approver": m.is_approver,
+                    "is_assistant": m.is_assistant,
+                    "is_signer": m.is_signer
+                }
                 })
         response = {"members": members}
     else:
