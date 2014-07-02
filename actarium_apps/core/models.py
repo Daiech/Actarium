@@ -6,6 +6,8 @@ from .managers import *
 from django.contrib.auth.models import User
 from actarium_apps.customers_services.models import Customers, CustomersServices , Services #,  OrderStatus, CustomerOrders, OrderItems
 from actarium_apps.organizations.models import Organizations
+from actarium_apps.task_manager.models import Tasks
+from apps.groups_app.models import minutes as LastMinutes
 
 
 class ActariumCustomers(models.Model):
@@ -84,3 +86,17 @@ class DiscountCodes(models.Model):
  
     def __unicode__(self):
         return u"%s: $%s" % (self.code, self.value)
+
+
+class LastMinutesTasks(models.Model):
+    minutes = models.ForeignKey(LastMinutes, related_name='%(class)s_minutes', verbose_name=_("Acta"))
+    task = models.ForeignKey(Tasks, related_name='%(class)s_task', verbose_name=_("Tarea"))
+
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    
+    objects = GenericManager()
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.minutes, self.task)
