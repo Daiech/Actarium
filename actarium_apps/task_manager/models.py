@@ -40,20 +40,25 @@ class Tasks(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    def create_task():
+    def create_task(self):
         pass
 
-    def edit_task():
+    def update_task(self):
         pass
 
-    def delete_task():
+    def delete_task(self):
         pass
 
-    def task_done():
+    def set_task_done(self):
         pass
 
-    def task_canceled():
+    def set_task_canceled(self):
         pass
+
+    def get_responsible(self):
+        return self.usertasks_task.get(role__code="RES").user
+
+    responsible = property(get_responsible)
 
     objects = TasksManager()
 
