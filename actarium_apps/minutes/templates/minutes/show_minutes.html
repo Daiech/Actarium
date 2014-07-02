@@ -25,34 +25,25 @@
 {% block panel_content %}
 	{% include "minutes/panel_tpl.html" %}
 	{% include "minutes/approving_commission/tpl.html" %}
+	{% include "task_manager/read_tasks_tpl.html" %}
 {% endblock %}
 
 {% block menu_content_js %}
 	<script src="{{ STATIC_URL }}js/vendor/tiny_mce/tiny_mce.js"></script>
 	<!-- <script src="{{ STATIC_URL }}js/vendor/waypoints.min.js"></script> -->
 	<script type="text/javascript">{% include "minutes/approving_commission/scripts.js" %}</script>
+	<script type="text/javascript">{% include "task_manager/read_tasks.js" %}</script>
 	<script>
 		$(document).on("ready", function(){
 			$("#group-menu-folder").addClass("active");
 			$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
 			$("#commissionPanel").on("click", showCommission);
-			$("#commissionPanel").click(); //open the commission approving panel
+			
 
-			$("#tasksPanel").on("click", tasksPanel);
-			function tasksPanel (e) {
-				e.preventDefault();
-				var ctx = {
-					id: $(this).attr("id"),
-					title: "{% trans 'Tareas' %}",
-					info_text: "{% trans 'Organiza todas las tareas que requieras para cada acta' %}",
-					callback: function () {
-						sendNewAjax("/rest/api/users/1/mydata/",{}, function (data) {
-							loadPanelContent("<h1>" + data.username + "</h1>");
-						});
-					}
-				}
-				loadPanel(ctx);
-			}
+			$("#tasksPanel").on("click", loadTasksPanel);
+
+			$("#tasksPanel").click(); //open the commission approving panel
+			
 
 			{% if minutes.is_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
