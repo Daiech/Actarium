@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
+
 from .managers import *
 
 
@@ -55,8 +56,6 @@ class Tasks(models.Model):
         pass
 
     objects = TasksManager()
-
-
 
     def __unicode__(self):
         return u"%s" % (self.name)

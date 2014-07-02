@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from actarium_apps.customers_services.models import Customers, CustomersServices , Services #,  OrderStatus, CustomerOrders, OrderItems
 from actarium_apps.organizations.models import Organizations
 from actarium_apps.task_manager.models import Tasks
-from apps.groups.models import minutes as LastMinutes
+from apps.groups_app.models import minutes as LastMinutes
 
 
 class ActariumCustomers(models.Model):
@@ -99,4 +99,4 @@ class LastMinutesTasks(models.Model):
     objects = GenericManager()
 
     def __unicode__(self):
-        return u"%s - %s - %s" % (self.task.name,self.user.username,self.role.name)
+        return u"%s - %s" % (self.minutes, self.task)
