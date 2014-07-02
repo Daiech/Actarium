@@ -260,7 +260,7 @@
 		    			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
 		    	}
 		    	else{
-		    		if(confirm("Seguro que desea remover esta característica?")){
+		    		if(confirm("{% trans 'Seguro que desea remover esta característica?' %}")){
 		    			sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 		    				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
 		    		}

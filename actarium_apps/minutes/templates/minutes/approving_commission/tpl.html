@@ -7,17 +7,17 @@
 			<div id="approve-message-up" class="div-sign alert ">
 	    		<strong>Tu voto: </strong> Apruebas ésta Acta?
 		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
-					<i class="glyphicon glyphicon-ok icon-white"></i> Si, apruebo <span></span>
+					<i class="glyphicon glyphicon-ok icon-white"></i> {% trans 'Si, apruebo' %} <span></span>
 				</a>
 				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
-					<i class="glyphicon glyphicon-comment"></i> No, Necesita correcci&oacute;n <span></span>
+					<i class="glyphicon glyphicon-comment"></i> {% trans 'No, Necesita corrección' %} <span></span>
 				</a>
 			</div>
 			{% endif %}
 			<div class="mt20">
-				<!-- <strong class="mt20">Comisi&oacute;n aprobatoria:</strong> -->
+				<!-- <strong class="mt20">{% trans 'Comisión aprobatoria' %}:</strong> -->
 				<ol class="commission-approving-list" class="mt20">
-					{%for member in commission_approving%}
+					{% for member in commission_approving %}
 						<li class="missing-{{member.id_user.id}}">
 							<div>
 								<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
@@ -37,7 +37,7 @@
 								{%endifequal%}
 							</div>
 						</li>
-					{%endfor%}
+					{% endfor %}
 				</ol>
 			</div>
 		</div>
@@ -82,3 +82,29 @@
 	</script>
 	{% endif %}
 {% endif %}
+{% if is_org_admin %}
+{% endif %}
+<script type="text/template" id="editApprovingCommissionTpl">
+	<div id="editApprovingCommission" class="">
+		<div class="">
+			<strong class="">{% trans 'Comisión aprobatoria' %}:</strong>
+			{% verbatim %}
+			<ul class="commission-approving-list list-unstyled">
+				{% for member in members %}
+					<li class="missing-{{ member.id }}">
+						<span>
+							<img style="width:20px" src="{{ member.img }}">
+						</span>
+						<span>
+						{{ member.full_name }}
+						</span>
+						<span class="icon-approver-status">
+							<input class ="set-role approver" id="approver{{ member.id }}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{ member.id }}" {% if member.is_approver %}checked{%endif%}>
+						</span>
+					</li>
+				{% endfor %}
+			</ul>
+			{% endverbatim %}
+		</div>
+	</div>
+</script>

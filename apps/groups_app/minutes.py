@@ -710,7 +710,8 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
     group = Groups.objects.get_group(slug=slug_group)
 
     _user_rel = getRelUserGroup(request.user, group.id)
-    if _user_rel.is_secretary and _user_rel.is_active:
+    is_org_admin = group.organization.has_user_role(request.user, "is_admin")
+    if (_user_rel and _user_rel.is_secretary and _user_rel.is_active) or is_org_admin:
         saved = False
         error = False
         _reunion = None
@@ -763,12 +764,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ######## <SAVE_THE_MINUTE> #########
         if request.method == "POST":
             form = newMinutesForm(request.POST)
-            # print "request.post------------------------------------"
-            # print request.POST 
-            # print "formulario--------------------------------"
-            # print form 
             if form.is_valid():
-                # print "form valid---------------------"
                 _minute = saveMinute(request, group, form, _template)
 
                 ######## <Create a relation into reunion and the new minutes> #########
@@ -835,6 +831,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "secretary": secretary,
                "show_dni": show_dni,
                "is_form": 1,
+               "is_org_admin": is_org_admin,
                "breadcrumb": _("Crear Acta")
                }
         return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))

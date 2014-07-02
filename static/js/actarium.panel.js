@@ -25,7 +25,7 @@ function loadPanel (a) {
 		.niceScroll();
 	$("#dropdownPanelList i.glyphicon").removeClass("glyphicon-ok");
 	$("#" + ctx.id).find("i.glyphicon").addClass("glyphicon-ok");
-	ctx.callback();
+	a.callback();
 }
 function closePanel (e) {
 	e.preventDefault();
