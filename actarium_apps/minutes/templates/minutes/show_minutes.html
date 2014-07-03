@@ -31,8 +31,12 @@
 {% block menu_content_js %}
 	<script src="{{ STATIC_URL }}js/vendor/tiny_mce/tiny_mce.js"></script>
 	<!-- <script src="{{ STATIC_URL }}js/vendor/waypoints.min.js"></script> -->
+	<script type="text/javascript" src="{{STATIC_PREFIX}}js/vendor/moment-with-langs.min.js"></script>
+	<script type="text/javascript" src="{{STATIC_PREFIX}}js/vendor/bootstrap/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript">{% include "minutes/approving_commission/scripts.js" %}</script>
 	<script type="text/javascript">{% include "task_manager/read_tasks.js" %}</script>
+
+
 	<script>
 		$(document).on("ready", function(){
 			$("#group-menu-folder").addClass("active");
@@ -90,6 +94,8 @@
 {% endblock %}
 
 {% block menu_content_style%}
+	<style>{% include "task_manager/read_tasks.css" %}</style>
+	<link rel="stylesheet" media="all" type="text/css" href="{{STATIC_PREFIX}}css/bootstrap-datetimepicker.min.css" />
 	<style>
 		.white-box-container{width: 80%;margin: auto; }
 		.selected-annontation{background-color: rgb(240, 240, 240);;}

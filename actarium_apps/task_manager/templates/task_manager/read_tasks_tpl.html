@@ -1,10 +1,39 @@
 {% load gravatartag i18n humanize %}
 	<script type="text/template" id="taskManagerTpl">
 		<div id="taskManager" >
-			<div class="mt20">
-				<div>Agregar tarea + </div>
-				<div id="tasksList">
+			<div class="task_add">
+				<button id="taskAddBtn" class="btn actarium-dropdown" >
+					<span id="taskAddBtn" class="glyphicon glyphicon-plus" ></span>
+					Agregar Tarea
+				</button>
+				<div  class="dropdown-container task_form">
+					<div class="header-title">
+				    	<span>Agregar Tarea</span>
+				    	<button type="button" class="close close-popover" aria-hidden="true">&times;</button>
+					</div>
+					<div class="dropdown-body">
+						<input id="taskName" type="text"  placeholder="Titulo" class="form-control task_input"/>
+						<textarea placeholder = "descripcion" class="form-control task_input"></textarea>
+						<div class="input-group task_input">
+							<span class="input-group-addon" >
+								<i class="glyphicon glyphicon-user" ></i>
+							</span>
+							<select class="form-control">
+								<option value="1" >Usuario uno</option>
+								<option value="2" >Usuario dos</option>
+							</select>
+						</div>
+						<div class="input-group task_input">
+							<span class="input-group-addon" >
+								<i class="glyphicon glyphicon-calendar" ></i>
+							</span>
+							<input class="date-pick form-control " type="text" />
+						</div>
+						<button class="btn task_input" type="submit" >Guardar</button>
+					</div>		
 				</div>
+			</div>
+			<div id="tasksList">
 			</div>
 		</div>
 	</script>
@@ -12,22 +41,41 @@
 	<script type="text/template" id="taskListTpl">
 		{% verbatim %}
 			{%for task in tasks %}
-				<div class="oneTask" id="{{task.id}}">
-					<div>
-						{{task.name}}
+				<div class="one_task row-fluid" data-task-id="{{task.id}}">
+					<div class="task_status pull-left" style="background-color: {{task.color}}">
 					</div>
-					<div>
-						{{task.description}}
+					<div class="task_info pull-left row-fluid">
+						<div class="task_user_img pull-left">
+							<img style="width:40px" src="{{task.img}}" class="img-circle">
+						</div>
+						<div class="task_content pull-left">
+							<div class="task_responsible">
+								<strong> {{task.responsible}} </strong>
+							</div>
+							<div class="task_name">
+								{{task.short_name}}
+							</div>
+						</div>
 					</div>
-					<div>
-						<img style="width:20px" src="{{task.img}}">
+					<div class="task_functions pull-left">
+						<a href="#">
+							<span class="glyphicon glyphicon-remove-circle"></span>
+						</a>
+						<a href="#">
+							<span class="glyphicon glyphicon-ok-circle"></span>
+						</a>
+						<a href="#">
+							<span class="glyphicon glyphicon-ban-circle"></span>
+						</a>
 					</div>
-					<div>
-						{{task.responsible}}
-					</div>
+					
 				</div>
 			{%endfor%}
 		{% endverbatim %}
 	</script>
 
-	
+	<!-- 
+	<div>
+		{{task.description}}
+	</div>
+	-->

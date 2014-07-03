@@ -1,0 +1,63 @@
+#tasksList{
+	border-bottom: 1px solid #f7f7f7;
+}
+
+.one_task{
+	margin: 2px 0px;
+	padding:0px;
+	height:62px;
+	border-top: 1px solid #f7f7f7;
+}
+
+.one_task:hover{
+	background-color: #FAFAFA;
+	border: solid thin #dadada;
+	cursor:pointer;
+}
+
+.task_status{
+	width:15px;
+	height:60px;
+}
+
+.task_info{
+	width:212px;
+	height:60px;
+	padding:3px 3px 3px 5px;
+}
+
+.task_functions{
+	width:15px;
+	height:60px;
+}
+
+.task_users_img{
+	width: 50px;
+}
+
+.task_content{
+	padding-left:5px;
+}
+
+.task_add{
+	height: 43px;
+	padding-top: 6px;
+
+}
+
+.task_responsible{
+
+}
+
+.task_name{
+	width: 158px;
+	line-height: 16px;
+}
+
+.task_form{
+	width: 248px;
+}
+
+.task_input{
+	margin-top: 8px;
+}
