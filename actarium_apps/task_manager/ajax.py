@@ -12,7 +12,14 @@ def get_minutes_tasks(request, minutes_id):
     tasks_list = Tasks.objects.get_tasks_by_minutes(minutes_id)
     tasks = []
     for task in tasks_list:
-        tasks.append({"id":task.id,"name":task.name,"description":task.description,"img":showgravatar(task.responsible.email,20), "responsible":task.responsible.username})
+        tasks.append({
+        	"id":task.id,
+        	"name":task.name,
+        	"short_name":str(task.name)[0:45]+"..." if len(str(task.name)) >= 45 else task.name,
+        	"description":task.description,
+        	"img":showgravatar(task.responsible.email,40), 
+        	"responsible":task.responsible.first_name, 
+        	"color":task.color})
     message = tasks
 
     # else:
