@@ -56,8 +56,6 @@ class Tasks(models.Model):
         pass
 
     def get_responsible(self):
-        print "_____________ALL", self.usertasks_task.all()
-        print "_____________FILTER", self.usertasks_task.filter(role__code="RES")
         return self.usertasks_task.get(role__code="RES").user
 
     def get_color(self):

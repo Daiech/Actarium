@@ -1,15 +1,39 @@
 {% load gravatartag i18n humanize %}
 	<script type="text/template" id="taskManagerTpl">
 		<div id="taskManager" >
-			<div>
-				<div class="task_add">
-					<button class="btn">
-						<span class="glyphicon glyphicon-plus" ></span>
-						Agregar Tarea
-					</button>
+			<div class="task_add">
+				<button id="taskAddBtn" class="btn actarium-dropdown" >
+					<span id="taskAddBtn" class="glyphicon glyphicon-plus" ></span>
+					Agregar Tarea
+				</button>
+				<div  class="dropdown-container task_form">
+					<div class="header-title">
+				    	<span>Agregar Tarea</span>
+				    	<button type="button" class="close close-popover" aria-hidden="true">&times;</button>
+					</div>
+					<div class="dropdown-body">
+						<input id="taskName" type="text"  placeholder="Titulo" class="form-control task_input"/>
+						<textarea placeholder = "descripcion" class="form-control task_input"></textarea>
+						<div class="input-group task_input">
+							<span class="input-group-addon" >
+								<i class="glyphicon glyphicon-user" ></i>
+							</span>
+							<select class="form-control">
+								<option value="1" >Usuario uno</option>
+								<option value="2" >Usuario dos</option>
+							</select>
+						</div>
+						<div class="input-group task_input">
+							<span class="input-group-addon" >
+								<i class="glyphicon glyphicon-calendar" ></i>
+							</span>
+							<input class="date-pick form-control " type="text" />
+						</div>
+						<button class="btn task_input" type="submit" >Guardar</button>
+					</div>		
 				</div>
-				<div id="tasksList">
-				</div>
+			</div>
+			<div id="tasksList">
 			</div>
 		</div>
 	</script>

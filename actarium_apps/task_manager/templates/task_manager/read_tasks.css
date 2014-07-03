@@ -1,7 +1,12 @@
+#tasksList{
+	border-bottom: 1px solid #f7f7f7;
+}
+
 .one_task{
 	margin: 2px 0px;
 	padding:0px;
 	height:62px;
+	border-top: 1px solid #f7f7f7;
 }
 
 .one_task:hover{
@@ -19,8 +24,6 @@
 	width:212px;
 	height:60px;
 	padding:3px 3px 3px 5px;
-	
-
 }
 
 .task_functions{
@@ -37,7 +40,9 @@
 }
 
 .task_add{
-	height: 36px;
+	height: 43px;
+	padding-top: 6px;
+
 }
 
 .task_responsible{
@@ -47,4 +52,12 @@
 .task_name{
 	width: 158px;
 	line-height: 16px;
+}
+
+.task_form{
+	width: 248px;
+}
+
+.task_input{
+	margin-top: 8px;
 }
