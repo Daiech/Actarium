@@ -87,7 +87,7 @@
 <script type="text/template" id="editApprovingCommissionTpl">
 	<div id="editApprovingCommission" class="">
 		<div class="">
-			<table id="table-roles" class="table table-bordered table-hover">
+			<table id="table-roles" class="table table-hover">
 				<thead>
 				<tr>
 					<th class="td-first">
@@ -117,8 +117,8 @@
 				<tr {%if m.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
 					<td class="td-first">
 						<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
-						{%if not m.is_active%}title="{{m.username}} a&uacute;n no ha aceptado la invitaci&oacute;n"{%endif%}>
-	                        <img style="width:20px" src="{{ m.img }}">{{ m.full_name }}
+						title="{% if not m.is_active %}{{m.username}} aún no ha aceptado la invitación{% endif %}">
+	                        <img style="width:20px" src="{{ m.img }}"> {{ m.full_name }}
 	                    </div>
 					</td>
 					<td class="t-a-c">
