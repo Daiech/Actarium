@@ -7,7 +7,7 @@ import json
 def get_approving_commission(request, slug_group):
     if True:#request.is_ajax():
         group = Groups.objects.get_group(slug=slug_group)
-        members = group.rel_user_group_set.get_all_active()
+        members = group.rel_user_group_set.get_all_active().order_by("-id_user__is_active")
         rel = group.rol_user_minutes_id_group.filter(id_minutes=None, is_active=False)
 
         members_list = list()
@@ -15,7 +15,8 @@ def get_approving_commission(request, slug_group):
             rol = m.id_user.rol_user_minutes_id_user.get_or_none(id_minutes=None, is_active=False)
             members_list.append({
                 "id": m.id_user.id,
-                "full_name": m.id_user.get_full_name(),
+                "username": m.id_user.username,
+                "full_name": m.id_user.first_name + " " + m.id_user.last_name[0] + ".",
                 "img": showgravatar(m.id_user.email, 20),
                 "is_active": m.id_user.is_active,
                 "role": {

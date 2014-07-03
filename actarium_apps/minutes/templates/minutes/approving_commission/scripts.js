@@ -25,43 +25,14 @@ function editCommission (e) {
 					name: "nhommasdf"
 				}
 				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
+				$(".popover-element").popover({trigger: 'hover'});
 			});
-			$(".popover-element").popover({trigger: 'hover'});
 		}
 	}
 	loadPanel(ctx);
 }
-function callBackApprove(data){
-	$(".div-sign").fadeOut(300,function(){
-		$(this).empty();
-	});
-	var u = $(".missing-"+data["user-id"]);
-	if(data['approved']==1){
-		u.find("div.icon-approver-status").html('<i class="glyphicon glyphicon-ok"></i>');
-		setAlertMessage("{% trans 'Acta aprobada!' %}", "{% trans 'Haz aprobado esta acta' %}.");
-		if (data["is_full_signed"]){
-			$("#minutes-edit").closest("li").fadeOut("fast");
-			$("#btn-generate-pdf").removeClass("disabled").attr("data-original-title","{% trans 'Descarga esta acta en PDF' %}").on("click", function (e) {e.preventDefault();$("#pdf-form").submit();});
-		}
-	}
-}
-function setApprove(e){
-	e.preventDefault();
-	$(this).attr({"disabled": "disabled"});
-	var minutes_id = $(this).attr("data-minutes");
-	var is_approved = parseInt($(this).attr("data-approve"));
-	sendNewAjax(
-		"{% url 'approve_minutes' %}",
-		{"m_id":minutes_id, "approve": is_approved},
-		callBackApprove,
-		{"method": "post"}
-	);
-}
-$(document).on("click", ".btn-approve", setApprove);
 
-if(window.location.hash){
-	$(window.location.hash+" > div").addClass("selected-annontation");
-}
+/*annotations*/
 function newAnnotation(e){
 	e.preventDefault(e);
 	tinyMCE.init({
@@ -116,39 +87,46 @@ function saveAnnotation(e){
 		setAlertError("{% trans 'Error' %}", "{% trans 'No puedes agregar una anotación vacía' %}")
 	}
 }
+if(window.location.hash){
+	$(window.location.hash+" > div").addClass("selected-annontation");
+}
 $(document).on("click", ".btn-no-approve", newAnnotation);
 $(document).on("click", "#button-save", saveAnnotation);
-
-
-
-function callbackSetRole(data) {
-	if (data["saved"]){
-    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
-    }
-    else{
-    	setAlertError("Ocurri&oacute; un error", data['error'])
-    }
-}
-function callbackRemoveRole(data) {
-	if (data["saved"]){
-    	setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
-    }
-    else{
-    	setAlertError("Ocurri&oacute; un error", data['error'])
-    }
-}
-
+/*close annotations*/
 
 /****roles for minutes ****/
-
-
+function callBackApprove(data){
+	$(".div-sign").fadeOut(300,function(){
+		$(this).empty();
+	});
+	var u = $(".missing-"+data["user-id"]);
+	if(data['approved']==1){
+		u.find("div.icon-approver-status").html('<i class="glyphicon glyphicon-ok"></i>');
+		setAlertMessage("{% trans 'Acta aprobada!' %}", "{% trans 'Haz aprobado esta acta' %}.");
+		if (data["is_full_signed"]){
+			$("#minutes-edit").closest("li").fadeOut("fast");
+			$("#btn-generate-pdf").removeClass("disabled").attr("data-original-title","{% trans 'Descarga esta acta en PDF' %}").on("click", function (e) {e.preventDefault();$("#pdf-form").submit();});
+		}
+	}
+}
+function setApprove(e){
+	e.preventDefault();
+	$(this).attr({"disabled": "disabled"});
+	var minutes_id = $(this).attr("data-minutes");
+	var is_approved = parseInt($(this).attr("data-approve"));
+	sendNewAjax(
+		"{% url 'approve_minutes' %}",
+		{"m_id":minutes_id, "approve": is_approved},
+		callBackApprove,
+		{"method": "post"}
+	);
+}
 function isThereAprobers(e){
-	console.log('enter to  isThereAprobers');
-	approvers = $(".approver").filter(':checked');
+	var approvers = $(".approver").filter(':checked');
 	if (approvers.length == 0){
 		e.preventDefault();
 		e.stopPropagation();
-		setAlertMessage("Se necesta aprobador", "Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta")
+		setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}")
 	}
 }
 
@@ -186,11 +164,6 @@ function setRole(e) {
 			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
 	}
 	else{
-		// if(confirm("{% trans 'Seguro que desea remover esta característica?' %}")){
-		// }
-		// else{
-		// 	checkbox.attr("checked","checked")
-		// }
 		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
 				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
 	}
@@ -249,10 +222,11 @@ function setShowDNI(e){
 		}
 	);
 }
+$(document).on("click", ".btn-approve", setApprove);
 $(document).on("click", ".set-role", setRole);//roles MAIN
+$(document).on('click', ".btn-next", isThereAprobers);
 $(document).on("change", "#sel-president", setPresident);//roles MAIN
 $(document).on("change", "#sel-secretary", setSecretary);//roles MAIN
 $(document).on('change', "#show-dni", setShowDNI);
-$(document).on('click', ".btn-next", isThereAprobers);
 
 /****close roles for minutes ****/

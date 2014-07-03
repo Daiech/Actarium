@@ -133,9 +133,10 @@
          font-size:12px;
          z-index: 9999 !important;
         }
-        select{
-            width: 100%;
-        }
+        .president-secretary{margin: 5px 10px;}
+        .president-secretary .text{margin-left: 24px;}
+        .president-secretary select{width: 80%;display: inline-block;}
+        .president-ok, .secretary-ok{margin-left: 5px;}
         #social-buttons{width: 104px;}
     </style>
     <style>
@@ -148,12 +149,6 @@
     	.pager{margin: 5px auto;padding: 0;position: relative;top: 0;}
     	.minutes-form-btn{display:inline;}
         section{margin-top: 0px;padding-top: 0 !important}
-    /*    .bootstrap-datetimepicker-widget{
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
-    top: 100px}*/
     </style>
     <link rel="stylesheet" media="all" type="text/css" href="{{STATIC_PREFIX}}css/bootstrap-datetimepicker.min.css" />
 {%endblock%}
