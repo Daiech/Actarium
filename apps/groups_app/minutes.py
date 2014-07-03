@@ -834,7 +834,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "is_org_admin": is_org_admin,
                "breadcrumb": _("Crear Acta")
                }
-        return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
+        return render_to_response('minutes/create_minutes.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/groups/" + group.slug + "#No-tienes-permiso-para-crear-actas")
 
@@ -1043,7 +1043,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                    "is_edit": True,
                    "breadcrumb": _("Editar acta ")+minutes_code
                    }
-            return render_to_response('groups/templates/newMinutes.html', ctx, context_instance=RequestContext(request))
+            return render_to_response('minutes/create_minutes.html', ctx, context_instance=RequestContext(request))
         else:
             return HttpResponseRedirect("/groups/" + group.slug + "#No-existe-un-acta-con-codigo-" + minutes_code)
     else:

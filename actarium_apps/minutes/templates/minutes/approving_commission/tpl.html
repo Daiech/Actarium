@@ -87,24 +87,62 @@
 <script type="text/template" id="editApprovingCommissionTpl">
 	<div id="editApprovingCommission" class="">
 		<div class="">
-			<strong class="">{% trans 'Comisión aprobatoria' %}:</strong>
-			{% verbatim %}
-			<ul class="commission-approving-list list-unstyled">
-				{% for member in members %}
-					<li class="missing-{{ member.id }}">
-						<span>
-							<img style="width:20px" src="{{ member.img }}">
-						</span>
-						<span>
-						{{ member.full_name }}
-						</span>
-						<span class="icon-approver-status">
-							<input class ="set-role approver" id="approver{{ member.id }}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{ member.id }}" {% if member.is_approver %}checked{%endif%}>
-						</span>
-					</li>
-				{% endfor %}
-			</ul>
-			{% endverbatim %}
+			<table id="table-roles" class="table table-hover">
+				<thead>
+				<tr>
+					<th class="td-first">
+						<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">
+							{% trans 'Miembros' %}
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="{% trans 'Personas que asistieron a la reuni&oacute;n' %}">
+							<i class="glyphicon glyphicon-pencil"></i>
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="{% trans 'Personas encargadas de aprobar actas' %}">
+							<i class="glyphicon glyphicon-thumbs-up"></i> 
+						</div>
+					</th>
+					<th>
+						<div class="info-title" title="{% trans 'Personas encargadas de firmar las actas' %}">
+							<i class="glyphicon glyphicon-wrench"></i> 
+						</div>
+					</th>
+				</tr>
+				</thead>
+				<tdody>
+				{% verbatim %}{%for m in members %}
+				<tr {%if m.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
+					<td class="td-first">
+						<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
+						title="{% if not m.is_active %}{{m.username}} aún no ha aceptado la invitación{% endif %}">
+	                        <img style="width:20px" src="{{ m.img }}"> {{ m.full_name }}
+	                    </div>
+					</td>
+					<td class="t-a-c">
+						<label for="assistant{{m.id}}">
+							<input class ="set-role" id="assistant{{m.id}}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{m.id}}" {%if m.role.is_assistant%}checked{%endif%}>
+						</label>
+					</td>
+					<td class="t-a-c">
+						<label for="approver{{m.id}}">
+							<input class ="set-role approver" id="approver{{m.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.id}}" {%if m.role.is_approver%}checked{%endif%}>
+						</label>
+					</td>
+					<td class="t-a-c">
+						<label for="signer{{m.id}}">
+							<input class ="set-role" id="signer{{m.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.id}}" {% if m.role.is_signer %}checked{% endif %}>
+						</label>
+					</td>
+				</tr>{% endverbatim %}
+				</body>
+                {% verbatim %}{%endfor%}{% endverbatim %}
+			</table>
+
+
+
 		</div>
 	</div>
 </script>
