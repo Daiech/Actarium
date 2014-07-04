@@ -127,6 +127,10 @@ function isThereAprobers(e){
 		e.preventDefault();
 		e.stopPropagation();
 		setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}")
+		return false;
+	}
+	else{
+		return true;
 	}
 }
 
@@ -224,9 +228,9 @@ function setShowDNI(e){
 }
 $(document).on("click", ".btn-approve", setApprove);
 $(document).on("click", ".set-role", setRole);//roles MAIN
-$(document).on('click', ".btn-next", isThereAprobers);
 $(document).on("change", "#sel-president", setPresident);//roles MAIN
 $(document).on("change", "#sel-secretary", setSecretary);//roles MAIN
 $(document).on('change', "#show-dni", setShowDNI);
+$(document).on('click', ".btn-next", isThereAprobers);
 
 /****close roles for minutes ****/

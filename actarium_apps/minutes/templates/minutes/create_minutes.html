@@ -171,6 +171,7 @@
             $("#save-new-minutes").on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+                isThereAprobers(jQuery.Event("click"));
                 $("#form-new-minutes").submit();
             });
             // moment().format('YYYY-MM-DD h:mm a');
