@@ -46,7 +46,7 @@
 
 			$("#tasksPanel").on("click", loadTasksPanel);
 
-			$("#tasksPanel").click(); //open the commission approving panel
+			$("#commissionPanel").click(); //open the commission approving panel
 			
 
 			{% if minutes.is_full_signed %}
@@ -124,8 +124,6 @@
 		.important{z-index: 2001}
 		#minutes-version{width: 815px;margin: auto;}
 
-		.dropdown-menu li > a{padding-right: 35px;}
-		.dropdown-menu li > a i{right: 10px !important;left: auto;}
 		@media (max-width: 979px) {
 			.minutes-bar-static{top: 0px;}
 		}

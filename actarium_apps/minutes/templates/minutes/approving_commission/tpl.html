@@ -1,148 +1,172 @@
 {% load gravatartag i18n humanize %}
 {% if space_to_approve or is_secretary or is_org_admin %}
 	{% if space_to_approve or is_secretary %}
-	<script type="text/template" id="approvingCommissionTpl">
-		<div id="approvingCommission" class="">
-			{% if my_attending %}
-			<div id="approve-message-up" class="div-sign alert ">
-	    		<strong>Tu voto: </strong> Apruebas ésta Acta?
-		    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
-					<i class="glyphicon glyphicon-ok icon-white"></i> {% trans 'Si, apruebo' %} <span></span>
-				</a>
-				<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
-					<i class="glyphicon glyphicon-comment"></i> {% trans 'No, Necesita corrección' %} <span></span>
-				</a>
-			</div>
-			{% endif %}
-			<div class="mt20">
-				<!-- <strong class="mt20">{% trans 'Comisión aprobatoria' %}:</strong> -->
-				<ol class="commission-approving-list" class="mt20">
-					{% for member in commission_approving %}
-						<li class="missing-{{member.id_user.id}}">
-							<div>
-								<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
-							</div>
-							<div>
-							{{member.id_user.first_name}} {{member.id_user.last_name}}
-							</div>
-							<div class="icon-approver-status">
-								{%ifequal member.is_signed_approved 0%}
-								<i class="glyphicon glyphicon-time"></i>
-								{%endifequal%}
-								{%ifequal member.is_signed_approved 1%}
-								<i class="glyphicon glyphicon-ok"></i>
-								{%endifequal%}
-								{%ifequal member.is_signed_approved 2%}
-								<i class="icon-remove-circle"></i>
-								{%endifequal%}
-							</div>
-						</li>
-					{% endfor %}
-				</ol>
-			</div>
-		</div>
-		<div class="" id="annotations-approve">
-			<div class="pull-right"><i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{% trans 'Cualquier miembro del grupo puede escribir anotaciones sobre esta acta.' %}"></i></div>
-			<h4>{% trans 'Anotaciones' %}</h4>
-			<hr>
-			<div>
-				<a href="#new-annotation"  class="btn-no-approve btn btn-link"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crear anotaci&oacute;n' %}</a>
-			</div>
-			<div id="new-annotation" class="hidden">
-				<strong>{% trans 'Crear nueva anotaci&oacute;n' %}:</strong>
-				<textarea id="textarea-new-annotation" placeholder="{% trans 'Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una anotaci&oacute;n al redactor.' %}" autofocus></textarea>
-				<button class="btn btn-info" id="button-save">{% trans 'Publicar' %}</button>
-			</div>
-			<hr>
-			<div class="mt20">
-				<ul id="annotations" class="mt20 list-unstyled">
-					{%for annon in annotations%}
-					<li class="row-fluid"  id="annotation-{{annon.id_minutes_annotation}}">
-						<div class="annotation bb span70">
-							<div class="user-gravatar pull-left">
-								<img class="size32 avatar" src="{{ annon.id_user.email|showgravatar:'32'}}" alt="{{annon.id_user.first_name}}" />
-							</div>
-							<div class="name-user-annotation">
-								<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
-								·
-								<time title="{{annon.date_joined|date}}" datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
-							</div>
-							<div class="content-annotation">{{annon.annotation_text|safe}}
-							</div>
-							<div>
-								<!-- <hr> -->
-								<!-- <textarea></textarea> -->
-							</div>
-						</div>
-					</li>
-					{%endfor%}
-				</ul>
-			</div>
-		</div>
-	</script>
 	{% endif %}
 {% endif %}
-{% if is_org_admin %}
-{% endif %}
+<script type="text/template" id="approvingCommissionTpl">
+	<div id="approvingCommission" class="">
+		{% if my_attending %}
+		<div id="approve-message-up" class="div-sign alert ">
+    		<strong>Tu voto: </strong> Apruebas ésta Acta?
+	    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+				<i class="glyphicon glyphicon-ok icon-white"></i> {% trans 'Si, apruebo' %} <span></span>
+			</a>
+			<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
+				<i class="glyphicon glyphicon-comment"></i> {% trans 'No, Necesita corrección' %} <span></span>
+			</a>
+		</div>
+		{% endif %}
+		<div class="mt20">
+			<!-- <strong class="mt20">{% trans 'Comisión aprobatoria' %}:</strong> -->
+			<ol class="commission-approving-list" class="mt20">
+				{% for member in commission_approving %}
+					<li class="missing-{{member.id_user.id}}">
+						<div>
+							<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
+						</div>
+						<div>
+						{{member.id_user.first_name}} {{member.id_user.last_name}}
+						</div>
+						<div class="icon-approver-status">
+							{%ifequal member.is_signed_approved 0%}
+							<i class="glyphicon glyphicon-time"></i>
+							{%endifequal%}
+							{%ifequal member.is_signed_approved 1%}
+							<i class="glyphicon glyphicon-ok"></i>
+							{%endifequal%}
+							{%ifequal member.is_signed_approved 2%}
+							<i class="icon-remove-circle"></i>
+							{%endifequal%}
+						</div>
+					</li>
+				{% endfor %}
+			</ol>
+		</div>
+	</div>
+	<div class="" id="annotations-approve">
+		<div class="pull-right"><i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{% trans 'Cualquier miembro del grupo puede escribir anotaciones sobre esta acta.' %}"></i></div>
+		<h4>{% trans 'Anotaciones' %}</h4>
+		<hr>
+		<div>
+			<a href="#new-annotation"  class="btn-no-approve btn btn-link"><span class="glyphicon glyphicon-plus"></span> {% trans 'Crear anotaci&oacute;n' %}</a>
+		</div>
+		<div id="new-annotation" class="hidden">
+			<strong>{% trans 'Crear nueva anotaci&oacute;n' %}:</strong>
+			<textarea id="textarea-new-annotation" placeholder="{% trans 'Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una anotaci&oacute;n al redactor.' %}" autofocus></textarea>
+			<button class="btn btn-info" id="button-save">{% trans 'Publicar' %}</button>
+		</div>
+		<hr>
+		<div class="mt20">
+			<ul id="annotations" class="mt20 list-unstyled">
+				{%for annon in annotations%}
+				<li class="row-fluid"  id="annotation-{{annon.id_minutes_annotation}}">
+					<div class="annotation bb span70">
+						<div class="user-gravatar pull-left">
+							<img class="size32 avatar" src="{{ annon.id_user.email|showgravatar:'32'}}" alt="{{annon.id_user.first_name}}" />
+						</div>
+						<div class="name-user-annotation">
+							<strong>{{annon.id_user.first_name}} {{annon.id_user.last_name}}</strong>
+							·
+							<time title="{{annon.date_joined|date}}" datetime="{{annon.date_joined|date:'Y-m-d'}}">{{annon.date_joined|naturaltime}}</time>
+						</div>
+						<div class="content-annotation">{{annon.annotation_text|safe}}
+						</div>
+						<div>
+							<!-- <hr> -->
+							<!-- <textarea></textarea> -->
+						</div>
+					</div>
+				</li>
+				{%endfor%}
+			</ul>
+		</div>
+	</div>
+</script>
 <script type="text/template" id="editApprovingCommissionTpl">
 	<div id="editApprovingCommission" class="">
-		<div class="">
+		<div class="president-secretary">
+			<div class="text-center"><strong>{% trans 'Roles de la reunión para esta Acta' %}</strong></div>
+			<div class="">
+				<span class="text">{% trans 'Presidente (opcional):' %}</span>
+				<div class="text-center">
+					<select id="sel-president" class="form-control">
+						<option value="0">{% trans 'Seleccione presidente' %}</option>{% verbatim %}
+						{% for m in members %}
+						<option value="{{ m.id }}" {% if m.role.is_president %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>
+	            		{% endfor %}{% endverbatim %}
+					</select>
+					<span class="president-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
+				</div>
+			</div>
+			<div class="mt20">
+				<span class="text">{% trans 'Secretario (opcional):' %}</span>
+				<div class="text-center">
+					<select id="sel-secretary" class="form-control">
+						<option value="0">{% trans 'Seleccione secretario' %}</option>{% verbatim %}
+						{% for m in members %}
+						<option value="{{ m.id }}" {% if m.role.is_secretary %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>
+	            		{% endfor %}{% endverbatim %}
+					</select>
+					<span class="secretary-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div>
 			<table id="table-roles" class="table table-hover">
 				<thead>
-				<tr>
-					<th class="td-first">
-						<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">
-							{% trans 'Miembros' %}
-						</div>
-					</th>
-					<th>
-						<div class="info-title" title="{% trans 'Personas que asistieron a la reuni&oacute;n' %}">
-							<i class="glyphicon glyphicon-pencil"></i>
-						</div>
-					</th>
-					<th>
-						<div class="info-title" title="{% trans 'Personas encargadas de aprobar actas' %}">
-							<i class="glyphicon glyphicon-thumbs-up"></i> 
-						</div>
-					</th>
-					<th>
-						<div class="info-title" title="{% trans 'Personas encargadas de firmar las actas' %}">
-							<i class="glyphicon glyphicon-wrench"></i> 
-						</div>
-					</th>
-				</tr>
+					<tr>
+						<th class="td-first">
+							<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">
+								{% trans 'Miembros' %}
+							</div>
+						</th>
+						<th>
+							<div class="info-title popover-element" data-toggle="popover" data-container="body" data-placement="left" data-content="{% trans 'Asistentes: Personas que asistieron a la reunión' %}">
+								<i class="glyphicon glyphicon-list"></i>
+							</div>
+						</th>
+						<th>
+							<div class="info-title popover-element" data-toggle="popover" data-container="body" data-placement="left" data-content="{% trans 'Comisión aprobatoria: Personas encargadas de aprobar el acta' %}">
+								<i class="glyphicon glyphicon-ok"></i> 
+							</div>
+						</th>
+						<th>
+							<div class="info-title popover-element" data-toggle="popover" data-container="body" data-placement="left" data-content="{% trans 'Espacio de firma: Mostrar espacio para la firma de la persona' %}">
+								<i class="glyphicon glyphicon-file"></i> 
+							</div>
+						</th>
+					</tr>
 				</thead>
 				<tdody>
 				{% verbatim %}{%for m in members %}
-				<tr {%if m.id == user_selected%}id="user-{{user_selected}}"{%endif%}>
-					<td class="td-first">
-						<div class="username-info {%if not m.is_active%}user-pend-r{%endif%}"
-						title="{% if not m.is_active %}{{m.username}} aún no ha aceptado la invitación{% endif %}">
-	                        <img style="width:20px" src="{{ m.img }}"> {{ m.full_name }}
-	                    </div>
-					</td>
-					<td class="t-a-c">
-						<label for="assistant{{m.id}}">
-							<input class ="set-role" id="assistant{{m.id}}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{m.id}}" {%if m.role.is_assistant%}checked{%endif%}>
-						</label>
-					</td>
-					<td class="t-a-c">
-						<label for="approver{{m.id}}">
-							<input class ="set-role approver" id="approver{{m.id}}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{m.id}}" {%if m.role.is_approver%}checked{%endif%}>
-						</label>
-					</td>
-					<td class="t-a-c">
-						<label for="signer{{m.id}}">
-							<input class ="set-role" id="signer{{m.id}}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{m.id}}" {% if m.role.is_signer %}checked{% endif %}>
-						</label>
-					</td>
-				</tr>{% endverbatim %}
+					<tr {%if m.id == user_selected%}id="user-{{ user_selected }}"{%endif%}>
+						<td class="td-first">
+							<div class="username-info {% if not m.is_active %}user-pend-l{% endif %}"
+							title="{% if not m.is_active %}{{ m.full_name }} es un usuario virtual, debe activar su cuenta ingresando al link que se le envió al correo en el momento de la invitación.{% endif %}">
+		                        <img style="width:20px" src="{{ m.img }}"> {{ m.full_name }}
+		                    </div>
+						</td>
+						<td class="t-a-c">
+							<label for="assistant{{ m.id }}">
+								<input class ="set-role" id="assistant{{ m.id }}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{ m.id }}" {%if m.role.is_assistant%}checked{%endif%}>
+							</label>
+						</td>
+						<td class="t-a-c popover-element" data-toggle="popover" data-container="body" data-placement="left" data-content="{% if not m.is_active %}Este miembro es virtual, nunca ha accedido a Actarium. Solo los miembros activos pueden ser parte de la comisión aprobatoria.{% endif %}">
+							<label for="approver{{ m.id }}">
+								<input class ="set-role approver" id="approver{{ m.id }}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{ m.id }}" {% if not m.is_active %}disabled{% else %}{% if m.role.is_approver %}checked{% endif %}{% endif %}>
+							</label>
+						</td>
+						<td class="t-a-c">
+							<label for="signer{{ m.id }}">
+								<input class ="set-role" id="signer{{ m.id }}" type="checkbox" data-role="1" data-role-name="Firmador" data-uid="{{ m.id }}" {% if m.role.is_signer %}checked{% endif %}>
+							</label>
+						</td>
+					</tr>{% endverbatim %}
 				</body>
-                {% verbatim %}{%endfor%}{% endverbatim %}
+	            {% verbatim %}{%endfor%}{% endverbatim %}
 			</table>
-
-
-
 		</div>
+		<hr>
 	</div>
 </script>
