@@ -171,8 +171,15 @@
             $("#save-new-minutes").on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                isThereAprobers(jQuery.Event("click"));
-                $("#form-new-minutes").submit();
+                if(isThereAprobers(jQuery.Event("click"))){
+                    $("#form-new-minutes").submit();
+                }else{
+                    console.log("asdf");
+                    setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}");
+                }
+            });
+            $("#form-new-minutes").on("click", function (e) {
+                e.preventDefault();
             });
             // moment().format('YYYY-MM-DD h:mm a');
             dp = $('.date-pick').datetimepicker({

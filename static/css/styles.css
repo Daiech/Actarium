@@ -834,6 +834,10 @@ cierra Show Minutes
     .dropdown-container{right: auto;left: 0;}
 }
 /*Close Dropdown Actarium*/
+#alerts {position: fixed;top: 25px;left: 0;right: 0;z-index: 10000;width:30%;margin:0 auto;padding: 10px 30px 10px 30px;font-size: 16px;}
+#alerts div.alert{position: relative;top: 0;width: 100%;}
+
+
 /*==================================================*/
 /*                  Inicia Responsive               */                    
 /*==================================================*/
@@ -919,6 +923,7 @@ cierra Show Minutes
     .topbar-btn > .dinline{display: none}
     .org-menu-container .nav-list .glyphicon-chevron-right{display: none;}
     #topbar .breadcrumb {padding-left: 85px;}
+    #alerts{width: 70% !important;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {

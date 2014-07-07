@@ -126,7 +126,6 @@ function isThereAprobers(e){
 	if (approvers.length == 0){
 		e.preventDefault();
 		e.stopPropagation();
-		setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}")
 		return false;
 	}
 	else{
@@ -143,7 +142,7 @@ function getRoleName (op) {
 }
 function callbackSetRole(data) {
 	if (data["saved"]){
-    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+    	// setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
     }
     else{
     	setAlertError("Ocurri&oacute; un error", data['error'])
@@ -151,7 +150,7 @@ function callbackSetRole(data) {
 }
 function callbackRemoveRole(data) {
 	if (data["saved"]){
-    	setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
+    	// setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
     }
     else{
     	setAlertError("Ocurri&oacute; un error", data['error'])
