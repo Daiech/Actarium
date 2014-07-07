@@ -58,8 +58,12 @@
 					<i class="glyphicon"></i>
 				</a>
 			</li>
+			{% if user.is_staff %}
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="tasksPanel" data-placement="right" >
 			{% trans "Tareas" %}<i class="glyphicon"></i></a></li>
+			{% else %}
+			<li role="presentation" class="disabled"><a href="#">Tareas (pronto)</a></li>
+			{% endif %}
 		</ul>
 	</li>
 </ul>
