@@ -6,10 +6,11 @@
 		    <span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownFile">
-		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="right" ><span class="glyphicon glyphicon-plus"></span> {% trans "Nueva acta" %}</a></li>
+		    <li role="presentation" class="{%if not rel_user.is_secretary%}disabled{%endif%}">
+		    	<a role="menuitem" tabindex="-1" href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="title-on-disabled" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="right" ><span class="glyphicon glyphicon-plus"></span> {% trans "Nueva acta" %}</a></li>
 		    <li role="presentation" class="divider"></li>
-		    <li role="presentation">
-				<a role="menuitem" tabindex="-1" href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" title="{%if not minutes.is_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="right" >
+		    <li role="presentation" class="{%if not minutes.is_full_signed%}disabled{%endif%}">
+				<a role="menuitem" tabindex="-1" href="#" id="btn-generate-pdf"  title="{%if not minutes.is_full_signed%}{% trans 'Únicamente las actas aprobadas pueden descargase en PDF' %}{%endif%}">
 			    	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
 						{% csrf_token %}
 						<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
@@ -25,6 +26,10 @@
 			{% if minutes.is_full_signed %}
 			<li role="presentation" class="print hidden">
 				<a role="menuitem" tabindex="-1" href="#" id="print-minutes"><span class="glyphicon glyphicon-print"></span> {% trans 'Imprimir' %}</a>
+			</li>
+			{% else %}
+			<li role="presentation" class="disabled" title="{% trans 'Únicamente las actas aprobadas pueden imprimirse' %}"  data-placement="right">
+				<a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-print"></span> {% trans 'Imprimir' %}</a>
 			</li>
 			{%endif%}
 		    <li role="presentation" class="divider"></li>

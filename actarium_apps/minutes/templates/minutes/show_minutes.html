@@ -65,6 +65,7 @@
 				{% endif %}
 			});
 			$("li, a").tooltip();
+			{% comment %}
 			$('#first-point').waypoint(function() {
 				if($("#approve-message-up").hasClass("minutes-bar-static")){
 					$("#approve-message-up").removeClass("minutes-bar-static").css({"position": "relative"});
@@ -73,6 +74,7 @@
 					$("#approve-message-up").addClass("minutes-bar-static").css({"position": "fixed"});
 				}
 			});
+			{% endcomment %}
 			$('#minutes-html-data').val($('#minutes').html());
 
 			$("#history").on("click", function (e) {
