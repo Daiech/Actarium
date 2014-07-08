@@ -70,7 +70,12 @@ class Tasks(models.Model):
 
         action = self.actions_task.get_or_none(status__code="ASI")
         if action != None:
+            # print self.due
+            # print self.due.date()
+            # print datetime.date.today()
+            
             days_apart_delta = self.due.date() - datetime.date.today()
+            # print days_apart_delta
             days_apart = days_apart_delta.days
             if days_apart < 0:
                 return "#ff8c8c"

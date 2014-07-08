@@ -36,7 +36,7 @@ class TasksManager(GenericManager):
         pass
 
     def get_tasks_by_minutes(self, minutes_id):
-        tasks_list = self.filter(lastminutestasks_task__minutes_id=minutes_id)
+        tasks_list = self.filter(lastminutestasks_task__minutes_id=minutes_id).order_by('-modified')
         return tasks_list
 
     def get_tasks_by_group(self):
