@@ -54,10 +54,14 @@
 	line-height: 16px;
 }
 
-.task_form{
+.task_form_content{
 	width: 248px;
 }
 
 .task_input{
 	margin-top: 8px;
+}
+
+.error-form-task{
+	color: #a94442;
 }

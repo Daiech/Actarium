@@ -12,7 +12,7 @@ function loadTasksPanel(e) {
 				loadPanelContent($('#taskManagerTpl').html());
 				$('#taskAddBtn').on('click', function(){
 						setTimeout(function(){
-				            $("#taskName").focus();
+				            $("#nameTaskForm").focus();
 				        }, 1);});
 				tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
 				$('#tasksList').html(tasks_html)
@@ -25,3 +25,32 @@ function loadTasksPanel(e) {
 	}
 	loadPanel(ctx);
 }
+
+
+function createTask(e) {
+  	e.preventDefault();
+  	e.stopPropagation();
+  	$('.error-form-task').remove();
+  	sendNewAjax(
+        "{% url 'tasks:create_task' %}",
+        $(this).serialize(),
+        function (data) {
+	        if(data.errors){
+	        	console.log("ERRORES",data.errors)
+				for (var i in data.errors){
+					console.log(i, data.errors[i])
+					$( "#"+i+"TaskForm" ).before( "<label class='error-form-task'>"+data.errors[i]+"</label>" );
+		        } 
+	        }
+	        else if (data.successful){
+	        	setAlertMessage("Tarea Agregada","Se ha agregado una nueva tarea al acta <strong>{{ minutes.code}}</strong> ");
+	        	$("#taskDropdown").find(".close").click();
+	        	cleanForm("#taskForm");
+	        }
+        },
+        {"method":"post"}
+    );
+}
+
+
+$(document).on("submit","#taskForm", createTask)
