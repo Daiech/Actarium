@@ -6,30 +6,34 @@
 					<span id="taskAddBtn" class="glyphicon glyphicon-plus" ></span>
 					Agregar Tarea
 				</button>
-				<div  class="dropdown-container task_form">
+				<div id="taskDropdown" class="dropdown-container task_form_content">
 					<div class="header-title">
 				    	<span>Agregar Tarea</span>
 				    	<button type="button" class="close close-popover" aria-hidden="true">&times;</button>
 					</div>
 					<div class="dropdown-body">
-						<input id="taskName" type="text"  placeholder="Titulo" class="form-control task_input"/>
-						<textarea placeholder = "descripcion" class="form-control task_input"></textarea>
-						<div class="input-group task_input">
-							<span class="input-group-addon" >
-								<i class="glyphicon glyphicon-user" ></i>
-							</span>
-							<select class="form-control">
-								<option value="1" >Usuario uno</option>
-								<option value="2" >Usuario dos</option>
-							</select>
-						</div>
-						<div class="input-group task_input">
-							<span class="input-group-addon" >
-								<i class="glyphicon glyphicon-calendar" ></i>
-							</span>
-							<input class="date-pick form-control " type="text" />
-						</div>
-						<button class="btn task_input" type="submit" >Guardar</button>
+						<form id="taskForm" method="POST">
+							<input name="name" id="nameTaskForm" type="text"  placeholder="Titulo" class="form-control task_input"/>
+							<textarea id="descriptionTaskForm" name="description" placeholder = "descripcion" class="form-control task_input"></textarea>
+							<div id="responsibleTaskForm" class="input-group task_input">
+								<span class="input-group-addon" >
+									<i class="glyphicon glyphicon-user" ></i>
+								</span>
+								<select name="responsible" class="form-control">
+									{% for rel in group.rel_user_group_set.get_all_active %}
+									<option value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div id="dueTaskForm" class="input-group task_input">
+								<span class="input-group-addon" >
+									<i class="glyphicon glyphicon-calendar" ></i>
+								</span>
+								<input name="due" class="date-pick form-control " type="text" value="{% now 'Y-m-d' %}" />
+							</div>
+							<input type="hidden" name="minutes"   value="{{minutes.id}}" />
+							<button class="btn task_input" type="submit" >Guardar</button>
+						</form>
 					</div>		
 				</div>
 			</div>
