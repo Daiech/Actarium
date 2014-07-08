@@ -28,13 +28,13 @@
 						{{member.id_user.first_name}} {{member.id_user.last_name}}
 						</div>
 						<div class="icon-approver-status">
-							{%ifequal member.is_signed_approved 0%}
+							{%ifequal member.get_minutes_signed 0%}
 							<i class="glyphicon glyphicon-time"></i>
 							{%endifequal%}
-							{%ifequal member.is_signed_approved 1%}
+							{%ifequal member.get_minutes_signed 1%}
 							<i class="glyphicon glyphicon-ok"></i>
 							{%endifequal%}
-							{%ifequal member.is_signed_approved 2%}
+							{%ifequal member.get_minutes_signed 2%}
 							<i class="icon-remove-circle"></i>
 							{%endifequal%}
 						</div>

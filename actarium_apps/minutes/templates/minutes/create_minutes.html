@@ -69,6 +69,10 @@
             {% endif %}
             <form id="form-new-minutes" class="form-horizontal" enctype="multipart/form-data" method="POST">
                 {% csrf_token %}
+                {% if is_edit %}
+                <input id="minutesId" value="{{ minutes.id }}" type="hidden">
+                {% endif %}
+                    
                 {% include minutesTemplateForm %}
             </form>
             <style type="text/css">
@@ -174,7 +178,6 @@
                 if(isThereAprobers(jQuery.Event("click"))){
                     $("#form-new-minutes").submit();
                 }else{
-                    console.log("asdf");
                     setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}");
                 }
             });
@@ -229,7 +232,7 @@
                 $("#change-template").attr("href",href);
             });
 
-            $('#id_code').on('keyup',function(e){console.log('evento',e.keyCode); if(e.keyCode===32){$(this).val($(this).val().replace(/\ /i,'-'))}})
+            $('#id_code').on('keyup',function(e){if(e.keyCode===32){$(this).val($(this).val().replace(/\ /i,'-'))}})
             $("#id_code_title").attr("title", "{% trans 'El espacio se cambiará por un guión' %}" );
 
             {% if last.code %}

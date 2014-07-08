@@ -21,8 +21,7 @@ function editCommission (e) {
 		"callback":  function () {
 			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug %}",{}, function (data){
 				ctx = {
-					members: data.members,
-					name: "nhommasdf"
+					members: {% if is_edit %}{{ members_list|safe }}{% else %}data.members{% endif %},
 				}
 				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
 				$(".popover-element").popover({trigger: 'hover'});
@@ -161,14 +160,16 @@ function setRole(e) {
 	var role = checkbox.attr("data-role")
 	var role_name = checkbox.attr("data-role-name")
 	var uid = checkbox.attr("data-uid")
-	// console.log(checkbox.is(":checked"));
+	var minutes_id = $("#minutesId").val();{% comment %}solo si se esta en edicion{% endcomment %}
 	if(checkbox.is(":checked")){
-		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
-			{"role":role, "uid": uid, "remove": 0},"",callbackSetRole)
+		sendNewAjax("{% url 'set_minutes_role' group.slug %}",
+			{"role":role, "uid": uid, "m_id": minutes_id, "remove": 0}, callbackSetRole,
+			{"method": "post"})
 	}
 	else{
-		sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
-				{"role":role, "uid": uid, "remove": 1},"",callbackRemoveRole)
+		sendNewAjax("{% url 'set_minutes_role' group.slug %}",
+				{"role":role, "uid": uid, "m_id": minutes_id, "remove": 1}, callbackRemoveRole,
+				{"method": "post"})
 	}
 }
 function callbackSetPresident (data) {
@@ -201,16 +202,20 @@ function callbackSetSecretary (data) {
     }
 }
 function setPresident (e) {
-	$(".president-ok").addClass("hidden")
+	$(".president-ok").addClass("hidden");
 	var uid = $(this).val();
-	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
-		{"role":4, "uid": uid, "remove": 0},"",callbackSetPresident)
+	sendNewAjax("{% url 'set_minutes_role' group.slug %}",
+		{"role":4, "uid": uid, "remove": 0}, callbackSetPresident,
+			{"method": "post"}
+	);
 }
 function setSecretary (e) {
-	$(".secretary-ok").addClass("hidden")
+	$(".secretary-ok").addClass("hidden");
 	var uid = $(this).val();
-	sendAjax("/groups/{{group.slug}}/set-rol-for-minute",
-		{"role":5, "uid": uid, "remove": 0},"",callbackSetSecretary)
+	sendNewAjax("{% url 'set_minutes_role' group.slug %}",
+		{"role":5, "uid": uid, "remove": 0}, callbackSetSecretary,
+			{"method": "post"}
+	);
 }
 function setShowDNI(e){
 	sendAjax("/groups/{{group.slug}}/set-show-dni",

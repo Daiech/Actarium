@@ -199,6 +199,7 @@ class RelUserGroupManager(GenericManager):
 
 
 class rel_user_group(models.Model):
+    """Relaciona roles a un usuario con un grupo"""
     id_user = models.ForeignKey(User,  null=False, related_name='%(class)s_id_user')
     id_user_invited = models.ForeignKey(User, blank=True, null=True, default=None, related_name='%(class)s_id_user_invited')
     id_group = models.ForeignKey(Groups)

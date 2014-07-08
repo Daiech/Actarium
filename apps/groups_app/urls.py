@@ -8,7 +8,7 @@ urlpatterns = patterns('',
 )
 urlpatterns += patterns('apps.groups_app.minutes',
     # url(r'^(?P<slug_group>[-\w]+)/roles-for-this-minutes(?P<id_reunion>.*)', 'rolesForMinutes', name='set_role_for_minute'),
-    url(r'^(?P<slug_group>[-\w]+)/set-rol-for-minute', 'setRolForMinute', name='Set Role'),
+    url(r'^(?P<slug_group>[-\w]+)/set-rol-for-minute', 'setRolForMinute', name='set_minutes_role'),
     url(r'^(?P<slug_group>[-\w]+)/set-show-dni', 'setShowDNI', name='Set Show DNI'),
     url(r'^(?P<slug_group>[-\w]+)/add-new-annotation', 'newAnnotation', name='Set annotation'),
     # url(r'^(?P<slug_group>[-\w]+)/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='New minutes with reunion'),
