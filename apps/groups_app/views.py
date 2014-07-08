@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _
 from actarium_apps.organizations.models import rel_user_group
 from .models import *
 from .forms import newGroupForm, newReunionForm
+from apps.account.models import activation_keys
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
@@ -515,15 +516,12 @@ def newInvitationToGroup(request):
 
 def resendInvitation(request, slug_group):
     if request.is_ajax():
-        if request.method == "GET":
+        if request.method == "POST":
             try:
                 group = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
                 if group and _user_rel.is_admin and _user_rel.is_active:
-                    try:
-                        uid = str(request.GET['uid'])
-                    except Exception:
-                        uid = None
+                    uid = request.POST.get('uid')
                     if uid == "" or not uid:
                         return HttpResponse(False)
                     _user = getUserById(uid)
@@ -539,21 +537,18 @@ def resendInvitation(request, slug_group):
                             type_email = 11
                             if not _user.is_active:
                                 type_email = 10
-                                try:
-                                    from apps.account.models import activation_keys
-                                    ak = activation_keys.objects.get_or_none(id_user=_user, is_expired=False)
-                                    if ak:
-                                        ctx_email["activation_key"] = ak.activation_key
-                                        ctx_email["id_inv"] = request.user.pk
-                                        ctx_email["newuser_username"] = _user.username
-                                        ctx_email["pass"] = ak.activation_key[:8]
-                                except Exception, e:
-                                    print e
-                                    # Error log e
+                                ak = activation_keys.objects.get_or_none(id_user=_user, is_expired=False)
+                                if ak:
+                                    ctx_email["activation_key"] = ak.activation_key
+                                    ctx_email["id_inv"] = request.user.pk
+                                    ctx_email["newuser_username"] = _user.username
+                                    ctx_email["pass"] = ak.activation_key[:8]
+                                else:
+                                    pass
                             message = {"email": _user.email, "sent": True}
                             sendEmailHtml(type_email, ctx_email, [_user.email])  # activate account
                         else:
-                            message = {"error": "el usuario ya está activo"}
+                            message = {"error": "El usuario ya está activo"}
                     else:
                         message = {"error": _(u"El usuario no pertenece a este grupo"), "sent": False}
                 else:
