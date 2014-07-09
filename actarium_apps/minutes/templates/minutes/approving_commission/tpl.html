@@ -17,16 +17,13 @@
 		</div>
 		{% endif %}
 		<div class="mt20">
-			<!-- <strong class="mt20">{% trans 'Comisión aprobatoria' %}:</strong> -->
 			<ol class="commission-approving-list" class="mt20">
 				{% for member in commission_approving %}
 					<li class="missing-{{member.id_user.id}}">
 						<div>
 							<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
 						</div>
-						<div>
-						{{member.id_user.first_name}} {{member.id_user.last_name}}
-						</div>
+						<div>{{member.id_user.first_name}} {{member.id_user.last_name}}</div>
 						<div class="icon-approver-status">
 							{%ifequal member.get_minutes_signed 0%}
 							<i class="glyphicon glyphicon-time"></i>
@@ -90,23 +87,14 @@
 				<span class="text">{% trans 'Presidente (opcional):' %}</span>
 				<div class="text-center">
 					<select id="sel-president" class="form-control">
-						<option value="0">{% trans 'Seleccione presidente' %}</option>{% verbatim %}
-						{% for m in members %}
-						<option value="{{ m.id }}" {% if m.role.is_president %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>
-	            		{% endfor %}{% endverbatim %}
-					</select>
+						<option value="0">{% trans 'Seleccione presidente' %}</option>{% verbatim %}{% for m in members %}<option value="{{ m.id }}" {% if m.role.is_president %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>{% endfor %}{% endverbatim %}</select>
 					<span class="president-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 				</div>
 			</div>
 			<div class="mt20">
 				<span class="text">{% trans 'Secretario (opcional):' %}</span>
 				<div class="text-center">
-					<select id="sel-secretary" class="form-control">
-						<option value="0">{% trans 'Seleccione secretario' %}</option>{% verbatim %}
-						{% for m in members %}
-						<option value="{{ m.id }}" {% if m.role.is_secretary %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>
-	            		{% endfor %}{% endverbatim %}
-					</select>
+					<select id="sel-secretary" class="form-control"><option value="0">{% trans 'Seleccione secretario' %}</option>{% verbatim %}{% for m in members %}<option value="{{ m.id }}" {% if m.role.is_secretary %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>{% endfor %}{% endverbatim %}</select>
 					<span class="secretary-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 				</div>
 			</div>
@@ -117,8 +105,7 @@
 				<thead>
 					<tr>
 						<th class="td-first">
-							<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">
-								{% trans 'Miembros' %}
+							<div class="info-title" title="{% trans 'Lista de todos los miembros del grupo' %} '{{group.name}}'">{% trans 'Miembros' %}
 							</div>
 						</th>
 						<th>
