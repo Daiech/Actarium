@@ -7,11 +7,11 @@
 	<div id="approvingCommission" class="">
 		{% if my_attending %}
 		<div id="approve-message-up" class="div-sign alert ">
-    		<strong>Tu voto: </strong> Apruebas ésta Acta?
-	    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{minutes.id}}" data-approve="1">
+    		<strong>{% trans 'Tu voto' %}: </strong> {% trans 'Apruebas ésta Acta?' %}
+	    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{ minutes.id }}" data-approve="1">
 				<i class="glyphicon glyphicon-ok icon-white"></i> {% trans 'Si, apruebo' %} <span></span>
 			</a>
-			<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{minutes.id}}" data-approve="0">
+			<a href="#new-annotation"  class="btn btn-no-approve" data-minutes="{{ minutes.id }}" data-approve="0">
 				<i class="glyphicon glyphicon-comment"></i> {% trans 'No, Necesita corrección' %} <span></span>
 			</a>
 		</div>
@@ -40,6 +40,7 @@
 			</ol>
 		</div>
 	</div>
+	<hr>
 	<div class="" id="annotations-approve">
 		<div class="pull-right"><i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{% trans 'Cualquier miembro del grupo puede escribir anotaciones sobre esta acta.' %}"></i></div>
 		<h4>{% trans 'Anotaciones' %}</h4>
