@@ -9,8 +9,8 @@
 .dropdown-body ul li a{display: block; padding: 5px;}
 .dropdown-body ul li a:hover{background-color: #f3f3f3;text-decoration:underline; /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;*/}
 .second-menu{display: none;width:100%}
-.second-menu label {margin:0;padding: 0;}
-.second-menu input {width: auto;}
+.second-menu label {margin:0;padding: 0;font-weight: normal !important;}
+.second-menu input {width: auto;padding: 4px 5px 2px !important;}
 .back{margin-top: 5px;padding: 5px;border-radius: 3px;}
 .back:hover{background-color: #dadada}
 /*section{padding-top: 10px;}*/

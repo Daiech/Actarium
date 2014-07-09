@@ -264,16 +264,18 @@
 				msj_configuration_of: "{% trans 'Configuración de' %}",
 				msj_configuration: "{% trans 'Configuración' %}",
 				msj_resend: '{% trans "Reenviar invitación" %}',
-				msj_change_names: '{% trans "Cambiar nombres" %}',
+				msj_change_names: '{% trans "Cambiar datos" %}',
 				msj_delete: '{% trans "Eliminar de grupo" %}',
 				msj_first_name: '{% trans "Nombres" %}',
 				msj_last_name: '{% trans "Apellidos" %}',
+				msj_email: '{% trans "Correo" %}',
 				msj_back: '{% trans "Regresar" %}',
 				msj_save: "{% trans 'Guardar' %}",
 				msj_me: "{% trans 'yo' %}"
 			}
 		}
 		$("#teamList").html(swig.render($("#teamListTpl").html(),{locals: team}));
+		$(".popover-element").popover({trigger: 'hover'});
 		{% if rel_user.is_admin or user_is_org_admin %}
 			$(".user-list").niceScroll();
 			function load_org_member_list () {
@@ -488,7 +490,7 @@
 		            $(this).find("i.icon-remove").hide(30)
 		        })
 		    }
-		    function changeNames(elem){
+		    function changeDataBtn(elem){
 		    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
 		    	var first_menu = elem.closest(".first-menu");
 
@@ -525,14 +527,16 @@
 	{% if rel_user.is_admin or user_is_org_admin %}
 	function reSendInvitation (elem) {
     	var uid = $(elem).attr("data-uid");
-    	sendAjax("{% url 'resend_invitation' group.slug %}",{"uid":uid},"",function (data){
+    	sendNewAjax("{% url 'resend_invitation' group.slug %}",{"uid":uid}, function (data){
     		if(data.sent){
 	    		setAlertMessage("{% trans 'Invitación reenviada' %}", "{% trans 'Se ha enviado nuevamente una invitacón por correo electrónico a ' %}" + data.email);
 			}
 			else{
 				setAlertError("{% trans 'Error' %}", "{% trans 'Algo salió mal. No se envió el correo recordatorio. Por favor recargue la página e intente de nuevo.' %}");
 			}
-    	})
+    	},
+    	{"method": "post"}
+    	);
     }
     function deleteInvitationDropdown(elem){
         if(confirm("{% trans 'Realmente desea eliminar la invitación a este Usuario?' %}"))
@@ -567,24 +571,31 @@
 			change_actions_org_member(data.iid);
 		});
     }
-	$(document).on("click", ".save-names", function (e){
+    function changeData(e){
 		e.preventDefault();
 		e.stopPropagation();
-		var fname = $(this).closest(".second-menu").find(".first-name").val();
-		var lname = $(this).closest(".second-menu").find(".last-name").val();
+		var fname = $(this).closest(".second-menu").find(".first-name-input").val();
+		var lname = $(this).closest(".second-menu").find(".last-name-input").val();
+		var email = $(this).closest(".second-menu").find(".email-input").val();
 		var uid = $(this).attr("data-uid");
-		var ctx = {"uid": uid, "first_name": fname, "last_name": lname}
+		var ctx = {"uid": uid, "first_name": fname, "last_name": lname, "email": email}
 		var elem = $(this);
-		sendAjax("{% url 'change_names' group.slug %}",ctx,"",function(data){
+		sendNewAjax("{% url 'change_names' group.slug %}", ctx, function(data){
 			if(data.changed){
 				elem.closest(".td-info-user").find(".names").text(data['fname'] + " " + data['lname']);
+				// debugger;
+				elem.closest(".td-info-user").find(".resend-inv-li").attr("data-content", data['email']);
+
 				restartMenus();
-				setAlertMessage("{% trans 'Nombres Cambiados' %}", "{% trans 'Los nombres se han actualizado con éxito.' %}");
+				setAlertMessage("{% trans 'Datos Cambiados' %}", "{% trans 'Los datos se han actualizado con éxito.' %}");
 			}else{
-				setAlertError("Error", "{% trans 'No se pudo guardar los nuevos nombres. Recarga la página e intenta de nuevo.' %}");
+				setAlertError("Error", "{% trans 'No se pudo guardar los nuevos Datos. Por favor recarga la página e intenta de nuevo.' %}");
 			}
-		});
-	});
+		},
+		{"method": "post"}
+		);
+	}
+	$(document).on("click", ".save-names", changeData);
     $(document).on("click", ".configuration-list a", function (e){
     	e.preventDefault();
     	e.stopPropagation();
@@ -592,7 +603,7 @@
     		reSendInvitation(this);
     	}
     	if($(this).attr("href") === "#change-names"){
-    		changeNames($(this));
+    		changeDataBtn($(this));
     	}
     	if($(this).attr("href") === "#delete-from-group"){
     		deleteInvitationDropdown($(this));

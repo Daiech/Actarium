@@ -538,17 +538,16 @@ def resendInvitation(request, slug_group):
                             if not _user.is_active:
                                 type_email = 10
                                 ak = activation_keys.objects.get_or_none(id_user=_user, is_expired=False)
-                                if ak:
-                                    ctx_email["activation_key"] = ak.activation_key
-                                    ctx_email["id_inv"] = request.user.pk
-                                    ctx_email["newuser_username"] = _user.username
-                                    ctx_email["pass"] = ak.activation_key[:8]
-                                else:
-                                    pass
+                                if not ak:
+                                    ak = activation_keys.objects.create_key_to_user(_user)
+                                ctx_email["activation_key"] = ak.activation_key
+                                ctx_email["id_inv"] = request.user.pk
+                                ctx_email["newuser_username"] = _user.username
+                                ctx_email["pass"] = ak.activation_key[:8]
                             message = {"email": _user.email, "sent": True}
                             sendEmailHtml(type_email, ctx_email, [_user.email])  # activate account
                         else:
-                            message = {"error": "El usuario ya está activo"}
+                            message = {"error": _(u"El usuario ya está activo")}
                     else:
                         message = {"error": _(u"El usuario no pertenece a este grupo"), "sent": False}
                 else:
@@ -563,46 +562,46 @@ def resendInvitation(request, slug_group):
 
 
 def changeNames(request, slug_group):
-    """
-    Cambia los nombres del usuario invitado
-    """
+    """Cambia los nombres del usuario invitado"""
     if request.is_ajax():
-        if request.method == "GET":
+        if request.method == "POST":
             try:
                 group = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, group)
-                if _user_rel.is_admin and _user_rel.is_active:
+                if _user_rel and _user_rel.is_admin and _user_rel.is_active:
                     error = False
                     try:
-                        uid = str(request.GET['uid'])
+                        uid = str(request.POST.get('uid'))
                     except:
                         uid = None
                     if uid == "" or not uid:
                         return HttpResponse(False)
                     _user = getUserById(uid)
-                    try:
-                        first_name = request.GET.get('first_name')
-                    except:
-                        first_name = _user.first_name if _user else ""
-                        error = True
-                    try:
-                        last_name = request.GET.get('last_name')
-                    except Exception:
-                        last_name = _user.last_name if _user else ""
-                        error = True
+                    first_name = request.POST.get('first_name')
+                    last_name = request.POST.get('last_name')
+                    email = request.POST.get('email')
                     if _user:
+                        if not first_name:
+                            first_name = _user.first_name if _user else ""
+                            error = True
+                        if not last_name:
+                            last_name = _user.last_name if _user else ""
+                            error = True
+                        if not email:
+                            email = _user.email
+                            error = True
                         rel = getRelUserGroup(_user, group)
                         if rel and not error:
-                            # change Names
                             _user.first_name = first_name
                             _user.last_name = last_name
+                            _user.email = email
                             _user.save()
-                            message = {"fname": _user.first_name, "lname": _user.last_name, "changed": True}
+                            message = {"fname": _user.first_name, "lname": _user.last_name, "email": _user.email, "changed": True}
                         else:
-                            error = "El usuario no pertenece a este grupo" if not rel else "No se pudo editar los nombres."
+                            error = _(u"El usuario no pertenece a este grupo") if not rel else _(u"No se pudo editar los datos. Por favor recarga la página e intenta de nuevo")
                             message = {"error": error, "changed": False}
                     else:
-                        message = {"error": "No pudes cambiar los nombres de este usuario", "changed": False}
+                        message = {"error": _(u"No pudes cambiar los nombres de este usuario"), "changed": False}
                 else:
                     message = "No tienes permisos para hacer eso."
             except Exception:

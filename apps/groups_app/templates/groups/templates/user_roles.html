@@ -23,7 +23,7 @@
             		<div class="first-menu">
             			<ul class="configuration-list list-unstyled">
             				{% if not m.is_active %}
-            				<li>
+            				<li class="resend-inv-li popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{{ m.email }}">
             					<a data-uid="{{ m.id }}" href="#resend-invitation">
             						<i class="glyphicon glyphicon-envelope"></i> {{ team.texts.msj_resend }}
             					</a>
@@ -46,11 +46,15 @@
 						<div class="">
 							<label>
 								{{ team.texts.msj_first_name }}:
-								<input class="first-element first-name" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.first_name }}">
+								<input class="first-element first-name-input" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.first_name }}">
 							</label>
 							<label>
-								{{ team.texts.msj_first_name }}:
-								<input class="last-name" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.last_name }}" >
+								{{ team.texts.msj_last_name }}:
+								<input class="last-name-input" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.last_name }}" >
+							</label>
+							<label>
+								{{ team.texts.msj_email }}:
+								<input class="email-input" type="text" placeholder="{{ team.texts.msj_first_name }}" value="{{ m.email }}" >
 							</label>
                         	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {{ team.texts.msj_back }}</a>
 							<input type="button" data-uid="{{ m.id }}" class="btn btn-info save-names" value="{{ team.texts.msj_save }}">
