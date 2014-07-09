@@ -23,7 +23,7 @@
 						<div>
 							<img style="width:20px" src="{{member.id_user.email|showgravatar:'20'}}">
 						</div>
-						<div>{{member.id_user.first_name}} {{member.id_user.last_name}}</div>
+						<div> {{member.id_user.first_name}} {{member.id_user.last_name}} </div>
 						<div class="icon-approver-status">
 							{%ifequal member.get_minutes_signed 0%}
 							<i class="glyphicon glyphicon-time"></i>
