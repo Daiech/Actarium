@@ -48,7 +48,7 @@
 		{% verbatim %}
 			{%for task in tasks %}
 				<div class="one_task row-fluid" data-task-id="{{task.id}}">
-					<div class="task_status pull-left" style="background-color: {{task.color}}">
+					<div class="task_status pull-left" style="background-color: {{task.color}}" title="{{ task.status}}">
 					</div>
 					<div class="task_info pull-left row-fluid">
 						<div class="task_user_img pull-left">

@@ -9,6 +9,7 @@ def task_as_json(task_obj):
                 "description":task_obj.description,
                 "img":showgravatar(task_obj.responsible.email,40), 
                 "responsible":task_obj.responsible.first_name, 
-                "color":task_obj.color
-                }
+                "color":task_obj.color,
+                "status":task_obj.status
+    }
     return new_task
