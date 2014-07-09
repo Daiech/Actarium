@@ -19,6 +19,7 @@ if 'rosetta' in settings.INSTALLED_APPS:
 for app in settings.APPS:
     try:
         appurls = __import__(app + ".urls", fromlist=['urls'])
+        print "APPURLS___________",appurls
         if hasattr(appurls, "name"):
             ns = ""
             if hasattr(appurls, "namespace"):
@@ -29,7 +30,10 @@ for app in settings.APPS:
         else:
             urlpatterns += appurls.urlpatterns
     except Exception as e:
-        print "Error: ",app, e
+        # print "Error: ",app, e
+        # print type(e)
+        if not (str(e) =="No module named urls"):
+            raise e
 
 
 if settings.DEBUG:
