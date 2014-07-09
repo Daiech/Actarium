@@ -204,16 +204,18 @@ function callbackSetSecretary (data) {
 function setPresident (e) {
 	$(".president-ok").addClass("hidden");
 	var uid = $(this).val();
+	var minutes_id = $("#minutesId").val();
 	sendNewAjax("{% url 'set_minutes_role' group.slug %}",
-		{"role":4, "uid": uid, "remove": 0}, callbackSetPresident,
+		{"role":4, "uid": uid, "m_id": minutes_id,  "remove": 0}, callbackSetPresident,
 			{"method": "post"}
 	);
 }
 function setSecretary (e) {
 	$(".secretary-ok").addClass("hidden");
 	var uid = $(this).val();
+	var minutes_id = $("#minutesId").val();
 	sendNewAjax("{% url 'set_minutes_role' group.slug %}",
-		{"role":5, "uid": uid, "remove": 0}, callbackSetSecretary,
+		{"role":5, "uid": uid, "m_id": minutes_id,  "remove": 0}, callbackSetSecretary,
 			{"method": "post"}
 	);
 }
