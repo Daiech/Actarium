@@ -13,7 +13,7 @@ from apps.groups_app.models import minutes as LastMinutes
 from django.utils.timezone import utc
 
 @login_required()
-def get_minutes_tasks(request, minutes_id):
+def get_minutes_tasks(request, minutes_id=None):
     if request.is_ajax():
         tasks_list = Tasks.objects.get_tasks_by_minutes(minutes_id)
         tasks = []
@@ -45,7 +45,7 @@ def create_task(request):
             creator_role_obj = Roles.objects.get_or_none(code="CRE")
             responsible_role_obj = Roles.objects.get_or_none(code="RES")
 
-            if status_obj and creator_role_obj and responsible_role_obj:
+            if minutes and status_obj and creator_role_obj and responsible_role_obj:
                 task_obj = Tasks.objects.create(name=name,description=description,due=due)
                 UserTasks.objects.create(user=request.user,role=creator_role_obj,task=task_obj)
                 responsible_obj = User.objects.get(id=responsible)
@@ -59,10 +59,10 @@ def create_task(request):
 
                 message = {'successful': _( "true" ), "new_task": [new_task]} 
             else:
-                message = {'Error': _( "Ha ocurrido un error en la plataforma, comunicate con los administradores para solucionarlo" )} 
+                message = {'error': _( "Ha ocurrido un error en la plataforma, comunicate con los administradores para solucionarlo" )} 
         else:
             message = {'errors':  dict(form.errors.items()) }
     else:
-        message = {'Error': _( "No es posible realizar esta acción" )}
+        message = {'error': _( "No es posible realizar esta acción" )}
 
     return HttpResponse(json.dumps(message), mimetype="application/json")

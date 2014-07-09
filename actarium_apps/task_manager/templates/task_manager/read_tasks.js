@@ -7,20 +7,31 @@ function loadTasksPanel(e) {
 		title: "{% trans 'Tareas' %}",
 		info_text: "{% trans 'Organiza todas las tareas que requieras para cada acta' %}",
 		callback: function () {
-			sendNewAjax("{% url 'tasks:get_minutes_tasks' minutes.id %}",{}, function (data) {
-				tasks = data
-				loadPanelContent($('#taskManagerTpl').html());
-				$('#taskAddBtn').on('click', function(){
-						setTimeout(function(){
-				            $("#nameTaskForm").focus();
-				        }, 1);});
-				tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
-				$('#tasksList').html(tasks_html)
-				dp = $('.date-pick').datetimepicker({
-				    format: 'YYYY-MM-DD',
-				    pickTime: false,		            
+			sendNewAjax({% if minutes %}
+				"{% url 'tasks:get_minutes_tasks' minutes.id %}",
+				{% else %}
+				"{% url 'tasks:get_minutes_tasks' 0 %}",
+				{% endif %}{},
+				function (data) {
+					console.log(data);
+					if (!data.error){
+						tasks = data;
+						loadPanelContent($('#taskManagerTpl').html());
+						$('#taskAddBtn').on('click', function(){
+								setTimeout(function(){
+						            $("#nameTaskForm").focus();
+						        }, 1);});
+						tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
+						$('#tasksList').html(tasks_html);
+						dp = $('.date-pick').datetimepicker({
+						    format: 'YYYY-MM-DD',
+						    pickTime: false,		            
+						});
+					}
+					else{
+						setAlertError("{% trans 'Error' %}", data.error);
+					}
 				});
-			});
 		}
 	}
 	loadPanel(ctx);

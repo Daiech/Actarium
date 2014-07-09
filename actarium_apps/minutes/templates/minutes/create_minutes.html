@@ -151,7 +151,7 @@
     	.minutes-form-btn{display:inline;}
         section{margin-top: 0px;padding-top: 0 !important}
     </style>
-    <link rel="stylesheet" media="all" type="text/css" href="{{STATIC_PREFIX}}libs/bootstrap/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}libs/bootstrap-dtp/css/bootstrap-datetimepicker.min.css" />
 {%endblock%}
 
 {% block menu_content_js %}
@@ -162,6 +162,7 @@
             $("#toolBarStatus").html("{% trans 'Último código de Acta' %}: <strong>{{ last.code }}</strong>");
             {% endif %}
             $("#commissionPanel").on("click", editCommission);
+            $("#tasksPanel").on("click", loadTasksPanel);
             $("#commissionPanel").click(); //open the commission approving panel
             
             $("#save-new-minutes").on("click", function (e) {
