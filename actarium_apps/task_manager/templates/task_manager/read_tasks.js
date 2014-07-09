@@ -13,7 +13,6 @@ function loadTasksPanel(e) {
 				"{% url 'tasks:get_minutes_tasks' 0 %}",
 				{% endif %}{},
 				function (data) {
-					console.log(data);
 					if (!data.error){
 						tasks = data;
 						loadPanelContent($('#taskManagerTpl').html());
@@ -29,7 +28,8 @@ function loadTasksPanel(e) {
 						});
 					}
 					else{
-						setAlertError("{% trans 'Error' %}", data.error);
+						// setAlertError("{% trans 'Error' %}", data.error);
+						loadPanelContent($("#taskEmptyTpl").html());
 					}
 				});
 		}
@@ -46,18 +46,18 @@ function createTask(e) {
         "{% url 'tasks:create_task' %}",
         $(this).serialize(),
         function (data) {
-	        if(data.errors){
-	        	// console.log("ERRORES",data.errors)
+	        if(data.form_errors){
 				for (var i in data.errors){
-					// console.log(i, data.errors[i])
 					$( "#"+i+"TaskForm" ).before( "<label class='error-form-task'>"+data.errors[i]+"</label>" );
 		        } 
+	        }
+	        else if (data.error){
+	        	setAlertError("{% trans 'Error' %}", data.error);
 	        }
 	        else if (data.successful){
 	        	setAlertMessage("Tarea Agregada","Se ha agregado una nueva tarea al acta <strong>{{ minutes.code}}</strong> ");
 	        	$("#taskDropdown").find(".close").click();
 	        	cleanForm("#taskForm");
-	        	// console.log("NEW TASK",data.new_task)
 	        	tasks = data.new_task
 	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
 				$('#tasksList').prepend(tasks_html)

@@ -19,7 +19,6 @@ if 'rosetta' in settings.INSTALLED_APPS:
 for app in settings.APPS:
     try:
         appurls = __import__(app + ".urls", fromlist=['urls'])
-        print "APPURLS___________",appurls
         if hasattr(appurls, "name"):
             ns = ""
             if hasattr(appurls, "namespace"):
