@@ -64,11 +64,11 @@ def getPrevNextOfGroup(group, minutes_id):
 
 
 def getRolUserMinutes(_user, id_group, id_minutes=None, is_active=True):
-    a = "--"
     try:
         r = rol_user_minutes.objects.get(id_user=_user, id_group=id_group, id_minutes=id_minutes, is_active=is_active)
         return r
     except rol_user_minutes.DoesNotExist:
+        print "NO HAY"
         return None
     except Exception, e:
         print "getRolUserMinutes Error", e
@@ -242,18 +242,19 @@ def getAllPublicTemplates():
 def removeUniqueRolGroup(group, role):
     try:
         if role == 4:
-            r = rol_user_minutes.objects.get(id_group=group, is_president=True, is_active=False)
+            r = rol_user_minutes.objects.get(id_group=group, is_president=True)
             r.is_president = False
             # r.is_signer = False
+            r.save()
         if role == 5:
-            r = rol_user_minutes.objects.get(id_group=group, is_secretary=True, is_active=False)
+            r = rol_user_minutes.objects.get(id_group=group, is_secretary=True)
             r.is_secretary = False
             # r.is_signer = False
-        r.save()
+            r.save()
         return True
     except rol_user_minutes.DoesNotExist:
         return True
-    except Exception:
+    except Exception, e:
         return False
 
 
@@ -267,10 +268,7 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editin
 
         email_list = list()
         befores = rel_user_minutes_signed.objects.filter(id_minutes=_minute)
-        print "======================================================="
-        print befores
         befores.delete()
-        print befores
         for r in rols:
             if r.is_approver:
                 email_list.append(r.id_user.email)
@@ -540,9 +538,15 @@ def setRolForMinute(request, slug_group):
                         rel = getRolUserMinutes(u, g, is_active=False)
                         print "REL2:", rel
                     if not rel:
-                        rel = setRolUserMinutes(u, g)
+                        if _minute:
+                            rel = setRolUserMinutes(u, g, id_minutes=_minute, is_active=True)
+                        else:
+                            rel = setRolUserMinutes(u, g)
                         if rel:
-                            rel = getRolUserMinutes(u, g, is_active=False)
+                            if _minute:
+                                rel = getRolUserMinutes(u, g, id_minutes=_minute)
+                            else:
+                                rel = getRolUserMinutes(u, g)
                         else:
                             rel = False
                     if rel:
@@ -567,7 +571,7 @@ def setRolForMinute(request, slug_group):
                                 if not rel.is_president:
                                     rel.is_secretary = True
                                 else:
-                                    error = "No se puede ser Presidente y Secretario al mismo tiempo"
+                                    error = _("No se puede ser Presidente y Secretario al mismo tiempo")
                             role_name = r5
 
                         if role == 1 and u and remove:
