@@ -93,10 +93,7 @@
     <span id="is_form" style="display:none">{{is_form}}</span>
 {% endblock%}
 
-{% block panel_content %}
-    {% include "minutes/panel_tpl.html" %}
-    {% include "minutes/approving_commission/tpl.html" %}
-{% endblock %}
+{% block panel_content %}{% endblock %}
 
 {% block menu_content_style %}
     <style>
@@ -154,15 +151,10 @@
     	.minutes-form-btn{display:inline;}
         section{margin-top: 0px;padding-top: 0 !important}
     </style>
-    <link rel="stylesheet" media="all" type="text/css" href="{{STATIC_PREFIX}}css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" media="all" type="text/css" href="{{STATIC_PREFIX}}libs/bootstrap/css/bootstrap-datetimepicker.min.css" />
 {%endblock%}
 
 {% block menu_content_js %}
-    <script src="{{STATIC_PREFIX}}js/vendor/tiny_mce/tiny_mce.js"></script>
-    <script type="text/javascript" src="{{STATIC_PREFIX}}js/vendor/moment-with-langs.min.js"></script>
-    <script type="text/javascript" src="{{STATIC_PREFIX}}js/vendor/bootstrap/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript">{% include "minutes/approving_commission/scripts.js" %}</script>
-
     <script type="text/javascript" >
        $(document).ready(function(){
             $("#group-menu-folder").addClass("active");

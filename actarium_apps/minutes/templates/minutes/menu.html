@@ -10,6 +10,9 @@
 				<span id="toolBarStatus"></span>
 	    	</div>
 	    	<div id="activity" class="hidden">
+	    		{% include "minutes/panel_tpl.html" %}
+				{% include "minutes/approving_commission/tpl.html" %}
+				{% include "task_manager/read_tasks_tpl.html" %}
 	    		{% block panel_content %}{% endblock %}
 	    	</div>
 	    	<div id="group-content" class="">
@@ -25,33 +28,16 @@
 {%endblock%}
 
 {% block js %}
-	<script src="{{STATIC_PREFIX}}js/vendor/jquery.nicescroll.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_PREFIX }}libs/bootstrap-dtp/js/moment-with-langs.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_PREFIX }}libs/bootstrap-dtp/js/bootstrap-datetimepicker.js"></script>
+{% comment %}<script type="text/javascript" src="{{ STATIC_PREFIX }}js/vendor/waypoints.min.js"></script>{% endcomment %}
+	<script type="text/javascript" src="{{ STATIC_PREFIX }}js/vendor/jquery.nicescroll.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_PREFIX }}js/vendor/tiny_mce/tiny_mce.js"></script>
+	<script type="text/javascript">{% include "minutes/approving_commission/scripts.js" %}</script>
+	<script type="text/javascript">{% include "task_manager/read_tasks.js" %}</script>
+
 	<script>
 		$(document).on("ready",function(){
-			$("#title-menu").on("click", function (e) {
-				$("#group-menu-list").slideToggle();
-			});
-			$("#feed-option").animate({"top": ($(window).height() - 120) + "px" }, 1000);
-			$("#group-left-menu > ul > li > a[href='#settings']").on("click", changeContent);
-
-			function changeContent (e) {
-				e.preventDefault();
-				e.stopPropagation();
-				var div = $("#group-content-div");
-				var id = $(this).attr("href");
-				switch(id){
-					case "#settings":
-					  	$("#group-settings-submenu").slideToggle("fast");
-					  	if ( $("#icon-chevron").hasClass("glyphicon glyphicon-chevron-down") ){
-					  		$("#icon-chevron").removeClass("glyphicon glyphicon-chevron-down");
-					  	}else{
-					  		$("#icon-chevron").addClass("glyphicon glyphicon-chevron-down");
-					  	}
-					  	break;
-					default:
-						return false;
-				}
-			}
 			$(".title").tooltip();
 		});
 	</script>
@@ -63,7 +49,9 @@
 {% endblock %}
 
 {% block style%}
-	<style>
+	<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}libs/bootstrap-dtp/css/bootstrap-datetimepicker.min.css" />
+	<style type="text/css">{% include "task_manager/read_tasks.css" %}</style>
+	<style type="text/css">
 		header.navbar{border-bottom:0;height: 50px}
 		#topbar{border-bottom: 1px solid #CBCCCC;}
 		.selected-annontation{background-color: rgb(240, 240, 240);;}
