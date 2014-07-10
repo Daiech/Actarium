@@ -123,9 +123,9 @@
                 <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
             {%endif%}
             <div id="assistance_hidden" style="display:none">
-                <ul class="list-unstyled">
+                <ul class="list-unstyled members-list">
                     {% for member in members_selected%}
-                        <li>
+                        <li class="member-{{ member.id_user.id }}">
                             <div class="">
                                 {{member.id_user.first_name|upper}} {{member.id_user.last_name|upper}}
                             </div>

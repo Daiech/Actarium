@@ -113,10 +113,10 @@
     			<tr>
     				<td style="padding:5px"><strong>{% trans 'ASISTENTES' %}</strong></td>
     				<td style="padding:5px">
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled members-list">
                         {% for member in members_selected%}
-                               <li>
-                               {{member.id_user.first_name}} {{member.id_user.last_name}}
+                               <li class="member-{{ member.id_user.id }}">
+                               {{ member.id_user.first_name }} {{ member.id_user.last_name }}
                                {%comment%}
                                {% if not forloop.last %},{%endif%}
                                {%endcomment%}

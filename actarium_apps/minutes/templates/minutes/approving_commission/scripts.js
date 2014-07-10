@@ -132,6 +132,12 @@ function isThereAprobers(e){
 	}
 }
 
+function addMemberToList (user) {
+	$("#minutes .members-list").append("<li>"+ user.full_name + "</li>")
+}
+function removeMemberToList (user) {
+	$("#minutes .members-list").find(".member-" + user.id).remove();
+}
 function getRoleName (op) {
 	switch(op){
 		case 1 : return "Administrador de &eacute;ste grupo"; break;
@@ -141,18 +147,27 @@ function getRoleName (op) {
 }
 function callbackSetRole(data) {
 	if (data["saved"]){
-    	// setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+    	// setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role_name'] + " del acta a crear.")
+		if (data.role === 3){
+			addMemberToList({"id": data.uid, "username": data.username, "first_name": data.u, "full_name": data.full_name});
+		}
+		else{
+			// console.log("es", data.role_name);
+		}
     }
     else{
-    	setAlertError("Ocurri&oacute; un error", data['error'])
+    	setAlertError("{% trans 'Ocurrió un error' %}", data['error'])
     }
 }
 function callbackRemoveRole(data) {
 	if (data["saved"]){
-    	// setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role'] + " del acta a crear.")
+    	// setAlertMessage("Rol removido", data['u'] + " ya no es " + data['role_name'] + " del acta a crear.")
+    	if (data.role === 3){
+			removeMemberToList({"id": data.uid, "username": data.username, "first_name": data.u, "full_name": data.full_name});
+		}
     }
     else{
-    	setAlertError("Ocurri&oacute; un error", data['error'])
+    	setAlertError("{% trans 'Ocurrió un error' %}", data['error'])
     }
 }
 function setRole(e) {
@@ -174,7 +189,7 @@ function setRole(e) {
 }
 function callbackSetPresident (data) {
 	if (data["saved"]){
-    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role_name'] + " del acta a crear.")
 		$(".president-ok").removeClass("hidden");
 		//show all options for to set a secretary
 		$("#sel-secretary option").show();
@@ -190,7 +205,7 @@ function callbackSetPresident (data) {
 }
 function callbackSetSecretary (data) {
 	if (data["saved"]){
-    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role'] + " del acta a crear.")
+    	setAlertMessage("Rol agregado", data['u'] + " ahora es " + data['role_name'] + " del acta a crear.")
 		$(".secretary-ok").removeClass("hidden");
 		$("#sel-president option").show();
 		$("#sel-president option[value=" + data['uid'] +"]").hide();
