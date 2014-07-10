@@ -1,6 +1,7 @@
 {% load gravatartag i18n humanize %}
 	<script type="text/template" id="taskManagerTpl">
 		<div id="taskManager" >
+			{% if is_secretary %}
 			<div class="task_add">
 				<button id="taskAddBtn" class="btn actarium-dropdown" >
 					<span id="taskAddBtn" class="glyphicon glyphicon-plus" ></span>
@@ -37,6 +38,7 @@
 					</div>		
 				</div>
 			</div>
+			{% endif %}
 			<div id="tasksList">
 			</div>
 		</div>
@@ -46,7 +48,7 @@
 		{% verbatim %}
 			{%for task in tasks %}
 				<div class="one_task row-fluid" data-task-id="{{task.id}}">
-					<div class="task_status pull-left" style="background-color: {{task.color}}">
+					<div class="task_status pull-left" style="background-color: {{task.color}}" title="{{ task.status}}">
 					</div>
 					<div class="task_info pull-left row-fluid">
 						<div class="task_user_img pull-left">
@@ -78,8 +80,9 @@
 		{% endverbatim %}
 	</script>
 
-	<!-- 
-	<div>
-		{{task.description}}
-	</div>
-	-->
+	<script type="text/template" id="taskEmptyTpl">
+		<div class="task_empty">
+			<strong>No hay tareas para mostrar</strong>
+			<p>debes guardar el acta para poder agregar tareas.</p>
+		</div>	
+	</script>

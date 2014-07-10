@@ -65,3 +65,7 @@
 .error-form-task{
 	color: #a94442;
 }
+
+.task_empty{
+	padding: 10px;
+}
