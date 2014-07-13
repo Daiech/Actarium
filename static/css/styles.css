@@ -703,10 +703,10 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 /*
 Show Minutes 
 */
-#minutes-container{max-width: 915px;margin: auto;}
+#minutes-container{max-width: 815px;margin: auto;}
 
 .hoja{/*width: 70%;*/margin:auto;}
-#sign{margin: 0 auto;margin-top: 20px;min-height: 100px;}
+#sign{margin: 0 auto;margin-top: 8px;min-height: 100px;}
 .minute{
     border: solid thin #ddd;
     background-color: #fff;
@@ -834,6 +834,10 @@ cierra Show Minutes
     .dropdown-container{right: auto;left: 0;}
 }
 /*Close Dropdown Actarium*/
+#alerts {position: fixed;top: 25px;left: 0;right: 0;z-index: 10000;width:30%;margin:0 auto;padding: 10px 30px 10px 30px;font-size: 16px;}
+#alerts div.alert{position: relative;top: 0;width: 100%;}
+
+
 /*==================================================*/
 /*                  Inicia Responsive               */                    
 /*==================================================*/
@@ -919,6 +923,7 @@ cierra Show Minutes
     .topbar-btn > .dinline{display: none}
     .org-menu-container .nav-list .glyphicon-chevron-right{display: none;}
     #topbar .breadcrumb {padding-left: 85px;}
+    #alerts{width: 70% !important;}
 }
 /* Landscape phones and down */
 @media (max-width: 480px) {

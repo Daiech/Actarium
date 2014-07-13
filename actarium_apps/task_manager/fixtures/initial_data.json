@@ -1,0 +1,55 @@
+[
+	{
+		"pk":1,
+		"model":"task_manager.roles",
+		"fields":{
+			"code":"RES",
+			"is_active":true,
+			"name":"responsible",
+			"description":"Cuando un usuario crea una tarea debe asignarla a alguien, la persona a quien se asigne es el responsable."
+		}
+	},
+	{
+		"pk":2,
+		"model":"task_manager.roles",
+		"fields":{
+			"code":"CRE",
+			"is_active":true,
+			"name":"Creador",
+			"description":"Persona que crea una tarea."
+		}
+	},
+	{
+		"pk":1,
+		"model":"task_manager.status",
+		"fields":{
+			"color_code":"#ffffc6",
+			"code":"ASI",
+			"is_active":true,
+			"name":"Asignada",
+			"description":"Este estado se asigna autom\u00e1ticamente cuando alguien crea una tarea y la asigna a alguien. "
+		}
+	},
+	{
+		"pk":2,
+		"model":"task_manager.status",
+		"fields":{
+			"color_code":"#50d735",
+			"code":"TER",
+			"is_active":true,
+			"name":"Terminada",
+			"description":"Cuando el responsable sobre la tarea la marca como terminada"
+		}
+	},
+	{
+		"pk":3,
+		"model":"task_manager.status",
+		"fields":{
+			"color_code":"#b7b7b7",
+			"code":"CAN",
+			"is_active":true,
+			"name":"Cancelada",
+			"description":"Cuando el responsable decide descartar una tarea por cualquier motivo. "
+		}
+	}
+]

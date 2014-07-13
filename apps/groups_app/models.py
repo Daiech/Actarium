@@ -4,7 +4,18 @@ from django.contrib.auth.models import User
 from django.template import defaultfilters
 from django.conf import settings
 from actarium_apps.organizations.models import Groups
+from django.http import Http404
+from libs.generic_managers import GenericManager
 
+
+class MinutesManager(GenericManager):
+    def get_minute(self, **kwargs):
+        m = self.get_or_none(**kwargs)
+        if m:
+            return m
+        else:
+            raise Http404
+        
 
 class minutes_type_1(models.Model):
     date_start = models.DateTimeField()
@@ -78,8 +89,10 @@ class minutes(models.Model):
     is_full_signed = models.BooleanField(default=False)
     code = models.CharField(max_length=150, verbose_name="code")
 
+    objects = MinutesManager()
+
     def __unicode__(self):
-        return "%s,  Extra Minutes: %s" % (self.id_group.name, self.id_extra_minutes)
+        return "Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
 
     def minutesIsValid(self):
         return self.is_valid
@@ -193,6 +206,18 @@ class rol_user_minutes(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=False)
 
+    objects = GenericManager()
+
+    def get_minutes_signed(self):
+        try:
+            signed = self.id_minutes.rel_user_minutes_signed_id_minutes.get(id_user=self.id_user)
+        except Exception, e:
+            signed = None
+        if signed:
+            return signed.is_signed_approved
+        else:
+            return None
+    
     def __unicode__(self):
         return "user: %s is_active: %s" % (self.id_user, self.is_active)
 

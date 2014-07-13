@@ -4,7 +4,7 @@
 {% block toolbar_content %}
 <ul class="list-unstyled">
     <li>
-        <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%} create-minutes" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
+        <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%} create-minutes" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}>
                 <span class="glyphicon glyphicon-plus"></span> {% trans "Crear acta" %}
         </a>
     </li>
@@ -35,7 +35,7 @@
                 {%else%}
                     {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
                 {%endif%}">
-                    <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}">
+                    <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}" target="_blank">
                         {{minute.minutes.code}}
                         <span class="date-minute-created" > el {{minute.minutes.date_created|date:"j \d\e M \d\e Y"}} </span>
                         <span class="date-minute-created" > Creada por {{minute.minutes.id_creator.first_name}} </span>

@@ -1,0 +1,23 @@
+{% load gravatartag humanize i18n %}
+<div id="minutesPanel"></div>
+<script type="text/template" id="minutesPanelTpl">
+	{% verbatim %}
+	<div class="actarium-panel" id="panel_{{ ctx.id }}">
+		<header>
+			<div class="groups-icons">
+				<i class="glyphicon glyphicon-question-sign popover-element" data-toggle="popover"  data-container="body" data-placement="left" data-content="{{ ctx.info_text }}"></i>
+				<span class="close-panel"><i class="glyphicon glyphicon-remove-circle"></i></span>
+			</div>
+			<h4>{{ ctx.title }}</h4>
+		</header>
+		<div>
+			<div id="activity-content" class="">
+			</div>
+		</div>
+	</div>
+	{% endverbatim %}
+</script>
+{% if space_to_approve or is_secretary or is_org_admin %}
+{% comment %}
+{%endcomment%}
+{% endif %}

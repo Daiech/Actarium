@@ -29,7 +29,10 @@ for app in settings.APPS:
         else:
             urlpatterns += appurls.urlpatterns
     except Exception as e:
-        print "Error: ",app, e
+        # print "Error: ",app, e
+        # print type(e)
+        if not (str(e) =="No module named urls"):
+            raise e
 
 
 if settings.DEBUG:

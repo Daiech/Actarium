@@ -166,24 +166,6 @@ function getUrlVars() {
     return vars;
 }
 
-function setAlert(tittle, message, type){
-    var l = message.length;
-    var t=0;
-    if (l===0) t=0;
-    else if (l<=50)  t=3000;
-    else if (l<=100) t=5000;
-    else if (l<=200) t=6000;
-    else if (l> 200) t=7000;
-    $(type+" h4").html(tittle);
-    $(type+" p").html(message);
-    $(type).fadeIn().delay(t).fadeOut(1500);
-}
-function setAlertError(t, m){
-    setAlert(t, m, '#alert-error');
-}
-function setAlertMessage(t, m){
-    setAlert(t, m, '#alert-message');
-}
 function sendAjax(url, params, load_elem, myCallback){
     // $(load_elem).show().html('<img src="/static/img/load16.gif" />');
     $("#ac-load").fadeIn().html('<img src="/static/img/load.gif" />');
@@ -195,6 +177,40 @@ function sendAjax(url, params, load_elem, myCallback){
     );
 }
 
+function setAlert(tittle, message, type) {
+    var l = message.length;
+    var t = 0;
+    if (l === 0)
+        t = 0;
+    else if (l <= 50)
+        t = 3000;
+    else if (l <= 100)
+        t = 5000;
+    else if (l <= 200)
+        t = 6000;
+    else if (l > 200)
+        t = 7000;
+    // $(type + " h4").html(tittle);
+    // $(type + " p").html(message);
+    var id = parseInt(Math.random()*999999) + 1;
+    var template = '<div class="alert alert-' + type + '" id="alert' + id + '">'+
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
+      '<strong>' + tittle + '</strong><br>' + message + 
+    '</div>';
+    $("#alerts").append(template);
+    $("#alert"+id).fadeIn();
+    if (type != "error"){
+        $("#alert"+id).delay(t).fadeOut(1500, function (argument) {
+            $(this).remove();
+        });
+    }
+}
+function setAlertError(t, m) {
+    setAlert(t, m, 'error');
+}
+function setAlertMessage(t, m) {
+    setAlert(t, m, 'block');
+}
 function sendNewAjax(url, params, myCallback, args){
     if (typeof args === "undefined") {
         load_elem = "#ac-load";
@@ -222,6 +238,7 @@ function sendNewAjax(url, params, myCallback, args){
         });
     }
 }
+
 /*Dropdown Actarium*/
 function restartMenus(){
     $(".second-menu").slideUp(200);
@@ -261,6 +278,10 @@ function changeDropDownMenus(elem){
     });
 }
 /*Close Dropdown Actarium*/
+
+function cleanForm(element){
+    $(element).each(function() {this.reset();});
+}
 
 $("#language-form button").on("click", function (e){e.preventDefault();$("#language-selected").val($(this).attr("data-language"));$("#language-form").submit();})
 

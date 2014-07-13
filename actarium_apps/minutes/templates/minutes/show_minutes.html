@@ -1,0 +1,102 @@
+{% extends "minutes/menu.html" %}
+{% block title %}Acta {{ minutes.code }}, Grupo {{minutes.id_group.name}} {% endblock %}
+{% load gravatartag i18n %}
+
+{% block toolbar_content %}
+	{% include "minutes/show_minutes_tool_bar.html" %}
+{% endblock %}
+
+{%block menu_content %}
+	<div id="minutes-processor-container" class="">
+	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
+	    	<p>Historial de versiones:</p>
+	    	{%for minutes in minutes_version%}
+	    		{{minutes.full_html|safe}}
+	    		<hr>
+	    	{%endfor%}
+	    </div>
+	    <div id="minutes-container">{{minute_template}}</div>
+	</div>
+	<span id="is_form" style="display:none">{{is_form}}</span>
+{%endblock%}
+
+{% block panel_content %}{% endblock %}
+
+{% block menu_content_js %}
+	<script>
+		$(document).on("ready", function(){
+			$("#group-menu-folder").addClass("active");
+			$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
+			$("#commissionPanel").on("click", showCommission);
+			$("#tasksPanel").on("click", loadTasksPanel);
+			
+			$("#commissionPanel").click(); //open the commission approving panel
+			
+			{% if minutes.is_full_signed %}
+			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
+				$(".print").removeClass("hidden");
+			}
+			{% endif %}
+			$("#print-minutes").on("click", function (e) {
+				alert("{% trans 'No olvides configurar las márgenes y las opciones de encabezado y pie de página antes de imprimir.' %}")
+				window.print();
+			});
+			$("#btn-generate-pdf").on("click", function (e) {
+				e.preventDefault();
+				{% if minutes.is_full_signed %}
+				$("#pdf-form").submit();
+				{% endif %}
+			});
+			$("li, a").tooltip();
+			{% comment %}
+			$('#first-point').waypoint(function() {
+				if($("#approve-message-up").hasClass("minutes-bar-static")){
+					$("#approve-message-up").removeClass("minutes-bar-static").css({"position": "relative"});
+				}
+				else{
+					$("#approve-message-up").addClass("minutes-bar-static").css({"position": "fixed"});
+				}
+			});
+			{% endcomment %}
+			$('#minutes-html-data').val($('#minutes').html());
+
+			$("#history").on("click", function (e) {
+				e.preventDefault();
+				$("#minutes-version").slideToggle();
+			})
+
+			{% if is_secretary %}
+			$("#minutes-edit").on("click", function (e) {
+				if(confirm("{% trans 'Seguro que desea editar esta Acta?' %}")){
+					top.location = "{% url 'edit_minutes' group.slug minutes.code minutes.id_template.slug %}";
+				}
+			})
+			{% endif %}
+			
+		});
+		{% include minutesTemplateJs %}
+	</script>
+{% endblock %}
+
+{% block menu_content_style%}
+	<style>
+		.white-box-container{width: 80%;margin: auto; }
+		
+		#body-container > article{margin-top:0;padding-top: 0;}
+		#minutes-bar{background-color: rgb(251, 251, 251); padding: 5px 0;position: absolute;left: 0;width:100%;margin-top: 0px;}
+		#minutes-bar-hoja{width: 75%;}
+		.header-minutes{background-color: rgb(251, 251, 251); padding: 15px 0;position: absolute;left: 0;width: 100%;margin: 0;}
+		.header-minutes > div{margin: 0 auto;margin-bottom: 8px;width: 90%;}
+		.minutes-bar-static{position: fixed;top: 73px;width: 50%;left: 0;right: 0;margin: 0 auto;}
+		#minutes-container > section{margin-top: 0px;padding-top: 0 !important}
+		#minutes{padding-right: 0;padding-left: 0;}
+		#toolbar-btn > ul > li > form{margin: 0}
+		.ico-title{margin-top: -4px;margin-right: 2px;}
+		.important{z-index: 2001}
+		#minutes-version{width: 815px;margin: auto;}
+
+		@media (max-width: 979px) {
+			.minutes-bar-static{top: 0px;}
+		}
+	</style>
+{% endblock %}

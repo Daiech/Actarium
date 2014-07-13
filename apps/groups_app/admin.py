@@ -18,6 +18,13 @@ class privateTemplatesAdmin(admin.ModelAdmin):
 class DNI_typeAdmin(admin.ModelAdmin):
     list_display = ('short_name', 'long_name')
 
+class rol_user_minutesAdmin(admin.ModelAdmin):
+    list_display = ('id_user', 'id_group', 'id_minutes',"is_president","is_secretary","is_approver","is_assistant","is_signer", 'is_active')
+
+
+class rel_user_minutes_signedAdmin(admin.ModelAdmin):
+    list_display = ('id_user', 'id_minutes', "is_signed_approved")
+
 
 admin.site.register(Groups, GroupsAdmin)  # aca registramos nuestro modelo con el admin de django
 admin.site.register(minutes, minutesAdmin)
@@ -27,8 +34,8 @@ admin.site.register(minutes_type)
 admin.site.register(minutes_type_1)
 admin.site.register(reunions)
 admin.site.register(rel_user_minutes_assistance)
-admin.site.register(rel_user_minutes_signed)
-admin.site.register(rol_user_minutes)
+admin.site.register(rel_user_minutes_signed, rel_user_minutes_signedAdmin)
+admin.site.register(rol_user_minutes, rol_user_minutesAdmin)
 admin.site.register(templates)
 admin.site.register(rel_user_private_templates)
 admin.site.register(annotations)

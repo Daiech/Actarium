@@ -1,6 +1,7 @@
 from django.conf.urls import url, patterns
 from apps.website.views import getGlobalVar
 
+
 urlpatterns = patterns('apps.website.views',
     url(r'^$', 'home', name='home'),
     url(r'^tour$', 'home', name='tour'),
@@ -15,4 +16,5 @@ urlpatterns = patterns('apps.website.views',
     url(r'^pricing', 'pricing', name="pricing"),
     url(r'^blog', 'blog', name="blog"),
     url(r'^landing', 'landing', name="landing"),
+    url(r'^fixtures', 'get_initial_data', name="landing"),
 )

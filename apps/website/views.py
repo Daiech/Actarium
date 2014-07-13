@@ -186,3 +186,13 @@ def benefits(request):
     response['Content-Disposition'] = 'inline;filename=Services.pdf'
     pdf.close()
     return response
+
+@login_required()
+def get_initial_data(request):
+    data = "You are not welcome here"
+    if request.user.is_staff and request.user.is_superuser:
+        from actarium_apps.task_manager.models import Status as MyModel
+        queryset = MyModel.objects.all()
+        from django.core import serializers
+        data = serializers.serialize("json", queryset)
+    return HttpResponse(data, mimetype="application/json")

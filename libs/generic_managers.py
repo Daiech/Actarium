@@ -5,7 +5,7 @@ from django.contrib.auth.models import UserManager
 class GenericManager(models.Manager):
 
     def get_all_active(self):
-        return self.filter(is_active=True).distinct().order_by('-modified')
+        return self.filter(is_active=True).distinct() #.order_by('-modified')
 
     def get_or_none(self, **kwargs):
         try:

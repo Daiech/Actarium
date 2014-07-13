@@ -224,7 +224,8 @@ def showMinuteGroup(request, slug_group, minutes_code):
 
             ######## <APPROVER LISTS> #########
             try:
-                missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
+                # missing_approved_list = rel_user_minutes_signed.objects.filter(id_minutes=minutes_current)
+                missing_approved_list = group.rol_user_minutes_id_group.filter(id_minutes=minutes_current, is_active=True, is_approver=True)
                 # missing_approved_list = 0 if len(missing_approved_list) == 0 else missing_approved_list
             except rel_user_minutes_signed.DoesNotExist:
                 print "NO HAY rel_user_minutes_assistance missing_approved_list"
@@ -284,12 +285,12 @@ def showMinuteGroup(request, slug_group, minutes_code):
     if only_minutes:
         return render_to_response('groups/onlyShowMinutes.html', ctx, context_instance=RequestContext(request))
     else:
-        return render(request, 'groups/templates/showMinutes.html', ctx)
+        return render(request, 'minutes/show_minutes.html', ctx)
 
 
 @login_required(login_url='/account/login')
 def rolesForMinutes(request, slug_group, id_reunion):
-    '''return the board to set the roles for a new Minutes'''
+    '''[DEPRECATED 07/07/14] return the board to set the roles for a new Minutes'''
     saveViewsLog(request, "apps.groups_app.minutes.rolesForMinutes")
     try:
         if id_reunion:
