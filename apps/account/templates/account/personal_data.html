@@ -61,6 +61,8 @@
     <hr>
     <p>{% trans 'Eres miembro desde el' %} {{ user.date_joined }} </p>
     <p>{% trans 'Ultimo logueo' %}: {{ user.last_login}}.</p>
+    <hr>
+    <a href="{% url 'delete_account' %}">{% trans 'Eliminar cuenta' %}</a>
 </div>
 {% endblock%}
 

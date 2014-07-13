@@ -1,0 +1,34 @@
+{% extends "asettings/settings_menu.html" %}
+{% block TITLE %}Cuenta de Usuario{% endblock %}
+{% load gravatartag i18n %}
+
+{% block bodysettings %}
+<div class="">
+	<h2>{% trans 'Eliminar cuenta' %}</h2>
+	{% blocktrans %}
+	<p>Si elimina su cuenta, TODA su información (incluyendo las actas que haya creado) se eliminarán.</p>
+	<p>Este proceso no podrá revertirse después de hacer click en el botón "Eliminar mi cuenta".</p>
+	{% endblocktrans %}
+	<p class="lead">{% trans '¿Seguro que desea eliminar su cuenta?' %}</p>
+
+	<hr>
+	<form method="post">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-danger">{% trans 'Eliminar mi cuenta' %}</button>
+		<a href="{% url 'personal_data' %}" class="btn btn-default">{% trans 'Cancelar' %}</a>
+		
+	</form>
+</div>
+{% endblock%}
+
+{% block settings_style %}
+	<style>
+	</style>
+{% endblock %}
+
+{% block settings_js %}
+<script>
+	$(document).on("ready", function() {
+	});
+</script>
+{% endblock %}

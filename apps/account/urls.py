@@ -21,4 +21,6 @@ urlpatterns = patterns('apps.account.views',
     url(r'^password/done/$', 'password_reset_complete2', name="password_reset_complete2"),
     url(r'^activate/(?P<activation_key>[-\w]+)/invited(?P<is_invited>.*)', 'confirm_account', name="confirm_account"),
     url(r'^activate/(?P<activation_key>[-\w]+)', 'activate_account', name="activate_account"),
+    url(r'^delete-account/', 'delete_account', name="delete_account"),
+    url(r'^confirm_account_deleted/', 'confirm_account_deleted', name="confirm_account_deleted"),
 )

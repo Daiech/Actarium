@@ -1,0 +1,18 @@
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Cuenta eliminada' %}{% endblock %}
+
+{% block content %}
+	<div class="white-box-container mt20">
+		<p class="lead">{% trans 'Gracias por usar Actarium, todos tus datos han sido eliminados.' %}</p>
+		<p>{% blocktrans %}Para nosotros es muy importante obtener retroalimentación de su parte para poder mejorar nuestras herramientas y nuestro servicio al cliente en cada momento. Por favor cuéntanos por qué eliminó su cuenta haciendo click <a id="callFeed" href="#">aquí</a>{% endblocktrans %}</p>
+	</div>
+{% endblock %}
+
+
+{% block js %}
+<script>
+	$(document).on("ready", function() {
+	});
+</script>
+{% endblock %}

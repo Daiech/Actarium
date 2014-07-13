@@ -1,5 +1,5 @@
 #encoding:utf-8
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext  # para hacer funcionar {% csrf_token %}
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -472,3 +472,19 @@ def activate_account_now(request, activation_key):
         return False
     except Exception:
         return False
+
+
+@login_required()
+def delete_account(request):
+    print "hola, %s esta es la eliminacion" % request.user.username
+    if request.method == "POST":
+        request.user.delete()
+        return HttpResponseRedirect(reverse("confirm_account_deleted"))
+    return render(request, "account/delete_account.html", locals())
+
+
+def confirm_account_deleted(request):
+    return render(request, "account/confirm_account_deleted.html", locals())
+
+
+
