@@ -15,10 +15,19 @@ def get_minutes_roles(minutes, group=None):
     members_list = list()
     for m in members:
         rol = m.id_user.rol_user_minutes_id_user.get_or_none(id_minutes=minutes, is_active=is_active)
+        try:
+            last_name = m.id_user.last_name[0]
+        except Exception, e:
+            last_name = ""
+        try:
+            first_name = m.id_user.first_name
+        except Exception, e:
+            first_name = m.id_user.username
+        ln = first_name + " " + last_name + ".",
         members_list.append({
             "id": m.id_user.id,
             "username": m.id_user.username,
-            "full_name": m.id_user.first_name + " " + m.id_user.last_name[0] + ".",
+            "full_name": ln,
             "img": showgravatar(m.id_user.email, 20),
             "is_active": m.id_user.is_active,
             "role": {
