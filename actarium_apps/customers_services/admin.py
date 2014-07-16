@@ -9,6 +9,9 @@ class CustomersServicesAdmin(admin.ModelAdmin):
 class OrderItemsAdmin(admin.ModelAdmin):
     list_display = ('order_quantity', 'number_of_periods', 'discount', 'service', 'order', 'customer_service', 'is_active')
 
+class ServicesAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name', 'price_per_period', 'period', 'is_active')
+
 
 # fixtures
 from .models import OrderStatus, Periods
@@ -27,5 +30,5 @@ admin.site.register(OrderItems, OrderItemsAdmin)
 from .models import ServicesCategories, PaymentMethods, Services
 admin.site.register(ServicesCategories)
 admin.site.register(PaymentMethods)
-admin.site.register(Services)
+admin.site.register(Services, ServicesAdmin)
 

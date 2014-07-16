@@ -23,13 +23,7 @@ def read_pricing(request, slug_org):
 
         packages = Packages.objects.get_all_active().order_by('code')
 
-        S000 = Services.objects.get_or_none(code='S000')
-        S001 = Services.objects.get_or_none(code='S001')
-        S002 = Services.objects.get_or_none(code='S002')
-        S003 = Services.objects.get_or_none(code='S003')
-        S004 = Services.objects.get_or_none(code='S004')
-        S005 = Services.objects.get_or_none(code='S005')
-        S006 = Services.objects.get_or_none(code='S006')
+        services_list = Services.objects.filter(service_category__code="C001", is_active=True).order_by("-price_per_period")
 
         services_categories = ServicesCategories.objects.filter(is_active=True)
 
@@ -53,7 +47,7 @@ def read_pricing(request, slug_org):
                     else:
                         error = message
                 else:
-                    error = _("El metodo de pago seleccionado")
+                    error = _(u"El método de pago seleccionado")
             else:                
                 show_modal=True
 

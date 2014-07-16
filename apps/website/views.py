@@ -14,7 +14,7 @@ from apps.groups_app.utils_meetings import date_time_format_form
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
-from actarium_apps.customers_services.models import OrderItems
+from actarium_apps.customers_services.models import OrderItems, Services
 from .models import *
 import datetime
 import json
@@ -54,7 +54,6 @@ def users(request):
         all_users = User.objects.all()
         active_users = User.objects.get_all_active()
         inactive_users = User.objects.filter(is_active=False)
-        pay_users = User.objects.filter(is_staff=True)
         orders = OrderItems.objects.exclude(service__code="S000").filter(is_active=True)
         orders_count = orders.aggregate(total=Sum("order_quantity"))
     return render(request, 'website/num_users.html', locals())
@@ -142,6 +141,7 @@ def pricing(request):
     MIN_MONTHLY_PAYMENT = getGlobalVar("MIN_MONTHLY_PAYMENT")
     TRIAL_MEMBERS = getGlobalVar("TRIAL_MEMBERS")
     TRIAL_MONTH = getGlobalVar("TRIAL_MONTH")
+    services_list = Services.objects.filter(service_category__code="C001", is_active=True).exclude(code="S000").order_by("-price_per_period")
     return render(request, 'website/pricing.html', locals())
 
 

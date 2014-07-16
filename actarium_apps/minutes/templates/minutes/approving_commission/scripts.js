@@ -280,7 +280,12 @@ function setShowDNI(e){
 		}
 	);
 }
+function cancelEditCommission(e){
+	e.preventDefault();
+	$("#commissionPanel").click();
+}
 $(document).on("click", ".btn-approve", setApprove);
+$(document).on("click", ".btn-send-notification .btn-cancel", cancelEditCommission);
 $(document).on("click", ".set-role", setRole);//roles MAIN
 $(document).on("change", "#sel-president", setPresident);//roles MAIN
 $(document).on("change", "#sel-secretary", setSecretary);//roles MAIN

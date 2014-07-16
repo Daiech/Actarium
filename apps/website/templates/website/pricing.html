@@ -156,15 +156,15 @@
         set_initial_pricing_box ();
         function set_initial_pricing_box () {
             mn = "{% trans 'miembros' %}";
-            payment = "{% trans 'mes/miembro + iva' %}";
+            payment = "{% trans 'mes/miembro' %}";
             to = " {% trans 'a' %} ";
             suscribe = "{% trans 'Suscribirse' %}";
             url_s = "{% url 'create_org' %}"
             pricing = {
-                "1": {price: 5000, payment: payment, members_num: {to: 1, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "2": {price: 4100, payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "3": {price: 3300, payment: payment, members_num: {to: 21, inter_text: to, until: 35}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "4": {price: 2900, payment: payment, members_num: {to: "", inter_text: "", until: "+35"}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "1": {price: "{{ services_list.0.price_per_period|floatformat }}", payment: payment, members_num: {to: 1, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "2": {price: "{{ services_list.1.price_per_period|floatformat }}", payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "3": {price: "{{ services_list.2.price_per_period|floatformat }}", payment: payment, members_num: {to: 21, inter_text: to, until: 35}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+                "4": {price: "{{ services_list.3.price_per_period|floatformat }}", payment: payment, members_num: {to: "", inter_text: "", until: "+35"}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
             }
             $("#pricing-methods").html(swig.render($("#pricing-template").html(), {locals: pricing}));
         }

@@ -9,7 +9,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel">Actualizar paquete</h4>
+	        <h4 class="modal-title" id="myModalLabel">{% trans 'Actualizar paquete' %}</h4>
 	      </div>
 	      <form class="form-horizontal" method="POST">
 		      <div class="modal-body">
@@ -19,16 +19,16 @@
 		            </table>
 		            <h4>{% trans 'Resumen' %}</h4>
 		            <table id="tableResume" class="table">
-			            <tr><td> Precio por mes: </td><td>  $<strong id="pricePerMonth"></strong></td></tr>
-			            <tr><td> Sub total: </td><td>  $<strong id="subTotal"></strong></td></tr>
-			            <tr><td> Descuento: </td><td>  $<strong id="discountValue">0</strong></td></tr>
-			            <tr><td> IVA: </td><td> $<strong id="discountValue">0</strong></td></tr>
-			            <tr><td> Total a pagar: </td><td> $<strong id="totalPrice"></strong></td></tr>
+			            <tr><td> {% trans 'Precio por mes' %}: </td><td>  $<strong id="pricePerMonth"></strong></td></tr>
+			            <tr><td> {% trans 'Sub total' %}: </td><td>  $<strong id="subTotal"></strong></td></tr>
+			            <tr><td> {% trans 'Descuento' %}: </td><td>  $<strong id="discountValue">0</strong></td></tr>
+			            <tr><td> {% trans 'IVA' %}: </td><td> $<strong id="discountValue">0</strong></td></tr>
+			            <tr><td> {% trans 'Total a pagar' %}: </td><td> $<strong id="totalPrice"></strong></td></tr>
 		            </table>     
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-		        <button type="submit" class="btn btn-primary">Actualizar</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cerrar' %}</button>
+		        <button type="submit" class="btn btn-primary">{% trans 'Actualizar' %}</button>
 		      </div>
 	      </form>
 	    </div>
@@ -105,31 +105,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr id="{{ S000.code }}" >
-						<td>{{ S000.name }}</td> 
-						<td>{{ S000.description }}</td>
-						<td>${{ S000.price_per_period|floatformat }} / {{ S000.period.name }}</td>
-					</tr>
-					<tr id="{{ S004.code }}" >
-						<td>{{ S004.name }}</td> 
-						<td>{{ S004.description }}</td>
-						<td>${{ S004.price_per_period|floatformat }} / {{ S000.period.name }}</td>
-					</tr>
-					<tr id="{{ S003.code }}" >
-						<td>{{ S003.name }}</td> 
-						<td>{{ S003.description }}</td>
-						<td>${{ S003.price_per_period|floatformat }} / {{ S000.period.name }}</td>
-					</tr>
-					<tr id="{{ S002.code }}" >
-						<td>{{ S002.name }}</td> 
-						<td>{{ S002.description }}</td>
-						<td>${{ S002.price_per_period|floatformat }} / {{ S000.period.name }}</td>
-					</tr>
-					<tr id="{{ S001.code }}" >
-						<td>{{ S001.name }}</td> 
-						<td>{{ S001.description }}</td>
-						<td>${{ S001.price_per_period|floatformat }} / {{ S000.period.name }}</td>
-					</tr>
+					{% for s in services_list %}
+						<tr id="{{ s.code }}">
+							<td>{{ s.name }}</td> 
+							<td>{{ s.description }}</td>
+							<td>${{ s.price_per_period|floatformat }} / {{ s.period.name }}</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		</div>

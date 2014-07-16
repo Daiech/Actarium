@@ -520,12 +520,14 @@ def setRolForMinute(request, slug_group):
             try:
                 g = Groups.objects.get_group(slug=slug_group)
                 _user_rel = getRelUserGroup(request.user, g)
+                is_org_admin = g.organization.has_user_role(request.user, "is_admin")
 
-                if _user_rel and _user_rel.is_secretary:
+                if (_user_rel and _user_rel.is_secretary) or is_org_admin:
                     role = int(request.POST.get('role'))
                     remove = bool(int(request.POST.get('remove')))
                     _user = get_user_or_email(request.POST.get('uid'))
                     m_id = request.POST.get('m_id')
+                    print "POST", request.POST
                     _minute = None
                     if m_id:
                         _minute = minutes.objects.get_minute(id=int(m_id))
@@ -583,7 +585,7 @@ def setRolForMinute(request, slug_group):
                         print "no hay relacion"
                         # save Error log
                 else:
-                    error = _("No tienes permiso para hacer eso, Por favor recarga la p&aacute;gina")
+                    error = _("No tienes permiso para hacer eso, Por favor recarga la página")
             except Exception, e:
                 print e
                 error = _("Por favor recarga la página e intenta de nuevo.")

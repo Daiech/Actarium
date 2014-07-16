@@ -45,10 +45,10 @@
 							</li>
 						{% endfor %}
 						{% endverbatim %}
-					</ol>
+					</ol>{% comment %}
 					{% if not minutes.is_full_signed %}
 					<span><a href="#" id="btnEditCommission" class="btn"><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar comisión' %}</a></span>
-					{% endif %}
+					{% endif %}{% endcomment %}
 				</div>
 			</div>
 		</div>
@@ -190,10 +190,10 @@
 			</table>
 		</div>
 		<hr>
-		{% verbatim %}{% if not commission_is_editing %}{% endverbatim %}
+		{% verbatim %}{% if commission_is_editing %}{% endverbatim %}
 		<div class="btn-send-notification">
-			<a href="#" class="btn">{% trans 'Cancelar' %}</a> 
-			<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-send"></span> {% trans 'Enviar notificación' %}</button>
+			<a href="#" class="btn btn-cancel">{% trans 'Cancelar' %}</a> 
+			<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-send"></span> {% trans 'Guardar y notificar' %}</button>
 		</div>{% verbatim %}{% endif %}{% endverbatim %}
 	</div>
 </script>
