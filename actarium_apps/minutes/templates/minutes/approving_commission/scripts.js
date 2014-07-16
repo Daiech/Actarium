@@ -6,13 +6,22 @@ function showCommission (e) {
 		"title": "{% trans 'Comisión aprobatoria' %}",
 		"info_text": "{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}",
 		"callback":  function () {
-			loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: {} }));
+			ca = [{% for member in commission_approving %}
+					{
+						id: {{ member.id_user.id }},
+						img: "{{member.id_user.email|showgravatar:'20'}}",
+						full_name: "{{member.id_user.first_name}} {{member.id_user.last_name}}",
+						get_minutes_signed: {{ member.get_minutes_signed }}
+					},
+				{% endfor %}]
+			ctx = {ca: ca}
+			loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: ctx }));
 			$(".popover-element").popover({trigger: 'hover'});
 		}
 	}
 	loadPanel(ctx);
 }
-function editCommission (e) {
+function editMinutesRoles (e) {
 	e.preventDefault();
 	var ctx = {
 		"id": $(this).attr("id"),
@@ -23,6 +32,30 @@ function editCommission (e) {
 				ctx = {
 					members: {% if is_edit %}{{ members_list|safe }}{% else %}data.members{% endif %},
 				}
+				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
+				$(".popover-element").popover({trigger: 'hover'});
+			});
+		}
+	}
+	loadPanel(ctx);
+}
+function editCommission (e) {
+	e.preventDefault();
+	var ctx = {
+		"id": $(this).attr("id"),
+		"title": "{% trans 'Editar comisión aprobatoria' %}",
+		"info_text": "{% trans 'Solo puedes editar la comisíón aprobatoria. Para editar otro dato debes editar el acta completa.' %}",
+		"callback":  function () {
+			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug minutes.id %}",{}, function (data){
+				var president = $.grep(data.members, function (element, index) {return element.role.is_president;});
+				var secretary = $.grep(data.members, function (element, index) {return element.role.is_secretary;});
+				if ( president.length > 0 ) {president = president[0].full_name[0]}else{president = "{% trans 'Noy hay presidente' %}"}
+				if ( secretary.length > 0 ) {secretary = secretary[0].full_name[0]}else{secretary = "{% trans 'Noy hay secretario' %}"}
+				ctx = {
+					members: data.members,
+					president: president,
+					secretary: secretary,
+					commission_is_editing: true}
 				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
 				$(".popover-element").popover({trigger: 'hover'});
 			});
@@ -253,5 +286,6 @@ $(document).on("change", "#sel-president", setPresident);//roles MAIN
 $(document).on("change", "#sel-secretary", setSecretary);//roles MAIN
 $(document).on('change', "#show-dni", setShowDNI);
 $(document).on('click', ".btn-next", isThereAprobers);
+$(document).on('click', "#btnEditCommission", editCommission);
 
 /****close roles for minutes ****/

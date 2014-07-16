@@ -1,0 +1,75 @@
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %} {% trans "Usuarios" %}  {% endblock %}
+
+{% block content %}
+    <div class="row-fluid text-center box">
+      <div class="col-md-4">
+        <a href="#">
+            <div class="group-preview">
+                <div class="group-circle">
+                <span class="group-members-num" title="{{ all_users.count }}">{{ all_users.count }}</span>
+                </div>
+                <div class="group-name" title="{{ all_users.count }}"><p>{% trans 'Total de usuarios' %}</p></div>
+            </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="#">
+            <div class="group-preview">
+                <div class="group-circle">
+                <span class="group-members-num" title="{{ active_users.count }}">{{ active_users.count }}</span>
+                </div>
+                <div class="group-name" title="{{ active_users.count }}"><p>{% trans 'Usuarios activos' %}</p></div>
+            </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="#">
+            <div class="group-preview">
+                <div class="group-circle">
+                <span class="group-members-num" title="{{ inactive_users.count }}">{{ inactive_users.count }}</span>
+                </div>
+                <div class="group-name" title="{{ inactive_users.count }}"><p>{% trans 'Usuarios inactivos' %}</p></div>
+            </div>
+        </a>
+      </div>
+    </div>
+    <hr />
+    
+    <div class="row-fluid text-center box">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4">
+        <a href="#">
+            <div class="group-preview">
+                <div class="group-circle">
+                <span class="group-members-num" title="{{ active_users.count }}">{{ orders_count.total }}</span>
+                </div>
+                <div class="group-name" title="{{ active_users.count }}"><p>{% trans 'Cupos pagados' %}</p></div>
+            </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+      </div>
+    </div>
+    {% comment %}
+    <ol>
+    {% for o in orders %}
+        <li>{{ o.order_quantity }}</li>
+    {% endfor %}
+    </ol>
+    {% endcomment %}
+{% endblock %}
+
+{% block style %}
+<style>
+</style>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}

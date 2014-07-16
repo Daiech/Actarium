@@ -7,17 +7,18 @@ from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.utils import translation
 from django.conf import settings
+from django.db.models import Sum
 
 from apps.groups_app.models import reunions, assistance, DNI_permissions
 from apps.groups_app.utils_meetings import date_time_format_form
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
+from actarium_apps.customers_services.models import OrderItems
 from .models import *
 import datetime
 import json
 import re
-
 
 def home(request):
     if request.method == "GET" and 'lang' in request.GET:
@@ -45,6 +46,18 @@ def home(request):
 def landing(request):
     saveViewsLog(request, "landing anonymous")
     return render(request, 'website/landing.html')
+
+
+@login_required
+def users(request):
+    if request.user.is_staff:
+        all_users = User.objects.all()
+        active_users = User.objects.get_all_active()
+        inactive_users = User.objects.filter(is_active=False)
+        pay_users = User.objects.filter(is_staff=True)
+        orders = OrderItems.objects.exclude(service__code="S000").filter(is_active=True)
+        orders_count = orders.aggregate(total=Sum("order_quantity"))
+    return render(request, 'website/num_users.html', locals())
 
 
 def sendFeedBack(request):

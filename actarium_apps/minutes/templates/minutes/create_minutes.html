@@ -134,10 +134,6 @@
          font-size:12px;
          z-index: 9999 !important;
         }
-        .president-secretary{margin: 5px 10px;}
-        .president-secretary .text{margin-left: 24px;}
-        .president-secretary select{width: 80%;display: inline-block;}
-        .president-ok, .secretary-ok{margin-left: 5px;}
         #social-buttons{width: 104px;}
     </style>
     <style>
@@ -161,7 +157,7 @@
             {% if last.code %}
             $("#toolBarStatus").html("{% trans 'Último código de Acta' %}: <strong>{{ last.code }}</strong>");
             {% endif %}
-            $("#commissionPanel").on("click", editCommission);
+            $("#commissionPanel").on("click", editMinutesRoles);
             $("#tasksPanel").on("click", loadTasksPanel);
             $("#commissionPanel").click(); //open the commission approving panel
             
