@@ -23,7 +23,7 @@
 		"pk":1,
 		"model":"task_manager.status",
 		"fields":{
-			"color_code":"#ffffc6",
+			"color_code":"#ffffd2",
 			"code":"ASI",
 			"is_active":true,
 			"name":"Asignada",

@@ -16,7 +16,7 @@
 }
 
 .task_status{
-	width:15px;
+	width:6px;
 	height:60px;
 }
 
@@ -68,4 +68,12 @@
 
 .task_empty{
 	padding: 10px;
+}
+
+#taskAddBtnImg{
+	height:23px;
+}
+
+#miniNameTaskForm{
+	width:206px;
 }

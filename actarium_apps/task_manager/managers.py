@@ -23,6 +23,29 @@ class GenericManager(models.Manager):
 
 class TasksManager(GenericManager):
     
+    def create_task(self, name, description, responsible_obj, due, minutes_obj, user_obj):
+        from .models import UserTasks, Actions, Status, Roles
+        from actarium_apps.core.models import LastMinutesTasks
+        from django.contrib.auth.models import User
+
+        # validate database configuration - fixtures
+        status_obj = Status.objects.get_or_none(code="ASI")
+        creator_role_obj = Roles.objects.get_or_none(code="CRE")
+        responsible_role_obj = Roles.objects.get_or_none(code="RES")
+        if not (status_obj and creator_role_obj and responsible_role_obj):
+            return None
+
+        task_obj = self.create(name=name,description=description,due=due)
+        UserTasks.objects.create(user=user_obj,role=creator_role_obj,task=task_obj)
+        
+
+        UserTasks.objects.create(user=responsible_obj,role=responsible_role_obj,task=task_obj)
+        Actions.objects.create(user=responsible_obj, status=status_obj,task=task_obj)
+        LastMinutesTasks.objects.create(minutes= minutes_obj,task=task_obj)
+
+
+        return task_obj
+
     def get_due_tasks_by_user(self):
         pass
 

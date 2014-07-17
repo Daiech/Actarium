@@ -35,14 +35,12 @@ class Status(models.Model):
 class Tasks(models.Model):
     name = models.CharField(max_length=300, verbose_name=_("Nombre"))
     description = models.TextField(blank=True, verbose_name=_(u"Descripción"))
-    due = models.DateTimeField()
+    due = models.DateTimeField(null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    def create_task(self):
-        pass
 
     def update_task(self):
         pass
@@ -51,34 +49,79 @@ class Tasks(models.Model):
         pass
 
     def set_task_done(self):
-        pass
+        from .models import UserTasks, Actions, Status, Roles
+        from actarium_apps.core.models import LastMinutesTasks
+        from django.contrib.auth.models import User
+
+        # validate database configuration - fixtures
+        status_obj = Status.objects.get_or_none(code="TER")
+        if not (status_obj):
+            return False, __(u"Ha ocurrido un error al intentar marcar la tarea como terminada, comunicate con los administradores para solucionarlo")
+
+        if self.status_code == "TER":
+            return False, __(u"Esta tarea ya fue marcada como terminada")
+
+        if self.status_code == "NAS":
+            return False, __(u"Esta tarea no se puede marcar como terminada")
+
+        responsible_obj = self.responsible
+        Actions.objects.create(user=responsible_obj, status=status_obj,task=self)
+        return True, __(u"La tarea se ha marcado como terminada")
 
     def set_task_canceled(self):
-        pass
+        from .models import UserTasks, Actions, Status, Roles
+        from actarium_apps.core.models import LastMinutesTasks
+        from django.contrib.auth.models import User
+
+        # validate database configuration - fixtures
+        status_obj = Status.objects.get_or_none(code="CAN")
+        if not (status_obj):
+            return False, __(u"Ha ocurrido un error al intentar marcar la tarea como terminada, comunicate con los administradores para solucionarlo")
+
+        if self.status_code == "CAN":
+            return False, __(u"Esta tarea ya fue marcada como cancelada")
+
+        if self.status_code == "NAS":
+            return False, __(u"Esta tarea no se puede marcar como terminada")
+
+        responsible_obj = self.responsible
+        Actions.objects.create(user=responsible_obj, status=status_obj,task=self)
+        return True, __(u"La tarea se ha marcado como cancelada")
 
     def get_responsible(self):
         return self.usertasks_task.get(role__code="RES").user
 
     def get_status(self):
 
-        action = self.actions_task.get_or_none(status__code="TER")
-        if action != None:
-            return __(u"Terminada"), action.status.color_code
-        
-        action = self.actions_task.get_or_none(status__code="CAN")
-        if action != None:
-            return __(u"Cancelada"), action.status.color_code
+        actions = self.actions_task.all().order_by('-created')
 
-        action = self.actions_task.get_or_none(status__code="ASI")
-        if action != None:
+        if actions == []:
+            return [__(u"Sin asignar"), "#000000"], "NAS"
+
+        action = actions[0]
+
+        
+        if action.status.code == "TER":
+            return __(u"Terminada"), action.status.color_code, "TER"
+        
+        
+        if action.status.code == "CAN":
+            return __(u"Cancelada"), action.status.color_code, "CAN"
+
+        
+        if action.status.code == "ASI":
+            if self.due == None:
+                return __(u"Asignada"), action.status.color_code, "ASI"
             days_apart_delta = self.due.date() - datetime.date.today()
             days_apart = days_apart_delta.days
             if days_apart < 0:
-                return __(u"Vencida"), "#ff8c8c"
+                return __(u"Vencida"), "#ff8c8c", "VEN"
             else:
-                return __(u"Asignada"), action.status.color_code
+                return __(u"Asignada"), action.status.color_code, "ASI"
 
-        return [__(u"Sin asignar"), "#000000"]
+        return [__(u"Sin asignar"), "#000000"], "NAS"
+
+        
             
     def get_status_message(self):
         return self.get_status()[0]
@@ -86,9 +129,13 @@ class Tasks(models.Model):
     def get_status_color(self):
         return self.get_status()[1]
 
+    def get_status_code(self):
+        return self.get_status()[2]
+
     responsible = property(get_responsible)
     status = property(get_status_message)
     color = property(get_status_color)
+    status_code = property(get_status_code)
     
 
     objects = TasksManager()
