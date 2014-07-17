@@ -1,0 +1,8 @@
+#history{}
+#history ul:before{border-top: solid thin #ddd; }
+#history ul li{border-bottom: solid thin #ddd;margin: 0;}
+#history ul li:hover{background-color: #ffffd6; }
+#history ul li a{display: inline-block;padding: 10px;}
+#history ul li .creator{color: #888;}
+#minutes-version .version-date{}
+#minutes-version .version-creator{color: #888}

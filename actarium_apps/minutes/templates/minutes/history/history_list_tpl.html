@@ -1,0 +1,16 @@
+{% load gravatartag i18n humanize %}
+
+<script type="text/template" id="historyTpl">
+<div id="history" class="">
+	<ul class="list-unstyled">
+		{% for minutes in minutes_version %}
+    		<li>
+    			<a href="#" data-minutes-version="{{ minutes.id }}" class="btn-minutes-version">
+    				<div>{{ minutes.date_created }}</div>
+    				<span class="creator">{{ minutes.id_user_creator.get_full_name }}</span>
+    			</a>
+    		</li>
+    	{% endfor %}
+	</ul>
+</div>
+</script>

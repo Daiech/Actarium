@@ -12,6 +12,7 @@
 	    	<div id="activity" class="hidden">
 	    		{% include "minutes/panel_tpl.html" %}
 				{% include "minutes/approving_commission/tpl.html" %}
+	    		{% include "minutes/history/history_list_tpl.html" %}
 				{% include "task_manager/read_tasks_tpl.html" %}
 	    		{% block panel_content %}{% endblock %}
 	    	</div>
@@ -30,10 +31,17 @@
 {% block js %}
 	<script type="text/javascript" src="{{ STATIC_PREFIX }}libs/bootstrap-dtp/js/moment-with-langs.min.js"></script>
 	<script type="text/javascript" src="{{ STATIC_PREFIX }}libs/bootstrap-dtp/js/bootstrap-datetimepicker.js"></script>
+    <!-- <script src="http://google-diff-match-patch.googlecode.com/svn/trunk/javascript/diff_match_patch.js"></script> -->
+    <!-- <script src="https://rawgit.com/arnab/jQuery.PrettyTextDiff/master/jquery.pretty-text-diff.js"></script> -->
+    <!-- <script src="http://prettydiff.com/lib/diffview.js"></script> -->
+    <!-- <script src="http://prettydiff.com/prettydiff-min.js"></script> -->
+    <!-- <script src="{{ STATIC_PREFIX }}/libs/prettydiff.js"></script> -->
+    <script type="text/javascript" src="{{ STATIC_PREFIX }}libs/htmldiff.js"></script>
 {% comment %}<script type="text/javascript" src="{{ STATIC_PREFIX }}js/vendor/waypoints.min.js"></script>{% endcomment %}
 	<script type="text/javascript" src="{{ STATIC_PREFIX }}js/vendor/jquery.nicescroll.min.js"></script>
 	<script type="text/javascript" src="{{ STATIC_PREFIX }}js/vendor/tiny_mce/tiny_mce.js"></script>
 	<script type="text/javascript">{% include "minutes/approving_commission/scripts.js" %}</script>
+	<script type="text/javascript">{% include "minutes/history/history.js" %}</script>
 	<script type="text/javascript">{% include "task_manager/read_tasks.js" %}</script>
 
 	<script>
@@ -52,6 +60,7 @@
 	<link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}libs/bootstrap-dtp/css/bootstrap-datetimepicker.min.css" />
 	<style type="text/css">{% include "task_manager/read_tasks.css" %}</style>
 	<style type="text/css">{% include "minutes/approving_commission/styles.css" %}</style>
+	<style type="text/css">{% include "minutes/history/history.css" %}</style>
 	<style type="text/css">
 		header.navbar{border-bottom:0;height: 50px}
 		#topbar{border-bottom: 1px solid #CBCCCC;}

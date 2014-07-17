@@ -9,11 +9,9 @@
 {%block menu_content %}
 	<div id="minutes-processor-container" class="">
 	    <div id="minutes-version" style="background-color:rgb(245,245,245);display:none">
-	    	<p>Historial de versiones:</p>
-	    	{%for minutes in minutes_version%}
-	    		{{minutes.full_html|safe}}
-	    		<hr>
-	    	{%endfor%}
+	    	<h5>{% blocktrans %}Historial de cambios: <span class="version-date"></span>, por <span class="version-creator"></span>{% endblocktrans %}</h5>
+	    	<div class="diff_version"></div>
+	    	<hr>
 	    </div>
 	    <div id="minutes-container">{{minute_template}}</div>
 	</div>
@@ -28,9 +26,10 @@
 			$("#group-menu-folder").addClass("active");
 			$("#toolBarStatus").text("{% trans 'Última modificación' %}: {{ minutes.date_created }}");
 			$("#commissionPanel").on("click", showCommission);
+			$("#historyPanel").on("click", loadHistoryPanel);
 			$("#tasksPanel").on("click", loadTasksPanel);
 			
-			$("#commissionPanel").click(); //open the commission approving panel
+			$("#historyPanel").click(); //open the commission approving panel
 			
 			{% if minutes.is_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
@@ -47,7 +46,7 @@
 				$("#pdf-form").submit();
 				{% endif %}
 			});
-			$("li, a").tooltip();
+			$("#toolbar-btn li, #toolbar-btn a").tooltip();
 			{% comment %}
 			$('#first-point').waypoint(function() {
 				if($("#approve-message-up").hasClass("minutes-bar-static")){
@@ -60,10 +59,10 @@
 			{% endcomment %}
 			$('#minutes-html-data').val($('#minutes').html());
 
-			$("#history").on("click", function (e) {
-				e.preventDefault();
-				$("#minutes-version").slideToggle();
-			})
+			// $("#history").on("click", function (e) {
+			// 	e.preventDefault();
+			// 	$("#minutes-version").slideToggle();
+			// })
 
 			{% if is_secretary %}
 			$("#minutes-edit").on("click", function (e) {
@@ -98,5 +97,15 @@
 		@media (max-width: 979px) {
 			.minutes-bar-static{top: 0px;}
 		}
+
+		ins {
+    background-color: #c6ffc6;
+    text-decoration: none;
+}
+
+del {
+    background-color: #ffc6c6;
+}
+
 	</style>
 {% endblock %}
