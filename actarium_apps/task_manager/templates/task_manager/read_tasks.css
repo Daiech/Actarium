@@ -5,7 +5,7 @@
 .one_task{
 	margin: 2px 0px;
 	padding:0px;
-	height:62px;
+	height:80px;
 	border-top: 1px solid #f7f7f7;
 }
 
@@ -17,26 +17,28 @@
 
 .task_status{
 	width:6px;
-	height:60px;
+	height:76px;
 }
 
 .task_info{
-	width:212px;
-	height:60px;
+	width:218px;
+	height:59px;
 	padding:3px 3px 3px 5px;
 }
 
 .task_functions{
-	width:15px;
-	height:60px;
+	width:100px;
+	
 }
 
-.task_users_img{
-	width: 50px;
+.task_user_img{
+	width:26px;
+	margin-top:7px;
 }
 
 .task_content{
 	padding-left:5px;
+	width:230px;
 }
 
 .task_add{
@@ -50,7 +52,7 @@
 }
 
 .task_name{
-	width: 158px;
+	width: 193px;
 	line-height: 16px;
 }
 
@@ -60,6 +62,10 @@
 
 .task_input{
 	margin-top: 8px;
+}
+
+.task_action{
+	margin-left: 10px;
 }
 
 .error-form-task{

@@ -54,32 +54,31 @@
 				<div id="task{{task.id}}" class="one_task row-fluid actarium-dropdown" data-task-id="{{task.id}}">
 					<div class="task_status pull-left" style="background-color: {{task.color}}" title="{{ task.status}}">
 					</div>
-					<div class="task_info pull-left row-fluid">
-						<div class="task_content pull-left">
-							<div class="task_name">
-								<strong>{{task.short_title}}</strong>
-							</div>
-							<div class="task_name">
-								{{task.short_description}}
+						<div class="task_info pull-left row-fluid">
+							<div class="task_content pull-left">
+								<div class="task_name">
+									<strong>{{task.short_title}}</strong>
+								</div>
+								<div class="task_name">
+									{{task.short_description}}
+								</div>
 							</div>
 						</div>
 						<div class="task_user_img pull-left">
-							<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.img}}" class="img-circle">
+								<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.responsible_img}}" class="img-circle">
+						</div>
+						<div class="task_functions pull-left" >
+							<a  class="task_action" href="#" data-task-id="{{task.id}}">
+								<span class="glyphicon glyphicon-remove-circle"></span>
+							</a>
+							<a class="set_task_done_btn task_action" href="#" >
+								<span class="glyphicon glyphicon-ok-circle"></span>
+							</a>
+							<a class="set_task_canceled_btn task_action" href="#">
+								<span class="glyphicon glyphicon-ban-circle"></span>
+							</a>
 						</div>
 					</div>
-					<div class="task_functions pull-left" >
-						<a  href="#" data-task-id="{{task.id}}">
-							<span class="glyphicon glyphicon-remove-circle"></span>
-						</a>
-						<a class="set_task_done_btn" href="#" >
-							<span class="glyphicon glyphicon-ok-circle"></span>
-						</a>
-						<a class="set_task_canceled_btn" href="#">
-							<span class="glyphicon glyphicon-ban-circle"></span>
-						</a>
-					</div>
-					
-				</div>
 			{%endfor%}
 		{% endverbatim %}
 	</script>
