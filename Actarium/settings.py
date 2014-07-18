@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 try:
     from .local_settings import URL_BASE
 except ImportError:
-    URL_BASE = "http://actarium.com"
+    URL_BASE = "https://actarium.com"
     
 ADMINS = (
     ('Mauricio Aizaga', 'maizaga@daiech.com'),
@@ -46,7 +46,8 @@ except:
 
 ALLOWED_HOSTS = [
     ".actarium.com",
-    ".actarium.com."
+    ".actarium.com.",
+    "162.243.207.189"
 ]
 
 TIME_ZONE = 'America/Bogota'
