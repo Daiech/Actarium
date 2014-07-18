@@ -14,7 +14,7 @@ def showgravatar(email, size):
     #default = "http://cms.myspacecdn.com/cms/Music%20Vertical/Common/Images/default_small.jpg"
     default = URL_BASE + "/static/img/user_default.png"
 
-    url = "http://www.gravatar.com/avatar.php?"
+    url = "https://www.gravatar.com/avatar.php?"
     url += urllib.urlencode({
         'gravatar_id': hashlib.md5(email).hexdigest(),
         # 'default': default,
