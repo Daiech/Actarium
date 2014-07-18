@@ -68,14 +68,14 @@
 								<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.responsible_img}}" class="img-circle">
 						</div>
 						<div class="task_functions pull-left" >
-							<a  class="task_action" href="#" data-task-id="{{task.id}}">
-								<span class="glyphicon glyphicon-remove-circle"></span>
-							</a>
 							<a class="set_task_done_btn task_action" href="#" >
 								<span class="glyphicon glyphicon-ok-circle"></span>
 							</a>
 							<a class="set_task_canceled_btn task_action" href="#">
 								<span class="glyphicon glyphicon-ban-circle"></span>
+							</a>
+							<a  class="delete_task task_action" href="#" data-task-id="{{task.id}}">
+								<span class="glyphicon glyphicon-remove-circle"></span>
 							</a>
 						</div>
 					</div>

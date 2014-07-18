@@ -42,9 +42,6 @@ class Tasks(models.Model):
     modified = models.DateTimeField(auto_now=True)
     
 
-    def delete_task(self):
-        pass
-
     def set_task_done(self):
         from .models import UserTasks, Actions, Status, Roles
         from actarium_apps.core.models import LastMinutesTasks

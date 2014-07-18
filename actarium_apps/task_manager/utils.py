@@ -2,8 +2,8 @@
 from apps.account.templatetags.gravatartag import showgravatar
 
 def task_as_json(task_obj):
-    title_max_length = 20
-    description_max_length = 45
+    title_max_length = 25
+    description_max_length = 52
     new_task = {
                 "id":task_obj.id,
                 "title":task_obj.name,

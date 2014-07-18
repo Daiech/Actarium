@@ -45,7 +45,7 @@ def get_task(request):
         message = {'error': _( u"Error obteniendo la tarea" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")        
 
-    task_obj = Tasks.objects.get_or_none(pk=task_id)
+    task_obj = Tasks.objects.get_or_none(id=task_id)
     if task_obj == None:
         message = {'error': _( u"La tarea no existe" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")        
@@ -83,7 +83,7 @@ def create_task(request):
         message = {'error': _( u"Es necesario gúardar el acta para agregarle tareas." )}
         return HttpResponse(json.dumps(message), mimetype="application/json")
     try:
-        minutes_obj = LastMinutes.objects.get(pk=int(minutes))
+        minutes_obj = LastMinutes.objects.get(id=int(minutes))
     except:
         message = {'error': _( u"Ha ocurrido un error intentando obtener el acta" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")   
@@ -113,14 +113,20 @@ def create_task(request):
     if task_id == "0":
         # create task
         task_obj, response = Tasks.objects.create_task(name, description, responsible_obj, due, minutes_obj, request.user)
-        message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response} 
+        if not task_obj:
+            message = {'error': response} 
+        else:
+            message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response} 
     else:
         # Update task
         task_obj, response = Tasks.objects.update_task(name, description, responsible_obj, due, minutes_obj, request.user,task_id)
-        message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response, "task_updated": True} 
+        
+        if not task_obj:
+            message = {'error': response} 
+        else:
+            message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response, "task_updated": True} 
 
-    if not task_obj:
-        message = {'error': response} 
+    
           
     return HttpResponse(json.dumps(message), mimetype="application/json")
         
@@ -184,4 +190,25 @@ def set_task_canceled(request):
         return HttpResponse(json.dumps(message), mimetype="application/json")
 
     message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response } 
+    return HttpResponse(json.dumps(message), mimetype="application/json")
+
+
+@login_required()
+def delete_task(request):
+
+    if not request.is_ajax():
+        message = {'error': _( u"No es posible realizar esta acción" )}
+        return HttpResponse(json.dumps(message), mimetype="application/json")
+    
+    # get GET data
+    task_id = request.GET.get("task_id")
+
+    # verify if task exist
+    task_obj, response = Tasks.objects.delete_task(task_id,request.user)
+
+    if not task_obj:
+        message = {'error': response }
+        return HttpResponse(json.dumps(message), mimetype="application/json")
+
+    message = {'successful': _( "true" ),  "message": response } 
     return HttpResponse(json.dumps(message), mimetype="application/json")

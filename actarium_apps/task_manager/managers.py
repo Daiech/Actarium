@@ -56,20 +56,41 @@ class TasksManager(GenericManager):
             return None, __( u"No puedes modificar una tarea creada por otro usuario" )
             
 
+        if task_obj.status_code in ("TER", "CAN", "NAS"):
+            return None, __( u"Esta tarea ya no se puede modificar" )
+
         task_obj.name = name
         task_obj.description = description
         
         usertask_obj =  task_obj.usertasks_task.get(role__code="RES")
         usertask_obj.user= responsible_obj
         usertask_obj.save()
-
-
         task_obj.due = due
 
         task_obj.save()
 
         return task_obj, __(u"La tarea ha sido actualizada correctamente")
         
+    def delete_task(self,task_id, user_obj):
+
+        # verify if task exist
+        task_obj = self.get_or_none(id=task_id)
+        if not task_obj:
+            return None, __( u"No existe esta tarea" )
+            
+
+        # owner verification
+        if not (task_obj.creator == user_obj):
+            return None, __( u"No puedes eliminar una tarea creada por otro usuario" )
+            
+        if task_obj.status_code in ("TER", "CAN", "NAS"):
+            return None, __( u"Esta tarea ya no se puede eliminar" )
+
+        task_obj.is_active = False
+        task_obj.save()
+
+        return task_obj, __(u"La tarea ha sido eliminada")
+
 
     def get_due_tasks_by_user(self):
         pass
@@ -84,7 +105,7 @@ class TasksManager(GenericManager):
         pass
 
     def get_tasks_by_minutes(self, minutes_id):
-        tasks_list = self.filter(lastminutestasks_task__minutes_id=minutes_id).order_by('-modified')
+        tasks_list = self.filter(lastminutestasks_task__minutes_id=minutes_id, is_active=True).order_by('-modified')
         return tasks_list
 
     def get_tasks_by_group(self):

@@ -122,7 +122,7 @@ function setTaskCanceled(e){
 				setAlertError("{% trans 'Error' %}", data.error);
 			}
 			else if (data.successful){
-				setAlertMessage("{% trans 'Tarea modiicada' %}", data.message);
+				setAlertMessage("{% trans 'Tarea modificada' %}", data.message);
 				prev_task = $(task).prev()[0]
 				tasks = data.new_task
 	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
@@ -163,6 +163,7 @@ function editTask(e){
 function showDropDown(e){
 	cleanForm("#taskForm");
 	$("#taskId").val(0);
+	$("#nameTaskForm").val($("#miniNameTaskForm").val());
 }
 
 function hideDropDown(e){
@@ -171,11 +172,34 @@ function hideDropDown(e){
 	$("#taskDropdown").css("display","None");
 }
 
+function deleteTask(e){
+	e.preventDefault();
+  	e.stopPropagation();
+  	if(window.confirm("{% trans '¿Estas seguro que deseas eliminar esta tarea?' %}")){
+            task = $(this).closest(".one_task")[0];
+		  	task_id = $(task).attr("data-task-id");
+		  	sendNewAjax(
+				"{% url 'tasks:delete_task'%}",
+				{"task_id":task_id},
+				function (data) {
+					if (data.error){
+						setAlertError("{% trans 'Error' %}", data.error);
+					}
+					else if (data.successful){
+						setAlertMessage("{% trans 'Tarea eliminada' %}", data.message);
+			        	$(task).remove();
+					}
+				}
+			);
+        } 
+}
+
 
 $(document).on("submit","#taskForm", createTask)
 $(document).on("focus","#miniNameTaskForm",hideDropDown)
 $(document).on("submit","#miniTaskForm",miniCreateTask)
 $(document).on("click",".set_task_done_btn", setTaskDone)
 $(document).on("click",".set_task_canceled_btn", setTaskCanceled)
+$(document).on("click",".delete_task", deleteTask)
 $(document).on("click",".one_task", editTask)
 $(document).on("click","#taskAddBtn",showDropDown)
