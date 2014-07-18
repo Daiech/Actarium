@@ -1,6 +1,7 @@
 #encoding:utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 
 
 
@@ -33,7 +34,7 @@ class TasksManager(GenericManager):
         creator_role_obj = Roles.objects.get_or_none(code="CRE")
         responsible_role_obj = Roles.objects.get_or_none(code="RES")
         if not (status_obj and creator_role_obj and responsible_role_obj):
-            return None
+            return None , _(u"Existe un problema al intentar aplicar los roles")
 
         task_obj = self.create(name=name,description=description,due=due)
         UserTasks.objects.create(user=user_obj,role=creator_role_obj,task=task_obj)
@@ -44,7 +45,31 @@ class TasksManager(GenericManager):
         LastMinutesTasks.objects.create(minutes= minutes_obj,task=task_obj)
 
 
-        return task_obj
+        return task_obj, __(u"Tarea creada correctamente en el acta: ")+minutes_obj.code
+
+    def update_task(self, name, description, responsible_obj, due, minutes_obj, user_obj, task_id):
+        task_obj = self.get_or_none(id=task_id)
+        if task_obj == None:
+            return None,  __(u"La tarea que desea modificar no existe")
+
+        if not (task_obj.creator == user_obj):
+            return None, __( u"No puedes modificar una tarea creada por otro usuario" )
+            
+
+        task_obj.name = name
+        task_obj.description = description
+        
+        usertask_obj =  task_obj.usertasks_task.get(role__code="RES")
+        usertask_obj.user= responsible_obj
+        usertask_obj.save()
+
+
+        task_obj.due = due
+
+        task_obj.save()
+
+        return task_obj, __(u"La tarea ha sido actualizada correctamente")
+        
 
     def get_due_tasks_by_user(self):
         pass

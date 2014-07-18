@@ -28,7 +28,6 @@ function loadTasksPanel(e) {
 						});
 					}
 					else{
-						// setAlertError("{% trans 'Error' %}", data.error);
 						loadPanelContent($("#taskEmptyTpl").html());
 					}
 				});
@@ -47,10 +46,8 @@ function createTask(e) {
         $(this).serialize(),
         function (data) {
 	        if(data.form_errors){
-	        	console.log(data.form_errors)
 				for (var i in data.form_errors){
-					field_selector = "#"+i+"TaskForm"
-					console.log(field_selector)
+					field_selector = "#"+i+"TaskForm";
 					$(field_selector).before( "<label class='error-form-task'>"+data.form_errors[i]+"</label>" );
 		        } 
 	        }
@@ -58,7 +55,10 @@ function createTask(e) {
 	        	setAlertError("{% trans 'Error' %}", data.error);
 	        }
 	        else if (data.successful){
-	        	setAlertMessage("{% trans 'Tarea Agregada","Se ha agregado una nueva tarea al acta ' %} <strong>{{ minutes.code}}</strong> ");
+				if (data.task_updated){
+					$("#task"+data.new_task[0].id).remove();
+				}
+	        	setAlertMessage("Tarea",data.message);
 	        	$("#taskDropdown").find(".close").click();
 	        	cleanForm("#taskForm");
 	        	cleanForm("#miniTaskForm");
@@ -74,7 +74,6 @@ function createTask(e) {
 function miniCreateTask(e){
 	e.preventDefault();
   	e.stopPropagation();
-  	console.log($("#miniNameTaskForm").val())
   	$("#nameTaskForm").val($("#miniNameTaskForm").val());
   	$("#newTaskBtn").click();
 }
@@ -92,7 +91,7 @@ function setTaskDone(e){
 				setAlertError("{% trans 'Error' %}", data.error);
 			}
 			else if (data.successful){
-				setAlertMessage("{% trans 'Tarea modiicada' %}", data.message);
+				setAlertMessage("{% trans 'Tarea modificada' %}", data.message);
 				prev_task = $(task).prev()[0]
 				tasks = data.new_task
 	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
@@ -103,6 +102,7 @@ function setTaskDone(e){
 				else{
 					$('#tasksList').prepend(tasks_html)
 				}
+				
 			}
 		}
 	);
@@ -141,7 +141,6 @@ function setTaskCanceled(e){
 function editTask(e){
 	$("#taskDropdown").css("display","block");
 	task_id = $(this).attr("data-task-id");
-	// console.log("task id antes de enviar",task_id)
   	sendNewAjax(
 		"{% url 'tasks:get_task'%}",
 		{"task_id":task_id},
@@ -150,12 +149,10 @@ function editTask(e){
 				setAlertError("{% trans 'Error' %}", data.error);
 			}
 			else if (data.successful){
-				// prev_task = $(task).prev()[0]
-				task = data.task[0]
-	        	// console.log(task);
+				task = data.task[0];
 	        	$("#nameTaskForm").val(task.title);
 	        	$("#descriptionTaskForm").val(task.description);
-	        	$("option[value="+task.responsible_id+"] .responsible_option").attr("selected","selected");
+	        	$("#responsibleSelector option[value="+task.responsible_id+"]").attr("selected","selected")
 	        	$("#dueTaskForm input").val(task.due)
 	        	$("#taskId").val(task.id)
 			}
@@ -163,9 +160,22 @@ function editTask(e){
 	);
 }
 
+function showDropDown(e){
+	cleanForm("#taskForm");
+	$("#taskId").val(0);
+}
+
+function hideDropDown(e){
+	cleanForm("#taskForm");
+	$("#taskId").val(0);
+	$("#taskDropdown").css("display","None");
+}
+
 
 $(document).on("submit","#taskForm", createTask)
+$(document).on("focus","#miniNameTaskForm",hideDropDown)
 $(document).on("submit","#miniTaskForm",miniCreateTask)
 $(document).on("click",".set_task_done_btn", setTaskDone)
 $(document).on("click",".set_task_canceled_btn", setTaskCanceled)
 $(document).on("click",".one_task", editTask)
+$(document).on("click","#taskAddBtn",showDropDown)

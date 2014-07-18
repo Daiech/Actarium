@@ -61,6 +61,7 @@ def create_task(request):
         return HttpResponse(json.dumps(message), mimetype="application/json")
     
     # get POST data
+    task_id = request.POST.get("task_id")
     name = request.POST.get("name")
     description = request.POST.get("description")
     responsible  = request.POST.get("responsible")
@@ -76,8 +77,6 @@ def create_task(request):
     if not responsible_obj:
         message = {'error': _( u"Ha ocurrido un problema intentando asignar la tarea al usuario especificado." )}
         return HttpResponse(json.dumps(message), mimetype="application/json")
-
-
 
     # get minutes validation
     if not minutes:
@@ -109,15 +108,20 @@ def create_task(request):
         message = {'form_errors':  dict(form.errors.items()) }
         return HttpResponse(json.dumps(message), mimetype="application/json")
     
-    # create task
-    task_obj = Tasks.objects.create_task(name, description, responsible_obj, due, minutes_obj, request.user)
+
+    
+    if task_id == "0":
+        # create task
+        task_obj, response = Tasks.objects.create_task(name, description, responsible_obj, due, minutes_obj, request.user)
+        message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response} 
+    else:
+        # Update task
+        task_obj, response = Tasks.objects.update_task(name, description, responsible_obj, due, minutes_obj, request.user,task_id)
+        message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response, "task_updated": True} 
 
     if not task_obj:
-        message = {'error': _( u"Ha ocurrido un error al intentar guardar la tarea, comunicate con los administradores para solucionarlo" )} 
-        return HttpResponse(json.dumps(message), mimetype="application/json")
+        message = {'error': response} 
           
-
-    message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)]} 
     return HttpResponse(json.dumps(message), mimetype="application/json")
         
 

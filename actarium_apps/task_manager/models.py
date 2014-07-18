@@ -42,9 +42,6 @@ class Tasks(models.Model):
     modified = models.DateTimeField(auto_now=True)
     
 
-    def update_task(self):
-        pass
-
     def delete_task(self):
         pass
 
@@ -91,6 +88,9 @@ class Tasks(models.Model):
     def get_responsible(self):
         return self.usertasks_task.get(role__code="RES").user
 
+    def get_creator(self):
+        return self.usertasks_task.get(role__code="CRE").user
+
     def get_status(self):
 
         actions = self.actions_task.all().order_by('-created')
@@ -106,7 +106,7 @@ class Tasks(models.Model):
         
         
         if action.status.code == "CAN":
-            return __(u"Cancelada"), action.status.color_code, "CAN"
+            return __(u"Archivada"), action.status.color_code, "CAN"
 
         
         if action.status.code == "ASI":
@@ -133,6 +133,7 @@ class Tasks(models.Model):
         return self.get_status()[2]
 
     responsible = property(get_responsible)
+    creator = property(get_creator)
     status = property(get_status_message)
     color = property(get_status_color)
     status_code = property(get_status_code)
