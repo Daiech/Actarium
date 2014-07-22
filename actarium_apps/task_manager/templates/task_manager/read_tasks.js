@@ -109,34 +109,34 @@ function setTaskDone(e){
 }
 
 
-function setTaskCanceled(e){
-	e.preventDefault();
-  	e.stopPropagation();
-  	task = $(this).closest(".one_task")[0];
-  	task_id = $(task).attr("data-task-id");
-  	sendNewAjax(
-		"{% url 'tasks:set_task_canceled'%}",
-		{"task_id":task_id},
-		function (data) {
-			if (data.error){
-				setAlertError("{% trans 'Error' %}", data.error);
-			}
-			else if (data.successful){
-				setAlertMessage("{% trans 'Tarea modificada' %}", data.message);
-				prev_task = $(task).prev()[0]
-				tasks = data.new_task
-	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
-	        	$(task).remove()
-				if (prev_task){
-					$(prev_task).after(tasks_html)
-				}
-				else{
-					$('#tasksList').prepend(tasks_html)
-				}
-			}
-		}
-	);
-}
+// function setTaskCanceled(e){
+// 	e.preventDefault();
+//   	e.stopPropagation();
+//   	task = $(this).closest(".one_task")[0];
+//   	task_id = $(task).attr("data-task-id");
+//   	sendNewAjax(
+// 		"{% url 'tasks:set_task_canceled'%}",
+// 		{"task_id":task_id},
+// 		function (data) {
+// 			if (data.error){
+// 				setAlertError("{% trans 'Error' %}", data.error);
+// 			}
+// 			else if (data.successful){
+// 				setAlertMessage("{% trans 'Tarea modificada' %}", data.message);
+// 				prev_task = $(task).prev()[0]
+// 				tasks = data.new_task
+// 	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
+// 	        	$(task).remove()
+// 				if (prev_task){
+// 					$(prev_task).after(tasks_html)
+// 				}
+// 				else{
+// 					$('#tasksList').prepend(tasks_html)
+// 				}
+// 			}
+// 		}
+// 	);
+// }
 
 function editTask(e){
 	$("#taskDropdown").css("display","block");
@@ -199,7 +199,7 @@ $(document).on("submit","#taskForm", createTask)
 $(document).on("focus","#miniNameTaskForm",hideDropDown)
 $(document).on("submit","#miniTaskForm",miniCreateTask)
 $(document).on("click",".set_task_done_btn", setTaskDone)
-$(document).on("click",".set_task_canceled_btn", setTaskCanceled)
-$(document).on("click",".delete_task", deleteTask)
+// $(document).on("click",".set_task_canceled_btn", setTaskCanceled)
+$(document).on("click",".delete_task_btn", deleteTask)
 $(document).on("click",".one_task", editTask)
 $(document).on("click","#taskAddBtn",showDropDown)
