@@ -34,7 +34,7 @@
 		"pk":2,
 		"model":"task_manager.status",
 		"fields":{
-			"color_code":"#50d735",
+			"color_code":"#97C02C",
 			"code":"TER",
 			"is_active":true,
 			"name":"Terminada",

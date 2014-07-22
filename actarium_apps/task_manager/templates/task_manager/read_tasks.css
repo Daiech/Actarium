@@ -5,19 +5,20 @@
 .one_task{
 	margin: 2px 0px;
 	padding:0px;
-	height:80px;
+	height:87px;
 	border-top: 1px solid #f7f7f7;
 }
 
 .one_task:hover{
-	background-color: #FAFAFA;
-	border: solid thin #dadada;
+	background-color: #FFFFd6;
+	border-top: 1px solid #BBBBBB;
+	border-bottom: 1px solid #BBBBBB;
 	cursor:pointer;
 }
 
 .task_status{
 	width:6px;
-	height:76px;
+	height:83px;
 }
 
 .task_info{
@@ -28,6 +29,7 @@
 
 .task_functions{
 	width:100px;
+	font-size:25px;
 	
 }
 
@@ -82,4 +84,18 @@
 
 #miniNameTaskForm{
 	width:206px;
+}
+
+#taskDropdown{
+	position: fixed;
+
+}
+
+
+.set_task_done_btn .glyphicon-ok-circle{
+	color: #97C02C;
+}
+
+.delete_task_btn .glyphicon-remove-circle{
+	color: #ff8c8c;
 }
