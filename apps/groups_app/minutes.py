@@ -1148,7 +1148,7 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
 
 def getMinutesVersions(id_minutes):
     try:
-        return minutes_version.objects.filter(id_minutes=id_minutes)
+        return minutes_version.objects.filter(id_minutes=id_minutes).order_by("-date_created")
     except minutes_version.DoesNotExist:
         return None
 

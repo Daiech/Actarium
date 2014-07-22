@@ -115,7 +115,6 @@ def showMinuteGroup(request, slug_group, minutes_code):
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
     is_org_admin = group.organization.has_user_role(request.user, "is_admin")
     if isMemberOfGroup(request.user, group) or is_org_admin:
-        # minutes_current = getMinutesByCode(group, minutes_code)
         minutes_current = group.get_minutes_by_code(code=minutes_code)
         rel_group = getRelUserGroup(request.user, group)
         rol = getRolUserMinutes(request.user, group, id_minutes=minutes_current)

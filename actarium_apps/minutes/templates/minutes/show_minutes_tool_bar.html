@@ -38,7 +38,7 @@
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownEdit">
 		    {% if is_secretary and not minutes.is_full_signed%}
-		    <li role="presentation" data-placement="right" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
+		    <li role="presentation" data-placement="right" title="{% trans 'Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento' %}.">
 				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
 		    </li>
 		    {% else %}
