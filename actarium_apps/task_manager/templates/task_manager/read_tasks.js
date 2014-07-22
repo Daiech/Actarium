@@ -36,7 +36,6 @@ function loadTasksPanel(e) {
 	loadPanel(ctx);
 }
 
-
 function createTask(e) {
   	e.preventDefault();
   	e.stopPropagation();
@@ -56,15 +55,27 @@ function createTask(e) {
 	        }
 	        else if (data.successful){
 				if (data.task_updated){
-					$("#task"+data.new_task[0].id).remove();
+					task_id = "#task"+data.new_task[0].id
+					prev_task = $(task_id).prev()[0]
+					tasks = data.new_task
+		        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
+		        	$(task).remove()
+					if (prev_task){
+						$(prev_task).after(tasks_html)
+					}
+					else{
+						$('#tasksList').prepend(tasks_html)
+					}
+				}
+				else{
+					tasks = data.new_task
+		        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
+					$('#tasksList').prepend(tasks_html)	
 				}
 	        	setAlertMessage("Tarea",data.message);
 	        	$("#taskDropdown").find(".close").click();
 	        	cleanForm("#taskForm");
 	        	cleanForm("#miniTaskForm");
-	        	tasks = data.new_task
-	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
-				$('#tasksList').prepend(tasks_html)
 	        }
         },
         {"method":"post"}
@@ -108,35 +119,34 @@ function setTaskDone(e){
 	);
 }
 
-
-// function setTaskCanceled(e){
-// 	e.preventDefault();
-//   	e.stopPropagation();
-//   	task = $(this).closest(".one_task")[0];
-//   	task_id = $(task).attr("data-task-id");
-//   	sendNewAjax(
-// 		"{% url 'tasks:set_task_canceled'%}",
-// 		{"task_id":task_id},
-// 		function (data) {
-// 			if (data.error){
-// 				setAlertError("{% trans 'Error' %}", data.error);
-// 			}
-// 			else if (data.successful){
-// 				setAlertMessage("{% trans 'Tarea modificada' %}", data.message);
-// 				prev_task = $(task).prev()[0]
-// 				tasks = data.new_task
-// 	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
-// 	        	$(task).remove()
-// 				if (prev_task){
-// 					$(prev_task).after(tasks_html)
-// 				}
-// 				else{
-// 					$('#tasksList').prepend(tasks_html)
-// 				}
-// 			}
-// 		}
-// 	);
-// }
+function setTaskAssigned(e){
+	e.preventDefault();
+  	e.stopPropagation();
+  	task = $(this).closest(".one_task")[0];
+  	task_id = $(task).attr("data-task-id");
+  	sendNewAjax(
+		"{% url 'tasks:set_task_assigned'%}",
+		{"task_id":task_id},
+		function (data) {
+			if (data.error){
+				setAlertError("{% trans 'Error' %}", data.error);
+			}
+			else if (data.successful){
+				setAlertMessage("{% trans 'Tarea modificada' %}", data.message);
+				prev_task = $(task).prev()[0]
+				tasks = data.new_task
+	        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
+	        	$(task).remove()
+				if (prev_task){
+					$(prev_task).after(tasks_html)
+				}
+				else{
+					$('#tasksList').prepend(tasks_html)
+				}
+			}
+		}
+	);
+}
 
 function editTask(e){
 	$("#taskDropdown").css("display","block");
@@ -167,6 +177,8 @@ function showDropDown(e){
 }
 
 function hideDropDown(e){
+	e.preventDefault();
+  	e.stopPropagation();
 	cleanForm("#taskForm");
 	$("#taskId").val(0);
 	$("#taskDropdown").css("display","None");
@@ -199,7 +211,8 @@ $(document).on("submit","#taskForm", createTask)
 $(document).on("focus","#miniNameTaskForm",hideDropDown)
 $(document).on("submit","#miniTaskForm",miniCreateTask)
 $(document).on("click",".set_task_done_btn", setTaskDone)
-// $(document).on("click",".set_task_canceled_btn", setTaskCanceled)
+$(document).on("click",".set_task_assigned_btn", setTaskAssigned)
 $(document).on("click",".delete_task_btn", deleteTask)
 $(document).on("click",".one_task", editTask)
 $(document).on("click","#taskAddBtn",showDropDown)
+$(document).on("click","#cancelBtn", hideDropDown)

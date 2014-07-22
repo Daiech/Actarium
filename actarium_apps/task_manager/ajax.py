@@ -163,7 +163,7 @@ def set_task_done(request):
 
 
 @login_required()
-def set_task_canceled(request):
+def set_task_assigned(request):
 
     if not request.is_ajax():
         message = {'error': _( u"No es posible realizar esta acción" )}
@@ -183,9 +183,9 @@ def set_task_canceled(request):
         return HttpResponse(json.dumps(message), mimetype="application/json")
 
     # set task done
-    is_task_canceled, response = task_obj.set_task_canceled()
+    is_task_assigned, response = task_obj.set_task_assigned()
 
-    if not is_task_canceled:
+    if not is_task_assigned:
         message = {'error': response} 
         return HttpResponse(json.dumps(message), mimetype="application/json")
 

@@ -17,6 +17,7 @@ def task_as_json(task_obj):
                 "creator_img":showgravatar(task_obj.creator.email,25),
                 "color":task_obj.color,
                 "status":task_obj.status,
+                "status_code":task_obj.status_code,
                 "due":task_obj.due.strftime('%Y-%m-%d') if task_obj.due else ""
     }
     return new_task

@@ -82,6 +82,26 @@ class Tasks(models.Model):
         Actions.objects.create(user=responsible_obj, status=status_obj,task=self)
         return True, __(u"La tarea se ha marcado como cancelada")
 
+    def set_task_assigned(self):
+        from .models import UserTasks, Actions, Status, Roles
+        from actarium_apps.core.models import LastMinutesTasks
+        from django.contrib.auth.models import User
+
+        # validate database configuration - fixtures
+        status_obj = Status.objects.get_or_none(code="ASI")
+        if not (status_obj):
+            return False, __(u"Ha ocurrido un error al intentar marcar la tarea como terminada, comunicate con los administradores para solucionarlo")
+
+        if self.status_code == "ASI":
+            return False, __(u"Esta tarea ya fue marcada como asignada")
+
+        if self.status_code == "NAS":
+            return False, __(u"Esta tarea no se puede marcar como terminada")
+
+        responsible_obj = self.responsible
+        Actions.objects.create(user=responsible_obj, status=status_obj,task=self)
+        return True, __(u"La tarea se ha marcado como asignada")
+
     def get_responsible(self):
         return self.usertasks_task.get(role__code="RES").user
 

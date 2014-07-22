@@ -37,7 +37,8 @@
 							</div>
 							<input type="hidden" name="minutes"   value="{{minutes.id}}" />
 							<input type="hidden" name="task_id" id="taskId"  value="0" />
-							<button id="newTaskBtn" class="btn task_input" type="submit" >Guardar</button>
+							<button id="newTaskBtn" class="btn task_input" type="submit" >{% trans 'Guardar' %}</button>
+							<button id="cancelBtn" class="btn task_input" >{% trans 'Cancelar' %}</button>
 						</form>
 					</div>		
 				</div>
@@ -68,10 +69,16 @@
 							<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.responsible_img}}" class="img-circle">
 						</div>
 						<div class="task_functions pull-left" >
-							<a class="set_task_done_btn task_action" href="#" >
-								<span class="glyphicon glyphicon-ok-circle"></span>
-							</a>
-							<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}">
+							{% if task.status_code == "TER" %}
+								<a class="set_task_assigned_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como asignada' %}" {% verbatim %}>
+									<span class="glyphicon glyphicon-ok-sign"></span>
+								</a>
+							{% else %}
+								<a class="set_task_done_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como terminada' %}" {% verbatim %}>
+									<span class="glyphicon glyphicon-ok-circle"></span>
+								</a>
+							{% endif %}
+							<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Eliminar tarea' %}" {% verbatim %}>
 								<span class="glyphicon glyphicon-remove-circle"></span>
 							</a>
 						</div>
