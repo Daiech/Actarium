@@ -227,23 +227,25 @@ class rol_user_minutes(models.Model):
     objects = GenericManager()
 
     def set_assistance(self):
-        assistance_obj, created = rel_user_minutes_assistance.objects.get_or_create(id_user=self.id_user, id_minutes=self.id_minutes)
-        if assistance_obj:
-            assistance_obj.assistance = self.is_assistant
-            assistance_obj.save()
+        if self.id_minutes:
+            assistance_obj, created = rel_user_minutes_assistance.objects.get_or_create(id_user=self.id_user, id_minutes=self.id_minutes)
+            if assistance_obj:
+                assistance_obj.assistance = self.is_assistant
+                assistance_obj.save()
 
     def change_commission(self):
-        if self.is_approver:
-            commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
-            if commission_obj:
-                commission_obj.is_signed_approved = True
-                commission_obj.save()
+        if self.id_minutes:
+            if self.is_approver:
+                commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
+                if commission_obj:
+                    commission_obj.is_signed_approved = True
+                    commission_obj.save()
+                else:
+                    rel_user_minutes_signed.objects.create(id_user=self.id_user, id_minutes=self.id_minutes, is_signed_approved=False)
             else:
-                rel_user_minutes_signed.objects.create(id_user=self.id_user, id_minutes=self.id_minutes, is_signed_approved=False)
-        else:
-            commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
-            if commission_obj:
-                commission_obj.delete()
+                commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
+                if commission_obj:
+                    commission_obj.delete()
 
     def get_minutes_signed(self):
         try:

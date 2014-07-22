@@ -535,7 +535,6 @@ def setRolForMinute(request, slug_group):
                 remove = bool(int(request.POST.get('remove')))
                 _user = get_user_or_email(request.POST.get('uid'))
                 m_id = request.POST.get('m_id')
-                print "POST", request.POST
                 _minute = None
                 if m_id:
                     _minute = minutes.objects.get_minute(id=int(m_id))
@@ -587,8 +586,10 @@ def setRolForMinute(request, slug_group):
                     if role == 3 and u and remove:
                         rel.is_assistant = False
                     rel.save()
-                    rel.set_assistance()
-                    rel.change_commission()
+                    if role == 2:
+                        rel.change_commission()
+                    if role == 3:
+                        rel.set_assistance()
                     saved = True
                     # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
                 else:
@@ -597,8 +598,8 @@ def setRolForMinute(request, slug_group):
             else:
                 error = _("No tienes permiso para hacer eso, Por favor recarga la página")
         except Exception, e:
-            print e
-            error = _("Por favor recarga la página e intenta de nuevo.")
+            print "EROOOOOORRR", e
+            error = _(u"Por favor recarga la página e intenta de nuevo.")
         if error:
             return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
         response = {"saved": saved, "u": u.first_name, "username": u.username, "full_name": u.get_full_name(), "role": role, "role_name": role_name, "uid": u.id}

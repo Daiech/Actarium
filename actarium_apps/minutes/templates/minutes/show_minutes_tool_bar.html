@@ -41,6 +41,10 @@
 		    <li role="presentation" data-placement="right" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
 				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
 		    </li>
+		    {% else %}
+		    <li role="presentation" class="{%if minutes.is_full_signed%}disabled{%endif%}" title="{%if minutes.is_full_signed%}{% trans 'Esta acta ya no se puede editar' %}{%endif%}" data-placement="right">
+		    	<a role="menuitem" tabindex="-1" href="#" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
+		    </li>
 			{%endif%}
 			<!-- <li role="presentation" data-placement="right" title="{% trans 'Revisa los cambios que ha tenido esta acta hasta el momento' %}">
 				<a role="menuitem" tabindex="-1" href="#" id="history" class="{% if not minutes_version %}{% endif %}"><span class="glyphicon glyphicon-th-list"></span> {% trans 'Veriones' %} ({{minutes_version|length}})</a>
@@ -63,19 +67,11 @@
 					<i class="glyphicon"></i>
 				</a>
 			</li>
-			{% if user.is_staff %}
-			{% else %}
-			{% endif %}
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="tasksPanel" data-placement="right" >
 			{% trans "Tareas" %}<i class="glyphicon"></i></a></li>
-			<!-- <li role="presentation" class="disabled"><a href="#">Tareas (pronto)</a></li> -->
 		</ul>
 	</li>
 </ul>
-
-
-
-
 <ul class="pull-right btn-pull-right">
     <li class=" important">
 		<a class="{%if not prev %}disabled{%endif%}" href="{%if prev %}{% url 'show_minute' group.slug prev.code %}{%else%}#{%endif%}"><span class="glyphicon glyphicon-arrow-left"></span></a>
@@ -84,9 +80,6 @@
 		<a class="{%if not next %}disabled{%endif%}" href="{%if next %}{% url 'show_minute' group.slug next.code %}{%else%}#{%endif%}"><i class="glyphicon glyphicon-arrow-right"></i></a>
     </li>
 </ul>
-
-
-
 
 {% comment %}
 <li class="dropdown">
