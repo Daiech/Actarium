@@ -55,11 +55,12 @@ function createTask(e) {
 	        }
 	        else if (data.successful){
 				if (data.task_updated){
+					console.log("Update task")
 					task_id = "#task"+data.new_task[0].id
 					prev_task = $(task_id).prev()[0]
 					tasks = data.new_task
 		        	tasks_html = swig.render($("#taskListTpl").html(),{locals: tasks })
-		        	$(task).remove()
+		        	$(task_id).remove()
 					if (prev_task){
 						$(prev_task).after(tasks_html)
 					}
@@ -91,7 +92,7 @@ function miniCreateTask(e){
 
 function setTaskDone(e){
 	e.preventDefault();
-  	e.stopPropagation();
+	e.stopPropagation();
   	task = $(this).closest(".one_task")[0];
   	task_id = $(task).attr("data-task-id");
   	sendNewAjax(
