@@ -7,4 +7,4 @@ class createTaskForm(forms.Form):
     name = forms.CharField(required=True)
     description = forms.CharField(required=False)
     responsible = forms.CharField()
-    due = forms.DateTimeField(input_formats=['%Y-%m-%d'])
+    due = forms.DateTimeField(input_formats=['%Y-%m-%d'], required=False)

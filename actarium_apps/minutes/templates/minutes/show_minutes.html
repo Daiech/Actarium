@@ -29,7 +29,7 @@
 			$("#historyPanel").on("click", loadHistoryPanel);
 			$("#tasksPanel").on("click", loadTasksPanel);
 			
-			$("#commissionPanel").click(); //open the commission approving panel
+			$("#tasksPanel").click(); //open the commission approving panel
 			
 			{% if minutes.is_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){

@@ -3,26 +3,29 @@
 		<div id="taskManager" >
 			{% if is_secretary %}
 			<div class="task_add">
+				<form id="miniTaskForm" method="POST" class='pull-left'>
+					<input id="miniNameTaskForm" type="text" class="form-control" placeholder="{% trans 'Agregar tarea' %}"/>
+					
+				</form>
 				<button id="taskAddBtn" class="btn actarium-dropdown" >
-					<span id="taskAddBtn" class="glyphicon glyphicon-plus" ></span>
-					Agregar Tarea
+						<span id="taskAddBtnImg" class="glyphicon glyphicon-plus" ></span>
 				</button>
 				<div id="taskDropdown" class="dropdown-container task_form_content">
 					<div class="header-title">
-				    	<span>Agregar Tarea</span>
+				    	<span>{% trans 'Agregar Tarea' %}</span>
 				    	<button type="button" class="close close-popover" aria-hidden="true">&times;</button>
 					</div>
 					<div class="dropdown-body">
 						<form id="taskForm" method="POST">
-							<input name="name" id="nameTaskForm" type="text"  placeholder="Titulo" class="form-control task_input"/>
-							<textarea id="descriptionTaskForm" name="description" placeholder = "descripcion" class="form-control task_input"></textarea>
+							<input name="name" id="nameTaskForm" type="text"  placeholder="{% trans 'Título' %}" class="form-control task_input"/>
+							<textarea id="descriptionTaskForm" name="description" placeholder = "{% trans 'descripcion' %}" class="form-control task_input"></textarea>
 							<div id="responsibleTaskForm" class="input-group task_input">
 								<span class="input-group-addon" >
 									<i class="glyphicon glyphicon-user" ></i>
 								</span>
-								<select name="responsible" class="form-control">
+								<select id="responsibleSelector" name="responsible" class="form-control">
 									{% for rel in group.rel_user_group_set.get_all_active %}
-									<option value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
+									<option  value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
 									{% endfor %}
 								</select>
 							</div>
@@ -33,7 +36,8 @@
 								<input name="due" class="date-pick form-control " type="text" value="{% now 'Y-m-d' %}" />
 							</div>
 							<input type="hidden" name="minutes"   value="{{minutes.id}}" />
-							<button class="btn task_input" type="submit" >Guardar</button>
+							<input type="hidden" name="task_id" id="taskId"  value="0" />
+							<button id="newTaskBtn" class="btn task_input" type="submit" >Guardar</button>
 						</form>
 					</div>		
 				</div>
@@ -47,42 +51,41 @@
 	<script type="text/template" id="taskListTpl">
 		{% verbatim %}
 			{%for task in tasks %}
-				<div class="one_task row-fluid" data-task-id="{{task.id}}">
+				<div id="task{{task.id}}" class="one_task row-fluid actarium-dropdown" data-task-id="{{task.id}}">
 					<div class="task_status pull-left" style="background-color: {{task.color}}" title="{{ task.status}}">
 					</div>
-					<div class="task_info pull-left row-fluid">
+						<div class="task_info pull-left row-fluid">
+							<div class="task_content pull-left">
+								<div class="task_name">
+									<strong>{{task.short_title}}</strong>
+								</div>
+								<div class="task_name">
+									{{task.short_description}}
+								</div>
+							</div>
+						</div>
 						<div class="task_user_img pull-left">
-							<img style="width:40px" src="{{task.img}}" class="img-circle">
+								<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.responsible_img}}" class="img-circle">
 						</div>
-						<div class="task_content pull-left">
-							<div class="task_responsible">
-								<strong> {{task.responsible}} </strong>
-							</div>
-							<div class="task_name">
-								{{task.short_name}}
-							</div>
+						<div class="task_functions pull-left" >
+							<a class="set_task_done_btn task_action" href="#" >
+								<span class="glyphicon glyphicon-ok-circle"></span>
+							</a>
+							<a class="set_task_canceled_btn task_action" href="#">
+								<span class="glyphicon glyphicon-ban-circle"></span>
+							</a>
+							<a  class="delete_task task_action" href="#" data-task-id="{{task.id}}">
+								<span class="glyphicon glyphicon-remove-circle"></span>
+							</a>
 						</div>
 					</div>
-					<div class="task_functions pull-left">
-						<a href="#">
-							<span class="glyphicon glyphicon-remove-circle"></span>
-						</a>
-						<a href="#">
-							<span class="glyphicon glyphicon-ok-circle"></span>
-						</a>
-						<a href="#">
-							<span class="glyphicon glyphicon-ban-circle"></span>
-						</a>
-					</div>
-					
-				</div>
 			{%endfor%}
 		{% endverbatim %}
 	</script>
 
 	<script type="text/template" id="taskEmptyTpl">
 		<div class="task_empty">
-			<strong>No hay tareas para mostrar</strong>
-			<p>debes guardar el acta para poder agregar tareas.</p>
+			<strong>{% trans 'No hay tareas para mostrar' %}</strong>
+			<p>{% trans 'debes guardar el acta para poder agregar tareas.' %}</p>
 		</div>	
 	</script>
