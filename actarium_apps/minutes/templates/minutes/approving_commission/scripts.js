@@ -167,6 +167,7 @@ function isThereAprobers(e){
 }
 
 function addMemberToList (user) {
+	$("#minutes .empty-list").empty();
 	$("#minutes .members-list").append("<li>"+ user.full_name + "</li>")
 }
 function removeMemberToList (user) {

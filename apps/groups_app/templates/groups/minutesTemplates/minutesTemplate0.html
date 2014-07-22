@@ -32,7 +32,7 @@
             .list-of-members{margin:0;}
             .box{overflow: hidden;}
             .box > div{float: left;width: 50%}
-            #headerContent{margin: 0}
+            #headerContent{margin: 0;margin-top: 50px;}
             #headerContent table th, #minutesContent table th{text-align: left;vertical-align: center;}
             #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
             .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
@@ -82,9 +82,10 @@
             
             <table border="1" style="width:100%; margin-bottom:10px">
                 <tr>
-                    <td style="padding:5px"><strong>{% trans 'FECHA / HORA' %}</strong></td>
+                    <td style="padding:5px;width:30%;"><strong>{% trans 'FECHA / HORA' %}</strong></td>
                     <td style="padding:5px">
                         {% if is_form %}
+                        <span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
                         <div class="">
                             {% if is_edit %}
                                 <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
@@ -92,7 +93,7 @@
                                 {{ newMinutesForm.date_start|safe }}
                             {% endif %}
                         </div>
-                        <span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
+                        <span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span>
                         <div class="">
                             {% if is_edit %}
                                 <input id="id_date_end" type="text" class="date-pick" style="width: 150px; z-index: 1034;"  name="date_end" value="{{newMinutesForm.date_end.value|date:'Y-m-d g:i A'}}" placeholder="{{newMinutesForm.date_end.label}}" />
@@ -100,7 +101,6 @@
                                 {{ newMinutesForm.date_end|safe }}
                             {% endif %}
                         </div>
-                        <span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span>
                         {%else%}
                         <div>{% trans 'Inicio' %}: {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}</div>
                         <div>{% trans 'Final' %}: {{ newMinutesForm.date_end|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}</div>
@@ -112,42 +112,43 @@
     				<td style="padding:5px">
                         <ul class="list-unstyled members-list">
                         {% for member in members_selected%}
-                               <li class="member-{{ member.id_user.id }}">
-                               {{ member.id_user.first_name }} {{ member.id_user.last_name }}
-                               {%comment%}
-                               {% if not forloop.last %},{%endif%}
-                               {%endcomment%}
-                               </li>
+                           <li class="member-{{ member.id_user.id }}">
+                           {{ member.id_user.first_name }} {{ member.id_user.last_name }}
+                           </li>
+                        {% empty %}
+                            <li class="empty-list">
+                                <i>{% trans 'Selecciona los asistentes en el panel: "Roles de acta", a la derecha de la ventana' %}</i>
+                            </li>
                         {% endfor%}
                         </ul>
                    </td>
     			</tr>
     		</table>
-    		
     		<table border="1" style="width:100%; margin-bottom:10px">
     			<tr>
-    				<td style="padding:5px"><strong>{% trans 'ORDEN DEL D&Iacute;A' %}</strong></td>
-    			</tr>
-    			<tr>
-    				<td class="tinymce-textareas">
-                        {{ newMinutesForm.agenda|safe }}
+    				<td style="padding:5px"><strong>{% trans 'ORDEN DEL DÍA' %}</strong>
                         <span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> 
                     </td>
-    			</tr>
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'DESARROLLO ORDEN DEL D&Iacute;A' %}</strong></td>
-    			</tr>
-    			<tr>
-    				<td class="tinymce-textareas">
-                        {{ newMinutesForm.agreement|safe }}
-                        <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+                </tr>
+                <tr>
+                    <td class="tinymce-textareas">
+                        {{ newMinutesForm.agenda|safe }}
                     </td>
     			</tr>
-    			
+    			<tr>
+    				<td style="padding:5px"><strong>{% trans 'DESARROLLO ORDEN DEL DÍA' %}</strong>
+                        <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tinymce-textareas">
+                        {{ newMinutesForm.agreement|safe }}
+                    </td>
+    			</tr>
     		</table>
     		<br /><br />
             <div id="firmas">
-                <table>
+                <table >
                     <tr>
                     {% if president.user %}
                         <td style="padding-left:10px;padding-top:60px;">
