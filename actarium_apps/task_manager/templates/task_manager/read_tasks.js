@@ -150,7 +150,6 @@ function setTaskAssigned(e){
 }
 
 function editTask(e){
-	$("#taskDropdown").css("display","block");
 	task_id = $(this).attr("data-task-id");
   	sendNewAjax(
 		"{% url 'tasks:get_task'%}",
@@ -160,12 +159,22 @@ function editTask(e){
 				setAlertError("{% trans 'Error' %}", data.error);
 			}
 			else if (data.successful){
-				task = data.task[0];
-	        	$("#nameTaskForm").val(task.title);
-	        	$("#descriptionTaskForm").val(task.description);
-	        	$("#responsibleSelector option[value="+task.responsible_id+"]").attr("selected","selected")
-	        	$("#dueTaskForm input").val(task.due)
-	        	$("#taskId").val(task.id)
+				if (data.task[0].status_code == "TER"){
+					task = data.task[0]
+	        		task_html = swig.render($("#taskModal").html(),{locals: task })
+	        		$("#minutesModal").html(task_html);
+	        		$("#minutesModal").modal();
+		        }
+		        else {
+		        	
+		        	task = data.task[0];
+		        	$("#nameTaskForm").val(task.title);
+		        	$("#descriptionTaskForm").val(task.description);
+		        	$("#responsibleSelector option[value="+task.responsible_id+"]").attr("selected","selected")
+		        	$("#dueTaskForm input").val(task.due)
+		        	$("#taskId").val(task.id)
+		        	$("#taskDropdown").css("display","block");
+		        }
 			}
 		}
 	);
