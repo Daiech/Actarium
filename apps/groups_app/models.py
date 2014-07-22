@@ -16,6 +16,14 @@ class MinutesManager(GenericManager):
         else:
             raise Http404
         
+class AssistanceManager(models.Manager):
+    def get_or_none(self, **kwargs):
+        try:
+            return self.get(**kwargs)
+        except self.model.DoesNotExist:
+            return None
+        except self.model.MultipleObjectsReturned:
+            return None    
 
 class minutes_type_1(models.Model):
     date_start = models.DateTimeField()
@@ -170,6 +178,7 @@ class rel_user_minutes_assistance(models.Model):
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
     assistance = models.BooleanField(default=False)
     date_assistance = models.DateTimeField(auto_now=True)
+    objects = AssistanceManager()
 
     def __unicode__(self):
         return "%s: assistance %s in %s" % (self.id_user.username, self.assistance, self.id_minutes.code)

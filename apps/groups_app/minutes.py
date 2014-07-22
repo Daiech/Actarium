@@ -74,17 +74,6 @@ def getRolUserMinutes(_user, id_group, id_minutes=None, is_active=True):
         return None
 
 
-def getMembersSigned(group, minutes_current):  # not called
-    try:
-        members_signed = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current)
-    except rel_user_minutes_assistance.DoesNotExist:
-        members_signed = False
-    except Exception, e:
-        print "Error getMembersSigned: %s " % e
-        members_signed = False
-    return members_signed
-
-
 def getMembersAssistance(group, minutes_current):
     try:
         selected = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=True)
@@ -105,6 +94,8 @@ def getMembersSigners(group, minutes_current):
 
 
 def getAssistanceFromRolUserMinutes(group, id_minutes=None):
+    """retorna la lista de asistentes e inasistentes de un acta o de la proxima acta.
+    """
     try:
         if id_minutes:
             selected = rol_user_minutes.objects.filter(id_group=group, id_minutes=id_minutes, is_assistant=True, is_active=True)
@@ -132,11 +123,9 @@ def getSignersFromRolUserMinutes(group, id_minutes=None):
 
 
 def getMembersOfGroupWithSelected(group, select):
-    '''
-    return a tuple with the list of selected members and no selected members
+    '''return a tuple with the list of selected members and no selected members
     (selected_members, no_selected_members)
-    the tuple is a rel_user_group object
-    '''
+    the tuple is a rel_user_group object'''
     all_members = rel_user_group.objects.filter(id_group=group, is_member=True).order_by("id")
     memb_list = list()
     for m in all_members:
@@ -330,33 +319,51 @@ def setRelUserMinutesSigned(_user, _minutes, is_signed_approved):
         return False
 
 
-def setMinuteAssistance(minutes_id, members_selected, members_no_selected):  # not called
-    '''
-    Stored in the database records all users attending a reunion.
-    '''
-    a = list()
-    b = list()
-    for m in members_selected:
-        a.append(
-            rel_user_minutes_assistance(
-                id_user=m.id_user,
-                id_minutes=minutes_id,
-                assistance=True)
-        )
-    for m in members_no_selected:
-        b.append(
-            rel_user_minutes_assistance(
-                id_user=m.id_user,
-                id_minutes=minutes_id,
-                assistance=False)
-        )
-    try:
-        rel_user_minutes_assistance.objects.bulk_create(a)
-        rel_user_minutes_assistance.objects.bulk_create(b)
-    except Exception, e:
-        print "Minutes.setMinuteAssistance", e
-        return False
-
+def setMinuteAssistance(minutes_id, members_selected, members_no_selected, is_updating=False):
+    '''Stored in the database records of all users attending a reunion.'''
+    if not is_updating:
+        a = list()
+        b = list()
+        for m in members_selected:
+            a.append(
+                rel_user_minutes_assistance(
+                    id_user=m.id_user,
+                    id_minutes=minutes_id,
+                    assistance=True)
+            )
+        for m in members_no_selected:
+            b.append(
+                rel_user_minutes_assistance(
+                    id_user=m.id_user,
+                    id_minutes=minutes_id,
+                    assistance=False)
+            )
+        try:
+            rel_user_minutes_assistance.objects.bulk_create(a)
+            rel_user_minutes_assistance.objects.bulk_create(b)
+        except Exception, e:
+            print "Minutes.setMinuteAssistance", e
+            return False
+    else:
+        assistances = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_id)
+        for m in members_selected:
+            user_assistance = assistances.filter(id_user=m.id_user)
+            if user_assistance and user_assistance.count() > 0:
+                try:
+                    uas = user_assistance[0]
+                    uas.assistance = True
+                    uas.save()
+                except Exception, e:
+                    print "[WARNING] no se actualizo la asistencia: ", e
+        for m in members_no_selected:
+            user_assistance = assistances.filter(id_user=m.id_user)
+            if user_assistance and user_assistance.count() > 0:
+                try:
+                    uas = user_assistance[0]
+                    uas.assistance = False
+                    uas.save()
+                except Exception, e:
+                    print "[WARNING] no se actualizo la asistencia: ", e
 
 def setRelationReunionMinutes(_reunion, _minute):
     try:
@@ -991,7 +998,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
 
                         if _minute:
                             ######## <UPDATE_ROLES_IN_rol_user_minutes> #########
-                            # setMinuteAssistance(_minute, members_assistant, members_no_assistant)
+                            setMinuteAssistance(_minute, members_assistant, members_no_assistant, is_updating=True)
                             url_new_minute = updateRolUserMinutes(request, group, _minute, for_approvers=True, id_editing=True)
                             ######## </UPDATE_ROLES_IN_rol_user_minutes> #########
 

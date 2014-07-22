@@ -45,7 +45,7 @@
             {% empty %}
                 <li>
                     {% trans "Aún no tienes actas!" %}
-                    <a href="{%if not rel_user.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" role="button" class="btn btn-info btn-small create-minutes"><i class="glyphicon glyphicon-file"></i> Crea un Acta</a> pero antes, <a href="{% url 'show_team' group.slug  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-user icon-white"></i> invita a tu equipo de trabajo</a>
+                    <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" role="button" class="btn btn-info btn-small create-minutes"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crea un Acta' %}</a> {% trans 'pero antes, asegúrate de' %} <a href="{% url 'show_team' group.slug  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-user"></i> {% trans 'invitar a tu equipo de trabajo' %}</a>
                 </li>
             {%endfor%}
             {%if minutes%}
