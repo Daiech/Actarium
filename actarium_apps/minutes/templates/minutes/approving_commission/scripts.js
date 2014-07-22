@@ -22,6 +22,7 @@ function showCommission (e) {
 	loadPanel(ctx);
 }
 function editMinutesRoles (e) {
+	console.log("Editando")
 	e.preventDefault();
 	var ctx = {
 		"id": $(this).attr("id"),
@@ -173,9 +174,9 @@ function removeMemberToList (user) {
 }
 function getRoleName (op) {
 	switch(op){
-		case 1 : return "Administrador de &eacute;ste grupo"; break;
-		case 2 : return "Aprobador de actas"; break;
-		case 3 : return "Redactor (Puede redactar Actas)"; break;
+		case 1 : return "{% trans 'Administrador de éste grupo' %}"; break;
+		case 2 : return "{% trans 'Aprobador de actas' %}"; break;
+		case 3 : return "{% trans 'Redactor (Puede redactar Actas)' %}"; break;
 	}
 }
 function callbackSetRole(data) {

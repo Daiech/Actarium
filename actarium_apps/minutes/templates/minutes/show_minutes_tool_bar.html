@@ -64,11 +64,11 @@
 				</a>
 			</li>
 			{% if user.is_staff %}
+			{% else %}
+			{% endif %}
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="tasksPanel" data-placement="right" >
 			{% trans "Tareas" %}<i class="glyphicon"></i></a></li>
-			{% else %}
-			<li role="presentation" class="disabled"><a href="#">Tareas (pronto)</a></li>
-			{% endif %}
+			<!-- <li role="presentation" class="disabled"><a href="#">Tareas (pronto)</a></li> -->
 		</ul>
 	</li>
 </ul>
