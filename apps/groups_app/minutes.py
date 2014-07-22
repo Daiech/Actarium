@@ -80,7 +80,7 @@ def getMembersAssistance(group, minutes_current):
         no_selected = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_current, assistance=False)
         return (selected, no_selected)
     except Exception, e:
-        print e
+        print "getMembersAssistance", e
         return None
 
 
@@ -89,7 +89,7 @@ def getMembersSigners(group, minutes_current):
         selected = rol_user_minutes.objects.filter(id_group=group, is_signer=True, is_secretary=False, is_president=False, id_minutes=minutes_current)
         return selected
     except Exception, e:
-        print e
+        print "getMembersSigners", e
         return None
 
 
@@ -106,7 +106,7 @@ def getAssistanceFromRolUserMinutes(group, id_minutes=None):
             a.append(m.id_user.id)
         return getMembersOfGroupWithSelected(group, a)
     except Exception, e:
-        print e
+        print "getAssistanceFromRolUserMinutes", e
         return None
 
 
@@ -118,7 +118,7 @@ def getSignersFromRolUserMinutes(group, id_minutes=None):
             selected = rol_user_minutes.objects.filter(id_group=group, is_active=False, is_signer=True, is_secretary=False, is_president=False)
         return selected
     except Exception, e:
-        print e
+        print "getSignersFromRolUserMinutes", e
         return None
 
 
@@ -154,7 +154,7 @@ def getLastMinutes(group):
         l = minutes.objects.filter(id_group=group).order_by("-date_created")[0]
         return l
     except Exception, e:
-        print e
+        print "getLastMinutes:", e
         return "---"
 
 

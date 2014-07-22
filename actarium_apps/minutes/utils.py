@@ -3,7 +3,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 
 
 def get_minutes_roles(minutes, group=None):
-    """return a JSON with the users minutes roles. if minutes is None, the param group is needed to know the group"""
+    """return a JSON with the users minutes roles. if minutes is None, the param 'group' is needed"""
     if minutes:
         group = minutes.id_group
     elif not group:
@@ -14,7 +14,7 @@ def get_minutes_roles(minutes, group=None):
 
     members_list = list()
     for m in members:
-        rol = m.id_user.rol_user_minutes_id_user.get_or_none(id_minutes=minutes, is_active=is_active)
+        rol = m.id_user.rol_user_minutes_id_user.get_or_none(id_minutes=minutes, id_group=group, is_active=is_active)
         try:
             last_name = m.id_user.last_name[0]
         except Exception, e:
