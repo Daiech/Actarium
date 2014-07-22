@@ -15,8 +15,17 @@ class MinutesManager(GenericManager):
             return m
         else:
             raise Http404
-        
+
 class AssistanceManager(models.Manager):
+    def get_or_none(self, **kwargs):
+        try:
+            return self.get(**kwargs)
+        except self.model.DoesNotExist:
+            return None
+        except self.model.MultipleObjectsReturned:
+            return None    
+
+class CommissionManager(models.Manager):
     def get_or_none(self, **kwargs):
         try:
             return self.get(**kwargs)
@@ -189,6 +198,7 @@ class rel_user_minutes_signed(models.Model):
     id_minutes = models.ForeignKey(minutes,  null=False, related_name='%(class)s_id_minutes')
     is_signed_approved = models.IntegerField()  # take 0, 1, or 2
     date_joined = models.DateTimeField(auto_now=True)
+    objects = CommissionManager()
 
     def __unicode__(self):
         return "%s: assistance %s in %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
@@ -214,8 +224,26 @@ class rol_user_minutes(models.Model):
     is_signer = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=False)
-
     objects = GenericManager()
+
+    def set_assistance(self):
+        assistance_obj, created = rel_user_minutes_assistance.objects.get_or_create(id_user=self.id_user, id_minutes=self.id_minutes)
+        if assistance_obj:
+            assistance_obj.assistance = self.is_assistant
+            assistance_obj.save()
+
+    def change_commission(self):
+        if self.is_approver:
+            commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
+            if commission_obj:
+                commission_obj.is_signed_approved = True
+                commission_obj.save()
+            else:
+                rel_user_minutes_signed.objects.create(id_user=self.id_user, id_minutes=self.id_minutes, is_signed_approved=False)
+        else:
+            commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
+            if commission_obj:
+                commission_obj.delete()
 
     def get_minutes_signed(self):
         try:

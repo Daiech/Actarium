@@ -342,13 +342,13 @@ def setMinuteAssistance(minutes_id, members_selected, members_no_selected, is_up
             rel_user_minutes_assistance.objects.bulk_create(a)
             rel_user_minutes_assistance.objects.bulk_create(b)
         except Exception, e:
-            print "Minutes.setMinuteAssistance", e
+            print "Minutes.set Minute Assistance", e
             return False
     else:
         assistances = rel_user_minutes_assistance.objects.filter(id_minutes=minutes_id)
         for m in members_selected:
             user_assistance = assistances.filter(id_user=m.id_user)
-            if user_assistance and user_assistance.count() > 0:
+            if user_assistance.count() > 0:
                 try:
                     uas = user_assistance[0]
                     uas.assistance = True
@@ -357,7 +357,7 @@ def setMinuteAssistance(minutes_id, members_selected, members_no_selected, is_up
                     print "[WARNING] no se actualizo la asistencia: ", e
         for m in members_no_selected:
             user_assistance = assistances.filter(id_user=m.id_user)
-            if user_assistance and user_assistance.count() > 0:
+            if user_assistance.count() > 0:
                 try:
                     uas = user_assistance[0]
                     uas.assistance = False
@@ -522,85 +522,87 @@ def setRolForMinute(request, slug_group):
     error = None
     saved = True
     role_name = ""
-    if request.is_ajax():
-        if request.method == 'POST':
-            try:
-                g = Groups.objects.get_group(slug=slug_group)
-                _user_rel = getRelUserGroup(request.user, g)
-                is_org_admin = g.organization.has_user_role(request.user, "is_admin")
+    if not request.is_ajax():
+        return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
+    if request.method == 'POST':
+        try:
+            g = Groups.objects.get_group(slug=slug_group)
+            _user_rel = getRelUserGroup(request.user, g)
+            is_org_admin = g.organization.has_user_role(request.user, "is_admin")
 
-                if (_user_rel and _user_rel.is_secretary) or is_org_admin:
-                    role = int(request.POST.get('role'))
-                    remove = bool(int(request.POST.get('remove')))
-                    _user = get_user_or_email(request.POST.get('uid'))
-                    m_id = request.POST.get('m_id')
-                    print "POST", request.POST
-                    _minute = None
-                    if m_id:
-                        _minute = minutes.objects.get_minute(id=int(m_id))
-                    u = _user['user']
-                    if _minute and u:
-                        rel = getRolUserMinutes(u, g, id_minutes=_minute)
-                    elif u:
-                        rel = getRolUserMinutes(u, g, is_active=False)
-                    if not rel:
-                        if _minute:
-                            rel = setRolUserMinutes(u, g, id_minutes=_minute, is_active=True)
-                        else:
-                            rel = setRolUserMinutes(u, g)
-                        if rel:
-                            if _minute:
-                                rel = getRolUserMinutes(u, g, id_minutes=_minute)
-                            else:
-                                rel = getRolUserMinutes(u, g, is_active=False)
-                        else:
-                            rel = False
-                    if rel:
-                        if role == 1 and u and not remove:
-                            rel.is_signer = True
-                            role_name = r1
-                        if role == 2 and u and not remove:
-                            rel.is_approver = True
-                            role_name = r2
-                        if role == 3 and u and not remove:
-                            rel.is_assistant = True
-                            role_name = r3
-                        if role == 4 and u and not remove:
-                            if removeUniqueRolGroup(g, 4):
-                                if not rel.is_secretary:
-                                    rel.is_president = True
-                                else:
-                                    error = _(u"No se puede ser Secretario y Presidente al mismo tiempo")
-                            role_name = r4
-                        if role == 5 and u and not remove:
-                            if removeUniqueRolGroup(g, 5):
-                                if not rel.is_president:
-                                    rel.is_secretary = True
-                                else:
-                                    error = _(u"No se puede ser Presidente y Secretario al mismo tiempo")
-                            role_name = r5
-                        if role == 1 and u and remove:
-                            rel.is_signer = False
-                        if role == 2 and u and remove:
-                            rel.is_approver = False
-                        if role == 3 and u and remove:
-                            rel.is_assistant = False
-                        rel.save()
-                        saved = True
-                        # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
+            if (_user_rel and _user_rel.is_secretary) or is_org_admin:
+                role = int(request.POST.get('role'))
+                remove = bool(int(request.POST.get('remove')))
+                _user = get_user_or_email(request.POST.get('uid'))
+                m_id = request.POST.get('m_id')
+                print "POST", request.POST
+                _minute = None
+                if m_id:
+                    _minute = minutes.objects.get_minute(id=int(m_id))
+                u = _user['user']
+                if _minute and u:
+                    rel = getRolUserMinutes(u, g, id_minutes=_minute)
+                elif u:
+                    rel = getRolUserMinutes(u, g, is_active=False)
+                if not rel:
+                    if _minute:
+                        rel = setRolUserMinutes(u, g, id_minutes=_minute, is_active=True)
                     else:
-                        print "no hay relacion"
-                        # save Error log
+                        rel = setRolUserMinutes(u, g)
+                    if rel:
+                        if _minute:
+                            rel = getRolUserMinutes(u, g, id_minutes=_minute)
+                        else:
+                            rel = getRolUserMinutes(u, g, is_active=False)
+                    else:
+                        rel = False
+                if rel:
+                    if role == 1 and u and not remove:
+                        rel.is_signer = True
+                        role_name = r1
+                    if role == 2 and u and not remove:
+                        rel.is_approver = True
+                        role_name = r2
+                    if role == 3 and u and not remove:
+                        rel.is_assistant = True
+                        role_name = r3
+                    if role == 4 and u and not remove:
+                        if removeUniqueRolGroup(g, 4):
+                            if not rel.is_secretary:
+                                rel.is_president = True
+                            else:
+                                error = _(u"No se puede ser Secretario y Presidente al mismo tiempo")
+                        role_name = r4
+                    if role == 5 and u and not remove:
+                        if removeUniqueRolGroup(g, 5):
+                            if not rel.is_president:
+                                rel.is_secretary = True
+                            else:
+                                error = _(u"No se puede ser Presidente y Secretario al mismo tiempo")
+                        role_name = r5
+                    if role == 1 and u and remove:
+                        rel.is_signer = False
+                    if role == 2 and u and remove:
+                        rel.is_approver = False
+                    if role == 3 and u and remove:
+                        rel.is_assistant = False
+                    rel.save()
+                    rel.set_assistance()
+                    rel.change_commission()
+                    saved = True
+                    # saveAction added Rol: group: g, user: u, role = role, role name=role_name, set or remove?: remove
                 else:
-                    error = _("No tienes permiso para hacer eso, Por favor recarga la página")
-            except Exception, e:
-                print e
-                error = _("Por favor recarga la página e intenta de nuevo.")
-            if error:
-                return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
-            response = {"saved": saved, "u": u.first_name, "username": u.username, "full_name": u.get_full_name(), "role": role, "role_name": role_name, "uid": u.id}
-            return HttpResponse(json.dumps(response), mimetype="application/json")
-    return HttpResponse(json.dumps({"error": "You can not enter here"}), mimetype="application/json")
+                    print "no hay relacion"
+                    # save Error log
+            else:
+                error = _("No tienes permiso para hacer eso, Por favor recarga la página")
+        except Exception, e:
+            print e
+            error = _("Por favor recarga la página e intenta de nuevo.")
+        if error:
+            return HttpResponse(json.dumps({"error": error, "saved": False}), mimetype="application/json")
+        response = {"saved": saved, "u": u.first_name, "username": u.username, "full_name": u.get_full_name(), "role": role, "role_name": role_name, "uid": u.id}
+        return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
 @login_required(login_url='/account/login')
@@ -1135,7 +1137,7 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
             id_user = request.user
             saveActionLog(id_user, 'NEW_MINUTE', "group: %s, code: %s" % (group.name, df['code']), request.META['REMOTE_ADDR'])
             # registra los usuarios que asistieron a la reunión en la que se creó el acta
-            # setMinuteAssistance(myNewMinutes, m_selected, m_no_selected)
+            
             return myNewMinutes
         else:
             return False
