@@ -8,7 +8,7 @@ def get_minutes_roles(minutes, group=None):
         group = minutes.id_group
     elif not group:
         return False
-    members = group.rel_user_group_set.get_all_active().order_by("-id_user__is_active")
+    members = group.rel_user_group_set.get_all_active().filter(is_member=True).order_by("-id_user__is_active")
     is_active = True if minutes else False
     # rel = group.rol_user_minutes_id_group.filter(id_minutes=minutes, is_active=is_active)
 
