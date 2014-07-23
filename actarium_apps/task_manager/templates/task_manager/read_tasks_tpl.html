@@ -53,7 +53,7 @@
 		{% verbatim %}
 			{%for task in tasks %}
 				<div id="task{{task.id}}" class="one_task row-fluid actarium-dropdown" data-task-id="{{task.id}}">
-					<div class="task_status pull-left" style="background-color: {{task.color}}" title="{{ task.status}}">
+					<div class="task_status pull-left" {% if task.status_code == 'TER' %}style="background-color: {{task.color}}"{% endif %} title="{{ task.status}}">
 					</div>
 					<div class="task_info pull-left row-fluid">
 						<div class="task_content pull-left">
@@ -78,10 +78,12 @@
 								<span class="glyphicon glyphicon-ok-circle"></span>
 							</a>
 							<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Eliminar tarea' %}" {% verbatim %}>
-								<span class="glyphicon glyphicon-remove-circle"></span>
+								<span class="glyphicon glyphicon-trash"></span>
 							</a>
 						{% endif %}
-						
+					</div>
+					<div class="task_due pull-right" {% if task.status_code == 'VEN' %}style="background-color: #FFC7C7"{% endif %}>
+						{{ task.due| }}
 					</div>
 				</div>
 			{%endfor%}
@@ -98,36 +100,35 @@
 	<script type="text/template" id="taskModal">
 		{% verbatim %}
 			<div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% endverbatim %} {% trans 'Cerrar' %} {% verbatim %}</span></button>
-		        <h4 class="modal-title" id="myModalLabel">{{task.title}}</h4>
-		      </div>
-		      <div class="modal-body">
-		        
-					<div class="">
-						{{task.description}}
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% endverbatim %} {% trans 'Cerrar' %} {% verbatim %}</span></button>
+			        <h4 class="modal-title" id="myModalLabel">{{task.title}}</h4>
+			      </div>
+			      <div class="modal-body">
+						<div class="">
+							{{task.description}}
+						</div>
+						<br><br>
+						<strong>{% endverbatim %} {% trans 'Responsable:' %} {% verbatim %}</strong>
+						<br><br>
+						<div class="">
+							<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.responsible_img}}" class="img-circle">
+							{{task.responsible}}
+						</div>
+						<br><br>
+						<strong>{% endverbatim %} {% trans 'Estado:' %} {% verbatim %}</strong>
+						<br><br>
+						<div >
+							{{ task.status}}
+						</div>
+			      </div>
+			      <div class="modal-footer">
+			        <div class="task_empty">
+						<button type="button" class="btn btn-default" data-dismiss="modal">{% endverbatim %} {% trans 'Cerrar' %} {% verbatim %}</button>
 					</div>
-					<br><br>
-					<strong>{% endverbatim %} {% trans 'Responsable:' %} {% verbatim %}</strong>
-					<br><br>
-					<div class="">
-						<img title="{{task.responsible}}" alt="{{task.responsible}}" style="width:25px" src="{{task.responsible_img}}" class="img-circle">
-						{{task.responsible}}
-					</div>
-					<br><br>
-					<strong>{% endverbatim %} {% trans 'Estado:' %} {% verbatim %}</strong>
-					<br><br>
-					<div >
-						{{ task.status}}
-					</div>
-		      </div>
-		      <div class="modal-footer">
-		        <div class="task_empty">
-					<button type="button" class="btn btn-default" data-dismiss="modal">{% endverbatim %} {% trans 'Cerrar' %} {% verbatim %}</button>
-				</div>
-		      </div>
-		    </div>
-		  </div>
+			      </div>
+			    </div>
+		  	</div>
 		{% endverbatim %}
 	</script>
