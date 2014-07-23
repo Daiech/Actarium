@@ -3,8 +3,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template import defaultfilters
 from django.conf import settings
-from actarium_apps.organizations.models import Groups
 from django.http import Http404
+from django.db.models.signals import post_save
+from django.db.models import Sum
+
+from actarium_apps.organizations.models import Groups
 from libs.generic_managers import GenericManager
 
 
@@ -33,6 +36,8 @@ class CommissionManager(models.Manager):
             return None
         except self.model.MultipleObjectsReturned:
             return None    
+
+
 
 class minutes_type_1(models.Model):
     date_start = models.DateTimeField()
@@ -108,9 +113,6 @@ class minutes(models.Model):
 
     objects = MinutesManager()
 
-    def __unicode__(self):
-        return "Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
-
     def minutesIsValid(self):
         return self.is_valid
     minutesIsValid.admin_order_field = 'date_created'
@@ -118,7 +120,7 @@ class minutes(models.Model):
     minutesIsValid.short_description = 'is valid?'
 
     def minutesIsFullSigned(self):
-        return self.is_full_signed
+        return self.is_minute_full_signed
     minutesIsFullSigned.admin_order_field = 'date_created'
     minutesIsFullSigned.boolean = True
     minutesIsFullSigned.short_description = 'is full signed?'
@@ -127,12 +129,29 @@ class minutes(models.Model):
         self.is_full_signed = True
         self.save()
 
-    class Meta:
-        unique_together = ('id_group', 'code')
+    def is_minute_full_signed(self):
+        all_signs = rel_user_minutes_signed.objects.filter(id_minutes=self)
+        if all_signs:
+            total = all_signs.aggregate(total=Sum("is_signed_approved"))
+            if total["total"] == all_signs.count():
+                print "Si señor, ya todos los que quedaron son full signed"
+                return True
+            else:
+                print "NO son iguales"
+                return False
+
+
 
     def save(self):
         self.code = str(self.code).replace(" ","-")
         super(minutes, self).save()
+    
+    def __unicode__(self):
+        return "Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
+
+    class Meta:
+        unique_together = ('id_group', 'code')
+
 
 
 class reunions(models.Model):
@@ -201,7 +220,7 @@ class rel_user_minutes_signed(models.Model):
     objects = CommissionManager()
 
     def __unicode__(self):
-        return "%s: assistance %s in %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
+        return "%s signed %s in minutes: %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
 
 
 class last_minutes(models.Model):
@@ -234,11 +253,8 @@ class rol_user_minutes(models.Model):
                 assistance_obj.save()
 
     def change_commission(self):
-        print self.id
         if self.id_minutes:
-            print "SI HAY ACTA"
             if self.is_approver:
-                print "NUEVO APROBADOR"
                 commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
                 if commission_obj:
                     commission_obj.is_signed_approved = True
@@ -246,10 +262,14 @@ class rol_user_minutes(models.Model):
                 else:
                     rel_user_minutes_signed.objects.create(id_user=self.id_user, id_minutes=self.id_minutes, is_signed_approved=False)
             else:
-                print "CHAO APROBADOR"
                 commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
                 if commission_obj:
                     commission_obj.delete()
+            ifs = "is_minute_full_signed:", self.id_minutes.is_minute_full_signed()
+            if ifs:
+                self.id_minutes.set_full_signed = True
+                self.id_minutes.save()
+
 
     def get_minutes_signed(self):
         try:
