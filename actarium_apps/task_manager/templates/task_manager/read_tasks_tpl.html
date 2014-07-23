@@ -24,7 +24,7 @@
 									<i class="glyphicon glyphicon-user" ></i>
 								</span>
 								<select id="responsibleSelector" name="responsible" class="form-control">
-									{% for rel in group.rel_user_group_set.get_all_active %}
+									{% for rel in group.rel_user_group_set.get_all_members_active %}
 									<option  value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
 									{% endfor %}
 								</select>

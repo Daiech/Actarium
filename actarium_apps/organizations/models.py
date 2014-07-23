@@ -196,6 +196,8 @@ class Groups(models.Model):
 class RelUserGroupManager(GenericManager):
     def get_rel(self, user, group):
         return self.filter(id_user=user, id_group=group, is_active=True)
+    def get_all_members_active(self):
+        return self.filter(is_active=True, is_member=True)
 
 
 class rel_user_group(models.Model):
