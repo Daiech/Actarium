@@ -23,9 +23,9 @@
 					<form method="post" class="minutes-form-btn">
 						{% csrf_token %}
 						<input type='hidden' id="minutes-html-data" name="minutes-html-data" value="">
-						<button type='submit' id="btn-generate-pdf" class="btn" {%if not minutes.is_full_signed%}disabled title="Los PDF solo son generados para actas aprobadas."{%endif%} ><i class="glyphicon glyphicon-file"></i> Generar PDF</button>
+						<button type='submit' id="btn-generate-pdf" class="btn" {%if not minutes.is_minute_full_signed%}disabled title="Los PDF solo son generados para actas aprobadas."{%endif%} ><i class="glyphicon glyphicon-file"></i> Generar PDF</button>
 					</form>
-					{% if is_secretary and not minutes.is_full_signed%}
+					{% if is_secretary and not minutes.is_minute_full_signed%}
 					<button class="btn" id="minutes-edit"><i class="glyphicon glyphicon-pencil"></i> Editar Acta</button>
 					{%endif%}
 					{%if minutes_version%}

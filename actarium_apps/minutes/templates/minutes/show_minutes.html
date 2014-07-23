@@ -32,7 +32,7 @@
 			
 			$("#commissionPanel").click(); //open the commission approving panel
 			
-			{% if minutes.is_full_signed %}
+			{% if minutes.is_minute_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
 				$(".print").removeClass("hidden");
 			}
@@ -43,7 +43,7 @@
 			});
 			$("#btn-generate-pdf").on("click", function (e) {
 				e.preventDefault();
-				{% if minutes.is_full_signed %}
+				{% if minutes.is_minute_full_signed %}
 				$("#pdf-form").submit();
 				{% endif %}
 			});

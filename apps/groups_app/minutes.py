@@ -397,7 +397,7 @@ def setMinutesApprove(request):
             except Exception, e:
                 print "Error Al aprobar: %s" % e
             response = {"approved": approved, "minutes": minutes_id,
-            "user-id": request.user.id, "is_full_signed": _minutes.is_full_signed,
+            "user-id": request.user.id, "is_full_signed": _minutes.is_minute_full_signed(),
             "user-name": request.user.first_name + " " + request.user.last_name}
     else:
         response = "Error invitacion"
@@ -535,7 +535,6 @@ def setRolForMinute(request, slug_group):
                 remove = bool(int(request.POST.get('remove')))
                 _user = get_user_or_email(request.POST.get('uid'))
                 m_id = request.POST.get('m_id')
-                print "m_id", m_id
                 _minute = None
                 if m_id:
                     _minute = minutes.objects.get_minute(id=int(m_id))
@@ -556,7 +555,6 @@ def setRolForMinute(request, slug_group):
                             rel = getRolUserMinutes(u, g, is_active=False)
                     else:
                         rel = False
-                print "MINUTE:", _minute
                 if rel:
                     if role == 1 and u and not remove:
                         rel.is_signer = True
@@ -588,7 +586,6 @@ def setRolForMinute(request, slug_group):
                     if role == 3 and u and remove:
                         rel.is_assistant = False
                     rel.save()
-                    print "ROLE:", role
                     if role == 2:
                         rel.change_commission()
                     if role == 3:
@@ -933,7 +930,7 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
         error = False
         _reunion = None
         _minute = group.get_minutes_by_code(code=minutes_code)
-        if _minute and (not _minute.is_full_signed):
+        if _minute and (not _minute.is_minute_full_signed()):
             _extra_minutes = getExtraMinutesById(_minute.id_extra_minutes)
             ######## <SLUG TEMPLATE> #########
             _template = getTemplateMinutes(slug_template)

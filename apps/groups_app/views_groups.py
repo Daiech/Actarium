@@ -124,7 +124,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
         if rol and rel_group:
             rol_is_approver = rol.is_approver
             rel_group_is_secretary = rel_group.is_secretary
-        if is_org_admin or (rel_group and rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin or minutes_current.is_full_signed):
+        if is_org_admin or (rel_group and rol_is_approver or rel_group_is_secretary or rel_group.is_secretary or rel_group.is_admin or minutes_current.is_minute_full_signed()):
             if not minutes_current:
                 return HttpResponseRedirect('/groups/' + slug_group + '/#error-there-is-not-that-minutes')
 

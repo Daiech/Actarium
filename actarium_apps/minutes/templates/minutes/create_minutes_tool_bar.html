@@ -9,7 +9,7 @@
 		    <li role="presentation"><a role="menuitem" tabindex="-1" href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%}" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opci&oacute;n' %}"{%endif%}  data-placement="right" ><span class="glyphicon glyphicon-plus"></span> {% trans "Nueva acta" %}</a></li>
 		    <li role="presentation" class="divider"></li>
 		    <li role="presentation">
-				<a role="menuitem" tabindex="-1" href="#" id="btn-generate-pdf" class="{%if not minutes.is_full_signed%}disabled{%endif%}" title="{%if not minutes.is_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="right" >
+				<a role="menuitem" tabindex="-1" href="#" id="btn-generate-pdf" class="{%if not minutes.is_minute_full_signed%}disabled{%endif%}" title="{%if not minutes.is_minute_full_signed%}{% trans 'Los PDF se generan para actas aprobadas' %}{% else %}{% trans 'Descarga esta acta en PDF' %}{%endif%}"  data-placement="right" >
 			    	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
 						{% csrf_token %}
 						<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
@@ -17,7 +17,7 @@
 					</form>
 				</a>
 		    </li>
-			{% if minutes.is_full_signed %}
+			{% if minutes.is_minute_full_signed %}
 			<li role="presentation" class="print hidden">
 				<a role="menuitem" tabindex="-1" href="#" id="print-minutes"><span class="glyphicon glyphicon-print"></span> {% trans 'Imprimir' %}</a>
 			</li>
@@ -32,7 +32,7 @@
 		<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownEdit">
-		    {% if is_secretary and not minutes.is_full_signed%}
+		    {% if is_secretary and not minutes.is_minute_full_signed%}
 		    <li role="presentation" data-placement="right" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
 				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
 		    </li>
