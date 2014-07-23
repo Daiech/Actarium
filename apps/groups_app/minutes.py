@@ -535,6 +535,7 @@ def setRolForMinute(request, slug_group):
                 remove = bool(int(request.POST.get('remove')))
                 _user = get_user_or_email(request.POST.get('uid'))
                 m_id = request.POST.get('m_id')
+                print "m_id", m_id
                 _minute = None
                 if m_id:
                     _minute = minutes.objects.get_minute(id=int(m_id))
@@ -555,6 +556,7 @@ def setRolForMinute(request, slug_group):
                             rel = getRolUserMinutes(u, g, is_active=False)
                     else:
                         rel = False
+                print "MINUTE:", _minute
                 if rel:
                     if role == 1 and u and not remove:
                         rel.is_signer = True
@@ -586,6 +588,7 @@ def setRolForMinute(request, slug_group):
                     if role == 3 and u and remove:
                         rel.is_assistant = False
                     rel.save()
+                    print "ROLE:", role
                     if role == 2:
                         rel.change_commission()
                     if role == 3:

@@ -12,7 +12,7 @@
 					{% trans 'Encargados de aprobar esta acta' %}:
 				</div>
 				<div class="panel-body">
-					{% if my_attending %}
+					{% verbatim %}{% if i_should_approve and not i_have_approved %}{% endverbatim %}
 					<div id="approve-message-up" class="div-sign alert ">
 			    		<strong>{% trans 'Tu voto' %}: </strong> {% trans 'Apruebas ésta Acta?' %}
 				    	<a href="#approve" class="btn btn-info btn-approve" data-minutes="{{ minutes.id }}" data-approve="1">
@@ -22,15 +22,16 @@
 							<span class="glyphicon glyphicon-comment"></span> {% trans 'No, Necesita corrección' %} <span></span>
 						</a>
 					</div>
-					{% endif %}
+					{% verbatim %}{% endif %}{% endverbatim %}
 					<ol class="commission-approving-list" class="">
 						{% verbatim %}
 						{% for member in ca %}
+							{% if member.role.is_approver %}
 							<li class="missing-{{ member.id }}">
 								<div>
 									<img style="width:20px" src="{{ member.img }}">
 								</div>
-								<div> {{ member.full_name }} </div>
+								<div> {{ member.short_name }} </div>
 								<div class="icon-approver-status">
 									{% if member.get_minutes_signed == 0 %}
 									<i class="glyphicon glyphicon-time"></i>
@@ -43,6 +44,7 @@
 									{% endif %}
 								</div>
 							</li>
+							{% endif %}
 						{% endfor %}
 						{% endverbatim %}
 					</ol>{% comment %}
@@ -108,7 +110,7 @@
 				{% else %}{% endverbatim %}
 				<div class="text-center">
 					<select id="sel-president" class="form-control">
-						<option value="0">{% trans 'Seleccione presidente' %}</option>{% verbatim %}{% for m in members %}<option value="{{ m.id }}" {% if m.role.is_president %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>{% endfor %}{% endverbatim %}</select>
+						<option value="0">{% trans 'Seleccione presidente' %}</option>{% verbatim %}{% for m in members %}<option value="{{ m.id }}" {% if m.role.is_president %}selected{% endif %}>{{ m.short_name }} ({{ m.username }})</option>{% endfor %}{% endverbatim %}</select>
 					<span class="president-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 				</div>
 				{% verbatim %}{% endif %}{% endverbatim %}
@@ -121,7 +123,7 @@
 				</div>
 				{% else %}{% endverbatim %}
 				<div class="text-center">
-					<select id="sel-secretary" class="form-control"><option value="0">{% trans 'Seleccione secretario' %}</option>{% verbatim %}{% for m in members %}<option value="{{ m.id }}" {% if m.role.is_secretary %}selected{% endif %}>{{ m.full_name }} ({{ m.username }})</option>{% endfor %}{% endverbatim %}</select>
+					<select id="sel-secretary" class="form-control"><option value="0">{% trans 'Seleccione secretario' %}</option>{% verbatim %}{% for m in members %}<option value="{{ m.id }}" {% if m.role.is_secretary %}selected{% endif %}>{{ m.short_name }} ({{ m.username }})</option>{% endfor %}{% endverbatim %}</select>
 					<span class="secretary-ok hidden"><i class="glyphicon glyphicon-ok"></i></span>
 					{% verbatim %}{% endif %}{% endverbatim %}
 				</div>
@@ -158,8 +160,8 @@
 					<tr>
 						<td class="td-first">
 							<div class="username-info {% if not m.is_active %}user-pend-l{% endif %}"
-							title="{% if not m.is_active %}{{ m.full_name }} es un usuario virtual, debe activar su cuenta ingresando al link que se le envió al correo en el momento de la invitación.{% endif %}">
-		                        <img style="width:20px" src="{{ m.img }}"> {{ m.full_name }}
+							title="{% if not m.is_active %}{{ m.short_name }} es un usuario virtual, debe activar su cuenta ingresando al link que se le envió al correo en el momento de la invitación.{% endif %}">
+		                        <img style="width:20px" src="{{ m.img }}"> {{ m.short_name }}
 		                    </div>
 						</td>
 						<td class="t-a-c">
@@ -192,7 +194,7 @@
 		<hr>
 		{% verbatim %}{% if commission_is_editing %}{% endverbatim %}
 		<div class="btn-send-notification">
-			<a href="#" class="btn btn-cancel">{% trans 'Cancelar' %}</a> 
+			<a href="#" class="btn btn-cancel">{% trans 'Cerrar' %}</a> 
 			<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-send"></span> {% trans 'Guardar y notificar' %}</button>
 		</div>{% verbatim %}{% endif %}{% endverbatim %}
 	</div>

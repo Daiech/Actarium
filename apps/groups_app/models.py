@@ -234,8 +234,11 @@ class rol_user_minutes(models.Model):
                 assistance_obj.save()
 
     def change_commission(self):
+        print self.id
         if self.id_minutes:
+            print "SI HAY ACTA"
             if self.is_approver:
+                print "NUEVO APROBADOR"
                 commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
                 if commission_obj:
                     commission_obj.is_signed_approved = True
@@ -243,6 +246,7 @@ class rol_user_minutes(models.Model):
                 else:
                     rel_user_minutes_signed.objects.create(id_user=self.id_user, id_minutes=self.id_minutes, is_signed_approved=False)
             else:
+                print "CHAO APROBADOR"
                 commission_obj = rel_user_minutes_signed.objects.get_or_none(id_user=self.id_user, id_minutes=self.id_minutes)
                 if commission_obj:
                     commission_obj.delete()

@@ -6,30 +6,25 @@ function showCommission (e) {
 		"title": "{% trans 'Comisión aprobatoria' %}",
 		"info_text": "{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}",
 		"callback":  function () {
-			ca = [{% for member in commission_approving %}
-					{
-						id: {{ member.id_user.id }},
-						img: "{{member.id_user.email|showgravatar:'20'}}",
-						full_name: "{{member.id_user.first_name}} {{member.id_user.last_name}}",
-						get_minutes_signed: {{ member.get_minutes_signed }}
-					},
-				{% endfor %}]
-			ctx = {ca: ca}
-			loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: ctx }));
-			$(".popover-element").popover({trigger: 'hover'});
+			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug minutes.id %}",{}, function (data){
+				approve = $.grep(data.members, function (element, index) {return element.id == "{{ user.id }}" && element.role.is_approver});
+				i_have_approved = $.grep(data.members, function (element, index) {return element.id == "{{ user.id }}" && element.role.is_approver && element.get_minutes_signed != 0});
+				ctx = {ca: data.members, i_should_approve: approve.length, i_have_approved: i_have_approved.length};
+				loadPanelContent(swig.render($("#approvingCommissionTpl").html(),{locals: ctx }));
+				$(".popover-element").popover({trigger: 'hover'});
+			});
 		}
 	}
 	loadPanel(ctx);
 }
 function editMinutesRoles (e) {
-	console.log("Editando")
 	e.preventDefault();
 	var ctx = {
 		"id": $(this).attr("id"),
 		"title": "{% trans 'Roles de acta' %}",
 		"info_text": "{% trans 'Ésta Acta no será publicada a todo el grupo hasta que los miembros asignados como comisión aprobatoria estén de acuerdo con su redacción.' %}",
 		"callback":  function () {
-			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug %}",{}, function (data){
+			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug minutes.id %}",{}, function (data){
 				ctx = {
 					members: {% if is_edit %}{{ members_list|safe }}{% else %}data.members{% endif %},
 				}
@@ -50,8 +45,8 @@ function editCommission (e) {
 			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug minutes.id %}",{}, function (data){
 				var president = $.grep(data.members, function (element, index) {return element.role.is_president;});
 				var secretary = $.grep(data.members, function (element, index) {return element.role.is_secretary;});
-				if ( president.length > 0 ) {president = president[0].full_name[0]}else{president = "{% trans 'Noy hay presidente' %}"}
-				if ( secretary.length > 0 ) {secretary = secretary[0].full_name[0]}else{secretary = "{% trans 'Noy hay secretario' %}"}
+				if ( president.length > 0 ) {president = president[0].short_name[0]}else{president = "{% trans 'Noy hay presidente' %}"}
+				if ( secretary.length > 0 ) {secretary = secretary[0].short_name[0]}else{secretary = "{% trans 'Noy hay secretario' %}"}
 				ctx = {
 					members: data.members,
 					president: president,
