@@ -164,6 +164,14 @@ class minutes(models.Model):
                 done += 1
         return done
 
+    def get_total_tasks_due(self):
+        lms =  self.lastminutestasks_minutes.get_tasks()
+        due = 0
+        for lm in lms:
+            if lm.task.status_code == "VEN":
+                due += 1
+        return due
+
     def get_tasks_progress(self):
         total = self.get_total_tasks()
         done = self.get_total_tasks_done()
