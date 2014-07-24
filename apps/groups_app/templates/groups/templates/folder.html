@@ -53,11 +53,13 @@
                                 </a>
                             </td>
                             <td>
+                                {% if minute.minutes.get_total_tasks_done > 0 %}
                                 <div class="progress">
                                   <div class="progress-bar" role="progressbar" aria-valuenow="{{minute.minutes.get_tasks_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{minute.minutes.get_tasks_progress}}%; background-color: #97C02C;">
                                     {{minute.minutes.get_total_tasks_done}}/{{minute.minutes.get_total_tasks}}
                                   </div>
                                 </div>
+                                {% endif %}
                             </td>
                             <td>
                                 <span > 

@@ -167,6 +167,8 @@ class minutes(models.Model):
     def get_tasks_progress(self):
         total = self.get_total_tasks()
         done = self.get_total_tasks_done()
+        if total == 0:
+            return 0
         percentage = int(round(100*float(done)/float(total)))
         return percentage
 
