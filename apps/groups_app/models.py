@@ -140,8 +140,6 @@ class minutes(models.Model):
                 print "NO son iguales"
                 return False
 
-
-
     def save(self):
         self.code = str(self.code).replace(" ","-")
         super(minutes, self).save()

@@ -41,17 +41,14 @@
 		    <li role="presentation" data-placement="right" title="{% trans 'Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento' %}.">
 				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
 		    </li>
-		    <li role="presentation" data-placement="right" title="{% trans 'Editar la lista de personas que deben aprobar esta acta' %}." class="">
-				<a role="menuitem" tabindex="-1" href="#" class="" id="btnEditCommission" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar comisión aprobatoria' %}</a>
-		    </li>
 		    {% else %}
 		    <li role="presentation" class="{%if minutes.is_minute_full_signed%}disabled{%endif%}" title="{%if minutes.is_minute_full_signed%}{% trans 'Esta acta ya no se puede editar' %}{%endif%}" data-placement="right">
 		    	<a role="menuitem" tabindex="-1" href="#" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
 		    </li>
-		    <li role="presentation" data-placement="right" title="{% trans 'Ya no se puede editar la comisión aprobatoria' %}." class="{%if minutes.is_minute_full_signed%}disabled{%endif%}">
-				<a role="menuitem" tabindex="-1" href="#" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar comisión aprobatoria' %}</a>
-		    </li>
 			{%endif%}
+		    <li role="presentation" data-placement="right" title="{% trans 'Editar la lista de personas que deben aprobar esta acta' %}." class="">
+				<a role="menuitem" tabindex="-1" href="#" class="" id="btnEditCommission" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar comisión aprobatoria' %}</a>
+		    </li>
 			<!-- <li role="presentation" data-placement="right" title="{% trans 'Revisa los cambios que ha tenido esta acta hasta el momento' %}">
 				<a role="menuitem" tabindex="-1" href="#" id="history" class="{% if not minutes_version %}{% endif %}"><span class="glyphicon glyphicon-th-list"></span> {% trans 'Veriones' %} ({{minutes_version|length}})</a>
 		    </li> -->
