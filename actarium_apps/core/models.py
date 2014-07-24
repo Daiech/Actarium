@@ -96,7 +96,7 @@ class LastMinutesTasks(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    objects = GenericManager()
+    objects = LastMinutesTasksManager()
 
     def __unicode__(self):
         return u"%s - %s" % (self.minutes, self.task)

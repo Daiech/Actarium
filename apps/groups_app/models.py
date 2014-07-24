@@ -152,7 +152,25 @@ class minutes(models.Model):
     class Meta:
         unique_together = ('id_group', 'code')
 
+    
 
+    def get_total_tasks(self):
+        return self.lastminutestasks_minutes.get_tasks().count()
+        
+
+    def get_total_tasks_done(self):
+        lms =  self.lastminutestasks_minutes.get_tasks()
+        done = 0
+        for lm in lms:
+            if lm.task.status_code == "TER":
+                done += 1
+        return done
+
+    def get_tasks_progress(self):
+        total = self.get_total_tasks()
+        done = self.get_total_tasks_done()
+        percentage = int(round(100*float(done)/float(total)))
+        return percentage
 
 class reunions(models.Model):
     id_convener = models.ForeignKey(User, null=False, related_name='%(class)s_id_convener')

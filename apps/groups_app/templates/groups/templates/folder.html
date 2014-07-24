@@ -22,41 +22,73 @@
             <h4 class="">{% trans "Folder de Actas" %}</h4>
         </header>
         <hr>
-        <ul class="list-unstyled minutes-list">
-            {%for minute in minutes%}
-                {%if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_minute_full_signed%}
-                <li title="{%if minute.minutes.is_minute_full_signed%}
-                        {% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}
-                    {%else%}
-                        {%if minute.rol.is_approver%}{% trans 'Debes aprobar esta Acta para ser publicada' %}
-                        {%else%}{% trans 'Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}
-                    {%endif%}
-                {%endif%}" class="list-item-minutes {%if minute.minutes.is_minute_full_signed%}user-active-l
-                {%else%}
-                    {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
-                {%endif%}">
-                    <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}" target="_blank">
-                        {{minute.minutes.code}}
-                        <span class="date-minute-created" > el {{minute.minutes.date_created|date:"j \d\e M \d\e Y"}} </span>
-                        <span class="date-minute-created" > Creada por {{minute.minutes.id_creator.first_name}} </span>
-                    </a>
-                </li>
-                {% endif %}
-            {% empty %}
-                <li>
-                    {% trans "Aún no tienes actas!" %}
-                    <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" role="button" class="btn btn-info btn-small create-minutes"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crea un Acta' %}</a> {% trans 'pero antes, asegúrate de' %} <a href="{% url 'show_team' group.slug  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-user"></i> {% trans 'invitar a tu equipo de trabajo' %}</a>
-                </li>
-            {%endfor%}
-            {%if minutes%}
+        
+
+        {%if minutes%}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Título' %}</th>
+                        <th>{% trans 'Tareas' %}</th>
+                        <th>{% trans 'Fecha creación' %}</th>
+                        <th>{% trans 'Redactor' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for minute in minutes%}
+                        {%if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_minute_full_signed%}
+                        <tr title="{%if minute.minutes.is_minute_full_signed%}
+                                {% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}
+                            {%else%}
+                                {%if minute.rol.is_approver%}{% trans 'Debes aprobar esta Acta para ser publicada' %}
+                                {%else%}{% trans 'Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}
+                            {%endif%}
+                        {%endif%}" class="list-item-minutes {%if minute.minutes.is_minute_full_signed%}user-active-l
+                        {%else%}
+                            {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
+                        {%endif%}">
+                            <td>
+                                <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}" target="_blank">
+                                    {{minute.minutes.code}}
+                                </a>
+                            </td>
+                            <td>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="{{minute.minutes.get_tasks_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{minute.minutes.get_tasks_progress}}%; background-color: #97C02C;">
+                                    {{minute.minutes.get_total_tasks_done}}/{{minute.minutes.get_total_tasks}}
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span > 
+                                    {{minute.minutes.date_created|date:"j \d\e M \d\e Y"}} 
+                                </span>
+                            </td>
+                            <td>
+                                <span  > 
+                                    {{minute.minutes.id_creator.first_name}} 
+                                </span>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {%endfor%}
+                </tbody>
+            </table>
             <div class="icons-info">
                 <span>{% trans "Info" %}:</span>
                 <span class="user-active-l" title="{% trans 'Actas que han sido aprobadas por la comisi&oacute;n aprobatoria del Acta' %}">{% trans "Actas aprobadas y publicadas" %}</span>
                 <span class="user-pend-l" title="{% trans 'Actas que necesitan tu aprobaci&oacute;n' %}">{% trans "Actas sin tu aprobaci&oacute;n" %}</span>
                 <span class="minute-no-approver-l" title="{% trans 'Puedes ver porque eres administrador del grupo' %}">{% trans "Actas sin aprobar" %}</span>
             </div>
-            {%endif%}
-        </ul>
+        {% else %}
+            <ul class="list-unstyled minutes-list">
+                <li>
+                    {% trans "Aún no tienes actas!" %}
+                    <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}" role="button" class="btn btn-info btn-small create-minutes"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crea un Acta' %}</a> {% trans 'pero antes, asegúrate de' %} <a href="{% url 'show_team' group.slug  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-user"></i> {% trans 'invitar a tu equipo de trabajo' %}</a>
+                </li>
+            </ul>
+        {%endif%}
+        
         
     </div>
 {% endblock %}
@@ -83,11 +115,11 @@
 
 {% block menu_content_style %}
 <style type="text/css">
-.list-item{position: relative;margin: 3px 0;}
-    .list-item-minutes{position: relative;margin: 1px 0;padding: 5px;background-color: rgb(248, 248, 248)}
+    .list-item{position: relative;margin: 3px 0;}
+    .list-item-minutes{position: relative;margin: 1px 0;padding: 5px;background-color: #FFFFFF}
     .list-item-minutes > a{display: block;}
-    .list-item-minutes:hover{background-color: #eee}
-    /*.list-item-next{padding: 8px;border-radius: 0px}*/
+    .list-item-minutes:hover{background-color: #FFFFd6;}
+    /*.list-item-next{padding: 8px;border-radius: 0px}  rgb(248, 248, 248)*/
     .list-item-next{border-radius: 0px}
     .list-item > a{border:solid thin #fff;display:block;}
     /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
@@ -96,6 +128,8 @@
     .minutes-list{min-height: 200px;}
     #minutes-section{min-height: 354px;}
     .date-minute-created{color: #777;text-align: right;float:right; padding-left: 5px;}
+    .progress{height: 23px; margin-bottom: 0px}
+    .table tbody{ border-bottom: 1px solid #ddd}
 </style>
 {% endblock %}
 

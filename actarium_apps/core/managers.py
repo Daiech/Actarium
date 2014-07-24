@@ -96,3 +96,8 @@ class ServicesRangesManager(GenericManager):
 
 class DiscountCodesManager(GenericManager):
     pass
+
+
+class LastMinutesTasksManager(GenericManager):
+    def get_tasks(self):
+        return self.filter(task__is_active=True)
