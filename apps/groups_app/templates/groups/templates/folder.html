@@ -18,39 +18,25 @@
 
 {% block menu_content %}
     <div class="white-box-container">
-        <header class="">
-            <h4 class="">{% trans "Folder de Actas" %}</h4>
-        </header>
-        <hr>
-        
-
         {%if minutes%}
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>{% trans 'Título' %}</th>
-                        <th>{% trans 'Tareas' %}</th>
-                        <th class="due-task-field" >{% trans 'Tareas Vencidas' %}</th>
-                        <th>{% trans 'Fecha creación' %}</th>
-                        <th>{% trans 'Redactor' %}</th>
+                    <tr class="row-fluid">
+                        <th class="col-md-4 col-xs-4">{% trans 'Título' %}</th>
+                        <th class="col-md-3 col-xs-4">{% trans 'Tareas' %}</th>
+                        <th class="col-md-1 col-xs-1" >{% trans 'Tareas Vencidas' %}</th>
+                        <th class="col-md-2 col-xs-3">{% trans 'Fecha creación' %}</th>
+                        <th class="col-md-2 col-xs-0 hidden-xs">{% trans 'Redactor' %}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {%for minute in minutes%}
-                        {%if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_minute_full_signed%}
-                        <tr title="{%if minute.minutes.is_minute_full_signed%}
-                                {% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}
-                            {%else%}
-                                {%if minute.rol.is_approver%}{% trans 'Debes aprobar esta Acta para ser publicada' %}
-                                {%else%}{% trans 'Esta Acta a&uacute;n no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}
-                            {%endif%}
-                        {%endif%}" class="list-item-minutes {%if minute.minutes.is_minute_full_signed%}user-active-l
-                        {%else%}
-                            {%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}
-                        {%endif%}">
-                            <td>
+                    {% for minute in minutes %}
+                        {% if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_minute_full_signed %}
+                        <tr title="{% if minute.minutes.is_minute_full_signed %}{% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}{% else %}{% if minute.rol.is_approver %}{% trans 'Acta en revisión. Eres parte de la comisión aprobatoria' %}{% else %}{% trans 'Esta Acta aún no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}{% endif %}{%endif%}" class="list-item-minutes {%if minute.minutes.is_minute_full_signed%}user-active-l
+                        {% else %}{%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}{%endif%}">
+                            <td class="minutes-name">
                                 <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}" target="_blank">
-                                    {{minute.minutes.code}}
+                                    {{ minute.minutes.code }}
                                 </a>
                             </td>
                             <td>
@@ -76,9 +62,9 @@
                                     {{minute.minutes.date_created|date:"j \d\e M \d\e Y"}} 
                                 </span>
                             </td>
-                            <td>
+                            <td class="hidden-xs">
                                 <span  > 
-                                    {{minute.minutes.id_creator.first_name}} 
+                                    {{ minute.minutes.id_creator.first_name }} {{ minute.minutes.id_creator.last_name.0 }}.
                                 </span>
                             </td>
                         </tr>
@@ -88,9 +74,9 @@
             </table>
             <div class="icons-info">
                 <span>{% trans "Info" %}:</span>
-                <span class="user-active-l" title="{% trans 'Actas que han sido aprobadas por la comisi&oacute;n aprobatoria del Acta' %}">{% trans "Actas aprobadas y publicadas" %}</span>
-                <span class="user-pend-l" title="{% trans 'Actas que necesitan tu aprobaci&oacute;n' %}">{% trans "Actas sin tu aprobaci&oacute;n" %}</span>
-                <span class="minute-no-approver-l" title="{% trans 'Puedes ver porque eres administrador del grupo' %}">{% trans "Actas sin aprobar" %}</span>
+                <span class="user-active-l" title="{% trans 'Actas que han sido aprobadas por la comisión aprobatoria del Acta y son visibles a todo el grupo' %}">{% trans "Actas aprobadas y publicadas" %}</span>
+                <span class="user-pend-l" title="{% trans 'Actas en revisión: eres parte de la comisión aprobatoria. Solo son visibles para la comisión.' %}">{% trans "Actas en revisión" %}</span>
+                <span class="minute-no-approver-l" title="{% trans 'Actas en revisión: No eres parte de la comisión aprobatoria. Puedes ver porque eres administrador del grupo' %}">{% trans "Actas en revisión" %}</span>
             </div>
         {% else %}
             <ul class="list-unstyled minutes-list">
@@ -131,11 +117,12 @@
     .list-item-minutes{position: relative;margin: 1px 0;padding: 5px;background-color: #FFFFFF}
     .list-item-minutes > a{display: block;}
     .list-item-minutes:hover{background-color: #FFFFd6;}
-    /*.list-item-next{padding: 8px;border-radius: 0px}  rgb(248, 248, 248)*/
-    .list-item-next{border-radius: 0px}
+    .minutes-name{padding: 0 !important;}
+    .list-item-next{border-radius: 0px;display: block; padding: 8px;}
+    .list-item-next:hover{text-decoration: underline;}
     .list-item > a{border:solid thin #fff;display:block;}
     /*.list-item div{border:solid thin white;border-bottom: solid thin #ddd;}*/
-    .list-item > a:hover{border:solid thin #ddd;background-color: #eee}
+    .list-item > a:hover{border:solid thin #ddd;background-color: #eee;}
     /*.list-item div:hover{border:solid thin #ddd;background-color: #eee}*/
     .minutes-list{min-height: 200px;}
     #minutes-section{min-height: 354px;}
@@ -144,7 +131,7 @@
     .table tbody{ border-bottom: 1px solid #ddd}
     .empty-progress-bar{ color: #97C02C;}
     .due-tasks{background-color:#FF9B9B;}
-    .due-task-field{max-width: 36px;}
+    .due-task-field{max-width: 46px;}
 </style>
 {% endblock %}
 
