@@ -9,11 +9,11 @@
 {% block menu_content %}
     <div id="minutes-processor-container" class="">
         <div id="template-list" class="modal fade"> <!--  -->
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>{% trans 'Seleccionar plantilla' %}</h3>
+                        <h4 class="modal-title">{% trans 'Seleccionar plantilla' %}</h4>
                     </div>
                     <div class="modal-body">
                         <span>{% trans 'Selecciona una plantilla' %}:</span>
@@ -44,8 +44,8 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <a href="#" class="btn" id="close-template-list">Cerrar</a>
-                        <a id="change-template" href="#" class="btn btn-info">Aplicar Plantilla</a>
+                        <a href="#" class="btn" id="close-template-list">{% trans 'Cerrar' %}</a>
+                        <a id="change-template" href="#" class="btn btn-info">{% trans 'Aplicar Plantilla' %}</a>
                     </div>
                 </div>
             </div>
@@ -54,16 +54,16 @@
             {% if minutes_saved.error %}
                 <div class="alert alert-error">
                     {%if minutes_saved.error == "e0"%}
-                        Error, el formulario no es valido
+                        {% trans 'Error, el formulario no es valido' %}
                     {%endif%}
                     {%if minutes_saved.error == "e1"%}
-                        Error, al menos un (1) miembro debe ser seleccionado
+                        {% trans 'Error, al menos un (1) miembro debe ser seleccionado' %}
                     {%endif%}
                     {%if minutes_saved.error == "e2"%}
-                        Error, este grupo tiene un acta con el mismo c&oacute;digo
+                        {% trans 'Error, este grupo tiene un acta con el mismo código' %}
                     {%endif%}
                     {%if minutes_saved.error == "e3"%}
-                        Ha ocurrido un error, intenta de nuevo mas tarde.
+                        {% trans 'Ha ocurrido un error, intenta de nuevo mas tarde.' %}
                     {%endif%}
                 </div>
             {% endif %}
@@ -164,8 +164,12 @@
             $("#save-new-minutes").on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(isThereAprobers(jQuery.Event("click"))){
-                    $("#form-new-minutes").submit();
+                if(isThereAprobers(e)){
+                    if(isThereAttendees(e)){
+                        $("#form-new-minutes").submit();
+                    }else{
+                        setAlertMessage("{% trans 'Sin asistentes?' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como asistente de la reunión' %}");
+                    }
                 }else{
                     setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}");
                 }

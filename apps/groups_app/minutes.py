@@ -596,7 +596,7 @@ def setRolForMinute(request, slug_group):
                     print "no hay relacion"
                     # save Error log
             else:
-                error = _("No tienes permiso para hacer eso, Por favor recarga la página")
+                error = _(u"No tienes permiso para hacer eso, Por favor recarga la página")
         except Exception, e:
             print "EROOOOOORRR", e
             error = _(u"Por favor recarga la página e intenta de nuevo.")

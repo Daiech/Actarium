@@ -34,20 +34,20 @@
 		</ul>
 	</li>
 	<li class="dropdown">
-		<a href="#" class="dropdown-toggle" id="dropdownEdit" data-toggle="dropdown">{% trans 'Edición' %}<span class="caret"></span>
+		<a href="#" class="dropdown-toggle" id="dropdownEdit" data-toggle="dropdown">{% trans 'Editar' %}<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownEdit">
 		    {% if is_secretary and not minutes.is_minute_full_signed%}
 		    <li role="presentation" data-placement="right" title="{% trans 'Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento' %}.">
-				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
+				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-file"></span> {% trans 'Contenido del Acta' %}</a>
 		    </li>
 		    {% else %}
 		    <li role="presentation" class="{%if minutes.is_minute_full_signed%}disabled{%endif%}" title="{%if minutes.is_minute_full_signed%}{% trans 'Esta acta ya no se puede editar' %}{%endif%}" data-placement="right">
-		    	<a role="menuitem" tabindex="-1" href="#" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
+		    	<a role="menuitem" tabindex="-1" href="#" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Contenido del Acta' %}</a>
 		    </li>
 			{%endif%}
 		    <li role="presentation" data-placement="right" title="{% trans 'Editar la lista de personas que deben aprobar esta acta' %}." class="">
-				<a role="menuitem" tabindex="-1" href="#" class="" id="btnEditCommission" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar comisión aprobatoria' %}</a>
+				<a role="menuitem" tabindex="-1" href="#" class="" id="btnEditCommission" ><span class="glyphicon glyphicon-ok"></span> {% trans 'Comisión aprobatoria' %}</a>
 		    </li>
 			<!-- <li role="presentation" data-placement="right" title="{% trans 'Revisa los cambios que ha tenido esta acta hasta el momento' %}">
 				<a role="menuitem" tabindex="-1" href="#" id="history" class="{% if not minutes_version %}{% endif %}"><span class="glyphicon glyphicon-th-list"></span> {% trans 'Veriones' %} ({{minutes_version|length}})</a>

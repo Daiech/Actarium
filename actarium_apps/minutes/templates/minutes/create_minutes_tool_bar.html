@@ -28,15 +28,15 @@
 	</li>
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" id="dropdownEdit" data-toggle="dropdown">
-			{% trans 'Edición' %}
+			{% trans 'Editar' %}
 		<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownEdit">
-		    {% if is_secretary and not minutes.is_minute_full_signed%}
+		    {% if is_secretary and not minutes.is_minute_full_signed %}
 		    <li role="presentation" data-placement="right" title="{% trans 'Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento' %}.">
-				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar Acta' %}</a>
+				<a role="menuitem" tabindex="-1" href="#" class="" id="minutes-edit" ><span class="glyphicon glyphicon-file"></span> {% trans 'Contenido del Acta' %}</a>
 		    </li>
-			{%endif%}
+			{% endif %}
 			<li role="presentation" >
 				<a role="presentation" data-placement="right" href="#"  data-toggle="modal" data-target="#template-list">
 				<span class="glyphicon glyphicon-list-alt"></span> {% trans 'Cambiar Plantilla' %}</a>

@@ -88,8 +88,14 @@ function setApprove(e){
 	);
 }
 function isThereAprobers(e){
-	var approvers = $(".approver").filter(':checked');
-	if (approvers.length == 0){
+	return is_one_selected(e, ".approver");
+}
+function isThereAttendees(e){
+	return is_one_selected(e, ".attendees");
+}
+function is_one_selected (e, elem) {
+	var checkbox = $(elem).filter(':checked');
+	if (checkbox.length == 0){
 		e.preventDefault();
 		e.stopPropagation();
 		return false;

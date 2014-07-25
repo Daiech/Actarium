@@ -167,13 +167,13 @@
 						<td class="t-a-c">
 							{% if not commission_is_editing %}
 							<label for="assistant{{ m.id }}">
-								<input class ="set-role" id="assistant{{ m.id }}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{ m.id }}" {% if m.role.is_assistant %}checked{% endif %}>
+								<input class ="set-role attendees" id="assistant{{ m.id }}" type="checkbox" data-role="3" data-role-name="Asistente" data-uid="{{ m.id }}" {% if m.role.is_assistant %}checked{% endif %}>
 							</label>
 							{% else %}
 								{% if m.role.is_assistant %}<i class="glyphicon glyphicon-ok gray"></i>{% endif %}
 							{% endif %}
 						</td>
-						<td class="t-a-c popover-element" data-toggle="popover" data-container="body" data-placement="left" data-content="{% if not m.is_active %}Este miembro es virtual, nunca ha accedido a Actarium. Solo los miembros activos pueden ser parte de la comisión aprobatoria.{% endif %}">
+						<td class="t-a-c popover-element" data-toggle="popover" data-container="body" data-placement="left" data-content="{% if not m.is_active %}{% endverbatim %}{% trans 'Este miembro es virtual, nunca ha accedido a Actarium. Solo los miembros activos pueden ser parte de la comisión aprobatoria.' %}{% verbatim %}{% endif %}">
 							<label for="approver{{ m.id }}">
 								<input class ="set-role approver" id="approver{{ m.id }}" type="checkbox" data-role="2" data-role-name="Aprobador" data-uid="{{ m.id }}" {% if not m.is_active %}disabled{% else %}{% if m.role.is_approver %}checked{% endif %}{% endif %}>
 							</label>
@@ -195,7 +195,7 @@
 		{% verbatim %}{% if commission_is_editing %}{% endverbatim %}
 		<div class="btn-send-notification">
 			<a href="#" class="btn btn-cancel">{% trans 'Cerrar' %}</a> 
-			<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-send"></span> {% trans 'Guardar y notificar' %}</button>
+			<button class="btn btn-success" type="button"><span class="glyphicon glyphicon-send"></span> {% trans 'Notificar cambios' %}</button>
 		</div>{% verbatim %}{% endif %}{% endverbatim %}
 	</div>
 </script>
