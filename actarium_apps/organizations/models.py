@@ -160,6 +160,9 @@ class Groups(models.Model):
         """Calculate from relations"""
         return rel_user_group.objects.filter(id_group=self).count()
     
+    def get_num_minutes(self):
+        return self.minutes_id_group.count()
+    
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.organization)
     

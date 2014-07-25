@@ -732,9 +732,7 @@ def getSignersList(m_signers):
 
 @login_required(login_url='/account/login')
 def newMinutes(request, slug_group, id_reunion, slug_template):
-    '''
-    This function creates a minutes with the form for this.
-    '''
+    '''This function creates a minutes with the form for this.'''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
     group = Groups.objects.get_group(slug=slug_group)
 

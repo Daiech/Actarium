@@ -8,48 +8,7 @@
 
 {% block menu_content %}
     <div id="minutes-processor-container" class="">
-        <div id="template-list" class="modal fade"> <!--  -->
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">{% trans 'Seleccionar plantilla' %}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <span>{% trans 'Selecciona una plantilla' %}:</span>
-                        <ul class="list-unstyled">
-                            {% for template in list_templates %}
-                            <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
-                                <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
-                                    <a href="{{ template.slug }}" style="width:90%">{{ template.name }}</a>
-                                    <div class="template-thumbnail" data-href="{{ template.slug }}">
-                                        <img src="{{STATIC_PREFIX}}img/groups/{{template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
-                                    </div>
-                                </div>
-                            </li>
-                            {% endfor %}
-                            {% for template in list_private_templates %}
-                            <li class="template-item {%ifequal slug_template template.id_template.slug%}template-item-selected{%endifequal%}">
-                                <div class="template-item-child {%ifequal slug_template template.id_template.slug%}template-item-child-selected{%endifequal%}">
-                                    <a href="{{ template.id_template.slug }}" class="">
-                                        {{ template.id_template.name }}
-                                        <span style="font-size:10px;" class="label label-info">{% trans 'Pro' %}</span>
-                                    </a>
-                                    <div class="template-thumbnail" data-href="{{ template.id_template.slug }}">
-                                        <img src="{{STATIC_PREFIX}}img/groups/{{template.id_template.slug}}-template.jpg" alt="Plantilla B&aacute;sica">
-                                    </div>
-                                </div>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#" class="btn" id="close-template-list">{% trans 'Cerrar' %}</a>
-                        <a id="change-template" href="#" class="btn btn-info">{% trans 'Aplicar Plantilla' %}</a>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- close template-list -->
+        {% include "minutes/change_template_modal.html" %}
         <div id="minutes-container">
             {% if minutes_saved.error %}
                 <div class="alert alert-error">
@@ -106,7 +65,7 @@
 
         #template-list{}
         /*#template-list ul{display:inline-table;width: 100%}*/
-        #template-list ul li{border:solid thin #ccc;display:inline-block;font-size: 14px;margin-bottom:5px;text-align: center; width: 167px;}
+        #template-list ul li{border:solid thin #ccc;display:inline-block;font-size: 14px;margin-bottom:5px;text-align: center; width: 167px;margin-right: 2px;}
         #template-list ul li a{display: inline-block;}
         .template-item{position: relative;}
         .template-item-child{border: solid thin white; padding: 5px;}
@@ -177,6 +136,11 @@
             $("#form-new-minutes").on("click", function (e) {
                 e.preventDefault();
             });
+
+            if (hasHash("#select-template")){
+                $("#template-list").modal("show");
+            }
+
             // moment().format('YYYY-MM-DD h:mm a');
             dp = $('.date-pick').datetimepicker({
                 format: 'YYYY-MM-DD h:mm a',
@@ -200,10 +164,11 @@
                 width : "100%",
                 content_css : "{{STATIC_PREFIX}}js/vendor/tiny_mce/themes/simple/skins/default/editorstyles.css",
              });
-            // $("#template-list").modal("show");
+            
             $("#close-template-list").on("click",function(e){
                 e.preventDefault();
                 $("#template-list").modal("hide");
+                window.location.hash = "";
             })
 
             function setTemplateSelectedColors (elem) {
