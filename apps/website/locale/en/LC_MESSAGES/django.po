@@ -2,51 +2,51 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-15 15:08-0500\n"
+"POT-Creation-Date: 2014-07-25 17:35-0500\n"
 "PO-Revision-Date: 2014-05-15 15:11-0500\n"
 "Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: views.py:70
+#: views.py:82
 msgid "General"
 msgstr "General"
 
-#: views.py:72
+#: views.py:84
 msgid "Sugerencia"
 msgstr "Suggestion"
 
-#: views.py:74
+#: views.py:86
 msgid "Error"
 msgstr "Error"
 
-#: views.py:76
+#: views.py:88
 msgid "Pregunta"
 msgstr "Question"
 
-#: views.py:78
+#: views.py:90
 msgid "No definido"
 msgstr "Not defined"
 
-#: views.py:87
+#: views.py:99
 msgid "Correo invalido"
 msgstr "Email sent"
 
-#: views.py:150
+#: views.py:163
 msgid "Políticas de privacidad"
 msgstr "Privacy Policy"
 
-#: views.py:161
+#: views.py:174
 msgid "Términos y condiciones"
 msgstr "Terms and conditions"
 
@@ -85,14 +85,14 @@ msgstr "Twitter"
 msgid "Todos los derechos reservados"
 msgstr "All rights reserved"
 
-#: templates/website/footer.html:24 templates/website/public_footer.html:37
+#: templates/website/footer.html:24
 #, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
-"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
+"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
-"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
+"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/help.html:3
 msgid "Ayuda"
@@ -112,8 +112,7 @@ msgstr "Questions and Answers"
 
 #: templates/website/landing.html:3
 msgid ""
-"Actarium - El espacio más cómodo para registrar el resultado de tus "
-"reuniones"
+"Actarium - El espacio más cómodo para registrar el resultado de tus reuniones"
 msgstr ""
 "Actarium - The most convenient place to record the results of your meetings"
 
@@ -155,12 +154,11 @@ msgstr "Password (Confirmation)"
 #, python-format
 msgid ""
 "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
-"uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "
-"target=\"_blank\">Pol&iacute;ticas de privacidad</a>"
+"uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Pol&iacute;"
+"ticas de privacidad</a>"
 msgstr ""
-"I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of "
-"Use</a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy "
-"Policy</a>"
+"I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of Use</"
+"a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy Policy</a>"
 
 #: templates/website/landing.html:31
 msgid "Registrarme"
@@ -194,15 +192,15 @@ msgstr "Login with"
 msgid "tus actas en un solo lugar"
 msgstr "Your Minutes only in a place"
 
-#: templates/website/landing.html:120
+#: templates/website/landing.html:108
 msgid "¿Beneficios? mucho m&aacute;s..."
 msgstr "Benefits? much more..."
 
-#: templates/website/landing.html:133
+#: templates/website/landing.html:121
 msgid "Bolsa de Plantillas"
 msgstr "Bag Templates"
 
-#: templates/website/landing.html:134
+#: templates/website/landing.html:122
 msgid ""
 "Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, "
 "además cree sus propias plantillas!"
@@ -210,23 +208,23 @@ msgstr ""
 "Choose minutes templates to accelerate your processes and save time, also "
 "create your own templates!"
 
-#: templates/website/landing.html:142
+#: templates/website/landing.html:130
 msgid "Aprobación inmediata de actas"
 msgstr "Instant approval of minutes"
 
-#: templates/website/landing.html:143
+#: templates/website/landing.html:131
 msgid ""
-"Después de redactar un acta, inmediatamente la puede compartir con su equipo"
-" de trabajo para ser aprobada o corregida."
+"Después de redactar un acta, inmediatamente la puede compartir con su equipo "
+"de trabajo para ser aprobada o corregida."
 msgstr ""
 "After writing the minutes, immediately can share with your team to be "
 "approved or corrected."
 
-#: templates/website/landing.html:151
+#: templates/website/landing.html:139
 msgid "Acceda desde cualquier dispositivo!"
 msgstr "Access from any device!"
 
-#: templates/website/landing.html:152
+#: templates/website/landing.html:140
 msgid ""
 "En cualquier momento que necesite registrar sus decisiones de reuniones "
 "informales, reuniones imprevistas que se presentan en cualquier sitio puede "
@@ -236,11 +234,11 @@ msgstr ""
 "meetings that occur at any site can create minutes from phones, tablets, "
 "computers."
 
-#: templates/website/landing.html:162
+#: templates/website/landing.html:150
 msgid "Grabación de actas (muy pronto)"
 msgstr "Recording of minutes (coming soon)"
 
-#: templates/website/landing.html:163
+#: templates/website/landing.html:151
 msgid ""
 "Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos "
 "tomados, además adjunte las grabaciones si lo desea en las actas."
@@ -248,35 +246,35 @@ msgstr ""
 "Record audio of your meetings to have a better support the decisions taken, "
 "as well attach if desired recordings in the minutes."
 
-#: templates/website/landing.html:171
+#: templates/website/landing.html:159
 msgid "Integración con Google (muy pronto)"
 msgstr "Google integrations (coming soon)"
 
-#: templates/website/landing.html:172
+#: templates/website/landing.html:160
 msgid ""
 "Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
 "o simplemente inicia sesión con tu cuenta de Google)"
 msgstr ""
-"Connect with business management services. (Calendar, Drive, Gmail or simply"
-" sign in with your Google Account)"
+"Connect with business management services. (Calendar, Drive, Gmail or simply "
+"sign in with your Google Account)"
 
-#: templates/website/landing.html:180
+#: templates/website/landing.html:168
 msgid "Local storage (muy pronto)"
 msgstr "Local storage (coming soon)"
 
-#: templates/website/landing.html:181
+#: templates/website/landing.html:169
 msgid "Almacena datos en el navegador sin necesidad de internet."
 msgstr "Stores data in the browser without internet."
 
-#: templates/website/landing.html:189
+#: templates/website/landing.html:177
 msgid "Aliados"
 msgstr "Partners"
 
-#: templates/website/landing.html:346
+#: templates/website/landing.html:335
 msgid "Idioma no soportado"
 msgstr "Language not supported"
 
-#: templates/website/landing.html:347
+#: templates/website/landing.html:336
 msgid ""
 "Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
 "para recibir actualizaciones de nuestra plataforma"
@@ -287,6 +285,27 @@ msgstr ""
 #: templates/website/layout_landing.html:12
 msgid "El espacio más cómodo para registrar el resultado de sus reuniones"
 msgstr "The most convenient place to record the results of your meetings"
+
+#: templates/website/num_users.html:3
+msgid "Usuarios"
+msgstr ""
+
+#: templates/website/num_users.html:13
+#, fuzzy
+msgid "Total de usuarios"
+msgstr "Username"
+
+#: templates/website/num_users.html:23
+msgid "Usuarios activos"
+msgstr ""
+
+#: templates/website/num_users.html:33
+msgid "Usuarios inactivos"
+msgstr ""
+
+#: templates/website/num_users.html:49
+msgid "Cupos pagados"
+msgstr ""
 
 #: templates/website/pricing.html:8
 msgid "Costo por miembro en una organización"
@@ -347,24 +366,42 @@ msgid "El tiempo mínimo de compra es de %(MIN_MONTHLY_PAYMENT)s meses"
 msgstr "The minimum purchase is %(MIN_MONTHLY_PAYMENT)s months "
 
 #: templates/website/pricing.html:58
-msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
+msgid ""
+" Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
 msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
 
-#: templates/website/pricing.html:160
+#: templates/website/pricing.html:158
 msgid "miembros"
 msgstr "members"
 
-#: templates/website/pricing.html:161
+#: templates/website/pricing.html:159
 msgid "mes/miembro"
 msgstr "month/member"
 
-#: templates/website/pricing.html:162
+#: templates/website/pricing.html:160
 msgid "a"
 msgstr "to"
 
-#: templates/website/pricing.html:163
+#: templates/website/pricing.html:161
 msgid "Suscribirse"
 msgstr "Subscribe"
+
+#: templates/website/public_footer.html:37
+#, fuzzy, python-format
+msgid ""
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
+"\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
+msgstr ""
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
+"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+
+#: templates/website/public_top_bar.html:22
+msgid "Inicia sesión"
+msgstr "Login"
+
+#: templates/website/public_top_bar.html:23
+msgid "Registrate gratis"
+msgstr "Sign Up"
 
 #: templates/website/topBar_landing.html:40
 msgid "Editar configuraci&oacute;n"
@@ -394,12 +431,6 @@ msgstr "See all"
 #: templates/website/topBar_landing.html:69
 msgid "Crear grupo"
 msgstr "Create group"
-
-#~ msgid "Inicia sesión"
-#~ msgstr "Login"
-
-#~ msgid "Registrate gratis"
-#~ msgstr "Sign Up"
 
 #~ msgid ""
 #~ "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones"

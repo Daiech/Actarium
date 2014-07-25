@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 20:12-0500\n"
+"POT-Creation-Date: 2014-07-25 17:35-0500\n"
 "PO-Revision-Date: 2014-05-14 20:16-0500\n"
 "Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: forms.py:10
@@ -50,61 +50,66 @@ msgstr "Not choose to keep the current"
 msgid "No puedes usar este nombre para tu organización."
 msgstr "You can not use this name for your organization."
 
-#: models.py:125 models.py:200
+#: models.py:146 models.py:227
 msgid "Nombre"
 msgstr "Name"
 
-#: models.py:126
+#: models.py:147
 msgid "Slug"
 msgstr "Slug"
 
-#: models.py:128
+#: models.py:149
 msgid "Imagen"
 msgstr "Image"
 
-#: models.py:199
+#: models.py:226
 msgid "Código"
 msgstr "Code"
 
-#: models.py:201
+#: models.py:228
 msgid "Descripción"
 msgstr "Description"
 
-#: views_ajax.py:81 views_ajax.py:117 views_ajax.py:143
+#: views_ajax.py:82 views_ajax.py:118
 msgid "No tienes permiso para agregar usuarios."
 msgstr "You can't add users"
 
-#: views_ajax.py:108
+#: views_ajax.py:109
 msgid "ahora es administrador de la organización."
 msgstr "now is organization admin."
 
-#: views_ajax.py:111
+#: views_ajax.py:112
 msgid "ya no podrá administrar la organización."
 msgstr "will not admin the organization."
 
-#: views_ajax.py:113
+#: views_ajax.py:114
 msgid "Este usuario no pertenece al grupo"
 msgstr "This user belongs to the group"
 
-#: views_ajax.py:115
+#: views_ajax.py:116
 msgid ""
 "Ocurrió un error extraño, por favor recargue la página e intente de nuevo."
 msgstr "Strange error occured, please refresh and try again."
 
-#: views_ajax.py:137
+#: views_ajax.py:144
 msgid "ya no podrá acceder a la organización."
 msgstr "will not access to the organization"
 
-#: views_ajax.py:139
+#: views_ajax.py:147
 msgid "Este usuario no pertenece a la organización"
 msgstr "This user belongs to the organization"
 
-#: views_ajax.py:141
+#: views_ajax.py:149
 msgid ""
 "Faltan variables para realizar la operación, por favor recargue la página e "
 "intente de nuevo."
 msgstr ""
 "Missing variables to perform the operation, please refresh and try again."
+
+#: views_ajax.py:151
+#, fuzzy
+msgid "No tienes permiso para eliminar miembros."
+msgstr "You can't add users"
 
 #: templates/organizations/create_org.html:3
 #: templates/organizations/create_org.html:11
@@ -130,8 +135,8 @@ msgid ""
 "Crea una organización trial, puedes invitar a %(members)s miembro%(mem)s y "
 "probar los beneficios de Actarium gratis por %(months)s mes%(mon)s."
 msgstr ""
-"Create a trial organization, you can invite to %(members)s member%(mem)s and"
-" test the benefits of free Actarium for %(months)s month%(mon)s."
+"Create a trial organization, you can invite to %(members)s member%(mem)s and "
+"test the benefits of free Actarium for %(months)s month%(mon)s."
 
 #: templates/organizations/create_org.html:30
 #: templates/organizations/update_org.html:23
@@ -177,6 +182,7 @@ msgstr "Are you sure you want to archive this organization?"
 
 #: templates/organizations/delete_org.html:26
 #: templates/organizations/form_org.html:7
+#: templates/organizations/team_org.html:44
 msgid "Cancelar"
 msgstr "Cancel"
 
@@ -232,6 +238,7 @@ msgstr "Groups"
 
 #: templates/organizations/menu.html:25
 #: templates/organizations/profile_org.html:21
+#: templates/organizations/team_org.html:60
 msgid "Miembros"
 msgstr "Members"
 
@@ -248,6 +255,8 @@ msgid "Información de organización"
 msgstr "Information organization "
 
 #: templates/organizations/profile_org.html:22
+#: templates/organizations/team_org.html:54
+#: templates/organizations/team_org.html:61
 msgid "de"
 msgstr "of"
 
@@ -282,63 +291,84 @@ msgid ""
 "trabajo."
 msgstr "Organizations allow you to have better control of work teams."
 
-#: templates/organizations/team_org.html:30
+#: templates/organizations/team_org.html:32
+#: templates/organizations/team_org.html:106
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/organizations/team_org.html:35
+#, fuzzy
+msgid "Al eliminar un usuario de la organización se elimina de:"
+msgstr "Member removed from organization"
+
+#: templates/organizations/team_org.html:37
+msgid ""
+"Todas las listas de comisión aprobatoria a las que pertenece pero que aún no "
+"ha aprobado."
+msgstr ""
+
+#: templates/organizations/team_org.html:38
+msgid "Todos los grupos a los que pertenece."
+msgstr ""
+
+#: templates/organizations/team_org.html:41
+msgid "Seguro que desea eliminar a"
+msgstr "Are you sure to want remove to"
+
+#: templates/organizations/team_org.html:45
+#, fuzzy
+msgid "Si, Eliminar"
+msgstr "Delete"
+
+#: templates/organizations/team_org.html:53
 #, python-format
 msgid "Miembros de %(n)s"
 msgstr "Members of %(n)s"
 
-#: templates/organizations/team_org.html:37
+#: templates/organizations/team_org.html:75
 msgid "Filtrar usuarios"
 msgstr "Filter members"
 
-#: templates/organizations/team_org.html:44
+#: templates/organizations/team_org.html:81
 msgid ""
-"Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando"
-" esté disponible."
+"Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando "
+"esté disponible."
 msgstr ""
 
-#: templates/organizations/team_org.html:44
+#: templates/organizations/team_org.html:81
 msgid "Agregar miembro"
 msgstr "Add member"
 
-#: templates/organizations/team_org.html:63
+#: templates/organizations/team_org.html:100
 msgid "Ver grupos"
 msgstr "View groups"
 
-#: templates/organizations/team_org.html:66
+#: templates/organizations/team_org.html:103
 msgid "Administrador"
 msgstr "Administrator"
 
-#: templates/organizations/team_org.html:69
-msgid "Eliminar"
-msgstr "Delete"
-
-#: templates/organizations/team_org.html:73
+#: templates/organizations/team_org.html:110
 msgid "Miembro administrador"
 msgstr "Administrator member"
 
-#: templates/organizations/team_org.html:75
+#: templates/organizations/team_org.html:112
 msgid "Miembro normal"
 msgstr "Normal member"
 
-#: templates/organizations/team_org.html:120
+#: templates/organizations/team_org.html:163
 msgid "Grupos de "
 msgstr "Groups of "
 
-#: templates/organizations/team_org.html:139
-#: templates/organizations/team_org.html:151
+#: templates/organizations/team_org.html:182
+#: templates/organizations/team_org.html:198
 msgid "Error"
 msgstr "Error"
 
-#: templates/organizations/team_org.html:142
+#: templates/organizations/team_org.html:185
 msgid "Rol cambiado"
 msgstr "Role changed"
 
-#: templates/organizations/team_org.html:148
-msgid "Seguro que desea eliminar a"
-msgstr "Are you sure to want remove to"
-
-#: templates/organizations/team_org.html:154
+#: templates/organizations/team_org.html:208
 msgid "Usuario eliminado de la organización"
 msgstr "Member removed from organization"
 

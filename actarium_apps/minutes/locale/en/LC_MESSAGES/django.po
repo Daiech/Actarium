@@ -1,0 +1,339 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-25 17:36-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/minutes/change_template_modal.html:7
+msgid "Seleccionar plantilla"
+msgstr ""
+
+#: templates/minutes/change_template_modal.html:10
+msgid "Selecciona una plantilla"
+msgstr ""
+
+#: templates/minutes/change_template_modal.html:27
+msgid "Pro"
+msgstr ""
+
+#: templates/minutes/change_template_modal.html:38
+msgid "Para abrir este diálogo click en:"
+msgstr ""
+
+#: templates/minutes/change_template_modal.html:38
+msgid "Editar/Cambiar plantilla"
+msgstr ""
+
+#: templates/minutes/change_template_modal.html:39
+#: templates/minutes/approving_commission/tpl.html:198
+msgid "Cerrar"
+msgstr ""
+
+#: templates/minutes/change_template_modal.html:40
+msgid "Aplicar Plantilla"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:16
+msgid "Error, el formulario no es valido"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:19
+msgid "Error, al menos un (1) miembro debe ser seleccionado"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:22
+msgid "Error, este grupo tiene un acta con el mismo código"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:25
+msgid "Ha ocurrido un error, intenta de nuevo mas tarde."
+msgstr ""
+
+#: templates/minutes/create_minutes.html:117
+msgid "Último código de Acta"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:130
+msgid "Sin asistentes?"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:130
+msgid ""
+"Es necesario que se defina por lo menos un miembro del equipo como asistente "
+"de la reunión"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:133
+msgid "Se necesta aprobador"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:133
+msgid ""
+"Es necesario que se defina por lo menos un miembro del equipo como aprobador "
+"del acta"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:194
+msgid "El espacio se cambiará por un guión"
+msgstr ""
+
+#: templates/minutes/create_minutes.html:197
+msgid "El último código de acta asignado es:"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:5
+#: templates/minutes/show_minutes_tool_bar.html:4
+msgid "Archivo"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:9
+#: templates/minutes/create_minutes_tool_bar.html:26
+#: templates/minutes/show_minutes_tool_bar.html:7
+#: templates/minutes/show_minutes_tool_bar.html:19
+#: templates/minutes/show_minutes_tool_bar.html:33
+msgid "Necesitas ser redactor para habilitar esta opci&oacute;n"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:9
+#: templates/minutes/show_minutes_tool_bar.html:7
+msgid "Nueva acta"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:12
+msgid "Los PDF se generan para actas aprobadas"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:12
+msgid "Descarga esta acta en PDF"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:16
+#: templates/minutes/show_minutes_tool_bar.html:14
+msgid "Descargar PDF"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:22
+#: templates/minutes/show_minutes_tool_bar.html:25
+#: templates/minutes/show_minutes_tool_bar.html:29
+msgid "Imprimir"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:26
+#: templates/minutes/show_minutes_tool_bar.html:33
+msgid "Volver al folder"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:31
+#: templates/minutes/show_minutes_tool_bar.html:37
+msgid "Editar"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:36
+msgid ""
+"Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:37
+#: templates/minutes/show_minutes_tool_bar.html:42
+#: templates/minutes/show_minutes_tool_bar.html:46
+msgid "Contenido del Acta"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:42
+msgid "Cambiar Plantilla"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:48
+#: templates/minutes/show_minutes_tool_bar.html:58
+msgid "Herramientas"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:54
+#: templates/minutes/show_minutes_tool_bar.html:63
+msgid "Comisión aprobatoria, Anotaciones"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:59
+msgid "Tareas"
+msgstr ""
+
+#: templates/minutes/create_minutes_tool_bar.html:66
+msgid "Guardar Acta"
+msgstr ""
+
+#: templates/minutes/show_minutes.html:12
+msgid ""
+"Historial de cambios: <span class=\"version-date\"></span>, por <span class="
+"\"version-creator\"></span>"
+msgstr ""
+
+#: templates/minutes/show_minutes.html:28
+msgid "Última modificación"
+msgstr ""
+
+#: templates/minutes/show_minutes.html:44
+msgid ""
+"No olvides configurar las márgenes y las opciones de encabezado y pie de "
+"página antes de imprimir."
+msgstr ""
+
+#: templates/minutes/show_minutes.html:74
+msgid "Seguro que desea editar esta Acta?"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:10
+msgid "Únicamente las actas aprobadas pueden descargase en PDF"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:20
+msgid "Subir acta"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:28
+msgid "Únicamente las actas aprobadas pueden imprimirse"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:41
+msgid "Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:45
+msgid "Esta acta ya no se puede editar"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:49
+msgid "Editar la lista de personas que deben aprobar esta acta"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:50
+msgid "Comisión aprobatoria"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:52
+msgid "Revisa los cambios que ha tenido esta acta hasta el momento"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:53
+msgid "Veriones"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:69
+msgid "Historial de cambios"
+msgstr ""
+
+#: templates/minutes/show_minutes_tool_bar.html:74
+msgid "Tareas de acta"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:11
+msgid "Listado de la comisión aprobatoria."
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:12
+msgid "Encargados de aprobar esta acta"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:17
+msgid "Tu voto"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:17
+msgid "Apruebas ésta Acta?"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:19
+msgid "Si, apruebo"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:22
+msgid "No, Necesita corrección"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:60
+msgid "Cualquier miembro del grupo puede escribir anotaciones sobre esta acta."
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:61
+msgid "Anotaciones"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:65
+msgid "Crear anotaci&oacute;n"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:68
+msgid "Crear nueva anotación"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:69
+msgid ""
+"Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una "
+"anotaci&oacute;n al redactor."
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:70
+msgid "Publicar"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:104
+msgid "Roles de la reunión para esta Acta:"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:106
+msgid "Presidente (opcional):"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:114
+msgid "Seleccione presidente"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:120
+msgid "Secretario (opcional):"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:127
+msgid "Seleccione secretario"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:139
+msgid "Lista de todos los miembros del grupo"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:139
+msgid "Miembros"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:143
+msgid "Asistentes: Personas que asistieron a la reunión"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:148
+msgid "Comisión aprobatoria: Personas encargadas de aprobar el acta"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:153
+msgid "Espacio de firma: Mostrar espacio para la firma de la persona"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:177
+msgid ""
+"Este miembro es virtual, nunca ha accedido a Actarium. Solo los miembros "
+"activos pueden ser parte de la comisión aprobatoria."
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:199
+msgid "Notificar cambios"
+msgstr ""

@@ -1,0 +1,264 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-25 17:41-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: managers.py:43
+msgid "Pedido realizado Exitosamente"
+msgstr ""
+
+#: managers.py:46
+msgid "Error Creando objeto OrderItems"
+msgstr ""
+
+#: managers.py:49
+msgid "No Status"
+msgstr ""
+
+#: managers.py:51
+msgid "No customer"
+msgstr ""
+
+#: managers.py:53
+msgid "No customer services"
+msgstr ""
+
+#: models.py:22 models.py:34 models.py:46 models.py:61 models.py:76
+msgid "Código"
+msgstr ""
+
+#: models.py:23 models.py:35 models.py:47 models.py:62 models.py:77
+#: models.py:150
+msgid "Nombre"
+msgstr ""
+
+#: models.py:24 models.py:48 models.py:63 models.py:78
+msgid "Descripción"
+msgstr ""
+
+#: models.py:79
+msgid "Precio por período"
+msgstr ""
+
+#: models.py:81
+msgid "Período"
+msgstr ""
+
+#: models.py:82
+msgid "Categoría"
+msgstr ""
+
+#: models.py:98 models.py:178
+msgid "Cantidad"
+msgstr ""
+
+#: models.py:99
+msgid "Fecha de vencimiento"
+msgstr ""
+
+#: models.py:137
+msgid "País"
+msgstr ""
+
+#: models.py:138
+msgid "Departamento"
+msgstr ""
+
+#: models.py:139
+msgid "Ciudad"
+msgstr ""
+
+#: models.py:151
+msgid "Teléfono"
+msgstr ""
+
+#: models.py:152
+msgid "Correo"
+msgstr ""
+
+#: models.py:154
+msgid "Dirección"
+msgstr ""
+
+#: models.py:166 templates/admin_orders.html:20
+msgid "Estado"
+msgstr ""
+
+#: models.py:167
+msgid "Cliente"
+msgstr ""
+
+#: models.py:179
+msgid "Número de periodos"
+msgstr ""
+
+#: models.py:180 templates/pricing.html:24
+msgid "Descuento"
+msgstr ""
+
+#: models.py:182
+msgid "Servicio"
+msgstr ""
+
+#: models.py:183
+msgid "Orden del cliente"
+msgstr ""
+
+#: models.py:184
+msgid "Servicio del cliente"
+msgstr ""
+
+#: views.py:50
+msgid "El método de pago seleccionado"
+msgstr ""
+
+#: views_ajax.py:45
+msgid "Modificado Correctamente"
+msgstr ""
+
+#: views_ajax.py:48
+msgid "Opcion no implementada, solo se puede actualizar la version trial"
+msgstr ""
+
+#: views_ajax.py:51
+msgid "No hay orden disponible"
+msgstr ""
+
+#: views_ajax.py:54
+msgid "No tiene permiso para realizar esta accion"
+msgstr ""
+
+#: templates/admin_orders.html:13
+msgid "Ordenes de servicio"
+msgstr ""
+
+#: templates/admin_orders.html:19
+msgid "Orden"
+msgstr ""
+
+#: templates/admin_orders.html:21
+msgid "Usuario"
+msgstr ""
+
+#: templates/admin_orders.html:22
+msgid "Organizacion"
+msgstr ""
+
+#: templates/admin_orders.html:23
+msgid "# miembros"
+msgstr ""
+
+#: templates/admin_orders.html:24
+msgid "# meses"
+msgstr ""
+
+#: templates/admin_orders.html:25
+msgid "Total"
+msgstr ""
+
+#: templates/admin_orders.html:26
+msgid "Acciones"
+msgstr ""
+
+#: templates/admin_orders.html:45
+msgid "Aprobar"
+msgstr ""
+
+#: templates/admin_orders.html:48
+msgid "Rechazar"
+msgstr ""
+
+#: templates/pricing.html:3 templates/pricing.html.py:40
+msgid "Precios"
+msgstr ""
+
+#: templates/pricing.html:12
+msgid "Actualizar paquete"
+msgstr ""
+
+#: templates/pricing.html:20
+msgid "Resumen"
+msgstr ""
+
+#: templates/pricing.html:22
+msgid "Precio por mes"
+msgstr ""
+
+#: templates/pricing.html:23
+msgid "Sub total"
+msgstr ""
+
+#: templates/pricing.html:25
+msgid "IVA"
+msgstr ""
+
+#: templates/pricing.html:26
+msgid "Total a pagar"
+msgstr ""
+
+#: templates/pricing.html:30
+msgid "Cerrar"
+msgstr ""
+
+#: templates/pricing.html:31
+msgid "Actualizar"
+msgstr ""
+
+#: templates/pricing.html:44
+msgid "Volver"
+msgstr ""
+
+#: templates/pricing.html:48
+msgid "Listado de los servicios disponibles"
+msgstr ""
+
+#: templates/pricing.html:53
+msgid "Paquetes predefinidos"
+msgstr ""
+
+#: templates/pricing.html:59
+msgid "Opci&oacute;n"
+msgstr ""
+
+#: templates/pricing.html:60
+msgid "# Mimembros"
+msgstr ""
+
+#: templates/pricing.html:61 templates/pricing.html.py:104
+msgid "Precio"
+msgstr ""
+
+#: templates/pricing.html:62 templates/pricing.html.py:75
+#: templates/pricing.html:85
+msgid "Adquirir"
+msgstr ""
+
+#: templates/pricing.html:82
+msgid "N&uacute;mero de miembros"
+msgstr ""
+
+#: templates/pricing.html:96
+msgid "Listado de precios por miembros"
+msgstr ""
+
+#: templates/pricing.html:102
+msgid "Name"
+msgstr ""
+
+#: templates/pricing.html:103
+msgid "Description"
+msgstr ""
