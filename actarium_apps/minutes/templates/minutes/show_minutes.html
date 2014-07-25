@@ -31,6 +31,9 @@
 			$("#tasksPanel").on("click", loadTasksPanel);
 			
 			$("#commissionPanel").click(); //open the commission approving panel
+			if(hasHash("#show-tasks")){
+				$("#tasksPanel").click();
+			}
 			
 			{% if minutes.is_minute_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){

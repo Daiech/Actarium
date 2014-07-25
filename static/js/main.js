@@ -157,6 +157,14 @@ function goToByScroll(element, callback){// Scroll
         'slow', callback);
 }
 
+function hasHash(hash) {
+    if(window.location.hash && window.location.hash == hash){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 function getUrlVars() {
     var vars = {};

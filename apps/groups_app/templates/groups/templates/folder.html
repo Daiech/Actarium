@@ -32,35 +32,35 @@
                 <tbody>
                     {% for minute in minutes %}
                         {% if rel_user.is_admin or minute.rol.is_approver or minute.minutes.is_minute_full_signed %}
-                        <tr title="{% if minute.minutes.is_minute_full_signed %}{% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}{% else %}{% if minute.rol.is_approver %}{% trans 'Acta en revisión. Eres parte de la comisión aprobatoria' %}{% else %}{% trans 'Esta Acta aún no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}{% endif %}{%endif%}" class="list-item-minutes {%if minute.minutes.is_minute_full_signed%}user-active-l
+                        <tr class="list-item-minutes {%if minute.minutes.is_minute_full_signed%}user-active-l
                         {% else %}{%if minute.rol.is_approver%}user-pend-l{%else%}minute-no-approver-l{%endif%}{%endif%}">
-                            <td class="minutes-name">
+                            <td class="minutes-name" title="{% if minute.minutes.is_minute_full_signed %}{% trans 'Esta Acta ha sido aprobada y es visible a todo el grupo' %} {{ group.name }}{% else %}{% if minute.rol.is_approver %}{% trans 'Acta en revisión. Eres parte de la comisión aprobatoria' %}{% else %}{% trans 'Esta Acta aún no ha sido aprobada. Puedes visualizarla ya que eres administrador del grupo.' %}{% endif %}{%endif%}">
                                 <a class="list-item-next" href="{% url 'show_minute' group.slug minute.minutes.code %}" target="_blank">
                                     {{ minute.minutes.code }}
                                 </a>
                             </td>
-                            <td>
+                            <td title="{% trans 'Click para ver las tareas de esta acta' %}">
                                 {% if minute.minutes.get_total_tasks > 0 %}
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{minute.minutes.get_tasks_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{minute.minutes.get_tasks_progress}}%; background-color: #97C02C;">
-                                    {% if minute.minutes.get_total_tasks_done == 0%}
-                                        <span class="empty-progress-bar">0/{{minute.minutes.get_total_tasks}}</span>
-                                    {% else %}
-                                        {{minute.minutes.get_total_tasks_done}}/{{minute.minutes.get_total_tasks}}
-                                    {% endif %}
+                                <a href="{% url 'show_minute' group.slug minute.minutes.code %}#show-tasks" target="_blank">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{minute.minutes.get_tasks_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{minute.minutes.get_tasks_progress}}%; background-color: #97C02C;">
+                                        {% if minute.minutes.get_total_tasks_done == 0%}
+                                            <span class="empty-progress-bar">0/{{minute.minutes.get_total_tasks}}</span>
+                                        {% else %}
+                                            {{minute.minutes.get_total_tasks_done}}/{{minute.minutes.get_total_tasks}}
+                                        {% endif %}
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                                 {% endif %}
                             </td>
-                            <td class="due-task-field text-center">
+                            <td class="due-task-field text-center title" title="{% trans 'Tareas vencidas de esta acta:' %} {{ minute.minutes.get_total_tasks_due }}">
                                 {% if minute.minutes.get_total_tasks_due > 0 %}
                                     <span class="badge due-tasks">{{minute.minutes.get_total_tasks_due}}</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <span > 
-                                    {{minute.minutes.date_created|date:"j \d\e M \d\e Y"}} 
-                                </span>
+                                <span>{{minute.minutes.date_created|date:"j \d\e M \d\e Y"}}</span>
                             </td>
                             <td class="hidden-xs">
                                 <span  > 
