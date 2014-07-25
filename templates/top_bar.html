@@ -1,5 +1,4 @@
-{% load gravatartag %}
-{% load i18n %}
+{% load gravatartag i18n %}
 <div id="topbar">
     <a href="/" id="topbar-btn-logo">
         <div class="topbar-logo-center"><div id="logo-actarium-p" class="sprites"></div></div>
@@ -30,56 +29,7 @@
         </a>   
     </div>
     {% else %}
-    <div id="topbar-menu" class="dib">
-        <span class="suspension-points" style="display:none">...</span>
-        <div id="account-menu" class="btn-group pull-right">
-            <div id="log-sup" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="Configuraci&oacute;n de cuenta">
-                <span><img class="size22 avatar img-circle b" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" /></span>
-                <span class="dinline">
-                    {% if user.is_authenticated %}{{user.username}}{% else %}{% trans "Iniciar Sesi&oacute;n" %}{% endif %}
-                </span>
-                <span class="caret topbar-caret"></span>
-            </div>
-            <ul class="dropdown-menu">
-                <li class="current-user">
-                    <a href="/account">
-                        <div class="content-box">
-                            <img class="size32 avatar img-circle b" src="{{ user.email|showgravatar:'32'}}" alt="{{user.first_name}}" />
-                            <span class="fullname">{{user.first_name}} {{user.last_name}}</span>
-                            <small class="metadata">{% trans "Editar configuraci&oacute;n" %}</small>
-                        </div>
-                    </a>
-                </li>
-                <li><a href="/{{URL_PRIVACY}}">{% trans "Privacidad" %}</a></li>
-                <li><a id="menu-feed" href="/#feedback">{% trans "Comentarios" %}</a></li>
-                <li class="divider"></li>
-                <li><a href="/account/logout/">{% trans "Cerrar sesi&oacute;n" %}</a></li>
-            </ul>
-        </div>
-        <div id="groups-menu" class="btn-group pull-right">
-            <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" title="">
-                <span><img class="" src="/static/img/groups/default.jpg" alt='{% trans "Grupos" %}'  /> </span>
-                <span class="dinline"> {% trans "Grupos" %}</span> <span class="caret topbar-caret"></span>
-            </div>
-            <ul class="dropdown-menu">
-                {% for org in MY_ORGS %}
-                    <li role="presentation" class="dropdown-header">{{ org.name }}</li>
-                    {% for g in org.get_groups %}
-                    <li title="">
-                        <a class="group-link" href="{{ g.get_absolute_url }}">
-                            {{g.name|title}}
-                        {% if g.is_pro%}<span class="label label-info">Pro</span>{% endif %}
-                        </a>
-                    </li>
-                    {% endfor %}
-                    <!-- <li><a href="{{ org.get_absolute_url }}">{% trans 'Ver organización' %}</a></li> -->
-                <li class="divider"></li>
-                {% endfor %}
-                <li class="divider"></li>
-                <li><a href="{% url 'home' %}">{% trans "Ver todas mis organizaciones" %}</a></li>
-            </ul>
-        </div>
-    </div>
+    {% include "topbar_menus.html" %}
     {%endif%}
     <div id="ac-load"></div>
 </div>
