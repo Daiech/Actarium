@@ -421,7 +421,7 @@ msgstr ""
 #: templates/groups/templates/folder.html:7
 #: templates/groups/templates/folder.html:12
 #: templates/groups/templates/home.html:7
-msgid "Necesitas ser redactor para habilitar esta opci&oacute;n"
+msgid "Necesitas ser redactor para habilitar esta opción"
 msgstr ""
 
 #: templates/groups/templates/folder.html:8

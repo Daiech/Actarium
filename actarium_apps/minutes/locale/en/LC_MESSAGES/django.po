@@ -2,338 +2,344 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-25 17:36-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-07-25 19:28-0500\n"
+"PO-Revision-Date: 2014-07-25 19:33-0500\n"
+"Last-Translator: Admin Actarium <maoaiz@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: templates/minutes/change_template_modal.html:7
 msgid "Seleccionar plantilla"
-msgstr ""
+msgstr "Select template"
 
 #: templates/minutes/change_template_modal.html:10
 msgid "Selecciona una plantilla"
-msgstr ""
+msgstr "Select a template"
 
 #: templates/minutes/change_template_modal.html:27
 msgid "Pro"
-msgstr ""
+msgstr "Pro"
 
 #: templates/minutes/change_template_modal.html:38
 msgid "Para abrir este diálogo click en:"
-msgstr ""
+msgstr "Open this dialog by clicking on:"
 
 #: templates/minutes/change_template_modal.html:38
 msgid "Editar/Cambiar plantilla"
-msgstr ""
+msgstr "Edit / Change Template"
 
 #: templates/minutes/change_template_modal.html:39
 #: templates/minutes/approving_commission/tpl.html:198
 msgid "Cerrar"
-msgstr ""
+msgstr "Close"
 
 #: templates/minutes/change_template_modal.html:40
 msgid "Aplicar Plantilla"
-msgstr ""
+msgstr "Apply template"
 
 #: templates/minutes/create_minutes.html:16
 msgid "Error, el formulario no es valido"
-msgstr ""
+msgstr "Error, invalid form"
 
 #: templates/minutes/create_minutes.html:19
 msgid "Error, al menos un (1) miembro debe ser seleccionado"
-msgstr ""
+msgstr "Error, at least one (1) member must be selected"
 
 #: templates/minutes/create_minutes.html:22
 msgid "Error, este grupo tiene un acta con el mismo código"
-msgstr ""
+msgstr "Error, this group has a minutes with the same code"
 
 #: templates/minutes/create_minutes.html:25
-msgid "Ha ocurrido un error, intenta de nuevo mas tarde."
-msgstr ""
+msgid "Ha ocurrido un error, intenta de nuevo más tarde."
+msgstr "An error has occurred, please try again later."
 
 #: templates/minutes/create_minutes.html:117
 msgid "Último código de Acta"
-msgstr ""
+msgstr "Last minutes code"
 
 #: templates/minutes/create_minutes.html:130
 msgid "Sin asistentes?"
-msgstr ""
+msgstr "Without assistants?"
 
 #: templates/minutes/create_minutes.html:130
 msgid ""
-"Es necesario que se defina por lo menos un miembro del equipo como asistente "
-"de la reunión"
-msgstr ""
+"Es necesario que se defina por lo menos un miembro del equipo como asistente"
+" de la reunión"
+msgstr "You need to define at least one team member as meeting attendee"
 
 #: templates/minutes/create_minutes.html:133
-msgid "Se necesta aprobador"
-msgstr ""
+msgid "Se necesita aprobador"
+msgstr "Required approver"
 
 #: templates/minutes/create_minutes.html:133
 msgid ""
-"Es necesario que se defina por lo menos un miembro del equipo como aprobador "
-"del acta"
-msgstr ""
+"Es necesario que se defina por lo menos un miembro del equipo como aprobador"
+" del acta"
+msgstr "You need to define at least one team member as approving the minutes"
 
 #: templates/minutes/create_minutes.html:194
 msgid "El espacio se cambiará por un guión"
-msgstr ""
+msgstr "The space will be changed by a dash"
 
 #: templates/minutes/create_minutes.html:197
 msgid "El último código de acta asignado es:"
-msgstr ""
+msgstr "last code of minutes:"
 
 #: templates/minutes/create_minutes_tool_bar.html:5
 #: templates/minutes/show_minutes_tool_bar.html:4
 msgid "Archivo"
-msgstr ""
+msgstr "File"
 
 #: templates/minutes/create_minutes_tool_bar.html:9
 #: templates/minutes/create_minutes_tool_bar.html:26
 #: templates/minutes/show_minutes_tool_bar.html:7
 #: templates/minutes/show_minutes_tool_bar.html:19
 #: templates/minutes/show_minutes_tool_bar.html:33
-msgid "Necesitas ser redactor para habilitar esta opci&oacute;n"
-msgstr ""
+msgid "Necesitas ser redactor para habilitar esta opción"
+msgstr "You need to be editor to enable this option"
 
 #: templates/minutes/create_minutes_tool_bar.html:9
 #: templates/minutes/show_minutes_tool_bar.html:7
 msgid "Nueva acta"
-msgstr ""
+msgstr "New minutes"
 
 #: templates/minutes/create_minutes_tool_bar.html:12
 msgid "Los PDF se generan para actas aprobadas"
-msgstr ""
+msgstr "The PDF is generated for approved minutes"
 
 #: templates/minutes/create_minutes_tool_bar.html:12
 msgid "Descarga esta acta en PDF"
-msgstr ""
+msgstr "Download this minutes in PDF"
 
 #: templates/minutes/create_minutes_tool_bar.html:16
 #: templates/minutes/show_minutes_tool_bar.html:14
 msgid "Descargar PDF"
-msgstr ""
+msgstr "Download PDF"
 
 #: templates/minutes/create_minutes_tool_bar.html:22
 #: templates/minutes/show_minutes_tool_bar.html:25
 #: templates/minutes/show_minutes_tool_bar.html:29
 msgid "Imprimir"
-msgstr ""
+msgstr "Print"
 
 #: templates/minutes/create_minutes_tool_bar.html:26
 #: templates/minutes/show_minutes_tool_bar.html:33
 msgid "Volver al folder"
-msgstr ""
+msgstr "Back to folder"
 
 #: templates/minutes/create_minutes_tool_bar.html:31
 #: templates/minutes/show_minutes_tool_bar.html:37
 msgid "Editar"
-msgstr ""
+msgstr "Edit"
 
 #: templates/minutes/create_minutes_tool_bar.html:36
 msgid ""
 "Como esta acta aún no ha sido aprobada puedes editarla en cualquier momento"
-msgstr ""
+msgstr "This minutes has not been approved, you could edit at any time."
 
 #: templates/minutes/create_minutes_tool_bar.html:37
 #: templates/minutes/show_minutes_tool_bar.html:42
 #: templates/minutes/show_minutes_tool_bar.html:46
 msgid "Contenido del Acta"
-msgstr ""
+msgstr "Minutes content"
 
 #: templates/minutes/create_minutes_tool_bar.html:42
 msgid "Cambiar Plantilla"
-msgstr ""
+msgstr "Change template"
 
 #: templates/minutes/create_minutes_tool_bar.html:48
-#: templates/minutes/show_minutes_tool_bar.html:58
+#: templates/minutes/show_minutes_tool_bar.html:55
 msgid "Herramientas"
-msgstr ""
+msgstr "Tools"
 
 #: templates/minutes/create_minutes_tool_bar.html:54
-#: templates/minutes/show_minutes_tool_bar.html:63
+#: templates/minutes/show_minutes_tool_bar.html:60
 msgid "Comisión aprobatoria, Anotaciones"
-msgstr ""
+msgstr "Approving Commission, Annotations"
 
 #: templates/minutes/create_minutes_tool_bar.html:59
 msgid "Tareas"
-msgstr ""
+msgstr "Tasks"
 
 #: templates/minutes/create_minutes_tool_bar.html:66
 msgid "Guardar Acta"
-msgstr ""
+msgstr "Save minutes"
 
 #: templates/minutes/show_minutes.html:12
 msgid ""
-"Historial de cambios: <span class=\"version-date\"></span>, por <span class="
-"\"version-creator\"></span>"
+"Historial de cambios: <span class=\"version-date\"></span>, por <span class"
+"=\"version-creator\"></span>"
 msgstr ""
+"Change History: <span class=\"version-date\"></span>, by <span class"
+"=\"version-creator\"></span>"
 
 #: templates/minutes/show_minutes.html:28
 msgid "Última modificación"
-msgstr ""
+msgstr "Last updated"
 
 #: templates/minutes/show_minutes.html:44
 msgid ""
 "No olvides configurar las márgenes y las opciones de encabezado y pie de "
 "página antes de imprimir."
 msgstr ""
+"Don't forget to set the margins and options to header and footer before "
+"printing."
 
 #: templates/minutes/show_minutes.html:74
 msgid "Seguro que desea editar esta Acta?"
-msgstr ""
+msgstr "Sure you want to edit this Minutes?"
 
 #: templates/minutes/show_minutes_tool_bar.html:10
 msgid "Únicamente las actas aprobadas pueden descargase en PDF"
-msgstr ""
+msgstr "Only approved minutes can be downloaded in PDF"
 
 #: templates/minutes/show_minutes_tool_bar.html:20
 msgid "Subir acta"
-msgstr ""
+msgstr "Upload minutes"
 
 #: templates/minutes/show_minutes_tool_bar.html:28
 msgid "Únicamente las actas aprobadas pueden imprimirse"
-msgstr ""
+msgstr "Only approved minutes can be printed"
 
 #: templates/minutes/show_minutes_tool_bar.html:41
-msgid "Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento"
-msgstr ""
+msgid ""
+"Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento"
+msgstr "This minutes has not been approved, you can edit at any time"
 
 #: templates/minutes/show_minutes_tool_bar.html:45
 msgid "Esta acta ya no se puede editar"
-msgstr ""
+msgstr "This minutes can no longer be edited"
 
 #: templates/minutes/show_minutes_tool_bar.html:49
 msgid "Editar la lista de personas que deben aprobar esta acta"
-msgstr ""
+msgstr "Edit the list of persons who must approve this minutes"
 
 #: templates/minutes/show_minutes_tool_bar.html:50
 msgid "Comisión aprobatoria"
-msgstr ""
+msgstr "Commission approving"
 
-#: templates/minutes/show_minutes_tool_bar.html:52
-msgid "Revisa los cambios que ha tenido esta acta hasta el momento"
-msgstr ""
-
-#: templates/minutes/show_minutes_tool_bar.html:53
-msgid "Veriones"
-msgstr ""
-
-#: templates/minutes/show_minutes_tool_bar.html:69
+#: templates/minutes/show_minutes_tool_bar.html:66
 msgid "Historial de cambios"
-msgstr ""
+msgstr "Change History"
 
-#: templates/minutes/show_minutes_tool_bar.html:74
+#: templates/minutes/show_minutes_tool_bar.html:71
 msgid "Tareas de acta"
-msgstr ""
+msgstr "Task minutes"
 
 #: templates/minutes/approving_commission/tpl.html:11
 msgid "Listado de la comisión aprobatoria."
-msgstr ""
+msgstr "List of commission approving."
 
 #: templates/minutes/approving_commission/tpl.html:12
 msgid "Encargados de aprobar esta acta"
-msgstr ""
+msgstr "Responsible for approving this minutes:"
 
 #: templates/minutes/approving_commission/tpl.html:17
 msgid "Tu voto"
-msgstr ""
+msgstr "Your vote"
 
 #: templates/minutes/approving_commission/tpl.html:17
 msgid "Apruebas ésta Acta?"
-msgstr ""
+msgstr "Do you approve this Minutes?"
 
 #: templates/minutes/approving_commission/tpl.html:19
 msgid "Si, apruebo"
-msgstr ""
+msgstr "Yes, I approve"
 
 #: templates/minutes/approving_commission/tpl.html:22
 msgid "No, Necesita corrección"
-msgstr ""
+msgstr "No, needs correction"
 
 #: templates/minutes/approving_commission/tpl.html:60
-msgid "Cualquier miembro del grupo puede escribir anotaciones sobre esta acta."
-msgstr ""
+msgid ""
+"Cualquier miembro del grupo puede escribir anotaciones sobre esta acta."
+msgstr "Any group member can write annotations on this minutes."
 
 #: templates/minutes/approving_commission/tpl.html:61
 msgid "Anotaciones"
-msgstr ""
+msgstr "Annotations"
 
 #: templates/minutes/approving_commission/tpl.html:65
-msgid "Crear anotaci&oacute;n"
-msgstr ""
+msgid "Crear anotación"
+msgstr "Create annotation"
 
 #: templates/minutes/approving_commission/tpl.html:68
 msgid "Crear nueva anotación"
-msgstr ""
+msgstr "Create new annotation"
 
 #: templates/minutes/approving_commission/tpl.html:69
 msgid ""
-"Si crees que algo debe mejorarse en esta acta, por favor env&iacute;ale una "
-"anotaci&oacute;n al redactor."
+"Si crees que algo debe mejorarse en esta acta, por favor envíale una "
+"anotación al redactor."
 msgstr ""
+"If you think something should be improved in the minutes, please send an "
+"annotation to the editor."
 
 #: templates/minutes/approving_commission/tpl.html:70
 msgid "Publicar"
-msgstr ""
+msgstr "Publish"
 
 #: templates/minutes/approving_commission/tpl.html:104
 msgid "Roles de la reunión para esta Acta:"
-msgstr ""
+msgstr "Roles of the meeting to this minutes:"
 
 #: templates/minutes/approving_commission/tpl.html:106
 msgid "Presidente (opcional):"
-msgstr ""
+msgstr "President (optional):"
 
 #: templates/minutes/approving_commission/tpl.html:114
 msgid "Seleccione presidente"
-msgstr ""
+msgstr "Select President:"
 
 #: templates/minutes/approving_commission/tpl.html:120
 msgid "Secretario (opcional):"
-msgstr ""
+msgstr "Secretary (optional):"
 
 #: templates/minutes/approving_commission/tpl.html:127
 msgid "Seleccione secretario"
-msgstr ""
+msgstr "Select Secretary:"
 
 #: templates/minutes/approving_commission/tpl.html:139
 msgid "Lista de todos los miembros del grupo"
-msgstr ""
+msgstr "List of all group members"
 
 #: templates/minutes/approving_commission/tpl.html:139
 msgid "Miembros"
-msgstr ""
+msgstr "Members"
 
 #: templates/minutes/approving_commission/tpl.html:143
 msgid "Asistentes: Personas que asistieron a la reunión"
-msgstr ""
+msgstr "Participants: People who attended the meeting"
 
 #: templates/minutes/approving_commission/tpl.html:148
 msgid "Comisión aprobatoria: Personas encargadas de aprobar el acta"
-msgstr ""
+msgstr "Commission approving: People responsible for approving the minutes"
 
 #: templates/minutes/approving_commission/tpl.html:153
 msgid "Espacio de firma: Mostrar espacio para la firma de la persona"
-msgstr ""
+msgstr "Signing Space: Show Space for signature of the person"
 
 #: templates/minutes/approving_commission/tpl.html:177
 msgid ""
 "Este miembro es virtual, nunca ha accedido a Actarium. Solo los miembros "
 "activos pueden ser parte de la comisión aprobatoria."
 msgstr ""
+"This member is virtual, has never acceded to Actarium. Only active members "
+"can be part of the commission approving."
 
 #: templates/minutes/approving_commission/tpl.html:199
 msgid "Notificar cambios"
-msgstr ""
+msgstr "Notify changes"
+
+#~ msgid "Revisa los cambios que ha tenido esta acta hasta el momento"
+#~ msgstr "Review the changes that have taken this minutes until the moment"

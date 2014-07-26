@@ -1,0 +1,233 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-25 17:57-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/account/complete_registration.html:3
+msgid "Confirmaci&oacute;n de cuenta"
+msgstr ""
+
+#: templates/account/complete_registration.html:8
+msgid "Configura tu perf&iacute;l"
+msgstr ""
+
+#: templates/account/complete_registration.html:20
+msgid "Omitir"
+msgstr ""
+
+#: templates/account/complete_registration.html:22
+msgid "Confirmar"
+msgstr ""
+
+#: templates/account/confirm_account_deleted.html:3
+msgid "Cuenta eliminada"
+msgstr ""
+
+#: templates/account/confirm_account_deleted.html:7
+msgid "Gracias por usar Actarium, todos tus datos han sido eliminados."
+msgstr ""
+
+#: templates/account/confirm_account_deleted.html:8
+msgid ""
+"Para nosotros es muy importante obtener retroalimentación de su parte para "
+"poder mejorar nuestras herramientas y nuestro servicio al cliente en cada "
+"momento. Por favor cuéntanos por qué eliminó su cuenta haciendo click <a id="
+"\"callFeed\" href=\"#\">aquí</a>"
+msgstr ""
+
+#: templates/account/delete_account.html:7
+#: templates/account/personal_data.html:65
+msgid "Eliminar cuenta"
+msgstr ""
+
+#: templates/account/delete_account.html:8
+msgid ""
+"\n"
+"\t<p>Si elimina su cuenta, TODA su información (incluyendo las actas que "
+"haya creado) se eliminarán.</p>\n"
+"\t<p>Este proceso no podrá revertirse después de hacer click en el botón "
+"\"Eliminar mi cuenta\".</p>\n"
+"\t"
+msgstr ""
+
+#: templates/account/delete_account.html:12
+msgid "¿Seguro que desea eliminar su cuenta?"
+msgstr ""
+
+#: templates/account/delete_account.html:17
+msgid "Eliminar mi cuenta"
+msgstr ""
+
+#: templates/account/delete_account.html:18
+msgid "Cancelar"
+msgstr ""
+
+#: templates/account/login.html:3 templates/account/login.html.py:7
+msgid "Iniciar Sesión"
+msgstr ""
+
+#: templates/account/login.html:8
+msgid ""
+"Ingresa tus datos de usuario para acceder a tu cuenta en <strong>Actarium</"
+"strong>"
+msgstr ""
+
+#: templates/account/login.html:21
+msgid "Registrarse"
+msgstr ""
+
+#: templates/account/login.html:22
+msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
+msgstr ""
+
+#: templates/account/newUser.html:3
+msgid "Registro"
+msgstr ""
+
+#: templates/account/newUser.html:6
+msgid "Registro de Usuario"
+msgstr ""
+
+#: templates/account/newUser.html:7
+msgid ""
+"Necesitamos identificarte para restringir tu contenido solo a las personas "
+"que tu desees."
+msgstr ""
+
+#: templates/account/personal_data.html:9
+msgid "Tus datos"
+msgstr ""
+
+#: templates/account/personal_data.html:12
+msgid "Cambiar imágen"
+msgstr ""
+
+#: templates/account/personal_data.html:14
+msgid ""
+"Agrega una foto a tu correro en <a href=\"http://gravatar.com/\">Gravatar."
+"com</a> y Actarium autom&aacute;ticamente har&aacute; uso de ella."
+msgstr ""
+
+#: templates/account/personal_data.html:20
+msgid "Actualizar Datos"
+msgstr ""
+
+#: templates/account/personal_data.html:26
+msgid "Los datos con * son de caracter obligatorio."
+msgstr ""
+
+#: templates/account/personal_data.html:29
+msgid "Qué son las cuentas asociadas?"
+msgstr ""
+
+#: templates/account/personal_data.html:31
+msgid "Cuantas asociadas"
+msgstr ""
+
+#: templates/account/personal_data.html:38
+msgid "Desconectar"
+msgstr ""
+
+#: templates/account/personal_data.html:41
+msgid "No tienes cuentas asociadas"
+msgstr ""
+
+#: templates/account/personal_data.html:45
+msgid "Conectate con"
+msgstr ""
+
+#: templates/account/personal_data.html:56
+msgid "No hay cuentas para asociar"
+msgstr ""
+
+#: templates/account/personal_data.html:62
+msgid "Eres miembro desde el"
+msgstr ""
+
+#: templates/account/personal_data.html:63
+msgid "Ultimo logueo"
+msgstr ""
+
+#: templates/account/personal_data.html:95
+msgid "Error al actualizar correo"
+msgstr ""
+
+#: templates/account/personal_data.html:95
+msgid "Tu correo electronico no pudo ser actualizado"
+msgstr ""
+
+#: templates/account/personal_data.html:97
+msgid "Datos Actualizados"
+msgstr ""
+
+#: templates/account/personal_data.html:97
+msgid "Tus datos fueron actualizados correctamente"
+msgstr ""
+
+#: templates/account/personal_data.html:99
+msgid "Contraseña Actualizada"
+msgstr ""
+
+#: templates/account/personal_data.html:99
+msgid "Tu contraseña fue actualizada correctamente"
+msgstr ""
+
+#: templates/account/personal_data.html:103
+msgid "Cuenta en uso"
+msgstr ""
+
+#: templates/account/personal_data.html:103
+msgid ""
+"Ya existe una cuenta en Actarium asociada a esta cuenta, por favor verifica "
+"que no tengas dos cuentas en Actarium."
+msgstr ""
+
+#: templates/account/personal_data.html:106
+msgid "Cuenta asociada"
+msgstr ""
+
+#: templates/account/personal_data.html:106
+msgid ""
+"Ahora puedes iniciar sesión con tu nombre de usuario y contraseña o bien "
+"usando tu cuenta asociada."
+msgstr ""
+
+#: templates/account/personal_data.html:109
+msgid "Cuenta liberada"
+msgstr ""
+
+#: templates/account/personal_data.html:109
+msgid "Se ha quitado la asociación a tu cuenta."
+msgstr ""
+
+#: templates/account/personal_data.html:112
+msgid "Procedimiento cancelado"
+msgstr ""
+
+#: templates/account/personal_data.html:112
+msgid "No se ha completado la asociación."
+msgstr ""
+
+#: templates/account/personal_data.html:115
+msgid "Imposible Desconectar"
+msgstr ""
+
+#: templates/account/personal_data.html:115
+msgid ""
+"No puedes desconectar esta cuenta ya que es la única forma acceder a tu "
+"cuenta. Por favor configure una contraseña e intente de nuevo."
+msgstr ""

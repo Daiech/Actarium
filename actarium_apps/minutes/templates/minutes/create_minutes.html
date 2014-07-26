@@ -22,7 +22,7 @@
                         {% trans 'Error, este grupo tiene un acta con el mismo código' %}
                     {%endif%}
                     {%if minutes_saved.error == "e3"%}
-                        {% trans 'Ha ocurrido un error, intenta de nuevo mas tarde.' %}
+                        {% trans 'Ha ocurrido un error, intenta de nuevo más tarde.' %}
                     {%endif%}
                 </div>
             {% endif %}
@@ -130,7 +130,7 @@
                         setAlertMessage("{% trans 'Sin asistentes?' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como asistente de la reunión' %}");
                     }
                 }else{
-                    setAlertMessage("{% trans 'Se necesta aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}");
+                    setAlertMessage("{% trans 'Se necesita aprobador' %}", "{% trans 'Es necesario que se defina por lo menos un miembro del equipo como aprobador del acta' %}");
                 }
             });
             $("#form-new-minutes").on("click", function (e) {

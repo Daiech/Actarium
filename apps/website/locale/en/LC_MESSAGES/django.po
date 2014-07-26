@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-25 17:35-0500\n"
-"PO-Revision-Date: 2014-05-15 15:11-0500\n"
-"Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
+"PO-Revision-Date: 2014-07-25 19:15-0500\n"
+"Last-Translator: Admin Actarium <maoaiz@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: views.py:82
@@ -88,11 +88,11 @@ msgstr "All rights reserved"
 #: templates/website/footer.html:24
 #, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/help.html:3
 msgid "Ayuda"
@@ -112,7 +112,8 @@ msgstr "Questions and Answers"
 
 #: templates/website/landing.html:3
 msgid ""
-"Actarium - El espacio más cómodo para registrar el resultado de tus reuniones"
+"Actarium - El espacio más cómodo para registrar el resultado de tus "
+"reuniones"
 msgstr ""
 "Actarium - The most convenient place to record the results of your meetings"
 
@@ -154,11 +155,12 @@ msgstr "Password (Confirmation)"
 #, python-format
 msgid ""
 "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
-"uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Pol&iacute;"
-"ticas de privacidad</a>"
+"uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "
+"target=\"_blank\">Pol&iacute;ticas de privacidad</a>"
 msgstr ""
-"I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of Use</"
-"a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy Policy</a>"
+"I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of "
+"Use</a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy "
+"Policy</a>"
 
 #: templates/website/landing.html:31
 msgid "Registrarme"
@@ -214,8 +216,8 @@ msgstr "Instant approval of minutes"
 
 #: templates/website/landing.html:131
 msgid ""
-"Después de redactar un acta, inmediatamente la puede compartir con su equipo "
-"de trabajo para ser aprobada o corregida."
+"Después de redactar un acta, inmediatamente la puede compartir con su equipo"
+" de trabajo para ser aprobada o corregida."
 msgstr ""
 "After writing the minutes, immediately can share with your team to be "
 "approved or corrected."
@@ -255,8 +257,8 @@ msgid ""
 "Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
 "o simplemente inicia sesión con tu cuenta de Google)"
 msgstr ""
-"Connect with business management services. (Calendar, Drive, Gmail or simply "
-"sign in with your Google Account)"
+"Connect with business management services. (Calendar, Drive, Gmail or simply"
+" sign in with your Google Account)"
 
 #: templates/website/landing.html:168
 msgid "Local storage (muy pronto)"
@@ -288,24 +290,23 @@ msgstr "The most convenient place to record the results of your meetings"
 
 #: templates/website/num_users.html:3
 msgid "Usuarios"
-msgstr ""
+msgstr "Users"
 
 #: templates/website/num_users.html:13
-#, fuzzy
 msgid "Total de usuarios"
-msgstr "Username"
+msgstr "Total of users"
 
 #: templates/website/num_users.html:23
 msgid "Usuarios activos"
-msgstr ""
+msgstr "Active users"
 
 #: templates/website/num_users.html:33
 msgid "Usuarios inactivos"
-msgstr ""
+msgstr "Inactive users"
 
 #: templates/website/num_users.html:49
 msgid "Cupos pagados"
-msgstr ""
+msgstr "Quotas paid"
 
 #: templates/website/pricing.html:8
 msgid "Costo por miembro en una organización"
@@ -366,8 +367,7 @@ msgid "El tiempo mínimo de compra es de %(MIN_MONTHLY_PAYMENT)s meses"
 msgstr "The minimum purchase is %(MIN_MONTHLY_PAYMENT)s months "
 
 #: templates/website/pricing.html:58
-msgid ""
-" Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
+msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
 msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
 
 #: templates/website/pricing.html:158
@@ -387,13 +387,13 @@ msgid "Suscribirse"
 msgstr "Subscribe"
 
 #: templates/website/public_footer.html:37
-#, fuzzy, python-format
+#, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/public_top_bar.html:22
 msgid "Inicia sesión"

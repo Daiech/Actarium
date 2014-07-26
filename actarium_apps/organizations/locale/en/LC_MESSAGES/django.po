@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-25 17:35-0500\n"
-"PO-Revision-Date: 2014-05-14 20:16-0500\n"
-"Last-Translator: Mauricio Aiz <mauricioaizaga0606@hotmail.com>\n"
+"PO-Revision-Date: 2014-07-25 19:16-0500\n"
+"Last-Translator: Admin Actarium <maoaiz@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: forms.py:10
@@ -107,7 +107,6 @@ msgstr ""
 "Missing variables to perform the operation, please refresh and try again."
 
 #: views_ajax.py:151
-#, fuzzy
 msgid "No tienes permiso para eliminar miembros."
 msgstr "You can't add users"
 
@@ -135,8 +134,8 @@ msgid ""
 "Crea una organización trial, puedes invitar a %(members)s miembro%(mem)s y "
 "probar los beneficios de Actarium gratis por %(months)s mes%(mon)s."
 msgstr ""
-"Create a trial organization, you can invite to %(members)s member%(mem)s and "
-"test the benefits of free Actarium for %(months)s month%(mon)s."
+"Create a trial organization, you can invite to %(members)s member%(mem)s and"
+" test the benefits of free Actarium for %(months)s month%(mon)s."
 
 #: templates/organizations/create_org.html:30
 #: templates/organizations/update_org.html:23
@@ -297,28 +296,27 @@ msgid "Eliminar"
 msgstr "Delete"
 
 #: templates/organizations/team_org.html:35
-#, fuzzy
 msgid "Al eliminar un usuario de la organización se elimina de:"
-msgstr "Member removed from organization"
+msgstr "If you delete this user in your organization, this is removed:"
 
 #: templates/organizations/team_org.html:37
 msgid ""
-"Todas las listas de comisión aprobatoria a las que pertenece pero que aún no "
-"ha aprobado."
+"Todas las listas de comisión aprobatoria a las que pertenece pero que aún no"
+" ha aprobado."
 msgstr ""
+"All commission approving lists to which it belongs but has not yet approved."
 
 #: templates/organizations/team_org.html:38
 msgid "Todos los grupos a los que pertenece."
-msgstr ""
+msgstr "All their groups."
 
 #: templates/organizations/team_org.html:41
 msgid "Seguro que desea eliminar a"
 msgstr "Are you sure to want remove to"
 
 #: templates/organizations/team_org.html:45
-#, fuzzy
 msgid "Si, Eliminar"
-msgstr "Delete"
+msgstr "Yes, delete"
 
 #: templates/organizations/team_org.html:53
 #, python-format
@@ -331,9 +329,11 @@ msgstr "Filter members"
 
 #: templates/organizations/team_org.html:81
 msgid ""
-"Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando "
-"esté disponible."
+"Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando"
+" esté disponible."
 msgstr ""
+"This option is disabled temporarily. We will inform you when it becomes "
+"available."
 
 #: templates/organizations/team_org.html:81
 msgid "Agregar miembro"

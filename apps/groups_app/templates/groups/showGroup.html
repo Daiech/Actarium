@@ -146,11 +146,11 @@
                 <h4 class="">Listado de Actas</h4>
             </header>
             <div class="t-a-r button-group">
-                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/roles-for-this-minutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opción"{%endif%}>
                     <span class="glyphicon glyphicon-plus"></span> Crear acta
                 </a>
                 {%if is_pro%}
-                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opci&oacute;n"{%endif%}>
+                <a href="{%if not current_member.is_secretary%}#{%else%}/groups/{{group.slug}}/uploadMinutes{%endif%}" class="btn btn-small title-on-disabled {%if not current_member.is_secretary%}disabled{%endif%}" {%if not current_member.is_secretary%}title="Necesitas ser redactor para habilitar esta opción"{%endif%}>
                     <i class="glyphico glyphicon glyphicon-cloud-upload"></i> Subir acta
                 </a>
                 {%endif%}
