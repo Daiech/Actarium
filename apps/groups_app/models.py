@@ -120,7 +120,7 @@ class minutes(models.Model):
     minutesIsValid.short_description = 'is valid?'
 
     def minutesIsFullSigned(self):
-        return self.is_minute_full_signed
+        return self.is_minute_full_signed()
     minutesIsFullSigned.admin_order_field = 'date_created'
     minutesIsFullSigned.boolean = True
     minutesIsFullSigned.short_description = 'is full signed?'

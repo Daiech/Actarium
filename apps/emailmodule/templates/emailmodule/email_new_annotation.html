@@ -1,8 +1,9 @@
 {% extends "emailmodule/email_layout.html" %}
+{% load i18n %}
 {% block emaildata%}
 <tr width="100%"> 
 	<td valign="top" align="left" style="border-bottom-left-radius:4px;border-bottom-right-radius:4px;background:#fff;padding:18px"> 
-		<h1 style="font-size:20px;margin:0"> {{firstname}} ({{username}}) agreg&oacute; una anotaci&oacute;n en el grupo {{groupname}} de <strong>Actarium</strong> </h1> 
+		<h1 style="font-size:20px;margin:0"> {% blocktrans %}{{ firstname }} ({{ username }}) agregó una anotación en el grupo {{ groupname }} de Actarium{% endblocktrans %}</h1> 
 		<hr style="clear:both;min-height:1px;border:0;border:none;width:100%;background:#dcdcdc;color:#dcdcdc;margin:18px 0;padding:0"> 
 			<table >
 				<tr style="padding: 5px">
@@ -12,19 +13,19 @@
 						</span>
 					</td>
 					<td style="padding: 5px">
-						<h3 style="font-size:18px;margin:18px 0">Acta {{minutes_code}} del grupo {{groupname}}</h3>
+						<h3 style="font-size:18px;margin:18px 0">{% blocktrans %}Acta {{ minutes_code }} del grupo {{ groupname }}{% endblocktrans %}</h3>
 					</td>
 				</tr>
 			</table>
 			 
 		<div> 
 			<div style="margin-bottom:18px;font:15px/19px 'Helvetica Neue',Arial,Helvetica"> 
-				<p>{{firstname}} escribi&oacute;:</p>
+				<p>{% blocktrans %}{{ firstname }} escribió:{% endblocktrans %}</p>
 				<div style="background-color:#F7F7F7;padding: 1px 25px;margin-top: 10px;">
 					{{ annotation|truncatewords:5 }}
 				</div>
 				<br><br>
-				Revisa &eacute;sta anotaci&oacute;n en <a href='http://actarium.com{{link}}'>Actarium.com{{link}}</a>
+				{% blocktrans %}Revisa ésta anotación en <a href='{{ link }}'>{{ link }}</a>{% endblocktrans %}
 			</div> 
 			
 		</div> 

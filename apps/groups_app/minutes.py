@@ -3,14 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-import json
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.utils.translation import ugettext as _
+import json
 
 # imports from application
 from apps.groups_app.models import *
 from apps.groups_app.forms import newMinutesForm
-from Actarium.settings import URL_BASE, MEDIA_URL
 from apps.account.templatetags.gravatartag import showgravatar
 
 # Imports from views.py
@@ -19,7 +19,6 @@ from .utils_meetings import date_time_format_form, date_time_format_db, remove_g
 from .utils import send_email_full_signed, getEmailListByGroup
 from actarium_apps.minutes.utils import get_minutes_roles
 from apps.actions_log.views import saveActionLog, saveViewsLog
-# from Actarium.settings import URL_BASE
 from apps.emailmodule.views import sendEmailHtml
 from actarium_apps.organizations.models import rel_user_group
 
@@ -268,7 +267,7 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editin
         # saveErrorLog
     url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
     url_new_minute = reverse("show_minute", args=(group.slug, _minute.code))
-    link = URL_BASE + url_new_minute
+    link = settings.URL_BASE + url_new_minute
 
     email_ctx = {
         'code':_minute.code,
@@ -490,7 +489,7 @@ def newAnnotation(request, slug_group):
                         "username": request.user.username,
                         "groupname": g.name,
                         "minutes_code": annon.id_minutes.code,
-                        "link": reverse("show_minute", args=(g.slug, annon.id_minutes.code,)) + "#annotation-" + str(annon.id_minutes_annotation),
+                        "link": settings.URL_BASE + reverse("show_minute", args=(g.slug, annon.id_minutes.code,)) + "#annotation-" + str(annon.id_minutes_annotation),
                         "annotation": annon.annotation_text,
                         "urlgravatar": showgravatar(request.user.email, 50)
                     }
@@ -781,11 +780,11 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         ######## </MEMBER SIGNER LISTS> #########
 
         ######## <LOGO> #########
-        url_logo = URL_BASE + '/static/img/logo_email.png'
+        url_logo = settings.URL_BASE + '/static/img/logo_email.png'
         # if isProGroup(group):
         #     _pro = getProGroup(group)
         #     if _pro:
-        #         url_logo = URL_BASE + _pro.id_organization.logo_address
+        #         url_logo = settings.URL_BASE + _pro.id_organization.logo_address
         ######## </LOGO> #########
 
         ######## <SAVE_THE_MINUTE> #########
@@ -884,7 +883,7 @@ def setMinutesVersion(_minute, _extra_minutes, group, members_assistant,
         "type_reunion": _extra_minutes.type_reunion,
         "code": _minute.code}
     full_html = loader.render_to_string(_minute.id_template.address_template, {
-        "URL_BASE": URL_BASE,
+        "URL_BASE": settings.URL_BASE,
         "newMinutesForm": list_newMinutesForm,
         "group": group,
         "members_selected": members_assistant,
@@ -972,11 +971,11 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
             ######## </MEMBER SIGNER LISTS> #########
 
             ######## <LOGO> #########
-            url_logo = URL_BASE + '/static/img/logo_email.png'
+            url_logo = settings.URL_BASE + '/static/img/logo_email.png'
             # if isProGroup(group):
             #     _pro = getProGroup(group)
             #     if _pro:
-            #         url_logo = URL_BASE + _pro.id_organization.logo_address
+            #         url_logo = settings.URL_BASE + _pro.id_organization.logo_address
             ######## </LOGO> #########
             members_list = []
             ######## <SAVE_THE_MINUTE> #########
