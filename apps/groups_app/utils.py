@@ -201,11 +201,22 @@ def create_group(request, form):
 
 
 def getEmailListByGroup(group):
-    '''
-    Retorna los correos de los miembros activos de un grupo.
-    '''
+    '''Retorna los correos de los miembros activos de un grupo.'''
     try:
         group_list = rel_user_group.objects.filter(id_group=group, is_active=True)
+        mails = list()
+        for member in group_list:
+            mails.append(member.id_user.email)
+        return mails
+    except Exception, e:
+        print e
+
+
+
+def getEmailCommisionListByminutes(minutes):
+    '''Retorna los correos de la comisión aprobatoria.'''
+    try:
+        group_list = minutes.rel_user_minutes_signed_id_minutes.filter(is_signed_approved=False)
         mails = list()
         for member in group_list:
             mails.append(member.id_user.email)
@@ -223,6 +234,23 @@ def send_email_full_signed(minutes):
             'link': link
         }
         sendEmailHtml(3, email_ctx, getEmailListByGroup(minutes.id_group), minutes.id_group)
+    except Exception, e:
+        #saveErrorLog
+        pass
+
+
+def send_email_new_commission(user, annon):
+    try:
+        ctx_email = {
+            "firstname": user.first_name,
+            "username": user.username,
+            "groupname": annon.id_minutes.id_group.name,
+            "minutes_code": annon.id_minutes.code,
+            "link": settings.URL_BASE + reverse("show_minute", args=(annon.id_minutes.id_group.slug, annon.id_minutes.code,)) + "#annotation-" + str(annon.id_minutes_annotation),
+            "annotation": annon.annotation_text,
+            "urlgravatar": showgravatar(user.email, 50)
+        }
+        sendEmailHtml(12, ctx_email, getEmailCommisionListByminutes(annon.id_minutes))
     except Exception, e:
         #saveErrorLog
         pass

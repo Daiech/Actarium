@@ -16,7 +16,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 # Imports from views.py
 from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email
 from .utils_meetings import date_time_format_form, date_time_format_db, remove_gmt
-from .utils import send_email_full_signed, getEmailListByGroup
+from .utils import send_email_full_signed, getEmailListByGroup, send_email_new_commission
 from actarium_apps.minutes.utils import get_minutes_roles
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
@@ -494,6 +494,7 @@ def newAnnotation(request, slug_group):
                         "urlgravatar": showgravatar(request.user.email, 50)
                     }
                     sendEmailHtml(12, ctx_email, email_list)
+                    send_email_new_commission(request.user, annon)
                     response = {"data": "success, send a socket to say them to the other connected"}
                 else:
                     print "else"
