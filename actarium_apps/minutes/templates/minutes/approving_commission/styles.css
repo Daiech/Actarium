@@ -23,5 +23,5 @@ article header img{margin-top: 0px;}
 .president-ok, .secretary-ok{margin-left: 5px;}
 .text-italic{font-style: italic;}
 .gray{color: #dadada;}
-.btn-send-notification{position: fixed;bottom: 0px;right: 0px;padding: 10px 5px;background-color: white;padding-bottom: 10px;border-top:solid thin #ddd;}
+.btn-send-notification{position: fixed;bottom: 0px;right: 0px;padding: 10px 5px;background-color: white;padding-bottom: 10px;border-top:solid thin #ddd;width: 259px;}
 .btn-send-notification button{width: 162px;margin: auto;margin-left: 5px}

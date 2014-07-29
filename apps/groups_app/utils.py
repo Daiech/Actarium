@@ -213,17 +213,7 @@ def getEmailListByGroup(group):
 
 
 
-def getEmailListofCommisionByMinutes(minutes):
-    '''Retorna una lista con los correos de la comisión aprobatoria.'''
-    try:
-        group_list = minutes.rel_user_minutes_signed_id_minutes.filter(is_signed_approved=False)
-        mails = []
-        for member in group_list:
-            mails.append(member.id_user.email)
-        return mails
-    except Exception, e:
-        print e
-        return None
+
 
 
 def send_email_full_signed(minutes):

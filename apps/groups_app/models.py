@@ -26,7 +26,7 @@ class AssistanceManager(models.Manager):
         except self.model.DoesNotExist:
             return None
         except self.model.MultipleObjectsReturned:
-            return None    
+            return None
 
 class CommissionManager(models.Manager):
     def get_or_none(self, **kwargs):
@@ -140,10 +140,22 @@ class minutes(models.Model):
                 print "NO son iguales"
                 return False
 
+    def get_commision_email_list(self, **kwargs):
+        '''Retorna una lista con los correos de la comisión aprobatoria.'''
+        try:
+            group_list = self.rel_user_minutes_signed_id_minutes.filter(**kwargs)
+            mails = []
+            for member in group_list:
+                mails.append(member.id_user.email)
+            return mails
+        except:
+            return None
+
     def save(self):
         self.code = str(self.code).replace(" ","-")
         super(minutes, self).save()
     
+
     def __unicode__(self):
         return "Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
 

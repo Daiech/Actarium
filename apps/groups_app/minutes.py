@@ -16,7 +16,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 # Imports from views.py
 from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email
 from .utils_meetings import date_time_format_form, date_time_format_db, remove_gmt
-from .utils import send_email_full_signed, getEmailListByGroup, getEmailListofCommisionByMinutes
+from .utils import send_email_full_signed, getEmailListByGroup
 from actarium_apps.minutes.utils import get_minutes_roles
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
@@ -253,7 +253,7 @@ def email_to_approvers(request, slug_group, minutes_id):
     rel_group = getRelUserGroup(request.user, group)
     if (rel_group and rel_group.is_secretary) or is_org_admin:
         minutes_obj = minutes.objects.get_minute(id=minutes_id)
-        email_list = getEmailListofCommisionByMinutes(minutes_obj)
+        email_list = minutes_obj.get_commision_email_list(is_signed_approved=False)
         email_ctx = {
             'code': minutes_obj.code,
             'groupname': group.name,
