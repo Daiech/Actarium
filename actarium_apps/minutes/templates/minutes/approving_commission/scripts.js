@@ -233,7 +233,7 @@ function sendEmailToApprovers(e){
 		{},
 		function (data) {
 			if (data.sent){
-				setAlertMessage("{% trans 'Correo enviado' %}", "{% trans 'Se ha enviado un correo de notificación a la comisión aprobatoria del acta.' %}")
+				setAlertMessage("{% trans 'Correo enviado' %}", "{% trans 'Se ha enviado un correo de notificación a quienes no han aprobado el acta.' %}")
 			}
 		}
 	);
