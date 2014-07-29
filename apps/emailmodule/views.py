@@ -38,7 +38,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         13- email_new_minutes_for_approvers   (Depende del grupo)
         14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)
         15- Recordar aprobar un acta. (va a toda la comisión)"""
-
+    htmly = ""
     if email_type == 1:
         subject = ctx['username'] + " Bienvenido a %s" % settings.PROJECT_NAME
         plaintext = get_template('emailmodule/emailtest.txt')
@@ -90,11 +90,11 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     elif email_type == 13:  # colocar restriccioin
         subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó el acta "+ctx['code']+" en el grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
     elif email_type == 14:  # colocar restriccion
         subject = ctx['firstname'] + " (" + ctx['username'] + u") Solicita acceso a tu DNI para el grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_dni_request.html')
-        htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
     elif email_type == 15:
         subject = u"El acta "+ctx['code']+" del grupo " + ctx['groupname'] + u" espera tu aprobación" + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
@@ -108,7 +108,10 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     ctx["URL_BASE"] = settings.URL_BASE # <- está en el Context proccessor y no funciona con get_template
     d = Context(ctx)
     text_content = plaintext.render(d)
-    html_content = htmly.render(d)
+    if htmly:
+        html_content = htmly.render(d)
+    else:
+        return
 
     actives_required_list = [3, 4, 6, 14]  # This list contains the number of email_type that requires the user is active in actarium
     if email_type in actives_required_list:
