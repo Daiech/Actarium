@@ -227,6 +227,7 @@ function cancelEditCommission(e){
 }
 function sendEmailToApprovers(e){
 	e.preventDefault();
+	{% if minutes %}
 	sendNewAjax(
 		"{% url 'email_to_approvers' group.slug minutes.id %}",
 		{},
@@ -236,6 +237,7 @@ function sendEmailToApprovers(e){
 			}
 		}
 	);
+	{% endif %}
 	$("#commissionPanel").click();
 }
 $(document).on("click", ".btn-approve", setApprove);
