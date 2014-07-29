@@ -1,0 +1,23 @@
+{% extends "emailmodule/email_layout.html" %}
+{% load i18n %}
+{% block emaildata %}
+<tr width="100%"> 
+	<td valign="top" align="left" style="border-bottom-left-radius:4px;border-bottom-right-radius:4px;background:#fff;padding:18px"> 
+		<table >
+			<tr>
+				<td>
+					<h3 style="font-size:18px;margin:18px 0">
+					{% blocktrans %}Falta tu aprobación del acta "{{ code }}" del grupo {{ groupname }} {% endblocktrans %}
+					</h3>
+				</td>
+			</tr>
+		</table>
+		<div> 
+			<div style="margin-bottom:18px;font:15px/19px 'Helvetica Neue',Arial,Helvetica"> 
+				{% trans 'Este correo te ha llegado porque has sido seleccionado como parte de la comisión aprobatoria. Sin tu aprobación, esta acta no podrá ser visualizada por el resto del equipo. <br><br>Ingresa al siguiente link para aprobarla:' %}<br><br>
+				<a href='{{ link }}'>{{ link }}</a><br>
+			</div>
+		</div> 
+	</td> 
+</tr> 
+{% endblock %}	

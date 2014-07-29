@@ -16,7 +16,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 # Imports from views.py
 from apps.groups_app.views import getGroupBySlug, isMemberOfGroup, getRelUserGroup, get_user_or_email
 from .utils_meetings import date_time_format_form, date_time_format_db, remove_gmt
-from .utils import send_email_full_signed, getEmailListByGroup, send_email_new_commission
+from .utils import send_email_full_signed, getEmailListByGroup, getEmailListofCommisionByMinutes
 from actarium_apps.minutes.utils import get_minutes_roles
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
@@ -245,6 +245,24 @@ def removeUniqueRolGroup(group, role):
         return False
 
 
+def email_to_approvers(request, slug_group, minutes_id):
+    group = Groups.objects.get_group(slug=slug_group)
+    if not group:
+        return HttpResponseRedirect('/#error-the-group-doesnt-exists')
+    is_org_admin = group.organization.has_user_role(request.user, "is_admin")
+    rel_group = getRelUserGroup(request.user, group)
+    if (rel_group and rel_group.is_secretary) or is_org_admin:
+        minutes_obj = minutes.objects.get_minute(id=minutes_id)
+        email_list = getEmailListofCommisionByMinutes(minutes_obj)
+        email_ctx = {
+            'code': minutes_obj.code,
+            'groupname': group.name,
+            'link': settings.URL_BASE + reverse("show_minute", args=(group.slug, minutes_obj.code)),
+        }
+        sendEmailHtml(15, email_ctx, email_list)
+        return HttpResponse(json.dumps({"sent": True, "msj": _(u"Se ha enviado un correo electrónico a toda la comisión aprobatoria.")}), mimetype="application/json")
+
+
 def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editing=False):
     saveViewsLog(request, "apps.groups_app.minutes.updateRolUserMinutes")
     try:
@@ -265,7 +283,6 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editin
     except Exception, e:
         print "updateRolUserMinutes Error", e
         # saveErrorLog
-    url_new_minute = "/groups/" + str(group.slug) + "/minutes/" + str(_minute.code)
     url_new_minute = reverse("show_minute", args=(group.slug, _minute.code))
     link = settings.URL_BASE + url_new_minute
 
@@ -494,7 +511,6 @@ def newAnnotation(request, slug_group):
                         "urlgravatar": showgravatar(request.user.email, 50)
                     }
                     sendEmailHtml(12, ctx_email, email_list)
-                    send_email_new_commission(request.user, annon)
                     response = {"data": "success, send a socket to say them to the other connected"}
                 else:
                     print "else"

@@ -188,5 +188,16 @@
       "admin_type": 2,
       "date_added": "2013-12-20T23:37:01Z"
     }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 15,
+    "fields": {
+      "name": "Recordar aprobar acta",
+      "description": "Envía un correo a toda la comisión",
+      "email_type": "15",
+      "admin_type": 2,
+      "date_added": "2014-07-28T23:37:01Z"
+    }
   }
 ]

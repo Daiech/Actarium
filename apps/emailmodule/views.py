@@ -36,7 +36,8 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         11- email_group_reinvitation   (Depende del grupo)
         12- email_new_annotation   (Depende del grupo)
         13- email_new_minutes_for_approvers   (Depende del grupo)
-        14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)"""
+        14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)
+        15- Recordar aprobar un acta. (va a toda la comisión)"""
 
     if email_type == 1:
         subject = ctx['username'] + " Bienvenido a %s" % settings.PROJECT_NAME
@@ -89,18 +90,22 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     elif email_type == 13:  # colocar restriccioin
         subject = ctx['firstname'] + " (" + ctx['username'] + u") redactó el acta "+ctx['code']+" en el grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
-        htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
     elif email_type == 14:  # colocar restriccion
         subject = ctx['firstname'] + " (" + ctx['username'] + u") Solicita acceso a tu DNI para el grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_dni_request.html')
+        htmly = get_template('emailmodule/email_new_minutes_for_approvers.html')
+    elif email_type == 15:
+        subject = u"El acta "+ctx['code']+" del grupo " + ctx['groupname'] + u" espera tu aprobación" + END_SUBJECT
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_remember_approve.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
         subject, to = 'Mensaje de prueba', ['emesa@daiech.com']
     
     from_email = '%s <no-reply@daiech.com>' % settings.PROJECT_NAME
-    ctx["URL_BASE"] = settings.URL_BASE # Context proccessor no funciona con get_template
+    ctx["URL_BASE"] = settings.URL_BASE # <- está en el Context proccessor y no funciona con get_template
     d = Context(ctx)
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
@@ -116,7 +121,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     except NameError:
         smtp = None
     if smtp:
-        if len(to) > 0:# and not settings.DEBUG:
+        if len(to) > 0 and not settings.DEBUG:
             sendGmailEmail(to, subject, html_content)
     else:
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
@@ -136,7 +141,6 @@ def groupAdminFilter(email_list, email_type, _group):
     _email = email.objects.get(email_type=email_type)
     if _email.admin_type == _email_admin_type:
         for e in email_list:
-            print e
             _user = User.objects.get(email=e)
             try:
                 # print "user",_user
@@ -151,12 +155,13 @@ def groupAdminFilter(email_list, email_type, _group):
             except email_group_permissions.DoesNotExist:
                 new_email_list.append(e)
                 # print ".....No esta, colocar como activo"
-
+            except Exception, e:
+                print "groupAdminFilter:", e
         # print "---------diferencia en listas de correos--- eliminar despues de probar----------"
         # print " email_list -------"
         # print email_list
         # print " new_email_list ---"
-        # print new_email_list
+        print new_email_list
 
         return new_email_list
     else:
@@ -287,6 +292,7 @@ def show_template(request):
         locale = "Pereira"
         id_reunion = 4
         datereunionshort="2014-06-11"
+        link = "actarium.com/acta"
 
         return render(request, "emailmodule/" + request.GET.get("p"), locals())
     else:

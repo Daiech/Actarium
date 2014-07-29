@@ -225,8 +225,22 @@ function cancelEditCommission(e){
 	e.preventDefault();
 	$("#commissionPanel").click();
 }
+function sendEmailToApprovers(e){
+	e.preventDefault();
+	sendNewAjax(
+		"{% url 'email_to_approvers' group.slug minutes.id %}",
+		{},
+		function (data) {
+			if (data.sent){
+				setAlertMessage("{% trans 'Correo enviado' %}", "{% trans 'Se ha enviado un correo de notificación a la comisión aprobatoria del acta.' %}")
+			}
+		}
+	);
+	$("#commissionPanel").click();
+}
 $(document).on("click", ".btn-approve", setApprove);
 $(document).on("click", ".btn-send-notification .btn-cancel", cancelEditCommission);
+$(document).on("click", ".btn-send-notification #sendEmailToApprovers", sendEmailToApprovers);
 $(document).on("click", ".set-role", setRole);//roles MAIN
 $(document).on("change", "#sel-president", setPresident);//roles MAIN
 $(document).on("change", "#sel-secretary", setSecretary);//roles MAIN
