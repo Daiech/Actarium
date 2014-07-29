@@ -1,11 +1,16 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Link no valido{% endblock %}
-{%block body %}		
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Link no valido' %}{% endblock %}
+{%block content %}		
 	<article class="message-box white-box-container">
-		<h3>Link no v&aacute;lido!</h3>
-		<p>El link al que ingresaste ya no es v&aacute;lido.</p>
-		<p>Si deseas iniciar sesi&oacute;n ingresa a <a href="/account/login">Iniciar sesi&oacute;n</a></p>
-		<p>Si olvidaste tu contrase&ntilde;a utiliza la <a href="/account/password/reset/">opci&oacute;n de recuperaci&oacute;n de contrase&ntilde;a</a></p>
+		{% url 'password_reset2' as password_reset2 %}
+ 		{% url 'log_in' as login %}
+		{% blocktrans %}
+		<h3>Link no válido!</h3>
+		<p>El link al que ingresaste ya no es válido.</p>
+		<p>Si deseas iniciar sesión ingresa a <a href="{{ login }}">Iniciar sesión</a></p>
+		<p>Si olvidaste tu contraseña utiliza la <a href="{{ password_reset2 }}">opción de recuperación de contraseña</a></p>
+		{% endblocktrans %}
 	</article>
 {% endblock%}
 {%block style%}

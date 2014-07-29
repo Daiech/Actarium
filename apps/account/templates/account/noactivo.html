@@ -1,9 +1,10 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Usuario no activo{% endblock %}
-{%block body %}		
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Usuario no activo' %}{% endblock %}
+{%block content %}		
 	<article class="message-box white-box-container">
-		<h3>Usuario inactivo!</h3>
-		<p>El usuario no se encuentra activo en el momento</p>
-		<p>Ingresa al link de activaci&oacute;n que ha sido enviado al correo electr&oacute;nico asociado a &eacute;sta cuenta</p>
+		<h3>{% trans 'Usuario inactivo!' %}</h3>
+		<p>{% trans 'El usuario no se encuentra activo en el momento' %}</p>
+		<p>{% trans 'Ingresa al link de activación que ha sido enviado al correo electrónico asociado a ésta cuenta' %}</p>
 	</article>
 {% endblock%}

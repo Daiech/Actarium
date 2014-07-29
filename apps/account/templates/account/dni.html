@@ -1,23 +1,13 @@
 {% extends "asettings/settings_menu.html" %}
-{% block TITLE %}Configuraci&oacute;n de DNI{% endblock %}
-{% load gravatartag %}
+{% load i18n gravatartag %}
+{% block TITLE %}{% trans 'Configuración de DNI' %}{% endblock %}
 {% block bodysettings %}
 <div>
-    <div class="uTop">
-        <img src="{{ user.email|showgravatar:'32'}}" width="32px" />
-        Hola
-        <strong>
-            <a href="{% if user.id == 1 %}/admin{%else%}#{%endif%}">
-                {{ user.first_name }} ({{user.username}})
-            </a>
-        </strong>
-    </div>
-    <hr>
     <form method="POST"  action="/account/dni">
         {% csrf_token %}
         <table class="">
             <tr>
-                <th colspan="2" class="title">Tu informaci&oacute;n de DNI</th>
+                <th colspan="2" class="title">{% trans 'Tu información de DNI' %}</th>
             </tr>
             {{ formDNI }}
             <tr>
@@ -30,9 +20,11 @@
             </tr>
         </table>
     </form>
-    <strong>Qu&eacute; es el DNI?</strong>
+    <strong>Qué es el DNI?</strong>
     <p>
-        El documento nacional de identidad, tambi&eacute;n conocido como C&eacute;dula de Ciudadanía (CC), Carn&eacute; de Identidad (CI), C&eacute;dula de Identidad (CI) o Documento Nacional de Identidad (DNI) o identificaci&oacute;n oficial o simplemente identificaci&oacute;n, es un documento privado (individual) que contiene datos personales de car&aacute;cter p&uacute;blico emitido por una autoridad administrativa competente para permitir la identificaci&oacute;n personal de los ciudadanos. <a href="http://es.wikipedia.org/wiki/Documento_de_identidad" target="_blank">Leer m&aacute;s</a>
+        {% blocktrans %}
+        El documento nacional de identidad, también conocido como Cédula de Ciudadanía (CC), Carné de Identidad (CI), Cédula de Identidad (CI) o Documento Nacional de Identidad (DNI) o identificación oficial o simplemente identificación, es un documento privado (individual) que contiene datos personales de carácter público emitido por una autoridad administrativa competente para permitir la identificación personal de los ciudadanos. <a href="http://es.wikipedia.org/wiki/Documento_de_identidad" target="_blank">Leer más</a>
+        {% endblocktrans %}
     </p>
     <hr>
     {% if permissions %}
@@ -41,22 +33,22 @@
             <tr>
                 <th class="td-first">
                     <div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-                        Solicitante
+                        {% trans 'Solicitante' %}
                     </div>
                 </th>            
                 <th >
                     <div class="info-title" title="Lista de todos los miembros del grupo '{{group.name}}'">
-                        Grupo
+                        {% trans 'Grupo' %}
                     </div>
                 </th>
                 <th>
                     <div class="info-title" title="Personas que aparecen en la lista de las actas">
-                        Estado
+                        {% trans 'Estado' %}
                     </div>
                 </th>
                 <th>
                     <div class="info-title" title="Personas que aparecen en la lista de las actas">
-                        Acci&oacute;n
+                        {% trans 'Acción' %}
                     </div>
                 </th>
             </tr>
@@ -67,7 +59,7 @@
 		                <img style="width:20px" src="{{dni_p.id_requester.email|showgravatar:'20'}}" alt="{{dni_p.id_requester}}" />
 		                {{dni_p.id_requester.first_name}} {{dni_p.id_requester.last_name}}
 		                {%if dni_p.id_requester == user%}
-		                (yo)
+		                ({% trans 'yo' %})
 		                {%else%}
 		                ({{dni_p.id_requester}})
 		                {%endif%}
@@ -78,18 +70,18 @@
                 </td>
                 <td id="dni-state-{{dni_p.pk}}">
                     {% if dni_p.state == '0' %}
-                        Sin responder
+                        {% trans 'Sin responder' %}
                     {% elif dni_p.state == '1' %}
-                        Aceptado, si tiene acceso
+                        {% trans 'Aceptado, si tiene acceso' %}
                     {% elif dni_p.state == '2' %}
-                        Rechazado, no tiene acceso
+                        {% trans 'Rechazado, no tiene acceso' %}
                     {% endif %}
                 </td>
                 <td>
                     {% if dni_p.state == '0' or dni_p.state == '2'%}
-                        <button class="dni-btn-option  btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Permitir acceso a DNI</button>
+                        <button class="dni-btn-option  btn btn-info" data-option="1" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">{% trans 'Permitir acceso a DNI' %}</button>
                     {% elif dni_p.state == '1' %}
-                        <button class="dni-btn-option  btn btn-warning" data-option="2" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">Retirar acceso a DNI</button>
+                        <button class="dni-btn-option  btn btn-warning" data-option="2" data-dni="{{dni_p.pk}}" data-name-group="{{dni_p.id_group.name}}">{% trans 'Retirar acceso a DNI' %}</button>
                     {% endif %}
                 </td>
             </tr>
@@ -167,7 +159,7 @@
                     "#loading-reunion",
                     function(data){
                         if (data.saved){
-                            setAlertMessage("Operaci&oacute;n realizada", "Se ha modificado el estado de solicitud de DNI para el grupo: <strong>"+group_name+"</strong>")
+                            setAlertMessage("Operación realizada", "Se ha modificado el estado de solicitud de DNI para el grupo: <strong>"+group_name+"</strong>")
                             if (status == 1){
                                 console.log("1"+btn.html())
                                 btn.removeClass("btn-info")
@@ -187,14 +179,14 @@
                             //console.log("id: "+id_user+" Nombre: "+nombre )
                         }
                         else{
-                            setAlertError("Ocurri&oacute; un error", data.error)
+                            setAlertError("Ocurrió un error", data.error)
                         }
                     } 
             );
         });
 	});
     {% if dataSaved %}
-    setAlertMessage("Datos guardados","Se ha guardado correctamente la informaci&oacute;n de DNI")
+    setAlertMessage("Datos guardados","Se ha guardado correctamente la información de DNI")
     {% endif %}
 
 

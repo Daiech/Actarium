@@ -18,8 +18,8 @@
                     </label>
                     <div class="">
                         <button type="submit" name="submit" id="id_submit" class="btn btn-info btn-large">Inicia sesi&oacute;n</button>
-                        <a href="/account/new" class="btn btn-link">{% trans 'Registrarse' %}</a><br>
-                        <a href="/account/password/reset/" class="btn btn-link mt20">{% trans '&iquest;Olvidaste tu contrase&ntilde;a?' %}</a>
+                        <a href="{% url 'new_user' %}" class="btn btn-link">{% trans 'Registrarse' %}</a><br>
+                        <a href="{% url 'password_reset2' %}" class="btn btn-link mt20">{% trans '&iquest;Olvidaste tu contraseña?' %}</a>
                     </div>
                 </div>
             </div>

@@ -29,7 +29,7 @@ def complete_registration(request):
             return HttpResponseRedirect(reverse("tour"))
     else:
         form = UserForm(instance=request.user)
-    return render_to_response("account/complete_registration.html", locals(), context_instance=RequestContext(request))
+    return render(request, "account/complete_registration.html", locals())
 
 
 

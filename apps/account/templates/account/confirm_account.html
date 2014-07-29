@@ -1,32 +1,33 @@
 {% extends "website/layout_landing.html" %}
-{% block TITLE %}Confirmaci&oacute;n de cuenta{% endblock %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Confirmación de cuenta' %}{% endblock %}
 {%block body %}		
 	<section class="message-box white-box-container">
-		<h3>Bienvendo a Actarium!</h3>
+		<h3>{% trans 'Bienvendo a Actarium!' %}</h3>
 		<p>
 			{%for inv in invitations%}
 			{{inv.id_user_invited.first_name}},
 			{%endfor%}
-			te {% if invitations|length > 1%}invitaron{%else%}invit&oacute;{%endif%} a disfrutar de <strong>Actarium</strong>.
+			te {% if invitations|length > 1%}invitaron{%else%}invitó{%endif%} a disfrutar de <strong>Actarium</strong>.
 		</p>
-		<p>Est&aacute;s a punto de activar tu cuenta, pero antes, por favor confirma los siguientes datos y lee nuetros <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a> y <a href="/{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>:</p>
+		<p>{% blocktrans %}Estás a punto de activar tu cuenta, pero antes, por favor confirma los siguientes datos y lee nuetros <a href="/{{URL_TERMS}}" target="_blank">Términos de uso</a> y <a href="/{{URL_PRIVACY}}" target="_blank">Políticas de privacidad</a>:{% endblocktrans %}</p>
 		<div class="white-box-container message-box">
 			<form method="POST">
 				{% csrf_token %}
 				{{form}}
 				<label class="checkbox">
-                    <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a>
+                    <input type="checkbox" name="term_privacy" id="term_privacy"> {% blocktrans %}Acepto los <a href="/{{URL_TERMS}}" target="_blank">Términos de uso{% endblocktrans %}</a>
                 </label>
 	            <button type="submit" class="btn btn-info" disabled="disabled" id="btn-submit">
 	                Actualizar Datos
 	            </button>
 			</form>
 		</div>
-		<div class="menu-icons icon-about"></div><p>Conoce el funcionamiento general de <strong>Actarium</strong> en la secci&oacute;n <a href="/about">Acerca</a></p>
-		<div class="menu-icons icon-faqs"></div><p>Necesitas ayuda? Accede a las <a href="/help/faq">Preguntas frecuentes</a>  </p>
-		<div class="menu-icons icon-blog"></div><p>Ent&eacute;rate de las actualizaciones de la plataforma en el <a href="/blog">Blog oficial de <strong>Actarium</strong></a>
+		<div class="menu-icons icon-about"></div><p>{% blocktrans %}Conoce el funcionamiento general de <strong>Actarium</strong> en la sección <a href="/about">Acerca</a>{% endblocktrans %}</p>
+		<div class="menu-icons icon-faqs"></div><p>{% blocktrans %}Necesitas ayuda? Accede a las <a href="/help/faq">Preguntas frecuentes</a>{% endblocktrans %}  </p>
+		<div class="menu-icons icon-blog"></div><p>{% blocktrans %}Entérate de las actualizaciones de la plataforma en el <a href="/blog">Blog oficial de <strong>Actarium</strong>{% endblocktrans %}</a>
 		<br><br>
-		<p>Si tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes hacerlo a trav&eacute;s del m&oacute;dulo <a href="#" id="callFeed">FeedBack</a> que esta disponible a la derecha en todas las ventanas</p>
+		<p>{% blocktrans %}Si tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes hacerlo a través del módulo <a href="#" id="callFeed">FeedBack</a> que esta disponible a la derecha en todas las ventanas{% endblocktrans %}</p>
 	</section>
 {% endblock%}
 
