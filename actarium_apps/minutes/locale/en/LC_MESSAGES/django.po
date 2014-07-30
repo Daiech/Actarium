@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-30 15:47-0500\n"
-"PO-Revision-Date: 2014-07-25 19:33-0500\n"
-"Last-Translator: Admin Actarium <maoaiz@hotmail.com>\n"
+"PO-Revision-Date: 2014-07-30 16:29-0500\n"
+"Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: templates/minutes/change_template_modal.html:7
@@ -73,8 +73,8 @@ msgstr "Without assistants?"
 
 #: templates/minutes/create_minutes.html:130
 msgid ""
-"Es necesario que se defina por lo menos un miembro del equipo como asistente "
-"de la reunión"
+"Es necesario que se defina por lo menos un miembro del equipo como asistente"
+" de la reunión"
 msgstr "You need to define at least one team member as meeting attendee"
 
 #: templates/minutes/create_minutes.html:133
@@ -83,8 +83,8 @@ msgstr "Required approver"
 
 #: templates/minutes/create_minutes.html:133
 msgid ""
-"Es necesario que se defina por lo menos un miembro del equipo como aprobador "
-"del acta"
+"Es necesario que se defina por lo menos un miembro del equipo como aprobador"
+" del acta"
 msgstr "You need to define at least one team member as approving the minutes"
 
 #: templates/minutes/create_minutes.html:194
@@ -177,11 +177,11 @@ msgstr "Save minutes"
 
 #: templates/minutes/show_minutes.html:12
 msgid ""
-"Historial de cambios: <span class=\"version-date\"></span>, por <span class="
-"\"version-creator\"></span>"
+"Historial de cambios: <span class=\"version-date\"></span>, por <span class"
+"=\"version-creator\"></span>"
 msgstr ""
-"Change History: <span class=\"version-date\"></span>, by <span class="
-"\"version-creator\"></span>"
+"Change History: <span class=\"version-date\"></span>, by <span class"
+"=\"version-creator\"></span>"
 
 #: templates/minutes/show_minutes.html:28
 msgid "Última modificación"
@@ -212,7 +212,8 @@ msgid "Únicamente las actas aprobadas pueden imprimirse"
 msgstr "Only approved minutes can be printed"
 
 #: templates/minutes/show_minutes_tool_bar.html:41
-msgid "Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento"
+msgid ""
+"Ésta acta aún no ha sido aprobada, puedes editarla en cualquier momento"
 msgstr "This minutes has not been approved, you can edit at any time"
 
 #: templates/minutes/show_minutes_tool_bar.html:45
@@ -260,34 +261,32 @@ msgid "No, Necesita corrección"
 msgstr "No, needs correction"
 
 #: templates/minutes/approving_commission/tpl.html:28
-#, fuzzy
 msgid "Miembro"
-msgstr "Members"
+msgstr "Member"
 
 #: templates/minutes/approving_commission/tpl.html:29
 msgid "Estado"
-msgstr ""
+msgstr "Status"
 
 #: templates/minutes/approving_commission/tpl.html:42
-#, fuzzy
 msgid "aún no ha aprobado esta acta"
-msgstr "Responsible for approving this minutes:"
+msgstr "has not yet approved these minutes"
 
 #: templates/minutes/approving_commission/tpl.html:45
-#, fuzzy
 msgid "aprobó esta acta"
-msgstr "Responsible for approving this minutes:"
+msgstr "approved these minutes"
 
 #: templates/minutes/approving_commission/tpl.html:53
 msgid "Click para enviar recordatorio a"
-msgstr ""
+msgstr "Click to send reminder to"
 
 #: templates/minutes/approving_commission/tpl.html:65
 msgid "Enviar recordatorio a todos"
-msgstr ""
+msgstr "Send reminder to all"
 
 #: templates/minutes/approving_commission/tpl.html:73
-msgid "Cualquier miembro del grupo puede escribir anotaciones sobre esta acta."
+msgid ""
+"Cualquier miembro del grupo puede escribir anotaciones sobre esta acta."
 msgstr "Any group member can write annotations on this minutes."
 
 #: templates/minutes/approving_commission/tpl.html:74
