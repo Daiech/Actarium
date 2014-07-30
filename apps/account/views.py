@@ -342,19 +342,15 @@ def setDNIPermissions(request):
 
 
 def password_reset2(request):
-        """
-        django.contrib.auth.views.password_reset view (forgotten password)
-        """
-        saveViewsLog(request, "apps.account.views.password_reset2")
-        if not request.user.is_authenticated():
-            print "entro a password_reset2"
-            try:
-                return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
-            except Exception:
-                return HttpResponseRedirect("/account/password/reset/done/")
-        else:
-            print "no entro a password_reset2"
-            return HttpResponseRedirect("/account/")
+    """django.contrib.auth.views.password_reset view (forgotten password)"""
+    saveViewsLog(request, "apps.account.views.password_reset2")
+    if not request.user.is_authenticated():
+        try:
+            return password_reset(request, template_name='account/password_reset_form.html', email_template_name='account/password_reset_email.html', subject_template_name='account/password_reset_subject.txt', post_reset_redirect='/account/password/reset/done/')
+        except Exception:
+            return HttpResponseRedirect("/account/password/reset/done/")
+    else:
+        return HttpResponseRedirect("/account/")
 
 
 def password_reset_done2(request):
@@ -374,11 +370,9 @@ def password_reset_confirm2(request, uidb36, token):
         """
         saveViewsLog(request, "apps.account.views.password_reset_confirm2")
         if not request.user.is_authenticated():
-                print "entro a password_reset_confirm2"
-                return password_reset_confirm(request, uidb36, token, template_name='account/password_reset_confirm.html', post_reset_redirect='/account/password/done/')
+            return password_reset_confirm(request, uidb36, token, template_name='account/password_reset_confirm.html', post_reset_redirect='/account/password/done/')
         else:
-                print "no entro a password_reset_confirm2"
-                return HttpResponseRedirect("/account/")
+            return HttpResponseRedirect("/account/")
 
 
 def password_reset_complete2(request):
