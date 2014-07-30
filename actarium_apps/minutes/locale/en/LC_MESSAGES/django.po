@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-25 19:45-0500\n"
+"POT-Creation-Date: 2014-07-30 15:47-0500\n"
 "PO-Revision-Date: 2014-07-25 19:33-0500\n"
 "Last-Translator: Admin Actarium <maoaiz@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgid "Editar/Cambiar plantilla"
 msgstr "Edit / Change Template"
 
 #: templates/minutes/change_template_modal.html:39
-#: templates/minutes/approving_commission/tpl.html:198
+#: templates/minutes/approving_commission/tpl.html:212
 msgid "Cerrar"
 msgstr "Close"
 
@@ -259,23 +259,50 @@ msgstr "Yes, I approve"
 msgid "No, Necesita corrección"
 msgstr "No, needs correction"
 
-#: templates/minutes/approving_commission/tpl.html:60
+#: templates/minutes/approving_commission/tpl.html:28
+#, fuzzy
+msgid "Miembro"
+msgstr "Members"
+
+#: templates/minutes/approving_commission/tpl.html:29
+msgid "Estado"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:42
+#, fuzzy
+msgid "aún no ha aprobado esta acta"
+msgstr "Responsible for approving this minutes:"
+
+#: templates/minutes/approving_commission/tpl.html:45
+#, fuzzy
+msgid "aprobó esta acta"
+msgstr "Responsible for approving this minutes:"
+
+#: templates/minutes/approving_commission/tpl.html:53
+msgid "Click para enviar recordatorio a"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:65
+msgid "Enviar recordatorio a todos"
+msgstr ""
+
+#: templates/minutes/approving_commission/tpl.html:73
 msgid "Cualquier miembro del grupo puede escribir anotaciones sobre esta acta."
 msgstr "Any group member can write annotations on this minutes."
 
-#: templates/minutes/approving_commission/tpl.html:61
+#: templates/minutes/approving_commission/tpl.html:74
 msgid "Anotaciones"
 msgstr "Annotations"
 
-#: templates/minutes/approving_commission/tpl.html:65
+#: templates/minutes/approving_commission/tpl.html:78
 msgid "Crear anotación"
 msgstr "Create annotation"
 
-#: templates/minutes/approving_commission/tpl.html:68
+#: templates/minutes/approving_commission/tpl.html:81
 msgid "Crear nueva anotación"
 msgstr "Create new annotation"
 
-#: templates/minutes/approving_commission/tpl.html:69
+#: templates/minutes/approving_commission/tpl.html:82
 msgid ""
 "Si crees que algo debe mejorarse en esta acta, por favor envíale una "
 "anotación al redactor."
@@ -283,51 +310,51 @@ msgstr ""
 "If you think something should be improved in the minutes, please send an "
 "annotation to the editor."
 
-#: templates/minutes/approving_commission/tpl.html:70
+#: templates/minutes/approving_commission/tpl.html:83
 msgid "Publicar"
 msgstr "Publish"
 
-#: templates/minutes/approving_commission/tpl.html:104
+#: templates/minutes/approving_commission/tpl.html:117
 msgid "Roles de la reunión para esta Acta:"
 msgstr "Roles of the meeting to this minutes:"
 
-#: templates/minutes/approving_commission/tpl.html:106
+#: templates/minutes/approving_commission/tpl.html:119
 msgid "Presidente (opcional):"
 msgstr "President (optional):"
 
-#: templates/minutes/approving_commission/tpl.html:114
+#: templates/minutes/approving_commission/tpl.html:127
 msgid "Seleccione presidente"
 msgstr "Select President:"
 
-#: templates/minutes/approving_commission/tpl.html:120
+#: templates/minutes/approving_commission/tpl.html:133
 msgid "Secretario (opcional):"
 msgstr "Secretary (optional):"
 
-#: templates/minutes/approving_commission/tpl.html:127
+#: templates/minutes/approving_commission/tpl.html:140
 msgid "Seleccione secretario"
 msgstr "Select Secretary:"
 
-#: templates/minutes/approving_commission/tpl.html:139
+#: templates/minutes/approving_commission/tpl.html:152
 msgid "Lista de todos los miembros del grupo"
 msgstr "List of all group members"
 
-#: templates/minutes/approving_commission/tpl.html:139
+#: templates/minutes/approving_commission/tpl.html:152
 msgid "Miembros"
 msgstr "Members"
 
-#: templates/minutes/approving_commission/tpl.html:143
+#: templates/minutes/approving_commission/tpl.html:156
 msgid "Asistentes: Personas que asistieron a la reunión"
 msgstr "Participants: People who attended the meeting"
 
-#: templates/minutes/approving_commission/tpl.html:148
+#: templates/minutes/approving_commission/tpl.html:161
 msgid "Comisión aprobatoria: Personas encargadas de aprobar el acta"
 msgstr "Commission approving: People responsible for approving the minutes"
 
-#: templates/minutes/approving_commission/tpl.html:153
+#: templates/minutes/approving_commission/tpl.html:166
 msgid "Espacio de firma: Mostrar espacio para la firma de la persona"
 msgstr "Signing Space: Show Space for signature of the person"
 
-#: templates/minutes/approving_commission/tpl.html:177
+#: templates/minutes/approving_commission/tpl.html:190
 msgid ""
 "Este miembro es virtual, nunca ha accedido a Actarium. Solo los miembros "
 "activos pueden ser parte de la comisión aprobatoria."
@@ -335,9 +362,8 @@ msgstr ""
 "This member is virtual, has never acceded to Actarium. Only active members "
 "can be part of the commission approving."
 
-#: templates/minutes/approving_commission/tpl.html:199
-msgid "Notificar cambios"
-msgstr "Notify changes"
+#~ msgid "Notificar cambios"
+#~ msgstr "Notify changes"
 
 #~ msgid "Revisa los cambios que ha tenido esta acta hasta el momento"
 #~ msgstr "Review the changes that have taken this minutes until the moment"

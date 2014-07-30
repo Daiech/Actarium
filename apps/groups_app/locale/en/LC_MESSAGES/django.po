@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-25 17:44-0500\n"
+"POT-Creation-Date: 2014-07-30 15:46-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,54 +97,79 @@ msgstr ""
 msgid "Archivos"
 msgstr ""
 
-#: minutes.py:521 templates/groups/templates/rolesForMinutes.html:74
+#: minutes.py:267 minutes.py:291
+msgid "Se ha enviado un correo electrónico a toda la comisión aprobatoria."
+msgstr ""
+
+#: minutes.py:269
+msgid "El usuario no pertenece a la comisión aprobatoria"
+msgstr ""
+
+#: minutes.py:271
+msgid ""
+"Error, este usuario no exite, por favor, recarge la página e intente de "
+"nuevo."
+msgstr ""
+
+#: minutes.py:293
+msgid ""
+"Hay un error con la comisión aprobatoria, por favor, recarge la página e "
+"intente de nuevo."
+msgstr ""
+
+#: minutes.py:295
+msgid ""
+"Error, esta acta no exite, por favor, recarge la página e intente de nuevo."
+msgstr ""
+
+#: minutes.py:570 templates/groups/templates/rolesForMinutes.html:74
 #: templates/groups/templates/rolesForMinutes.html:126
 #: templates/groups/templates/rolesForMinutes.html:140
 msgid "Firmador"
 msgstr ""
 
-#: minutes.py:521 templates/groups/templates/rolesForMinutes.html:68
+#: minutes.py:570 templates/groups/templates/rolesForMinutes.html:68
 #: templates/groups/templates/rolesForMinutes.html:125
 #: templates/groups/templates/rolesForMinutes.html:137
 msgid "Aprobador"
 msgstr ""
 
-#: minutes.py:521 templates/groups/templates/rolesForMinutes.html:124
+#: minutes.py:570 templates/groups/templates/rolesForMinutes.html:124
 #: templates/groups/templates/rolesForMinutes.html:134
 msgid "Asistente"
 msgstr ""
 
-#: minutes.py:521 templates/groups/minutesTemplates/minutesTemplate0.html:157
+#: minutes.py:570 templates/groups/minutesTemplates/minutesTemplate0.html:157
 #: templates/groups/minutesTemplates/minutesTemplate3.html:157
 msgid "Presidente"
 msgstr ""
 
-#: minutes.py:521 templates/groups/minutesTemplates/minutesTemplate0.html:167
+#: minutes.py:570 templates/groups/minutesTemplates/minutesTemplate0.html:167
 #: templates/groups/minutesTemplates/minutesTemplate3.html:167
 msgid "Secretario"
 msgstr ""
 
-#: minutes.py:573
+#: minutes.py:622
 msgid "No se puede ser Secretario y Presidente al mismo tiempo"
 msgstr ""
 
-#: minutes.py:580
+#: minutes.py:629
 msgid "No se puede ser Presidente y Secretario al mismo tiempo"
 msgstr ""
 
-#: minutes.py:599
+#: minutes.py:648
 msgid "No tienes permiso para hacer eso, Por favor recarga la página"
 msgstr ""
 
-#: minutes.py:602
+#: minutes.py:651
 msgid "Por favor recarga la página e intenta de nuevo."
 msgstr ""
 
-#: minutes.py:862
+#: minutes.py:911
 msgid "Crear Acta"
 msgstr ""
 
-#: minutes.py:1075
+#: minutes.py:1124
 msgid "Editar acta "
 msgstr ""
 

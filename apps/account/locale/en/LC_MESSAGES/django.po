@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-25 17:57-0500\n"
+"POT-Creation-Date: 2014-07-30 15:46-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: templates/account/complete_registration.html:3
-msgid "Confirmaci&oacute;n de cuenta"
+#: templates/account/confirm_account.html:3
+msgid "Confirmación de cuenta"
 msgstr ""
 
-#: templates/account/complete_registration.html:8
-msgid "Configura tu perf&iacute;l"
+#: templates/account/complete_registration.html:7
+msgid "Configura tu perfíl"
 msgstr ""
 
-#: templates/account/complete_registration.html:20
+#: templates/account/complete_registration.html:19
 msgid "Omitir"
 msgstr ""
 
-#: templates/account/complete_registration.html:22
+#: templates/account/complete_registration.html:21
 msgid "Confirmar"
+msgstr ""
+
+#: templates/account/confirm_account.html:6
+msgid "Bienvendo a Actarium!"
+msgstr ""
+
+#: templates/account/confirm_account.html:13
+#, python-format
+msgid ""
+"Estás a punto de activar tu cuenta, pero antes, por favor confirma los "
+"siguientes datos y lee nuetros <a href=\"/%(URL_TERMS)s\" target=\"_blank"
+"\">Términos de uso</a> y <a href=\"/%(URL_PRIVACY)s\" target=\"_blank"
+"\">Políticas de privacidad</a>:"
+msgstr ""
+
+#: templates/account/confirm_account.html:19
+#, python-format
+msgid "Acepto los <a href=\"/%(URL_TERMS)s\" target=\"_blank\">Términos de uso"
+msgstr ""
+
+#: templates/account/confirm_account.html:26
+msgid ""
+"Conoce el funcionamiento general de <strong>Actarium</strong> en la sección "
+"<a href=\"/about\">Acerca</a>"
+msgstr ""
+
+#: templates/account/confirm_account.html:27
+msgid ""
+"Necesitas ayuda? Accede a las <a href=\"/help/faq\">Preguntas frecuentes</a>"
+msgstr ""
+
+#: templates/account/confirm_account.html:28
+msgid ""
+"Entérate de las actualizaciones de la plataforma en el <a href=\"/blog"
+"\">Blog oficial de <strong>Actarium</strong>"
+msgstr ""
+
+#: templates/account/confirm_account.html:30
+msgid ""
+"Si tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes "
+"hacerlo a través del módulo <a href=\"#\" id=\"callFeed\">FeedBack</a> que "
+"esta disponible a la derecha en todas las ventanas"
 msgstr ""
 
 #: templates/account/confirm_account_deleted.html:3
@@ -47,6 +90,10 @@ msgid ""
 "poder mejorar nuestras herramientas y nuestro servicio al cliente en cada "
 "momento. Por favor cuéntanos por qué eliminó su cuenta haciendo click <a id="
 "\"callFeed\" href=\"#\">aquí</a>"
+msgstr ""
+
+#: templates/account/delete_account.html:3 templates/account/password.html:3
+msgid "Cuenta de Usuario"
 msgstr ""
 
 #: templates/account/delete_account.html:7
@@ -76,6 +123,85 @@ msgstr ""
 msgid "Cancelar"
 msgstr ""
 
+#: templates/account/dni.html:3
+msgid "Configuración de DNI"
+msgstr ""
+
+#: templates/account/dni.html:10
+msgid "Tu información de DNI"
+msgstr ""
+
+#: templates/account/dni.html:25
+msgid ""
+"\n"
+"        El documento nacional de identidad, también conocido como Cédula de "
+"Ciudadanía (CC), Carné de Identidad (CI), Cédula de Identidad (CI) o "
+"Documento Nacional de Identidad (DNI) o identificación oficial o simplemente "
+"identificación, es un documento privado (individual) que contiene datos "
+"personales de carácter público emitido por una autoridad administrativa "
+"competente para permitir la identificación personal de los ciudadanos. <a "
+"href=\"http://es.wikipedia.org/wiki/Documento_de_identidad\" target=\"_blank"
+"\">Leer más</a>\n"
+"        "
+msgstr ""
+
+#: templates/account/dni.html:36
+msgid "Solicitante"
+msgstr ""
+
+#: templates/account/dni.html:41
+msgid "Grupo"
+msgstr ""
+
+#: templates/account/dni.html:46
+msgid "Estado"
+msgstr ""
+
+#: templates/account/dni.html:51
+msgid "Acción"
+msgstr ""
+
+#: templates/account/dni.html:62
+msgid "yo"
+msgstr ""
+
+#: templates/account/dni.html:73
+msgid "Sin responder"
+msgstr ""
+
+#: templates/account/dni.html:75
+msgid "Aceptado, si tiene acceso"
+msgstr ""
+
+#: templates/account/dni.html:77
+msgid "Rechazado, no tiene acceso"
+msgstr ""
+
+#: templates/account/dni.html:82
+msgid "Permitir acceso a DNI"
+msgstr ""
+
+#: templates/account/dni.html:84
+msgid "Retirar acceso a DNI"
+msgstr ""
+
+#: templates/account/invalid_link.html:3
+msgid "Link no valido"
+msgstr ""
+
+#: templates/account/invalid_link.html:8
+#, python-format
+msgid ""
+"\n"
+"\t\t<h3>Link no válido!</h3>\n"
+"\t\t<p>El link al que ingresaste ya no es válido.</p>\n"
+"\t\t<p>Si deseas iniciar sesión ingresa a <a href=\"%(login)s\">Iniciar "
+"sesión</a></p>\n"
+"\t\t<p>Si olvidaste tu contraseña utiliza la <a href=\"%(password_reset2)s"
+"\">opción de recuperación de contraseña</a></p>\n"
+"\t\t"
+msgstr ""
+
 #: templates/account/login.html:3 templates/account/login.html.py:7
 msgid "Iniciar Sesión"
 msgstr ""
@@ -91,7 +217,7 @@ msgid "Registrarse"
 msgstr ""
 
 #: templates/account/login.html:22
-msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
+msgid "&iquest;Olvidaste tu contraseña?"
 msgstr ""
 
 #: templates/account/newUser.html:3
@@ -106,6 +232,176 @@ msgstr ""
 msgid ""
 "Necesitamos identificarte para restringir tu contenido solo a las personas "
 "que tu desees."
+msgstr ""
+
+#: templates/account/noactivo.html:3
+msgid "Usuario no activo"
+msgstr ""
+
+#: templates/account/noactivo.html:6
+msgid "Usuario inactivo!"
+msgstr ""
+
+#: templates/account/noactivo.html:7
+msgid "El usuario no se encuentra activo en el momento"
+msgstr ""
+
+#: templates/account/noactivo.html:8
+msgid ""
+"Ingresa al link de activación que ha sido enviado al correo electrónico "
+"asociado a ésta cuenta"
+msgstr ""
+
+#: templates/account/password.html:11
+#: templates/account/password_reset_confirm.html:3
+msgid "Cambiar Contraseña"
+msgstr ""
+
+#: templates/account/password.html:18
+msgid "Actualizar Contraseña"
+msgstr ""
+
+#: templates/account/password.html:74 templates/account/personal_data.html:95
+msgid "Error al actualizar correo"
+msgstr ""
+
+#: templates/account/password.html:74 templates/account/personal_data.html:95
+msgid "Tu correo electronico no pudo ser actualizado"
+msgstr ""
+
+#: templates/account/password.html:77
+#: templates/account/password_reset_form.html:87
+#: templates/account/personal_data.html:97
+msgid "Datos Actualizados"
+msgstr ""
+
+#: templates/account/password.html:77
+#: templates/account/password_reset_form.html:87
+#: templates/account/personal_data.html:97
+msgid "Tus datos fueron actualizados correctamente"
+msgstr ""
+
+#: templates/account/password.html:80
+#: templates/account/password_reset_form.html:90
+msgid "Constraseña Actualizada"
+msgstr ""
+
+#: templates/account/password.html:80
+#: templates/account/password_reset_form.html:90
+msgid "Tu constraseña fue actualizada correctamente"
+msgstr ""
+
+#: templates/account/password_reset_complete.html:3
+#: templates/account/password_reset_complete.html:6
+msgid "Contraseña restaurada"
+msgstr ""
+
+#: templates/account/password_reset_complete.html:8
+#, python-format
+msgid ""
+"Tu contraseña ha sido restaurada, ahora puedes acceder a tu cuenta <a href="
+"\"%(login)s\">Iniciando sesión</a>"
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:7
+msgid "Recuperación de cuenta"
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:8
+msgid "Por favor escribe tu nueva contraseña para recuperar tu cuenta."
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:13
+msgid "Nueva contraseña:"
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:17
+msgid "Repite la contraseña:"
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:22
+msgid "Restaurar"
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:27
+msgid "Error recuperando contraseña"
+msgstr ""
+
+#: templates/account/password_reset_confirm.html:28
+msgid ""
+"La direccion para recuperar la contraseña no es valida, posiblemente sea "
+"porque ésta ya ha sido usada, por favor solicita la recuperación de nuevo."
+msgstr ""
+
+#: templates/account/password_reset_done.html:3
+msgid "Correo enviado"
+msgstr ""
+
+#: templates/account/password_reset_done.html:6
+msgid ""
+"\n"
+"\t\t<h3>Restablecer contraseña</h3>\n"
+"\t\t<p>Hemos enviado un correo electrónico con las instrucciones para "
+"restablecer la contraseña.</p>\n"
+"\t\t<p>Revisa la bandeja de entrada de tu correo, si no lo encuentras revisa "
+"la bandeja de correos no deseados.</p>\n"
+"\t\t"
+msgstr ""
+
+#: templates/account/password_reset_email.html:4
+msgid ""
+"Has recibido este correo porque has solicitado un cambio de contraseña para "
+"tu cuenta en www.actarium.com."
+msgstr ""
+
+#: templates/account/password_reset_email.html:6
+msgid "Porfavor ingresa al siguiente link para cambiar tu contraseña:"
+msgstr ""
+
+#: templates/account/password_reset_email.html:11
+msgid "Tu nombre de usuario es:"
+msgstr ""
+
+#: templates/account/password_reset_email.html:16
+msgid ""
+"\n"
+"Atentamente,\n"
+"\n"
+"El equipo Daiech\n"
+msgstr ""
+
+#: templates/account/password_reset_form.html:3
+#: templates/account/password_reset_form.html:6
+msgid "Recuperar Contraseña"
+msgstr ""
+
+#: templates/account/password_reset_form.html:7
+msgid ""
+"Olvidaste tu contraseña? Escribe tu email y te enviarmemos instrucciones "
+"para restablecerla."
+msgstr ""
+
+#: templates/account/password_reset_form.html:8
+msgid "Ingresa el correo asociado a tu cuenta"
+msgstr ""
+
+#: templates/account/password_reset_form.html:17
+msgid "Recuperar"
+msgstr ""
+
+#: templates/account/password_reset_form.html:25
+#, python-format
+msgid ""
+"No estás registrado? <a href=\"%(new_user)s\">Registrate</a>, es gratis."
+msgstr ""
+
+#: templates/account/password_reset_form.html:29
+#, python-format
+msgid "Si ya tienes una cuenta, <a href=\"%(login)s\">Inicia sesión</a>"
+msgstr ""
+
+#: templates/account/password_reset_subject.txt:2
+msgid "Solicitud de recuperación de contraseña en actarium.com"
 msgstr ""
 
 #: templates/account/personal_data.html:9
@@ -160,22 +456,6 @@ msgstr ""
 
 #: templates/account/personal_data.html:63
 msgid "Ultimo logueo"
-msgstr ""
-
-#: templates/account/personal_data.html:95
-msgid "Error al actualizar correo"
-msgstr ""
-
-#: templates/account/personal_data.html:95
-msgid "Tu correo electronico no pudo ser actualizado"
-msgstr ""
-
-#: templates/account/personal_data.html:97
-msgid "Datos Actualizados"
-msgstr ""
-
-#: templates/account/personal_data.html:97
-msgid "Tus datos fueron actualizados correctamente"
 msgstr ""
 
 #: templates/account/personal_data.html:99
