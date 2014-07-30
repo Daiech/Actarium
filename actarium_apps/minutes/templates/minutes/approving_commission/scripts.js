@@ -240,9 +240,23 @@ function sendEmailToApprovers(e){
 	{% endif %}
 	$("#commissionPanel").click();
 }
+function rememberApprove(e){
+	e.preventDefault();
+	var uid = $(this).attr("data-uid");
+	{% if minutes %}
+	sendNewAjax("{% url 'email_to_approver' group.slug minutes.id %}",{uid: uid}, function(data){
+		if (data.sent){
+			setAlertMessage("{% trans 'Recordatorio enviado' %}", data.msj);
+		}else{
+			setAlertError("{% trans 'Recordatorio NO enviado' %}", data.msj);
+		}
+	},{"method":"post"});
+	{% endif %}
+}
 $(document).on("click", ".btn-approve", setApprove);
+$(document).on("click", ".remember-approve", rememberApprove);
+$(document).on("click", "#sendEmailToApprovers", sendEmailToApprovers);
 $(document).on("click", ".btn-send-notification .btn-cancel", cancelEditCommission);
-$(document).on("click", ".btn-send-notification #sendEmailToApprovers", sendEmailToApprovers);
 $(document).on("click", ".set-role", setRole);//roles MAIN
 $(document).on("change", "#sel-president", setPresident);//roles MAIN
 $(document).on("change", "#sel-secretary", setSecretary);//roles MAIN

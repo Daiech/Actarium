@@ -27,6 +27,7 @@ def get_minutes_roles(minutes, group=None):
         members_list.append({
             "id": m.id_user.id,
             "username": m.id_user.username,
+            "email": m.id_user.email,
             "full_name": m.id_user.get_full_name(),
             "short_name": sn,
             "img": showgravatar(m.id_user.email, 20),

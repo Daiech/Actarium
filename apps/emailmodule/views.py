@@ -124,7 +124,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     except NameError:
         smtp = None
     if smtp:
-        if len(to) > 0 and not settings.DEBUG:
+        if len(to) > 0:# and not settings.DEBUG:
             sendGmailEmail(to, subject, html_content)
     else:
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)

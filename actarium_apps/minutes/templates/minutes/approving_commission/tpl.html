@@ -23,18 +23,23 @@
 						</a>
 					</div>
 					{% verbatim %}{% endif %}{% endverbatim %}
-					<ol class="commission-approving-list" class="">
+					<table class="table commission-approving-list" class="">
+						<tr>
+							<th colspan="2">{% trans 'Miembro' %}</th>
+							<th class="text-center">{% trans 'Estado' %}</th>
+							<th></th>
+						</tr>
 						{% verbatim %}
 						{% for member in ca %}
 							{% if member.role.is_approver %}
-							<li class="missing-{{ member.id }}">
-								<div>
+							<tr class="missing-{{ member.id }}">
+								<td class="user-image">
 									<img style="width:20px" src="{{ member.img }}">
-								</div>
-								<div> {{ member.short_name }} </div>
-								<div class="icon-approver-status">
+								</td>
+								<td> {{ member.short_name }} </div>
+								<td class="icon-approver-status text-center">
 									{% if member.get_minutes_signed == 0 %}
-									<i class="glyphicon glyphicon-time"></i>
+									<i class="glyphicon glyphicon-time"></i> 
 									{% endif %}
 									{% if member.get_minutes_signed == 1 %}
 									<i class="glyphicon glyphicon-ok"></i>
@@ -43,14 +48,23 @@
 									<i class="icon-remove-circle"></i>
 									{% endif %}
 								</div>
-							</li>
+								<td>
+									{% if member.get_minutes_signed == 0 %}
+									<a href="#" class="remember-approve popover-element" data-uid="{{ member.id }}" data-toggle="popover"  data-container="body" data-placement="top" data-content="{% endverbatim %}{% trans 'Click para enviar recordatorio a' %}{% verbatim %} {{ member.full_name }} ({{ member.email }})">
+										<i class="glyphicon glyphicon-send"></i>
+									</a>
+									{% endif %}
+								</td>
+							</tr>
 							{% endif %}
 						{% endfor %}
 						{% endverbatim %}
-					</ol>{% comment %}
+					</table>
 					{% if not minutes.is_minute_full_signed %}
-					<span><a href="#" id="btnEditCommission" class="btn"><span class="glyphicon glyphicon-pencil"></span> {% trans 'Editar comisión' %}</a></span>
-					{% endif %}{% endcomment %}
+					<div class="">
+					<button class="btn" type="button" id="sendEmailToApprovers"><span class="glyphicon glyphicon-send"></span> {% trans 'Enviar recordatorio a todos' %}</button>
+					{% endif %}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -196,7 +210,7 @@
 		<div class="btn-send-notification">
 			<div>
 			<a href="#" class="btn btn-cancel">{% trans 'Cerrar' %}</a> 
-			<button class="btn btn-success" type="button" id="sendEmailToApprovers"><span class="glyphicon glyphicon-send"></span> {% trans 'Enviar recordatorio' %}</button>
+			
 			</div>
 		</div>{% verbatim %}{% endif %}{% endverbatim %}
 	</div>

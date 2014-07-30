@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 import json
 
@@ -245,6 +246,31 @@ def removeUniqueRolGroup(group, role):
         return False
 
 
+def email_to_approver(request, slug_group, minutes_id):
+    group = Groups.objects.get_group(slug=slug_group)
+    if not group:
+        return HttpResponseRedirect('/#error-the-group-doesnt-exists')
+    is_org_admin = group.organization.has_user_role(request.user, "is_admin")
+    rel_group = getRelUserGroup(request.user, group)
+    if (rel_group and rel_group.is_secretary) or is_org_admin:
+        minutes_obj = minutes.objects.get_minute(id=minutes_id)
+        uid = User.objects.get_or_none(id=request.POST.get("uid"))
+        if uid:
+            email_list = minutes_obj.get_commision_email_list(id_user=uid)
+            if len(email_list) > 0:
+                email_ctx = {
+                    'code': minutes_obj.code,
+                    'groupname': group.name,
+                    'link': settings.URL_BASE + reverse("show_minute", args=(group.slug, minutes_obj.code)),
+                }
+                sendEmailHtml(15, email_ctx, email_list)
+                response = {"sent": True, "msj": _(u"Se ha enviado un correo electrónico a toda la comisión aprobatoria.")}
+            else:
+                response = {"sent": False, "msj": _(u"El usuario no pertenece a la comisión aprobatoria")}
+        else:
+            response = {"sent": False, "msj": _(u"Error, este usuario no exite, por favor, recarge la página e intente de nuevo.")}
+        return HttpResponse(json.dumps(response), mimetype="application/json")
+
 def email_to_approvers(request, slug_group, minutes_id):
     group = Groups.objects.get_group(slug=slug_group)
     if not group:
@@ -253,14 +279,21 @@ def email_to_approvers(request, slug_group, minutes_id):
     rel_group = getRelUserGroup(request.user, group)
     if (rel_group and rel_group.is_secretary) or is_org_admin:
         minutes_obj = minutes.objects.get_minute(id=minutes_id)
-        email_list = minutes_obj.get_commision_email_list(is_signed_approved=False)
-        email_ctx = {
-            'code': minutes_obj.code,
-            'groupname': group.name,
-            'link': settings.URL_BASE + reverse("show_minute", args=(group.slug, minutes_obj.code)),
-        }
-        sendEmailHtml(15, email_ctx, email_list)
-        return HttpResponse(json.dumps({"sent": True, "msj": _(u"Se ha enviado un correo electrónico a toda la comisión aprobatoria.")}), mimetype="application/json")
+        if minutes_obj:
+            email_list = minutes_obj.get_commision_email_list(is_signed_approved=False)
+            if len(email_list) > 0:
+                email_ctx = {
+                    'code': minutes_obj.code,
+                    'groupname': group.name,
+                    'link': settings.URL_BASE + reverse("show_minute", args=(group.slug, minutes_obj.code)),
+                }
+                sendEmailHtml(15, email_ctx, email_list)
+                response = {"sent": True, "msj": _(u"Se ha enviado un correo electrónico a toda la comisión aprobatoria.")}
+            else:
+                response = {"sent": False, "msj": _(u"Hay un error con la comisión aprobatoria, por favor, recarge la página e intente de nuevo.")}
+        else:
+            response = {"sent": False, "msj": _(u"Error, esta acta no exite, por favor, recarge la página e intente de nuevo.")}
+        return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
 def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editing=False):

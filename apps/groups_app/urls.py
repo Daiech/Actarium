@@ -19,7 +19,8 @@ urlpatterns += patterns('apps.groups_app.minutes',
     url(r'^approve_minutes$', 'setMinutesApprove', name="approve_minutes"),
     url(r'^(?P<slug_group>[-\w]+)/minutes/create-minutes(?P<id_reunion>.*)/(?P<slug_template>.*)', 'newMinutes', name='create_minutes'),
     url(r'^(?P<slug_group>[-\w]+)/minutes-code/edit/(?P<minutes_code>[-\w.\ ]+)/(?P<slug_template>.*)$', 'editMinutes', name="edit_minutes"),
-    url(r'^(?P<slug_group>[-\w]+)/minutes-code/(?P<minutes_id>[-\w.\ ]+)/email_to_approvers$', 'email_to_approvers', name="email_to_approvers"),
+    url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_id>[-\w.\ ]+)/email_to_approver$', 'email_to_approver', name="email_to_approver"),
+    url(r'^(?P<slug_group>[-\w]+)/minutes/(?P<minutes_id>[-\w.\ ]+)/email_to_approvers$', 'email_to_approvers', name="email_to_approvers"),
 )
 
 # Mettings
