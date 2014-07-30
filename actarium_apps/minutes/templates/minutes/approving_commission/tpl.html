@@ -39,19 +39,19 @@
 								<td> {{ member.short_name }} </div>
 								<td class="icon-approver-status text-center">
 									{% if member.get_minutes_signed == 0 %}
-									<i class="glyphicon glyphicon-time"></i> 
+									<span class="glyphicon glyphicon-time popover-element" data-toggle="popover"  data-container="body" data-placement="top" data-content="{{ member.full_name }} {% endverbatim %}{% trans 'aún no ha aprobado esta acta' %}{% verbatim %}"></span> 
 									{% endif %}
 									{% if member.get_minutes_signed == 1 %}
-									<i class="glyphicon glyphicon-ok"></i>
+									<span class="glyphicon glyphicon-ok popover-element" data-toggle="popover"  data-container="body" data-placement="top" data-content="{{ member.full_name }} {% endverbatim %}{% trans 'aprobó esta acta' %}{% verbatim %}"></span>
 									{% endif %}
 									{% if member.get_minutes_signed == 2 %}
-									<i class="icon-remove-circle"></i>
+									<span class="icon-remove-circle popover-element" data-toggle="popover"  data-container="body" data-placement="top" data-content="{% endverbatim %}{% verbatim %}"></span>
 									{% endif %}
 								</div>
 								<td>
 									{% if member.get_minutes_signed == 0 %}
 									<a href="#" class="remember-approve popover-element" data-uid="{{ member.id }}" data-toggle="popover"  data-container="body" data-placement="top" data-content="{% endverbatim %}{% trans 'Click para enviar recordatorio a' %}{% verbatim %} {{ member.full_name }} ({{ member.email }})">
-										<i class="glyphicon glyphicon-send"></i>
+										<span class="glyphicon glyphicon-send"></span>
 									</a>
 									{% endif %}
 								</td>
