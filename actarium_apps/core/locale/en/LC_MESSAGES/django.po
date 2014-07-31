@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-30 15:47-0500\n"
-"PO-Revision-Date: 2014-07-30 16:53-0500\n"
+"PO-Revision-Date: 2014-07-30 18:14-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -132,7 +132,6 @@ msgid "Actualizar"
 msgstr "Update"
 
 #: templates/organizations_services.html:41
-#, fuzzy
 msgid "Estado de Ordenes"
 msgstr "Order status"
 
