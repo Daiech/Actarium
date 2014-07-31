@@ -39,7 +39,6 @@ def home(request):
         from actarium_apps.organizations.views import listOrgs
         return listOrgs(request)
     else:
-        saveViewsLog(request, "landing anonymous")
         return landing(request)
 
 
