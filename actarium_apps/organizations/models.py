@@ -9,6 +9,8 @@ from libs.generic_managers import GenericManager
 
 from libs.thumbs import ImageWithThumbsField
 from uuslug import uuslug
+from datetime import datetime  
+
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules(
     [
@@ -214,7 +216,11 @@ class rel_user_group(models.Model):
     is_superadmin = models.BooleanField(default=False)
     is_convener = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)
+
     is_active = models.BooleanField(default=True)
+    date_added = models.DateTimeField(auto_now_add=True, default=datetime.now)
+    date_modified = models.DateTimeField(auto_now=True, default=datetime.now)
+
 
     objects = RelUserGroupManager()
 
