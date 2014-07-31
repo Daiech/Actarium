@@ -104,7 +104,7 @@
         {%if not rel_user.is_secretary%}
             $(".create-minutes").on("click",function(e){
                 e.preventDefault();
-                setAlertMessage("{% trans 'Permisos de redacci&oacute;n","No tienes permisos de redacci&oacute;n sobre este grupo, por esta raz&oacute;n no puedes crear actas, solicita al administrador del grupo que te otorgue los permisos necesarios para poder realizar esta labor' %}");
+                setAlertMessage("{% trans 'Permisos de redacción' %}","{% trans 'No tienes permisos de redacción sobre este grupo, por esta razón no puedes crear actas, solicita al administrador del grupo que te otorgue los permisos necesarios para poder realizar esta labor' %}");
             })
         {%endif%}
 	});

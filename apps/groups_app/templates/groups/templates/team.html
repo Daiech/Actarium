@@ -17,19 +17,10 @@
 		        	</div>
 		        </li>
 		        <li>
-		            <input type="hidden" id="group_name" value="{{group.name}}">
-		            <input type="hidden" id="group_id" value="{{group.id}}">
-		        	<div class="prelative">
-		                <button id="button-search" class="btn btn-info"><i class="glyphicon glyphicon-search icon-white"></i> </button>
-		                <input type="text" placeholder="Nombre de usuario o correo" id="newmember">
-		                <span id="load-member"></span>
-		            </div>	
+		            
 		        </li>
 		        <li>
-		            <p id="message-search"></p>
-		        </li>
-		        <li>
-		            <ul id="search-result">
+		            <ul >
 		            	
 		            </ul>
 		        </li>
@@ -48,23 +39,7 @@
 			</div>
 			{% if rel_user.is_admin or user_is_org_admin %}
 			<div class="col-md-6">
-				<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
-	            <div class="dropdown-container" id="dropdown-org-users">
-	        		<div class="header-title">
-	                	<span>{% blocktrans with org=group.organization %}Miembros de {{ org }} {% endblocktrans %}</span>
-	                	<div class="close close-popover glyphicon glyphicon-remove"></div>
-	            	</div>
-	            	<div class="dropdown-body">
-	            		<div class="first-menu user-list">
-	            			<ul class="list-unstyled" id="org-user-list"></ul>
-	            		</div>
-						<div class="second-menu">
-							<div class="">
-	                        	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
-							</div>
-						</div>
-	            	</div>
-	            </div>
+				{% include "groups/templates/add_member_dropdown.html" %}
 			</div>
 			{% endif %}
 		</div>
@@ -119,36 +94,6 @@
 <script type="text/template" id="teamListTpl">
 	{% include "groups/templates/user_roles.html" %}
 </script>
-{% if rel_user.is_admin or user_is_org_admin %}
-<script type="text/template" id="new-user-template">
-	<li>
-		<div class="">
-			<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
-			{% verbatim %}
-			<input id="new-user-firstname" type="text" placeholder="Nombres" value="{{username}}">
-			<input id="new-user-lastname" type="text" placeholder="Apellidos">
-			<input id="new-user-email" type="hidden" value="{{mail}}">
-			<input id="new-user-uname" type="hidden" value="{{username}}">
-			{% endverbatim %}
-		</div>
-	</li>
-	<li>
-		<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitaci&oacute;n" %}</button>
-	</li>
-</script>
-<script type="text/template" id="org-user-template">
-	{% verbatim %}
-	{% for u in users %}
-		<li id="org-user-{{ u.id }}">
-			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
-				<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="32px" /></span>
-				<span>{{ u.full_name }}</span>
-				<span class="glyphicon glyphicon-ok {% if not u.is_member %}hidden{% endif %}"></span>
-			</a>
-		</li>
-	{% endfor %}
-	{% endverbatim %}
-</script>{% endif %}
 {% endblock %}
 
 
@@ -190,8 +135,8 @@
     ul#add-member-menu li{margin-bottom: 7px;}
     ul#add-member-menu li a:hover, ul#add-member-menu li a:active{color: white}
     .dropdownmenu  * li{list-style:none;text-decoration: none;}
-    #newmember{margin: 3px;/*padding: 10px;*/width: 68%;}
-    #button-search{margin: 3px;padding: 10px;padding-left: 20px;padding-right: 20px;position: absolute;right: 0;}
+    /*#newmember{margin: 3px;padding: 10px;width: 68%;}*/
+    /*#button-search{margin: 3px;padding: 10px;padding-left: 20px;padding-right: 20px;position: absolute;right: 0;}*/
     .btnSup{margin-top: 8px;}
     div > section ul{margin-left:0; }
     div > section ul li{list-style: none;}
@@ -201,18 +146,22 @@
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
     .td-info-user .dropdown-container{right: 0}
     #dropdown-org-users{width: 283px;}
-    .org-user-img{width: 32px;height: 32px;display: inline-block;margin-right: 4px;}
-    #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 240px;}
+    .org-user-img{width: 28px;height: 28px;display: inline-block;margin-right: 8px;}
+    #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 388px;}
     #dropdown-org-users .dropdown-body ul li {position: relative;}
-    #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;}
-    #dropdown-org-users .dropdown-body ul li a span.glyphicon-ok{position: absolute;right: 0;padding: 10px;font-size: 14px;color: #dadada;}
+    #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;color: #333;border-radius: 3px;}
+    #dropdown-org-users .dropdown-body ul li a:hover{color: white;}
+    #dropdown-org-users .dropdown-body ul li a span.glyphicon{position: absolute;right: 0;padding: 8px;font-size: 14px;color: #ddd;}
+    ul li a{color: #333;}
+    ul li a:hover{color: white;}
+
     .btn .caret{margin: 0 !important;}
 	@media (min-width: 480px) {
-		#newmember{width: 74%;}
+		/*#newmember{width: 74%;}*/
 		/*#add-member-menu{width: 315px;}*/
 	}
 	@media (min-width: : 380px) {
-		#newmember{width: 60%;}
+		/*#newmember{width: 60%;}*/
 		#add-member-menu{width: 280px;left: -75px;}
 	}
 </style>
@@ -227,10 +176,9 @@
 <script src="{{STATIC_PREFIX}}js/vendor/jquery.nicescroll.min.js"></script>
 <script type="text/javascript" ><!--
 	$(document).ready(function() {
-		var message = "{% trans 'Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.' %}";
-		$("#message-search").html(message);
 		$("#admin-roles").addClass("active");
 		$(".icons-info span, .username-info, .info-title, .resend").tooltip();
+		
 		{% if user_selected%}
 		$("#user-{{user_selected}} td").css({"background-color":"#F9F395"})
 		{%endif%}
@@ -249,7 +197,7 @@
 					last_name: "{{ m.id_user.last_name }}",
 					get_full_name: "{{ m.id_user.get_full_name }}",
 					email: "{{ m.id_user.email }}",
-					gravatar: "{{ m.id_user.email|showgravatar:20 }}",
+					gravatar: "{{ m.id_user.email|showgravatar:28 }}",
 					is_active: {{ m.id_user.is_active|lower }},
 					roles: {
 						is_member: {{ m.is_member|lower }},
@@ -276,254 +224,85 @@
 		}
 		$("#teamList").html(swig.render($("#teamListTpl").html(),{locals: team}));
 		$(".popover-element").popover({trigger: 'hover'});
-		{% if rel_user.is_admin or user_is_org_admin %}
-			$(".user-list").niceScroll();
-			function load_org_member_list () {
-				users = {};
-				{% for u in group.organization.get_members %}{% is_member_of_group "u" "group" as is_member %}
-				users[{{ forloop.counter0 }}] = {"id": "{{ u.id }}","email": "{{ u.email }}","username": "{{ u.username }}","image": "{{ u.email|showgravatar:32 }}","full_name": "{{ u.get_full_name|truncatewords:20 }}", "is_member": {{ is_member|lower }}};{% endfor %}
-				$("#org-user-list").html(swig.render($("#org-user-template").html(), {locals: users}));
-			}
-			function append_org_member(u){
-				users = {};
-				users[0] = {"id": u.iid,"email": u.email, "username": u.username, "image": u['gravatar'],"full_name": u['full_name'], "is_member": true};
-				$("#org-user-list").append(swig.render($("#org-user-template").html(), {locals: users}));
-			}
-			change_actions_org_member = function (id){
-				var e = $("#org-user-"+id);
-				e.find("span.glyphicon-ok").toggleClass("hidden");
-				e.find("a.link-to-invite").toggleClass("user-inv");
-			}
-		    showIconCloseOnHover()
-		    var MAX_LENGTH = 60
-		    function getRoleName (op) {
-		    	switch(op){
-		    		case 1 : return "{% trans 'Miembro. Los miembros aparecen en las actas' %}"; break;
-		    		case 2 : return "{% trans 'Redactor de Actas' %}"; break;
-		    		case 3 : return "{% trans 'Creador de reuniones para &eacute;ste grupo.' %}"; break;
-		    		case 4 : return "{% trans 'Administrador de &eacute;ste grupo' %}"; break;
-		    	}
-		    }
-		    function callbackSetRole(data) {
-		    	if (data["saved"]){
-			    	setAlertMessage("{% trans 'Permiso agregado' %}", data['u'] + " ahora es " + getRoleName(data['role']))
-			    }
-			    else{
-			    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
-			    }
-		    }
-		    function callbackRemoveRole(data) {
-		    	if (data["saved"]){
-			    	setAlertMessage("{% trans 'Rol removido' %}", data['u'] + " ya no es " + getRoleName(data['role']))
-			    }
-			    else{
-			    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
-			    }
-		    }
-		    function setRole(e) {
-		    	var checkbox = $(this);
-		    	var role = checkbox.attr("data-role")
-		    	var role_name = checkbox.attr("data-role-name")
-		    	var uid = checkbox.attr("data-uid")
-		    	if(checkbox.is(":checked")){
-		    		sendNewAjax("{% url 'set_role_in_group' group.slug %}",
-		    			{"role":role, "uid": uid, "remove": 0},
-		    			callbackSetRole,
-		    			{"method":"post"})
-		    	}
-		    	else{
-		    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
-		    			sendNewAjax("{% url 'set_role_in_group' group.slug %}",
-		    				{"role":role, "uid": uid, "remove": 1},
-		    				callbackRemoveRole,
-		    				{"load_elem": "#ac-load", "method":"post"})
-		    		}
-		    		else{
-		    			checkbox.prop("checked",true);
-		    		}
-		    	}
-		    }
-		    function showIconAddMemberOnHover(){
-		        // mostrar flecha sobre usuario
-		        $(".user-li").hover(
-		            function(){
-		                $(this).find("i").toggleClass("hidden");
-		        })
-		    }
-		    function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
-		    	if(data.mail_is_valid){
-			        if(data.is_user){//es usuario de la base de datos
-			            user_to_invite = data['mail']+" ("+data['username']+")";
-			            if(user_to_invite.length > MAX_LENGTH)
-			                p="..."
-			            $("#message-search").html("<strong>" + data.username + "</strong> hace parte de Actarium, haz click en el nombre para invitar.");
-			            $("#search-result").html(
-			                "<li class='user-li'>"+
-			                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-			                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-			                user_to_invite.substring(0,MAX_LENGTH)+p+
-			                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-			                "</a>"+
-			                "</li>"
-			                );
-			        }
-			        else{//No es usuario de la base de datos
-			            if(data['mail'].length > MAX_LENGTH)
-			                p="..."
-			            var view = {
-			            	"mail": data['mail'],
-			            	"gravatar": data['gravatar'],
-			            	"username": data['username'],
-			            	"p": p
-			            }
-			            $("#search-result").html(swig.render($("#new-user-template").html(), {locals:view}));
-			            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
-			            $("#add-new-user").on("click", sendInvitationToNewUser);
-			        }
-			        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
-			    }
-		    }
-		    invitationResult = function (data, append_to_org_list){//Resultados de la invitacion (agrega si TRUE, error si False)
-		        if(data['invited']){    //USUARIO INVITADO
-		        	var is_admin = "{{is_admin}}";
-		        	var user = {
-						id: data['iid'], is_active: data['is_active'],
-						username: data['username'], first_name: data['first_name'], last_name: data['last_name'],
-						get_full_name: data['full_name'], email: data['email'], gravatar: data['gravatar'],
-						roles: {is_member: true,is_secretary: false,is_admin: false}
-					}
-		        	var team_members = team.members;
-		        	team.members = [user]; 
-					$("#teamList").append(swig.render($("#teamListTpl").html(),{locals: team}));
-					team.members = team_members;
-					team.members.push(user);
-					setAlertMessage("{% trans 'Invitado' %}", data['message'])
-		            showIconCloseOnHover()
-					$("td input[type='checkbox']").on("click", setRole);
-		            $("#newmember").val("");
-		            if (!append_to_org_list){append_org_member(data);}
-		        }else{//EL USUARIO YA ESTA INVITADO
-		            if(data["message"]){
-		                setAlertError("{% trans 'Informaci&oacute;n' %}","("+data['email']+") "+data['message'])
-		            }
-		            else{
-		                //si no hay mensaje, error desconocido
-		                if(data["error"]){
-		                	setAlertError("{% trans 'Ups! Algo sali&oacute; mal :(' %}",data['error'])
-		                }
-		                else{
-		                	setAlertError("{% trans 'Ups! Algo sali&oacute; mal :(' %}","{% trans 'Por favor recarga la p&aacute;gina e intenta de nuevo' %}")
-		                }
-		            }
-		        }
-		    }
-		    function sendInvitationToNewUser(e){
-		    	e.preventDefault();
-		    	var ctx = {
-		    		"new": 1,
-		    		"pk": $("#group_id").val(),
-		    		"mail": $("#new-user-email").val(),
-		    		"uname": $("#new-user-uname").val(),
-		    		"firstname": $("#new-user-firstname").val(),
-		    		"lastname": $("#new-user-lastname").val(),
-		    		}
-				sendAjax("{% url 'set_invitation' %}",ctx,"",invitationResult);
-				$("#search-result").fadeOut(300,function (argument) {
-					$(this).empty().show().removeClass("user-li");;
-				});
-	            $("#newmember").focus();
-	            $("#message-search").html(message);
-		    }
-		    sendInvitation = function (elem, callback) {
-		    	var mail = elem.attr("data-email");
-	            var uname = elem.attr("data-username");
-	            var group_id = $("#group_id").val();
-	            sendNewAjax("{% url 'set_invitation' %}", {"pk":group_id, "mail": mail}, callback);
-		    }
-		    function sendInvitationOnClick(){//escucha el evento click para agregar al usuario al grupo
-		        $(".user-li > a").on("click",function(e){
-		            e.preventDefault();
-		            sendInvitation($(this), invitationResult);
-		            $(this).parent().fadeOut(300, function (e){
-		            	$(this).empty().show().removeClass("user-li");
-		            });
-		            $("#newmember").focus();
-		            $("#message-search").html(message);
-		        });
-		    }
-		    function listMembers(data){//lista los usuarios disponibles a invitar
-		        if(data){
-		        	if (data.forbbiden){
-		        		setAlertError("{% trans 'Error' %}", data.forbbiden);
-		        	}else{
-			            p="";
-			            if(data["mail_is_valid"]){//el email valido, o el usuario es existente
-			                appendMemberToList(data);//Muestra la lista de posibles miembros a agregar
-			                sendInvitationOnClick();//escucha el evento click para agregar al usuario al grupo
-			            }
-			            else{//el correo es invalido o no hay resultados de usuarios existentes
-			            	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electr&oacute;nico.' %}");
-			                $("#search-result").html("<li style='list-style:none'>"+
-			                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
-			                                            "</a>"+
-			                                        "</li>")
-			            }
-		        	}
-		        }else{//error en el server
-		            setAlertError("Error en el servidor","Lo sentimos, algo sali&oacute; mal en el servidor, no es tu culpa<br><br>Gracias por darte cuenta, trataremos de repararlo.")
-		        }
-		    }
-		    function getSearch () {
-		    	var user = $("#newmember").val();
-		        sendNewAjax("{% url 'get_users_list' group.organization.slug  %}", {search: user}, listMembers);
-		    }
-		    function searchMember(e){//INVITACIONES MAIN
-		    	e.preventDefault();
-		        if(e.keyCode==13){
-				    getSearch();
-		        }
-		    }
-		    function showIconCloseOnHover(){
-		        $(".list-member-item").hover(function(){  
-		            $(this).find("i.icon-remove").show(10)  
-		        },function(){                      
-		            $(this).find("i.icon-remove").hide(30)
-		        })
-		    }
-		    function changeDataBtn(elem){
-		    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
-		    	var first_menu = elem.closest(".first-menu");
-
-		    	second_menu.slideDown(150);
-		    	first_menu.slideUp(200, function(){$(".first-element").focus();});
-
-		    	second_menu.find(".back").on("click", function (e) {
-		    		e.preventDefault();
-		    		e.stopPropagation();
-		    		first_menu.slideDown(150);
-		    		second_menu.slideUp(200);
-		    	});
-		    }
-		    function setNewNames(uid, fname, lname){
-
-		    }
-		    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
-		    $("#button-search").on("click", function (e) {
-		    	e.preventDefault();
-		    	getSearch();
-		    	$("#newmember").focus();
-		    });
-		    $("#newmember").on("keyup", searchMember);//INVITACIONES MAIN 
-		    $("#add-member").on('click focus', function(){//dar FOCO al input para buscar miembros
-		        $("#add-member-menu").addClass("disblock");
-		        $("#newmember").focus();//give the focus to the input to search members
-		    });
-		    $("#close-add-member").on("click",function(e){//boton cerrar dropdown
-		        $("#add-member-menu").removeClass("disblock");//Close the dropdown menu to add members
-		    });
-		    load_org_member_list();
-		{% endif %}
 	});
+	{% if rel_user.is_admin or user_is_org_admin %}
+		{% include "groups/add_member_dropdown/scripts.js" %}
+		change_actions_org_member = function (id){
+			var e = $("#org-user-"+id);
+			e.find("span.glyphicon-ok").toggleClass("hidden");
+			e.find("a.link-to-invite").toggleClass("user-inv");
+		}
+	    function getRoleName (op) {
+	    	switch(op){
+	    		case 1 : return "{% trans 'Miembro. Los miembros aparecen en las actas' %}"; break;
+	    		case 2 : return "{% trans 'Redactor de Actas' %}"; break;
+	    		case 3 : return "{% trans 'Creador de reuniones para &eacute;ste grupo.' %}"; break;
+	    		case 4 : return "{% trans 'Administrador de &eacute;ste grupo' %}"; break;
+	    	}
+	    }
+	    function callbackSetRole(data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("{% trans 'Permiso agregado' %}", data['u'] + " ahora es " + getRoleName(data['role']))
+		    }
+		    else{
+		    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
+		    }
+	    }
+	    function callbackRemoveRole(data) {
+	    	if (data["saved"]){
+		    	setAlertMessage("{% trans 'Rol removido' %}", data['u'] + " ya no es " + getRoleName(data['role']))
+		    }
+		    else{
+		    	setAlertError("{% trans 'Ocurri&oacute; un error' %}", data['error'])
+		    }
+	    }
+	    function setRole(e) {
+	    	var checkbox = $(this);
+	    	var role = checkbox.attr("data-role")
+	    	var role_name = checkbox.attr("data-role-name")
+	    	var uid = checkbox.attr("data-uid")
+	    	if(checkbox.is(":checked")){
+	    		sendNewAjax("{% url 'set_role_in_group' group.slug %}",
+	    			{"role":role, "uid": uid, "remove": 0},
+	    			callbackSetRole,
+	    			{"method":"post"})
+	    	}
+	    	else{
+	    		if(confirm("{% trans 'Seguro que desea eliminarle este rol?' %}")){
+	    			sendNewAjax("{% url 'set_role_in_group' group.slug %}",
+	    				{"role":role, "uid": uid, "remove": 1},
+	    				callbackRemoveRole,
+	    				{"load_elem": "#ac-load", "method":"post"})
+	    		}
+	    		else{
+	    			checkbox.prop("checked",true);
+	    		}
+	    	}
+	    }
+	    function searchMember(e){//INVITACIONES MAIN
+	    	e.preventDefault();
+	        if(e.keyCode==13){
+			    getSearch();
+	        }
+	    }
+	    function changeDataBtn(elem){
+	    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
+	    	var first_menu = elem.closest(".first-menu");
+
+	    	second_menu.slideDown(150);
+	    	first_menu.slideUp(200, function(){$(".first-element").focus();});
+
+	    	second_menu.find(".back").on("click", function (e) {
+	    		e.preventDefault();
+	    		e.stopPropagation();
+	    		first_menu.slideDown(150);
+	    		second_menu.slideUp(200);
+	    	});
+	    }
+	    function setNewNames(uid, fname, lname){
+	    }
+	    $("td input[type='checkbox']").on("click", setRole);//INVITACIONES MAIN 
+	{% endif %}
 	{% if rel_user.is_admin or user_is_org_admin %}
 	function reSendInvitation (elem) {
     	var uid = $(elem).attr("data-uid");

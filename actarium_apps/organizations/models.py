@@ -247,9 +247,9 @@ class OrganizationsUserManager(GenericManager):
 
     def get_members(self):
         users = []
-        for u in self.get_all_active().filter(role__code="is_member"):
+        for u in self.get_all_active().filter(role__code="is_member").order_by("-user__is_active", "user__username"):
             users.append(u.user.id)
-        return User.objects.filter(id__in=users)
+        return User.objects.filter(id__in=users).order_by("-is_active", "username")
 
     def get_org(self, **kwargs):
         for k,v in kwargs.iteritems():

@@ -17,77 +17,65 @@ import json
 def get_user_org_groups(request, slug_org=False):
     """Only org admin can use this function"""
     saveViewsLog(request, "actarium_apps.organizations.views_ajax.getListMembers")
-    if request.is_ajax():
-        if request.method == "GET":
-            org = request.user.organizationsuser_user.get_org(slug=slug_org)
-            uname = request.GET.get("uname")
-            if uname:
-                _user = User.objects.get_or_none(username=str(uname))
-                if _user and org.has_user_role(_user, "is_member") or org.has_user_role(_user, "is_admin"):
-                    my_group_list = []
-                    for g in org.get_groups():
-                        rel = rel_user_group.objects.get_rel(_user, g)
-                        if rel:
-                            my_group_list.append(
-                                {"id": g.id,
-                                "name": g.name,
-                                "url": g.get_absolute_url(),
-                                "image": g.image_path.url_100x100})
-                    return HttpResponse(json.dumps(my_group_list), mimetype="application/json")
-    raise Http404
+    if not request.is_ajax():
+        raise Http404
+    if request.method == "GET":
+        org = request.user.organizationsuser_user.get_org(slug=slug_org)
+        uname = request.GET.get("uname")
+        if uname:
+            _user = User.objects.get_or_none(username=str(uname))
+            if _user and org.has_user_role(_user, "is_member") or org.has_user_role(_user, "is_admin"):
+                my_group_list = []
+                for g in org.get_groups():
+                    rel = rel_user_group.objects.get_rel(_user, g)
+                    if rel:
+                        my_group_list.append(
+                            {"id": g.id,
+                            "name": g.name,
+                            "url": g.get_absolute_url(),
+                            "image": g.image_path.url_100x100})
+                return HttpResponse(json.dumps(my_group_list), mimetype="application/json")
 
 
 @login_required(login_url='/account/login')
 def getListMembers(request, slug_org=False):
     """Only org admin can use this function"""
     saveViewsLog(request, "actarium_apps.organizations.views_ajax.getListMembers")
-    if request.is_ajax():
-        if request.method == "GET":
-            org = request.user.organizationsuser_user.get_org(slug=slug_org)
-            if org and org.has_user_role(request.user, "is_admin"):
-                try:
-                    search = request.GET.get('search')
-                    valid_email = validateEmail(search)
-                    if valid_email:
-                        try:
-                            ans = User.objects.get(email=search)
-                        except User.DoesNotExist:
-                            ans = 1  # email valido, pero no es usuario
-                    else:
-                        try:
-                            ans = User.objects.get(username=search)
-                        except User.DoesNotExist:
-                            ans = 2  # no existe el usuario
-                    if ans != 1 and ans != 2:
-                        message = {
-                            "user_id": ans.id,
-                            "mail_is_valid": True,
-                            "username": ans.username,
-                            "is_user": True,
-                            "mail": ans.email,
-                            "gravatar": showgravatar(ans.email, 30)}
-                    else:
-                        if ans == 1:  # email valido, pero no es usuario
-                            message = {"user_id": search, "mail_is_valid": True,
-                                        "mail": search, "username": search.split("@")[0].title(),
-                                        "gravatar": showgravatar(search, 30), "is_user": False}
-                        else:
-                            if ans == 2:  # no existe el usuario e email invalido
-                                message = {"mail_is_valid": False}
-                            else:
-                                    message = False
-                except Exception:
-                    message = False
-            else:
-                message = {"forbbiden": _("No tienes permiso para agregar usuarios.")}
-            return HttpResponse(json.dumps(message), mimetype="application/json")
+    if not request.is_ajax():
+        raise Http404
+    if not (request.method == "GET"):
+        raise Http404
+    org = request.user.organizationsuser_user.get_org(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_admin"):
+        search = request.GET.get('search')
+        if validateEmail(search):
+            try:
+                ans = User.objects.get(email=search)
+            except:
+                ans = 1  # email valido, pero no es usuario
         else:
-            message = False
-        return HttpResponse(message, mimetype="application/json")
+            ans = User.objects.filter(last_name__regex=r"^" + search + "")
+        
+        if ans == 1:  # email valido, pero no es usuario
+            user_info ={"user_id": search, "mail": search, "username": search.split("@")[0].title(),
+                    "gravatar": showgravatar(search, 30), "is_user": False}
+            users = {"users": False, "new_user": user_info}
+        else:
+            users_json = []
+            for u in ans:
+                users_json.append({
+                    "id": u.id,
+                    "username": u.username,
+                    "full_name": u.get_full_name(),
+                    "is_user": True,
+                    "mail": u.email,
+                    "gravatar": showgravatar(u.email, 30)
+                })
+            users = {"users": users_json, "new_user": False}
     else:
-        message = False
-        return HttpResponse(message, mimetype="application/json")
-
+        users = {"forbbiden": _("No tienes permiso para agregar usuarios.")}
+    return HttpResponse(json.dumps(users), mimetype="application/json")
+    
 
 @login_required(login_url='/account/login')
 def config_admin_to_org(request, slug_org):

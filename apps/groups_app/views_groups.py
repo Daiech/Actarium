@@ -47,7 +47,7 @@ def showTeamGroup(request, slug_group):
     _user_rel = getRelUserGroup(request.user, g.id)
     if _user_rel or user_is_org_admin:
         if user_is_org_admin or _user_rel.is_active:
-            members = rel_user_group.objects.filter(id_group=g.id).order_by("-is_active")
+            members = rel_user_group.objects.filter(id_group=g.id).order_by("-id_user__is_active", "id_user__username")
             is_m = _user_rel.is_member if( _user_rel and _user_rel.is_member) else user_is_org_admin
             is_s = _user_rel.is_secretary if (_user_rel and _user_rel.is_secretary) else user_is_org_admin
             ctx = {"user_is_org_admin": user_is_org_admin, "group": g, "rel_user": _user_rel, "is_member": is_m, "is_secretary": is_s, "members": members, "user_selected": u_selected, "breadcrumb":_("Equipo de trabajo")}
