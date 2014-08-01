@@ -5,7 +5,7 @@
 {% block toolbar_content %}
 <ul class="list-unstyled">
     <li>
-        <a href="{% url 'new_reunion_group' group.slug %}" >
+        <a id="newReunion" href="{% url 'new_reunion_group' group.slug %}" >
             <span class="glyphicon glyphicon-plus"></span> {% trans " Convocar Reuni&oacute;n" %}
         </a>
     </li>
@@ -208,6 +208,12 @@
 <script type="text/javascript" ><!--
 $(document).ready(function() {
 
+	{% if group.organization.is_expired %}
+	    $("#newReunion").on("click",function(e){
+	        e.preventDefault();
+	        setAlertMessage("{% trans 'La cuenta a expirado' %}","{% trans 'No puedes convocar reuniones cuando esta vencida la cuenta, debes actualizar el servicio desde el menú de organización para poder realizar esta acción' %}");
+	    })
+    {% endif %}
 	$("#menu-reunions").addClass("menu-active")
 	$("#menu-reunions .navbar-item").addClass("navbar-item-hover");
     $("#menu-reunions .navbar-button-propierties").css({"height":"15px"}, 100);
