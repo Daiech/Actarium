@@ -1,0 +1,61 @@
+{% load i18n orgs_ttag %}
+<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
+<div class="dropdown-container" id="dropdown-org-users">
+	<div class="header-title">
+    	<span>{% blocktrans %}Agregar miembros{% endblocktrans %}</span>
+    	<div class="close close-popover glyphicon glyphicon-remove"></div>
+	</div>
+	<div class="dropdown-body">
+		<div class="first-menu user-list">
+			<div class="search-member">
+				<input type="hidden" id="group_name" value="{{group.name}}">
+	            <input type="hidden" id="group_id" value="{{group.id}}">
+	        	<div class="prelative">
+	                <div class="input-group">
+	                	<input type="text" placeholder="{% trans 'Nombre de usuario o correo' %}" id="newmember" class="form-control" autofocus>
+	                	<div class="input-group-addon" id="button-search"><i class="glyphicon glyphicon-search"></i></div>
+	                </div>
+	                <p id="message-search"></p>
+	                <span id="load-member"></span>
+	            </div>
+			</div>
+			<hr>
+			<ul id="search-result"></ul>
+			<ul class="list-unstyled" id="org-user-list"></ul>
+		</div>
+		<div class="second-menu">
+			<div class="">
+            	<a href="#" class="btn btn-link back"><i class="glyphicon glyphicon-chevron-left"></i> {% trans "Regresar" %}</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if rel_user.is_admin or user_is_org_admin %}
+<script type="text/template" id="new-user-template">
+	<li>
+		<div class="">
+			<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
+			<input id="new-user-firstname" type="text" placeholder="{% trans 'Nombres' %}" value="{% verbatim %}{{ username }}{% endverbatim %}">
+			<input id="new-user-lastname" type="text" placeholder="{% trans 'Apellidos' %}">
+			<input id="new-user-email" type="hidden" value="{% verbatim %}{{ mail }}{% endverbatim %}">
+			<input id="new-user-uname" type="hidden" value="{% verbatim %}{{ username }}{% endverbatim %}">
+		</div>
+	</li>
+	<li>
+		<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitación" %}</button>
+	</li>
+</script>
+<script type="text/template" id="org-user-template">
+	{% verbatim %}
+	{% for u in users %}
+		<li id="org-user-{{ u.id }}" class="{% if u.is_member %}hidden{% endif %}">
+			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} disabled link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+				<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="28px" /></span>
+				<span>{{ u.full_name }}</span>
+				<span class="glyphicon glyphicon-{% if u.is_member %}ok{% else %}chevron-right {% endif %}"></span>
+			</a>
+		</li>
+	{% endfor %}
+	{% endverbatim %}
+</script>{% endif %}

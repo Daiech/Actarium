@@ -10,13 +10,16 @@
 			{%endfor%}
 			te {% if invitations|length > 1%}invitaron{%else%}invitó{%endif%} a disfrutar de <strong>Actarium</strong>.
 		</p>
-		<p>{% blocktrans %}Estás a punto de activar tu cuenta, pero antes, por favor confirma los siguientes datos y lee nuetros <a href="/{{URL_TERMS}}" target="_blank">Términos de uso</a> y <a href="/{{URL_PRIVACY}}" target="_blank">Políticas de privacidad</a>:{% endblocktrans %}</p>
+		<p>{% blocktrans %}Estás a punto de activar tu cuenta, pero antes, por favor confirma los siguientes datos y lee nuestros <a href="/{{ URL_TERMS }}" target="_blank">Términos de uso</a> y <a href="/{{ URL_PRIVACY }}" target="_blank">Políticas de privacidad</a>:{% endblocktrans %}</p>
 		<div class="white-box-container message-box">
 			<form method="POST">
 				{% csrf_token %}
 				{{form}}
 				<label class="checkbox">
-                    <input type="checkbox" name="term_privacy" id="term_privacy"> {% blocktrans %}Acepto los <a href="/{{URL_TERMS}}" target="_blank">Términos de uso{% endblocktrans %}</a>
+                    <input type="checkbox" name="term_privacy" id="term_privacy">
+                    {% blocktrans %}
+                    	Acepto los <a href="/{{ URL_TERMS }}" target="_blank">Términos de uso</a>
+                    {% endblocktrans %}
                 </label>
 	            <button type="submit" class="btn btn-info" disabled="disabled" id="btn-submit">
 	                Actualizar Datos

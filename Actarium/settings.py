@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     "social.apps.django_app.default",
     "rosetta",
     "rest_framework",
+    "south",
 ) + APPS
 
 LOGGING = {

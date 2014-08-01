@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 15:46-0500\n"
-"PO-Revision-Date: 2014-07-30 16:24-0500\n"
+"POT-Creation-Date: 2014-07-30 21:36-0500\n"
+"PO-Revision-Date: 2014-07-31 18:30-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,20 +40,29 @@ msgid "Bienvendo a Actarium!"
 msgstr "Welcome to Actarium!"
 
 #: templates/account/confirm_account.html:13
-#, python-format, fuzzy
+#, python-format
 msgid ""
 "Estás a punto de activar tu cuenta, pero antes, por favor confirma los "
-"siguientes datos y lee nuetros <a href=\"/%(URL_TERMS)s\" "
+"siguientes datos y lee nuestros <a href=\"/%(URL_TERMS)s\" "
 "target=\"_blank\">Términos de uso</a> y <a href=\"/%(URL_PRIVACY)s\" "
 "target=\"_blank\">Políticas de privacidad</a>:"
 msgstr ""
+"You are about to activate your account, but before, you please confirm the "
+"following information and read our <a href=\"/%(URL_TERMS)s\" "
+"target=\"_blank\">Terms of Use</a> and <a href=\"/%(URL_PRIVACY)s\" "
+"target=\"_blank\">Privacy Policies</a>:"
 
-#: templates/account/confirm_account.html:19
-#, python-format, fuzzy
-msgid "Acepto los <a href=\"/%(URL_TERMS)s\" target=\"_blank\">Términos de uso"
+#: templates/account/confirm_account.html:20
+#, python-format
+msgid ""
+"\n"
+"                    \tAcepto los <a href=\"/%(URL_TERMS)s\" target=\"_blank\">Términos de uso</a>\n"
+"                    "
 msgstr ""
+"\n"
+"I Accept <a href=\"/%(URL_TERMS)s\" target=\"_blank\">Terms of Use</a>"
 
-#: templates/account/confirm_account.html:26
+#: templates/account/confirm_account.html:29
 msgid ""
 "Conoce el funcionamiento general de <strong>Actarium</strong> en la sección "
 "<a href=\"/about\">Acerca</a>"
@@ -61,13 +70,12 @@ msgstr ""
 "Meet the general operation of <strong>Actarium</strong> in section: <a "
 "href=\"/about\">About</a>"
 
-#: templates/account/confirm_account.html:27
+#: templates/account/confirm_account.html:30
 msgid ""
 "Necesitas ayuda? Accede a las <a href=\"/help/faq\">Preguntas frecuentes</a>"
 msgstr "Need help? Access to <a href=\"/help/faq\">FAQs</a>"
 
-#: templates/account/confirm_account.html:28
-#, fuzzy
+#: templates/account/confirm_account.html:31
 msgid ""
 "Entérate de las actualizaciones de la plataforma en el <a "
 "href=\"/blog\">Blog oficial de <strong>Actarium</strong>"
@@ -75,20 +83,23 @@ msgstr ""
 "Get updates of the platform in <a href=\"/blog\">official blog of "
 "<strong>Actarium</strong>"
 
-#: templates/account/confirm_account.html:30
+#: templates/account/confirm_account.html:33
 msgid ""
 "Si tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes "
 "hacerlo a través del módulo <a href=\"#\" id=\"callFeed\">FeedBack</a> que "
 "esta disponible a la derecha en todas las ventanas"
 msgstr ""
+"If you have questions, suggestions, questions or want to report an error, "
+"you can do so through the <a href=\"#\" id=\"callFeed\">Feedback</a> module "
+"that is available right on all windows"
 
 #: templates/account/confirm_account_deleted.html:3
 msgid "Cuenta eliminada"
-msgstr ""
+msgstr "Account deleted"
 
 #: templates/account/confirm_account_deleted.html:7
 msgid "Gracias por usar Actarium, todos tus datos han sido eliminados."
-msgstr ""
+msgstr "Thank you for using Actarium, all your data were eliminated."
 
 #: templates/account/confirm_account_deleted.html:8
 msgid ""
@@ -97,43 +108,50 @@ msgid ""
 "momento. Por favor cuéntanos por qué eliminó su cuenta haciendo click <a "
 "id=\"callFeed\" href=\"#\">aquí</a>"
 msgstr ""
+"For us it is very important to get feedback on his part to improve our tools"
+" and our customer service at all times. Please tell us why you removed your "
+"account by clicking <a id=\"callFeed\" href=\"#\">here</a>"
 
 #: templates/account/delete_account.html:3 templates/account/password.html:3
 msgid "Cuenta de Usuario"
-msgstr ""
+msgstr "User account"
 
 #: templates/account/delete_account.html:7
 #: templates/account/personal_data.html:65
 msgid "Eliminar cuenta"
-msgstr ""
+msgstr "Delete account"
 
 #: templates/account/delete_account.html:8
+#, fuzzy
 msgid ""
 "\n"
 "\t<p>Si elimina su cuenta, TODA su información (incluyendo las actas que haya creado) se eliminarán.</p>\n"
 "\t<p>Este proceso no podrá revertirse después de hacer click en el botón \"Eliminar mi cuenta\".</p>\n"
 "\t"
 msgstr ""
+"\n"
+"<p>If you delete your account, all your information (including the Minutes that you created) will be deleted.</p>\n"
+"<p>This process can not be reversed after you click the button \"Delete my account\".</p>"
 
 #: templates/account/delete_account.html:12
 msgid "¿Seguro que desea eliminar su cuenta?"
-msgstr ""
+msgstr "Are you sure you want to delete your account?"
 
 #: templates/account/delete_account.html:17
 msgid "Eliminar mi cuenta"
-msgstr ""
+msgstr "Delete my account"
 
 #: templates/account/delete_account.html:18
 msgid "Cancelar"
-msgstr ""
+msgstr "Cancel"
 
 #: templates/account/dni.html:3
 msgid "Configuración de DNI"
-msgstr ""
+msgstr "settings of DNI"
 
 #: templates/account/dni.html:10
 msgid "Tu información de DNI"
-msgstr ""
+msgstr "Your information of DNI"
 
 #: templates/account/dni.html:25
 msgid ""
@@ -141,53 +159,55 @@ msgid ""
 "        El documento nacional de identidad, también conocido como Cédula de Ciudadanía (CC), Carné de Identidad (CI), Cédula de Identidad (CI) o Documento Nacional de Identidad (DNI) o identificación oficial o simplemente identificación, es un documento privado (individual) que contiene datos personales de carácter público emitido por una autoridad administrativa competente para permitir la identificación personal de los ciudadanos. <a href=\"http://es.wikipedia.org/wiki/Documento_de_identidad\" target=\"_blank\">Leer más</a>\n"
 "        "
 msgstr ""
+"\n"
+"The national identity document, also known as Certificate of Citizenship (CC), Identity Card (IC), identity card (IC) or National Identity Document (DNI) or official identification or simply identification, is a private document (individual ) containing information  personal public issued by a competent authority to permit personal identification of citizens. <a href=\"http://es.wikipedia.org/wiki/Documento_de_identidad\" target=\"_blank\">Read more</a>"
 
 #: templates/account/dni.html:36
 msgid "Solicitante"
-msgstr ""
+msgstr "Applicant"
 
 #: templates/account/dni.html:41
 msgid "Grupo"
-msgstr ""
+msgstr "Group"
 
 #: templates/account/dni.html:46
 msgid "Estado"
-msgstr ""
+msgstr "Status"
 
 #: templates/account/dni.html:51
 msgid "Acción"
-msgstr ""
+msgstr "Action"
 
 #: templates/account/dni.html:62
 msgid "yo"
-msgstr ""
+msgstr "me"
 
 #: templates/account/dni.html:73
 msgid "Sin responder"
-msgstr ""
+msgstr "Unanswered"
 
 #: templates/account/dni.html:75
 msgid "Aceptado, si tiene acceso"
-msgstr ""
+msgstr "Accepted, if you have access"
 
 #: templates/account/dni.html:77
 msgid "Rechazado, no tiene acceso"
-msgstr ""
+msgstr "Rejected, not have access"
 
 #: templates/account/dni.html:82
 msgid "Permitir acceso a DNI"
-msgstr ""
+msgstr "Allow access to DNI"
 
 #: templates/account/dni.html:84
 msgid "Retirar acceso a DNI"
-msgstr ""
+msgstr "Remove access to DNI"
 
 #: templates/account/invalid_link.html:3
 msgid "Link no valido"
-msgstr ""
+msgstr "Link not valid"
 
 #: templates/account/invalid_link.html:8
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "\n"
 "\t\t<h3>Link no válido!</h3>\n"
@@ -196,100 +216,113 @@ msgid ""
 "\t\t<p>Si olvidaste tu contraseña utiliza la <a href=\"%(password_reset2)s\">opción de recuperación de contraseña</a></p>\n"
 "\t\t"
 msgstr ""
+"\n"
+"<h3>Link not valid!</h3>\n"
+"<p>This link is no longer valid.</p>\n"
+"<p>If you wish to log in go to <a href=\"%(login)s\">Log in</a></p>\n"
+"<p>If you forgot your password use the<a href=\"%(password_reset2)s\">password recovery option</a></p>"
 
 #: templates/account/login.html:3 templates/account/login.html.py:7
 msgid "Iniciar Sesión"
-msgstr ""
+msgstr "Log in"
 
 #: templates/account/login.html:8
 msgid ""
 "Ingresa tus datos de usuario para acceder a tu cuenta en "
 "<strong>Actarium</strong>"
 msgstr ""
+"Enter your user details to access your account <strong>Actarium</strong>"
 
 #: templates/account/login.html:21
 msgid "Registrarse"
-msgstr ""
+msgstr "Sign in"
 
 #: templates/account/login.html:22
 msgid "&iquest;Olvidaste tu contraseña?"
-msgstr ""
+msgstr "Forgot your password?"
 
 #: templates/account/newUser.html:3
 msgid "Registro"
-msgstr ""
+msgstr "Registration"
 
 #: templates/account/newUser.html:6
 msgid "Registro de Usuario"
-msgstr ""
+msgstr "User registration"
 
 #: templates/account/newUser.html:7
 msgid ""
 "Necesitamos identificarte para restringir tu contenido solo a las personas "
 "que tu desees."
 msgstr ""
+"We need to identify to you and restrict your content to only the people you "
+"want."
 
 #: templates/account/noactivo.html:3
 msgid "Usuario no activo"
-msgstr ""
+msgstr "Not active user"
 
 #: templates/account/noactivo.html:6
 msgid "Usuario inactivo!"
-msgstr ""
+msgstr "Not active user"
 
 #: templates/account/noactivo.html:7
 msgid "El usuario no se encuentra activo en el momento"
-msgstr ""
+msgstr "The user is not active at the time"
 
 #: templates/account/noactivo.html:8
 msgid ""
 "Ingresa al link de activación que ha sido enviado al correo electrónico "
 "asociado a ésta cuenta"
 msgstr ""
+"Enter to the activation link that has been sent to the email address "
+"associated with this account"
 
 #: templates/account/password.html:11
 #: templates/account/password_reset_confirm.html:3
 msgid "Cambiar Contraseña"
-msgstr ""
+msgstr "Change Password"
 
 #: templates/account/password.html:18
 msgid "Actualizar Contraseña"
-msgstr ""
+msgstr "Update Password"
 
 #: templates/account/password.html:74 templates/account/personal_data.html:95
 msgid "Error al actualizar correo"
-msgstr ""
+msgstr "Failed to update email"
 
 #: templates/account/password.html:74 templates/account/personal_data.html:95
+#, fuzzy
 msgid "Tu correo electronico no pudo ser actualizado"
-msgstr ""
+msgstr "Your email has not been updated"
 
 #: templates/account/password.html:77
 #: templates/account/password_reset_form.html:87
 #: templates/account/personal_data.html:97
 msgid "Datos Actualizados"
-msgstr ""
+msgstr "Updated data"
 
 #: templates/account/password.html:77
 #: templates/account/password_reset_form.html:87
 #: templates/account/personal_data.html:97
 msgid "Tus datos fueron actualizados correctamente"
-msgstr ""
+msgstr "Your details have been updated correctly"
 
 #: templates/account/password.html:80
 #: templates/account/password_reset_form.html:90
+#, fuzzy
 msgid "Constraseña Actualizada"
-msgstr ""
+msgstr "Password Update"
 
 #: templates/account/password.html:80
 #: templates/account/password_reset_form.html:90
+#, fuzzy
 msgid "Tu constraseña fue actualizada correctamente"
-msgstr ""
+msgstr "Your password has been successfully updated"
 
 #: templates/account/password_reset_complete.html:3
 #: templates/account/password_reset_complete.html:6
 msgid "Contraseña restaurada"
-msgstr ""
+msgstr "Restored password"
 
 #: templates/account/password_reset_complete.html:8
 #, python-format
@@ -297,40 +330,44 @@ msgid ""
 "Tu contraseña ha sido restaurada, ahora puedes acceder a tu cuenta <a "
 "href=\"%(login)s\">Iniciando sesión</a>"
 msgstr ""
+"Your password has been restored, now you can login to your account <a "
+"href=\"%(login)s\">Log in</a>"
 
 #: templates/account/password_reset_confirm.html:7
 msgid "Recuperación de cuenta"
-msgstr ""
+msgstr "Retrieve account"
 
 #: templates/account/password_reset_confirm.html:8
 msgid "Por favor escribe tu nueva contraseña para recuperar tu cuenta."
-msgstr ""
+msgstr "Please enter your new password to reclaim your account."
 
 #: templates/account/password_reset_confirm.html:13
 msgid "Nueva contraseña:"
-msgstr ""
+msgstr "New password:"
 
 #: templates/account/password_reset_confirm.html:17
 msgid "Repite la contraseña:"
-msgstr ""
+msgstr "Repeat the password:"
 
 #: templates/account/password_reset_confirm.html:22
 msgid "Restaurar"
-msgstr ""
+msgstr "Restore"
 
 #: templates/account/password_reset_confirm.html:27
 msgid "Error recuperando contraseña"
-msgstr ""
+msgstr "Error retrieving password"
 
 #: templates/account/password_reset_confirm.html:28
 msgid ""
 "La direccion para recuperar la contraseña no es valida, posiblemente sea "
 "porque ésta ya ha sido usada, por favor solicita la recuperación de nuevo."
 msgstr ""
+"The direction to recover the password is invalid, possibly because it has "
+"already been used, please request the recovery again."
 
 #: templates/account/password_reset_done.html:3
 msgid "Correo enviado"
-msgstr ""
+msgstr "Mail sent."
 
 #: templates/account/password_reset_done.html:6
 msgid ""
@@ -340,20 +377,27 @@ msgid ""
 "\t\t<p>Revisa la bandeja de entrada de tu correo, si no lo encuentras revisa la bandeja de correos no deseados.</p>\n"
 "\t\t"
 msgstr ""
+"\n"
+"<h3>Reset Password</h3>\n"
+"<p>We have sent an email with instructions to reset your password.</p>\n"
+"<p>Check the inbox of your email, if not found, check spam tray.</p>"
 
 #: templates/account/password_reset_email.html:4
 msgid ""
 "Has recibido este correo porque has solicitado un cambio de contraseña para "
 "tu cuenta en www.actarium.com."
 msgstr ""
+"You received this email because you requested a password change for your "
+"account of www.actarium.com."
 
 #: templates/account/password_reset_email.html:6
+#, fuzzy
 msgid "Porfavor ingresa al siguiente link para cambiar tu contraseña:"
-msgstr ""
+msgstr "Please enter to the following link to change your password:"
 
 #: templates/account/password_reset_email.html:11
 msgid "Tu nombre de usuario es:"
-msgstr ""
+msgstr "Your username is:"
 
 #: templates/account/password_reset_email.html:16
 msgid ""
@@ -362,47 +406,54 @@ msgid ""
 "\n"
 "El equipo Daiech\n"
 msgstr ""
+"\n"
+"attentively,\n"
+"\n"
+"The Daiech team\n"
 
 #: templates/account/password_reset_form.html:3
 #: templates/account/password_reset_form.html:6
 msgid "Recuperar Contraseña"
-msgstr ""
+msgstr "Recover password"
 
 #: templates/account/password_reset_form.html:7
+#, fuzzy
 msgid ""
 "Olvidaste tu contraseña? Escribe tu email y te enviarmemos instrucciones "
 "para restablecerla."
 msgstr ""
+"Forgot your password? Enter your email and we'll send instructions to reset "
+"it."
 
 #: templates/account/password_reset_form.html:8
 msgid "Ingresa el correo asociado a tu cuenta"
-msgstr ""
+msgstr "Enter the email associated with your account"
 
 #: templates/account/password_reset_form.html:17
 msgid "Recuperar"
-msgstr ""
+msgstr "Recover"
 
 #: templates/account/password_reset_form.html:25
 #, python-format
 msgid "No estás registrado? <a href=\"%(new_user)s\">Registrate</a>, es gratis."
-msgstr ""
+msgstr "Not registered? <a href=\"%(new_user)s\">Register</a>, it's free!"
 
 #: templates/account/password_reset_form.html:29
 #, python-format
 msgid "Si ya tienes una cuenta, <a href=\"%(login)s\">Inicia sesión</a>"
-msgstr ""
+msgstr "If you already have an account, <a href=\"%(login)s\">log in</a>"
 
 #: templates/account/password_reset_subject.txt:2
 msgid "Solicitud de recuperación de contraseña en actarium.com"
-msgstr ""
+msgstr "Request password recovery in actarium.com"
 
 #: templates/account/personal_data.html:9
 msgid "Tus datos"
-msgstr ""
+msgstr "Your data"
 
 #: templates/account/personal_data.html:12
 msgid "Cambiar imágen"
-msgstr ""
+msgstr "Change image"
 
 #: templates/account/personal_data.html:14
 msgid ""
@@ -410,97 +461,108 @@ msgid ""
 "href=\"http://gravatar.com/\">Gravatar.com</a> y Actarium "
 "autom&aacute;ticamente har&aacute; uso de ella."
 msgstr ""
+"Add a photo to your Correro at <a "
+"href=\"http://gravatar.com/\">Gravatar.com</a> and Actarium automatically "
+"will make use of it."
 
 #: templates/account/personal_data.html:20
 msgid "Actualizar Datos"
-msgstr ""
+msgstr "Update your data"
 
 #: templates/account/personal_data.html:26
 msgid "Los datos con * son de caracter obligatorio."
-msgstr ""
+msgstr "Data with * are compulsory."
 
 #: templates/account/personal_data.html:29
 msgid "Qué son las cuentas asociadas?"
-msgstr ""
+msgstr "What are associated accounts?"
 
 #: templates/account/personal_data.html:31
+#, fuzzy
 msgid "Cuantas asociadas"
-msgstr ""
+msgstr "Associated accounts"
 
 #: templates/account/personal_data.html:38
 msgid "Desconectar"
-msgstr ""
+msgstr "Disconnect"
 
 #: templates/account/personal_data.html:41
 msgid "No tienes cuentas asociadas"
-msgstr ""
+msgstr "Not have associated accounts"
 
 #: templates/account/personal_data.html:45
 msgid "Conectate con"
-msgstr ""
+msgstr "Connect with"
 
 #: templates/account/personal_data.html:56
 msgid "No hay cuentas para asociar"
-msgstr ""
+msgstr "No accounts to associate"
 
 #: templates/account/personal_data.html:62
 msgid "Eres miembro desde el"
-msgstr ""
+msgstr "You are member since"
 
 #: templates/account/personal_data.html:63
 msgid "Ultimo logueo"
-msgstr ""
+msgstr "Last logging:"
 
 #: templates/account/personal_data.html:99
 msgid "Contraseña Actualizada"
-msgstr ""
+msgstr "Password Update"
 
 #: templates/account/personal_data.html:99
 msgid "Tu contraseña fue actualizada correctamente"
-msgstr ""
+msgstr "Your password has been successfully updated"
 
 #: templates/account/personal_data.html:103
 msgid "Cuenta en uso"
-msgstr ""
+msgstr "Account in use"
 
 #: templates/account/personal_data.html:103
 msgid ""
 "Ya existe una cuenta en Actarium asociada a esta cuenta, por favor verifica "
 "que no tengas dos cuentas en Actarium."
 msgstr ""
+"There is already an account in Actarium associated with this account, please"
+" check you do not have two accounts on Actarium."
 
 #: templates/account/personal_data.html:106
 msgid "Cuenta asociada"
-msgstr ""
+msgstr "Associated Account"
 
 #: templates/account/personal_data.html:106
 msgid ""
 "Ahora puedes iniciar sesión con tu nombre de usuario y contraseña o bien "
 "usando tu cuenta asociada."
 msgstr ""
+"Now you can login with your username and password or by using your "
+"associated account."
 
 #: templates/account/personal_data.html:109
 msgid "Cuenta liberada"
-msgstr ""
+msgstr "Account released"
 
 #: templates/account/personal_data.html:109
 msgid "Se ha quitado la asociación a tu cuenta."
-msgstr ""
+msgstr "Removed the association to your account."
 
 #: templates/account/personal_data.html:112
 msgid "Procedimiento cancelado"
-msgstr ""
+msgstr "Procedure canceled"
 
 #: templates/account/personal_data.html:112
 msgid "No se ha completado la asociación."
-msgstr ""
+msgstr "Did not complete the association."
 
 #: templates/account/personal_data.html:115
 msgid "Imposible Desconectar"
-msgstr ""
+msgstr "Unable to disconnect it"
 
 #: templates/account/personal_data.html:115
+#, fuzzy
 msgid ""
 "No puedes desconectar esta cuenta ya que es la única forma acceder a tu "
 "cuenta. Por favor configure una contraseña e intente de nuevo."
 msgstr ""
+"You can not disconnect this account because it is the only way to access "
+"your account. Please set a password and try again."
