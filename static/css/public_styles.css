@@ -12,3 +12,12 @@ body{margin-bottom: 160px;}
 .language label:hover{text-decoration: underline;}
 #ac-load{margin-top: 25px;}
 #ac-load img{margin-top: 0}
+
+.pass-container{width: 250px;margin-left: 10px;}
+.login-form{margin-top: 20px;padding: 0;}
+.login-form .col-md-*{color: red}
+.form-inline input{border-radius: 3px;}
+.input-group-addon{cursor: pointer;}
+.input-container input.text-input{padding-left: 30px;}
+.btn-submit{color: white; background-color: #28b7ca;box-shadow:none;border: none}
+.input-container .form-control-feedback{position: absolute;left: 25px;top: 10px;color: #A2A2A2;}
