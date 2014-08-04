@@ -1,3 +1,4 @@
+# encoding:utf-8
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.utils.translation import ugettext as _
