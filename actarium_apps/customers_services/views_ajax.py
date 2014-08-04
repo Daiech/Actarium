@@ -45,13 +45,13 @@ def approve_order(request):
                     message = {'is_done':True,'response':_("Modificado Correctamente")}
                     print message
                 else:
-                    message = {'Error': _( "Opcion no implementada, solo se puede actualizar la version trial" )}
+                    message = {'Error': _(u"Opción no implementada, únicamente se puede actualizar la version trial" )}
                     print message['Error']
             else:
                 message = {'Error': _( "No hay orden disponible" )}
                 print message['Error']
     else:
-        message = {'Error': _( "No tiene permiso para realizar esta accion" )}
+        message = {'Error': _( u"No tiene permiso para realizar esta acción" )}
         print message['Error']
         
     return HttpResponse(json.dumps(message), mimetype="application/json")
