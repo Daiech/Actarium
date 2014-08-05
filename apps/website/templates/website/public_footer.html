@@ -23,7 +23,7 @@
                     {% for language in languages %}
                     <span class="language">
                         <label>
-                            <button class="flag-icon {% if language.code == LANGUAGE_CODE %} selected="language-selected"{% endif %}" type="button" title="{{ language.name_local }} ({{ language.code }})" style="background: url('{{ STATIC_URL }}img/flags/{{ language.code }}.png')" data-language="{{ language.code }}"></button>
+                            <button class="flag-icon {% if language.code == LANGUAGE_CODE %}language-selected{% endif %}" type="button" title="{{ language.name_local }} ({{ language.code }})" style="background: url('{{ STATIC_URL }}img/flags/{{ language.code }}.png')" data-language="{{ language.code }}"></button>
                             {{ language.name_local }}
                         </label>
                     </span>
