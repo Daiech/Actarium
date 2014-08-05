@@ -82,7 +82,7 @@
 		                <span title="{% trans 'Miembros que aparecen en las actas' %}"><i class="glyphicon glyphicon-user"></i> {% trans "Aparece en actas" %}</span>
 		                <span title="Tiene la responsabilidad de redactar actas"><i class="glyphicon glyphicon-pencil"></i> {% trans "Redactor" %}</span>
 		                <!-- <span title="Puede convocar reuniones"><span class="glyphicon glyphicon-calendar"></span> {% trans "Convocador de reuniones" %}</span> -->
-		                <span title="{% trans 'El usuario pude agregar miembros, crear actas y administrar la información del grupo' %}"><i class="glyphicon glyphicon-wrench"></i> {% trans "Administrador" %}</span>
+		                <span title="{% trans 'El usuario puede agregar miembros, crear actas y administrar la información del grupo' %}"><i class="glyphicon glyphicon-wrench"></i> {% trans "Administrador" %}</span>
 		                <!-- <span class="user-pend-l"> {% trans "Usuarios pendientes" %}</span> -->
 		            </div>
 				</section>
@@ -308,7 +308,7 @@
     	var uid = $(elem).attr("data-uid");
     	sendNewAjax("{% url 'resend_invitation' group.slug %}",{"uid":uid}, function (data){
     		if(data.sent){
-	    		setAlertMessage("{% trans 'Invitación reenviada' %}", "{% trans 'Se ha enviado nuevamente una invitacón por correo electrónico a ' %}" + data.email);
+	    		setAlertMessage("{% trans 'Invitación reenviada' %}", "{% trans 'Se ha enviado nuevamente una invitación por correo electrónico a' %} " + data.email);
 			}
 			else{
 				setAlertError("{% trans 'Error' %}", "{% trans 'Algo salió mal. No se envió el correo recordatorio. Por favor recargue la página e intente de nuevo.' %}");
@@ -332,7 +332,7 @@
                         });
                     }
                     else{
-                    	msj = "{% trans 'No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo' %}";
+                    	msj = "{% trans 'No se pudo eliminar el Usuario. Recarga la página e intenta de nuevo' %}";
                     	if (data['message']){
                     		msj = data['message'];
                     	}

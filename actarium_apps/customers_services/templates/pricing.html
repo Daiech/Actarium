@@ -57,7 +57,7 @@
 				<thead>
 					<tr >
 						<th>{% trans 'Opci&oacute;n' %} </th>
-						<th>{% trans '# Mimembros' %} </th>
+						<th>{% trans '# Miembros' %} </th>
 						<th>{% trans 'Precio' %}</th>
 						<th>{% trans 'Adquirir' %}</th>
 					</tr>
@@ -80,7 +80,7 @@
 					<tr>
 						<td>5</td> 
 						<td><input id="other_quantity" type="number" name="quantity" min="5" max="300" placeholder="{% trans 'N&uacute;mero de miembros' %}" ></td>
-						<td>$<span id="other_quantity_price" >---</span> / mes</td>
+						<td>$<span id="other_quantity_price" >---</span> / {% trans 'mes' %}</td>
 						<td><button class="btn btn-lg" data-toggle="modal" data-target="#myModal" id="other_quantity_button"  disabled="disabled"> 
 							{% trans 'Adquirir' %} 
 							</button>
@@ -99,8 +99,8 @@
 			<table class="table">
 				<thead>
 					<tr >
-						<th>{% trans 'Name' %} </th>
-						<th>{% trans 'Description' %} </th>
+						<th>{% trans 'Nombre' %} </th>
+						<th>{% trans 'Descripción' %} </th>
 						<th>{% trans 'Precio' %}</th>
 					</tr>
 				</thead>
