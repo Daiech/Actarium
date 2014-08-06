@@ -3,10 +3,50 @@
 {% block TITLE %} {% trans "Actarium - El espacio más cómodo para registrar el resultado de tus reuniones" %}  {% endblock %}
 
 {% block content %}
-    <div class="landing-block first-block">
-        <div class="meeting-picture">
-            <div class="landing-container">
+    <div class="landing-block meeting-picture">
+        <div class="landing-container row-fluid">
+            <div class="col-md-7">
                 
+            </div>
+            <div class="col-md-5" id="signupForm">
+                <div class="form-container">
+                    <div class="form-box">
+                        <div class="form-content text-center">
+                            <form method="post">
+                                <h3>{% trans '¡Únete a Actarium!' %}</h3>
+                                <div class="input-container">
+                                    {% csrf_token %}
+                                    <input type="text" name="username" id="" class="form-control text-input" placeholder="{% trans 'Nombres' %}" autofocus>
+                                    <label for=""><span class="glyphicon glyphicon-user form-control-feedback"></span></label>
+                                </div>
+                                <div class="input-container">
+                                    <input type="email" name="username" id="" class="form-control text-input" placeholder="{% trans 'Correo electrónico' %}" required>
+                                    <label for=""><span class="glyphicon glyphicon-envelope form-control-feedback"></span></label>
+                                </div>
+                                <div class="input-container">
+                                    <input type="password" name="password1" id="password1" class="form-control text-input" placeholder="{% trans 'Contraseña' %}" required>
+                                    <label for="password1"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
+                                </div>
+                                <div class="input-container">
+                                    <input type="password" name="password2" id="password2" class="form-control text-input" placeholder="{% trans 'Repite Contraseña' %}" required>
+                                    <label for="password2"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
+                                </div>
+                                <div class="input-container">
+                                    <div class="btn-1">
+                                        <button type="submit" class="btn-action btn-large btn-green">{% trans 'Registrarse' %}</button>
+                                    </div>
+                                    <div class="btn-2">
+                                        <a href="#" class="btn-action btn-large btn-green"><p>{% trans 'Inicia con' %}</p> <span class="glyhicon gloogle-icon"></span></a>
+                                    </div>
+                                </div>
+                                <div class="input-container info-signup">
+                                    <p>{% trans 'Comienza ahora con Actarium' %}</p>
+                                    <a href="{% url 'pricing' %}" class="btn-white">{% trans 'Ver precios' %}</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -139,13 +179,31 @@
 {% block style %}
     <style>
         @font-face{font-family: HelveticaNeueLT;src: url({{ STATIC_URL }}fonts/HELVETICANEUELTSTD-TH.OTF);}
-        header.navbar{border-bottom:none;}
+        header.navbar{border-bottom:none;height: 80px;}
+        #public_topbar{height: 79px;}
         .landing-block{min-height: 300px;display: block;clear: both;}
         .landing-container{margin: auto;max-width: 980px;}
 
 
-        .first-block .meeting-picture{background-image: url("{{ STATIC_PREFIX }}img/landing/pic.png");height: 580px;}
-
+        .meeting-picture{background-image: url("{{ STATIC_PREFIX }}img/landing/pic.png");background-position: center; height: 576px;}
+        .meeting-picture > div{height: 100%;}
+        .meeting-picture #signupForm{height: 100%;display: table;}
+        .meeting-picture #signupForm .form-container{display: table-cell;vertical-align: middle;line-height: 1.3;}
+        .meeting-picture #signupForm .form-container .form-box{height: 80%;background-color: rgba(255,255,255,0.6);}
+        .meeting-picture #signupForm .form-container .form-box .form-content{padding: 20px 15px;}
+        .meeting-picture #signupForm .form-container .form-box .form-content h3{font-family: HelveticaNeueLT; color:#28b7ca;font-weight: bold;margin-top: 5px;}
+        .meeting-picture .form-content .input-container{position: relative;width: 80%;margin: auto;}
+        .meeting-picture .form-content .input-container > div{text-align: left;width: 49%;}
+        .meeting-picture .form-content .input-container .btn-1{float: left;}
+        .meeting-picture .form-content .input-container .btn-2{float: right;}
+        .meeting-picture .form-content .input-container .btn-2 p{font-size: 19px;padding: 18px 46px 0 12px;text-align: right;}
+        .meeting-picture .form-content .input-container .form-control-feedback{left:10px;}
+        .meeting-picture .form-content .input-container button[type=submit]{border:none;padding: 18px;font-size: 14pt;height: 60px;width: 100%;}
+        .meeting-picture .form-content .input-container .btn-action{margin: 0;padding: 0;font-size: 19px;height: 60px;width: 100%;}
+        .meeting-picture .form-content .input-container button[type=submit]:hover{text-decoration: none;}
+        .meeting-picture .form-content .info-signup{background-color: #28b7ca;color: white;padding: 10px;margin-top: 70px;border-radius: 3px;font-family: 'Signika', sans-serif;font-size: 14pt;clear: both;}
+        .meeting-picture .form-content .info-signup .btn-white{color: #28b7ca;padding: 10px 15px;background-color: white;margin: 2px 10px;display: inline-block;font-family: 'Titillium Web', sans-serif;border-radius: 4px;text-transform:uppercase;}
+        .gloogle-icon{background-image: url("{{ STATIC_PREFIX }}img/landing/icons.png");background-repeat: no-repeat;background-position: -4px -94px;width: 30px;height: 30px;display: inline-block;top: 16px;position: absolute;right: 10px;}
 
         .meeting-block{background-color: #f5f5f5;}
         .meeting-block .benefits-text{position: relative;top: 60px;left: -20px;font-family: 'Titillium Web', sans-serif;line-height: 1;}
@@ -186,7 +244,7 @@
         .partners-block  #parquesoft{background-image: url("/static/img/partners/parquesoft.png");height: 55px;margin: auto;margin-top: 30px;width: 185px;}
         .partners-block  #parquesoft:hover{background-position: 2px 54px;}
 
-        body{margin-bottom: 350px !important;}
+        body{margin-bottom: 350px !important;padding-top: 10px;}
         #footer{background-color: #f5f5f5;height: 290px;font-family: 'Signika'}
         #footer .footer-text-platform li{display: block;}
         #footer .footer-text-platform li:before{content: ""}
@@ -203,14 +261,14 @@
         }
         @media (max-width: 768px) {
             .login-form{margin-top: -5px;margin-bottom: 5px;}
-            .input-container{margin-bottom: 2px;}
+            .login-form .input-container{margin-bottom: 2px;}
             .slides-block .slides{height: 380px;}
         }
         @media (max-width: 512px) {
             .slides-block .slides-pic{height: 130px;}
             .slides-block .slides-text{height: auto;}
             .login-form{margin-top: -5px;margin-bottom: 5px;}
-            .input-container{margin-bottom: 2px;}
+            .login-form .input-container{margin-bottom: 2px;}
         }
         @media (max-width: 406px) {
             .slides-block .slides-pic{margin: auto;float: none;}

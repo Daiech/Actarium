@@ -44,7 +44,7 @@ def home(request):
 
 def landing(request):
     saveViewsLog(request, "landing anonymous")
-    return render(request, 'website/landing.html')
+    return render(request, 'website/landing/index.html')
 
 
 @login_required
