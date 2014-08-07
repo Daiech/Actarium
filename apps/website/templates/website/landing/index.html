@@ -219,17 +219,17 @@
         .meeting-picture .minutes-pic .minutes{height: 100%; background-color: rgba(255,255,255,0.84);padding: 70px 50px;margin: 40px;transform: rotate(-3deg);}
         /*.meeting-picture .minutes-pic .minutes .minutes-content{transform: rotate(3deg);}*/
         .meeting-picture .minutes-pic .minutes .minutes-content h1{font-family: HelveticaNeueLT;text-align: center;color: #29b7ca;font-size: 40px;}
-        .meeting-picture .minutes-pic .minutes .minutes-content p{font-family: 'Titillium Web';font-size: 25px;color: #aaa;line-height: 1.2;margin: 50px 35px;}
+        .meeting-picture .minutes-pic .minutes .minutes-content p{font-family: 'Titillium Web';font-size: 25px;color: #aaa;line-height: 1.2;margin: 50px 35px;text-align: justify;}
 
         .animate{transition: all 1.5s ease-in-out;}
-        .move-form{/*top: -530px;*/position: relative;background-color: white;transform: translate(0px,-530px);}
+        .move-form{position: relative;background-color: white;transform: translate(0px,-530px);}
 
 
         .meeting-block{background-color: #f5f5f5;}
         .meeting-block .benefits-text{position: relative;top: 60px;left: -20px;font-family: 'Titillium Web', sans-serif;line-height: 1;}
         .meeting-block .benefits-text ul{list-style:none;padding-left: 12px;}
         .meeting-block .benefits-text ul li{background: url("{{ STATIC_PREFIX }}img/landing/icon-circle-ok.png") no-repeat left center;padding: 15px 45px;font-size: 28px;color: #818181;margin-bottom: 6px;}
-        .meeting-block .meeting-picture2{background-image: url("{{ STATIC_PREFIX }}img/landing/meeting.png");background-repeat: no-repeat;background-position: right bottom -2px;height: 500px;}
+        .meeting-block .meeting-picture2{background-image: url("{{ STATIC_PREFIX }}img/landing/meeting.png");background-repeat: no-repeat;background-position: right bottom -2px;height: 400px;background-size: 500px;}
         
 
         .slides-block{background-color: #accb4f;}
@@ -288,11 +288,13 @@
             .meeting-picture .minutes-pic .minutes .minutes-content p{margin: 40px 5px 30px;}
             .login-form{margin-top: -5px;margin-bottom: 5px;}
             .login-form .input-container{margin-bottom: 2px;}
-            .slides-block .slides{height: 380px;}
+            .slides-block .slides{height: 380px;padding-top: 50px;}
             .meeting-picture .block-2 .form-container{display: block;margin-top: 5px;margin-left: 5px;}
             .meeting-picture .block-2{}
+            .meeting-block .meeting-picture2{height: 450px;}
         }
         @media (max-width: 512px) {
+            .meeting-block .meeting-picture2{background-position: right bottom -80px;height: 500px;}
             .meeting-picture .minutes-pic .minutes{left: -15px;height: 90%;}
             .slides-block .slides-pic{height: 130px;}
             .slides-block .slides-text{height: auto;}
@@ -303,6 +305,7 @@
             .meeting-picture .minutes-pic .minutes .minutes-content h1{font-size: 30px}
             .meeting-picture .minutes-pic .minutes .minutes-content p{font-size: 20px}
             .btn-action{margin: 0;padding: 15px;}
+            .slides-block .slides-text{font-size: 22px;}
         }
         @media (max-width: 406px) {
             .slides-block .slides-pic{margin: auto;float: none;}
@@ -316,16 +319,24 @@
     function showSignupForm (e) {
         e.preventDefault();
         if ($(window).width() < 768){
-            $("#signupForm").toggleClass("move-form");
+            $("#signupForm").addClass("move-form");
             setTimeout(function() {
                 $("#new_username").focus();
             }, 1000);
-            // $("#signupForm").animate({},function() {
-            // });
+        }else{
+            $("#new_username").focus();
         }
     }
     $(document).ready(function(){
         $(".btn-go-signup").on("click", showSignupForm);
+    });
+    $(window).resize(function (e) {
+        if ($(window).width() >= 768){
+            $("#signupForm").removeClass("move-form");
+        }
+        // else{
+        //     $(".btn-go-signup").click();
+        // }
     });
 </script>
 {% endblock %}
