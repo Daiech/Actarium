@@ -1,7 +1,7 @@
 {% load i18n %}
-<div class="container-fluid"  id="cred-footer">
-    <div class="row">
-        <div class="col-md-4">
+<div class="container-fluid landing-container"  id="cred-footer">
+    <div class="row-fluid">
+        <div class="col-md-4 col-sm-4">
             <ul class="footer-text-platform">
                 <li><a href="{% url 'services' %}">{% trans 'Servicios' %}</a></li>
                 <li><a href="{% url 'about' %}">{% trans 'Acerca de' %}</a></li>
@@ -11,7 +11,7 @@
                 <li><a href="https://twitter.com/Actarium" target="_blank">Twitter</a></li>
             </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-4 col-xs-6">
             {% if user.is_authenticated or user.is_staff %}
             {% endif %}
             <div class="footer-text">
@@ -31,7 +31,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-4 col-xs-6">
             <div class="footer-text">
                 <p><script>var f = new Date();document.write(f.getFullYear());</script>.&nbsp;{% trans "Todos los derechos reservados" %}</p>
                 <p>{% blocktrans %}Un producto <a href="http://www.daiech.com" target="_blank"><img src="{{ STATIC_PREFIX }}img/daiech.png" style="width: 80px;"></a>{% endblocktrans %}</p>
