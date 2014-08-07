@@ -294,3 +294,4 @@ function cleanForm(element){
 $("#language-form button").on("click", function (e){e.preventDefault();$("#language-selected").val($(this).attr("data-language"));$("#language-form").submit();})
 
 // $(document).ready(main);
+$(window).load(function() {$("body").removeClass("preload");});

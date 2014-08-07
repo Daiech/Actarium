@@ -11,6 +11,7 @@ a {color: #428bca;text-decoration: none;}/*00aeaa*/
 h1,h2,h3,h4,h5,h6, strong, .info-title{font-family: 'Oswald', sans-serif;}
 time{font-size: 14px;color: gray}
 #body-wrap{min-height: 100%;height: auto !important;height: 100%;}
+.preload * {-webkit-transition: none !important;-moz-transition: none !important;-ms-transition: none !important;-o-transition: none !important;}
 .dib{display: inline-block;}
 .flag-icon{width: 16px;height: 11px;border:0;margin: 5px;}
 .language{margin-right: 10px;}
