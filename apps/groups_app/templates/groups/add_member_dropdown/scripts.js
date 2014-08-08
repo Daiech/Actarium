@@ -20,7 +20,14 @@ $(document).ready(function() {
 	$(".actarium-dropdown").on("click", function (e) {
 		$("#newmember").attr("autofocus","autofocus")
 		setTimeout(function(){$("#newmember").focus();}, 1);
-	})
+	});
+    $("#newmember").on("keyup", function (e) {
+        if($(this).val() === ""){
+            load_org_member_list();
+            $("#org-user-list").show();
+            $("#search-result").empty().hide();
+        }
+    })
 	showIconCloseOnHover();
 	load_org_member_list();
 });
@@ -106,42 +113,44 @@ function sendInvitationToNewUser(e){
     $("#newmember").focus();
     $("#message-search").html(message);
 }
-
-function appendMemberToList(data){//Muestra la lista de posibles miembros a agregar
-	if(data.mail_is_valid){
-        if(data.new_user){//No es usuario de la base de datos
-        	if(data['mail'].length > MAX_LENGTH)
-                p="..."
-            var view = {
-            	"mail": data['mail'],
-            	"gravatar": data['gravatar'],
-            	"username": data['username'],
-            	"p": p
-            }
-            $("#search-result").html(swig.render($("#new-user-template").html(), {locals:view}));
-            $("#message-search").html("<strong>" + view.mail + "</strong> a&uacute;n no disfruta de Actarium. Agrega sus datos y le enviaremos una invitaci&oacute;n al correo electr&oacute;nico.")
-            $("#add-new-user").on("click", sendInvitationToNewUser);
+function appendToList (li) {
+    $("#search-result").show().html(li);
+    $("#org-user-list").hide();
+}
+function showMemberList(data){//Muestra la lista de posibles miembros a agregar
+    p = "";
+    if(data.new_user){//No es usuario de la base de datos
+        if(data.new_user.email.length > MAX_LENGTH){p="...";}
+        var view = {
+            "mail":     data.new_user['email'],
+            "gravatar": data.new_user['gravatar'],
+            "username": data.new_user['username'],
+            "p": p
         }
-        else{//es usuario de la base de datos
-
-            $("#message-search").html("<strong>" + data.username + "</strong> {% trans 'hace parte de Actarium, haz click en el nombre para invitar.' %}");
-        	
-            user_to_invite = data['mail']+" ("+data['username']+")";
-            if(user_to_invite.length > MAX_LENGTH)
-                p="..."
-            $("#search-result").html(
-                "<li class='user-li'>"+
-                "<a href='#invite-user' data-email='"+data['mail']+"' data-username='"+data['username']+"' >"+
-                "<img class='img30' src='"+data['gravatar']+"' alt='"+data['username']+"' />"+
-                user_to_invite.substring(0,MAX_LENGTH)+p+
-                '<i class="icon-accept pull-right icon-ok icon-white hidden"></i>'+
-                "</a>"+
-                "</li>"
-                );
-            
-        }
-        showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
+        appendToList(swig.render($("#new-user-template").html(), {locals:view}));
+        $("#message-search").html("<strong>" + view.mail + "</strong> {% trans 'aún no disfruta de Actarium. Agrega sus datos y le enviaremos una invitación al correo electrónico.' %}")
     }
+    else{//es usuario de la base de datos
+
+        $("#message-search").html("<strong>" + data.users.username + "</strong> {% trans 'hace parte de Actarium, haz click en el nombre para invitarlo al grupo.' %}")
+        li = "";
+        users = [];
+        for (var i = 0; i < data.users.length; i++) {
+            // users.append({});
+            user_to_invite = data.users[i]['mail']+" ("+data.users[i]['username']+")";
+            if(user_to_invite.length > MAX_LENGTH){p="...";}
+            users[i] = {
+                "id": data.users[i].id,
+                "email": data.users[i].email,
+                "username": data.users[i].username,
+                "image": data.users[i].gravatar, 
+                "full_name": data.users[i].full_name.substring(0,MAX_LENGTH) + p,
+            }
+        };
+        appendToList(swig.render($("#org-user-template").html(), {locals: users}));
+        
+    }
+    showIconAddMemberOnHover()//muestra icono "onHover" de la lista de miembros buscados
 }
 function sendInvitationOnClick(e){//escucha el evento click para agregar al usuario al grupo
     e.preventDefault();
@@ -153,24 +162,23 @@ function sendInvitationOnClick(e){//escucha el evento click para agregar al usua
     $("#message-search").html(message);
 }
 $(document).on("click", ".user-li > a", sendInvitationOnClick);
+$(document).on("click", "#add-new-user", sendInvitationToNewUser);
 
 function show_search_result(data){//lista los usuarios disponibles a invitar
     if(data){
     	if (data.forbbiden){
     		setAlertError("{% trans 'Error' %}", data.forbbiden);
     	}else{
-            p="";
-            if(data.users){//el email valido, viene una lista de usuarios existentes
-                appendMemberToList(data);//Muestra la lista de posibles miembros a agregar
-            }
-            else{//el correo es invalido o no hay resultados de usuarios existentes
-            	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electr&oacute;nico.' %}");
-                // org-user-template
-                $("#search-result").html("<li style='list-style:none'>"+
-                                            "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
-                                            "</a>"+
-                                        "</li>")
-            }
+            showMemberList(data);//Muestra la lista de posibles miembros a agregar
+            // if(data.new_user){//el email valido, viene una lista de usuarios existentes
+            // }else{//el correo es invalido o no hay resultados de usuarios existentes
+            // 	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electrónico.' %}");
+            //     // org-user-template
+            //     $("#search-result").html("<li style='list-style:none'>"+
+            //                                 "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
+            //                                 "</a>"+
+            //                             "</li>")
+            // }
     	}
     }else{//error en el server
         setAlertError("{% trans 'Error en el servidor' %}", "{% trans 'Lo sentimos, algo salió mal en el servidor.Por favor recarga la página e intenta de nuevo' %}")

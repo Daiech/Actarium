@@ -50,28 +50,34 @@ def getListMembers(request, slug_org=False):
         search = request.GET.get('search')
         if validateEmail(search):
             try:
-                ans = User.objects.get(email=search)
+                ans = [User.objects.get(email=search)]
             except:
                 ans = 1  # email valido, pero no es usuario
         else:
-            ans = User.objects.filter(last_name__regex=r"^" + search + "")
-        
+            ans1 = User.objects.filter(username__regex=r"^" + str(search) + "")
+            ans2 = User.objects.filter(first_name__regex=r"^" + str(search) + "")
+            ans3 = User.objects.filter(last_name__regex=r"^" + str(search) + "")
+            ans = list(ans1) + list(ans2) + list(ans3)
+            
         if ans == 1:  # email valido, pero no es usuario
-            user_info ={"user_id": search, "mail": search, "username": search.split("@")[0].title(),
+            user_info ={"user_id": search, "email": search, "username": search.split("@")[0].title(),
                     "gravatar": showgravatar(search, 30), "is_user": False}
             users = {"users": False, "new_user": user_info}
         else:
             users_json = []
+            print "ASN"
+            print type(ans)
             for u in ans:
                 users_json.append({
                     "id": u.id,
                     "username": u.username,
                     "full_name": u.get_full_name(),
                     "is_user": True,
-                    "mail": u.email,
+                    "email": u.email,
                     "gravatar": showgravatar(u.email, 30)
                 })
             users = {"users": users_json, "new_user": False}
+        print users
     else:
         users = {"forbbiden": _("No tienes permiso para agregar usuarios.")}
     return HttpResponse(json.dumps(users), mimetype="application/json")
