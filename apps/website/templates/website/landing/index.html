@@ -47,7 +47,7 @@
                                     <button type="submit" class="btn-action btn-large btn-submit">{% trans 'Crear cuenta' %}</button>
                                 </div>
                                 <div class="input-container google-action">
-                                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-action btn-large btn-green">{% trans 'o inicia con Google' %} <span class="glyhicon gloogle-icon"></span></a>
+                                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-action btn-large btn-green">{% trans 'o inicia con Google' %} <span class="glyhicon google-icon"></span></a>
                                 </div>
                                 <div class="input-container info-signup">
                                     <p>{% trans 'Comienza ahora con Actarium' %}</p>
@@ -161,7 +161,7 @@
             </div>
         </div>
     </div>
-    <div class="landing-block partners-block box">
+    <div class="landing-block partners-block box hidden">
         <div class="landing-container">
             <div class="text-center block-title">
                 <h2>{% trans "Nuestros clientes" %}</h2>
@@ -212,7 +212,7 @@
         .meeting-picture .form-content .input-container button[type=submit]:hover{text-decoration: none;}
         .meeting-picture .form-content .info-signup{background-color: #28b7ca;color: white;padding: 10px;margin-top: 10px;border-radius: 3px;font-family: 'Signika', sans-serif;font-size: 14pt;clear: both;height: auto;margin-bottom: -15px;}
         .meeting-picture .form-content .info-signup .btn-white{color: #28b7ca;padding: 10px 15px;background-color: white;margin: 2px 10px;display: inline-block;font-family: 'Titillium Web', sans-serif;border-radius: 4px;text-transform:uppercase;}
-        .gloogle-icon{background-image: url("{{ STATIC_PREFIX }}img/landing/icons.png");background-repeat: no-repeat;background-position: -4px -94px;width: 30px;height: 30px;display: inline-block;top: 5px;position: absolute;margin-left: 5px;}
+        .google-icon{background-image: url("{{ STATIC_PREFIX }}img/landing/icons.png");background-repeat: no-repeat;background-position: -4px -94px;width: 30px;height: 30px;display: inline-block;top: 5px;position: absolute;margin-left: 5px;}
 
         .meeting-picture .minutes-pic{height: 100%;transform: rotate(-3deg);margin-top: 40px; /*position: absolute;bottom: -15px;left: -60px;*/}
         
@@ -267,7 +267,7 @@
         .partners-block  #parquesoft{background-image: url("/static/img/partners/parquesoft.png");height: 55px;margin: auto;margin-top: 30px;width: 185px;}
         .partners-block  #parquesoft:hover{background-position: 2px 54px;}
 
-        body{margin-bottom: 350px !important;padding-top: 10px;}
+        body{/*margin-bottom: 350px !important;*/padding-top: 10px;}
         #footer{background-color: #f5f5f5;min-height: 290px;font-family: 'Signika'}
         #footer .footer-text-platform li{display: block;}
         #footer .footer-text-platform li:before{content: ""}
