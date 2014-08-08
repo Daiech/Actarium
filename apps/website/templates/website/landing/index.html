@@ -7,12 +7,15 @@
         <div class="landing-container row-fluid box">
             <div class="col-md-7 col-sm-6 block-1">
                 <div class="minutes-pic">
+                    <div class="minutes-headers">
+                        <div class="corner"></div>
+                        <div class="header"></div>
+                    </div>
                     <div class="minutes">
-                        <div class="square"></div>
                         <div class="minutes-content">
                             <h1>{% trans 'Ideal para la gestión de actas y reuniones!' %}</h1>
-                            <p>{% trans 'Invita a tu equipo de trabajo, programa tus reuniones y registra su resultado en actas digitales' %}</p>
-                            <div class="text-center"><a href="#" class="btn-action btn-green btn-go-signup">{% trans 'Pruébalo Gratis' %}</a></div>
+                            <p>{% trans 'Invita a tu equipo de trabajo, programa tus reuniones y registra su resultado en actas digitales.' %}</p>
+                            <div class="text-center"><a href="#" class="btn-action btn-green btn-go-signup">{% trans '¡Pruébalo Gratis!' %}</a></div>
                         </div>
                     </div>
                 </div>
@@ -41,12 +44,10 @@
                                     <label for="password2"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
                                 </div>
                                 <div class="input-container">
-                                    <div class="btn-1">
-                                        <button type="submit" class="btn-action btn-large btn-green">{% trans 'Registrarse' %}</button>
-                                    </div>
-                                    <div class="btn-2">
-                                        <a href="#" class="btn-action btn-large btn-green"><p>{% trans 'Inicia con' %}</p> <span class="glyhicon gloogle-icon"></span></a>
-                                    </div>
+                                    <button type="submit" class="btn-action btn-large btn-submit">{% trans 'Crear cuenta' %}</button>
+                                </div>
+                                <div class="input-container google-action">
+                                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-action btn-large btn-green">{% trans 'o inicia con Google' %} <span class="glyhicon gloogle-icon"></span></a>
                                 </div>
                                 <div class="input-container info-signup">
                                     <p>{% trans 'Comienza ahora con Actarium' %}</p>
@@ -200,29 +201,31 @@
         .meeting-picture .block-2{height: 100%;display: table;margin:40px auto 0;transition: all 0.5s ease-in-out;}
         .meeting-picture .block-2 .form-container{display: table-cell;vertical-align: middle;line-height: 1.3;}
         .meeting-picture .block-2 .form-container .form-box{height: 80%;background-color: rgba(255,255,255,0.6);width: 320px !important;float: right;}
-        .meeting-picture .block-2 .form-container .form-box .form-content{padding: 30px 15px;}
+        .meeting-picture .block-2 .form-container .form-box .form-content{padding: 30px 15px 35px;}
         .meeting-picture .block-2 .form-container .form-box .form-content h3{font-family: HelveticaNeueLT; color:#28b7ca;font-weight: bold;margin-top: 5px;}
-        .meeting-picture .form-content .input-container{position: relative;width: 95%;margin: auto;}
+        .meeting-picture .form-content .input-container{position: relative;width: 95%;margin: 0 auto 10px; height: 40px;}
         .meeting-picture .form-content .input-container > div{text-align: left;width: 49%;}
-        .meeting-picture .form-content .input-container .btn-1{float: left;}
-        .meeting-picture .form-content .input-container .btn-2{float: right;}
-        .meeting-picture .form-content .input-container .btn-2 p{font-size: 19px;padding: 18px 45px 0 12px;text-align: right;}
+        .meeting-picture .form-content .input-container.google-action .btn-action{padding: 8px;}
         .meeting-picture .form-content .input-container .form-control-feedback{left:10px;}
-        .meeting-picture .form-content .input-container button[type=submit]{border:none;padding: 18px;font-size: 14pt;height: 60px;width: 100%;}
-        .meeting-picture .form-content .input-container .btn-action{margin: 0;padding: 0;font-size: 19px;height: 60px;width: 100%;}
+        .meeting-picture .form-content .input-container button[type=submit]{border:none;/*padding: 18px;*/font-size: 14pt;height: inherit;width: 100%;}
+        .meeting-picture .form-content .input-container .btn-action{margin: 0;padding: 0;font-size: 19px;height: inherit;width: 100%;}
         .meeting-picture .form-content .input-container button[type=submit]:hover{text-decoration: none;}
-        .meeting-picture .form-content .info-signup{background-color: #28b7ca;color: white;padding: 10px;margin-top: 70px;border-radius: 3px;font-family: 'Signika', sans-serif;font-size: 14pt;clear: both;}
+        .meeting-picture .form-content .info-signup{background-color: #28b7ca;color: white;padding: 10px;margin-top: 10px;border-radius: 3px;font-family: 'Signika', sans-serif;font-size: 14pt;clear: both;height: auto;margin-bottom: -15px;}
         .meeting-picture .form-content .info-signup .btn-white{color: #28b7ca;padding: 10px 15px;background-color: white;margin: 2px 10px;display: inline-block;font-family: 'Titillium Web', sans-serif;border-radius: 4px;text-transform:uppercase;}
-        .gloogle-icon{background-image: url("{{ STATIC_PREFIX }}img/landing/icons.png");background-repeat: no-repeat;background-position: -4px -94px;width: 30px;height: 30px;display: inline-block;top: 16px;position: absolute;right: 10px;}
+        .gloogle-icon{background-image: url("{{ STATIC_PREFIX }}img/landing/icons.png");background-repeat: no-repeat;background-position: -4px -94px;width: 30px;height: 30px;display: inline-block;top: 5px;position: absolute;margin-left: 5px;}
 
-        .meeting-picture .minutes-pic{height: 100%;/*position: absolute;bottom: -15px;left: -60px;*/}
-        .meeting-picture .minutes-pic .minutes{height: 100%; background-color: rgba(255,255,255,0.84);padding: 70px 50px;margin: 40px;transform: rotate(-3deg);}
-        /*.meeting-picture .minutes-pic .minutes .minutes-content{transform: rotate(3deg);}*/
+        .meeting-picture .minutes-pic{height: 100%;transform: rotate(-3deg);margin-top: 40px; /*position: absolute;bottom: -15px;left: -60px;*/}
+        
+        .meeting-picture .minutes-pic .minutes-header {margin: 0 0 0 40px;padding-left: 70px;width: 100%;height: 70px;}
+        .meeting-picture .minutes-pic .minutes-header div{display: inline-block;}
+        .meeting-picture .minutes-pic .minutes-header .header{background-color: rgba(255,255,255,0.84);width: 100%;height: 70px;}
+        .meeting-picture .minutes-pic .minutes-header .corner{/*position: absolute;top: 0;left: 41px;*/float: left;margin-left: -70px;width: 70px;height: 70px;border-style: solid;border-width: 0 0 70px 70px;border-color: transparent transparent #d7d7d7 transparent;}
+        .meeting-picture .minutes-pic .minutes{height: 100%; background-color: rgba(255,255,255,0.84);padding: 70px 50px;padding-top: 50px; margin: 40px;margin-top: 0px;width: 100%;}
         .meeting-picture .minutes-pic .minutes .minutes-content h1{font-family: HelveticaNeueLT;text-align: center;color: #29b7ca;font-size: 40px;}
         .meeting-picture .minutes-pic .minutes .minutes-content p{font-family: 'Titillium Web';font-size: 25px;color: #aaa;line-height: 1.2;margin: 50px 35px;text-align: justify;}
 
         .animate{transition: all 1.5s ease-in-out;}
-        .move-form{position: relative;background-color: white;transform: translate(0px,-530px);}
+        .move-form{position: relative;background-color: white;transform: translate(0px,-550px);}
 
 
         .meeting-block{background-color: #f5f5f5;}
@@ -280,10 +283,10 @@
             .meeting-block .meeting-picture2{background-position: right bottom -120px;}
             .meeting-picture .minutes-pic .minutes{margin-left: 20px;padding: 60px 40px;}
             .meeting-picture .minutes-pic .minutes .minutes-content h1{font-size: 37px;}
-            .meeting-picture .minutes-pic .minutes .minutes-content p{margin: 50px 5px 35px;}
+            .meeting-picture .minutes-pic .minutes .minutes-content p{margin: 25px 5px 35px;}
         }
         @media (max-width: 768px) {
-            .meeting-picture .minutes-pic{left: 0;/*bottom: -16px;*/margin: auto;left: auto;right: auto;width: 90%;}
+            .meeting-picture .minutes-pic{margin: auto;width: 80%;}
             .meeting-picture .minutes-pic .minutes{top: 20px;position: relative;padding: 60px 40px;}
             .meeting-picture .minutes-pic .minutes .minutes-content p{margin: 40px 5px 30px;}
             .login-form{margin-top: -5px;margin-bottom: 5px;}
@@ -302,6 +305,7 @@
             .login-form .input-container{margin-bottom: 2px;}
         }
         @media (max-width: 480px) {
+            .meeting-picture .minutes-pic{width: 90%;}
             .meeting-picture .minutes-pic .minutes .minutes-content h1{font-size: 30px}
             .meeting-picture .minutes-pic .minutes .minutes-content p{font-size: 20px}
             .btn-action{margin: 0;padding: 15px;}
