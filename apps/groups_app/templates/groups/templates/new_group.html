@@ -11,13 +11,13 @@
                     <div class="type-group">
                         <div>
                             <h3>{% trans 'Crear grupo' %}</h3>
-                            <div class="text-info-smal">{% trans 'Organiza a tu equipo de trajabo en grupos como "Comite financiero", "Consejo Administración", etc.' %}</div>
+                            <div class="text-info-smal">{% trans 'Organiza a tu equipo de trajabo en grupos como "Comité financiero", "Consejo Administración", etc.' %}</div>
                         </div>
                     </div>
                 </div>
                 <div>
                     <ul class="list-unstyled">
-                    {{newGroupForm.as_ul}}
+                    {{ newGroupForm.as_ul }}
                     </ul>
                 </div>
                 <div class="">
@@ -25,7 +25,7 @@
                         <label for="sel-org">{% trans 'Organización' %}:</label>
                     </span>
                     <span class="pull-right">
-                        <a href="{% url 'create_org' %}?ref={{full_path}}"> + Crear organizaci&oacute;n</a>
+                        <a href="{% url 'create_org' %}?ref={{full_path}}"> + {% trans 'Crear organización' %}</a>
                     </span>
                     <select name="sel-organization" id="sel-org">
                         {% for org in organizations%}
@@ -36,17 +36,17 @@
                     </select>
                 </div>
                 <div id="administrator" class="hidden">
-                    <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">Administrador principal de grupo:</label>
-                    <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ Cambiar administrador</a>
+                    <label for="id_admin" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">{% trans 'Administrador principal de grupo:' %}</label>
+                    <a id="new-admin" class="pull-right" href="#" title="Persona encargada de asignar usuarios y roles al grupo. Solo puede haber un administrador principal">+ {% trans 'Cambiar administrador' %}</a>
                     <ul id="admin-list" class="list-unstyled">
                         <li>
                             <label for="id_admin">
-                                <input type="radio" name="id_admin" value="{{user.id}}" id="id_admin" checked> <img src="{{ user.email|showgravatar:'20'}}" class="img20"> {{user.first_name}} {{user.last_name}} (yo)
+                                <input type="radio" name="id_admin" value="{{user.id}}" id="id_admin" checked> <img src="{{ user.email|showgravatar:'20'}}" class="img20"> {{user.first_name}} {{user.last_name}} ({% trans 'yo' %})
                             </label>
                         </li>
                     </ul>
                     <div id="admin-box" style="display:none">
-                        <input id="search-member" type="text" placeholder="email o nombre de usuario" autocomplete="false">
+                        <input id="search-member" type="text" placeholder="{% trans 'email o nombre de usuario' %}" autocomplete="false">
                     </div>
                     <ul id="search-result" class="list-unstyled">
                         
@@ -55,14 +55,14 @@
                 <div id="is-memeber" class="hidden">
                     <label data-original-title="{% trans 'Aparecer en las actas' %}" for="is_member">
                         <input type="checkbox" id="is_member" name="is_member" value="1" checked>
-                        Ser miembro del grupo
+                        {% trans 'Ser miembro del grupo' %}
                     </label>
                 </div>
                 <div class="mt20">
                     <input type="hidden" id="group_name" value="{{group.name}}">
                     <input type="hidden" id="group_id" value="{{group.id}}">
                     <input type="hidden" value="{{sel_org}}" id="org-selected">
-                    <button type="submit" class="btn btn-info btn-large">{% trans 'Guardar' %}</button>
+                    <button type="submit" class="btn btn-info btn-large">{% trans 'Crear' %}</button>
                 </div>
             </div>
         </form>

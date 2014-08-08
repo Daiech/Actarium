@@ -47,7 +47,7 @@ def read_pricing(request, slug_org):
                     else:
                         error = message
                 else:
-                    error = _(u"El método de pago seleccionado")
+                    error = _(u"El método de pago seleccionado no existe")
             else:                
                 show_modal=True
 

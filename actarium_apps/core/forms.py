@@ -8,7 +8,7 @@ from .validators import greater_than_or_equal_to_five
 
 
 class OrderMembersServiceForm(forms.Form):
-    MONTHS = [('6', '6'), ('9', '9'), ('12', '12'), ('18', '18'), ('24', '24')]
+    MONTHS = [('3','3'), ('6', '6'), ('9', '9'), ('12', '12'), ('18', '18'), ('24', '24')]
     organization = forms.CharField(label=_(u"Organización"), widget=forms.HiddenInput()) # attrs={'placeholder': _(u'Organización'), 'autofocus': 'autofocus'}
     number_of_members = forms.CharField(label=_(u"Número de miembros"), widget=forms.TextInput(attrs={'placeholder': _(u'Número de miembros')}),validators=[greater_than_or_equal_to_five])
     number_of_months = forms.ChoiceField(label=_(u"Número de meses"), widget=forms.Select(), choices=MONTHS)

@@ -94,6 +94,9 @@
 {% block menu_content_js %}
 <script type="text/javascript">
     $(document).on("ready",function(){
+    {% if group.organization.is_expired %}
+        setAlertMessage("{% trans 'La cuenta a expirado' %}","{% if rel_user.is_admin %} {% trans 'La organización a la que pertenece este grupo a expirado, no puedes crear actas, convocar reuniones ni asignar tareas, para realizar estas funciones debes actualizar el servicio desde el menu de la organización' %}{%else %} {% trans 'La organización a la que pertenece este grupo a expirado, no puedes crear actas, convocar reuniones ni asignar tareas, comunicate con el administrador de la organización para actualizar el servicio' %} {% endif %}");
+    {% endif %}
 		$("#group-menu-folder").addClass("active");
         $("i, .list-members a, span, .member-pic, .title-on-disabled, .minutes-list li").tooltip();
         /*$(".list-item-minutes").hover(function(){
@@ -101,10 +104,15 @@
         }, function(){
             $(this).find(".date-minute-created").fadeOut("fast");
         })*/
-        {%if not rel_user.is_secretary%}
+        {% if group.organization.is_expired %}
             $(".create-minutes").on("click",function(e){
                 e.preventDefault();
-                setAlertMessage("{% trans 'Permisos de redacción' %}","{% trans 'No tienes permisos de redacción sobre este grupo, por esta razón no puedes crear actas, solicita al administrador del grupo que te otorgue los permisos necesarios para poder realizar esta labor' %}");
+                setAlertMessage("{% trans 'La cuenta a expirado' %}","{% trans 'No puedes crear Actas cuando esta vencida la cuenta, debes actualizar el servicio desde el menú de organización para poder realizar esta acción' %}");
+            })
+        {% elif not rel_user.is_secretary %}
+            $(".create-minutes").on("click",function(e){
+                e.preventDefault();
+                setAlertMessage("{% trans 'Permisos de redacción' %}", "{% trans 'No tienes permisos de redacción sobre este grupo, por esta razón no puedes crear actas, solicita al administrador del grupo que te otorgue los permisos necesarios para poder realizar esta labor' %}");
             })
         {%endif%}
 	});

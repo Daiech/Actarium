@@ -28,7 +28,7 @@
     <div class="white-box-container box-container">
     <p class="pull-right"><a href="{% url 'help' %}?faq=associated-accounts">{% trans 'Qué son las cuentas asociadas?' %}</a></p>
         <form method="post" action="" id="disconnect-form">{% csrf_token %}</form>
-        <p>{% trans 'Cuantas asociadas' %}:</p>
+        <p>{% trans 'Cuentas asociadas' %}:</p>
         <ul>
           {% for assoc in backends.associated %}
             <li>
@@ -92,7 +92,7 @@ $(document).on("ready", function() {
               .submit();
       });
     {% if error_email %}
-    setAlertError("{% trans 'Error al actualizar correo' %}", "{% trans 'Tu correo electronico no pudo ser actualizado' %}")
+    setAlertError("{% trans 'Error al actualizar correo' %}", "{% trans 'Tu correo electrónico no pudo ser actualizado' %}")
     {% endif %}{% if dataUpdate %}
     setAlertMessage("{% trans 'Datos Actualizados' %}", "{% trans 'Tus datos fueron actualizados correctamente' %}")
     {% endif %}{% if passwordUpdate %}
@@ -112,7 +112,7 @@ $(document).on("ready", function() {
         setAlertError("{% trans 'Procedimiento cancelado' %}", "{% trans 'No se ha completado la asociación.' %}");
     }
     if (vars.msg === "NotAllowedToDisconnect"){
-        setAlertError("{% trans 'Imposible Desconectar' %}", "{% trans 'No puedes desconectar esta cuenta ya que es la única forma acceder a tu cuenta. Por favor configure una contraseña e intente de nuevo.' %}");
+        setAlertError("{% trans 'Imposible Desconectar' %}", "{% trans 'No puedes desconectar esta cuenta ya que es la única forma acceder a tu cuenta de Actarium. Por favor configure una contraseña e intente de nuevo.' %}");
     }
 });
 </script>

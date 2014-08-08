@@ -601,9 +601,9 @@ def changeNames(request, slug_group):
                             error = _(u"El usuario no pertenece a este grupo") if not rel else _(u"No se pudo editar los datos. Por favor recarga la página e intenta de nuevo")
                             message = {"error": error, "changed": False}
                     else:
-                        message = {"error": _(u"No pudes cambiar los nombres de este usuario"), "changed": False}
+                        message = {"error": _(u"No puedes cambiar los nombres de este usuario"), "changed": False}
                 else:
-                    message = "No tienes permisos para hacer eso."
+                    message = _("No tienes permisos para hacer eso.")
             except Exception:
                 message = False
         else:
@@ -704,10 +704,10 @@ def remove_from_group(request, slug_group):
                                 "user: %s, grupo: %s, id_user_invited=%s,  is_superadmin=%s, is_admin=%s, is_secretary=%s, is_member=%s, is_active=%s, is_convener=%s, date_joined=%s" % (_user, group, rel.id_user_invited, rel.is_superadmin, rel.is_admin, rel.is_secretary, rel.is_member, rel.is_active, rel.is_convener, rel.date_joined),
                                 request.META['REMOTE_ADDR'])  # Accion de eliminar invitaciones
                             rel.delete()
-                            message = "El usuario (" + _user.username + ") ya no podr&aacute; acceder a este grupo"
+                            message = _(u"El usuario (%s) ya no podrá acceder a este grupo" % (_user.username))
                             response = {"deleted": True, "message": message}
                         else:
-                            response = _(u"Error de relación")
+                            response = _(u"No hay relación para este usuario")
                     else:
                         response = {"message": _(u"No puedes eliminarte tu mismo.")}
                 except:
@@ -715,7 +715,7 @@ def remove_from_group(request, slug_group):
             else:
                 response = _("No tienes permisos para hacer eso.")
         else:
-            response = _(u"Error invitación")
+            response = _(u"Error de invitación")
     else:
         response = _(u"Error invitación")
     return HttpResponse(json.dumps(response), mimetype="application/json")
