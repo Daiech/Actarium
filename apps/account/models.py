@@ -12,7 +12,6 @@ User.add_to_class('objects', CustomUserManager())
 # User.add_to_class('email', email)
 
 
-
 class ActivationManager(GenericManager):
     """This class is responsible to manage the process of  account activation"""
 

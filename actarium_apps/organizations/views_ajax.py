@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles, rel_user_group
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.account.templatetags.gravatartag import showgravatar
+from apps.groups_app.utils import getRelUserGroup
 from apps.groups_app.validators import validateEmail
 from apps.groups_app.utils import send_email_full_signed
 import json
@@ -48,16 +49,19 @@ def getListMembers(request, slug_org=False):
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
     if org and org.has_user_role(request.user, "is_admin"):
         search = request.GET.get('search')
+        gid = request.GET.get('gid')
+        group = org.get_group(id=gid)
         if validateEmail(search):
             try:
                 ans = [User.objects.get(email=search)]
             except:
                 ans = 1  # email valido, pero no es usuario
         else:
-            ans1 = User.objects.filter(username__regex=r"^" + str(search) + "")
-            ans2 = User.objects.filter(first_name__regex=r"^" + str(search) + "")
-            ans3 = User.objects.filter(last_name__regex=r"^" + str(search) + "")
-            ans = list(ans1) + list(ans2) + list(ans3)
+            ans1 = User.objects.filter(username__iregex=r"" + search + "")
+            ans2 = User.objects.filter(email__iregex=r"" + search + "")
+            ans3 = User.objects.filter(first_name__iregex=r"" + search + "")
+            ans4 = User.objects.filter(last_name__iregex=r"" + search + "")
+            ans = list(ans1) + list(ans2) + list(ans3) + list(ans4)
             
         if ans == 1:  # email valido, pero no es usuario
             user_info ={"user_id": search, "email": search, "username": search.split("@")[0].title(),
@@ -65,19 +69,25 @@ def getListMembers(request, slug_org=False):
             users = {"users": False, "new_user": user_info}
         else:
             users_json = []
-            print "ASN"
-            print type(ans)
+            uids = []
             for u in ans:
-                users_json.append({
-                    "id": u.id,
-                    "username": u.username,
-                    "full_name": u.get_full_name(),
-                    "is_user": True,
-                    "email": u.email,
-                    "gravatar": showgravatar(u.email, 30)
-                })
+                if u.id not in uids:
+                    uids.append(u.id)
+                    rel = getRelUserGroup(u, group)
+                    print u, "REL", rel
+                    is_member_of_group = False
+                    if rel:
+                        is_member_of_group = True
+                    print "ES TRUE??", is_member_of_group
+                    users_json.append({
+                        "id": u.id,
+                        "username": u.username,
+                        "full_name": u.get_full_name(),
+                        "is_user": is_member_of_group,
+                        "email": u.email,
+                        "gravatar": showgravatar(u.email, 30)
+                    })
             users = {"users": users_json, "new_user": False}
-        print users
     else:
         users = {"forbbiden": _("No tienes permiso para agregar usuarios.")}
     return HttpResponse(json.dumps(users), mimetype="application/json")

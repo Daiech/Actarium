@@ -58,6 +58,9 @@ class Organizations(models.Model):
     def get_num_members(self):
         return self.organizationsuser_organization.filter(role__code="is_member", is_active=True).count()
 
+    def get_group(self, **kwargs):
+        return self.get_groups().filter(**kwargs).first()
+
     def get_groups(self):
         return self.groups_org.filter(is_active=True)
 

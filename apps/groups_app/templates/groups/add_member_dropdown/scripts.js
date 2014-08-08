@@ -1,6 +1,6 @@
 {% load i18n orgs_ttag gravatartag %}
 $(document).ready(function() {
-	MAX_LENGTH = 60;
+	MAX_LENGTH = 25;
 	message = "{% trans 'Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro del grupo.' %}";
 	$("#message-search").html(message);
 	$(".user-list").niceScroll();
@@ -132,20 +132,22 @@ function showMemberList(data){//Muestra la lista de posibles miembros a agregar
     }
     else{//es usuario de la base de datos
 
-        $("#message-search").html("<strong>" + data.users.username + "</strong> {% trans 'hace parte de Actarium, haz click en el nombre para invitarlo al grupo.' %}")
+        $("#message-search").html("{% trans 'Haz click en el nombre para invitar al grupo.' %}")
         li = "";
         users = [];
         for (var i = 0; i < data.users.length; i++) {
             // users.append({});
-            user_to_invite = data.users[i]['mail']+" ("+data.users[i]['username']+")";
+            user_to_invite = data.users[i]['full_name']+" ("+data.users[i]['username']+")";
             if(user_to_invite.length > MAX_LENGTH){p="...";}
             users[i] = {
                 "id": data.users[i].id,
                 "email": data.users[i].email,
                 "username": data.users[i].username,
                 "image": data.users[i].gravatar, 
-                "full_name": data.users[i].full_name.substring(0,MAX_LENGTH) + p,
+                "full_name": user_to_invite.substring(0,MAX_LENGTH) + p,
+                "is_member": data.users[i].is_user
             }
+            console.log(data.users[i])
         };
         appendToList(swig.render($("#org-user-template").html(), {locals: users}));
         
@@ -186,5 +188,5 @@ function show_search_result(data){//lista los usuarios disponibles a invitar
 }
 function getSearch () {
 	var user = $("#newmember").val();
-    sendNewAjax("{% url 'get_users_list' group.organization.slug  %}", {search: user}, show_search_result);
+    sendNewAjax("{% url 'get_users_list' group.organization.slug  %}", {search: user, gid:{{ group.id }}}, show_search_result);
 }

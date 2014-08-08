@@ -112,6 +112,7 @@ def setRelUserGroup(id_user, id_group,
 
 def getRelUserGroup(_user, _group):
     try:
+        # return _user.rel_user_group_id_user.get(id_group=_group)
         return rel_user_group.objects.get(id_user=_user, id_group=_group)
     except rel_user_group.DoesNotExist:
         return False
