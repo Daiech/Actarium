@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 15:46-0500\n"
+"POT-Creation-Date: 2014-08-08 20:23-0500\n"
 "PO-Revision-Date: 2014-07-25 19:36-0500\n"
 "Last-Translator: Admin Actarium <maoaiz@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,35 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: views.py:82
+#: views.py:81
 msgid "General"
 msgstr "General"
 
-#: views.py:84
+#: views.py:83
 msgid "Sugerencia"
 msgstr "Suggestion"
 
-#: views.py:86
+#: views.py:85
 msgid "Error"
 msgstr "Error"
 
-#: views.py:88
+#: views.py:87
 msgid "Pregunta"
 msgstr "Question"
 
-#: views.py:90
+#: views.py:89
 msgid "No definido"
 msgstr "Not defined"
 
-#: views.py:99
+#: views.py:98
 msgid "Correo invalido"
 msgstr "Email sent"
 
-#: views.py:163
+#: views.py:162
 msgid "Políticas de privacidad"
 msgstr "Privacy Policy"
 
-#: views.py:174
+#: views.py:173
 msgid "Términos y condiciones"
 msgstr "Terms and conditions"
 
@@ -110,179 +110,8 @@ msgstr "I have an account"
 msgid "Preguntas y respuestas"
 msgstr "Questions and Answers"
 
-#: templates/website/landing.html:3
-msgid ""
-"Actarium - El espacio más cómodo para registrar el resultado de tus reuniones"
-msgstr ""
-"Actarium - The most convenient place to record the results of your meetings"
-
-#: templates/website/landing.html:10
-msgid "El espacio más cómodo para registrar el resultado de tus reuniones"
-msgstr "The most convenient place to record the results of your meetings"
-
-#: templates/website/landing.html:11
-msgid ""
-"Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y "
-"crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran "
-"tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel."
-msgstr ""
-"Invite your team, everyone can schedule meetings and create your Minutes "
-"quickly and effectively as well; Save time, money and protect the "
-"environment by reducing paper consumption."
-
-#: templates/website/landing.html:18 templates/website/landing.html.py:62
-msgid "Reg&iacute;strate gratis"
-msgstr "Sign up Free"
-
-#: templates/website/landing.html:22 templates/website/landing.html.py:49
-msgid "Nombre de usuario"
-msgstr "Username"
-
-#: templates/website/landing.html:23
-msgid "Correo Electr&oacute;nico"
-msgstr "Email"
-
-#: templates/website/landing.html:24 templates/website/landing.html.py:50
-msgid "Contrase&ntilde;a"
-msgstr "Password"
-
-#: templates/website/landing.html:25
-msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
-msgstr "Password (Confirmation)"
-
-#: templates/website/landing.html:28
-#, python-format
-msgid ""
-"Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
-"uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Pol&iacute;"
-"ticas de privacidad</a>"
-msgstr ""
-"I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of Use</"
-"a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy Policy</a>"
-
-#: templates/website/landing.html:31
-msgid "Registrarme"
-msgstr "Sign Up"
-
-#: templates/website/landing.html:38
-msgid "¿Ya tienes cuenta?"
-msgstr "I don't have an account"
-
-#: templates/website/landing.html:39 templates/website/landing.html.py:45
-msgid "Iniciar sesi&oacute;n"
-msgstr "Login"
-
-#: templates/website/landing.html:52 templates/website/topBar_landing.html:30
-msgid "Iniciar Sesi&oacute;n"
-msgstr "Login"
-
-#: templates/website/landing.html:54
-msgid "&iquest;Olvidaste tu contrase&ntilde;a?"
-msgstr "Forgot your password?"
-
-#: templates/website/landing.html:61
-msgid "¿Eres nuevo?"
-msgstr "Your first time?"
-
-#: templates/website/landing.html:67
-msgid "Inicia con"
-msgstr "Login with"
-
-#: templates/website/landing.html:84
-msgid "tus actas en un solo lugar"
-msgstr "Your Minutes only in a place"
-
-#: templates/website/landing.html:108
-msgid "¿Beneficios? mucho m&aacute;s..."
-msgstr "Benefits? much more..."
-
-#: templates/website/landing.html:121
-msgid "Bolsa de Plantillas"
-msgstr "Bag Templates"
-
-#: templates/website/landing.html:122
-msgid ""
-"Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, "
-"además cree sus propias plantillas!"
-msgstr ""
-"Choose minutes templates to accelerate your processes and save time, also "
-"create your own templates!"
-
-#: templates/website/landing.html:130
-msgid "Aprobación inmediata de actas"
-msgstr "Instant approval of minutes"
-
-#: templates/website/landing.html:131
-msgid ""
-"Después de redactar un acta, inmediatamente la puede compartir con su equipo "
-"de trabajo para ser aprobada o corregida."
-msgstr ""
-"After writing the minutes, immediately can share with your team to be "
-"approved or corrected."
-
-#: templates/website/landing.html:139
-msgid "Acceda desde cualquier dispositivo!"
-msgstr "Access from any device!"
-
-#: templates/website/landing.html:140
-msgid ""
-"En cualquier momento que necesite registrar sus decisiones de reuniones "
-"informales, reuniones imprevistas que se presentan en cualquier sitio puede "
-"crear actas desde móviles, tabletas, computadores..."
-msgstr ""
-"Anytime you need to record your decisions for informal meetings, impromptu "
-"meetings that occur at any site can create minutes from phones, tablets, "
-"computers."
-
-#: templates/website/landing.html:150
-msgid "Grabación de actas (muy pronto)"
-msgstr "Recording of minutes (coming soon)"
-
-#: templates/website/landing.html:151
-msgid ""
-"Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos "
-"tomados, además adjunte las grabaciones si lo desea en las actas."
-msgstr ""
-"Record audio of your meetings to have a better support the decisions taken, "
-"as well attach if desired recordings in the minutes."
-
-#: templates/website/landing.html:159
-msgid "Integración con Google (muy pronto)"
-msgstr "Google integrations (coming soon)"
-
-#: templates/website/landing.html:160
-msgid ""
-"Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
-"o simplemente inicia sesión con tu cuenta de Google)"
-msgstr ""
-"Connect with business management services. (Calendar, Drive, Gmail or simply "
-"sign in with your Google Account)"
-
-#: templates/website/landing.html:168
-msgid "Local storage (muy pronto)"
-msgstr "Local storage (coming soon)"
-
-#: templates/website/landing.html:169
-msgid "Almacena datos en el navegador sin necesidad de internet."
-msgstr "Stores data in the browser without internet."
-
-#: templates/website/landing.html:177
-msgid "Aliados"
-msgstr "Partners"
-
-#: templates/website/landing.html:335
-msgid "Idioma no soportado"
-msgstr "Language not supported"
-
-#: templates/website/landing.html:336
-msgid ""
-"Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
-"para recibir actualizaciones de nuestra plataforma"
-msgstr ""
-"Actarium is not translated to this language: (<br> Subscribe to our channel "
-"to receive updates from our platform"
-
 #: templates/website/layout_landing.html:12
+#: templates/website/landing/landing_base.html:11
 msgid "El espacio más cómodo para registrar el resultado de sus reuniones"
 msgstr "The most convenient place to record the results of your meetings"
 
@@ -394,13 +223,30 @@ msgstr ""
 "A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
 "\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
+#: templates/website/public_top_bar.html:16
+#, fuzzy
+msgid "Correo ó Nombre de usuario"
+msgstr "Username"
+
+#: templates/website/public_top_bar.html:20
+#: templates/website/landing/index.html:39
+#, fuzzy
+msgid "Contraseña"
+msgstr "Password"
+
 #: templates/website/public_top_bar.html:22
-msgid "Inicia sesión"
+#, fuzzy
+msgid "&iquest;Olvidaste la contraseña?"
+msgstr "Forgot your password?"
+
+#: templates/website/public_top_bar.html:25
+#, fuzzy
+msgid "Iniciar sesión"
 msgstr "Login"
 
-#: templates/website/public_top_bar.html:23
-msgid "Registrate gratis"
-msgstr "Sign Up"
+#: templates/website/topBar_landing.html:30
+msgid "Iniciar Sesi&oacute;n"
+msgstr "Login"
 
 #: templates/website/topBar_landing.html:40
 msgid "Editar configuraci&oacute;n"
@@ -431,9 +277,242 @@ msgstr "See all"
 msgid "Crear grupo"
 msgstr "Create group"
 
+#: templates/website/landing/index.html:3
+msgid ""
+"Actarium - El espacio más cómodo para registrar el resultado de tus reuniones"
+msgstr ""
+"Actarium - The most convenient place to record the results of your meetings"
+
+#: templates/website/landing/index.html:16
+#, fuzzy
+msgid "Ideal para la gestión de actas y reuniones!"
+msgstr "Actarium - The ideal platform for managing Minutes and Meeting"
+
+#: templates/website/landing/index.html:17
+msgid ""
+"Invita a tu equipo de trabajo, programa tus reuniones y registra su "
+"resultado en actas digitales."
+msgstr ""
+
+#: templates/website/landing/index.html:18
+#, fuzzy
+msgid "¡Pruébalo Gratis!"
+msgstr "Try it now!"
+
+#: templates/website/landing/index.html:28
+msgid "¡Únete a Actarium!"
+msgstr ""
+
+#: templates/website/landing/index.html:31
+msgid "Nombre de usuario"
+msgstr "Username"
+
+#: templates/website/landing/index.html:35
+#, fuzzy
+msgid "Correo electrónico"
+msgstr "Email"
+
+#: templates/website/landing/index.html:43
+msgid "Repite Contraseña"
+msgstr ""
+
+#: templates/website/landing/index.html:47
+#, fuzzy
+msgid "Crear cuenta"
+msgstr "Create group"
+
+#: templates/website/landing/index.html:50
+msgid "o"
+msgstr ""
+
+#: templates/website/landing/index.html:53
+#, fuzzy
+msgid "o inicia con Google"
+msgstr "Login with"
+
+#: templates/website/landing/index.html:56
+msgid "Comienza ahora con Actarium"
+msgstr ""
+
+#: templates/website/landing/index.html:57
+#, fuzzy
+msgid "Ver precios"
+msgstr "Pricing"
+
+#: templates/website/landing/index.html:71
+msgid "Tu información está siempre segura"
+msgstr ""
+
+#: templates/website/landing/index.html:72
+#, fuzzy
+msgid "Acceso desde cualquier dispositivo"
+msgstr "Access from any device!"
+
+#: templates/website/landing/index.html:73
+msgid "Aprueba tus actas en equipo"
+msgstr ""
+
+#: templates/website/landing/index.html:74
+msgid "Sistema de tareas"
+msgstr ""
+
+#: templates/website/landing/index.html:88
+msgid ""
+"Con Actarium ahorra tiempo, dinero y protege el medio ambiente reduciendo el "
+"consumo de papel"
+msgstr ""
+
+#: templates/website/landing/index.html:91
+msgid "Comienza ahora"
+msgstr ""
+
+#: templates/website/landing/index.html:100
+#, fuzzy
+msgid "¿Beneficios? mucho más..."
+msgstr "Benefits? much more..."
+
+#: templates/website/landing/index.html:109
+#, fuzzy
+msgid "Bolsa de plantillas"
+msgstr "Bag Templates"
+
+#: templates/website/landing/index.html:110
+msgid ""
+"Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, "
+"además cree sus propias plantillas!"
+msgstr ""
+"Choose minutes templates to accelerate your processes and save time, also "
+"create your own templates!"
+
+#: templates/website/landing/index.html:118
+msgid "Aprobación inmediata de actas"
+msgstr "Instant approval of minutes"
+
+#: templates/website/landing/index.html:119
+msgid ""
+"Después de redactar un acta, inmediatamente la puede compartir con su equipo "
+"de trabajo para ser aprobada o corregida."
+msgstr ""
+"After writing the minutes, immediately can share with your team to be "
+"approved or corrected."
+
+#: templates/website/landing/index.html:127
+msgid "Acceda desde cualquier dispositivo!"
+msgstr "Access from any device!"
+
+#: templates/website/landing/index.html:128
+msgid ""
+"En cualquier momento que necesite registrar sus decisiones de reuniones "
+"informales, reuniones imprevistas que se presentan en cualquier sitio puede "
+"crear actas desde móviles, tabletas, computadores..."
+msgstr ""
+"Anytime you need to record your decisions for informal meetings, impromptu "
+"meetings that occur at any site can create minutes from phones, tablets, "
+"computers."
+
+#: templates/website/landing/index.html:138
+msgid "Integración con Google (muy pronto)"
+msgstr "Google integrations (coming soon)"
+
+#: templates/website/landing/index.html:139
+msgid ""
+"Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
+"o simplemente inicia sesión con tu cuenta de Google)"
+msgstr ""
+"Connect with business management services. (Calendar, Drive, Gmail or simply "
+"sign in with your Google Account)"
+
+#: templates/website/landing/index.html:147
+msgid "Grabación de actas (muy pronto)"
+msgstr "Recording of minutes (coming soon)"
+
+#: templates/website/landing/index.html:148
+msgid ""
+"Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos "
+"tomados, además adjunte las grabaciones si lo desea en las actas."
+msgstr ""
+"Record audio of your meetings to have a better support the decisions taken, "
+"as well attach if desired recordings in the minutes."
+
+#: templates/website/landing/index.html:156
+msgid "Local storage (muy pronto)"
+msgstr "Local storage (coming soon)"
+
+#: templates/website/landing/index.html:157
+msgid "Almacena datos en el navegador sin necesidad de internet."
+msgstr "Stores data in the browser without internet."
+
+#: templates/website/landing/index.html:162
+#, fuzzy
+msgid "Pruébalo ahora"
+msgstr "Try it now!"
+
+#: templates/website/landing/index.html:170
+msgid "Nuestros clientes"
+msgstr ""
+
+#: templates/website/landing/index.html:179
+msgid "Únete ahora Gratis!"
+msgstr ""
+
+#~ msgid "El espacio más cómodo para registrar el resultado de tus reuniones"
+#~ msgstr "The most convenient place to record the results of your meetings"
+
 #~ msgid ""
-#~ "Actarium - La plataforma ideal para la gesti&oacute;n de Actas y Reuniones"
-#~ msgstr "Actarium - The ideal platform for managing Minutes and Meeting"
+#~ "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y "
+#~ "crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran "
+#~ "tiempo, dinero y protegen el medio ambiente al reducir el consumo de "
+#~ "papel."
+#~ msgstr ""
+#~ "Invite your team, everyone can schedule meetings and create your Minutes "
+#~ "quickly and effectively as well; Save time, money and protect the "
+#~ "environment by reducing paper consumption."
+
+#~ msgid "Reg&iacute;strate gratis"
+#~ msgstr "Sign up Free"
+
+#~ msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
+#~ msgstr "Password (Confirmation)"
+
+#~ msgid ""
+#~ "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
+#~ "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" target=\"_blank"
+#~ "\">Pol&iacute;ticas de privacidad</a>"
+#~ msgstr ""
+#~ "I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of Use</"
+#~ "a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy Policy</"
+#~ "a>"
+
+#~ msgid "Registrarme"
+#~ msgstr "Sign Up"
+
+#~ msgid "¿Ya tienes cuenta?"
+#~ msgstr "I don't have an account"
+
+#~ msgid "Iniciar sesi&oacute;n"
+#~ msgstr "Login"
+
+#~ msgid "¿Eres nuevo?"
+#~ msgstr "Your first time?"
+
+#~ msgid "tus actas en un solo lugar"
+#~ msgstr "Your Minutes only in a place"
+
+#~ msgid "Aliados"
+#~ msgstr "Partners"
+
+#~ msgid "Idioma no soportado"
+#~ msgstr "Language not supported"
+
+#~ msgid ""
+#~ "Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
+#~ "para recibir actualizaciones de nuestra plataforma"
+#~ msgstr ""
+#~ "Actarium is not translated to this language: (<br> Subscribe to our "
+#~ "channel to receive updates from our platform"
+
+#~ msgid "Registrate gratis"
+#~ msgstr "Sign Up"
 
 #~ msgid "Formulario de Inicio"
 #~ msgstr "Login Form"
