@@ -268,7 +268,7 @@ def email_to_approver(request, slug_group, minutes_id):
             else:
                 response = {"sent": False, "msj": _(u"El usuario no pertenece a la comisión aprobatoria")}
         else:
-            response = {"sent": False, "msj": _(u"Error, este usuario no exite, por favor, recargue la página e intente de nuevo.")}
+            response = {"sent": False, "msj": _(u"Error, este usuario no existe, por favor, recargue la página e intente de nuevo.")}
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 def email_to_approvers(request, slug_group, minutes_id):
@@ -292,7 +292,7 @@ def email_to_approvers(request, slug_group, minutes_id):
             else:
                 response = {"sent": False, "msj": _(u"Hay un error con la comisión aprobatoria, por favor, recargue la página e intente de nuevo.")}
         else:
-            response = {"sent": False, "msj": _(u"Error, esta acta no exite, por favor, recargue la página e intente de nuevo.")}
+            response = {"sent": False, "msj": _(u"Error, esta acta no existe, por favor, recargue la página e intente de nuevo.")}
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
