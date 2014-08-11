@@ -2,23 +2,67 @@
 {% load i18n %}
 {% block TITLE %}{% trans 'Registro' %}{% endblock %}
 {% block content %}
-<article class="message-box white-box-container">
-        <h3>{% trans 'Registro de Usuario' %}</h3>
-        <p>{% trans 'Necesitamos identificarte para restringir tu contenido solo a las personas que tu desees.' %}</p>
-        <form class="form-horizontal" method="POST">
-            {% csrf_token %}
-            <table>{{ formNewUser }}</table>
-            <div class="control-group t-a-c mt20">
-                <div class="controls">
-                    <label class="checkbox">
-                        <input type="checkbox" name="term_privacy" id="term_privacy"> Acepto los <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a> y las <a href="/{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad</a>
-                    </label>
-                    <div class="mt20">
-                        <button type="submit" class="btn btn-info btn-large" disabled="disabled" id="btn-submit">Registrarse</button>
-                        <a href="/account/login" class="btn btn-link">Iniciar Sesi&oacute;n</a><br />
+<article class="form-center-box row-fluid box b">
+    <div class="form-container">
+        <div class="form-box">
+            <div class="form-content text-center">
+                <form method="post" action="{% url 'new_user' %}">
+                    <h3>{% trans '¡Únete a Actarium!' %}</h3>
+                    <p>{% trans 'Necesitamos identificarte para restringir tu contenido solo a las personas que tu desees.' %}</p>
+                    <div class="input-container">
+                        {% csrf_token %}
+                        <input type="text" name="username" id="new_username" class="form-control text-input popover-element" placeholder="{% trans 'Nombre de usuario' %}" data-container="body" data-placement="right" data-toggle="popover" data-content="{{ formulario.username.help_text }}"  value="{{ formulario.username.value|default_if_none:"" }}" autofocus required>
+                        <label for="new_username"><span class="glyphicon glyphicon-user form-control-feedback"></span></label>
+                        <span class="error">{{ formulario.username.errors }}</span>
                     </div>
-                </div>
+                    <div class="input-container">
+                        <input type="email" name="email" id="email" class="form-control text-input" value="{{ formulario.email.value|default_if_none:"" }}" placeholder="{% trans 'Correo electrónico' %}" required>
+                        <label for="email"><span class="glyphicon glyphicon-envelope form-control-feedback"></span></label>
+                        <span class="error">{{ formulario.email.errors }}</span>
+                    </div>
+                    <div class="input-container">
+                        <input type="password" name="password1" id="password1" class="form-control text-input" placeholder="{% trans 'Contraseña' %}" required>
+                        <label for="password1"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
+                        <span class="error">{{ formulario.password2.errors }}</span>
+                    </div>
+                    <div class="input-container">
+                        <input type="password" name="password2" id="password2" class="form-control text-input" placeholder="{% trans 'Repite Contraseña' %}" required>
+                        <label for="password2"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
+                    </div>
+                    <div class="input-container">
+                        <p>{% blocktrans %}Al registrarte en Actarium aceptas los <a href="/{{URL_TERMS}}" target="_blank">T&eacute;rminos de uso</a> y las <a href="/{{URL_PRIVACY}}" target="_blank">Pol&iacute;ticas de privacidad{% endblocktrans %}</p>
+                        <button type="submit" class="btn-action btn-large btn-submit">{% trans 'Crear cuenta' %}</button>
+                    </div>
+                    <div class="line-separation">
+                        <!-- <p>{% trans 'o' %}</p> -->
+                    </div>
+                    <div class="input-container google-action">
+                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-action btn-large btn-green">{% trans 'o registrate con Google' %} <span class="glyhicon google-icon"></span></a>
+                    </div>
+                    <div class="mt20">
+                        <a href="{% url 'log_in' %}" class="text-gray">{% trans '&iquest;Eres miembro? Inicia sesión' %}</a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+    </div>
 </article>
 {%endblock%}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($(window).width() < 512){
+            console.log("es pequelo")
+            $("#new_username").popover({"placement": "top", trigger: 'focus'});
+        }else{
+            $("#new_username").popover({trigger: 'focus'});
+        }
+    })
+</script>
+{% endblock %}
+{% block style %}
+<style type="text/css">
+    .form-content{padding-top: 0;}
+</style>
+{% endblock %}

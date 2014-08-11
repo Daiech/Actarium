@@ -110,7 +110,7 @@ text-decoration:none;
 .menu-container .btn{height: 24px;padding: 2px 3px;padding-right: 6px}
 #account-menu{margin-left: 2px;margin-top: 0;}
 #groups-menu{margin-top: 0;margin-left: 0;}
-#topbar-menu{position: absolute;right: 0;top: 0;background-color: #F7F7F7;height: 41px;}
+#topbar-menu{position: absolute;right: 0;top: 0;background-color: inherit; /*#F7F7F7*/;height: 41px;}
 #topbar-menu > div > div{height: 42px;min-width: 54px;padding-right: 3px;}
 #groups-menu .group-link{color: #428bca;font-weight: normal;}
 #groups-menu .group-link:hover{color: #fff}
@@ -694,7 +694,7 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 #message-box{/*margin: 10px auto;*/width: 70%}
 .message-box{width: 50%}
 #more-info{min-height: 25px; margin: 10px auto;width: 70%;}
-
+.form-center-box{max-width: 400px;}
 
 
 .btn-groups-admin{display: block;/*margin: 0 auto;width: 58%;*/}
@@ -853,7 +853,7 @@ cierra Show Minutes
     .minutes, #minutes{width: 99%;}
 }
 @media (min-width: 992px){
-    #topbar-menu{min-width: 224px;}
+    /*#topbar-menu{min-width: 224px;}*/
     #topbar .breadcrumb {display: inline-block;}
     /*#topbar-menu > div {min-width: 111px;}*/
 }
@@ -964,7 +964,7 @@ cierra Show Minutes
 
 @media (max-width: 380px) {
     .white-bar{width: 95%;}
-    .form-box input{width: 70%;}
+    .form-content{padding: 0;}
 }
    /*==================================================*/
     /*                  Modal for view in mobile       */                    

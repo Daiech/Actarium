@@ -4,14 +4,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from apps.account.validators import validate_email_unique
 from apps.groups_app.models import DNI_type
+from django.utils.translation import ugettext_lazy as _
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(label="Correo Electrónico", validators=[validate_email_unique], widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    email = forms.EmailField(label=_(u"Correo Electrónico"), validators=[validate_email_unique], widget=forms.TextInput(attrs={'placeholder': 'Email'}))
     username = forms.CharField(
         label="Nombre de usuario",
-        widget=forms.TextInput(attrs={'placeholder': 'Nombre de Usuario', "autofocus": "autofocus"}),
-        help_text="Requerido. 30 caracteres o menos. Letras, dígitos y @/./+/-/_ solamente."
+        widget=forms.TextInput(attrs={'placeholder': _(u'Nombre de Usuario'), "autofocus": "autofocus"}),
+        help_text=_(u"Requerido. 30 caracteres o menos. Letras, dígitos y @.+-_ solamente.")
     )
 
     class Meta:
@@ -28,10 +29,10 @@ class RegisterForm(UserCreationForm):
 
 
 class UserForm(forms.ModelForm):
-    email = forms.EmailField(label="* Correo Electrónico", widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    username = forms.CharField(label="* Nombre de usuario", widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    first_name = forms.CharField(label="* Nombre", widget=forms.TextInput(attrs={'placeholder': 'Nombre'}))
-    last_name = forms.CharField(label="Apellido", required=False, widget=forms.TextInput(attrs={'placeholder': 'Apellido'}))
+    email = forms.EmailField(label=_(u"* Correo Electrónico"), widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    username = forms.CharField(label=_(u"* Nombre de usuario"), widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    first_name = forms.CharField(label=_(u"* Nombre"), widget=forms.TextInput(attrs={'placeholder': 'Nombre'}))
+    last_name = forms.CharField(label=_(u"Apellido"), required=False, widget=forms.TextInput(attrs={'placeholder': 'Apellido'}))
 
     class Meta:
         model = User
@@ -51,7 +52,7 @@ class NewDNI(forms.Form):
         CHOICES.append((gt.id, gt.short_name+" ("+gt.long_name+")"))
         i = i + 1
     dni = forms.CharField(label="DNI", widget=forms.TextInput(attrs={'placeholder': 'DNI'}))
-    dni_type = forms.ChoiceField(label="Tipo de DNI", choices=CHOICES)
+    dni_type = forms.ChoiceField(label=_(u"Tipo de DNI"), choices=CHOICES)
 
         
         

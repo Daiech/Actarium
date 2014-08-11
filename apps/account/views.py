@@ -60,7 +60,7 @@ def newUser(request):
     else:
         formulario = RegisterForm()
     from apps.website.views import getGlobalVar
-    ctx = {'formNewUser': formulario, 'url_terms': getGlobalVar("URL_TERMS"), 'url_privacy': getGlobalVar("URL_PRIVACY")}
+    ctx = {'formulario': formulario, 'url_terms': getGlobalVar("URL_TERMS"), 'url_privacy': getGlobalVar("URL_PRIVACY")}
     return render_to_response('account/newUser.html', ctx, context_instance=RequestContext(request))
 #    return render_to_response('account/newUser.html',{}, context_instance = RequestContext(request))
 
@@ -136,14 +136,15 @@ def log_in(request):
     '''
     saveViewsLog(request, "apps.account.views.log_in")
     if not request.user.is_anonymous():
-        return HttpResponseRedirect('/account/')
+        return HttpResponseRedirect('/account')
     if request.method == 'POST':
         formulario = AuthenticationForm(data=request.POST)
         if formulario.is_valid():
-            return userLogin(request, request.POST['username'], request.POST['password'])
+            return userLogin(request, request.POST.get('username'), request.POST.get('password'))
     else:
+        next = request.GET.get('next') if 'next' in request.GET else ""
         formulario = AuthenticationForm()
-    return render_to_response('account/login.html', {'formulario': formulario}, context_instance=RequestContext(request))
+    return render(request, 'account/login.html', locals())
 
 
 @login_required(login_url='/account/login')
@@ -165,8 +166,9 @@ def userLogin(request, user_name, password):
     '''Autentica a un usuario con los parametros recibidos
         actualmente solo se loguea con username, se espera autenticar con mail'''
     saveViewsLog(request, "apps.account.views.userLogin")
-    next = request.GET.get('next') if 'next' in request.GET else '/'
-
+    next = request.GET.get('next') if 'next' in request.GET else None
+    if not next:
+        next = request.POST.get('next') if 'next' in request.POST else '/'
     user = authenticate(username=user_name, password=password)
     if user is not None:
         if user.is_active:

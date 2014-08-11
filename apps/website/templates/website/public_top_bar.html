@@ -6,10 +6,12 @@
         <div class="logo"><img src="{{ STATIC_PREFIX }}img/actarium.com.png" class="img-responsive"></div>
     </a>
   </div>
+  {% if not user.is_authenticated %}
   <div class="col-md-9 col-sm-8 col-xs-8 login-form">
     <form class="form-inline" role="form" method="post" action="{% url 'log_in' %}">
         <div class="row-fluid">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" >
             <div class="col-md-2 col-sm-0">
             </div>
             <div class="input-container col-md-4 col-sm-4">
@@ -28,4 +30,7 @@
         </div>
     </form>
   </div>
+  {% else %}
+  {% include "topbar_menus.html" %}
+  {%endif%}
 </div>
