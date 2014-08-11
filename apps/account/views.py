@@ -162,25 +162,16 @@ def log_out(request):
 
 
 def userLogin(request, user_name, password):
-    '''
-        Autentica a un usuario con los parametros recibidos
-        actualmente solo se loguea con username, se espera autenticar con mail
-    '''
+    '''Autentica a un usuario con los parametros recibidos
+        actualmente solo se loguea con username, se espera autenticar con mail'''
     saveViewsLog(request, "apps.account.views.userLogin")
-    try:
-        next = request.GET['next']
-    except Exception:
-        next = '/'
+    next = request.GET.get('next') if 'next' in request.GET else '/'
 
-    acceso = authenticate(username=user_name, password=password)
-    if acceso is not None:
-        if acceso.is_active:
-            login(request, acceso)
-            try:
-                user_id = User.objects.get(username=user_name)
-            except:
-                user_id = User.objects.get(email=user_name)
-            saveActionLog(user_id, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
+    user = authenticate(username=user_name, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            saveActionLog(user, "LOG_IN", "username: %s" % (user_name), request.META['REMOTE_ADDR'])  # Guarda la accion de inicar sesion
             return HttpResponseRedirect(next)
         else:
             return render_to_response('account/noactivo.html', context_instance=RequestContext(request))
