@@ -11,7 +11,7 @@
                     <div class="type-group">
                         <div>
                             <h3>{% trans 'Crear grupo' %}</h3>
-                            <div class="text-info-smal">{% trans 'Organiza a tu equipo de trajabo en grupos como "Comité financiero", "Consejo Administración", etc.' %}</div>
+                            <div class="text-info-smal">{% trans 'Organiza a tu equipo de trabajo en grupos como "Comité financiero", "Consejo Administrativo", etc.' %}</div>
                         </div>
                     </div>
                 </div>
@@ -29,9 +29,7 @@
                     </span>
                     <select name="sel-organization" id="sel-org">
                         {% for org in organizations%}
-                        <option value="{{org.id}}" >
-                            {{org.name}}
-                        </option>
+                        <option value="{{org.id}}" >{{org.name}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -154,11 +152,9 @@
             $("#pro").click();
             $(".data-pro").removeClass("hidden");
         {%endif%}
-        // $('#id_name').popover({title:"Nombre Organizaci&oacute;n", content:"Este nombre se utilizar&aacute; como cabecera a la hora de mostrar e imprimir sus actas."}).click();
-        $(".group-type").parent().parent().parent().addClass("btn-group").attr({"data-toggle":"buttons-radio"})
+        // $(".group-type").parent().parent().parent().addClass("btn-group").attr({"data-toggle":"buttons-radio"})
+        // $(".group-type").first().click().parent().parent().addClass("active")
         $("#form-new-group .btn-group li").addClass("btn");
-
-        $(".group-type").first().click().parent().parent().addClass("active")
 
         $("#sel-type-group input").on("click",function(e){
             if($(this).val()==0){
