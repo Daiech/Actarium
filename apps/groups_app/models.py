@@ -134,10 +134,8 @@ class minutes(models.Model):
         if all_signs:
             total = all_signs.aggregate(total=Sum("is_signed_approved"))
             if total["total"] == all_signs.count():
-                print "Si señor, ya todos los que quedaron son full signed"
                 return True
             else:
-                print "NO son iguales"
                 return False
 
     def get_commision_email_list(self, **kwargs):
