@@ -3,30 +3,6 @@
 {% load i18n orgs_ttag %}
 {% block toolbar_content %}
 	<ul class="list-unstyled">
-	{% if user_is_org_admin %}
-		<li class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown"  id="add-member">
-		        <span class="glyphicon glyphicon-plus"></span> {% trans "Agregar miembro" %}
-		        <span class="caret"></span>
-		    </a>
-		    <ul id="add-member-menu" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-		        <li class="taling">
-		        	<div class="header-title">
-		            	<span>{% trans "Miembros" %}</span>
-		            	<div id="close-add-member" class="close pull-right glyphicon glyphicon-remove"></div>
-		        	</div>
-		        </li>
-		        <li>
-		            
-		        </li>
-		        <li>
-		            <ul >
-		            	
-		            </ul>
-		        </li>
-		    </ul>
-		</li>
-	{% endif %}
 	</ul>
 {% endblock %}
 

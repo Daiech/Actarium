@@ -1,0 +1,76 @@
+{% load i18n gravatartag orgs_ttag %}	
+<script id="modalGroupsTemplate" type="text/template">
+	<div class="modal-dialog modal-sm">
+	    {% verbatim %}
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="">{{ ctx.title }}</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<ul>
+	        {% for g in ctx.groups %}
+	        	<li>{{ g.name }}</li>
+	        {% endfor %}
+	        </ul>
+	      </div>
+	    </div>
+	    {% endverbatim %}
+	</div>
+</script>
+<script type="text/template" id="deleteUserTpl">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4 class="modal-title">{% trans 'Eliminar' %} {% verbatim %}@{{ user.name }}{% endverbatim %}</h4>
+		  </div>
+		  <div class="modal-body">
+		  	<p>{% trans 'Al eliminar un usuario de la organización se elimina de:' %}</p>
+		  	<ul>
+		  		<li>{% trans 'Todas las listas de comisión aprobatoria a las que pertenece pero que aún no ha aprobado.' %}</li>
+		  		<li>{% trans 'Todos los grupos a los que pertenece.' %}</li>
+		  	</ul>
+		  	 
+		    <p>{% trans 'Seguro que desea eliminar a' %} {% verbatim %}@{{ user.name }}{% endverbatim %}?</p>
+		  </div>
+		  <div class="modal-footer">
+		    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancelar' %}</button>
+		    <button type="button" class="btn btn-warning" id="deleteUser-{% verbatim %}{{ user.name }}{% endverbatim %}">{% trans 'Si, Eliminar' %}</button>
+		  </div>
+		</div><!-- /content -->
+	</div><!-- /dialog -->
+</script>
+
+<script type="text/template" id="orgListMembersTpl">
+{% verbatim %}{% for u in ctx.members %}
+<li class="org-user-options" data-username="{{ u.username }}">
+	<div class="org-user-box row">
+		<div class="col-md-6 col-xs-12">
+			<span class="pull-left org-user-image"><img src="{{ u.image }}" width="32px" class="img-circle" /></span>
+			<div class="pull-left org-user-info">
+				<strong>{{ u.full_name }}</strong>
+				<p>@{{ u.username }}</p>
+			</div>
+		</div>
+		<div class="col-md-6 col-xs-12" >
+			<span><a href="#" class="btn btn-link open-modal-groups">{% endverbatim %}{% trans 'Ver grupos' %}{% verbatim %}</a></span>
+		{% if ctx.watcher_is_org_admin %}
+			<span>
+				<label for="is_admin_{{ u.id }}" class="btn">{% endverbatim %}{% trans 'Administrador' %}{% verbatim %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u.is_org_admin %}checked{% endif %} /></label>
+			</span>
+			<span>
+			<button type="button" class="btn org-user-delete {% if u.id == ctx.watcher_id %}disabled{% endif %}"><span class="glyphicon glyphicon-remove"></span> {% endverbatim %}{% trans 'Eliminar' %}{% verbatim %}</button>
+			</span>
+		{% else %}
+			{% if u.is_org_admin %}
+			<span class="glyphicon glyphicon-user"></span>&nbsp;<span class="glyphicon glyphicon-wrench"></span> {% endverbatim %}{% trans 'Miembro administrador' %}{% verbatim %}
+			{% else %}
+			<span class="glyphicon glyphicon-user"></span> {% endverbatim %}{% trans 'Miembro normal' %}{% verbatim %}
+			{% endif %}
+		{% endif %}
+		</div>
+	</div>
+</li>
+{% endfor %}{% endverbatim %}
+</script>

@@ -3,57 +3,13 @@
 {% block TITLE %}{% trans 'Home' %}{% endblock %}
 
 {% block content_menu %}
+	{% include "organizations/team_templates.html" %}
 	<div id="genericModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	</div>
-	<script id="modalGroupsTemplate" type="text/template">
-	<div class="modal-dialog modal-sm">
-	    <div class="modal-content">
-	    {% verbatim %}
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="">{{ ctx.title }}</h4>
-	      </div>
-	      <div class="modal-body">
-	      	<ul>
-	        {% for g in ctx.groups %}
-	        	<li>{{ g.name }}</li>
-	        {% endfor %}
-	        </ul>
-	      </div>
-	    </div>
-	    {% endverbatim %}
-	  </div>
-	</script>
-    <script type="text/template" id="deleteUserTpl">
-		  <div class="modal-dialog modal-sm">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        <h4 class="modal-title">{% trans 'Eliminar' %} {% verbatim %}@{{ user.name }}{% endverbatim %}</h4>
-		      </div>
-		      <div class="modal-body">
-		      	<p>{% trans 'Al eliminar un usuario de la organización se elimina de:' %}</p>
-		      	<ul>
-		      		<li>{% trans 'Todas las listas de comisión aprobatoria a las que pertenece pero que aún no ha aprobado.' %}</li>
-		      		<li>{% trans 'Todos los grupos a los que pertenece.' %}</li>
-		      	</ul>
-		      	 
-		        <p>{% trans 'Seguro que desea eliminar a' %} {% verbatim %}@{{ user.name }}{% endverbatim %}?</p>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancelar' %}</button>
-		        <button type="button" class="btn btn-warning" id="deleteUser-{% verbatim %}{{ user.name }}{% endverbatim %}">{% trans 'Si, Eliminar' %}</button>
-		      </div>
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-	</script>
     <div class="org-team">
     	<div class="row-fluid menu-title">
 	    	<div class="col-md-8">
 	    		<h3>{% blocktrans with n=org.name %}Miembros de {{ n }}{% endblocktrans %}</h3>
-	    		<!-- <h4>{{ current_members }} {% trans 'de' %} {{ max_members }}</h4> -->
-		    	<span class="">
-		    	</span>
 			</div>
             <div class="col-md-4 org-num-members">
                 <div class="box">
@@ -84,39 +40,7 @@
 		</div>
 		<hr>
 		<div class="org-user-list">
-			<ol id="org-list-members" class="list-unstyleds">
-			{% for u in org.organizationsuser_organization.get_members %}
-				<li class="org-user-options" data-username="{{ u.username }}">
-					<div class="org-user-box row">
-						<div class="col-md-6 col-xs-12">
-							<span class="pull-left org-user-image"><img src="{{ u.email|showgravatar:'32'}}" width="32px" class="img-circle" /></span>
-							<div class="pull-left org-user-info">
-								<strong>{{ u.get_full_name }}</strong>
-								<p>@{{ u.username }}</p>
-							</div>
-						</div>
-						{% has_role "u" "org" "is_admin" as u_is_admin %}
-						<div class="col-md-6 col-xs-12" >
-							<span><a href="#" class="btn btn-link open-modal-groups">{% trans 'Ver grupos' %}</a></span>
-						{% if is_org_admin %}
-							<span>
-								<label for="is_admin_{{ u.id }}" class="btn">{% trans 'Administrador' %} <input type="checkbox" class="btn org-user-admin" id="is_admin_{{ u.id }}" {% if u_is_admin %}checked{% endif %} /></label>
-							</span>
-							<span>
-							<button type="button" class="btn org-user-delete {% ifequal u user %}disabled{% endifequal %}"><span class="glyphicon glyphicon-remove"></span> {% trans 'Eliminar' %}</button>
-							</span>
-						{% else %}
-							{% if u_is_admin %}
-							<span class="glyphicon glyphicon-user"></span>&nbsp;<span class="glyphicon glyphicon-wrench"></span> {% trans 'Miembro administrador' %}
-							{% else %}
-							<span class="glyphicon glyphicon-user"></span> {% trans 'Miembro normal' %}
-							{% endif %}
-						{% endif %}
-						</div>
-					</div>
-				</li>
-			{% endfor %}
-			</ol>
+			<ol id="orgListMembers" class="list-unstyleds"></ol>
 		</div>
     </div>
 {% endblock %}
@@ -130,13 +54,13 @@
 	.org-team .filter-members-container{padding: 0;}
 	.org-team .org-num-members{max-width: 200px}
 	.org-team .org-user-list > ul > li{position: relative;border-bottom: solid thin #eee;}
-	.org-team .org-user-list .org-user-box{padding: 5px 5px;vertical-align: middle;display: inline-block;width: 100%; }
+	.org-team .org-user-list .org-user-box{padding: 7px 5px;vertical-align: middle;display: inline-block;width: 100%; border-bottom: solid thin #dadada;}
 	.org-team .org-user-list .org-user-box input[type='checkbox']{margin-top: 0px;}
 	.org-team .org-user-list .org-user-box .org-user-info{margin-left: 6px}
 	.org-team .org-user-list .org-user-box .org-user-info strong{font-size: 15px}
 	.org-team .org-user-list .org-user-box .org-user-info p{color: #999;}
 	.org-team .org-user-list .org-user-box .org-user-image{margin-top: 5px;}
-	.org-team .org-user-list .org-user-box .org-user-options {margin-top: 10px}
+	.org-team .org-user-list .org-user-box .org-user-options {margin-top: 10px;}
 	.org-team .org-user-list .org-user-box .org-user-options:before {margin-top: 0px}
 	.org-team .org-user-list .org-user-box .org-user-options > span{margin-right: 2px}
 	/*.org-team .org-user-list .org-user-box .org-user-options ul.org-user-btn-list li{display: inline-block;}*/
@@ -155,7 +79,9 @@
 
             $("a.disabled").tooltip();
             $("#org-num-members").css({"width": {{ total }} + "%"});
-            $('#filter_members').fastLiveFilter('#org-list-members');
+            
+            $('#filter_members').fastLiveFilter('#orgListMembers');
+
             $(".open-modal-groups").on("click", function (e) {
             	e.preventDefault();
             	var uname = $(this).closest(".org-user-options").attr("data-username");
@@ -164,8 +90,11 @@
 	            	$("#genericModal").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
             	});
             })
-			{% if is_org_admin %}
 
+            members = [{% for u in org.organizationsuser_organization.get_members %}{"id": "{{ u.id }}", "email": "{{ u.email }}", "username": "{{ u.username }}", "image": "{{ u.email|showgravatar:28 }}", "full_name": "{{ u.get_full_name }}", "is_org_admin": {% has_role "u" "org" "is_admin" as u_is_admin %}{{ u_is_admin|lower }}},{% endfor %}]
+            ctx = {members: members, watcher_is_org_admin: {{ is_org_admin|lower }}, watcher_id: {{ user.id }}};
+			$("#orgListMembers").append(swig.render($("#orgListMembersTpl").html() , {locals: ctx}));
+			{% if is_org_admin %}
             $(".org-user-admin").on("click", change_admin);
             $(".org-user-delete").on("click", delete_user);
             function change_admin (e) {
