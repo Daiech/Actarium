@@ -1,0 +1,29 @@
+{% load i18n orgs_ttag %}
+
+<script type="text/template" id="new-user-template">
+	<li>
+		<div class="">
+			<label for="new-user-firstname">{% trans "Nombres y Apellidos" %}</label>
+			<input id="new-user-firstname" type="text" placeholder="{% trans 'Nombres' %}" value="{% verbatim %}{{ username }}{% endverbatim %}">
+			<input id="new-user-lastname" type="text" placeholder="{% trans 'Apellidos' %}">
+			<input id="new-user-email" type="hidden" value="{% verbatim %}{{ mail }}{% endverbatim %}">
+			<input id="new-user-uname" type="hidden" value="{% verbatim %}{{ username }}{% endverbatim %}">
+		</div>
+	</li>
+	<li>
+		<button id="add-new-user" class="btn btn-info btn-large">{% trans "Enviar invitación" %}</button>
+	</li>
+</script>
+<script type="text/template" id="org-user-template">
+	{% verbatim %}
+	{% for u in users %}
+		<li id="org-user-{{ u.id }}" class="{% if u.is_member %}hidden{% endif %}">
+			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} disabled link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+				<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="28px" /></span>
+				<span>{{ u.full_name }}</span>
+				<span class="glyphicon glyphicon-{% if u.is_member %}ok{% else %}chevron-right {% endif %}"></span>
+			</a>
+		</li>
+	{% endfor %}
+	{% endverbatim %}
+</script>

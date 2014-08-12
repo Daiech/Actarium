@@ -15,7 +15,7 @@
 			</div>
 			{% if rel_user.is_admin or user_is_org_admin %}
 			<div class="col-md-6">
-				{% include "groups/templates/add_member_dropdown.html" %}
+				{% include "groups/add_member_dropdown/add_member_dropdown.html" %}
 			</div>
 			{% endif %}
 		</div>
@@ -120,13 +120,7 @@
     .user-config{background-color: white; position: absolute;right: 6px;top: 10px;width:18px;height: 18px;text-align: center; transition: all 0.5s ease;border-radius: 4px;border: solid 1px white;}
     .user-config:hover{border: solid 1px #dadada;background-color: #dadada; /*transform:rotate(-30deg);*/}
     .td-info-user .dropdown-container{right: 0}
-    #dropdown-org-users{width: 283px;}
-    .org-user-img{width: 28px;height: 28px;display: inline-block;margin-right: 8px;}
-    #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 388px;}
-    #dropdown-org-users .dropdown-body ul li {position: relative;}
-    #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;color: #333;border-radius: 3px;}
-    #dropdown-org-users .dropdown-body ul li a:hover{color: white;}
-    #dropdown-org-users .dropdown-body ul li a span.glyphicon{position: absolute;right: 0;padding: 8px;font-size: 14px;color: #ddd;}
+    
     ul li a{color: #333;}
     /*ul li a:hover{color: white;}*/
 
@@ -254,12 +248,6 @@
 	    		}
 	    	}
 	    }
-	    function searchMember(e){//INVITACIONES MAIN
-	    	e.preventDefault();
-	        if(e.keyCode==13){
-			    getSearch();
-	        }
-	    }
 	    function changeDataBtn(elem){
 	    	var second_menu = elem.closest(".dropdown-body").find(".second-menu");
 	    	var first_menu = elem.closest(".first-menu");
@@ -325,6 +313,7 @@
 			change_actions_org_member(data.iid);
 		});
     }
+    $(document).on("click", "a.user-inv", sendInvitationFromAdmin);
     function changeData(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -364,7 +353,6 @@
     		$(this).closest(".dropdown-container").hide();
     	}
     });
-    $(document).on("click", "a.user-inv", sendInvitationFromAdmin);
     {% endif %}
 </script>
 {% endblock %}

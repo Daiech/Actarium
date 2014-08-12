@@ -4,6 +4,7 @@
 
 {% block content_menu %}
 	{% include "organizations/team_templates.html" %}
+	{% include "groups/add_member_dropdown/add_member_tpls.html" %}
 	<div id="genericModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	</div>
     <div class="org-team">
@@ -33,8 +34,9 @@
 				</form>
 			</div>
 			{% if is_org_admin %}
-			<div class="col-md-4">
-				<a href="#" class="btn btn-large disabled" title="{% trans 'Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando esté disponible.' %}"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a>
+			<div class="col-md-4"><!-- 
+				<a href="#" class="btn btn-large disabled" title="{% trans 'Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando esté disponible.' %}"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a> -->
+				{% include "groups/add_member_dropdown/add_member_dropdown.html" %}
 			</div>
 			{% endif %}
 		</div>
@@ -71,6 +73,7 @@
 {% block js_menu %}
     <script src="{{ STATIC_PREFIX }}/js/vendor/jquery.fastLiveFilter.min.js"></script>
 	<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
+<script src="{{STATIC_PREFIX}}js/vendor/jquery.nicescroll.min.js"></script>
     <script>
         $(document).ready(function(){
 			max_members = {{ max_members }};
@@ -79,10 +82,14 @@
 
             $("a.disabled").tooltip();
             $("#org-num-members").css({"width": {{ total }} + "%"});
-            
+
+            members = [{% for u in org.organizationsuser_organization.get_members %}{"id": "{{ u.id }}", "email": "{{ u.email }}", "username": "{{ u.username }}", "image": "{{ u.email|showgravatar:28 }}", "full_name": "{{ u.get_full_name }}", "is_org_admin": {% has_role "u" "org" "is_admin" as u_is_admin %}{{ u_is_admin|lower }}},{% endfor %}]
+            ctx = {members: members, watcher_is_org_admin: {{ is_org_admin|lower }}, watcher_id: {{ user.id }}};
+			$("#orgListMembers").append(swig.render($("#orgListMembersTpl").html() , {locals: ctx}));
+
             $('#filter_members').fastLiveFilter('#orgListMembers');
 
-            $(".open-modal-groups").on("click", function (e) {
+            $(document).on("click", ".open-modal-groups", function (e) {
             	e.preventDefault();
             	var uname = $(this).closest(".org-user-options").attr("data-username");
             	sendNewAjax("{% url 'get_user_org_groups' org.slug %}",{"uname":uname}, function (data) {
@@ -90,13 +97,9 @@
 	            	$("#genericModal").html(swig.render($("#modalGroupsTemplate").html(), {locals: ctx})).modal();
             	});
             })
-
-            members = [{% for u in org.organizationsuser_organization.get_members %}{"id": "{{ u.id }}", "email": "{{ u.email }}", "username": "{{ u.username }}", "image": "{{ u.email|showgravatar:28 }}", "full_name": "{{ u.get_full_name }}", "is_org_admin": {% has_role "u" "org" "is_admin" as u_is_admin %}{{ u_is_admin|lower }}},{% endfor %}]
-            ctx = {members: members, watcher_is_org_admin: {{ is_org_admin|lower }}, watcher_id: {{ user.id }}};
-			$("#orgListMembers").append(swig.render($("#orgListMembersTpl").html() , {locals: ctx}));
 			{% if is_org_admin %}
-            $(".org-user-admin").on("click", change_admin);
-            $(".org-user-delete").on("click", delete_user);
+            $(document).on("click", ".org-user-admin", change_admin);
+            $(document).on("click", ".org-user-delete", delete_user);
             function change_admin (e) {
             	var checkbox = $(this);
             	var uname = checkbox.closest(".org-user-options").attr("data-username");
@@ -142,5 +145,6 @@
             }
             {% endif %}
         });
+		{% include "organizations/add_member/scripts.js" %}
     </script>
 {% endblock %}

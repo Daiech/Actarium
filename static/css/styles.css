@@ -453,7 +453,7 @@ hr{
 
 
 article ul a img{
-    margin:10px;
+    /*margin:10px;*/
 }
 /*article ul li a:hover{
 
@@ -837,6 +837,17 @@ cierra Show Minutes
 /*Close Dropdown Actarium*/
 #alerts {position: fixed;top: 25px;left: 0;right: 0;z-index: 10000;width:30%;margin:0 auto;padding: 10px 30px 10px 30px;font-size: 16px;}
 #alerts div.alert{position: relative;top: 0;width: 100%;}
+
+#dropdown-org-users{width: 283px;}
+.org-user-img{width: 28px;height: 28px;display: inline-block;margin-right: 8px;}
+#dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 388px;}
+#dropdown-org-users .dropdown-body ul li {position: relative;}
+#dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;color: #333;border-radius: 3px;}
+#dropdown-org-users .dropdown-body ul li a:hover{color: white;}
+#dropdown-org-users .dropdown-body ul li a span.glyphicon{position: absolute;right: 0;padding: 8px;font-size: 14px;color: #ddd;}
+
+
+
 
 
 /*==================================================*/

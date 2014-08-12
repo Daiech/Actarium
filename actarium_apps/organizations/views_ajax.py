@@ -14,7 +14,7 @@ from apps.groups_app.utils import send_email_full_signed
 import json
 
 
-@login_required(login_url='/account/login')
+@login_required
 def get_user_org_groups(request, slug_org=False):
     """Only org admin can use this function"""
     saveViewsLog(request, "actarium_apps.organizations.views_ajax.getListMembers")
@@ -38,7 +38,7 @@ def get_user_org_groups(request, slug_org=False):
                 return HttpResponse(json.dumps(my_group_list), mimetype="application/json")
 
 
-@login_required(login_url='/account/login')
+@login_required
 def getListMembers(request, slug_org=False):
     """Only org admin can use this function"""
     saveViewsLog(request, "actarium_apps.organizations.views_ajax.getListMembers")
@@ -93,7 +93,7 @@ def getListMembers(request, slug_org=False):
     return HttpResponse(json.dumps(users), mimetype="application/json")
     
 
-@login_required(login_url='/account/login')
+@login_required
 def config_admin_to_org(request, slug_org):
     """uname and set_admin come in POST method.
     set_admin is a number: 1=set admin, 0=remove admin"""
@@ -124,7 +124,7 @@ def config_admin_to_org(request, slug_org):
     raise Http404
 
 
-@login_required(login_url='/account/login')
+@login_required
 def delete_member_org(request, slug_org):
     """uname comes in POST method."""
     if request.is_ajax():
@@ -155,3 +155,32 @@ def delete_member_org(request, slug_org):
                 message = {"forbbiden": _(u"No tienes permiso para eliminar miembros.")}
             return HttpResponse(json.dumps(message), mimetype="application/json")
     raise Http404
+
+
+@login_required
+def set_org_invitation(request, slug_org):
+    if not request.is_ajax():
+        raise Http404
+    if not request.method == "POST":
+        raise Http404
+    org = request.user.organizationsuser_user.get_org(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_admin"):
+        mail = request.POST.get("mail")
+        uname = request.POST.get("uname")
+        u = User.objects.get_or_none(email=mail, username=uname)
+        message = {"error": _(u"No se agregó")}
+        if u:
+            if not org.has_user_role(u, "is_member"):
+                org.set_role(u, is_member=True)
+                user = {
+                    "id": u.id,
+                    "email": u.email,
+                    "username": u.username,
+                    "image": showgravatar(u.email, 28),
+                    "full_name": u.get_full_name(),
+                    "is_member": True
+                }
+                message = {"invited": _(u"%s ahora es miembro de la organización %s" % (u.get_full_name(), org.name)), "user": user}
+            else:
+                message = {"error": _(u"%s ya es miembro de la organización" % u.get_full_name())}
+        return HttpResponse(json.dumps(message), mimetype="application/json")

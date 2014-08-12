@@ -31,6 +31,12 @@ $(document).ready(function() {
 	showIconCloseOnHover();
 	load_org_member_list();
 });
+function searchMember(e){//INVITACIONES MAIN
+    e.preventDefault();
+    if(e.keyCode==13){
+        getSearch();
+    }
+}
 function load_org_member_list () {
 	users = {};
 	{% for u in group.organization.get_members %}{% is_member_of_group "u" "group" as is_member %}
@@ -49,6 +55,7 @@ function showIconCloseOnHover(){
         $(this).find("i.icon-remove").hide(30)
     })
 }
+$(document).on("click", "td input[type='checkbox']", setRole);
 invitationResult = function (data, append_to_org_list){//Resultados de la invitacion (agrega si TRUE, error si False)
     if(data['invited']){    //USUARIO INVITADO
     	var is_admin = "{{is_admin}}";
@@ -65,7 +72,6 @@ invitationResult = function (data, append_to_org_list){//Resultados de la invita
 		team.members.push(user);
 		setAlertMessage("{% trans 'Invitado' %}", data['message'])
         showIconCloseOnHover()
-		$("td input[type='checkbox']").on("click", setRole);
         $("#newmember").val("");
         if (!append_to_org_list){append_org_member(data);}
     }else{//EL USUARIO YA ESTA INVITADO
@@ -172,15 +178,6 @@ function show_search_result(data){//lista los usuarios disponibles a invitar
     		setAlertError("{% trans 'Error' %}", data.forbbiden);
     	}else{
             showMemberList(data);//Muestra la lista de posibles miembros a agregar
-            // if(data.new_user){//el email valido, viene una lista de usuarios existentes
-            // }else{//el correo es invalido o no hay resultados de usuarios existentes
-            // 	$("#message-search").html("{% trans 'Asegurate de escribir correctamente el correo electrónico.' %}");
-            //     // org-user-template
-            //     $("#search-result").html("<li style='list-style:none'>"+
-            //                                 "<a href='#'>"+("No hay resultados").substring(0,MAX_LENGTH)+
-            //                                 "</a>"+
-            //                             "</li>")
-            // }
     	}
     }else{//error en el server
         setAlertError("{% trans 'Error en el servidor' %}", "{% trans 'Lo sentimos, algo salió mal en el servidor.Por favor recarga la página e intenta de nuevo' %}")
