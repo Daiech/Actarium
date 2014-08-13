@@ -41,9 +41,11 @@ def sendInvitationToGroup(user_invited, user_from, group):
     if _inv:
         email = [user_invited.email]
         ctx_email = {
-            'firstname': user_from.first_name + user_from.last_name,
+            'full_name': user_from.get_full_name(),
             'username': user_from.username,
             'groupname': group.name,
+            'url_base': settings.URL_BASE,
+            'group_url': settings.URL_BASE + group.get_absolute_url(),
             'urlgravatar': showgravatar(user_from.email, 50)
         }
         sendEmailHtml(6, ctx_email, email, group)
