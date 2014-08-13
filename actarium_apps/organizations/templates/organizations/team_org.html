@@ -34,8 +34,8 @@
 				</form>
 			</div>
 			{% if is_org_admin %}
-			<div class="col-md-4"><!-- 
-				<a href="#" class="btn btn-large disabled" title="{% trans 'Esta opción se encuentra deshabilitada temporalmente. Te informaremos cuando esté disponible.' %}"><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} </a> -->
+			<div class="col-md-4">
+				<a href="#" class="btn btn-large actarium-dropdown" title=""><span class="glyphicon glyphicon-user glyphicon-plus"></span> {% trans 'Agregar miembro' %} <span class="caret"></span></a>
 				{% include "groups/add_member_dropdown/add_member_dropdown.html" %}
 			</div>
 			{% endif %}
@@ -67,6 +67,7 @@
 	.org-team .org-user-list .org-user-box .org-user-options > span{margin-right: 2px}
 	/*.org-team .org-user-list .org-user-box .org-user-options ul.org-user-btn-list li{display: inline-block;}*/
 	.dropdown-menu{z-index: 900}
+	.is-member{color: red}
 </style>
 {% endblock %}
 

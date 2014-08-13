@@ -1,21 +1,13 @@
 {% load i18n orgs_ttag gravatartag %}
 invitationResult = function (data){//Resultados de la invitacion (agrega si TRUE, error si False)
     if(data['invited']){
-    	console.log(data)
     	li = "";
-        users = [];
-        user_to_invite = data.user['full_name'];
-        users[0] = {
-            "id": data.user.id,
-            "email": data.user.email,
-            "username": data.user.username,
-            "image": data.user.image, 
-            "full_name": user_to_invite,
-            "is_member": data.user.is_user
-        }
+        users = [data.user];
         ctx = {members : users, watcher_is_org_admin: {{ is_org_admin|lower }}, watcher_id: {{ user.id }}}
         $("#orgListMembers").append(swig.render($("#orgListMembersTpl").html(), {locals: ctx}));
         setAlertMessage("{% trans 'Usuario agregado' %}", data.invited);
+        //clean result
+        $("#org-user-" + data.user.id).empty().fadeOut().remove();
     }else{//EL USUARIO YA ESTA INVITADO
         if(data["message"]){
             setAlertError("{% trans 'Informaci&oacute;n' %}","("+data['email']+") "+data['message'])
@@ -30,6 +22,23 @@ invitationResult = function (data){//Resultados de la invitacion (agrega si TRUE
             }
         }
     }
+}
+function sendInvitationToNewUser(e){
+    e.preventDefault();
+    var ctx = {
+        "new": 1,
+        "pk": $("#group_id").val(),
+        "mail": $("#new-user-email").val(),
+        "uname": $("#new-user-uname").val(),
+        "firstname": $("#new-user-firstname").val(),
+        "lastname": $("#new-user-lastname").val(),
+        }
+    sendAjax("{% url 'set_invitation' %}",ctx, invitationResult, {"method": "post"});
+    $("#search-result").fadeOut(300,function (argument) {
+        $(this).empty().show().removeClass("user-li");;
+    });
+    $("#newmember").focus();
+    $("#message-search").html(message);
 }
 function sendInvitationFromAdmin(e){
 	e.preventDefault();
@@ -69,7 +78,8 @@ function showMemberList(data){//Muestra la lista de posibles miembros a agregar
                 "username": data.users[i].username,
                 "image": data.users[i].gravatar, 
                 "full_name": user_to_invite.substring(0,MAX_LENGTH) + p,
-                "is_member": data.users[i].is_user
+                "is_member": data.users[i].is_member,
+                "is_org_member": data.users[i].is_org_member
             }
         };
         appendToList(swig.render($("#org-user-template").html(), {locals: users}));
@@ -88,7 +98,6 @@ function show_search_result(data){//lista los usuarios disponibles a invitar
     }
 }
 function getSearch () {
-	console.log("get ")
 	var user = $("#newmember").val();
     sendNewAjax("{% url 'get_users_list' org.slug  %}", {search: user}, show_search_result);
 }
@@ -98,7 +107,11 @@ function searchMember(e){
 	    getSearch();
     }
 }
-$(document).on("click", "a.user-inv", sendInvitationFromAdmin);
+$(document).on("click", "a.disabled", function (e) {
+    e.preventDefault();
+});
+$(document).on("click", "a.event-org-inv", sendInvitationFromAdmin);
+$(document).on("click", "#add-new-user", sendInvitationToNewUser);
 $(document).ready(function() {
 	MAX_LENGTH = 25;
 	$(".user-list").niceScroll();

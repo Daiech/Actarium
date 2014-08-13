@@ -17,11 +17,11 @@
 <script type="text/template" id="org-user-template">
 	{% verbatim %}
 	{% for u in users %}
-		<li id="org-user-{{ u.id }}" class="{% if u.is_member %}hidden{% endif %}">
-			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} disabled link-to-invite nud"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+		<li id="org-user-{{ u.id }}" class="{% if u.is_member %}{% if not u.is_org_member %}hidden{% endif %}{% endif %}">
+			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} link-to-invite nud {% if not u.is_org_member %}event-org-inv{% else %}disabled{% endif %}"  data-email="{{ u.email }}" data-username="{{ u.username }}">
 				<span class="org-user-img"><img class="img-circle" src="{{ u.image }}" width="28px" /></span>
 				<span>{{ u.full_name }}</span>
-				<span class="glyphicon glyphicon-{% if u.is_member %}ok{% else %}chevron-right {% endif %}"></span>
+				<span class="glyphicon glyphicon-{% if u.is_org_member %}ok{% else %}chevron-right{% endif %}"></span>
 			</a>
 		</li>
 	{% endfor %}

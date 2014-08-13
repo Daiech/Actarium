@@ -824,6 +824,8 @@ cierra Show Minutes
 .dropdown-body ul{margin-bottom: 0;}
 .dropdown-body ul li a{display: block; padding: 5px;}
 .dropdown-body ul li a:hover{background-color: #97C02C;text-decoration:underline; /*background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00AEAA), to(#2f96b4));color: white;*/}
+.dropdown-body ul li a.disabled{background-color: white;color: #999 !important;}
+.dropdown-body ul li a.disabled:hover{background-color: white;color: #999 !important;}
 .second-menu{display: none;width:100%}
 .second-menu label {margin:0;padding: 0;font-weight: normal !important;}
 .second-menu input {width: 100%;padding: 4px 5px 2px !important;}
@@ -845,7 +847,8 @@ cierra Show Minutes
 #dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;color: #333;border-radius: 3px;}
 #dropdown-org-users .dropdown-body ul li a:hover{color: white;}
 #dropdown-org-users .dropdown-body ul li a span.glyphicon{position: absolute;right: 0;padding: 8px;font-size: 14px;color: #ddd;}
-
+#message-search{padding: 4px 2px;font-size: 13px;margin-bottom: 0;}
+.line-separator{border-bottom: solid thin #ddd;height: 1px;width: 100%;margin: 4px 0;}
 
 
 

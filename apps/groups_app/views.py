@@ -430,9 +430,9 @@ def isMemberOfGroupByEmail(email, id_group):
 def newInvitationToGroup(request):
     saveViewsLog(request, "apps.groups_app.views.newInvitationToGroup")
     if request.is_ajax():
-        if request.method == 'GET':
+        if request.method == 'POST':
             _user_rel = False
-            gid = request.GET.get('pk')
+            gid = request.POST.get('pk')
             if gid:
                 try:
                     g = Groups.objects.get_group(id=gid)
@@ -446,7 +446,7 @@ def newInvitationToGroup(request):
                     return HttpResponse(json.dumps({"error": _(u"Ocurri&oacute; un error, estamos trabajando para resolverlo.")}), mimetype="application/json")
                 if g and (is_org_admin or _user_rel.is_admin):
                     agregar = False
-                    email = str(request.GET.get('mail'))
+                    email = str(request.POST.get('mail'))
                     _user = getUserByEmail(email)
                     if _user:
                         if g.organization.has_user_role(_user, "is_member"):
@@ -469,9 +469,9 @@ def newInvitationToGroup(request):
                             firstname = None
                             lastname = None
                             try:
-                                if request.GET.get('new') == "1":
-                                    firstname = str(request.GET['firstname'])
-                                    lastname = str(request.GET['lastname'])
+                                if request.POST.get('new') == "1":
+                                    firstname = str(request.POST['firstname'])
+                                    lastname = str(request.POST['lastname'])
                             except:
                                 pass #relax, simplemente no hay nombres
                             _user = newUserWithInvitation(email, request.user, g, first_name=firstname, last_name=lastname)

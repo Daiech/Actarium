@@ -50,7 +50,8 @@ def getListMembers(request, slug_org=False):
     if org and org.has_user_role(request.user, "is_admin"):
         search = request.GET.get('search')
         gid = request.GET.get('gid')
-        group = org.get_group(id=gid)
+        if gid:
+            group = org.get_group(id=gid)
         if validateEmail(search):
             try:
                 ans = [User.objects.get(email=search)]
@@ -73,17 +74,19 @@ def getListMembers(request, slug_org=False):
             for u in ans:
                 if u.id not in uids:
                     uids.append(u.id)
-                    rel = getRelUserGroup(u, group)
-                    print u, "REL", rel
-                    is_member_of_group = False
-                    if rel:
-                        is_member_of_group = True
-                    print "ES TRUE??", is_member_of_group
+                    is_member = False
+                    if gid:
+                        rel = getRelUserGroup(u, group)
+                        if rel:
+                            is_member = True
+                    is_org_member = org.has_user_role(u, "is_member")
+                    print "is_org_member",is_org_member
                     users_json.append({
                         "id": u.id,
                         "username": u.username,
                         "full_name": u.get_full_name(),
-                        "is_user": is_member_of_group,
+                        "is_member": is_member,
+                        "is_org_member": is_org_member,
                         "email": u.email,
                         "gravatar": showgravatar(u.email, 30)
                     })

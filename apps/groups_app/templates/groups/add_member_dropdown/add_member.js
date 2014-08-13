@@ -74,6 +74,10 @@ invitationResult = function (data, append_to_org_list){//Resultados de la invita
         showIconCloseOnHover()
         $("#newmember").val("");
         if (!append_to_org_list){append_org_member(data);}
+        console.log($("#org-user-" + user.id).hasClass("hidden"))
+        setTimeout(function () {
+            $("#org-user-" + user.id).addClass("hidden");
+        },1000);
     }else{//EL USUARIO YA ESTA INVITADO
         if(data["message"]){
             setAlertError("{% trans 'Informaci&oacute;n' %}","("+data['email']+") "+data['message'])
@@ -93,7 +97,7 @@ sendInvitation = function (elem, callback) {
 	var mail = elem.attr("data-email");
     var uname = elem.attr("data-username");
     var group_id = $("#group_id").val();
-    sendNewAjax("{% url 'set_invitation' %}", {"pk":group_id, "mail": mail}, callback);
+    sendNewAjax("{% url 'set_invitation' %}", {"pk":group_id, "mail": mail}, callback, {"method": "post"});
 }
 function showIconAddMemberOnHover(){
     // mostrar flecha sobre usuario
@@ -112,7 +116,7 @@ function sendInvitationToNewUser(e){
 		"firstname": $("#new-user-firstname").val(),
 		"lastname": $("#new-user-lastname").val(),
 		}
-	sendAjax("{% url 'set_invitation' %}",ctx,"",invitationResult);
+	sendNewAjax("{% url 'set_invitation' %}",ctx, invitationResult, {"method": "post"});
 	$("#search-result").fadeOut(300,function (argument) {
 		$(this).empty().show().removeClass("user-li");;
 	});
@@ -151,7 +155,7 @@ function showMemberList(data){//Muestra la lista de posibles miembros a agregar
                 "username": data.users[i].username,
                 "image": data.users[i].gravatar, 
                 "full_name": user_to_invite.substring(0,MAX_LENGTH) + p,
-                "is_member": data.users[i].is_user
+                "is_member": data.users[i].is_member
             }
             console.log(data.users[i])
         };

@@ -15,6 +15,7 @@
 			</div>
 			{% if rel_user.is_admin or user_is_org_admin %}
 			<div class="col-md-6">
+				<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
 				{% include "groups/add_member_dropdown/add_member_dropdown.html" %}
 			</div>
 			{% endif %}
@@ -195,10 +196,11 @@
 		$(".popover-element").popover({trigger: 'hover'});
 	});
 	{% if rel_user.is_admin or user_is_org_admin %}
-		{% include "groups/add_member_dropdown/scripts.js" %}
+		{% include "groups/add_member_dropdown/add_member.js" %}
 		change_actions_org_member = function (id){
 			var e = $("#org-user-"+id);
-			e.find("span.glyphicon-ok").toggleClass("hidden");
+			e.toggleClass("hidden");
+			// e.find("span.glyphicon-ok").toggleClass("hidden");
 			e.find("a.link-to-invite").toggleClass("user-inv");
 		}
 	    function getRoleName (op) {

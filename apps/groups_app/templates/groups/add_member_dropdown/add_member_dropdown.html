@@ -1,5 +1,5 @@
 {% load i18n orgs_ttag %}
-<a href="#" class="actarium-dropdown btn " ><span class="glyphicon glyphicon-user"></span> {% trans 'Agregar miembro de la organización' %} <span class="caret"></span></a>
+
 <div class="dropdown-container" id="dropdown-org-users">
 	<div class="header-title">
     	<span>{% blocktrans %}Agregar miembros{% endblocktrans %}</span>
@@ -19,7 +19,7 @@
 	                <span id="load-member"></span>
 	            </div>
 			</div>
-			<hr>
+			<div class="line-separator"></div>
 			<ul class="list-unstyled" id="search-result"></ul>
 			<ul class="list-unstyled" id="org-user-list"></ul>
 		</div>
