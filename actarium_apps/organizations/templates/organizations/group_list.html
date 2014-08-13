@@ -15,7 +15,8 @@
     </div>
 </a>
 {% empty %}
-<p>{% trans 'No tienes ning&uacute;n grupo :(' %}</p>
+<p>{% trans 'No tienes ningún grupo en tu organización' %} <strong>{{ org.name }}</strong></p>
+<p>{% trans 'Organiza a tu equipo de trabajo en grupos como "Comité financiero", "Consejo Administrativo", etc.' %}</p>
 {% endfor %}
 {% if user_is_admin %}
 <a href="{% url 'new_group' %}?org={{ org.id }}">
