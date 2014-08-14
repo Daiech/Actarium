@@ -68,7 +68,7 @@ def showFolderGroup(request, slug_group):
     is_org_admin = g.organization.has_user_role(request.user, "is_admin")
     if is_org_admin or _user:
         if is_org_admin or _user.is_active:
-            minutes_group = minutes.objects.filter(id_group=g.id, is_valid=True).order_by("-date_created")
+            minutes_group = minutes.objects.filter(id_group=g, is_valid=True).order_by("-date_created")
             m = list()
             for _minutes in minutes_group:
                 m.append({
@@ -114,7 +114,10 @@ def showMinuteGroup(request, slug_group, minutes_code):
     if not group:
         return HttpResponseRedirect('/groups/#error-there-is-not-the-group')
     is_org_admin = group.organization.has_user_role(request.user, "is_admin")
-    if isMemberOfGroup(request.user, group) or is_org_admin:
+    if not (isMemberOfGroup(request.user, group) or is_org_admin):
+        raise Http404
+        # return HttpResponseRedirect('/groups/#error-its-not-your-group')
+    else:
         minutes_current = group.get_minutes_by_code(code=minutes_code)
         rel_group = getRelUserGroup(request.user, group)
         rol = getRolUserMinutes(request.user, group, id_minutes=minutes_current)
@@ -260,6 +263,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
                     "secretary": secretary,
                     "show_dni": show_dni
                     }),
+                "template": minutes_current.id_template.slug,
                 "space_to_approve": space_to_approve, "my_attending": my_attending,
                 "commission_approving": missing_approved_list,
                 "annotations": annon,
@@ -272,10 +276,7 @@ def showMinuteGroup(request, slug_group, minutes_code):
             return HttpResponseRedirect("/groups/" + slug_group + "#esta-acta-aun-no-ha-sido-aprobada")
         # else:
         #     return HttpResponseRedirect("/groups/" + slug_group + "#no-tienes-rol")
-    else:
-        raise Http404
-        # return HttpResponseRedirect('/groups/#error-its-not-your-group')
-
+    
     if request.method == 'GET':
         try:
             only_minutes = request.GET['only']

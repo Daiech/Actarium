@@ -418,7 +418,8 @@ def setRelationReunionMinutes(_reunion, _minute):
     try:
         rel_reunion_minutes(id_reunion=_reunion, id_minutes=_minute).save()
         return True
-    except Exception:
+    except Exception, e:
+        print "Exception [setRelationReunionMinutes]:", e
         return False
 
 
@@ -780,7 +781,7 @@ def getSignersList(m_signers):
 
 
 @login_required(login_url='/account/login')
-def newMinutes(request, slug_group, id_reunion, slug_template):
+def newMinutes(request, slug_group, slug_template):
     '''This function creates a minutes with the form for this.'''
     saveViewsLog(request, "apps.groups_app.minutes.newMinutes")
     group = Groups.objects.get_group(slug=slug_group)
@@ -845,14 +846,16 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
 
                 ######## <Create a relation into reunion and the new minutes> #########
                 try:
+                    _reunion = None
                     id_reunion = int(request.POST.get('reunion_id'))
                 except Exception:
                     id_reunion = None
                 if id_reunion:
                     _reunion = getReunionById(id_reunion)
-
+                print "ESTE ES EL ID DE LA REUNION: ", id_reunion
+                print "ESTA ES LA REUNION: ", _reunion
                 if _minute and _reunion:
-                        setRelationReunionMinutes(_reunion, _minute)
+                    setRelationReunionMinutes(_reunion, _minute)
                 ######## </Create a relation into reunion and the new minutes> #########
 
                 if _minute:
@@ -878,6 +881,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
         else:
             form = newMinutesForm()
             _reunion = None
+            id_reunion = request.GET.get("rid")
             if id_reunion:
                 _reunion = getReunionById(id_reunion)
                 if _reunion:
@@ -896,7 +900,7 @@ def newMinutes(request, slug_group, id_reunion, slug_template):
                "last": last,
                "members_selected": members_assistant,
                "members_no_selected":  members_no_assistant,
-               "slug_template": slug_template,
+               "template": slug_template,
                "minutesTemplateForm": _template.address_template,
                "minutesTemplateJs": _template.address_js,
                "list_templates": list_templates,

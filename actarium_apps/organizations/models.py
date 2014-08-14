@@ -212,6 +212,13 @@ class Groups(models.Model):
         except Exception, e:
             print "Error get_minutes_by_code: %s" % e
             return None
+    
+    def get_slug_last_template(self):
+        minute = self.minutes_id_group.last()
+        if minute:
+            return minute.id_template.slug
+        return ""
+
 
 
 class RelUserGroupManager(GenericManager):

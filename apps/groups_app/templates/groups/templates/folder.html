@@ -4,7 +4,7 @@
 {% block toolbar_content %}
 <ul class="list-unstyled">
     <li>
-        <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}{% ifequal group.get_num_minutes 0 %}#select-template{% endifequal %}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%} create-minutes" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opción' %}"{%endif%}>
+        <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug template %}{%endif%}{% ifequal group.get_num_minutes 0 %}#select-template{% endifequal %}" class="title-on-disabled {%if not rel_user.is_secretary%}disabled{%endif%} create-minutes" {%if not rel_user.is_secretary%}title="{% trans 'Necesitas ser redactor para habilitar esta opción' %}"{%endif%}>
                 <span class="glyphicon glyphicon-plus"></span> {% trans "Crear acta" %}
         </a>
     </li>
@@ -82,7 +82,7 @@
             <ul class="list-unstyled minutes-list">
                 <li>
                     {% trans "Aún no tienes actas!" %}
-                    <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug id_reunion template %}{%endif%}{% ifequal group.get_num_minutes 0 %}#select-template{% endifequal %}" role="button" class="btn btn-info btn-small create-minutes"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crea un Acta' %}</a> {% trans 'pero antes, asegúrate de' %} <a href="{% url 'show_team' group.slug  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-user"></i> {% trans 'invitar a tu equipo de trabajo' %}</a>
+                    <a href="{%if not rel_user.is_secretary%}#{%else%}{% url 'create_minutes' group.slug template %}{%endif%}{% ifequal group.get_num_minutes 0 %}#select-template{% endifequal %}" role="button" class="btn btn-info btn-small create-minutes"><i class="glyphicon glyphicon-plus"></i> {% trans 'Crea un Acta' %}</a> {% trans 'pero antes, asegúrate de' %} <a href="{% url 'show_team' group.slug  %}" role="button" class="btn btn-info btn-small"><i class="glyphicon glyphicon-user"></i> {% trans 'invitar a tu equipo de trabajo' %}</a>
                 </li>
             </ul>
         {%endif%}
