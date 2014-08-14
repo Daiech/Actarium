@@ -1,26 +1,33 @@
 {% extends "emailmodule/email_layout.html" %}
+{% load i18n %}
 {% block emaildata%}
 <tr width="100%"> 
 	<td valign="top" align="left" style="border-bottom-left-radius:4px;border-bottom-right-radius:4px;background:#fff;padding:18px"> 
-		<h1 style="font-size:20px;margin:0"> Te han invitado a unirte a un grupo en  <strong>Actarium</strong> </h1> 
+		<h1 style="font-size:20px;margin:0">{% trans 'Te han invitado a unirte a un grupo en  <strong>Actarium</strong>' %} </h1> 
 		<hr style="clear:both;min-height:1px;border:0;border:none;width:100%;background:#dcdcdc;color:#dcdcdc;margin:18px 0;padding:0"> 
-			<table >
-				<tr style="padding: 5px">
-					<td style="padding: 5px">
-						<span style="margin:0 2px 0 0"> 
-							<img src="{{ urlgravatar }}" alt="{{ username }}" title="{{ username }}" width="50" height="50" style="display:inline;vertical-align:top"> 
-						</span>
-					</td>
-					<td style="padding: 5px">
-						<h3 style="font-size:18px;margin:18px 0">{{ firstname }} ({{ username }})  te envi&oacute; una invitaci&oacute;n para que te unas al grupo {{groupname}}</h3>
-					</td>
-				</tr>
-			</table>
-			 
+		<table >
+			<tr style="padding: 5px">
+				<td style="padding: 5px">
+					<span style="margin:0 2px 0 0"> 
+						<img src="{{ urlgravatar }}" alt="{{ username }}" title="{{ username }}" width="50" height="50" style="display:inline;vertical-align:top"> 
+					</span>
+				</td>
+				<td style="padding: 5px">
+					<h3 style="font-size:18px;margin:18px 0">{% blocktrans %}{{ full_name }} (@{{ username }})  te agregó al grupo "{{ groupname }}".{% endblocktrans %}</h3>
+				</td>
+			</tr>
+		</table>
 		<div> 
 			<div style="margin-bottom:18px;font:15px/19px 'Helvetica Neue',Arial,Helvetica">
-				Unete al grupo {{ groupname }} para recibir notificaciones, participar de las reuniones programadas y de actas de &eacute;stas.<br><br>
-				Descúbre los beneficios de registrar el resultado de tus reuniones en <a href='http://actarium.com/about' >Actarium.com</a>
+				{% blocktrans %}
+				<p>Unete al grupo "{{ groupname }}" para recibir notificaciones, participar de toda la gestión de Actas y las reuniones.</p>
+				<p>En <a href='{{ url_base }}' >www.actarium.com</a> encontrarás todas tus organizaciones y sus grupos en cualquier momento. Para acceder al grupo "{{ groupname }}" ingresa al siguiente link:</p>
+				<p>Ingresa a tu nuevo grupo: <a href="{{ group_url }}">{{ group_url }}</a></p>
+				{% endblocktrans %}
+				<br>
+				{% blocktrans %}
+				<p>Descúbre los beneficios de registrar el resultado de tus reuniones en <a href='{{ url_base }}/about' >actarium.com/about</a></p>
+				{% endblocktrans %}
 			</div> 
 			
 		</div> 

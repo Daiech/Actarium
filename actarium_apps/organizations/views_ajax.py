@@ -79,14 +79,12 @@ def getListMembers(request, slug_org=False):
                         rel = getRelUserGroup(u, group)
                         if rel:
                             is_member = True
-                    is_org_member = org.has_user_role(u, "is_member")
-                    print "is_org_member",is_org_member
                     users_json.append({
                         "id": u.id,
                         "username": u.username,
                         "full_name": u.get_full_name(),
                         "is_member": is_member,
-                        "is_org_member": is_org_member,
+                        "is_org_member": org.has_user_role(u, "is_member"),
                         "email": u.email,
                         "gravatar": showgravatar(u.email, 30)
                     })

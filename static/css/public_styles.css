@@ -22,7 +22,7 @@ body{margin-bottom: 160px;}
 .btn-submit{color: white; background-color: #28b7ca;box-shadow:none;border: none}
 .input-container .form-control-feedback{position: absolute;left: 25px;top: 10px;color: #A2A2A2;}
 
-.text-gray{color:#888;}
+
 .text-gray:hover{color:#888;text-decoration: underline;}
 
 .form-content{padding: 30px 15px 35px;}

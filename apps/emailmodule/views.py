@@ -60,7 +60,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_confirm_assistance.html')
     elif email_type == 6:  # colocar restriccoin
-        subject = ctx['firstname'] + " (" + ctx['username'] + ") " + u" te invitó a unirte al grupo " + ctx['groupname'] + END_SUBJECT
+        subject = ctx['full_name'] + " (" + ctx['username'] + ") " + u" te invitó a unirte al grupo " + ctx['groupname'] + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_group_invitation.html')
     elif email_type == 7:
@@ -124,7 +124,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     except NameError:
         smtp = None
     if smtp:
-        if len(to) > 0 and not settings.DEBUG:
+        if len(to) > 0:# and not settings.DEBUG:
             sendGmailEmail(to, subject, html_content)
     else:
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
@@ -146,24 +146,15 @@ def groupAdminFilter(email_list, email_type, _group):
         for e in email_list:
             _user = User.objects.get(email=e)
             try:
-                # print "user",_user
-                # print "email admin type", _email_admin_type
-                # print "group ",_group
                 egp = email_group_permissions.objects.get(id_user=_user, id_email_type=_email, id_group=_group)
                 if egp.is_active:
                     new_email_list.append(e)
-                    # print "....si esta, si activo"
                 else:
                     print ".....si esta, no activo"
             except email_group_permissions.DoesNotExist:
                 new_email_list.append(e)
-                # print ".....No esta, colocar como activo"
             except Exception, e:
                 print "groupAdminFilter:", e
-        # print "---------diferencia en listas de correos--- eliminar despues de probar----------"
-        # print " email_list -------"
-        # print email_list
-        # print " new_email_list ---"
         print new_email_list
 
         return new_email_list
@@ -280,6 +271,7 @@ def sendGmailEmail(to, subject, text, attach=False):
     mailServer.sendmail(gmail_user, to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
     mailServer.close()
+    print "Mail Sent"
 
 
 def show_template(request):
