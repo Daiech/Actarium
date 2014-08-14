@@ -53,14 +53,14 @@ function appendToList (li) {
 function showMemberList(data){//Muestra la lista de posibles miembros a agregar
     p = "";
     if(data.new_user){//No es usuario de la base de datos
-        if(data.new_user.email.length > MAX_LENGTH){p="...";}
+        if(data.new_user.email.length > MAX_LENGTH){p="...";}else{p="";}
         var view = {
             "mail":     data.new_user['email'],
             "gravatar": data.new_user['gravatar'],
             "username": data.new_user['username'],
             "p": p
         }
-        appendToList(swig.render($("#new-user-template").html(), {locals:view}));
+        appendToList(swig.render($("#new-user-template").html(), {locals: view}));
         $("#message-search").html("<strong>" + view.mail + "</strong> {% trans 'aún no disfruta de Actarium. Agrega sus datos y le enviaremos una invitación al correo electrónico.' %}")
     }
     else{//es usuario de la base de datos
@@ -70,13 +70,14 @@ function showMemberList(data){//Muestra la lista de posibles miembros a agregar
         users = [];
         for (var i = 0; i < data.users.length; i++) {
             // users.append({});
-            user_to_invite = data.users[i]['full_name']+" ("+data.users[i]['username']+")";
-            if(user_to_invite.length > MAX_LENGTH){p="...";}
+            user_to_invite = data.users[i]['full_name'];
+            if(user_to_invite.length > MAX_LENGTH){p="...";}else{p="";}
             users[i] = {
                 "id": data.users[i].id,
                 "email": data.users[i].email,
                 "username": data.users[i].username,
                 "image": data.users[i].gravatar, 
+                "get_full_name": user_to_invite,
                 "full_name": user_to_invite.substring(0,MAX_LENGTH) + p,
                 "is_member": data.users[i].is_member,
                 "is_org_member": data.users[i].is_org_member

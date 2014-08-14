@@ -793,6 +793,12 @@ cierra Show Minutes
 .nav-list > li > a {color: #00aeaa}
 .close{font-size: 16px;}
 
+.text-gray{color:#888 !important;}
+.text-green{color: #97C02C !important;}
+.text-white{color: white !important;}
+.text-white:hover{color: #888 !important;}
+.text-gray:hover, .text-green:hover{color: white !important;}
+
 
 /*groups*/
 .group-preview{color: #666;min-width: 150px;max-width: 150px;position: relative;text-align: center;display: inline-block;margin: 0 5px;margin-left: 0px;margin-right: 20px;padding:10px 10px 5px;border:solid thin;border-color: white;vertical-align:middle}
@@ -841,15 +847,19 @@ cierra Show Minutes
 #alerts div.alert{position: relative;top: 0;width: 100%;}
 
 #dropdown-org-users{width: 283px;}
-.org-user-img{width: 28px;height: 28px;display: inline-block;margin-right: 8px;}
+.org-user-img{width: 28px;height: 28px;display: inline-block;margin-right: 8px;margin: 4px 5px 4px;}
 #dropdown-org-users .dropdown-body .user-list{min-height: 200px;max-height: 388px;}
 #dropdown-org-users .dropdown-body ul li {position: relative;}
-#dropdown-org-users .dropdown-body ul li a{padding: 4px;padding-right: 35px;color: #333;border-radius: 3px;}
+#dropdown-org-users .dropdown-body ul li a{padding: 5px 0;padding-right: 35px;color: #333;border-radius: 3px;}
 #dropdown-org-users .dropdown-body ul li a:hover{color: white;}
-#dropdown-org-users .dropdown-body ul li a span.glyphicon{position: absolute;right: 0;padding: 8px;font-size: 14px;color: #ddd;}
+#dropdown-org-users .dropdown-body ul li a span.glyphicon{position: absolute;right: 0;padding: 14px 10px;font-size: 14px;color: #ddd;}
 #message-search{padding: 4px 2px;font-size: 13px;margin-bottom: 0;}
 .line-separator{border-bottom: solid thin #ddd;height: 1px;width: 100%;margin: 4px 0;}
-
+.user-info *:hover{color: white !important;}
+.user-names{display: inline-block;line-height: 1.3;}
+.user-names p{margin: 0;padding: 0;}
+.user-names p.text-username{color: #888;font-size: 13px;}
+.event-org-inv:hover *{color: white !important;}
 
 
 
