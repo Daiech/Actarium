@@ -399,7 +399,7 @@ $(document).ready(function() {
    	    				if (data.has_minute == 1)
   	   	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/minutes/"+data.minute_code+"' class='btn btn-info' >Ver Acta</a>";
    	    				if (data.iconf == 1 && data.has_minute == 0)
-       	    					reunion_list = reunion_list + "<br /><br /><a href='/groups/"+data.group_slug+"/roles-for-this-minutes"+id_reunion+"' class='btn btn-success' >Crear Acta</a>";
+       	    					reunion_list = reunion_list + "<br /><br /><a href='" +"{% url 'create_minutes' group.slug id_reunion template %}"+id_reunion+"' class='btn btn-success' >{% trans 'Crear Acta' %}</a>";
     	    			
 				    //console.log(reunion_list)
 					$('#reunion-data').html(reunion_list);
