@@ -5,9 +5,25 @@
 <h3> Acciones </h3>
 <p>Acciones que han realizado los usuarios de Actarium </p>
 <br />
+<div class="pagination">
+    <span class="step-links">
+        {% if actions.has_previous %}
+            <a href="?page={{ actions.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span class="current">
+            P&aacute;gina {{ actions.number }} de {{ actions.paginator.num_pages }}.
+        </span>
+
+        {% if actions.has_next %}
+            <a href="?page={{ actions.next_page_number }}">Siguiente</a>
+        {% endif %}
+    </span>
+</div>
 <table id="table" >
  	<tr>
- 		<th>#</th>
+ 		<th>Num</th>
+ 		<th>pk</th>
  		<th><a href="/actions/order/id_user">Usuario</a></th>
  		<th><a href="/actions/order/id_action">Accion</a></th>
  		<th class="peque"><a href="/actions/order/extra">Extra</a></th>
@@ -17,6 +33,7 @@
  	
       {% for action in actions %}
 		  <tr>
+		<td>{{ forloop.counter }}</td>
 		<td>{{ action.pk }}</td>
 		<td><a href="/actions/{{ action.id_user.username}}">{{ action.id_user.username}}</a></td>
 		<td><a href="/actions/action/{{action.id_action.pk}}">{{ action.id_action.name}}</a></td>
@@ -26,6 +43,19 @@
       {% endfor %}
   </tr>
 </table>
+<div class="pagination">
+    <span class="step-links">
+        {% if actions.has_previous %}
+            <a href="?page={{ actions.previous_page_number }}">Anterior</a>
+        {% endif %}
+        <span class="current">
+            P&aacute;gina {{ actions.number }} de {{ actions.paginator.num_pages }}.
+        </span>
+        {% if actions.has_next %}
+            <a href="?page={{ actions.next_page_number }}">Siguiente</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock%}
 
 

@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from pymongo import MongoClient, DESCENDING as pymongo_DESCENDING
 #from django.core.mail import EmailMessage
 import datetime
@@ -36,8 +37,17 @@ def saveActionLog(id_user, code, extra, ip_address):
 def showActions(request):
     saveViewsLog(request, 'actions_log.views.showActions')
     if request.user.is_staff:
-        saveErrorLog('(%s) ingreso al actionlog' % request.user.username)
-        ctx = {"actions": rel_user_action.objects.all().order_by("-date_done")}
+        # saveErrorLog('(%s) ingreso al actionlog' % request.user.username)
+        actions_list = rel_user_action.objects.all().order_by("-date_done")
+        paginator = Paginator(actions_list, 25)
+        page = request.GET.get('page')
+        try:
+            actions = paginator.page(page)
+        except PageNotAnInteger:# If page is not an integer, deliver first page.
+            actions = paginator.page(1)
+        except EmptyPage:# If page is out of range (e.g. 9999), deliver last page of results.
+            actions = paginator.page(paginator.num_pages)
+        ctx = {"actions": actions}
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
@@ -58,9 +68,8 @@ def showAction(request, id_action):
 def showUserActions(request, username):
     saveViewsLog(request, 'actions_log.views.showUserActions')
     if request.user.is_staff:
-        user = User.objects.get(username=username)
-        ctx = {"actions": rel_user_action.objects.filter(
-            id_user=user).order_by("-date_done")}
+        user = User.objects.get_or_none(username=username)
+        ctx = {"actions": rel_user_action.objects.filter(id_user=user).order_by("-date_done")}
         return render_to_response('actions/actions.html', ctx, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')

@@ -9,7 +9,7 @@ urlpatterns = patterns('apps.actions_log.views',
     url(r'^action/(?P<id_action>[-\w]+)$', 'showAction', name='order_actions'),
     url(r'^views$', 'showViewsLog', name='views_log'),
     url(r'^viewsstats$', 'showViewsStats', name='views_stats'),
-    url(r'^(?P<username>[-\w]+)', 'showUserActions', name='user_actions'),
+    url(r'^(?P<username>[-\w.@ ]+)', 'showUserActions', name='user_actions'),
     url(r'^$', 'showActions', name='actions'),
    
 )
