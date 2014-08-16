@@ -8,9 +8,10 @@ from django.contrib.auth.decorators import login_required
 from actarium_apps.organizations.models import Organizations, OrganizationsUser, OrganizationsRoles, rel_user_group
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.account.templatetags.gravatartag import showgravatar
-from apps.groups_app.utils import getRelUserGroup
+from apps.account.utils import validateUsername, newInvitedUser
+from apps.groups_app.utils import getRelUserGroup, send_email_full_signed
 from apps.groups_app.validators import validateEmail
-from apps.groups_app.utils import send_email_full_signed
+from .utils import set_invitation_to_org
 import json
 
 
@@ -165,26 +166,36 @@ def set_org_invitation(request, slug_org):
     if not request.method == "POST":
         raise Http404
     org = request.user.organizationsuser_user.get_org(slug=slug_org)
+    message = {"error": _(u"No tienes permisos para hacer eso.")}
     if org and org.has_user_role(request.user, "is_admin"):
         mail = request.POST.get("mail")
         uname = request.POST.get("uname")
         u = User.objects.get_or_none(email=mail, username=uname)
-        message = {"error": _(u"No se agregó")}
+        message = {"error": _(u"No tienes permisos para hacer eso.")}
         if u:
-            if not org.has_user_role(u, "is_member"):
-                if org.can_add_members():
-                    org.set_role(u, is_member=True)
-                    user = {
-                        "id": u.id,
-                        "email": u.email,
-                        "username": u.username,
-                        "image": showgravatar(u.email, 28),
-                        "full_name": u.get_full_name(),
-                        "is_member": True
-                    }
-                    message = {"invited": _(u"%s ahora es miembro de la organización %s" % (u.get_full_name(), org.name)), "user": user}
+            message = set_invitation_to_org(org, u)
+    return HttpResponse(json.dumps(message), mimetype="application/json")
+
+
+@login_required
+def create_invite_user_to_org(request, slug_org):
+    if not request.is_ajax():
+        raise Http404
+    if not request.method == "POST":
+        raise Http404
+    org = request.user.organizationsuser_user.get_org(slug=slug_org)
+    if org and org.has_user_role(request.user, "is_admin"):
+        email = request.POST.get("email")
+        u = User.objects.get_or_none(email=email)
+        if u:
+            message = {"error": _(u"Ya existe un usuario con correo electrónico '%s'" % email)}
+        else:
+            if org.can_add_members():
+                user_obj = newInvitedUser(email, request.user, first_name=request.POST.get("firstname"), last_name=request.POST.get("lastname"))
+                if user_obj:
+                    message = set_invitation_to_org(org, user_obj)
                 else:
-                    message = {"error": _(u"La organización ya no tiene cupos para agregar usuarios")}
+                    message = {"error": _(u"Ocurrió un error al agregar a este usuario, por favor recargue la página e intente de nuevo.")}
             else:
-                message = {"error": _(u"%s ya es miembro de la organización" % u.get_full_name())}
+                message = {"error": _(u"La organización ya no tiene cupos para agregar usuarios. Comuniquese con el administrador de la organización para actualizar el cupo de miembros.")}
         return HttpResponse(json.dumps(message), mimetype="application/json")

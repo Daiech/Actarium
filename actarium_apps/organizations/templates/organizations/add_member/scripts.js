@@ -26,14 +26,12 @@ invitationResult = function (data){//Resultados de la invitacion (agrega si TRUE
 function sendInvitationToNewUser(e){
     e.preventDefault();
     var ctx = {
-        "new": 1,
-        "pk": $("#group_id").val(),
-        "mail": $("#new-user-email").val(),
         "uname": $("#new-user-uname").val(),
+        "email": $("#new-user-email").val(),
         "firstname": $("#new-user-firstname").val(),
         "lastname": $("#new-user-lastname").val(),
         }
-    sendAjax("{% url 'set_invitation' %}",ctx, invitationResult, {"method": "post"});
+    sendNewAjax("{% url 'create_invite_user_to_org' org.slug %}",ctx, invitationResult, {"method": "post"});
     $("#search-result").fadeOut(300,function (argument) {
         $(this).empty().show().removeClass("user-li");;
     });

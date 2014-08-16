@@ -8,7 +8,7 @@ from django.conf import settings
 from actarium_apps.organizations.models import Organizations, Groups, rel_user_group
 from .validators import validateEmail
 from apps.account.templatetags.gravatartag import showgravatar
-from apps.account.views import newInvitedUser
+from apps.account.utils import newInvitedUser
 from apps.emailmodule.views import sendEmailHtml
 
 
