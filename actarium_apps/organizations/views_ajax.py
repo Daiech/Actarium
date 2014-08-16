@@ -172,16 +172,19 @@ def set_org_invitation(request, slug_org):
         message = {"error": _(u"No se agregó")}
         if u:
             if not org.has_user_role(u, "is_member"):
-                org.set_role(u, is_member=True)
-                user = {
-                    "id": u.id,
-                    "email": u.email,
-                    "username": u.username,
-                    "image": showgravatar(u.email, 28),
-                    "full_name": u.get_full_name(),
-                    "is_member": True
-                }
-                message = {"invited": _(u"%s ahora es miembro de la organización %s" % (u.get_full_name(), org.name)), "user": user}
+                if org.can_add_members():
+                    org.set_role(u, is_member=True)
+                    user = {
+                        "id": u.id,
+                        "email": u.email,
+                        "username": u.username,
+                        "image": showgravatar(u.email, 28),
+                        "full_name": u.get_full_name(),
+                        "is_member": True
+                    }
+                    message = {"invited": _(u"%s ahora es miembro de la organización %s" % (u.get_full_name(), org.name)), "user": user}
+                else:
+                    message = {"error": _(u"La organización ya no tiene cupos para agregar usuarios")}
             else:
                 message = {"error": _(u"%s ya es miembro de la organización" % u.get_full_name())}
         return HttpResponse(json.dumps(message), mimetype="application/json")

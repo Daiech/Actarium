@@ -147,6 +147,9 @@ class Organizations(models.Model):
 
     is_expired = property(is_expired)
 
+    def can_add_members(self):
+        return self.organizationservices_organization.can_add() and not self.is_expired
+
     def __unicode__(self):
         return self.name
 

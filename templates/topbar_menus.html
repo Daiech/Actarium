@@ -1,4 +1,4 @@
-{% load gravatartag i18n %}
+{% load gravatartag i18n orgs_ttag %}
 <div id="topbar-menu" class="dib">
     <span class="suspension-points" style="display:none">...</span>
     <div id="account-menu" class="btn-group pull-right">
@@ -33,7 +33,7 @@
         <ul class="dropdown-menu">
             {% for org in MY_ORGS %}
                 <li role="presentation" class="dropdown-header">{{ org.name }}</li>
-                {% for g in org.get_groups %}
+                {% for g in org.get_groups|only_groups_of:user %}
                 <li title="">
                     <a class="group-link" href="{{ g.get_absolute_url }}">{{ g.name|title }}</a>
                 </li>
