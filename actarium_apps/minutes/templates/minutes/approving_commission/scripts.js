@@ -68,7 +68,9 @@ function callBackApprove(data){
 			$(this).empty();
 			var u = $(".missing-"+data["user-id"]);
 			u.find(".remember-approve").hide().remove();
-			u.find(".icon-approver-status .glyphicon-time").removeClass("glyphicon-time").removeClass("popover-element").addClass("glyphicon-ok");
+			icon = u.find(".icon-approver-status .glyphicon-time");
+			icon.removeClass("glyphicon-time").removeClass("popover-element").addClass("glyphicon-ok");
+			icon.attr("data-content", "{% trans 'aprobó esta acta' %}")
 		});
 		if (data["is_full_signed"]){
 			$("#minutes-edit").closest("li").fadeOut("fast");
