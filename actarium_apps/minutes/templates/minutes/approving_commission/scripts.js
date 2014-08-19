@@ -62,13 +62,14 @@ function editCommission (e) {
 
 /****roles for minutes ****/
 function callBackApprove(data){
-	$(".div-sign").fadeOut(300,function(){
-		$(this).empty();
-	});
-	var u = $(".missing-"+data["user-id"]);
 	if(data['approved']==1){
-		u.find("div.icon-approver-status").html('<i class="glyphicon glyphicon-ok"></i>');
 		setAlertMessage("{% trans 'Acta aprobada!' %}", "{% trans 'Haz aprobado esta acta' %}.");
+		$(".div-sign").fadeOut(300,function(){
+			$(this).empty();
+			var u = $(".missing-"+data["user-id"]);
+			u.find(".remember-approve").hide().remove();
+			u.find(".icon-approver-status .glyphicon-time").removeClass("glyphicon-time").removeClass("popover-element").addClass("glyphicon-ok");
+		});
 		if (data["is_full_signed"]){
 			$("#minutes-edit").closest("li").fadeOut("fast");
 			$("#btn-generate-pdf").removeClass("disabled").attr("data-original-title","{% trans 'Descarga esta acta en PDF' %}").on("click", function (e) {e.preventDefault();$("#pdf-form").submit();});
