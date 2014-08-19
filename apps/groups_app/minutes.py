@@ -188,9 +188,12 @@ def getRelUserMinutesAssistance(id_minutes, id_user):
         return None
 
 
-def getReunionById(id_reunion):
+def getReunionById(id_reunion, group=None):
     try:
-        _reunion = reunions.objects.get(id=id_reunion)  # esta reunion pertenece a un grupo mio?
+        if group:
+            _reunion = reunions.objects.get(id=id_reunion, id_group=group)  # esta reunion pertenece a un grupo mio?
+        else:
+            _reunion = reunions.objects.get(id=id_reunion)  # esta reunion pertenece a un grupo mio?
         if _reunion:
             if _reunion.hasMinutes():
                 return False
@@ -852,8 +855,6 @@ def newMinutes(request, slug_group, slug_template):
                     id_reunion = None
                 if id_reunion:
                     _reunion = getReunionById(id_reunion)
-                print "ESTE ES EL ID DE LA REUNION: ", id_reunion
-                print "ESTA ES LA REUNION: ", _reunion
                 if _minute and _reunion:
                     setRelationReunionMinutes(_reunion, _minute)
                 ######## </Create a relation into reunion and the new minutes> #########
@@ -883,7 +884,7 @@ def newMinutes(request, slug_group, slug_template):
             _reunion = None
             id_reunion = request.GET.get("rid")
             if id_reunion:
-                _reunion = getReunionById(id_reunion)
+                _reunion = getReunionById(id_reunion, group=group)
                 if _reunion:
                     form = newMinutesForm(initial={"location": _reunion.locale})
         ######## <SHOW_THE_MINUTE_FORM> #########

@@ -29,9 +29,10 @@
             <form id="form-new-minutes" class="form-horizontal" enctype="multipart/form-data" method="POST">
                 {% csrf_token %}
                 {% if is_edit %}
-                <input type="text" value="reunion" name="reunion_id" >
                 <input id="minutesId" value="{{ minutes.id }}" type="hidden">
-                {% endif %}
+                {% else %}{% if reunion %}
+                <input type="hidden" value="{{ reunion.id }}" name="reunion_id" >
+                {% endif %}{% endif %}
                     
                 {% include minutesTemplateForm %}
             </form>
