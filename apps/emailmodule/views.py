@@ -37,7 +37,8 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         12- email_new_annotation   (Depende del grupo)
         13- email_new_minutes_for_approvers   (Depende del grupo)
         14- Correo de solicitud de acceso a DNI para un grupo      (Depende del grupo)
-        15- Recordar aprobar un acta. (va a toda la comisión)"""
+        15- Recordar aprobar un acta. (va a toda la comisión)
+        16- Correo de invitacion a organizacion"""
     htmly = ""
     if email_type == 1:
         subject = ctx['username'] + " Bienvenido a %s" % settings.PROJECT_NAME
@@ -99,6 +100,10 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         subject = u"El acta "+ctx['code']+" del grupo " + ctx['groupname'] + u" espera tu aprobación" + END_SUBJECT
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/email_remember_approve.html')
+    elif email_type == 16:
+        subject = ctx['from_first_name'] + u" te invitó a usar %s, El espacio más cómodo para registrar el resultado de tus reuniones." % settings.PROJECT_NAME
+        plaintext = get_template('emailmodule/emailtest.txt')
+        htmly = get_template('emailmodule/email_actarium_invitation.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')

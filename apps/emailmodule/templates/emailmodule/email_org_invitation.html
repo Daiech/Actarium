@@ -1,0 +1,30 @@
+{% extends "emailmodule/email_layout.html" %}
+{% load i18n %}
+{% block emaildata %}
+<tr width="100%"> 
+	<td valign="top" align="left" style="border-bottom-left-radius:4px;border-bottom-right-radius:4px;background:#fff;padding:18px"> 
+		<h1 style="font-size:20px;margin:0"> {% trans 'Bienvenido a <strong>Actarium</strong>!' %} </h1> 
+		<hr style="clear:both;min-height:1px;border:0;border:none;width:100%;background:#dcdcdc;color:#dcdcdc;margin:18px 0;padding:0"> 
+			<table >
+				<tr style="padding: 5px 0">
+					<td style="padding: 5px 0">
+						<h3 style="font-size:18px;margin:18px 0">{% blocktrans %}{{ from_full_name }} te ha invitado a una organización en <strong>Actarium</strong>{% endblocktrans %}
+						</h3>
+					</td>
+				</tr>
+			</table>
+		<div> 
+			<div style="margin-bottom:18px;font:15px/19px 'Helvetica Neue',Arial,Helvetica"> 
+				{% url 'how_it_works' as how_it_works %}
+				{% blocktrans %}
+				Ahora perteneces a la organización <strong>{{ org }}</strong>.<br><br>
+				Descubre a qué grupos y qué permisos tienes en {{ org }} ingresando al link: <a href="{{ link }}">{{ link }}</a><br><br>
+				Cada vez que ingreses a <a href="{{ url_base }}">actarium.com</a> encontrarás a esta nueva organización en tu lista de organizaciones.<br><br>
+				No dejes pasar ningún detalle de tus reuiniones, te estaremos esperando.<br><br>
+				Conoce más de Actarium en <a href="{{ url_base }}{{ how_it_works }}">{{ url_base }}{{ how_it_works }}</a>
+				{% endblocktrans %}
+			</div> 
+		</div> 
+	</td> 
+</tr> 
+{% endblock %}

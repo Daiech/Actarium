@@ -14,18 +14,19 @@
 			</table>
 		<div> 
 			<div style="margin-bottom:18px;font:15px/19px 'Helvetica Neue',Arial,Helvetica"> 
-				<strong>Actarium</strong> es una plataforma dise&ntilde;ada para facilitar las labores relacionadas con la gesti&oacute;n de reuniones y creaci&oacute;n de actas. <br ><br >
-				Como eres un usuario invitado por alguien que ya est&aacute; registrado en <strong>Actarium</strong> lo &uacute;nico que debes hacer es ingresar al siguiente link de activaci&oacute;n confirmar tus datos y activar tu cuenta.<br ><br >
-				Una vez actives tu cuenta, los datos para iniciar sesi&oacute;n son:<br ><br >
+				{% blocktrans %}
+				<strong>Actarium</strong> es una plataforma diseñada para facilitar las labores relacionadas con la gestión de reuniones y creación de actas. <br ><br >
+				Como eres un usuario invitado por alguien que ya está registrado en <strong>Actarium</strong> lo único que debes hacer es ingresar al siguiente link de activación, confirmar tus datos y activar tu cuenta.<br ><br >
+				Una vez actives tu cuenta, los datos para iniciar sesión son:<br ><br >
 				Nombre de usuario: <strong>{{ newuser_username }}</strong> <br >
-				Contrase&ntilde;a: <strong>{{ pass }}</strong> <br ><br >
-				Puedes cambiar tu contrase&ntilde;a en cualquier momento.<br><br> 
-				Si prefieres no registrarte ni activar tu cuenta, <strong>Omite</strong> este correo; tu cuenta no ser&aacute; activada y no podras iniciar sesi&oacute;n con este nombre de usuario y contrase&ntilde;a.<br ><br >
-				
-				Link de registro y activaci&oacute;n:<br>
-				<a href='http://actarium.com/account/activate/{{ activation_key }}/invited{{ inv_code }}' >http://actarium.com/account/activate/{{ activation_key }}/invited{{ inv_code }}</a><br ><br >
-				Puedes cambiar estos datos en cualquier momento despu&eacute;s de activar tu cuenta.<br>
-				Te recomendamos que cambies la contrase&ntilde;a lo antes posible por una que puedas recordar m&aacute;s facilmente que la contrase&ntilde;a que te generamos automaticamente.<br> <br>
+				Contraseña: <strong>{{ pass }}</strong> <br ><br >
+				Puedes cambiar tu contraseña en cualquier momento.<br><br> 
+				Si prefieres no registrarte ni activar tu cuenta, <strong>Omite</strong> este correo; tu cuenta no será activada y no podras iniciar sesión con este nombre de usuario y contraseña.<br ><br >
+				{% endblocktrans %}
+				{% trans 'Link de registro y activación:' %}<br>
+				<a href="{% url 'confirm_account' activation_key inv_code %}" >{% url 'confirm_account' activation_key inv_code %}</a><br ><br >
+				{% blocktrans %}Puedes cambiar estos datos en cualquier momento después de activar tu cuenta.<br>
+				Te recomendamos que cambies la contraseña lo antes posible por una que puedas recordar más facilmente.{% endblocktrans %}<br> <br>
 				
 			</div> 
 		</div> 

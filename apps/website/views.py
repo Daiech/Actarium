@@ -1,13 +1,14 @@
 # encoding:utf-8
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, render
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.utils import translation
-from django.conf import settings
 from django.db.models import Sum
+from django.conf import settings
 
 from apps.groups_app.models import reunions, assistance, DNI_permissions
 from apps.groups_app.utils_meetings import date_time_format_form
@@ -184,7 +185,19 @@ def getGlobalVar(name):
         return ""
 
 
+def how_it_works(request):
+    pdf = open(settings.STATICFILES_DIRS[0] + "/pdf/how-it-works.pdf", "r")
+    response = HttpResponse(pdf.read(), mimetype='application/pdf')
+    response['Content-Disposition'] = 'inline;filename=how-it-works.pdf'
+    pdf.close()
+    return response
+
+
 def services(request):
+    """Changed. redirtect to how-it-works"""
+
+    return HttpResponseRedirect(reverse("how_it_works"))
+
     pdf = open(settings.STATICFILES_DIRS[0] + "/pdf/actarium_services.pdf", "r")
     response = HttpResponse(pdf.read(), mimetype='application/pdf')
     response['Content-Disposition'] = 'inline;filename=Services.pdf'

@@ -2,6 +2,9 @@
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from apps.account.templatetags.gravatartag import showgravatar
+from apps.emailmodule.views import sendEmailHtml
+from django.conf import settings
+
 
 @login_required(login_url='/account/login')
 def saveOrganization(request, form, org_obj=False):
@@ -12,6 +15,22 @@ def saveOrganization(request, form, org_obj=False):
     if ref:
         ref = request.POST.get('ref') + "?org=" + str(org.id)
     return org.get_absolute_url()
+
+
+def send_email_invitation_to_org(user_from, user_to, org):
+    try:
+        link = settings.URL_BASE + reverse("show_org", args=(org.slug, ))
+        email_ctx = {
+            'org': minutes.id_group.name,
+            'link': link,
+            'url_base': settings.URL_BASE,
+            'from_first_name': user_from.first_name,
+            'from_full_name': user_from.get_full_name()
+        }
+        sendEmailHtml(16, email_ctx, [user_to.email])
+    except Exception, e:
+        pass
+
 
 
 def set_invitation_to_org(org, u):

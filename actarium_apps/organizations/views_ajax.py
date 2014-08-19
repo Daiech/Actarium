@@ -174,6 +174,9 @@ def set_org_invitation(request, slug_org):
         message = {"error": _(u"No tienes permisos para hacer eso.")}
         if u:
             message = set_invitation_to_org(org, u)
+            # enviar correo de invitación a la organizacion
+            if message["invited"]:
+                send_email_invitation_to_org(request.user, u, org)
     return HttpResponse(json.dumps(message), mimetype="application/json")
 
 
@@ -194,6 +197,8 @@ def create_invite_user_to_org(request, slug_org):
                 user_obj = newInvitedUser(email, request.user, first_name=request.POST.get("firstname"), last_name=request.POST.get("lastname"))
                 if user_obj:
                     message = set_invitation_to_org(org, user_obj)
+                    if message["invited"]:
+                        send_email_invitation_to_org(request.user, user_obj, org)
                 else:
                     message = {"error": _(u"Ocurrió un error al agregar a este usuario, por favor recargue la página e intente de nuevo.")}
             else:
