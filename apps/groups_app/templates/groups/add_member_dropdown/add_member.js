@@ -74,7 +74,6 @@ invitationResult = function (data, append_to_org_list){//Resultados de la invita
         showIconCloseOnHover()
         $("#newmember").val("");
         if (!append_to_org_list){append_org_member(data);}
-        console.log($("#org-user-" + user.id).hasClass("hidden"))
         setTimeout(function () {
             $("#org-user-" + user.id).addClass("hidden");
         },1000);
@@ -158,7 +157,6 @@ function showMemberList(data){//Muestra la lista de posibles miembros a agregar
                 "full_name": user_to_invite.substring(0,MAX_LENGTH) + p,
                 "is_member": data.users[i].is_member
             }
-            console.log(data.users[i])
         };
         appendToList(swig.render($("#org-user-template").html(), {locals: users}));
         

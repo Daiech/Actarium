@@ -11,7 +11,7 @@ from apps.account.templatetags.gravatartag import showgravatar
 from apps.account.utils import validateUsername, newInvitedUser
 from apps.groups_app.utils import getRelUserGroup, send_email_full_signed
 from apps.groups_app.validators import validateEmail
-from .utils import set_invitation_to_org
+from .utils import set_invitation_to_org, send_email_invitation_to_org
 import json
 
 
@@ -175,8 +175,11 @@ def set_org_invitation(request, slug_org):
         if u:
             message = set_invitation_to_org(org, u)
             # enviar correo de invitación a la organizacion
-            if message["invited"]:
+            if "invited" in message:
+                print "ENVIANDO CORREO"
                 send_email_invitation_to_org(request.user, u, org)
+            else:
+                print message
     return HttpResponse(json.dumps(message), mimetype="application/json")
 
 
@@ -197,7 +200,7 @@ def create_invite_user_to_org(request, slug_org):
                 user_obj = newInvitedUser(email, request.user, first_name=request.POST.get("firstname"), last_name=request.POST.get("lastname"))
                 if user_obj:
                     message = set_invitation_to_org(org, user_obj)
-                    if message["invited"]:
+                    if "invited" in message:
                         send_email_invitation_to_org(request.user, user_obj, org)
                 else:
                     message = {"error": _(u"Ocurrió un error al agregar a este usuario, por favor recargue la página e intente de nuevo.")}

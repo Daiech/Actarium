@@ -199,5 +199,16 @@
       "admin_type": 2,
       "date_added": "2014-07-28T23:37:01Z"
     }
+  },
+  {
+    "model": "emailmodule.email",
+    "pk": 16,
+    "fields": {
+      "name": "Invitar a organización",
+      "description": "Envía un correo de invitación",
+      "email_type": "16",
+      "admin_type": 2,
+      "date_added": "2014-07-28T23:37:01Z"
+    }
   }
 ]

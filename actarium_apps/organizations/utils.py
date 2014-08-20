@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from apps.account.templatetags.gravatartag import showgravatar
 from apps.emailmodule.views import sendEmailHtml
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 
@@ -18,10 +19,11 @@ def saveOrganization(request, form, org_obj=False):
 
 
 def send_email_invitation_to_org(user_from, user_to, org):
+    print "COREOOOOO"
     try:
         link = settings.URL_BASE + reverse("show_org", args=(org.slug, ))
         email_ctx = {
-            'org': minutes.id_group.name,
+            'org': org.name,
             'link': link,
             'url_base': settings.URL_BASE,
             'from_first_name': user_from.first_name,
@@ -29,6 +31,7 @@ def send_email_invitation_to_org(user_from, user_to, org):
         }
         sendEmailHtml(16, email_ctx, [user_to.email])
     except Exception, e:
+        print e
         pass
 
 

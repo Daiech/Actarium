@@ -860,6 +860,8 @@ cierra Show Minutes
 .user-names p{margin: 0;padding: 0;}
 .user-names p.text-username{color: #888;font-size: 13px;}
 .event-org-inv:hover *{color: white !important;}
+.is_group_member:hover *{color: #888 !important;}
+img.disabled{opacity: 0.5;}
 
 
 

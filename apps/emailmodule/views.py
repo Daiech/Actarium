@@ -40,6 +40,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
         15- Recordar aprobar un acta. (va a toda la comisión)
         16- Correo de invitacion a organizacion"""
     htmly = ""
+    print email_type, ctx, to
     if email_type == 1:
         subject = ctx['username'] + " Bienvenido a %s" % settings.PROJECT_NAME
         plaintext = get_template('emailmodule/emailtest.txt')
@@ -103,7 +104,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     elif email_type == 16:
         subject = ctx['from_first_name'] + u" te invitó a usar %s, El espacio más cómodo para registrar el resultado de tus reuniones." % settings.PROJECT_NAME
         plaintext = get_template('emailmodule/emailtest.txt')
-        htmly = get_template('emailmodule/email_actarium_invitation.html')
+        htmly = get_template('emailmodule/email_org_invitation.html')
     else:
         plaintext = get_template('emailmodule/emailtest.txt')
         htmly = get_template('emailmodule/emailtest.html')
@@ -129,7 +130,7 @@ def sendEmailHtml(email_type, ctx, to, _group=None):
     except NameError:
         smtp = None
     if smtp:
-        if len(to) > 0 and not settings.DEBUG:
+        if len(to) > 0:# and not settings.DEBUG:
             sendGmailEmail(to, subject, html_content)
     else:
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)

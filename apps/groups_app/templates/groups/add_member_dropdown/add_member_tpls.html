@@ -18,13 +18,13 @@
 	{% verbatim %}
 	{% for u in users %}
 		<li id="org-user-{{ u.id }}" class="" title="{{ u.get_full_name }}{% if u.is_org_member %} {% endverbatim %}{% trans 'ya pertenece a la organización' %}{% verbatim %}{% else %}, {% endverbatim %}{% trans 'click para invitar' %}{% verbatim %}{% endif %}">
-			<a href="#" class="{% if not u.is_member %}user-inv{% endif %} link-to-invite nud {% if not u.is_org_member %}event-org-inv{% else %}disabled{% endif %}"  data-email="{{ u.email }}" data-username="{{ u.username }}">
-				<span class="pull-left org-user-img"><img class="img-circle" src="{{ u.image }}" width="28px" /></span>
+			<a href="#" class="{% if not u.is_member %}user-inv{% else %}disabled is_group_member{% endif %} link-to-invite nud {% if not u.is_org_member %}event-org-inv{% else %}disabled{% endif %}"  data-email="{{ u.email }}" data-username="{{ u.username }}">
+				<span class="pull-left org-user-img"><img class="img-circle {% if u.is_member or u.is_org_member %}disabled{% endif %}" src="{{ u.image }}" width="28px" /></span>
 				<span class="user-names">
 					<p>{{ u.full_name }}</p>
 					<p class="text-username">@{{ u.username }}</p>
 				</span>
-				<span class="glyphicon glyphicon-{% if u.is_org_member %}ok text-green{% else %}chevron-right text-white{% endif %}"></span>
+				<span class="glyphicon glyphicon-{% if u.is_org_member or u.is_member %}ok text-green{% else %}chevron-right text-white{% endif %}"></span>
 			</a>
 		</li>
 	{% endfor %}
