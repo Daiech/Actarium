@@ -19,4 +19,5 @@ urlpatterns = patterns('apps.website.views',
     url(r'^landing', 'landing', name="landing"),
     url(r'^users', 'users', name="users"),
     url(r'^fixtures', 'get_initial_data', name="landing"),
+    url(r'^quiero-la-plantilla-de-mi-empresa', 'send_template', name="send_template"),
 )

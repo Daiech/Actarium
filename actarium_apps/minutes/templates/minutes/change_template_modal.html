@@ -9,6 +9,15 @@
             <div class="modal-body">
                 <span>{% trans 'Selecciona una plantilla' %}:</span>
                 <ul class="list-unstyled">
+                    <li class="template-item get-own-template">
+                        <a href="{% url 'send_template' %}" target="_blak" style="width:90%">{% trans 'Solicita tu propia plantilla' %}
+                            <div class="circle-plus">
+                                <span class="" title="">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                </span>
+                            </div>
+                        </a>
+                    </li>
                     {% for template in list_templates %}
                     <li class="template-item {%ifequal slug_template template.slug%}template-item-selected{%endifequal%}">
                         <div class="template-item-child {%ifequal slug_template template.slug%}template-item-child-selected{%endifequal%}">
@@ -42,3 +51,7 @@
         </div>
     </div>
 </div> <!-- close template-list -->
+<style type="text/css">
+    /*.circle-plus{height: 165px;}*/
+    .get-own-template{padding: 75px 0 77px;margin-right: 5px;}
+</style>

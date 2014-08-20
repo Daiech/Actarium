@@ -17,6 +17,7 @@ from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
 from actarium_apps.customers_services.models import OrderItems, Services
 from .models import *
+from .forms import OrganizationForm
 import datetime
 import json
 import re
@@ -221,3 +222,18 @@ def get_initial_data(request):
         from django.core import serializers
         data = serializers.serialize("json", queryset)
     return HttpResponse(data, mimetype="application/json")
+
+
+@login_required()
+def send_template(request):
+    if request.method == "POST":
+        form = OrganizationForm(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            saved = _(u"Su información ha sido guardada, te responderemos lo más pronto posible a %s" % request.user.email)
+            form = OrganizationForm()
+    else:
+        form = OrganizationForm()
+    return render(request, "website/i_want_a_template.html", locals())

@@ -1,0 +1,42 @@
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %} {% trans "Quiero la plantilla de mi empresa" %}  {% endblock %}
+
+{% block content %}
+<div class="white-box-container row-fluid box b">
+  <div class="form-container col-md-12">
+    <h3>{% trans 'Podemos crear la plantilla que necesitas' %}</h3>
+    <form method="post" class="form-horizontal" enctype="multipart/form-data">
+      <p>{% trans 'Actarium es más interesante con nuestros propios formatos y plantillas, cuéntanos qué formato requieres para cumplir con los estándares y ser más competitivo.' %}</p>
+      <p>{% trans 'Envíanos un ejemplo del formato que te gustaría poder manejar en Actarium, lo analizaremos y te diremos qué debes hacer para poder estandarizarlo con Actarium.' %}</p>
+      <hr>
+      <div>
+        {% csrf_token %}
+        {{ form.as_p }}
+      </div>
+      <div>
+        <button type="submit" class="btn btn-success" >{% trans 'Enviar' %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block style %}
+<style>
+  .white-box-container{font-size: 16px;width: 60%;margin: auto;margin-top: 30px;}
+  .white-box-container p{color: #555;}
+  .white-box-container p label{display: block;}
+  .white-box-container #id_description{width: 100% !important;height: 70px !important;}
+</style>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+      {% if saved %}
+      setAlertMessage("{% trans 'Listo!' %}", "{{ saved }}");
+      {% endif %}
+    });
+</script>
+{% endblock %}
