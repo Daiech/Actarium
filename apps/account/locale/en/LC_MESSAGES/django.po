@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 21:36-0500\n"
-"PO-Revision-Date: 2014-07-31 18:30-0500\n"
+"POT-Creation-Date: 2014-08-11 17:46-0400\n"
+"PO-Revision-Date: 2014-08-11 16:48-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
+
+#: forms.py:11
+msgid "Correo Electrónico"
+msgstr "Email."
+
+#: forms.py:14
+msgid "Nombre de Usuario"
+msgstr "User name "
+
+#: forms.py:15
+msgid "Requerido. 30 caracteres o menos. Letras, dígitos y @.+-_ solamente."
+msgstr "Required. 30 characters or less. Letters, digits and @. + -_ Only."
+
+#: forms.py:32
+msgid "* Correo Electrónico"
+msgstr "* Email"
+
+#: forms.py:33
+msgid "* Nombre de usuario"
+msgstr "* User name"
+
+#: forms.py:34
+msgid "* Nombre"
+msgstr "* Name"
+
+#: forms.py:35
+msgid "Apellido"
+msgstr "Lastname"
+
+#: forms.py:55
+msgid "Tipo de DNI"
+msgstr "Type of DNI"
 
 #: templates/account/complete_registration.html:3
 #: templates/account/confirm_account.html:3
@@ -122,7 +154,6 @@ msgid "Eliminar cuenta"
 msgstr "Delete account"
 
 #: templates/account/delete_account.html:8
-#, fuzzy
 msgid ""
 "\n"
 "\t<p>Si elimina su cuenta, TODA su información (incluyendo las actas que haya creado) se eliminarán.</p>\n"
@@ -207,7 +238,7 @@ msgid "Link no valido"
 msgstr "Link not valid"
 
 #: templates/account/invalid_link.html:8
-#, python-format, fuzzy
+#, python-format
 msgid ""
 "\n"
 "\t\t<h3>Link no válido!</h3>\n"
@@ -222,22 +253,39 @@ msgstr ""
 "<p>If you wish to log in go to <a href=\"%(login)s\">Log in</a></p>\n"
 "<p>If you forgot your password use the<a href=\"%(password_reset2)s\">password recovery option</a></p>"
 
-#: templates/account/login.html:3 templates/account/login.html.py:7
+#: templates/account/login.html:3
 msgid "Iniciar Sesión"
 msgstr "Log in"
 
-#: templates/account/login.html:8
-msgid ""
-"Ingresa tus datos de usuario para acceder a tu cuenta en "
-"<strong>Actarium</strong>"
-msgstr ""
-"Enter your user details to access your account <strong>Actarium</strong>"
+#: templates/account/login.html:11
+msgid "Iniciar sesión en Actarium"
+msgstr "Log in"
 
-#: templates/account/login.html:21
-msgid "Registrarse"
-msgstr "Sign in"
+#: templates/account/login.html:12
+msgid "Ingresa tus datos de usuario para acceder a tu cuenta"
+msgstr "Enter your user details to access your account "
 
-#: templates/account/login.html:22
+#: templates/account/login.html:16
+msgid "Nombre de usuario o correo"
+msgstr "User name or email"
+
+#: templates/account/login.html:21 templates/account/newUser.html:24
+msgid "Contraseña"
+msgstr " Password"
+
+#: templates/account/login.html:25
+msgid "Iniciar sesión"
+msgstr "Log in"
+
+#: templates/account/login.html:30
+msgid "o inicia con Google"
+msgstr "or login with Google"
+
+#: templates/account/login.html:35
+msgid "&iquest;Eres nuevo? Registrarse"
+msgstr "Are you new? Sign up"
+
+#: templates/account/login.html:36
 msgid "&iquest;Olvidaste tu contraseña?"
 msgstr "Forgot your password?"
 
@@ -245,17 +293,56 @@ msgstr "Forgot your password?"
 msgid "Registro"
 msgstr "Registration"
 
-#: templates/account/newUser.html:6
-msgid "Registro de Usuario"
-msgstr "User registration"
+#: templates/account/newUser.html:10
+msgid "¡Únete a Actarium!"
+msgstr "Join Actarium!"
 
-#: templates/account/newUser.html:7
+#: templates/account/newUser.html:11
 msgid ""
 "Necesitamos identificarte para restringir tu contenido solo a las personas "
 "que tu desees."
 msgstr ""
 "We need to identify to you and restrict your content to only the people you "
 "want."
+
+#: templates/account/newUser.html:14
+msgid "Nombre de usuario"
+msgstr "User name"
+
+#: templates/account/newUser.html:19
+msgid "Correo electrónico"
+msgstr "Email"
+
+#: templates/account/newUser.html:29
+msgid "Repite Contraseña"
+msgstr "Repeat the password:"
+
+#: templates/account/newUser.html:33
+#, python-format
+msgid ""
+"Al registrarte en Actarium aceptas los <a href=\"/%(URL_TERMS)s\" "
+"target=\"_blank\">Términos de uso</a> y las <a href=\"/%(URL_PRIVACY)s\" "
+"target=\"_blank\">Políticas de privacidad</a>"
+msgstr ""
+"When you register in Actarium you accept the <a href=\"/%(URL_TERMS)s\" "
+"target=\"_blank\">Terms of Use</a> and <a href=\"/%(URL_PRIVACY)s\" "
+"target=\"_blank\">Privacy Policy</a>"
+
+#: templates/account/newUser.html:34
+msgid "Crear cuenta"
+msgstr "Create account"
+
+#: templates/account/newUser.html:37
+msgid "o"
+msgstr "or"
+
+#: templates/account/newUser.html:40
+msgid "o registrate con Google"
+msgstr "or sign up with Google"
+
+#: templates/account/newUser.html:43
+msgid "&iquest;Eres miembro? Inicia sesión"
+msgstr "Are you member? login "
 
 #: templates/account/noactivo.html:3
 msgid "Usuario no activo"
@@ -291,8 +378,7 @@ msgid "Error al actualizar correo"
 msgstr "Failed to update email"
 
 #: templates/account/password.html:74 templates/account/personal_data.html:95
-#, fuzzy
-msgid "Tu correo electronico no pudo ser actualizado"
+msgid "Tu correo electrónico no pudo ser actualizado"
 msgstr "Your email has not been updated"
 
 #: templates/account/password.html:77
@@ -309,14 +395,14 @@ msgstr "Your details have been updated correctly"
 
 #: templates/account/password.html:80
 #: templates/account/password_reset_form.html:90
-#, fuzzy
-msgid "Constraseña Actualizada"
+#: templates/account/personal_data.html:99
+msgid "Contraseña Actualizada"
 msgstr "Password Update"
 
 #: templates/account/password.html:80
 #: templates/account/password_reset_form.html:90
-#, fuzzy
-msgid "Tu constraseña fue actualizada correctamente"
+#: templates/account/personal_data.html:99
+msgid "Tu contraseña fue actualizada correctamente"
 msgstr "Your password has been successfully updated"
 
 #: templates/account/password_reset_complete.html:3
@@ -391,8 +477,7 @@ msgstr ""
 "account of www.actarium.com."
 
 #: templates/account/password_reset_email.html:6
-#, fuzzy
-msgid "Porfavor ingresa al siguiente link para cambiar tu contraseña:"
+msgid "Por favor ingresa al siguiente link para cambiar tu contraseña:"
 msgstr "Please enter to the following link to change your password:"
 
 #: templates/account/password_reset_email.html:11
@@ -417,10 +502,9 @@ msgid "Recuperar Contraseña"
 msgstr "Recover password"
 
 #: templates/account/password_reset_form.html:7
-#, fuzzy
 msgid ""
-"Olvidaste tu contraseña? Escribe tu email y te enviarmemos instrucciones "
-"para restablecerla."
+"Olvidaste tu contraseña? Escribe tu email y te enviaremos instrucciones para"
+" restablecerla."
 msgstr ""
 "Forgot your password? Enter your email and we'll send instructions to reset "
 "it."
@@ -478,8 +562,7 @@ msgid "Qué son las cuentas asociadas?"
 msgstr "What are associated accounts?"
 
 #: templates/account/personal_data.html:31
-#, fuzzy
-msgid "Cuantas asociadas"
+msgid "Cuentas asociadas"
 msgstr "Associated accounts"
 
 #: templates/account/personal_data.html:38
@@ -505,14 +588,6 @@ msgstr "You are member since"
 #: templates/account/personal_data.html:63
 msgid "Ultimo logueo"
 msgstr "Last logging:"
-
-#: templates/account/personal_data.html:99
-msgid "Contraseña Actualizada"
-msgstr "Password Update"
-
-#: templates/account/personal_data.html:99
-msgid "Tu contraseña fue actualizada correctamente"
-msgstr "Your password has been successfully updated"
 
 #: templates/account/personal_data.html:103
 msgid "Cuenta en uso"
@@ -559,10 +634,21 @@ msgid "Imposible Desconectar"
 msgstr "Unable to disconnect it"
 
 #: templates/account/personal_data.html:115
-#, fuzzy
 msgid ""
 "No puedes desconectar esta cuenta ya que es la única forma acceder a tu "
-"cuenta. Por favor configure una contraseña e intente de nuevo."
+"cuenta de Actarium. Por favor configure una contraseña e intente de nuevo."
 msgstr ""
 "You can not disconnect this account because it is the only way to access "
 "your account. Please set a password and try again."
+
+#~ msgid "Registrarse"
+#~ msgstr "Sign in"
+
+#~ msgid "Registro de Usuario"
+#~ msgstr "User registration"
+
+#~ msgid "Constraseña Actualizada"
+#~ msgstr "Password Update"
+
+#~ msgid "Tu constraseña fue actualizada correctamente"
+#~ msgstr "Your password has been successfully updated"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 15:46-0500\n"
-"PO-Revision-Date: 2014-07-31 18:26-0500\n"
+"POT-Creation-Date: 2014-08-11 18:02-0400\n"
+"PO-Revision-Date: 2014-08-11 17:05-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -107,39 +107,32 @@ msgid "El usuario no pertenece a la comisión aprobatoria"
 msgstr "The user does not belong to the approving committee."
 
 #: minutes.py:271
-#, fuzzy
 msgid ""
-"Error, este usuario no exite, por favor, recarge la página e intente de "
+"Error, este usuario no existe, por favor, recargue la página e intente de "
 "nuevo."
-msgstr ""
+msgstr "Error, this user does not exist, Please refresh and try again"
 
 #: minutes.py:293
-#, fuzzy
 msgid ""
-"Hay un error con la comisión aprobatoria, por favor, recarge la página e "
+"Hay un error con la comisión aprobatoria, por favor, recargue la página e "
 "intente de nuevo."
-msgstr ""
+msgstr "There was an error, please reload the page and try again."
 
 #: minutes.py:295
-#, fuzzy
 msgid ""
-"Error, esta acta no exite, por favor, recarge la página e intente de nuevo."
-msgstr ""
+"Error, esta acta no existe, por favor, recargue la página e intente de "
+"nuevo."
+msgstr "Error, this act does not exist, please reload the page and try again."
 
-#: minutes.py:570 templates/groups/templates/rolesForMinutes.html:74
-#: templates/groups/templates/rolesForMinutes.html:126
-#: templates/groups/templates/rolesForMinutes.html:140
+#: minutes.py:570
 msgid "Firmador"
 msgstr "Signer"
 
-#: minutes.py:570 templates/groups/templates/rolesForMinutes.html:68
-#: templates/groups/templates/rolesForMinutes.html:125
-#: templates/groups/templates/rolesForMinutes.html:137
+#: minutes.py:570
 msgid "Aprobador"
 msgstr "Approver"
 
-#: minutes.py:570 templates/groups/templates/rolesForMinutes.html:124
-#: templates/groups/templates/rolesForMinutes.html:134
+#: minutes.py:570
 msgid "Asistente"
 msgstr "Assistant"
 
@@ -182,7 +175,7 @@ msgid "Miembro"
 msgstr "Member"
 
 #: views.py:75 templates/groups/templates/folder.html:29
-#: templates/groups/templates/team.html:108
+#: templates/groups/templates/team.html:83
 msgid "Redactor"
 msgstr "Redactor"
 
@@ -190,8 +183,8 @@ msgstr "Redactor"
 msgid "Convocador"
 msgstr "Convenor"
 
-#: views.py:75 templates/groups/templates/team.html:98
-#: templates/groups/templates/team.html:110
+#: views.py:75 templates/groups/templates/team.html:73
+#: templates/groups/templates/team.html:85
 msgid "Administrador"
 msgstr "Manager"
 
@@ -275,7 +268,7 @@ msgstr "The user is already active"
 msgid "El usuario no pertenece a este grupo"
 msgstr "The user does not belong to this group"
 
-#: views.py:554 views.py:716
+#: views.py:554 views.py:606 views.py:716
 msgid "No tienes permisos para hacer eso."
 msgstr "You are not allowed to do that."
 
@@ -285,20 +278,27 @@ msgid ""
 msgstr "Could not edit the data. Please reload the page and try again"
 
 #: views.py:604
-#, fuzzy
-msgid "No pudes cambiar los nombres de este usuario"
-msgstr ""
+msgid "No puedes cambiar los nombres de este usuario"
+msgstr "You can not change the names of this user"
+
+#: views.py:707
+#, python-format
+msgid "El usuario (%s) ya no podrá acceder a este grupo"
+msgstr "The user (%s) does not belong to this group"
 
 #: views.py:710
-#, fuzzy
-msgid "Error de relación"
-msgstr ""
+msgid "No hay relación para este usuario"
+msgstr "There is no relationship to this user"
 
 #: views.py:712
 msgid "No puedes eliminarte tu mismo."
 msgstr "You can't eliminate you yourself."
 
-#: views.py:718 views.py:720
+#: views.py:718
+msgid "Error de invitación"
+msgstr "Error invitation"
+
+#: views.py:720
 msgid "Error invitación"
 msgstr "Error invitation"
 
@@ -307,7 +307,7 @@ msgid "Nueva reunión"
 msgstr "New meeting"
 
 #: views_groups.py:53 templates/groups/menu.html:20
-#: templates/groups/templates/team.html:46
+#: templates/groups/templates/team.html:37
 msgid "Equipo de trabajo"
 msgstr "Work team"
 
@@ -396,6 +396,19 @@ msgstr "View all"
 msgid "Detalles de la Reuni&oacute;n"
 msgstr "Meeting details"
 
+#: templates/groups/read_meetings.html:214
+#: templates/groups/templates/folder.html:98
+msgid "La cuenta a expirado"
+msgstr "The expired account"
+
+#: templates/groups/read_meetings.html:214
+msgid ""
+"No puedes convocar reuniones cuando esta vencida la cuenta, debes actualizar"
+" el servicio desde el menú de organización para poder realizar esta acción"
+msgstr ""
+"You can not call meetings when the account is expired, you must update the "
+"service of the organization from the menu to perform this action"
+
 #: templates/groups/minutesTemplates/minutesTemplate0.html:71
 #: templates/groups/minutesTemplates/minutesTemplate3.html:71
 msgid "ACTA"
@@ -439,6 +452,65 @@ msgstr "AGENDA"
 #: templates/groups/minutesTemplates/minutesTemplate3.html:139
 msgid "DESARROLLO ORDEN DEL DÍA"
 msgstr "DEVELOPMENT OF AGENDA."
+
+#: templates/groups/minutesTemplates/test.html:68
+#: templates/groups/minutesTemplates/test.html:69
+msgid "Código"
+msgstr "Code"
+
+#: templates/groups/minutesTemplates/test.html:72
+#: templates/groups/minutesTemplates/test.html:73
+#: templates/groups/templates/team.html:218
+msgid "Correo"
+msgstr "Email"
+
+#: templates/groups/minutesTemplates/test.html:76
+msgid "Texto general"
+msgstr ""
+
+#: templates/groups/minutesTemplates/test.html:77
+msgid "Texto plano"
+msgstr ""
+
+#: templates/groups/minutesTemplates/test.html:80
+#: templates/groups/templates/team.html:220
+msgid "Guardar"
+msgstr "Save"
+
+#: templates/groups/templates/add_member_dropdown.html:2
+msgid "Agregar miembro de la organización"
+msgstr "Add member of the organization"
+
+#: templates/groups/templates/add_member_dropdown.html:5
+msgid "Agregar miembros"
+msgstr "Add member"
+
+#: templates/groups/templates/add_member_dropdown.html:15
+msgid "Nombre de usuario o correo"
+msgstr "User name or email"
+
+#: templates/groups/templates/add_member_dropdown.html:28
+#: templates/groups/templates/team.html:219
+msgid "Regresar"
+msgstr "Back"
+
+#: templates/groups/templates/add_member_dropdown.html:38
+msgid "Nombres y Apellidos"
+msgstr "Names and surnames"
+
+#: templates/groups/templates/add_member_dropdown.html:39
+#: templates/groups/templates/team.html:216
+msgid "Nombres"
+msgstr "Names"
+
+#: templates/groups/templates/add_member_dropdown.html:40
+#: templates/groups/templates/team.html:217
+msgid "Apellidos"
+msgstr "Surnames"
+
+#: templates/groups/templates/add_member_dropdown.html:46
+msgid "Enviar invitación"
+msgstr "send invite"
 
 #: templates/groups/templates/calendar.html:17
 msgid "Agenda de Reuniones"
@@ -508,8 +580,7 @@ msgid "Tareas vencidas de esta acta:"
 msgstr "Overdue tasks of this Minutes:"
 
 #: templates/groups/templates/folder.html:76
-#: templates/groups/templates/rolesForMinutes.html:123
-#: templates/groups/templates/team.html:106
+#: templates/groups/templates/team.html:81
 msgid "Info"
 msgstr "Info"
 
@@ -562,14 +633,51 @@ msgstr "but first, be sure to"
 msgid "invitar a tu equipo de trabajo"
 msgstr "Invite your team"
 
-#: templates/groups/templates/folder.html:107
-#, fuzzy
+#: templates/groups/templates/folder.html:98
 msgid ""
-"Permisos de redacci&oacute;n\",\"No tienes permisos de redacci&oacute;n "
-"sobre este grupo, por esta raz&oacute;n no puedes crear actas, solicita al "
-"administrador del grupo que te otorgue los permisos necesarios para poder "
-"realizar esta labor"
+"La organización a la que pertenece este grupo ha expirado, no puedes crear "
+"actas, convocar reuniones ni asignar tareas, para realizar estas funciones "
+"debes actualizar el servicio desde el menú de la organización"
 msgstr ""
+"The organization to which this group belongs to expired, you can not create "
+"minutes, hold meetings or assign tasks, to perform these functions must "
+"update the service from the menu of the organization"
+
+#: templates/groups/templates/folder.html:98
+msgid ""
+"La organización a la que pertenece este grupo ha expirado, no puedes crear "
+"actas, convocar reuniones ni asignar tareas, comunicate con el administrador"
+" de la organización para actualizar el servicio"
+msgstr ""
+"The organization to which this group belongs has expired, you can not create"
+" minutes, hold meetings or assign tasks, contact the organization "
+"administrator to update the service"
+
+#: templates/groups/templates/folder.html:105
+msgid "La organización ha expirado"
+msgstr "The expired account"
+
+#: templates/groups/templates/folder.html:105
+msgid ""
+"No puedes crear Actas cuando la organización ha expirado, debes actualizar "
+"el servicio desde el menú de organización para poder realizar esta acción"
+msgstr ""
+"You can not create minutes when the organization has expired, you must "
+"update the service of the organization from the menu to perform this action"
+
+#: templates/groups/templates/folder.html:110
+msgid "Permisos de redacción"
+msgstr "Permits writing"
+
+#: templates/groups/templates/folder.html:110
+msgid ""
+"No tienes permisos de redacción sobre este grupo, por esta razón no puedes "
+"crear actas, solicita al administrador del grupo que te otorgue los permisos"
+" necesarios para poder realizar esta labor"
+msgstr ""
+"You are not authorized to writing about this group, for this reason you can "
+"not create minutes requests the group administrator grant you the necessary "
+"permissions to perform this work"
 
 #: templates/groups/templates/home.html:18
 #: templates/groups/templates/team.html:9
@@ -586,323 +694,176 @@ msgid "Crear grupo"
 msgstr "create group"
 
 #: templates/groups/templates/new_group.html:14
-#, fuzzy
 msgid ""
-"Organiza a tu equipo de trajabo en grupos como \"Comite financiero\", "
-"\"Consejo Administración\", etc."
+"Organiza a tu equipo de trabajo en grupos como \"Comité financiero\", "
+"\"Consejo Administrativo\", etc."
 msgstr ""
+"Organize your team in groups as \"Financial Committee\", \"Administrative "
+"Council\", etc."
 
 #: templates/groups/templates/new_group.html:25
 msgid "Organización"
 msgstr "Organization"
 
-#: templates/groups/templates/new_group.html:56
-msgid "Aparecer en las actas"
-msgstr "Appear in the Minutes"
+#: templates/groups/templates/new_group.html:28
+msgid "Crear organización"
+msgstr "Create organization"
 
-#: templates/groups/templates/new_group.html:65
-#: templates/groups/templates/team.html:273
-msgid "Guardar"
-msgstr "Save"
+#: templates/groups/templates/new_group.html:37
+msgid "Administrador principal de grupo:"
+msgstr "Manager of this group"
 
-#: templates/groups/templates/rolesForMinutes.html:9
-msgid "Volver"
-msgstr "Back"
+#: templates/groups/templates/new_group.html:38
+msgid "Cambiar administrador"
+msgstr "Change manager"
 
-#: templates/groups/templates/rolesForMinutes.html:14
-msgid "Siguiente"
-msgstr "Next"
-
-#: templates/groups/templates/rolesForMinutes.html:25
-msgid "Crear nueva Acta"
-msgstr "Create new minutes"
-
-#: templates/groups/templates/rolesForMinutes.html:26
-msgid "Roles de usuario:"
-msgstr "User Roles:"
-
-#: templates/groups/templates/rolesForMinutes.html:26
-#, fuzzy
-msgid ""
-"Debes registrar la asistencia de los miembros y definir sus roles antes de "
-"crear un acta</p>"
-msgstr ""
-
-#: templates/groups/templates/rolesForMinutes.html:32
-#, fuzzy
-msgid "Presidente:"
-msgstr ""
-
-#: templates/groups/templates/rolesForMinutes.html:34
-#, fuzzy
-msgid "Seleccione presidente"
-msgstr ""
-
-#: templates/groups/templates/rolesForMinutes.html:42
-#, fuzzy
-msgid "Secretario:"
-msgstr ""
-
-#: templates/groups/templates/rolesForMinutes.html:44
-#, fuzzy
-msgid "Seleccione secretario"
-msgstr ""
-
-#: templates/groups/templates/rolesForMinutes.html:55
-#: templates/groups/templates/team.html:81
-msgid "Lista de todos los miembros del grupo"
-msgstr "List of all group members"
-
-#: templates/groups/templates/rolesForMinutes.html:56
-msgid "Usuarios del grupo"
-msgstr "Group users"
-
-#: templates/groups/templates/rolesForMinutes.html:60
-msgid "Personas que asistieron a la reuni&oacute;n"
-msgstr "People who attended the meeting"
-
-#: templates/groups/templates/rolesForMinutes.html:62
-msgid "Asistentes"
-msgstr "Attendees"
-
-#: templates/groups/templates/rolesForMinutes.html:66
-msgid "Personas encargadas de aprobar actas"
-msgstr "Persons in charge of approving Minutes"
-
-#: templates/groups/templates/rolesForMinutes.html:72
-msgid "Personas encargadas de firmar las actas"
-msgstr "Persons responsible for signing the minutes"
-
-#: templates/groups/templates/rolesForMinutes.html:86
-#: templates/groups/templates/team.html:274
+#: templates/groups/templates/new_group.html:42
+#: templates/groups/templates/team.html:221
 msgid "yo"
 msgstr "Me"
 
-#: templates/groups/templates/rolesForMinutes.html:115
-msgid "Mostrar el DNI de los encargados de firmar"
-msgstr "Show your ID card to sign makers"
+#: templates/groups/templates/new_group.html:47
+msgid "email o nombre de usuario"
+msgstr "Email or user name"
 
-#: templates/groups/templates/rolesForMinutes.html:127
-#: templates/groups/templates/rolesForMinutes.html:143
-#: templates/groups/templates/team.html:111
-msgid "Usuarios pendientes"
-msgstr "Pending users"
+#: templates/groups/templates/new_group.html:54
+msgid "Aparecer en las actas"
+msgstr "Appear in the Minutes"
 
-#: templates/groups/templates/rolesForMinutes.html:130
-msgid "M&aacute;s informaci&oacute;n..."
-msgstr "More information..."
+#: templates/groups/templates/new_group.html:56
+msgid "Ser miembro del grupo"
+msgstr "Group membership"
 
-#: templates/groups/templates/rolesForMinutes.html:134
-msgid ""
-"Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de "
-"asistentes del Acta."
-msgstr ""
-"People who attended the meeting. Appears in the list of attendees the "
-"minutes"
-
-#: templates/groups/templates/rolesForMinutes.html:137
-msgid ""
-"Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; "
-"publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su "
-"totalidad."
-msgstr ""
-"Person responsible for the adoption the Minutes. The Minutes will not be "
-"published until the approving committee has accepted in full."
-
-#: templates/groups/templates/rolesForMinutes.html:140
-msgid ""
-"Persona encargada de firmar el Acta. Al final del Acta, solo aparece el "
-"listado de firmadores, no de aprobadores."
-msgstr ""
-"Person responsible for signing the Minutes. at the end of the Minutes, only "
-"appears the list of signers not of approvers."
-
-#: templates/groups/templates/rolesForMinutes.html:143
-msgid "Usuarios que no han aceptado la solicitud de ingreso al grupo."
-msgstr "Users who haven't accepted the application of the group."
+#: templates/groups/templates/new_group.html:63
+msgid "Crear"
+msgstr "Create "
 
 #: templates/groups/templates/team.html:15
 msgid "Miembros"
 msgstr "Members"
 
-#: templates/groups/templates/team.html:47
+#: templates/groups/templates/team.html:38
 msgid "Éste es tu equipo de trabajo con sus roles en el grupo."
 msgstr "This is your team, with their roles in the group."
 
-#: templates/groups/templates/team.html:51
-msgid "Agregar miembro de la organización"
-msgstr "Add member of the organization"
+#: templates/groups/templates/team.html:56
+msgid "Lista de todos los miembros del grupo"
+msgstr "List of all group members"
 
-#: templates/groups/templates/team.html:54
-#, python-format
-msgid "Miembros de %(org)s "
-msgstr "Members of %(org)s"
-
-#: templates/groups/templates/team.html:63
-#: templates/groups/templates/team.html:272
-msgid "Regresar"
-msgstr "Back"
-
-#: templates/groups/templates/team.html:81
+#: templates/groups/templates/team.html:56
 msgid "Miembros del grupo"
 msgstr "Members of the group"
 
-#: templates/groups/templates/team.html:84
+#: templates/groups/templates/team.html:59
 msgid "Personas que aparecen en la lista de las actas"
 msgstr "Persons appearing in the list of Minutes"
 
-#: templates/groups/templates/team.html:86
-#: templates/groups/templates/team.html:107
+#: templates/groups/templates/team.html:61
+#: templates/groups/templates/team.html:82
 msgid "Aparece en actas"
 msgstr "Appears in Minutes"
 
-#: templates/groups/templates/team.html:90
+#: templates/groups/templates/team.html:65
 msgid "Tiene permisos de crear actas"
 msgstr "Has permissions to create Minutes"
 
-#: templates/groups/templates/team.html:92
+#: templates/groups/templates/team.html:67
 msgid "Puede redactar"
 msgstr "You can write"
 
-#: templates/groups/templates/team.html:96
+#: templates/groups/templates/team.html:71
 msgid "Puede administrar el grupo"
 msgstr "You can manage the group"
 
-#: templates/groups/templates/team.html:107
+#: templates/groups/templates/team.html:82
 msgid "Miembros que aparecen en las actas"
 msgstr "Members appearing in Minutes"
 
-#: templates/groups/templates/team.html:109
+#: templates/groups/templates/team.html:84
 msgid "Convocador de reuniones"
 msgstr "Convener of meetings"
 
-#: templates/groups/templates/team.html:110
-#, fuzzy
+#: templates/groups/templates/team.html:85
 msgid ""
-"El usuario pude agregar miembros, crear actas y administrar la información "
+"El usuario puede agregar miembros, crear actas y administrar la información "
 "del grupo"
-msgstr ""
+msgstr "The user can add members, create minutes and manage the group."
 
-#: templates/groups/templates/team.html:126
-msgid "Nombres y Apellidos"
-msgstr "Names and surnames"
+#: templates/groups/templates/team.html:86
+msgid "Usuarios pendientes"
+msgstr "Pending users"
 
-#: templates/groups/templates/team.html:136
-msgid "Enviar invitaci&oacute;n"
-msgstr "Send invitation"
-
-#: templates/groups/templates/team.html:230
-msgid ""
-"Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro "
-"del grupo."
-msgstr "Type the username or email of the new member of the group."
-
-#: templates/groups/templates/team.html:263
+#: templates/groups/templates/team.html:210
 msgid "aún no ha aceptado la invitación"
 msgstr "has not yet accepted the invitation"
 
-#: templates/groups/templates/team.html:264
+#: templates/groups/templates/team.html:211
 msgid "Configuración de"
 msgstr "Settings of"
 
-#: templates/groups/templates/team.html:265
+#: templates/groups/templates/team.html:212
 msgid "Configuración"
 msgstr "Settings"
 
-#: templates/groups/templates/team.html:266
+#: templates/groups/templates/team.html:213
 msgid "Reenviar invitación"
 msgstr "Forward invitation"
 
-#: templates/groups/templates/team.html:267
+#: templates/groups/templates/team.html:214
 msgid "Cambiar datos"
 msgstr "changing Data"
 
-#: templates/groups/templates/team.html:268
+#: templates/groups/templates/team.html:215
 msgid "Eliminar de grupo"
 msgstr "Remove from group"
 
-#: templates/groups/templates/team.html:269
-msgid "Nombres"
-msgstr "Names"
-
-#: templates/groups/templates/team.html:270
-msgid "Apellidos"
-msgstr "Surnames"
-
-#: templates/groups/templates/team.html:271
-msgid "Correo"
-msgstr "Email"
-
-#: templates/groups/templates/team.html:301
+#: templates/groups/templates/team.html:236
 msgid "Miembro. Los miembros aparecen en las actas"
 msgstr "Member. Members than appear in the minutes"
 
-#: templates/groups/templates/team.html:302
+#: templates/groups/templates/team.html:237
 msgid "Redactor de Actas"
 msgstr "Writer of minutes"
 
-#: templates/groups/templates/team.html:303
+#: templates/groups/templates/team.html:238
 msgid "Creador de reuniones para &eacute;ste grupo."
 msgstr "Creator of meetings for this group."
 
-#: templates/groups/templates/team.html:304
+#: templates/groups/templates/team.html:239
 msgid "Administrador de &eacute;ste grupo"
 msgstr "Manager of this group"
 
-#: templates/groups/templates/team.html:309
+#: templates/groups/templates/team.html:244
 msgid "Permiso agregado"
 msgstr "Added permit"
 
-#: templates/groups/templates/team.html:312
-#: templates/groups/templates/team.html:320
+#: templates/groups/templates/team.html:247
+#: templates/groups/templates/team.html:255
 msgid "Ocurri&oacute; un error"
 msgstr "It happened an Error"
 
-#: templates/groups/templates/team.html:317
+#: templates/groups/templates/team.html:252
 msgid "Rol removido"
 msgstr "Role removed"
 
-#: templates/groups/templates/team.html:335
+#: templates/groups/templates/team.html:270
 msgid "Seguro que desea eliminarle este rol?"
 msgstr "Are sure you want to delete this role?"
 
-#: templates/groups/templates/team.html:400
-msgid "Invitado"
-msgstr "Guest"
-
-#: templates/groups/templates/team.html:407
-msgid "Informaci&oacute;n"
-msgstr "Information"
-
-#: templates/groups/templates/team.html:412
-#: templates/groups/templates/team.html:415
-msgid "Ups! Algo sali&oacute; mal :("
-msgstr "Ups! something went bad :("
-
-#: templates/groups/templates/team.html:415
-msgid "Por favor recarga la p&aacute;gina e intenta de nuevo"
-msgstr "Please reload the page and try again"
-
-#: templates/groups/templates/team.html:457
-#: templates/groups/templates/team.html:535
-#: templates/groups/templates/team.html:560
-msgid "Error"
-msgstr "Error"
-
-#: templates/groups/templates/team.html:465
-msgid "Asegurate de escribir correctamente el correo electr&oacute;nico."
-msgstr "Be sure to spell your email."
-
-#: templates/groups/templates/team.html:532
+#: templates/groups/templates/team.html:310
 msgid "Invitación reenviada"
 msgstr "Invitation forwarded"
 
-#: templates/groups/templates/team.html:532
-#, fuzzy
-msgid "Se ha enviado nuevamente una invitacón por correo electrónico a "
-msgstr ""
+#: templates/groups/templates/team.html:310
+msgid "Se ha enviado nuevamente una invitación por correo electrónico a"
+msgstr "An invitation was sent back by email to:"
 
-#: templates/groups/templates/team.html:535
+#: templates/groups/templates/team.html:313
+#: templates/groups/templates/team.html:338
+msgid "Error"
+msgstr "Error"
+
+#: templates/groups/templates/team.html:313
 msgid ""
 "Algo salió mal. No se envió el correo recordatorio. Por favor recargue la "
 "página e intente de nuevo."
@@ -910,30 +871,112 @@ msgstr ""
 "Something went wrong. Not sent reminder email. Please reload the page and "
 "try again."
 
-#: templates/groups/templates/team.html:542
+#: templates/groups/templates/team.html:320
 msgid "Realmente desea eliminar la invitación a este Usuario?"
 msgstr "Really delete the invitation to this user?"
 
-#: templates/groups/templates/team.html:551
+#: templates/groups/templates/team.html:329
 msgid "Usuario eliminado del grupo"
 msgstr "This user has been removed from the group"
 
-#: templates/groups/templates/team.html:556
-#, fuzzy
-msgid ""
-"No se pudo elimnar el Usuario. Recarga la p&aacute;gina e intenta de nuevo"
-msgstr ""
+#: templates/groups/templates/team.html:334
+msgid "No se pudo eliminar el Usuario. Recarga la página e intenta de nuevo"
+msgstr "Could not delete the user. Please reload the page and try again"
 
-#: templates/groups/templates/team.html:590
+#: templates/groups/templates/team.html:368
 msgid "Datos Cambiados"
 msgstr "Changed data"
 
-#: templates/groups/templates/team.html:590
+#: templates/groups/templates/team.html:368
 msgid "Los datos se han actualizado con éxito."
 msgstr "The data were updated successfully."
 
-#: templates/groups/templates/team.html:592
+#: templates/groups/templates/team.html:370
 msgid ""
 "No se pudo guardar los nuevos Datos. Por favor recarga la página e intenta "
 "de nuevo."
 msgstr "Failed to save new data. Please reload the page and try again."
+
+#~ msgid "Volver"
+#~ msgstr "Back"
+
+#~ msgid "Siguiente"
+#~ msgstr "Next"
+
+#~ msgid "Crear nueva Acta"
+#~ msgstr "Create new minutes"
+
+#~ msgid "Roles de usuario:"
+#~ msgstr "User Roles:"
+
+#~ msgid "Usuarios del grupo"
+#~ msgstr "Group users"
+
+#~ msgid "Personas que asistieron a la reuni&oacute;n"
+#~ msgstr "People who attended the meeting"
+
+#~ msgid "Asistentes"
+#~ msgstr "Attendees"
+
+#~ msgid "Personas encargadas de aprobar actas"
+#~ msgstr "Persons in charge of approving Minutes"
+
+#~ msgid "Personas encargadas de firmar las actas"
+#~ msgstr "Persons responsible for signing the minutes"
+
+#~ msgid "Mostrar el DNI de los encargados de firmar"
+#~ msgstr "Show your ID card to sign makers"
+
+#~ msgid "M&aacute;s informaci&oacute;n..."
+#~ msgstr "More information..."
+
+#~ msgid ""
+#~ "Persona que asisti&oacute; a la reuni&oacute;n. Aparece en el listado de "
+#~ "asistentes del Acta."
+#~ msgstr ""
+#~ "People who attended the meeting. Appears in the list of attendees the "
+#~ "minutes"
+
+#~ msgid ""
+#~ "Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; "
+#~ "publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su "
+#~ "totalidad."
+#~ msgstr ""
+#~ "Person responsible for the adoption the Minutes. The Minutes will not be "
+#~ "published until the approving committee has accepted in full."
+
+#~ msgid ""
+#~ "Persona encargada de firmar el Acta. Al final del Acta, solo aparece el "
+#~ "listado de firmadores, no de aprobadores."
+#~ msgstr ""
+#~ "Person responsible for signing the Minutes. at the end of the Minutes, only "
+#~ "appears the list of signers not of approvers."
+
+#~ msgid "Usuarios que no han aceptado la solicitud de ingreso al grupo."
+#~ msgstr "Users who haven't accepted the application of the group."
+
+#~ msgid "Miembros de %(org)s "
+#~ msgstr "Members of %(org)s"
+
+#~ msgid "Enviar invitaci&oacute;n"
+#~ msgstr "Send invitation"
+
+#~ msgid ""
+#~ "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro "
+#~ "del grupo."
+#~ msgstr "Type the username or email of the new member of the group."
+
+#~ msgid "Invitado"
+#~ msgstr "Guest"
+
+#~ msgid "Informaci&oacute;n"
+#~ msgstr "Information"
+
+#~ msgid "Ups! Algo sali&oacute; mal :("
+#~ msgstr "Ups! something went bad :("
+
+#~ msgid "Por favor recarga la p&aacute;gina e intenta de nuevo"
+#~ msgstr "Please reload the page and try again"
+
+#~ msgid "Asegurate de escribir correctamente el correo electr&oacute;nico."
+#~ msgstr "Be sure to spell your email."
