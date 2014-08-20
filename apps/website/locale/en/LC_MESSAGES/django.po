@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-11 17:46-0400\n"
+"POT-Creation-Date: 2014-08-20 14:24-0500\n"
 "PO-Revision-Date: 2014-08-09 11:48-0500\n"
 "Last-Translator: Jose Mauricio Aizaga Galeano <maizaga@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,35 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: views.py:81
+#: views.py:82
 msgid "General"
 msgstr "General"
 
-#: views.py:83
+#: views.py:84
 msgid "Sugerencia"
 msgstr "Suggestion"
 
-#: views.py:85
+#: views.py:86
 msgid "Error"
 msgstr "Error"
 
-#: views.py:87
+#: views.py:88
 msgid "Pregunta"
 msgstr "Question"
 
-#: views.py:89
+#: views.py:90
 msgid "No definido"
 msgstr "Not defined"
 
-#: views.py:98
+#: views.py:99
 msgid "Correo invalido"
 msgstr "Email sent"
 
-#: views.py:162
+#: views.py:163
 msgid "Políticas de privacidad"
 msgstr "Privacy Policy"
 
-#: views.py:173
+#: views.py:174
 msgid "Términos y condiciones"
 msgstr "Terms and conditions"
 
@@ -54,13 +54,13 @@ msgstr "Terms and conditions"
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/website/footer.html:6 templates/website/public_footer.html:7
+#: templates/website/footer.html:6 templates/website/public_footer.html:6
 msgid "Acerca de"
 msgstr "About"
 
-#: templates/website/footer.html:7 templates/website/public_footer.html:6
-msgid "Servicios"
-msgstr "Services"
+#: templates/website/footer.html:7 templates/website/public_footer.html:7
+msgid "Cómo funciona"
+msgstr ""
 
 #: templates/website/footer.html:8 templates/website/public_footer.html:8
 msgid "FAQ's"
@@ -436,6 +436,9 @@ msgstr "They trust us"
 #: templates/website/landing/index.html:175
 msgid "Únete ahora Gratis!"
 msgstr "Join Now Free!"
+
+#~ msgid "Servicios"
+#~ msgstr "Services"
 
 #~ msgid "Comienza ahora con Actarium"
 #~ msgstr "Start now with Actarium"
