@@ -149,7 +149,7 @@ def pricing(request):
 def help(request):
     saveViewsLog(request, "website.views.help")
     try:
-        faqs = faq.objects.filter(is_active=True)
+        faqs = faq.objects.filter(is_active=True).order_by("date_added")
     except faq.DoesNotExist:
         faqs = None
     return render(request, 'website/help.html', {"faqs": faqs})
