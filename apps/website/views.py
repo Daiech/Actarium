@@ -233,7 +233,7 @@ def send_template(request):
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
-            saved = _(u"Su información ha sido guardada, te responderemos lo más pronto posible a %s" % request.user.email)
+            saved = _(u"Su información ha sido guardada, le responderemos lo más pronto posible a %s" % request.user.email)
             form = OrderedTemplatesForm()
     else:
         form = OrderedTemplatesForm()

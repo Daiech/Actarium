@@ -31,7 +31,7 @@
                 {% for f in faqs%}
                 <li>
                     <strong>{{f.question}}</strong>
-                    <p>{{f.answer}}</p>
+                    <p>{{f.answer|safe}}</p>
                 </li>
                 {%endfor%}
             </ul>
