@@ -2,96 +2,100 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-20 14:25-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-08-20 17:06-0500\n"
+"Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: templates/emailmodule/email_actarium_invitation.html:6
 #: templates/emailmodule/email_org_invitation.html:6
 msgid "Bienvenido a <strong>Actarium</strong>!"
-msgstr ""
+msgstr "Welcome to <strong>Actarium</strong>!"
 
 #: templates/emailmodule/email_actarium_invitation.html:12
 #, python-format
 msgid ""
 "%(username)s te ha invitado a una organización en <strong>Actarium</strong>"
 msgstr ""
+"%(username)s has invited you to an organization in <strong>Actarium</strong>"
 
 #: templates/emailmodule/email_actarium_invitation.html:19
 #, python-format
 msgid ""
 "\n"
-"\t\t\t\t<strong>Actarium</strong> es una plataforma diseñada para facilitar "
-"las labores relacionadas con la gestión de reuniones y creación de actas. "
-"<br ><br >\n"
-"\t\t\t\tComo eres un usuario invitado por alguien que ya está registrado en "
-"<strong>Actarium</strong> lo único que debes hacer es ingresar al siguiente "
-"link de activación, confirmar tus datos y activar tu cuenta.<br ><br >\n"
-"\t\t\t\tUna vez actives tu cuenta, los datos para iniciar sesión son:<br "
-"><br >\n"
+"\t\t\t\t<strong>Actarium</strong> es una plataforma diseñada para facilitar las labores relacionadas con la gestión de reuniones y creación de actas. <br ><br >\n"
+"\t\t\t\tComo eres un usuario invitado por alguien que ya está registrado en <strong>Actarium</strong> lo único que debes hacer es ingresar al siguiente link de activación, confirmar tus datos y activar tu cuenta.<br ><br >\n"
+"\t\t\t\tUna vez actives tu cuenta, los datos para iniciar sesión son:<br ><br >\n"
 "\t\t\t\tNombre de usuario: <strong>%(newuser_username)s</strong> <br >\n"
 "\t\t\t\tContraseña: <strong>%(pass)s</strong> <br ><br >\n"
 "\t\t\t\tPuedes cambiar tu contraseña en cualquier momento.<br><br> \n"
-"\t\t\t\tSi prefieres no registrarte ni activar tu cuenta, <strong>Omite</"
-"strong> este correo; tu cuenta no será activada y no podras iniciar sesión "
-"con este nombre de usuario y contraseña.<br ><br >\n"
+"\t\t\t\tSi prefieres no registrarte ni activar tu cuenta, <strong>Omite</strong> este correo; tu cuenta no será activada y no podras iniciar sesión con este nombre de usuario y contraseña.<br ><br >\n"
 "\t\t\t\t"
 msgstr ""
+"\n"
+"<strong>Actarium</strong> is a platform designed to facilitate the work related the meeting management and creating Minutes. <br ><br >\n"
+"You are a guest user by someone who is already registered in <strong>Actarium<strong> all you have to do is enter the following link activation, confirm your details and activate your account.<br ><br >\n"
+"Once you activate your account the details to log are: <br ><br >\n"
+"Username: <strong>%(newuser_username)s</strong> <br >\n"
+"Password:  <strong>%(pass)s</strong> <br ><br >\n"
+"You can change your password at any time. <br><br>\n"
+"If you prefer not to register neither activate your account, <strong>omits</strong> this email; Your account will not be activated and will not be able to log in with this user name and password.<br ><br >"
 
 #: templates/emailmodule/email_actarium_invitation.html:28
 msgid "Link de registro y activación:"
-msgstr ""
+msgstr "Registration and activation link"
 
 #: templates/emailmodule/email_actarium_invitation.html:30
 msgid ""
-"Puedes cambiar estos datos en cualquier momento después de activar tu cuenta."
-"<br>\n"
-"\t\t\t\tTe recomendamos que cambies la contraseña lo antes posible por una "
-"que puedas recordar más facilmente."
+"Puedes cambiar estos datos en cualquier momento después de activar tu cuenta.<br>\n"
+"\t\t\t\tTe recomendamos que cambies la contraseña lo antes posible por una que puedas recordar más facilmente."
 msgstr ""
+"You can change these data at any time after you activate your account. <br> \n"
+"We recommend you change your password as soon as possible by something you can remember more easily"
 
 #: templates/emailmodule/email_group_invitation.html:6
 msgid "Te han invitado a unirte a un grupo en  <strong>Actarium</strong>"
-msgstr ""
+msgstr "You are invited to join a group <strong> Actarium </ strong>"
 
 #: templates/emailmodule/email_group_invitation.html:16
 #, python-format
 msgid "%(full_name)s (@%(username)s)  te agregó al grupo \"%(groupname)s\"."
-msgstr ""
+msgstr "%(full_name)s (@%(username)s) added you to the group\"%(groupname)s\"."
 
 #: templates/emailmodule/email_group_invitation.html:22
 #, python-format
 msgid ""
 "\n"
-"\t\t\t\t<p>Únete al grupo \"%(groupname)s\" para recibir notificaciones, "
-"participar de toda la gestión de Actas y las reuniones.</p>\n"
-"\t\t\t\t<p>En <a href='%(url_base)s' >www.actarium.com</a> encontrarás todas "
-"tus organizaciones y sus grupos en cualquier momento. Para acceder al grupo "
-"\"%(groupname)s\" ingresa al siguiente link:</p>\n"
-"\t\t\t\t<p>Ingresa a tu nuevo grupo: <a href=\"%(group_url)s\">"
-"%(group_url)s</a></p>\n"
+"\t\t\t\t<p>Únete al grupo \"%(groupname)s\" para recibir notificaciones, participar de toda la gestión de Actas y las reuniones.</p>\n"
+"\t\t\t\t<p>En <a href='%(url_base)s' >www.actarium.com</a> encontrarás todas tus organizaciones y sus grupos en cualquier momento. Para acceder al grupo \"%(groupname)s\" ingresa al siguiente link:</p>\n"
+"\t\t\t\t<p>Ingresa a tu nuevo grupo: <a href=\"%(group_url)s\">%(group_url)s</a></p>\n"
 "\t\t\t\t"
 msgstr ""
+"\n"
+"<p>Join the group \"%(groupname)s\" to receive notifications, participate in all management of Minutes and meetings.</p> \n"
+"<p>In <a href='%(url_base)s' >www.actarium.com</a>  find all your organizations and groups at any time. To access the group \"%(groupname)s\" enters the following link:</p>\n"
+"<p>Enter your new group:<a href=\"%(group_url)s\">%(group_url)s</a></p>"
 
 #: templates/emailmodule/email_group_invitation.html:28
 #, python-format
 msgid ""
 "\n"
-"\t\t\t\t<p>Descúbre los beneficios de registrar el resultado de tus "
-"reuniones en <a href='%(url_base)s/about' >actarium.com/about</a></p>\n"
+"\t\t\t\t<p>Descúbre los beneficios de registrar el resultado de tus reuniones en <a href='%(url_base)s/about' >actarium.com/about</a></p>\n"
 "\t\t\t\t"
 msgstr ""
+"\n"
+"<p>Discover the benefits of registering the outcome of your meetings <a href='%(url_base)s/about' >actarium.com/about</a></p>"
 
 #: templates/emailmodule/email_new_annotation.html:6
 #, python-format
@@ -99,44 +103,42 @@ msgid ""
 "%(firstname)s (%(username)s) agregó una anotación en el grupo %(groupname)s "
 "de Actarium"
 msgstr ""
+"%(firstname)s (%(username)s) added a annotation in the group %(groupname)s "
+"Actarium"
 
 #: templates/emailmodule/email_new_annotation.html:16
 #, python-format
 msgid "Acta %(minutes_code)s del grupo %(groupname)s"
-msgstr ""
+msgstr "Minutes %(minutes_code)s of the group %(groupname)s"
 
 #: templates/emailmodule/email_new_annotation.html:23
 #, python-format
 msgid "%(firstname)s escribió:"
-msgstr ""
+msgstr "%(firstname)s wrote:"
 
 #: templates/emailmodule/email_new_annotation.html:28
 #, python-format
 msgid "Revisa ésta anotación en <a href='%(link)s'>%(link)s</a>"
-msgstr ""
+msgstr "Review this annotation in <a href='%(link)s'>%(link)s</a>"
 
 #: templates/emailmodule/email_org_invitation.html:11
 #, python-format
 msgid ""
-"%(from_full_name)s te ha invitado a una organización en <strong>Actarium</"
-"strong>"
+"%(from_full_name)s te ha invitado a una organización en "
+"<strong>Actarium</strong>"
 msgstr ""
+"%(from_full_name)s has invited you to an organization <strong> Actarium </ "
+"strong>"
 
 #: templates/emailmodule/email_org_invitation.html:19
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "\n"
-"\t\t\t\tAhora perteneces a la organización <strong>%(org)s</strong>."
-"<br><br>\n"
-"\t\t\t\tDescubre a qué grupos y qué permisos tienes en %(org)s ingresando al "
-"link: <a href=\"%(link)s\">%(link)s</a><br><br>\n"
-"\t\t\t\tCada vez que ingreses a <a href=\"%(url_base)s\">actarium.com</a> "
-"encontrarás a esta nueva organización en tu lista de organizaciones."
-"<br><br>\n"
-"\t\t\t\tNo dejes pasar ningún detalle de tus reuiniones, te estaremos "
-"esperando.<br><br>\n"
-"\t\t\t\tConoce más de Actarium en <a href=\"%(url_base)s%(how_it_works)s\">"
-"%(url_base)s%(how_it_works)s</a>\n"
+"\t\t\t\tAhora perteneces a la organización <strong>%(org)s</strong>.<br><br>\n"
+"\t\t\t\tDescubre a qué grupos y qué permisos tienes en %(org)s ingresando al link: <a href=\"%(link)s\">%(link)s</a><br><br>\n"
+"\t\t\t\tCada vez que ingreses a <a href=\"%(url_base)s\">actarium.com</a> encontrarás a esta nueva organización en tu lista de organizaciones.<br><br>\n"
+"\t\t\t\tNo dejes pasar ningún detalle de tus reuiniones, te estaremos esperando.<br><br>\n"
+"\t\t\t\tConoce más de Actarium en <a href=\"%(url_base)s%(how_it_works)s\">%(url_base)s%(how_it_works)s</a>\n"
 "\t\t\t\t"
 msgstr ""
 
@@ -144,6 +146,8 @@ msgstr ""
 #, python-format
 msgid "Falta tu aprobación del acta \"%(code)s\" del grupo %(groupname)s "
 msgstr ""
+"You have not yet approved the minutes \"%(code)s\" of the group "
+"%(groupname)s"
 
 #: templates/emailmodule/email_remember_approve.html:17
 msgid ""
@@ -151,3 +155,7 @@ msgid ""
 "comisión aprobatoria. Sin tu aprobación, esta acta no podrá ser visualizada "
 "por el resto del equipo. <br><br>Ingresa al siguiente link para aprobarla:"
 msgstr ""
+"This email has come to you because you have been selected as part of the "
+"approval committee. Without your approval, this Minutes can not be seen by "
+"the rest of the team. <br><br>Enter to the following link to approve the "
+"minutes:"

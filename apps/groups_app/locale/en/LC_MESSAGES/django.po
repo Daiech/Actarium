@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-20 14:25-0500\n"
-"PO-Revision-Date: 2014-08-11 17:05-0500\n"
+"PO-Revision-Date: 2014-08-20 16:20-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: forms.py:8
@@ -120,7 +120,8 @@ msgstr "There was an error, please reload the page and try again."
 
 #: minutes.py:298
 msgid ""
-"Error, esta acta no existe, por favor, recargue la página e intente de nuevo."
+"Error, esta acta no existe, por favor, recargue la página e intente de "
+"nuevo."
 msgstr "Error, this act does not exist, please reload the page and try again."
 
 #: minutes.py:574
@@ -252,8 +253,8 @@ msgid ""
 "href='mailto:soporte@daiech.com'>soporte@daiech.com</a>"
 msgstr ""
 "It happened a Error we are working to solve it. If the error persists, "
-"contact the administrator of actarium in <a href='mailto:soporte@daiech."
-"com'>soporte@daiech.com</a> "
+"contact the administrator of actarium in <a "
+"href='mailto:soporte@daiech.com'>soporte@daiech.com</a> "
 
 #: views.py:512
 msgid "Error invitación, no puedes entrar desde aquí"
@@ -402,8 +403,8 @@ msgstr "The expired account"
 
 #: templates/groups/read_meetings.html:214
 msgid ""
-"No puedes convocar reuniones cuando esta vencida la cuenta, debes actualizar "
-"el servicio desde el menú de organización para poder realizar esta acción"
+"No puedes convocar reuniones cuando esta vencida la cuenta, debes actualizar"
+" el servicio desde el menú de organización para poder realizar esta acción"
 msgstr ""
 "You can not call meetings when the account is expired, you must update the "
 "service of the organization from the menu to perform this action"
@@ -446,7 +447,7 @@ msgstr "Create organization"
 
 #: templates/groups/add_member_dropdown/add_member_tpls.html:20
 msgid "click para invitar"
-msgstr ""
+msgstr "click to invite"
 
 #: templates/groups/minutesTemplates/minutesTemplate0.html:71
 #: templates/groups/minutesTemplates/minutesTemplate3.html:71
@@ -476,8 +477,8 @@ msgstr "ATTENDEES"
 #: templates/groups/minutesTemplates/minutesTemplate0.html:120
 #: templates/groups/minutesTemplates/minutesTemplate3.html:120
 msgid ""
-"Selecciona los asistentes en el panel: \"Roles de acta\", a la derecha de la "
-"ventana"
+"Selecciona los asistentes en el panel: \"Roles de acta\", a la derecha de la"
+" ventana"
 msgstr ""
 "Select attendees in the panel: \"Roles of minutes\" to the right of the "
 "window."
@@ -650,11 +651,11 @@ msgstr ""
 #: templates/groups/templates/folder.html:98
 msgid ""
 "La organización a la que pertenece este grupo ha expirado, no puedes crear "
-"actas, convocar reuniones ni asignar tareas, comunicate con el administrador "
-"de la organización para actualizar el servicio"
+"actas, convocar reuniones ni asignar tareas, comunicate con el administrador"
+" de la organización para actualizar el servicio"
 msgstr ""
-"The organization to which this group belongs has expired, you can not create "
-"minutes, hold meetings or assign tasks, contact the organization "
+"The organization to which this group belongs has expired, you can not create"
+" minutes, hold meetings or assign tasks, contact the organization "
 "administrator to update the service"
 
 #: templates/groups/templates/folder.html:105
@@ -676,8 +677,8 @@ msgstr "Permits writing"
 #: templates/groups/templates/folder.html:110
 msgid ""
 "No tienes permisos de redacción sobre este grupo, por esta razón no puedes "
-"crear actas, solicita al administrador del grupo que te otorgue los permisos "
-"necesarios para poder realizar esta labor"
+"crear actas, solicita al administrador del grupo que te otorgue los permisos"
+" necesarios para poder realizar esta labor"
 msgstr ""
 "You are not authorized to writing about this group, for this reason you can "
 "not create minutes requests the group administrator grant you the necessary "
@@ -944,9 +945,9 @@ msgstr "Failed to save new data. Please reload the page and try again."
 #~ "minutes"
 
 #~ msgid ""
-#~ "Persona encargada de la aprobaci&oacute;n del Acta. El Acta no "
-#~ "ser&aacute; publicada hasta que comisi&oacute;n aprobatoria lo haya "
-#~ "aceptado en su totalidad."
+#~ "Persona encargada de la aprobaci&oacute;n del Acta. El Acta no ser&aacute; "
+#~ "publicada hasta que comisi&oacute;n aprobatoria lo haya aceptado en su "
+#~ "totalidad."
 #~ msgstr ""
 #~ "Person responsible for the adoption the Minutes. The Minutes will not be "
 #~ "published until the approving committee has accepted in full."
@@ -955,8 +956,8 @@ msgstr "Failed to save new data. Please reload the page and try again."
 #~ "Persona encargada de firmar el Acta. Al final del Acta, solo aparece el "
 #~ "listado de firmadores, no de aprobadores."
 #~ msgstr ""
-#~ "Person responsible for signing the Minutes. at the end of the Minutes, "
-#~ "only appears the list of signers not of approvers."
+#~ "Person responsible for signing the Minutes. at the end of the Minutes, only "
+#~ "appears the list of signers not of approvers."
 
 #~ msgid "Usuarios que no han aceptado la solicitud de ingreso al grupo."
 #~ msgstr "Users who haven't accepted the application of the group."
@@ -968,8 +969,8 @@ msgstr "Failed to save new data. Please reload the page and try again."
 #~ msgstr "Send invitation"
 
 #~ msgid ""
-#~ "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo "
-#~ "miembro del grupo."
+#~ "Escribe el nombre de usuario o correo electr&oacute;nico del nuevo miembro "
+#~ "del grupo."
 #~ msgstr "Type the username or email of the new member of the group."
 
 #~ msgid "Invitado"
