@@ -20,6 +20,15 @@
     </form>
   </div>
 </div>
+<div class="white-box-container row-fluid box b">
+  <h3>{% trans 'Tus formatos enviados:' %}</h3>
+  <table class="table">
+    <tr><th>{% trans 'Fecha' %}</th><th>{% trans 'Archivo' %}</th><th>{% trans 'Descripción' %}</th></tr>
+  {% for f in files %}
+    <tr><td title="{{ f.date_added }}">{{ f.date_added|date }}</td><td>{{ f.filename }}</td><td>{{ f.description }}</td></tr>
+  {% endfor %}
+  </table>
+</div>
 
 {% endblock %}
 

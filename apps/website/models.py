@@ -1,4 +1,5 @@
 #encoding:utf-8
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -66,6 +67,9 @@ class OrderedTemplates(models.Model):
     is_active = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+
+    def filename(self):
+        return os.path.basename(self.address_file.name)
 
     def __unicode__(self):
         return ""

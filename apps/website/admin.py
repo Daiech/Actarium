@@ -3,6 +3,8 @@ from apps.website.models import *
 from django.conf import settings
 
 
+class OrderedTemplatesAdmin(admin.ModelAdmin):
+	list_display = ("user",)
 class Tiny_MCE(admin.ModelAdmin):
 
     class Media:
@@ -12,6 +14,6 @@ class Tiny_MCE(admin.ModelAdmin):
 admin.site.register(globalVars)
 admin.site.register(feedBack)
 admin.site.register(faq)
-admin.site.register(OrderedTemplates)
+admin.site.register(OrderedTemplates, OrderedTemplatesAdmin)
 admin.site.register(conditions, Tiny_MCE)
 admin.site.register(privacy, Tiny_MCE)

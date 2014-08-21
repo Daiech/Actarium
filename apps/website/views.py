@@ -17,7 +17,7 @@ from apps.emailmodule.views import sendEmailHtml
 from apps.account.templatetags.gravatartag import showgravatar
 from actarium_apps.customers_services.models import OrderItems, Services
 from .models import *
-from .forms import OrganizationForm
+from .forms import OrderedTemplatesForm
 import datetime
 import json
 import re
@@ -226,14 +226,15 @@ def get_initial_data(request):
 
 @login_required()
 def send_template(request):
+    files = OrderedTemplates.objects.filter(user=request.user)
     if request.method == "POST":
-        form = OrganizationForm(request.POST, request.FILES)
+        form = OrderedTemplatesForm(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
             saved = _(u"Su información ha sido guardada, te responderemos lo más pronto posible a %s" % request.user.email)
-            form = OrganizationForm()
+            form = OrderedTemplatesForm()
     else:
-        form = OrganizationForm()
+        form = OrderedTemplatesForm()
     return render(request, "website/i_want_a_template.html", locals())
