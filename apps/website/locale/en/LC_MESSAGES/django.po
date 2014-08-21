@@ -2,20 +2,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-20 14:24-0500\n"
-"PO-Revision-Date: 2014-08-09 11:48-0500\n"
-"Last-Translator: Jose Mauricio Aizaga Galeano <maizaga@daiech.com>\n"
+"PO-Revision-Date: 2014-08-20 16:19-0500\n"
+"Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: views.py:82
@@ -60,7 +60,7 @@ msgstr "About"
 
 #: templates/website/footer.html:7 templates/website/public_footer.html:7
 msgid "Cómo funciona"
-msgstr ""
+msgstr "How does it work?"
 
 #: templates/website/footer.html:8 templates/website/public_footer.html:8
 msgid "FAQ's"
@@ -88,11 +88,11 @@ msgstr "All rights reserved"
 #: templates/website/footer.html:24
 #, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/help.html:3
 msgid "Ayuda"
@@ -194,8 +194,7 @@ msgid "El tiempo mínimo de compra es de %(MIN_MONTHLY_PAYMENT)s meses"
 msgstr "The minimum purchase is %(MIN_MONTHLY_PAYMENT)s months "
 
 #: templates/website/pricing.html:58
-msgid ""
-" Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
+msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
 msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
 
 #: templates/website/pricing.html:158
@@ -217,11 +216,11 @@ msgstr "Subscribe"
 #: templates/website/public_footer.html:37
 #, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
-"\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a> product"
+"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
+"src=\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/public_top_bar.html:18
 msgid "Correo ó Nombre de usuario"
@@ -275,7 +274,8 @@ msgstr "Create group"
 
 #: templates/website/landing/index.html:3
 msgid ""
-"Actarium - El espacio más cómodo para registrar el resultado de tus reuniones"
+"Actarium - El espacio más cómodo para registrar el resultado de tus "
+"reuniones"
 msgstr ""
 "Actarium - The most convenient place to record the results of your meetings"
 
@@ -341,8 +341,8 @@ msgstr "Task system"
 
 #: templates/website/landing/index.html:84
 msgid ""
-"Con Actarium ahorra tiempo, dinero y protege el medio ambiente reduciendo el "
-"consumo de papel"
+"Con Actarium ahorra tiempo, dinero y protege el medio ambiente reduciendo el"
+" consumo de papel"
 msgstr ""
 "With Actarium saves time, money and protect the environment by reducing "
 "paper consumption"
@@ -373,8 +373,8 @@ msgstr "Instant approval of minutes"
 
 #: templates/website/landing/index.html:115
 msgid ""
-"Después de redactar un acta, inmediatamente la puede compartir con su equipo "
-"de trabajo para ser aprobada o corregida."
+"Después de redactar un acta, inmediatamente la puede compartir con su equipo"
+" de trabajo para ser aprobada o corregida."
 msgstr ""
 "After writing the minutes, immediately can share with your team to be "
 "approved or corrected."
@@ -402,8 +402,8 @@ msgid ""
 "Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
 "o simplemente inicia sesión con tu cuenta de Google)"
 msgstr ""
-"Connect with business management services. (Calendar, Drive, Gmail or simply "
-"sign in with your Google Account)"
+"Connect with business management services. (Calendar, Drive, Gmail or simply"
+" sign in with your Google Account)"
 
 #: templates/website/landing/index.html:143
 msgid "Grabación de actas (muy pronto)"
@@ -452,8 +452,7 @@ msgstr "Join Now Free!"
 #~ msgid ""
 #~ "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y "
 #~ "crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran "
-#~ "tiempo, dinero y protegen el medio ambiente al reducir el consumo de "
-#~ "papel."
+#~ "tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel."
 #~ msgstr ""
 #~ "Invite your team, everyone can schedule meetings and create your Minutes "
 #~ "quickly and effectively as well; Save time, money and protect the "
@@ -467,12 +466,12 @@ msgstr "Join Now Free!"
 
 #~ msgid ""
 #~ "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
-#~ "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" target=\"_blank"
-#~ "\">Pol&iacute;ticas de privacidad</a>"
+#~ "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "
+#~ "target=\"_blank\">Pol&iacute;ticas de privacidad</a>"
 #~ msgstr ""
-#~ "I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of Use</"
-#~ "a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy Policy</"
-#~ "a>"
+#~ "I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of "
+#~ "Use</a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy "
+#~ "Policy</a>"
 
 #~ msgid "Registrarme"
 #~ msgstr "Sign Up"
@@ -499,8 +498,8 @@ msgstr "Join Now Free!"
 #~ "Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
 #~ "para recibir actualizaciones de nuestra plataforma"
 #~ msgstr ""
-#~ "Actarium is not translated to this language: (<br> Subscribe to our "
-#~ "channel to receive updates from our platform"
+#~ "Actarium is not translated to this language: (<br> Subscribe to our channel "
+#~ "to receive updates from our platform"
 
 #~ msgid "Registrate gratis"
 #~ msgstr "Sign Up"
