@@ -1,6 +1,7 @@
 #encoding:utf-8
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from apps.account.models import activation_keys
 from apps.emailmodule.views import sendEmailHtml
 from .templatetags.gravatartag import showgravatar
@@ -54,7 +55,8 @@ def newInvitedUser(email_to_invite, _user_from, first_name=False, last_name=Fals
         # saveActionLog: new user invited by _user_from
         print reverse("confirm_account", args=(ak.activation_key, 1, ))
         ctx_email = {
-            'username': _user_from.username,
+            'url_base': settings.URL_BASE,
+            'username': _user_from.first_name + " (" +_user_from.username + ")",
             'activation_key': ak.activation_key,
             'inv_code': ak.activation_key[5:20], ## var to define a invitation. (only it is needed in the url to redirect)
             'newuser_username': _username,

@@ -26,7 +26,7 @@
 				Si prefieres no registrarte ni activar tu cuenta, <strong>Omite</strong> este correo; tu cuenta no será activada y no podras iniciar sesión con este nombre de usuario y contraseña.<br ><br >
 				{% endblocktrans %}
 				{% trans 'Link de registro y activación:' %}<br>
-				<a href="{% url 'confirm_account' activation_key inv_code %}" >{% url 'confirm_account' activation_key inv_code %}</a><br ><br >
+				<a href="{{ url_base }}{% url 'confirm_account' activation_key inv_code %}" >{{ url_base }}{% url 'confirm_account' activation_key inv_code %}</a><br ><br >
 				{% blocktrans %}Puedes cambiar estos datos en cualquier momento después de activar tu cuenta.<br>
 				Te recomendamos que cambies la contraseña lo antes posible por una que puedas recordar más facilmente.{% endblocktrans %}<br> <br>
 				
