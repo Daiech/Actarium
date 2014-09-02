@@ -22,7 +22,7 @@
 			            <tr><td> {% trans 'Precio por mes' %}: </td><td>  $<strong id="pricePerMonth"></strong></td></tr>
 			            <tr><td> {% trans 'Sub total' %}: </td><td>  $<strong id="subTotal"></strong></td></tr>
 			            <tr><td> {% trans 'Descuento' %}: </td><td>  $<strong id="discountValue">0</strong></td></tr>
-			            <tr><td> {% trans 'IVA' %}: </td><td> $<strong id="discountValue">0</strong></td></tr>
+			            <tr><td> {% trans 'IVA' %}: </td><td> $<strong id="ivaValue">0</strong></td></tr>
 			            <tr><td> {% trans 'Total a pagar' %}: </td><td> $<strong id="totalPrice"></strong></td></tr>
 		            </table>     
 		      </div>
@@ -146,7 +146,8 @@
             	}
             	else{
             		$('#other_quantity_price').html(data.quantity);
-            		$('#pricePerMonth').html(data.quantity);
+            		$('#pricePerMonth').html(data.quantity*0.84);
+            		$('#ivaValue').html(data.quantity*0.16);
             		$("#other_quantity_button").removeAttr("disabled");
             		setTotalPrice();
             	}
@@ -165,7 +166,8 @@
             function setTotalPrice(){
             	number_of_months = parseInt($('#id_number_of_months').val());
             	price_per_month = parseInt($('#pricePerMonth').html());
-            	sub_total = number_of_months*price_per_month;
+            	iva_value = parseInt($('#ivaValue').html());
+            	sub_total = number_of_months*(price_per_month+iva_value);
             	$("#subTotal").html(sub_total)
             	discount_value = parseInt($('#discountValue').html());
             	total_price = sub_total - discount_value
@@ -198,7 +200,8 @@
 			$('.btn-upgrade').on('click', function(){
 				number_of_members = $(this).attr('data-number-of-members');
 				total_price = $(this).attr("data-total-price");
-				$('#pricePerMonth').html(total_price);
+				$('#pricePerMonth').html(total_price*0.84);
+				$('#ivaValue').html(total_price*0.16);
 				$('#id_number_of_members').val(number_of_members);
 				setTotalPrice()
 			})
