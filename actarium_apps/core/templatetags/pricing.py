@@ -8,9 +8,9 @@ register = Library()
 
 @register.filter
 def total_price(quantity):
-    quantity = int(quantity)
-    total_price = ServicesRanges.objects.get_total_price(quantity)
-    return total_price
+    total_price = ServicesRanges.objects.get_total_price(int(quantity))
+    return int(total_price)
+
        
 @register.filter
 def icon_status(status_id):

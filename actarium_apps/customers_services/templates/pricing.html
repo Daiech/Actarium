@@ -1,6 +1,7 @@
 {% extends "organizations/menu.html" %}
 {% load i18n pricing %}
 {% block TITLE %}{% trans 'Precios' %}{% endblock %}
+{% load humanize %}
 
 {% block content_menu %}
 	<!-- Modal -->
@@ -18,13 +19,8 @@
 		            	{{ order_members_form }}
 		            </table>
 		            <h4>{% trans 'Resumen' %}</h4>
-		            <table id="tableResume" class="table">
-			            <tr><td> {% trans 'Precio por mes' %}: </td><td>  $<strong id="pricePerMonth"></strong></td></tr>
-			            <tr><td> {% trans 'Sub total' %}: </td><td>  $<strong id="subTotal"></strong></td></tr>
-			            <tr><td> {% trans 'Descuento' %}: </td><td>  $<strong id="discountValue">0</strong></td></tr>
-			            <tr><td> {% trans 'IVA' %}: </td><td> $<strong id="ivaValue">0</strong></td></tr>
-			            <tr><td> {% trans 'Total a pagar' %}: </td><td> $<strong id="totalPrice"></strong></td></tr>
-		            </table>     
+		            <div id="paymentSummaryTable" >
+		            </div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cerrar' %}</button>
@@ -67,7 +63,7 @@
 						<tr>
 							<td>{{ package.code }}</td>
 							<td>{{ package.number_of_members }}</td>
-							<td>${{ package.number_of_members|total_price|floatformat }} / {{ package.service.period.name }}</td>
+							<td>$ {{ package.number_of_members|total_price|intcomma}} / {{ package.service.period.name }}</td>
 							<td>
 								<button class="btn btn-lg btn-upgrade" 
 									data-number-of-members="{{ package.number_of_members }}" data-total-price="{{package.number_of_members|total_price|floatformat}}" 
@@ -109,14 +105,14 @@
 						<tr id="{{ s.code }}">
 							<td>{{ s.name }}</td> 
 							<td>{{ s.description }}</td>
-							<td>${{ s.price_per_period|floatformat }} / {{ s.period.name }}</td>
+							<td>$ {{ s.price_per_period|floatformat:"0"|intcomma }} / {{ s.period.name }}</td>
 						</tr>
 					{% endfor %}
 				</tbody>
 			</table>
 		</div>
 	</div>
-	
+	{% include "payment_summary_tpl.html" %}
 
 {% endblock %}
 
@@ -130,80 +126,93 @@
 {% endblock %}
 
 {% block js_menu %}
+	<script src="{{ STATIC_PREFIX }}js/vendor/swig.min.js"></script>
 	<script>
         $(document).ready(function(){
+
+        	{% include "payment_summary.js" %}
+
+
             $(".org-menu-container #org-services").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
 
 
-            function setOtherQuantityPrice(data){
-            	if (data.Error){
-            		$('#other_quantity_price').html('---')
-            		$("#other_quantity_button").attr("disabled", "disabled");
-            		$('#pricePerMonth').html("");
-            		$("#subTotal").html("")
-            		$("#totalPrice").html("")
-            	}
-            	else{
-            		$('#other_quantity_price').html(data.quantity);
-            		$('#pricePerMonth').html(data.quantity*0.84);
-            		$('#ivaValue').html(data.quantity*0.16);
-            		$("#other_quantity_button").removeAttr("disabled");
-            		setTotalPrice();
-            	}
-            }
+            // function setOtherQuantityPrice(data){
+            // 	if (data.Error){
+            // 		$('#other_quantity_price').html('---')
+            // 		$("#other_quantity_button").attr("disabled", "disabled");
+            // 		$('#pricePerMonth').html("");
+            // 		$("#subTotal").html("")
+            // 		$("#totalPrice").html("")
+            // 	}
+            // 	else{
+            // 		$('#other_quantity_price').html(numberWithCommas(data.quantity));
+            // 		$('#pricePerMonth').html(numberWithCommas(data.quantity*0.84));
+            // 		price_per_month = numberWithoutCommas($('#pricePerMonth').html());
+            // 		$('#ivaValue').html(numberWithCommas(data.quantity*0.16)*pricePerMonth);
+            // 		$("#other_quantity_button").removeAttr("disabled");
+            // 		setTotalPrice();
+            // 	}
+            // }
 
-            function setDiscountValue(data){
-            	if (data.Error){
-            		console.log(data.Error)
-            	}
-            	else{
-            		$('#discountValue').html(data.discount_value)
-            		setTotalPrice();
-            	}
-            }
+            // function setDiscountValue(data){
+            // 	if (data.Error){
+            // 		console.log(data.Error)
+            // 	}
+            // 	else{
+            // 		$('#discountValue').html(numberWithCommas(data.discount_value))
+            // 		setTotalPrice();
+            // 	}
+            // }
 
-            function setTotalPrice(){
-            	number_of_months = parseInt($('#id_number_of_months').val());
-            	price_per_month = parseInt($('#pricePerMonth').html());
-            	iva_value = parseInt($('#ivaValue').html());
-            	sub_total = number_of_months*(price_per_month+iva_value);
-            	$("#subTotal").html(sub_total)
-            	discount_value = parseInt($('#discountValue').html());
-            	total_price = sub_total - discount_value
-            	$("#totalPrice").html(total_price)
+            // function setTotalPrice(){
+            // 	number_of_months = numberWithoutCommas($('#id_number_of_months').val());
+            // 	price_per_month = numberWithoutCommas($('#pricePerMonth').html());
+            // 	iva_value = numberWithoutCommas($('#ivaValue').html());
+            // 	sub_total = number_of_months*(price_per_month);
+            // 	$("#subTotal").html(sub_total+iva_value)
+            // 	discount_value = numberWithoutCommas($('#discountValue').html());
+            // 	total_price = sub_total - discount_value
+            // 	$("#totalPrice").html(numberWithCommas(total_price))
 
-            }
+            // }
 
 			$("#other_quantity").on("keyup", function(){
 				other_quantity = $(this).val()
-				sendNewAjax("{% url 'core:get_total_price' %}",
-					{"quantity":other_quantity},
-					setOtherQuantityPrice,
-					{"method":"post"})
-				$('#id_number_of_members').val(other_quantity);
+				// sendNewAjax("{% url 'core:get_total_price' %}",
+				// 	{"quantity":other_quantity},
+				// 	setOtherQuantityPrice,
+				// 	{"method":"post"})
+				// payment_summary_obj.updateNumberOfMembers(other_quantity);
+				$('#id_number_of_months').val(other_quantity)
+				payment_summary_obj.updateWithForm()
 			});
 
             
 			$("#id_number_of_members").on("keyup", function(){
 				other_quantity = $(this).val();
-				sendNewAjax("{% url 'core:get_total_price' %}",
-					{"quantity":other_quantity},
-					setOtherQuantityPrice,
-					{"method":"post"})
+				// sendNewAjax("{% url 'core:get_total_price' %}",
+				// 	{"quantity":other_quantity},
+				// 	setOtherQuantityPrice,
+				// 	{"method":"post"})
+				$('#id_number_of_months').val(other_quantity)
+				payment_summary_obj.updateWithForm()
 			});
 
 			$("#id_number_of_months").on("change", function(){
-				setTotalPrice();
+				// setTotalPrice();
+				payment_summary_obj.updateWithForm()
 			})
 			
 			$('.btn-upgrade').on('click', function(){
-				number_of_members = $(this).attr('data-number-of-members');
-				total_price = $(this).attr("data-total-price");
-				$('#pricePerMonth').html(total_price*0.84);
-				$('#ivaValue').html(total_price*0.16);
-				$('#id_number_of_members').val(number_of_members);
-				setTotalPrice()
+				// number_of_members = $(this).attr('data-number-of-members');
+				// total_price = $(this).attr("data-total-price");
+				// $('#pricePerMonth').html(numberWithCommas(total_price*0.84));
+				// // price_per_month = numberWithoutCommas($('#pricePerMonth').html());
+				// $('#ivaValue').html(numberWithCommas(total_price*0.16));
+				// $('#id_number_of_members').val(number_of_members);
+				// setTotalPrice()
+				payment_summary_obj.load_data()
 			})
 
 			$("#id_discount").on("blur", function(){

@@ -1,0 +1,64 @@
+{% load i18n %}
+<script type="text/template" id="paymentSummaryTpl" >
+	<table  class="table" >
+		<tr>
+			<td> 
+				{% trans 'Precio por mes' %}: 
+			</td>
+			<td>  
+				$ <strong id="pricePerMonth">
+					{% verbatim %}
+						{{ price_per_month}}
+					{% endverbatim %}
+				</strong>
+			</td>
+		</tr>
+		<tr>
+			<td> 
+				{% trans 'Sub total' %} 
+				{% verbatim %}
+						{{ number_of_members }}
+				{% endverbatim %}: 
+			</td>
+			<td>  $ <strong id="subTotal">
+					{% verbatim %}
+						{{ price_total_months }}
+					{% endverbatim %}
+				</strong>
+			</td>
+		</tr>
+		<tr>
+			<td> {% trans 'Descuento' %}: 
+			</td>
+			<td>  
+				$ <strong id="discountValue">
+					{% verbatim %}
+						{{ discount }}
+					{% endverbatim %}
+				</strong>
+			</td>
+		</tr>
+		<tr>
+			<td> {% trans 'IVA' %}: 
+			</td>
+			<td> 
+				$ <strong id="ivaValue">
+					{% verbatim %}
+						{{ iva }}
+					{% endverbatim %}
+				</strong>
+			</td>
+		</tr>
+		<tr>
+			<td> {% trans 'Total a pagar' %}: 
+			</td>
+			<td> 
+				$ <strong id="totalPrice">
+					{% verbatim %}
+						{{ total }}
+					{% endverbatim %}
+				</strong>
+			</td>
+		</tr>
+	</table>
+</script>
