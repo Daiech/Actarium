@@ -136,146 +136,38 @@
             $(".org-menu-container #org-services").addClass("active")
                 .find("a > span").addClass("glyphicon glyphicon-chevron-right");
 
-
-            // function setOtherQuantityPrice(data){
-            // 	if (data.Error){
-            // 		$('#other_quantity_price').html('---')
-            // 		$("#other_quantity_button").attr("disabled", "disabled");
-            // 		$('#pricePerMonth').html("");
-            // 		$("#subTotal").html("")
-            // 		$("#totalPrice").html("")
-            // 	}
-            // 	else{
-            // 		$('#other_quantity_price').html(numberWithCommas(data.quantity));
-            // 		$('#pricePerMonth').html(numberWithCommas(data.quantity*0.84));
-            // 		price_per_month = numberWithoutCommas($('#pricePerMonth').html());
-            // 		$('#ivaValue').html(numberWithCommas(data.quantity*0.16)*pricePerMonth);
-            // 		$("#other_quantity_button").removeAttr("disabled");
-            // 		setTotalPrice();
-            // 	}
-            // }
-
-            // function setDiscountValue(data){
-            // 	if (data.Error){
-            // 		console.log(data.Error)
-            // 	}
-            // 	else{
-            // 		$('#discountValue').html(numberWithCommas(data.discount_value))
-            // 		setTotalPrice();
-            // 	}
-            // }
-
-            // function setTotalPrice(){
-            // 	number_of_months = numberWithoutCommas($('#id_number_of_months').val());
-            // 	price_per_month = numberWithoutCommas($('#pricePerMonth').html());
-            // 	iva_value = numberWithoutCommas($('#ivaValue').html());
-            // 	sub_total = number_of_months*(price_per_month);
-            // 	$("#subTotal").html(sub_total+iva_value)
-            // 	discount_value = numberWithoutCommas($('#discountValue').html());
-            // 	total_price = sub_total - discount_value
-            // 	$("#totalPrice").html(numberWithCommas(total_price))
-
-            // }
+            //Pricing initial options
+            $('.btn-upgrade').on('click', function(){
+				number_of_members = $(this).attr('data-number-of-members');
+				console.log(number_of_members)
+				$('#id_number_of_members').val(number_of_members)
+				payment_summary_obj.update()
+			})
 
 			$("#other_quantity").on("keyup", function(){
-				other_quantity = $(this).val()
-				// sendNewAjax("{% url 'core:get_total_price' %}",
-				// 	{"quantity":other_quantity},
-				// 	setOtherQuantityPrice,
-				// 	{"method":"post"})
-				// payment_summary_obj.updateNumberOfMembers(other_quantity);
-				$('#id_number_of_months').val(other_quantity)
-				payment_summary_obj.updateWithForm()
+				number_of_members = $(this).val()
+				$('#id_number_of_members').val(number_of_members)
+				payment_summary_obj.update()
 			});
 
-            
+            //Form Actions
 			$("#id_number_of_members").on("keyup", function(){
-				other_quantity = $(this).val();
-				// sendNewAjax("{% url 'core:get_total_price' %}",
-				// 	{"quantity":other_quantity},
-				// 	setOtherQuantityPrice,
-				// 	{"method":"post"})
-				$('#id_number_of_months').val(other_quantity)
-				payment_summary_obj.updateWithForm()
+				payment_summary_obj.update()
 			});
 
 			$("#id_number_of_months").on("change", function(){
-				// setTotalPrice();
-				payment_summary_obj.updateWithForm()
+				payment_summary_obj.update()
 			})
 			
-			$('.btn-upgrade').on('click', function(){
-				// number_of_members = $(this).attr('data-number-of-members');
-				// total_price = $(this).attr("data-total-price");
-				// $('#pricePerMonth').html(numberWithCommas(total_price*0.84));
-				// // price_per_month = numberWithoutCommas($('#pricePerMonth').html());
-				// $('#ivaValue').html(numberWithCommas(total_price*0.16));
-				// $('#id_number_of_members').val(number_of_members);
-				// setTotalPrice()
-				payment_summary_obj.load_data()
-			})
-
 			$("#id_discount").on("blur", function(){
-				discount_code = $(this).val();
-				sendNewAjax("{% url 'core:get_discount_value' %}",
-					{"discount_code":discount_code},
-					setDiscountValue,
-					{"method":"post"})
+				payment_summary_obj.update()
 			});
 
 
 
 			{% if show_modal %}
-
-				function showPricePerMonth(data){
-					$('#pricePerMonth').html(data.quantity);
-					price_per_month = data.quantity
-					number_of_months = parseInt($('#id_number_of_months').val());
-
-					if(isNaN(number_of_months)){
-						// console.log("Number of Months isNaN");	
-
-					}
-					else{
-						sub_total = price_per_month*number_of_months
-						$('#subTotal').html(sub_total);
-						discount_code = parseInt($('#id_discount').val());
-
-						sendNewAjax("{% url 'core:get_discount_value' %}",
-							{"discount_code":discount_code},
-							setDiscountValue,
-							{"method":"post"}
-						);
-					}
-					
-								
-				}
-
-				function fillModalResume(){
-					number_of_members = parseInt($('#id_number_of_members').val());
-					if (isNaN(number_of_members)) {
-						// console.log("Number of members Is NaN");
-						sendNewAjax("{% url 'core:get_discount_value' %}",
-							{"discount_code":$('#id_discount').val()},
-							setDiscountValue,
-							{"method":"post"}
-						);
-					}
-					else{
-						sendNewAjax("{% url 'core:get_total_price' %}",
-							{"quantity":number_of_members},
-							showPricePerMonth,
-							{"method":"post"}
-						);
-					}
-				}
-				
-				fillModalResume();
 				$('#myModal').modal();
 			{% endif %}
-
-
-			setTotalPrice();
 
 			{% if error %}
 				setAlertError("Error", "{{ error }}")

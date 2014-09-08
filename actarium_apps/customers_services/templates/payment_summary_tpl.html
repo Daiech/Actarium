@@ -17,8 +17,8 @@
 			<td> 
 				{% trans 'Sub total' %} 
 				{% verbatim %}
-						{{ number_of_members }}
-				{% endverbatim %}: 
+						<strong>{{ number_of_months }}</strong>
+				{% endverbatim %} meses : 
 			</td>
 			<td>  $ <strong id="subTotal">
 					{% verbatim %}
@@ -39,18 +39,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td> {% trans 'IVA' %}: 
-			</td>
-			<td> 
-				$ <strong id="ivaValue">
-					{% verbatim %}
-						{{ iva }}
-					{% endverbatim %}
-				</strong>
-			</td>
-		</tr>
-		<tr>
-			<td> {% trans 'Total a pagar' %}: 
+			<td> {% trans 'Total a pagar (IVA incluido):' %}: 
 			</td>
 			<td> 
 				$ <strong id="totalPrice">
