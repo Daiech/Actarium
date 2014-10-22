@@ -7,10 +7,13 @@ class OrganizationServicesAdmin(admin.ModelAdmin):
 class PackagesAdmin(admin.ModelAdmin):
 	list_display =('code','number_of_members','service','is_active')
 
+class ServicesRangesAdmin(admin.ModelAdmin):
+	list_display = ('id','lower', 'upper', 'service')
+
 from .models import OrganizationServices, Packages, ServicesRanges, DiscountCodes, LastMinutesTasks
 admin.site.register(OrganizationServices, OrganizationServicesAdmin)
 admin.site.register(Packages, PackagesAdmin)
-admin.site.register(ServicesRanges)
+admin.site.register(ServicesRanges,ServicesRangesAdmin)
 admin.site.register(DiscountCodes)
 admin.site.register(LastMinutesTasks)
 
