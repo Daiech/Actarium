@@ -16,6 +16,8 @@ from .models import *
 
 @login_required()
 def read_pricing(request, slug_org):
+    from apps.website.views import getGlobalVar
+        
     if slug_org:
         org = request.user.organizationsuser_user.get_org(slug=slug_org)
         if org and org.has_user_role(request.user,'is_creator'):
@@ -24,7 +26,8 @@ def read_pricing(request, slug_org):
         id_package = request.GET.get("id_package")
         if id_package:
             show_modal=True
-        packages = Packages.objects.get_all_active().order_by('code')
+        FREE_PACKAGE_ID = getGlobalVar("FREE_PACKAGE_ID")
+        packages = Packages.objects.get_all_active().order_by('code').exclude(id=FREE_PACKAGE_ID)
 
         services_list = Services.objects.filter(service_category__code="C001", is_active=True).order_by("-price_per_period")
 

@@ -26,8 +26,9 @@ class OrderMembersServiceForm(forms.Form):
         if user_customer:
             self.fields['payment_method'].queryset = user_customer.actariumcustomers_user.all()[0].customer.payment_methods.all()
 
-        
-        queryset_packages = Packages.objects.filter(is_active = True).exclude(id=5)
+        from apps.website.views import getGlobalVar
+        FREE_PACKAGE_ID = getGlobalVar("FREE_PACKAGE_ID")
+        queryset_packages = Packages.objects.filter(is_active = True).exclude(id=FREE_PACKAGE_ID)
         self.fields['packages'] = forms.ModelChoiceField(label=_(u"Paquete"), queryset=queryset_packages, empty_label=None)
             
 

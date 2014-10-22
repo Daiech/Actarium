@@ -1,7 +1,7 @@
 var PaymentSummary = function(){
 
 	// Data from Form
-	this.id_package = 5
+	this.id_package = 0
 	this.number_of_members = 0
 	this.number_of_months = 0
 	this.payment_method = ""

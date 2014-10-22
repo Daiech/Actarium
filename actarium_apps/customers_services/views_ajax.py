@@ -21,7 +21,8 @@ def approve_order(request):
                 
                 last_order = order_item.customer_service.get_order_active()
 
-                if last_order.service.code=="S011":
+                FREE_SERVICE = getGlobalVar("FREE_SERVICE")
+                if last_order.service.code==FREE_SERVICE:
 
                     new_order = order_item
 
