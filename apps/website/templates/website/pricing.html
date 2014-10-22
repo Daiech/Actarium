@@ -5,76 +5,49 @@
 {% block content %}
 <div class="container-fluid pricing-container" id="pricing-info">
     <header>
-        {% trans 'Costo por miembro en una organización' %} <h1>{% trans 'PRECIOS' %}</h1>
+        {% trans 'Paquetes de miembros en una organización' %} <h1>{% trans 'PRECIOS' %}</h1>
+        <hr/>
+        <p style="position:relative">
+        {% trans 'Mensual' %}
+        <label for="periodPayment">
+          <input type="checkbox" id="periodPayment" />
+          <span class="toggle"></span>
+        </label>
+        {% trans 'Anual (-5%)' %}
+        </p>
     </header>
     <div class="row pricing-content">
         <div class="row">
-            <div class="col-xs-12 col-sm-2 visible-lg visible-md">
-                <img src="{{ STATIC_URL }}img/pricing/1.png" width="120px">
+            <div class="col-xs-12 col-sm-1 visible-lg visible-md">
             </div>
             <div id="pricing-methods"></div>
-            <div class="col-xs-12 col-md-2 pricing-personal">
-                <a href="#pricing-calculator"><p>{% trans 'Calcula el precio adecuado para ti' %}<br>$</p></a>
+            <div class="col-xs-12 col-md-1 ">
             </div>
         </div>
         <div class="col-xs-12 col-sm-12">
         </div>
     </div>
-    <a href="{% url 'create_org' %}">
-        <div id="try-trial" class="white-box-container">
-            <div id="giftbox"></div>
-            {% trans 'Pruébalo por 30 días' %} <h2>{% trans '¡GRATIS!' %}</h2>
-            <p>{% blocktrans with members=TRIAL_MEMBERS months=TRIAL_MONTH s=TRIAL_MONTH|pluralize %}El trial incluye {{ members }} miembros por {{ months }} mes{{ s }} {% endblocktrans %}</p>
-            <p>{% trans 'Cuando finalice tu trial podrás elegir el plan que quieras.' %}</p>
-            <div><span class="btn btn-large">{% trans '¡Pruébalo ahora!' %}</span></div>
-        </div>
-    </a>
 </div>
-<div class="container-fluid pricing-container" id="pricing-calculator">
-    <header>{% trans 'Calcula el costo correcto para tu organización' %}</header>
-    <p class="text-description">{% trans 'Los precios varían dependiendo del número de miembros de tu equipo, calcula el precio exacto antes de comprar' %}.</p>
-    <form method="post" action="">
-        {% csrf_token %}
-        <div id="pricing-calculator-box">
-            <div class="row">
-                <div class="col-md-5 pricing-total" >
-                    <input type="text" value="5" id="team-number" autocomplete="off" />
-                    <p>{% trans 'Miembros del quipo' %}</p>
-                </div>
-                <div class="col-md-1 arrow-right">
-                    <img src="{{ STATIC_URL }}img/pricing/arrow-right.png">
-                </div>
-                <div class="col-md-5 pricing-total">
-                    <div class="total">
-                        <span id="pricing-money">$0</span>
-                    </div>
-                    <p>{% trans 'Costo mensual (COP)' %}*</p>
-                </div>
-                <div class="col-md-1 arrow-right">
-                </div>
-            </div>
-        </div>
-        <div class="text-muted note-payment">{% blocktrans %}El tiempo mínimo de compra es de {{ MIN_MONTHLY_PAYMENT }} meses{% endblocktrans %}</div>
-        <button type="submit" class="btn btn-success btn-large">{% blocktrans %} Comprar <span id="num"></span> cupos de miembros para tu organización {% endblocktrans %}</button>
-    </form>
-</div>
+
 <script type="text/template" id="pricing-template">
 {% verbatim %}
 {% for pr in pricing %}
     <div class="col-xs-6 col-md-2">
         <div class="pricing-block">
             <div class="members">
-                <p class="pricing-member-numbers">{{ pr.members_num.to }} <span class="pricing-a">{{ pr.members_num.inter_text }}</span> {{ pr.members_num.until }}</p>
-                <p>{{ pr.members_name }}</p>
+                
+                <p class="pricing-member-numbers"><sup>$</sup>{{ pr.price }}</p>
+                <p>{{ payment }}</p>
             </div>
             <div class="arrow">
                 <img src="/static/img/pricing/arrow.png">
             </div>
             <div class="pricing">
-                <p><sup>$</sup>{{ pr.price }}</p>
-                <p class="pricing-payment">{{ pr.payment }}</p>
+                <p class="pricing-payment">{{ mn }}</p>
+                <p> {{ pr.members_num}}</p>
+                
             </div>
-        <div class="pricing-suscripcion"><a href="{{ pr.url_suscribe }}">{{ pr.suscribe }}</a></div>
+            <div class="pricing-suscripcion"><a href="{{ pr.url_suscribe }}">{{ pr.suscribe }}</a></div>
         </div>
     </div>
 {% endfor %}
@@ -101,28 +74,25 @@
     .pricing-content .pricing-block .members p{font-size: 20px;font-family: HelveticaNeueLT;}
     .pricing-suscripcion{font-size: 20px;position: relative;width: auto;padding: 0;bottom: 0;background-color: #B3DB35;padding: 7px;}
     .pricing-suscripcion a{color: white;}
-    .pricing-a{font-size: 22px;}
 
-    .pricing-personal{font-family: HelveticaNeueLT;border:solid thin white;}
-    .pricing-personal a:hover{color: #00aeaa;}
-    .pricing-personal:hover{border-color: #dadada; cursor: pointer;box-shadow: 0 4px 9px #888;}
-    .pricing-personal p{line-height: 1.4;padding-top: 26px;}
-
-
-    #pricing-info{}
-    .note-payment{font-size: 18px;margin-bottom: 15px;margin-top: 0}
-    #pricing-calculator{margin: 120px auto;/*margin-bottom: 80px;*/padding-top: 80px;border-top: solid 2px #B3DB35;}
-    #pricing-calculator #pricing-calculator-box{border: solid thin #dadada; width: 50%;margin: 40px auto;font-size: 30px;padding: 40px;}
-    #pricing-calculator #pricing-calculator-box input{text-align: center;width: 180px;font-size: 50px;color: #00aeaa}
-    #pricing-calculator #pricing-calculator-box input:focus{outline: 0;border-color:#00aeaa;}
-    .arrow-right{margin-top: 12px;}
-    .pricing-total p{font-size: 20px;margin-top: 10px;}
-    .pricing-total .total{font-size: 60px;color: #00aeaa;margin-top: 10px;height: 60px;line-height: 1}
-
-    @media (max-width: 768px) {
-        #pricing-calculator #pricing-calculator-box{width: 90%}
-        #try-trial{width: 90%;}
+</style>
+<style>
+    /* SWITCH */
+    /* ocultamos el elemento  ya que no nos interesa*/
+    #pricing-info input[type="checkbox"]{      display:none;    }
+    /* creamos la forma del switch */
+    #pricing-info label{width:80px;height:20px; display:inline-block; margin-top:5px; bordeR:1px solid rgba(0,0,0,0.5); padding:0; border-radius:15px;}
+    /*creamos el toggle o el elemento deslisante */
+    #pricing-info label .toggle{width:19px;height:19px;border:1px solid rgba(0,0,0,0.5); display:block;border-radius:100%;background: #ddd; -webkit-transition:all 0.1s ease;
     }
+    /* agregamos la palabras on*/
+    #pricing-info .toggle:before{      content:"";      position:absolute;      left:2px;      display:inline-block;      color:green;      display:none;    }
+    /* agregamos la palabra of*/
+    #pricing-info .toggle:after{      content:"";      position:absolute;      display:inline-block;      left:60px;      top:6px;      color:tomato;    }
+    /*/ le decimos que cuando le haga checked haga lo siguiente*/
+    #pricing-info input[type="checkbox"]:checked + .toggle{      margin-left:60px;    }
+    #pricing-info input[type="checkbox"]:checked + .toggle:before{      display:block;    }
+    #pricing-info input[type="checkbox"]:checked + .toggle:after{      display:none;    }
 </style>
 {%endblock%}
 
@@ -132,42 +102,48 @@
 <script src="{{STATIC_PREFIX}}js/vendor/jquery.formatCurrency-1.4.0.js"></script>
 <script>
     $(document).ready(function(e){
-        $("#feed-option").animate({"top": ($(window).height() - 120) + "px" }, 1000);
-        $("a[href='#pricing-calculator']").on("click", function (e) {
-            e.preventDefault();
-            goToByScroll("#pricing-calculator",function (e) {
-                $("#team-number").focus();
-            });
-        })
-        $("#team-number").on("keyup", function (e) {
-            var num = $(this).val();
-            calculate_pricing(num);
-        });
-        calculate_pricing (5);
-        function calculate_pricing (num) {
-            sendNewAjax("{% url 'core:get_total_price' %}",
-                {"quantity": num},
-                function (data) {
-                    $("#num").text(num);
-                    $("#pricing-money").text(data.quantity).formatCurrency({roundToDecimalPlace: -2});
-                },
-                {"method":"post"});
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
-        set_initial_pricing_box ();
-        function set_initial_pricing_box () {
-            mn = "{% trans 'miembros' %}";
-            payment = "{% trans 'mes/miembro' %}";
-            to = " {% trans 'a' %} ";
-            suscribe = "{% trans 'Suscribirse' %}";
-            url_s = "{% url 'create_org' %}"
-            pricing = {
-                "1": {price: "{{ services_list.0.price_per_period|floatformat }}", payment: payment, members_num: {to: 1, inter_text: to, until: 10}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "2": {price: "{{ services_list.1.price_per_period|floatformat }}", payment: payment, members_num: {to: 11, inter_text: to, until: 20}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "3": {price: "{{ services_list.2.price_per_period|floatformat }}", payment: payment, members_num: {to: 21, inter_text: to, until: 35}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
-                "4": {price: "{{ services_list.3.price_per_period|floatformat }}", payment: payment, members_num: {to: "", inter_text: "", until: "+35"}, members_name: mn, suscribe: suscribe, url_suscribe: url_s},
+
+        set_initial_pricing_box ("M");
+        function set_initial_pricing_box (periodPayment) {
+            mn = "{% trans 'Miembros' %}";
+            suscribe = "{% trans 'Adquirir' %}";
+            url_s = "{% url 'create_org' %}";
+            if (periodPayment == "Y") {
+                period_value = 11.4
+                payment = "{% trans 'Anual' %}";
+            } else if (periodPayment == "M"){
+                period_value = 1
+                payment = "{% trans 'Mensual' %}";
             }
-            $("#pricing-methods").html(swig.render($("#pricing-template").html(), {locals: pricing}));
+           
+            pricing = [
+                {% for p in queryset_packages %}
+                    {
+                        price: numberWithCommas({{ p.service.price_per_period|floatformat }}*{{p.number_of_members}}*period_value  ), 
+                        payment: payment, 
+                        members_num: {{ p.number_of_members }}, 
+                        members_name: mn, 
+                        suscribe: suscribe, 
+                        url_suscribe: url_s+"?id_package="+{{ p.id }}
+                    },
+                {% endfor %}
+            ]
+            html_rendered = swig.render($("#pricing-template").html(), {locals: pricing})
+            $("#pricing-methods").html(html_rendered);
         }
+
+        $("#periodPayment").on("change",function(){
+            status = $(this).is(":checked")
+            if  (status=="true") {
+                set_initial_pricing_box ("Y");
+            } else {
+                set_initial_pricing_box ("M");
+            }
+        })
     });
 </script>
 {% endblock %}

@@ -22,8 +22,8 @@ def create_default_service(user,org):
         if order_status == None:
             return False, "No existe estado de orden con el codigo 002"
         
-        
-        service = Services.objects.get_or_none(code="S000")
+        # Default Service
+        service = Services.objects.get_or_none(code="S011")
         if service == None:
             return False, "No existe un servicio con el codigo proporcionado"
         customer_order = CustomerOrders.objects.create(customer=customer,status=order_status)

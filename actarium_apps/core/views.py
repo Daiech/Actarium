@@ -13,7 +13,6 @@ def read_organization_services(request,slug_org):
         if org and org.has_user_role(request.user,'is_admin'):
             if request.method == "GET":
                 order = request.GET.get('order')
-                print "ORDER", order
                 is_admin = True
                 customer_service = org.organizationservices_organization.get_members_service_active()
                 customer = request.user.actariumcustomers_user.all()[0].customer

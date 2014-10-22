@@ -65,53 +65,15 @@
 							<td>{{ package.number_of_members }}</td>
 							<td>$ {{ package.number_of_members|total_price|intcomma}} / {{ package.service.period.name }}</td>
 							<td>
-								<button class="btn btn-lg btn-upgrade" 
-									data-number-of-members="{{ package.number_of_members }}" data-total-price="{{package.number_of_members|total_price|floatformat}}" 
-									data-toggle="modal" data-target="#myModal"> 
-								{% trans 'Adquirir' %} 
-								</button>
+								<a class="btn btn-lg" href="{% url 'services:read_pricing' org.slug %}?id_package={{ package.id }}">{% trans 'Adquirir' %} </a>
 							</td>
 						</tr>
 					{% endfor %}
-					<tr>
-						<td>5</td> 
-						<td><input id="other_quantity" type="number" name="quantity" min="5" max="300" placeholder="{% trans 'N&uacute;mero de miembros' %}" ></td>
-						<td>$<span id="other_quantity_price" >---</span> / {% trans 'mes' %}</td>
-						<td><button class="btn btn-lg" data-toggle="modal" data-target="#myModal" id="other_quantity_button"  disabled="disabled"> 
-							{% trans 'Adquirir' %} 
-							</button>
-						</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3>{% trans 'Listado de precios por miembros' %}</h3>
-		</div>
-		<div class="panel-body">
-			<table class="table">
-				<thead>
-					<tr >
-						<th>{% trans 'Nombre' %} </th>
-						<th>{% trans 'Descripción' %} </th>
-						<th>{% trans 'Precio' %}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for s in services_list %}
-						<tr id="{{ s.code }}">
-							<td>{{ s.name }}</td> 
-							<td>{{ s.description }}</td>
-							<td>$ {{ s.price_per_period|floatformat:"0"|intcomma }} / {{ s.period.name }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
 	{% include "payment_summary_tpl.html" %}
 
 {% endblock %}
@@ -144,14 +106,9 @@
 				payment_summary_obj.update()
 			})
 
-			$("#other_quantity").on("keyup", function(){
-				number_of_members = $(this).val()
-				$('#id_number_of_members').val(number_of_members)
-				payment_summary_obj.update()
-			});
 
             //Form Actions
-			$("#id_number_of_members").on("keyup", function(){
+			$("#id_packages").on("change", function(){
 				payment_summary_obj.update()
 			});
 
@@ -163,7 +120,7 @@
 				payment_summary_obj.update()
 			});
 
-
+			payment_summary_obj.update()
 
 			{% if show_modal %}
 				$('#myModal').modal();

@@ -107,7 +107,7 @@ class Organizations(models.Model):
                     obj.is_active = False
                     obj.save()
                 else:
-                    print "Este man no tiene ese rol:", role
+                    # print "Este man no tiene ese rol:", role
                     return False
 
     def set_role(self, user, **kwargs):
@@ -121,7 +121,7 @@ class Organizations(models.Model):
                     objs_created += 1
                 obj.is_active = True
                 obj.save()
-                print obj, "////////////"
+                # print obj, "////////////"
             else:
                 roles_not_added.append(str(arg))          
         if objs_created < len(kwargs):
@@ -213,7 +213,7 @@ class Groups(models.Model):
         except minutes.DoesNotExist:
             return None
         except Exception, e:
-            print "Error get_minutes_by_code: %s" % e
+            # print "Error get_minutes_by_code: %s" % e
             return None
     
     def get_slug_last_template(self):

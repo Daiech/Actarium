@@ -10,8 +10,6 @@ from django.conf import settings
 @login_required(login_url='/account/login')
 def saveOrganization(request, form, org_obj=False):
     org = form.save()
-    # org.admin = request.user
-    # org.save()
     ref = request.POST.get('ref')
     if ref:
         ref = request.POST.get('ref') + "?org=" + str(org.id)
@@ -19,7 +17,6 @@ def saveOrganization(request, form, org_obj=False):
 
 
 def send_email_invitation_to_org(user_from, user_to, org):
-    print "COREOOOOO"
     try:
         link = settings.URL_BASE + reverse("show_org", args=(org.slug, ))
         email_ctx = {

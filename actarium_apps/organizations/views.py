@@ -23,18 +23,34 @@ def listOrgs(request):
 #### ORGANIZATION CRUD #####
 @login_required(login_url='/account/login')
 def createOrg(request):
+    from actarium_apps.core.forms import PackagesForm
+    from actarium_apps.core.models import Packages
+
     saveViewsLog(request, "apps.groups_app.views_groups.createOrg")
     ref = request.GET.get('ref') if 'ref' in request.GET else ""
     if request.method == "POST":
+
+        package_form = PackagesForm(1, request.POST)
         form = OrganizationForm(request.POST, request.FILES)
+
         if form.is_valid() and form.is_multipart():
             org = form.save()
             org.set_role(request.user, is_admin=True, is_member=True, is_creator=True)
+
             is_created, response = create_default_service(request.user, org)
             saveActionLog(request.user, 'NEW_ORG', "name: %s" % (org.name), request.META['REMOTE_ADDR'])
-            return HttpResponseRedirect(org.get_absolute_url())
+
+            if package_form.is_valid():
+
+                pf = package_form.cleaned_data['packages']
+                if pf.code == "5":
+                    return HttpResponseRedirect(org.get_absolute_url())
+                else:
+                    return HttpResponseRedirect(reverse("services:read_pricing",args=(org.slug,))+"?id_package="+str(pf.id))
     else:
+        id_package = request.GET.get("id_package")
         form = OrganizationForm()
+        package_form = PackagesForm(1,initial = {'packages': id_package })
     TRIAL_MEMBERS = getGlobalVar("TRIAL_MEMBERS")
     TRIAL_MONTH = getGlobalVar("TRIAL_MONTH")
     return render(request, "organizations/create_org.html", locals())

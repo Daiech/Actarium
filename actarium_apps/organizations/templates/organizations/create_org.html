@@ -14,15 +14,16 @@
     </header>
     <hr/>
     <div class="row-fluid">
-        <div class="white-box-container info-box" id="try-trial">
+ <!--        <div class="white-box-container info-box" id="try-trial">
             <div id="giftbox"></div>
             {% trans 'Pruébalo' %} <h2>{% trans '¡GRATIS!' %}</h2> {% trans 'por 30 días' %}
             <p>{% blocktrans with members=TRIAL_MEMBERS months=TRIAL_MONTH mon=TRIAL_MONTH|pluralize mem=TRIAL_MEMBERS|pluralize %}Crea una organización trial, puedes invitar a {{ members }} miembro{{ mem }} y probar los beneficios de Actarium gratis por {{ months }} mes{{ mon }}.{% endblocktrans %}*</p>
-        </div>
+        </div> -->
         <div class="white-box-container info-box message-box">
             <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
                 {% csrf_token %}
                 <table class="">
+                {{ package_form.as_table }}
                 {{ form.as_table }}
                 </table>
                 <br><br>

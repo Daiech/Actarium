@@ -45,7 +45,7 @@
 				<tr>
 					<th>{% trans 'Estado' %}</th>
 					<th>{% trans 'Numero de miembros' %} </th>
-					<th>{% trans 'Valor unidad' %}</th>
+					<!-- <th>{% trans 'Valor unidad' %}</th> -->
 					<th>{% trans 'Precio por mes' %}</th>
 					<th>{% trans 'N&uacute;mero de meses' %}</th>
 					<th>{% trans 'Descuento' %}</th>
@@ -57,7 +57,7 @@
 							<span class="glyphicon {{ order_item.order.status.id|icon_status }}"></span>
 							{{ order_item.order.status.name }}</td>
 						<td>{{ order_item.order_quantity }}</td>
-						<td>{{ order_item.service.price_per_period }} / Mes</td>
+						<!-- <td>{{ order_item.service.price_per_period }} / Mes</td> -->
 						<td>{{ order_item.get_price_per_period }} / Mes</td>
 						<td>{{ order_item.number_of_periods }}</td>
 						<td>{{ order_item.discount }}</td>

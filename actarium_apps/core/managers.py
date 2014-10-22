@@ -22,14 +22,12 @@ class OrganizationServicesManager(GenericManager):
     
     def can_add(self):
         max_num_members = self.get_max_num_members()
-        print "MAX", max_num_members
         org = self.all()[0].organization
         try:
             current_num_members = org.get_num_members()
         except:
             current_num_members = 0
         num_available_members = max_num_members - current_num_members
-        # print "num_available_members", num_available_members
         if num_available_members > 0:
             return True
         else:
@@ -66,7 +64,7 @@ class ServicesRangesManager(GenericManager):
 
     def get_service(self,quantity):
         quantity = int(quantity)
-        service_range = self.get_or_none(upper__gte=quantity,lower__lte=quantity)
+        service_range = self.get_all_active().get(upper__gte=quantity,lower__lte=quantity)
         if service_range:
             service = service_range.service
             return service

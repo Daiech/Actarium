@@ -5,7 +5,7 @@
 			<td> 
 				{% trans 'Precio por mes' %}: 
 			</td>
-			<td>  
+			<td class="text-right" >  
 				$ <strong id="pricePerMonth">
 					{% verbatim %}
 						{{ price_per_month}}
@@ -20,7 +20,7 @@
 						<strong>{{ number_of_months }}</strong>
 				{% endverbatim %} meses : 
 			</td>
-			<td>  $ <strong id="subTotal">
+			<td class="text-right">  $ <strong id="subTotal">
 					{% verbatim %}
 						{{ price_total_months }}
 					{% endverbatim %}
@@ -28,12 +28,23 @@
 			</td>
 		</tr>
 		<tr>
-			<td> {% trans 'Descuento' %}: 
+			<td> {% trans 'Descuento por codigo' %}: 
 			</td>
-			<td>  
-				$ <strong id="discountValue">
+			<td class="text-right">  
+				- $ <strong id="discountValue">
 					{% verbatim %}
-						{{ discount }}
+						{{ discount_by_code }}
+					{% endverbatim %}
+				</strong>
+			</td>
+		</tr>
+		<tr>
+			<td> {% trans 'Descuento por mas de 12 meses' %}: 
+			</td>
+			<td class="text-right">  
+				- $ <strong id="discountValue">
+					{% verbatim %}
+						{{ discount_by_periods }}
 					{% endverbatim %}
 				</strong>
 			</td>
@@ -41,7 +52,7 @@
 		<tr>
 			<td> {% trans 'Total a pagar (IVA incluido):' %}: 
 			</td>
-			<td> 
+			<td class="text-right"> 
 				$ <strong id="totalPrice">
 					{% verbatim %}
 						{{ total }}

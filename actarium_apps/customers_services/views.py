@@ -21,6 +21,9 @@ def read_pricing(request, slug_org):
         if org and org.has_user_role(request.user,'is_creator'):
             is_creator = True
 
+        id_package = request.GET.get("id_package")
+        if id_package:
+            show_modal=True
         packages = Packages.objects.get_all_active().order_by('code')
 
         services_list = Services.objects.filter(service_category__code="C001", is_active=True).order_by("-price_per_period")
@@ -32,17 +35,28 @@ def read_pricing(request, slug_org):
             if order_members_form.is_valid():
                 payment_method = order_members_form.cleaned_data['payment_method']
                 if payment_method.id == 1:
-                    number_of_members = order_members_form.cleaned_data['number_of_members']
+                    package = order_members_form.cleaned_data['packages']
+                    # number_of_members = order_members_form.cleaned_data['number_of_members']
+                    number_of_members = package.number_of_members
                     number_of_months = order_members_form.cleaned_data['number_of_months']
                     discount_code = order_members_form.cleaned_data['discount']
                     customer_services = org.organizationservices_organization.get_members_service_active()
                     service = ServicesRanges.objects.get_service(number_of_members)
-                    discount_value = DiscountCodes.objects.get_or_none(code=discount_code,is_active=True)
-                    discount_value = discount_value.value if discount_value else  0
+                    discount_value_obj = DiscountCodes.objects.get_or_none(code=discount_code,is_active=True)
+                    discount_value = discount_value_obj.value if discount_value_obj else  0
+
+                    if int(number_of_months) >= 12:
+                        base = float(number_of_members)*service.price_per_period
+                        base = base*float(number_of_months)
+                        discount_value = discount_value + base*0.05
 
                     order_id, message = OrderItems.objects.create_members_order(number_of_members=number_of_members,number_of_months=number_of_months,
                                                 customer_services=customer_services,service=service,discount_value=discount_value,user=request.user)
+
                     if order_id:
+                        if discount_value_obj:
+                            discount_value_obj.is_active= False
+                            discount_value_obj.save()
                         return HttpResponseRedirect(reverse("core:read_organization_services",args=(org.slug,))+"?order="+str(order_id))
                     else:
                         error = message
@@ -52,7 +66,7 @@ def read_pricing(request, slug_org):
                 show_modal=True
 
         else:
-            order_members_form  = OrderMembersServiceForm(initial={"organization":org.id,"payment_method":'1'},user_customer=request.user)
+            order_members_form  = OrderMembersServiceForm(initial={"organization":org.id,"payment_method":'1',"packages":id_package, "number_of_months": 12 },user_customer=request.user)
             
 
         return render(request,'pricing.html', locals())

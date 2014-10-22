@@ -55,7 +55,7 @@ def users(request):
         all_users = User.objects.all()
         active_users = User.objects.get_all_active()
         inactive_users = User.objects.filter(is_active=False)
-        orders = OrderItems.objects.exclude(service__code="S000").filter(is_active=True)
+        orders = OrderItems.objects.exclude(service__code="S000").exclude(service_code="S011").filter(is_active=True)
         orders_count = orders.aggregate(total=Sum("order_quantity"))
     return render(request, 'website/num_users.html', locals())
 
@@ -143,6 +143,8 @@ def pricing(request):
     TRIAL_MEMBERS = getGlobalVar("TRIAL_MEMBERS")
     TRIAL_MONTH = getGlobalVar("TRIAL_MONTH")
     services_list = Services.objects.filter(service_category__code="C001", is_active=True).exclude(code="S000").order_by("-price_per_period")
+    from actarium_apps.core.models import Packages
+    queryset_packages = Packages.objects.filter(is_active = True)
     return render(request, 'website/pricing.html', locals())
 
 

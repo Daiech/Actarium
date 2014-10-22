@@ -21,7 +21,7 @@ def approve_order(request):
                 
                 last_order = order_item.customer_service.get_order_active()
 
-                if last_order.service.code=="S000":
+                if last_order.service.code=="S011":
 
                     new_order = order_item
 
