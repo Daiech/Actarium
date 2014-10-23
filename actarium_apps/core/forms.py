@@ -32,9 +32,6 @@ class OrderMembersServiceForm(forms.Form):
         self.fields['packages'] = forms.ModelChoiceField(label=_(u"Paquete"), queryset=queryset_packages, empty_label=None)
             
 
-
-
-
 class PackagesForm(forms.Form):
 
     def __init__(self, option, *args, **kwargs):

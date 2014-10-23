@@ -39,7 +39,6 @@ def read_pricing(request, slug_org):
                 payment_method = order_members_form.cleaned_data['payment_method']
                 if payment_method.id == 1:
                     package = order_members_form.cleaned_data['packages']
-                    # number_of_members = order_members_form.cleaned_data['number_of_members']
                     number_of_members = package.number_of_members
                     number_of_months = order_members_form.cleaned_data['number_of_months']
                     discount_code = order_members_form.cleaned_data['discount']
