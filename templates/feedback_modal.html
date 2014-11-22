@@ -8,15 +8,16 @@
     <div class="modal-content" >
         <div class="modal-header">
             <button id="close-feed" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Feedback</h3>
+            <h3>{% trans 'Contacto' %}</h3>
         </div>
         <div class="modal-body">
-            <p>Ayudanos a mejorar dandonos tu opini&oacute;n:</p>
+            <!-- <p>Ayudanos a mejorar dandonos tu opini&oacute;n:</p> -->
+            <p>{% trans 'Escríbanos' %}:</p>
             <div id="feed-imput" class="btn-group" data-toggle="buttons-radio">
-                <button type="button" class="btn" value="0">General</button>
-                <button type="button" class="btn" value="1">Sugerencia</button>
-                <button type="button" class="btn" value="2">Error</button>
-                <button type="button" class="btn" value="3">Pregunta</button>
+                <button type="button" class="btn" value="0">{% trans 'General' %}</button>
+                <button type="button" class="btn" value="1">{% trans 'Sugerencia' %}</button>
+                <button type="button" class="btn" value="2">{% trans 'Error' %}</button>
+                <button type="button" class="btn" value="3">{% trans 'Pregunta' %}</button>
             </div>
             <textarea id="textComent" name="textComent" placeholder="Escribenos tus comentarios..."></textarea>
             <div class="control-group">
@@ -28,8 +29,8 @@
             <a href="https://twitter.com/intent/tweet?screen_name=Actarium" class="twitter-mention-button" data-lang="es" data-size="large" data-related="Actarium">Tweet to @Actarium</a>
         </div>
         <div id="load-feed-back"></div>
-        <a href="#" class="btn" id="cancel-feed" >Cancelar</a>
-        <a href="#" class="btn btn-primary disabled" id="send-feed-back">Enviar</a>
+        <a href="#" class="btn" id="cancel-feed" >{% trans 'Cancelar' %}</a>
+        <a href="#" class="btn btn-primary disabled" id="send-feed-back">{% trans 'Enviar' %}</a>
         </div>
     </div>
   </div>

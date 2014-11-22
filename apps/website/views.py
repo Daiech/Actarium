@@ -139,6 +139,7 @@ def blog(request):
 
 
 def pricing(request):
+    return HttpResponseRedirect("/")
     saveViewsLog(request, "website.views.pricing")
     MIN_MONTHLY_PAYMENT = getGlobalVar("MIN_MONTHLY_PAYMENT")
     TRIAL_MEMBERS = getGlobalVar("TRIAL_MEMBERS")

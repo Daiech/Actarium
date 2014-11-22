@@ -18,18 +18,18 @@
 					<th>{% trans 'Nombre del servicio' %}</th>
 					<th>{% trans 'Cantidad' %} </th>
 					<th>{% trans 'Fecha de expiraci&oacute;n' %}</th>
-					{% if is_admin  %}
+					<!-- {% if is_admin  %}
 						<th>{% trans 'Acci&oacute;n' %}</th>
-					{% endif %}
+					{% endif %} -->
 				</tr>
 				{% for org_service in  org.organizationservices_organization.all %}
 					<tr>
 					<td>{{ org_service.service.service_name }}</td>
 					<td>{{ org_service.service.quantity }}</td>
 					<td>{{ org_service.service.date_expiration }}</td>
-					{% if is_admin %}
+					<!-- {% if is_admin %}
 						<td> <a class="btn btn-default" href="{% url 'services:read_pricing' org.slug %}">{% trans 'Actualizar' %}</a></td>	
-					{% endif %}
+					{% endif %} -->
 					</tr>
 				{% endfor %}
 			</table>

@@ -42,4 +42,4 @@ class PackagesForm(forms.Form):
             queryset_packages = Packages.objects.filter(is_active = True)
         
 
-        self.fields['packages'] = forms.ModelChoiceField(label=_(u"Paquete"), queryset=queryset_packages, empty_label=None)
+        self.fields['packages'] = forms.ModelChoiceField(label=_(u"No. miembros"), queryset=queryset_packages, empty_label=None, widget=forms.Select(attrs={'class': "btn btn-large"}))
