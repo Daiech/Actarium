@@ -84,7 +84,8 @@
                         <p>{% trans 'Con Actarium ahorra tiempo, dinero y protege el medio ambiente reduciendo el consumo de papel' %}</p>
                     </div>
                     <div class="col-md-12 text-center">
-                        <a href="{% url 'new_user' %}?ref=bt1" class="btn-action btn-green">{% trans 'Comienza ahora' %}</a>
+                        <!-- <a href="{% url 'new_user' %}?ref=bt1" class="btn-action btn-green">{% trans 'Comienza ahora' %}</a> -->
+                        <a href="{% url 'about' %}?ref=bt1">{% trans "Conozca más" %}</a>
                     </div>
                 </div>
             </div>
@@ -155,7 +156,8 @@
                     </div>
                 </div>
                 <div class="col-md-12 text-center">
-                    <a href="{% url 'new_user' %}?ref=bt2" class="btn-action btn-green">{% trans 'Pruébalo ahora' %}</a>
+                    <!-- <a href="{% url 'new_user' %}?ref=bt2" class="btn-action btn-green">{% trans 'Pruébalo ahora' %}</a> -->
+                    <a href="{% url 'how_it_works' %}?ref=bt2" class="btn-action btn-green">{% trans 'Conozca cómo funciona' %}</a>
                 </div>
             </div>
         </div>
@@ -181,6 +183,7 @@
 
 {% block style %}
     <style>
+        body{margin-bottom: 290px !important;}
         @font-face{font-family: HelveticaNeueLT;src: url({{ STATIC_URL }}fonts/HELVETICANEUELTSTD-TH.OTF);}
         header.navbar{border-bottom:none;height: 80px;}
         #public_topbar{height: 79px;}
