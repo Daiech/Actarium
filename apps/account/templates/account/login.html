@@ -4,39 +4,7 @@
 
 {% block content %}
 <article class="form-center-box row-fluid box b">
-    <div class="form-container col-md-12">
-        <div class="form-box">
-            <div class="form-content text-center">
-                <form method="post" action="{% url 'log_in' %}" class="form-horizontal">
-                    <h3>{% trans 'Iniciar sesión en Actarium' %}</h3>
-                    <p>{% trans 'Ingresa tus datos de usuario para acceder a tu cuenta' %}</p>
-                    <div class="input-container">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ next }}" >
-                        <input type="text" name="username" id="id_username" class="form-control text-input" placeholder="{% trans 'Nombre de usuario o correo' %}" value="{{ formulario.username.value|default_if_none:"" }}" autofocus required>
-                        <label for="id_username"><span class="glyphicon glyphicon-user form-control-feedback"></span></label>
-                        {% if formulario.non_field_errors %}<span class="error">{{ formulario.non_field_errors }}</span>{% endif %}
-                    </div>
-                    <div class="input-container">
-                        <input type="password" name="password" id="password1" class="form-control text-input" placeholder="{% trans 'Contraseña' %}" required>
-                        <label for="password1"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
-                    </div>
-                    <div class="input-container">
-                        <button type="submit" class="btn-action btn-large btn-submit">{% trans 'Iniciar sesión' %}</button>
-                    </div>
-                    <div class="line-separation">
-                    </div>
-                    <div class="input-container google-action">
-                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-action btn-large btn-green">{% trans 'o inicia con Google' %} <span class="glyhicon google-icon"></span></a>
-                    </div>
-                </form>
-            </div>
-            <div class="">
-                <a href="{% url 'new_user' %}" class="text-gray pull-left">{% trans '&iquest;Eres nuevo? Registrarse' %}</a>
-                <a href="{% url 'password_reset2' %}" class="text-gray pull-right">{% trans '&iquest;Olvidaste tu contraseña?' %}</a>
-            </div>
-        </div>
-    </div>
+        {% include "account/login_form.html" %}
 </article>
 {% endblock %}
 {% block js %}

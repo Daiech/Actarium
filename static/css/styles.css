@@ -797,7 +797,7 @@ cierra Show Minutes
 .text-green{color: #97C02C !important;}
 .text-white{color: white !important;}
 .text-white:hover{color: #888 !important;}
-.text-gray:hover, .text-green:hover{color: white !important;}
+.text-green:hover{color: white !important;}
 
 
 /*groups*/

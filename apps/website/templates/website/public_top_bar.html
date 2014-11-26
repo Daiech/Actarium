@@ -1,5 +1,6 @@
 {% load gravatartag %}
 {% load i18n %}
+{% comment %}
 <div id="public_topbar" class="row-fluid landing-container">
   <div class="col-md-3 col-sm-4 col-xs-4">
     <a href="/">
@@ -25,7 +26,7 @@
             </div>
             <div class="col-md-2 col-sm-2">
                 <span><input type="submit" class="form-control btn-submit" value="{% trans 'Iniciar sesión' %}" /></span>
-                <!-- <span><a href="#" class=""><span class="google-icon btn-submit"></span></a></span> -->
+                <span><a href="#" class=""><span class="google-icon btn-submit"></span></a></span>
             </div>
         </div>
     </form>
@@ -34,3 +35,28 @@
   {% include "topbar_menus.html" %}
   {%endif%}
 </div>
+{% endcomment %}
+
+<nav id="public_topbasr"  class="navbar landing-container" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">
+        <img src="{{ STATIC_PREFIX }}img/actarium.com.png" class="img-responsive">
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li role="presentation" class=""><a href="/">{% trans 'Inicio' %}</a></li>
+        <li role="presentation" class=""><a href="/about" target="_blank">{% trans 'Acerca' %}</a></li>
+        <li role="presentation" class=""><a href="/como-funciona"  target="_blank">{% trans 'Cómo funciona' %}</a></li>
+        <li role="presentation" class=""><a href="/contact">{% trans 'Contacto' %}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

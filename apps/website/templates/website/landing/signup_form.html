@@ -1,0 +1,36 @@
+{% load i18n %}
+<div class="form-container">
+    <div class="form-box">
+        <div class="form-content text-center">
+            <form method="post" action="{% url 'new_user' %}">
+                <h3>{% trans '¡Únete a Actarium!' %}</h3>
+                <div class="input-container">
+                    {% csrf_token %}
+                    <input type="text" name="username" id="new_username" class="form-control text-input" placeholder="{% trans 'Nombre de usuario' %}" >
+                    <label for="new_username"><span class="glyphicon glyphicon-user form-control-feedback"></span></label>
+                </div>
+                <div class="input-container">
+                    <input type="email" name="email" id="email" class="form-control text-input" placeholder="{% trans 'Correo electrónico' %}" required>
+                    <label for="email"><span class="glyphicon glyphicon-envelope form-control-feedback"></span></label>
+                </div>
+                <div class="input-container">
+                    <input type="password" name="password1" id="password1" class="form-control text-input" placeholder="{% trans 'Contraseña' %}" required>
+                    <label for="password1"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
+                </div>
+                <div class="input-container">
+                    <input type="password" name="password2" id="password2" class="form-control text-input" placeholder="{% trans 'Repite Contraseña' %}" required>
+                    <label for="password2"><span class="glyphicon glyphicon-lock form-control-feedback"></span></label>
+                </div>
+                <div class="input-container">
+                    <button type="submit" class="btn-action btn-large btn-submit">{% trans 'Crear cuenta' %}</button>
+                </div>
+                <div class="line-separation">
+                    <!-- <p>{% trans 'o' %}</p> -->
+                </div>
+                <div class="input-container google-action">
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-action btn-large btn-green">{% trans 'o inicia con Google' %} <span class="glyhicon google-icon"></span></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

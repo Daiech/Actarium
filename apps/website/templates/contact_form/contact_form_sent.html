@@ -1,0 +1,36 @@
+{% extends "website/landing/landing_base.html" %}
+{% load i18n %}
+{% block TITLE %} {% trans "Actarium - El espacio más cómodo para registrar el resultado de tus reuniones" %}  {% endblock %}
+{% block content %}
+<br>
+<div class="container white-box-container text-center">
+	<h1>{% trans 'Contacto' %}</h1>
+	<hr>
+	<div class="contact">
+		<p class="lead">{% trans 'Muchas gracias por contactarnos, le responderemos inmediatamente leamos su mensaje.' %}</p>
+		<p class="text-gray">{% trans 'Siganos en nuestras redes sociales' %}</p>
+		<div id="social-buttons" class="text-center">
+	        <a href="https://www.facebook.com/Actarium" target="_blank">
+	            <div class="sprites social-button" id="fb-but"></div>
+	        </a>
+	        <a href="https://www.twitter.com/Actarium" target="_blank">
+	            <div class="sprites social-button" id="gp-but"></div>
+	        </a>
+	        <a href="https://plus.google.com/+Actarium" target="_blank">
+	            <div class="sprites social-button" id="tt-but"></div>
+	        </a>   
+	    </div>
+	</div>
+</div>
+{% endblock %}
+{% block style %}
+<style type="text/css">
+	.white-box-container{width: 60%}
+	.contact{width: 50%;margin: auto;}
+	label{display: block !important;}
+	.contact input[type=text],.contact input[type=email], .contact textarea{width: 60%;margin: auto;}
+	textarea{max-height: 100px;}
+	p:hover{text-decoration: none !important;}
+	#social-buttons{margin: auto;}
+</style>
+{% endblock %}

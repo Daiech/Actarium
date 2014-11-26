@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # to change:
-
+    url(r'^contact/', include('contact_form.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^meal/', include(admin.site.urls)),

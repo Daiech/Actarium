@@ -1,0 +1,28 @@
+{% extends "website/landing/landing_base.html" %}
+{% load i18n %}
+{% block TITLE %} {% trans "Actarium - El espacio más cómodo para registrar el resultado de tus reuniones" %}  {% endblock %}
+{% block content %}
+<br>
+<div class="container white-box-container text-center">
+	<h1>{% trans 'Contacto' %}</h1>
+	<hr>
+	<div class="contact">
+	<!-- <table class="table"></table> -->
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<p><input type="submit" class="btn btn-info btn-larg" value="{% trans 'Enviar' %}" /></p>
+	</form>
+	</div>
+</div>
+{% endblock %}
+{% block style %}
+<style type="text/css">
+
+	.white-box-container{width: 60%}
+	.contact{width: 50%;margin: auto;}
+	label{display: block !important;}
+	.contact input[type=text],.contact input[type=email], .contact textarea{width: 90%;margin: auto;}
+	textarea{max-height: 100px;}
+</style>
+{% endblock %}
