@@ -6,26 +6,24 @@
 <div class="container white-box-container text-center">
 	<h1>{% trans 'Contacto' %}</h1>
 	<hr>
-	<div class="contact">
 		<p>{% trans 'Tiene alguna duda? desea una presentación comercial? Escríabanos y nos pondremos en contacto con usted.' %}</p>
+	<div class="contact">
+		<!-- <p class="text-gray">{% trans 'Síganos en nuestras redes sociales' %}</p> -->
+		<div class="text-center original-social-buttons">
+	        <div class="fb-like" data-href="https://www.facebook.com/Actarium" data-layout="button" data-action="like" data-show-faces="true" data-share="false"></div>
+	        <div>
+	        	<a href="https://twitter.com/Actarium" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @Actarium</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+			</div>
+	        <!-- Inserta esta etiqueta donde quieras que aparezca widget. -->
+			<div class="g-follow" data-annotation="none" data-height="20" data-href="//plus.google.com/u/0/103573222326693941191" data-rel="publisher"></div>
+	    </div>
+		<hr>
 		<form method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
 			<p><input type="submit" class="btn btn-info btn-larg" value="{% trans 'Enviar' %}" /></p>
 		</form>
-		<hr>
-		<p class="text-gray">{% trans 'Siganos en nuestras redes sociales' %}</p>
-		<div id="social-buttons" class="text-center">
-	        <a href="https://www.facebook.com/Actarium" target="_blank">
-	            <div class="sprites social-button" id="fb-but"></div>
-	        </a>
-	        <a href="https://www.twitter.com/Actarium" target="_blank">
-	            <div class="sprites social-button" id="gp-but"></div>
-	        </a>
-	        <a href="https://plus.google.com/+Actarium" target="_blank">
-	            <div class="sprites social-button" id="tt-but"></div>
-	        </a>   
-	    </div>
 	</div>
 </div>
 {% endblock %}
@@ -34,10 +32,9 @@
 
 	.white-box-container{width: 60%}
 	.contact{width: 50%;margin: auto;}
-	label{display: block !important;}
+	/*label{display: block !important;}*/
 	.contact input[type=text],.contact input[type=email], .contact textarea{width: 90%;margin: auto;}
 	textarea{max-height: 100px;}
-	#social-buttons{margin: auto;}
 	p:hover{text-decoration: none !important;}
 	@media screen and (max-width: 767px){
 		.white-box-container{width: 90%}

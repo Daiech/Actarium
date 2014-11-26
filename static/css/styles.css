@@ -863,7 +863,10 @@ cierra Show Minutes
 .is_group_member:hover *{color: #888 !important;}
 img.disabled{opacity: 0.5;}
 
-
+.original-social-buttons{margin: auto;width: 240px;}
+.original-social-buttons > div {display: inline-block;margin-right: 5px;}
+.original-social-buttons .fb-like{top: -6px;}
+.original-social-buttons .g-follow{margin-left: 5px;}
 
 /*==================================================*/
 /*                  Inicia Responsive               */                    

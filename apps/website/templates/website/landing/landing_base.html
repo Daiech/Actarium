@@ -22,12 +22,21 @@
     <link title="fonts" href='https://fonts.googleapis.com/css?family=Signika' rel='stylesheet prefetch' type='text/css'>
     {%block style%}{%endblock%}
     <script src="{{ STATIC_PREFIX }}js/vendor/prefixfree.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer>{lang: 'es-419'}</script>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
   <body class="preload">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&appId=196772717140986&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     {% include "feedback_modal.html" %}
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
