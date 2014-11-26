@@ -49,7 +49,7 @@ body{margin-bottom: 160px;}
 .navbar-brand img{width: 140px;}
 .navbar-nav{font-family: Arial, Helvetica, sans-serif;;font-size: 15px;}
 .navbar-nav{font-family: 'Titillium Web';font-size: 15px;}
-.navbar-nav a{color: #adcb47;font-weight: normal !important;}
+.navbar-nav a{color: #669900;font-weight: normal !important;}
 
 .navbar-toggle {border-color: #adcb47;}
 .navbar-toggle .icon-bar {background-color: #adcb47;}

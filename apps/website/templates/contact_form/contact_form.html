@@ -7,12 +7,25 @@
 	<h1>{% trans 'Contacto' %}</h1>
 	<hr>
 	<div class="contact">
-	<!-- <table class="table"></table> -->
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<p><input type="submit" class="btn btn-info btn-larg" value="{% trans 'Enviar' %}" /></p>
-	</form>
+		<p>{% trans 'Tiene alguna duda? desea una presentación comercial? Escríabanos y nos pondremos en contacto con usted.' %}</p>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<p><input type="submit" class="btn btn-info btn-larg" value="{% trans 'Enviar' %}" /></p>
+		</form>
+		<hr>
+		<p class="text-gray">{% trans 'Siganos en nuestras redes sociales' %}</p>
+		<div id="social-buttons" class="text-center">
+	        <a href="https://www.facebook.com/Actarium" target="_blank">
+	            <div class="sprites social-button" id="fb-but"></div>
+	        </a>
+	        <a href="https://www.twitter.com/Actarium" target="_blank">
+	            <div class="sprites social-button" id="gp-but"></div>
+	        </a>
+	        <a href="https://plus.google.com/+Actarium" target="_blank">
+	            <div class="sprites social-button" id="tt-but"></div>
+	        </a>   
+	    </div>
 	</div>
 </div>
 {% endblock %}
@@ -24,5 +37,11 @@
 	label{display: block !important;}
 	.contact input[type=text],.contact input[type=email], .contact textarea{width: 90%;margin: auto;}
 	textarea{max-height: 100px;}
+	#social-buttons{margin: auto;}
+	p:hover{text-decoration: none !important;}
+	@media screen and (max-width: 767px){
+		.white-box-container{width: 90%}
+		.contact{width: 90%;margin: auto;}
+	}
 </style>
 {% endblock %}
