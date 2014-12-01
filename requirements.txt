@@ -10,3 +10,4 @@ reportlab==2.6
 xhtml2pdf
 django-rosetta
 djangorestframework
+django-contact-form
