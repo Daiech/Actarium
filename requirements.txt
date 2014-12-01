@@ -1,4 +1,4 @@
-django
+django==1.6.8
 python-social-auth>=0.1.26
 python-slugify
 django-uuslug
@@ -9,5 +9,5 @@ psycopg2
 reportlab==2.6
 xhtml2pdf
 django-rosetta
-djangorestframework
+djangorestframework==2.3.13
 django-contact-form
