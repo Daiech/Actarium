@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from .choices import CHOICE_TYPE_NOTIFICATION
 
 
 class actions(models.Model):
@@ -23,27 +24,32 @@ class rel_user_action(models.Model):
 
 
 class PersonalNotification(models.Model):
+    CHOICE_TYPE_NOTIFICATION = CHOICE_TYPE_NOTIFICATION
+
     image = models.CharField(max_length=200, verbose_name=_(u"Imagen"))
-    message = models.CharField(max_length=200, verbose_name=_(u"Mensaje"))
-    url = models.CharField(max_length=200, verbose_name=_(u"Url"))
+    message = models.CharField(max_length=400, verbose_name=_(u"Mensaje"))
+    url = models.CharField(max_length=400, verbose_name=_(u"Url"))
     user_generator = models.ForeignKey(User,  null=False, related_name='%(class)s_user_generator')
-    user_responsible = models.ForeignKey(User,  null=False, related_name='%(class)s_user_responsible')
-    type_notification = models.CharField(max_length=200, verbose_name=_(u"Tipo"))
-    viewed = models.BooleanField(default=True)
+    type_notification = models.CharField(max_length=200, verbose_name=_(u"Tipo"), choices=CHOICE_TYPE_NOTIFICATION)
+    
 
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-# class GroupalNotification(models.Model):
-#     image = models.CharField(max_length=200, verbose_name=_(u"Imagen"))
-#     message = models.CharField(max_length=200, verbose_name=_(u"Mensaje"))
-#     url = models.CharField(max_length=200, verbose_name=_(u"Url"))
-#     user_generator = models.ForeignKey(User,  null=False, related_name='%(class)s_user_generator')
-#     user_responsible = models.ForeignKey(User,  null=False, related_name='%(class)s_user_responsible')
-#     type_notification = models.CharField(max_length=200, verbose_name=_(u"Tipo"))
-#     viewed = models.BooleanField(default=True)
+    def __unicode__(self):
+        return "%s [%s] %s "%(self.id, self.type_notification, self.message)
 
-#     is_active = models.BooleanField(default=True)
-#     created = models.DateTimeField(auto_now_add=True)
-#     modified = models.DateTimeField(auto_now=True)
+
+
+class UserNotification(models.Model):
+    user = models.ForeignKey(User,  null=False, related_name='%(class)s_user_generator')
+    personalnotification = models.ForeignKey(PersonalNotification,  null=False, related_name='%(class)s_personalnotification')
+    viewed = models.BooleanField(default=False)
+
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return "%s [%s] %s - %s"%(self.id, self.user, self.viewed, self.personalnotification)    

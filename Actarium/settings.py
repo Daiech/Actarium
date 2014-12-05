@@ -29,6 +29,7 @@ folder_apps = ["apps", "actarium_apps"]
 for app in folder_apps:
     APPS += tuple([app+"."+x for x in os.listdir(os.sep.join([BASE_DIR,app])) if os.path.isdir(os.sep.join([BASE_DIR,app,x]))])
 
+
 RESERVED_WORDS = ["meal", "admin", "account", "groups", "pdf", "actions", "settings", "ads", "tour", "about", "feed-back", "blog", "update", "runMongo", "actarium", "services", "i18n", "oauth", "media", "static", "rosetta", "pricing"]
 
 if DEBUG:
@@ -132,6 +133,7 @@ TEMPLATE_CONTEXT_PROCESSORS =  global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'apps.website.context_processors.is_debug',
     'apps.website.context_processors.url_base',
     'actarium_apps.organizations.context_processors.my_orgs',
+    'apps.actions_log.context_processors.my_notifications',
     'social.apps.django_app.context_processors.backends',
 )
 
