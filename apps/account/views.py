@@ -32,35 +32,32 @@ def complete_registration(request):
 
 
 def newUser(request):
-    '''
-    crea un nuevo usuario usando un formulario propio
-    '''
+    '''crea un nuevo usuario usando un formulario propio'''
     saveViewsLog(request, "apps.account.views.newUser")
     if not request.user.is_anonymous():
-        return HttpResponseRedirect('/account/')
-    if request.method == "POST":
+        return HttpResponseRedirect(reverse("personal_data"))
+    if not request.method == "POST":
+        formulario = RegisterForm()
+    else:
         formulario = RegisterForm(request.POST)
         if formulario.is_valid():
-            email_user = formulario.cleaned_data['email']
-            name_newuser = formulario.cleaned_data['username']
+            email_user = formulario.cleaned_data.get('email')
+            name_newuser = formulario.cleaned_data.get('username')
             new_user = formulario.save()
             new_user.is_active = False
             new_user.username = new_user.username.replace(" ", "-")
-            try:
-                new_user.save()
-                ak = activation_keys.objects.create_key_to_user(new_user)
-                saveActionLog(new_user, "NEW_USER_CREATED", "username: %s, email: %s" % (name_newuser, formulario['email'].data), str(request.META['REMOTE_ADDR']))  # Registro en el Action log
-                sendEmailHtml(1, {'username': name_newuser, 'activation_key': ak.activation_key}, [str(email_user)])  # Envio de correo con clave de activacion
-                return render_to_response('account/registered.html', {'email_address': email_user}, context_instance=RequestContext(request))
-            except:
-                return HttpResponseRedirect('/#Error-de-registro-de-usuario')
-            # return userLogin(request, user_name, formulario['password1'].data)
-    else:
-        formulario = RegisterForm()
-    from apps.website.views import getGlobalVar
-    ctx = {'formulario': formulario, 'url_terms': getGlobalVar("URL_TERMS"), 'url_privacy': getGlobalVar("URL_PRIVACY")}
-    return render_to_response('account/newUser.html', ctx, context_instance=RequestContext(request))
-#    return render_to_response('account/newUser.html',{}, context_instance = RequestContext(request))
+            new_user.save()
+            ak = activation_keys.objects.create_key_to_user(new_user)
+            data = u"username: {}, email: {}".format(name_newuser, email_user)
+            saveActionLog(new_user, "SIGN_IN", data, request.META['REMOTE_ADDR'])  # Guarda datos de usuarios antes de modificarse
+            if ak:
+                try:
+                    sendEmailHtml(1, {'username': name_newuser, 'activation_key': ak.activation_key}, [str(email_user)])  # Envio de correo con clave de activacion
+                except Exception, e:
+                    print e
+                    return HttpResponseRedirect('/#Error-al-enviar-correo')
+            return render(request, 'account/registered.html', locals())
+    return render(request, 'account/newUser.html', locals())
 
 
 def log_in(request):
@@ -364,13 +361,12 @@ def confirm_account(request, activation_key, is_invited=False):
 def activate_account(request, activation_key):
     saveViewsLog(request, "apps.account.views.activate_account")
     if activate_account_now(request, activation_key):
-        try:
-            is_invited = request.GET['is_invited']
-        except Exception:
-            is_invited = False
-        return render_to_response('account/account_actived.html', {"invited": is_invited}, context_instance=RequestContext(request))
+        is_invited = request.GET.get('is_invited')
+        data = u"username: {}, email: {}".format(request.user.username, request.user.email)
+        saveActionLog(request.user, "ACCOUNT_ACTIVATED", data, request.META['REMOTE_ADDR'])
+        return render(request, 'account/account_actived.html', {"invited": is_invited})
     else:
-        return render_to_response('account/invalid_link.html', {}, context_instance=RequestContext(request))
+        return render(request, 'account/invalid_link.html', {})
 
 
 def activate_account_now(request, activation_key):

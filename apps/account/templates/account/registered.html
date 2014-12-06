@@ -1,15 +1,17 @@
-{% extends "website/layout_landing.html" %}
-{% block TITLE %}Correo enviado{% endblock %}
-{%block body %}		
+{% extends "public_base.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans "Cuenta registrada" %}{% endblock %}
+{% block content %}		
 	<article class="message-box white-box-container info-message">
-		<h3>Tu cuenta ha sido registrada!</h3>
-		<p>Hemos enviado un correo a <strong>{{ email_address }}</strong> con un link para activar tu cuenta.</p>
-		<p>Revisa tu correo, si no vez tu correo de activaci&oacute;n, revisa la bandeja de correo no deseado.</p>
-		<p>Recuerda agregar el contacto <strong>no-repy@daiech.com</strong> para que los correos de <strong>Actarium</strong> lleguen a tu bandeja de entrada.</p>
+		<h3>{% trans "Tu cuenta ha sido registrada!" %}</h3>
+		<p>{% blocktrans with email_user as email %}Hemos enviado un correo a <strong>{{ email }}</strong> con un link para activar tu cuenta.{% endblocktrans %}</p>
+		<p>{% trans "Revisa tu correo, si no vez tu correo de activación, revisa la bandeja de correo no deseado." %}</p>
+		<p>{% trans "Recuerda agregar el contacto <strong>no-repy@daiech.com</strong> para que los correos de <strong>Actarium</strong> lleguen a tu bandeja de entrada." %}</p>
+		<p><a href="/">{% trans "Regresar al inicio" %}</a></p>
 	</article>
-{% endblock%}
-{%block style%}
+{% endblock %}
+{% block style %}
 <style>
 	article.white-box-container{min-height: 160px;}
 </style>
-{%endblock%}
+{% endblock %}
