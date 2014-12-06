@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-20 14:24-0500\n"
+"POT-Creation-Date: 2014-11-21 20:14-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,38 @@ msgstr "Error 500 - Aplication error"
 msgid ""
 "Ops! algo salió mal :( Ocurrió un error en nuestros servidores, pero no te "
 "preocupes, ya estamos buscándolo para sacarlo de nuestro sistema."
+msgstr ""
+
+#: feedback_modal.html:11
+msgid "Contacto"
+msgstr ""
+
+#: feedback_modal.html:15
+msgid "Escríbanos"
+msgstr ""
+
+#: feedback_modal.html:17
+msgid "General"
+msgstr ""
+
+#: feedback_modal.html:18
+msgid "Sugerencia"
+msgstr ""
+
+#: feedback_modal.html:19
+msgid "Error"
+msgstr ""
+
+#: feedback_modal.html:20
+msgid "Pregunta"
+msgstr ""
+
+#: feedback_modal.html:32
+msgid "Cancelar"
+msgstr ""
+
+#: feedback_modal.html:33
+msgid "Enviar"
 msgstr ""
 
 #: topbar_menus.html:5
