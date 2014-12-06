@@ -175,5 +175,16 @@
 			"description": "elimina un usuario de una organización",
 			"date_created": "2013-12-20T23:37:01Z"
 		}
+	}, 
+	{
+		"model": "actions_log.actions",
+		"pk": 17,
+		"fields":
+		{
+			"name": "Cuenta Activada",
+			"code": "ACCOUNT_ACTIVATED",
+			"description": "Un usuario activo su cuenta a través del link",
+			"date_created": "2014-12-05T23:37:01Z"
+		}
 	}
 ]

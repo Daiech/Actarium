@@ -4,15 +4,6 @@
 
 {%block body%}
 <article>
-    <header >
-        <div class="row">
-            <div class="col-md-8">
-                <div class="menu-icons icons-page icon-groups"></div>
-                <h3>{% trans 'Crear organización' %}</h3>
-            </div>
-        </div>
-    </header>
-    <hr/>
     <div class="row-fluid">
  <!--        <div class="white-box-container info-box" id="try-trial">
             <div id="giftbox"></div>
@@ -20,31 +11,38 @@
             <p>{% blocktrans with members=TRIAL_MEMBERS months=TRIAL_MONTH mon=TRIAL_MONTH|pluralize mem=TRIAL_MEMBERS|pluralize %}Crea una organización trial, puedes invitar a {{ members }} miembro{{ mem }} y probar los beneficios de Actarium gratis por {{ months }} mes{{ mon }}.{% endblocktrans %}*</p>
         </div> -->
         <div class="white-box-container info-box message-box">
+            <h3>{% trans 'Crear organización' %}</h3>
+            <hr>
             <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="">
                 {% csrf_token %}
-                <table class="">
-                {{ package_form.as_table }}
-                {{ form.as_table }}
-                </table>
+                {{ package_form.as_p }}
+                {{ form.as_p }}
                 <br><br>
                 <input type="hidden" value="{{ref}}" name="ref" >
-                <a href="{% url 'home' %}" class="btn btn-large"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}</a>
-                <input type="submit" class="btn btn-large btn-info db" value="{% trans 'Crear' %}" >
+                <a href="{% url 'home' %}" class="btn"><span class="glyphicon glyphicon-arrow-left"></span> {% trans 'Volver' %}</a>
+                <input type="submit" class="btn btn-large btn-info" value="{% trans 'Crear organización' %}" >
             </form>
         </div>
     	<div class="white-box-container info-box" id="">
             <!-- <p>* {% trans 'No te preocupes, puedes ampliar tus cupos cuando quieras, tu información seguirá ahí :)' %}</p> -->
-            <p class="lead">{% trans 'Necesita más miembros?' %} <a href="#" id="callFeed">{% trans 'Escríbanos aqui' %}</a></p>
+            <p class="lead">{% trans 'Necesita más miembros?' %} <a href="/contact">{% trans 'Escríbanos aquí' %}</a></p>
         </div>
     </div>
 </article>
 {%endblock%}
 {%block style%}
+<link href='http://fonts.googleapis.com/css?family=Titillium+Web' rel='stylesheet' type='text/css'>
 <style>
     @font-face{font-family: HelveticaNeueLT;src: url({{ STATIC_URL }}fonts/HELVETICANEUELTSTD-TH.OTF);}
     @font-face{font-family: Bebas;src: url({{ STATIC_URL }}fonts/BEBAS.TTF);}
-	.white-box-container{text-align: center; margin: 0 auto;margin-bottom: 20px !important;width: 50%}
+	.white-box-container{text-align: center; margin: 0 auto;margin-bottom: 20px !important;width: 50%; font-size: 16px !important;text-align: left;font-family: 'Titillium Web' !important}
+    h3, .btn{font-family: 'Titillium Web' !important;}
     #try-trial{font-family: HelveticaNeueLT;}
+    form input{padding: 7px 10px !important;font-size: 14px !important;}
+    form input[type='file']{width: 60%;}
+    form label{/*display: block;*/width: 40%;}
+    form select{width: 210px;margin-left: 0 !important;}
+    .helptext {display: inline-block;margin-left: 4px;}
 </style>
 {%endblock%}
 
