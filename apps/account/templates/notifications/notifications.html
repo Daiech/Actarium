@@ -1,0 +1,46 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Notificaciones' %}{% endblock %}
+{% block bodysettings %}
+{% load gravatartag i18n orgs_ttag humanize %}
+
+<h3>{% trans 'Notificaciones' %}</h3>
+<div class="white-box-container">
+	<br />
+	<ul class="list-unstyled">
+        {% for notification in notifications %}
+        <li class="all-notifications" >
+            <div class ="notification-block {% if not notification.viewed %} notification-active {% endif %}">
+                <a href="{{ notification.personalnotification.url }}" class="update-view" data-notification-id="{{ notification.id}}" data-url="{% url 'update_notification' %}">
+                        
+                    <div class="notification-block-img pull-left">
+                        <img src="{{ notification.personalnotification.image}}" title="IMG" />
+                    </div>
+                    <div class="notification-block-message pull-left">
+                        <p>
+                        {% autoescape off %}
+                        {{ notification.personalnotification.message}}
+                        {% endautoescape %}
+                        </p>
+                        <span class="notification-datetime pull-right">{{ notification.created|naturaltime}}</span>
+                        <span class="glyphicon {{ notification.personalnotification.glyphicon }} pull-left"></span>
+                    </div>
+                    
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+        </ul>
+</div>
+
+{% endblock %}
+
+{% block settings_style %}
+<style>
+
+</style>
+{% endblock %}
+{% block settings_js %}
+<script >
+</script>
+{% endblock %}

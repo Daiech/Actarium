@@ -22,4 +22,5 @@ urlpatterns = patterns('apps.account.views',
     url(r'^activate/(?P<activation_key>[-\w]+)', 'activate_account', name="activate_account"),
     url(r'^delete-account/', 'delete_account', name="delete_account"),
     url(r'^confirm_account_deleted/', 'confirm_account_deleted', name="confirm_account_deleted"),
+    url(r'^list_notifications/', 'list_notifications', name="list_notifications"),
 )

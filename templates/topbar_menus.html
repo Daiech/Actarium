@@ -82,64 +82,16 @@
                             {% endautoescape %}
                             </p>
                             <span class="notification-datetime pull-right">{{ notification.created|naturaltime}}</span>
+                            <span class="glyphicon {{ notification.personalnotification.glyphicon }} pull-left"></span>
                         </div>
                         
                     </a>
                 </div>
             </li>
             {% endfor %}
-            <li  class="dropdown-header notification-footer"><p><a href="#" class="btn btn-small">Ver todas</a></p></li>
+            <li  class="dropdown-header notification-footer"><p><a href="{% url 'list_notifications'%}" class="btn btn-small">Ver todas</a></p></li>
         </ul>
     </div>
 </div>
 
-<style>
-
-.notification-block {
-    border-top: solid 1px #CACACA;
-    
-}
-.notification-block a {
-    padding: 7px 27px 7px 8px;
-    display: block;
-    width: 430px;
-    height: 64px;    
-    color: #766E6E;
-
-    
-}
-
-.notification-block a:hover{
-    background-color: #F7F7F7;
-}
-.notification-block-img, .notification-block-img img{
-    width: 50px;
-    height: 50px;
-}
-
-.notification-block-message{
-    width: 330px;
-    height: 50px;
-    padding-left: 4px;
-    overflow: hidden;
-}
-
-.notification-block-message p{
-    line-height: 14px;
-    height: 30px
-}
-
-.notification-footer{    
-    border-top: solid 1px #CAcaca;
-    text-align: center;
-}
-
-.notification-active{
-    background-color: #f0f0f0;
-}
-
-.notification-datetime{
-    font-size: 11px;
-}
-</style>
 

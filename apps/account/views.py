@@ -224,6 +224,13 @@ def dni(request):
     ctx = {'formDNI': formDNI, 'dataSaved': dataSaved, 'dni_permissions': _dni_permissions, 'permissions': permissions}
     return render_to_response('account/dni.html', ctx, context_instance=RequestContext(request))
 
+@login_required(login_url='/account/login')
+def list_notifications(request):
+    from apps.actions_log.models import UserNotification
+    notifications = UserNotification.objects.filter(user=request.user).order_by('-created')
+    return render(request,'notifications/notifications.html',locals())
+
+
 
 def setDNIPermissions(request):
     """
