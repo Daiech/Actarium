@@ -23,4 +23,5 @@ urlpatterns = patterns('apps.account.views',
     url(r'^delete-account/', 'delete_account', name="delete_account"),
     url(r'^confirm_account_deleted/', 'confirm_account_deleted', name="confirm_account_deleted"),
     url(r'^list_notifications/', 'list_notifications', name="list_notifications"),
+    url(r'^list_pending_tasks/', 'list_pending_tasks', name="list_pending_tasks"),
 )

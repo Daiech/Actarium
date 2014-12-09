@@ -224,13 +224,22 @@ def dni(request):
     ctx = {'formDNI': formDNI, 'dataSaved': dataSaved, 'dni_permissions': _dni_permissions, 'permissions': permissions}
     return render_to_response('account/dni.html', ctx, context_instance=RequestContext(request))
 
+# --------------------  notifications ------------------------
+
 @login_required(login_url='/account/login')
 def list_notifications(request):
     from apps.actions_log.models import UserNotification
     notifications = UserNotification.objects.filter(user=request.user).order_by('-created')
     return render(request,'notifications/notifications.html',locals())
 
+@login_required(login_url='/account/login')
+def list_pending_tasks(request):
+    from actarium_apps.task_manager.models import UserTasks
+    usertasks = UserTasks.objects.filter(user=request.user, role__code="RES").exclude(task__actions_task__status__code = 'TER').order_by('-created')
 
+    return render(request,'tasks/pending_tasks.html',locals())
+
+# --------------------  /notifications -----------------------
 
 def setDNIPermissions(request):
     """
