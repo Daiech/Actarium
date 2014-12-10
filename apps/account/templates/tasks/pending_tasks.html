@@ -74,6 +74,9 @@
 {% endblock %}
 {% block settings_js %}
 <script >
+$(document).ready( function() {
+        $("#settings-tasks").addClass("active");
+});
 jQuery(document).ready(function($) {
       $(".clickable-row").click(function() {
             window.document.location = $(this).attr("href");
