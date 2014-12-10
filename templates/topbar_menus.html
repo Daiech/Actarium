@@ -48,16 +48,33 @@
             <li><a href="{% url 'create_org' %}"><span class="glyphicon glyphicon-plus"></span> {% trans "Crear organización" %}</a></li>
         </ul>
     </div>
-    <!--<div id="" class="btn-group pull-right notifications">
+    <div id="" class="btn-group pull-right notifications">
         <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" >
             <span class="glyphicon glyphicon-exclamation-sign"></span>
-            <span class="badge" >12</span>
+            <span class="badge" >{{ SUMMARY_QUANTITY }}</span>
         </div>
         <ul class="dropdown-menu">
-            <li role="presentation" class="dropdown-header">Daiech</li>
-            <li class="disabled"><a href="#">0 grupos</a></li>
+            <li role="presentation" class="dropdown-header"><strong>Resumen</strong></li>
+            {% for item in SUMMARY_LIST %}
+            <li  class="dropdown-header">
+                <div class ="notification-block notification-summary">
+                    <a href="{% url 'list_pending_tasks'%}" >
+                        <div class="notification-summary-glyphicon pull-left">
+                            <span class="{{ item.glyphicon }}"></span>
+                        </div>
+                        <div class="notification-block-message pull-left">
+                            <strong>{{ item.title }}</strong>
+                        </div>
+                        <div class="pull-left">
+                            <span class="badge" >{{ item.quantity }}</span>
+                        </div>
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+            <li  class="dropdown-header notification-footer"></li>
         </ul>
-    </div> -->
+    </div> 
     <div id="" class="btn-group pull-right notifications">
         <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" >
             <span class="glyphicon glyphicon-bell"></span>
@@ -92,4 +109,13 @@
     </div>
 </div>
 
+<style>
+.notification-summary-glyphicon{
+    width: 30px;
+}
 
+.notification-summary a {
+    height: 33px;
+}
+
+</style>

@@ -235,8 +235,7 @@ def list_notifications(request):
 @login_required(login_url='/account/login')
 def list_pending_tasks(request):
     from actarium_apps.task_manager.models import UserTasks
-    usertasks = UserTasks.objects.filter(user=request.user, role__code="RES").exclude(task__actions_task__status__code = 'TER').order_by('-created')
-
+    usertasks = UserTasks.objects.get_pending_tasks_by_user(request.user)
     return render(request,'tasks/pending_tasks.html',locals())
 
 # --------------------  /notifications -----------------------

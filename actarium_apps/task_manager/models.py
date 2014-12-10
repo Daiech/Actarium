@@ -175,7 +175,7 @@ class Actions(models.Model):
     def __unicode__(self):
         return u"%s - %s - %s" % (self.task.name,self.user.username,self.status.name)
 
-        
+
 
 
 class UserTasks(models.Model):
@@ -187,13 +187,10 @@ class UserTasks(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    objects = GenericManager()
+    objects = UserTasksManager()
 
     def __unicode__(self):
         return u"%s - %s - %s" % (self.task.name,self.user.username,self.role.name)
 
     def get_minutes(self):
         return self.task.lastminutestasks_task.last().minutes
-
-    # def get_status(self):
-    #     return self.task.actions_task.all()
