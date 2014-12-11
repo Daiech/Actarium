@@ -140,6 +140,32 @@ float: right;height: 32px;min-width: 80px; padding: 10px 10px 0 8px;width: auto;
 .suspension-points{position: relative;display: inline-block;padding-top: 13px;padding-right: 5px;}
 /*/nueva barra*/
 
+/* ------------------------------  notificaciones  ------------------------ */
+
+/* top-bar notification*/
+.notifications { margin-left: 0px !important ;}
+.notifications div span.badge { background-color: #97C02C; margin-left: 3px; }
+
+/* dropdown notification */
+.notification-block {border-top: solid 1px #CACACA;}
+.notification-block a {padding: 7px 27px 7px 8px;    display: block;    width: 430px;    height: 64px;        color: #766E6E;}
+.notification-block a:hover{    background-color: #F7F7F7;}
+.notification-block-img, .notification-block-img img{    width: 50px;    height: 50px;}
+.notification-block-message{    width: 330px;    height: 50px;    padding-left: 4px;    overflow: hidden;}
+.notification-block-message p{    line-height: 14px !important;    height: 30px; font-size:13px !important;}
+.notification-block-message .glyphicon{ margin-left: 12px; }
+.notification-footer{        border-top: solid 1px #CAcaca;    text-align: center;}
+.notification-active{    background-color: #f0f0f0;}
+.notification-datetime{    font-size: 11px; line-height: 16px; }
+
+/* acount list notification*/
+.all-notifications .notification-block{  width: 600px;  height: 63px;}
+.all-notifications .notification-block a{    width: 100%;}
+.all-notifications .notification-block-message{    width: 500px;}
+.all-notifications .notification-block-message p{    width: 500px;    height: 23px;}
+
+/* ------------------------------termina notificaciones ---------------------*/
+
 /* **************************************************************************** 
 Termina barra superior Daiech
 **************************************************************************** */

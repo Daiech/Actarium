@@ -1,0 +1,76 @@
+{% extends "asettings/settings_menu.html" %}
+{% load i18n %}
+{% block TITLE %}{% trans 'Actas pendientes por aprobacion' %}{% endblock %}
+{% block bodysettings %}
+{% load gravatartag i18n orgs_ttag humanize %}
+
+<h3>{% trans 'Actas pendientes por aprobacion' %}</h3>
+<div class="white-box-container">
+	<table class="table">
+    <tr>
+        <th> {% trans 'Acta' %}</th>
+        <th> {% trans 'Grupo' %}</th>
+        <th> {% trans 'Fecha de creacion' %} </th>
+    </tr>
+    
+    {% for rel in rel_user_minutes %}
+        <tr class='clickable-row ' href="{% url 'show_minute' rel.id_minutes.id_group.slug rel.id_minutes.code %}">
+                <td>
+                   {{ rel.id_minutes.code }}
+                </td>
+                <td>
+                    {{ rel.id_minutes.id_group.name}}
+                </td>
+                <td>
+                    {{ rel.id_minutes.date_created }}
+                </td>
+            
+        </tr>
+    {% empty %}
+        <tr >
+            <td colspan="5" >            
+            {% trans 'No tienes actas pendientes por aprobacion' %}
+            </td>
+        </tr>
+        
+    {% endfor %}
+    
+    </table>
+</div>
+
+{% endblock %}
+
+{% block settings_style %}
+
+<style>
+
+.task_status{
+    width: 5px;
+    background-color: #f0f0f0;
+}
+
+.task_due{
+    background-color: #ffe2e2;
+}
+
+
+.clickable-row:hover{
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+</style>
+
+{% endblock %}
+{% block settings_js %}
+<script >
+$(document).ready( function() {
+        $("#settings-approval-of-minutes").addClass("active");
+});
+jQuery(document).ready(function($) {
+      $(".clickable-row").click(function() {
+            window.document.location = $(this).attr("href");
+      });
+});
+</script>
+{% endblock %}

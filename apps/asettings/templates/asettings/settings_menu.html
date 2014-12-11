@@ -13,6 +13,10 @@
 					<li id="settings-password"><a href="/account/changePassword"><i class="glyphicon glyphicon-chevron-right"></i>Contrase&ntilde;a</a></li>
 					<li id="settings-dni"><a href="/account/dni"><i class="glyphicon glyphicon-chevron-right"></i>DNI</a></li>
 					<li id="settings-templates" ><a href="/settings/templates"><i class="glyphicon glyphicon-chevron-right"></i>Plantillas</a></li>
+					<li id="settings-notifications" ><a  href="{% url 'list_notifications' %}"><i class="glyphicon glyphicon-chevron-right"></i>Notificaciones</a></li>
+					<li id="settings-tasks"><a  href="{% url 'list_pending_tasks' %}"><i class="glyphicon glyphicon-chevron-right"></i>Tareas</a></li>
+					<li id="settings-approval-of-minutes"><a  href="{% url 'list_pending_approval_of_minutes' %}"><i class="glyphicon glyphicon-chevron-right"></i>Actas por aprobar</a></li>
+
 			        {% if user.is_staff %}
                     <li id="settings-actions" style="margin-top:50px"><a href="/actions"><i class="glyphicon glyphicon-chevron-right"></i>Acciones</a></li>
                     <li id="settings-views"><a href="/actions/views"><i class="glyphicon glyphicon-chevron-right"></i>Visitas a Paginas</a></li>

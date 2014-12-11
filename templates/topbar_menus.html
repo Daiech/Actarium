@@ -1,4 +1,4 @@
-{% load gravatartag i18n orgs_ttag %}
+{% load gravatartag i18n orgs_ttag humanize %}
 <div id="topbar-menu" class="dib">
     <span class="suspension-points" style="display:none">...</span>
     <div id="account-menu" class="btn-group pull-right">
@@ -48,4 +48,78 @@
             <li><a href="{% url 'create_org' %}"><span class="glyphicon glyphicon-plus"></span> {% trans "Crear organización" %}</a></li>
         </ul>
     </div>
+    <div id="notification-summary-dropdown" class="btn-group pull-right notifications">
+        <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" >
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span class="notification-summary-badge badge" >{{ SUMMARY_QUANTITY }}</span>
+        </div>
+        <ul class="dropdown-menu">
+            <li role="presentation" class="dropdown-header"><strong>Resumen</strong></li>
+            {% for item in SUMMARY_LIST %}
+            <li >
+                <div class ="notification-block notification-summary">
+                    <a id="{{ item.id }}" href="{{ item.url }}" >
+                        <div class="notification-summary-glyphicon pull-left">
+                            <span class="{{ item.glyphicon }}"></span>
+                        </div>
+                        <div class="notification-block-message notification-sumary-block-message pull-left">
+                            <strong>{{ item.title }}</strong>
+                        </div>
+                        <div class="pull-left">
+                            <span class="badge" >{{ item.quantity }}</span>
+                        </div>
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+            <li  class="dropdown-header notification-footer"></li>
+        </ul>
+    </div> 
+    <div id="" class="btn-group pull-right notifications">
+        <div id="" class="topbar-btn dropdown-toggle" data-toggle="dropdown" >
+            <span class="glyphicon glyphicon-bell"></span>
+            <span id="notificationNotViewed" class="badge " >{{ NOTIFICATIONS_NOT_VIEWED}}</span>
+        </div>
+        <ul class="dropdown-menu">
+            <li role="presentation" class="dropdown-header"><strong>Notificaciones</strong></li>
+            {% for notification in NOTIFICATIONS %}
+            <li>
+                <div class ="notification-block {% if not notification.viewed %} notification-active {% endif %}">
+                    <a href="{{ notification.personalnotification.url }}" class="update-view" data-notification-id="{{ notification.id}}" data-url="{% url 'update_notification' %}">
+                            
+                        <div class="notification-block-img pull-left">
+                            <img src="{{ notification.personalnotification.image}}" title="IMG" />
+                        </div>
+                        <div class="notification-block-message pull-left">
+                            <p>
+                            {% autoescape off %}
+                            {{ notification.personalnotification.message}}
+                            {% endautoescape %}
+                            </p>
+                            <span class="notification-datetime pull-right">{{ notification.created|naturaltime}}</span>
+                            <span class="glyphicon {{ notification.personalnotification.glyphicon }} pull-left"></span>
+                        </div>
+                        
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+            <li  class="dropdown-header notification-footer"><p><a href="{% url 'list_notifications'%}" class="btn btn-small">Ver todas</a></p></li>
+        </ul>
+    </div>
 </div>
+
+<style>
+.notification-summary-glyphicon{
+    width: 30px;
+}
+
+.notification-summary a {
+    height: 33px;
+}
+
+.notification-sumary-block-message{
+    height: 20px;
+}
+
+</style>

@@ -1,6 +1,7 @@
 #encoding:utf-8
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from .models import Tasks, Roles, UserTasks, Actions, Status
 from .forms import createTaskForm
@@ -10,6 +11,8 @@ import datetime
 from .utils import *
 from apps.groups_app.models import minutes as LastMinutes
 from django.utils.timezone import utc
+from apps.actions_log.utils import create_notification
+from apps.account.templatetags.gravatartag import showgravatar
 
 
 @login_required()
@@ -116,6 +119,15 @@ def create_task(request):
         if not task_obj:
             message = {'error': response} 
         else:
+            # if not request.user.id == responsible_obj.id:
+            create_notification(
+                "NEW_TASK",
+                request.user,
+                showgravatar(request.user.email, 50),
+                reverse("show_minute", args=(minutes_obj.id_group.slug,minutes_obj.code,))+"#show-tasks",
+                "<strong>"+request.user.username + "</strong>"+ _(u" Te ha asignado una tarea en el acta ") + "<strong>"+ minutes_obj.code+"</strong>" + _(u" del grupo ") + "<strong>"+ minutes_obj.id_group.name+ "</strong>",
+                [responsible_obj]
+                )
             message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response} 
     else:
         # Update task
@@ -124,6 +136,14 @@ def create_task(request):
         if not task_obj:
             message = {'error': response} 
         else:
+            create_notification(
+                "NEW_TASK",
+                request.user,
+                showgravatar(request.user.email, 50),
+                reverse("show_minute", args=(minutes_obj.id_group.slug,minutes_obj.code,))+"#show-tasks",
+                "<strong>"+request.user.username + "</strong>"+ _(u" Te ha asignado una tarea en el acta ") + "<strong>"+ minutes_obj.code+"</strong>" + _(u" del grupo ") + "<strong>"+ minutes_obj.id_group.name+ "</strong>",
+                [responsible_obj]
+            )
             message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response, "task_updated": True} 
 
     
