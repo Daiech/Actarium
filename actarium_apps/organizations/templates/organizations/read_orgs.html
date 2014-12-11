@@ -36,17 +36,19 @@
           </div>
         </div>
     {% endfor %}
-        <a href="{% url 'create_org' %}">
-            <div class="group-preview">
-                <div class="group-circle group-circle-plus">
-                    <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+        <div class="create-button">
+            <a href="{% url 'create_org' %}">
+                <div class="group-preview">
+                    <div class="group-circle group-circle-plus">
+                        <span class="group-members-num btn-create-group" ><i class="glyphicon glyphicon-plus"></i></span>
+                    </div>
+                    <div class="group-permissions">
+                        <span class="glyphicon"></span>
+                    </div>
+                    <div class="group-name" title="{{ g.name }}">{% trans 'Crear organización' %}</div>
                 </div>
-                <div class="group-permissions">
-                    <span class="glyphicon"></span>
-                </div>
-                <div class="group-name" title="{{ g.name }}">{% trans 'Crear organización' %}</div>
-            </div>
-        </a>
+            </a>
+        </div>
     </div>
 </article>
 {%endblock%}
@@ -59,6 +61,7 @@
     .organizations-list .org-principal-image{width: 30px;height: 30px;margin-top: -6px;margin-right: 6px;}
     .organizations-list .org-principal-image img{width: 28px;margin-top: 1px;}
     .icon-config{margin-left: 5px;}
+    .create-button{text-align: center;}
 </style>
 {%endblock%}
 

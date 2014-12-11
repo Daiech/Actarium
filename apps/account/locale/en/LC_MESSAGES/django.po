@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-20 14:25-0500\n"
+"POT-Creation-Date: 2014-12-06 00:38-0500\n"
 "PO-Revision-Date: 2014-08-11 16:48-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,62 @@ msgstr "Lastname"
 #: forms.py:55
 msgid "Tipo de DNI"
 msgstr "Type of DNI"
+
+#: templates/account/account_actived.html:3
+#: templates/account/account_actived.html:10
+#, fuzzy
+msgid "Cuenta activada"
+msgstr "Associated Account"
+
+#: templates/account/account_actived.html:11
+msgid ""
+"Tu cuenta ha sido activada satisfactoriamente, ya puedes disfrutar de las "
+"funcionalidades de <strong>Actarium</strong>."
+msgstr ""
+
+#: templates/account/account_actived.html:15
+#, fuzzy
+msgid "Atención"
+msgstr "Action"
+
+#: templates/account/account_actived.html:15
+msgid ""
+"Hemos generado una contraseña temporal para el inicio de tu sesión, para "
+"mayor seguridad debes cambiarla inmediatamente en tu <a href="
+"\"{{ change_pass }}\">configuración de cuenta"
+msgstr ""
+
+#: templates/account/account_actived.html:19
+#, fuzzy
+msgid ""
+"Conoce el funcionamiento general de <strong>Actarium</strong> en la sección "
+"<a href=\"{{ about }}\">Acerca</a>"
+msgstr ""
+"Meet the general operation of <strong>Actarium</strong> in section: <a href="
+"\"/about\">About</a>"
+
+#: templates/account/account_actived.html:20
+#, fuzzy
+msgid ""
+"Necesitas ayuda? Accede a las <a href=\"{{ help }}\">Preguntas frecuentes</a>"
+msgstr "Need help? Access to <a href=\"/help/faq\">FAQs</a>"
+
+#: templates/account/account_actived.html:21
+#, fuzzy
+msgid ""
+"Entérate de las actualizaciones de la plataforma en el <a href="
+"\"{{ blog }}\">Blog oficial de <strong>Actarium</strong></a><br><br><p>Si "
+"tienes dudas, sugerencias, preguntas o quieres reportar un error, puedes "
+"hacerlo a través del módulo <a href=\"#\" id=\"callFeed\">FeedBack</a> que "
+"esta disponible a la derecha en todas las ventanas"
+msgstr ""
+"If you have questions, suggestions, questions or want to report an error, "
+"you can do so through the <a href=\"#\" id=\"callFeed\">Feedback</a> module "
+"that is available right on all windows"
+
+#: templates/account/account_actived.html:24
+msgid "Empezar"
+msgstr ""
 
 #: templates/account/complete_registration.html:3
 #: templates/account/confirm_account.html:3
@@ -278,36 +334,38 @@ msgstr ""
 msgid "Iniciar Sesión"
 msgstr "Log in"
 
-#: templates/account/login.html:11
+#: templates/account/login_form.html:6
 msgid "Iniciar sesión en Actarium"
 msgstr "Log in"
 
-#: templates/account/login.html:12
+#: templates/account/login_form.html:7
 msgid "Ingresa tus datos de usuario para acceder a tu cuenta"
 msgstr "Enter your user details to access your account "
 
-#: templates/account/login.html:16
+#: templates/account/login_form.html:11
 msgid "Nombre de usuario o correo"
 msgstr "User name or email"
 
-#: templates/account/login.html:21 templates/account/newUser.html:24
+#: templates/account/login_form.html:16 templates/account/newUser.html:24
 msgid "Contraseña"
 msgstr " Password"
 
-#: templates/account/login.html:25
+#: templates/account/login_form.html:20
 msgid "Iniciar sesión"
 msgstr "Log in"
 
-#: templates/account/login.html:30
+#: templates/account/login_form.html:25
 msgid "o inicia con Google"
 msgstr "or login with Google"
 
-#: templates/account/login.html:35
-msgid "&iquest;Eres nuevo? Registrarse"
+#: templates/account/login_form.html:29
+#, fuzzy
+msgid "&iquest;Nuevo? Registrarse"
 msgstr "Are you new? Sign up"
 
-#: templates/account/login.html:36
-msgid "&iquest;Olvidaste tu contraseña?"
+#: templates/account/login_form.html:30
+#, fuzzy
+msgid "&iquest;Olvidó su contraseña?"
 msgstr "Forgot your password?"
 
 #: templates/account/newUser.html:3
@@ -662,6 +720,38 @@ msgid ""
 msgstr ""
 "You can not disconnect this account because it is the only way to access "
 "your account. Please set a password and try again."
+
+#: templates/account/registered.html:3
+#, fuzzy
+msgid "Cuenta registrada"
+msgstr "Account released"
+
+#: templates/account/registered.html:6
+msgid "Tu cuenta ha sido registrada!"
+msgstr ""
+
+#: templates/account/registered.html:7
+#, python-format
+msgid ""
+"Hemos enviado un correo a <strong>%(email)s</strong> con un link para "
+"activar tu cuenta."
+msgstr ""
+
+#: templates/account/registered.html:8
+msgid ""
+"Revisa tu correo, si no vez tu correo de activación, revisa la bandeja de "
+"correo no deseado."
+msgstr ""
+
+#: templates/account/registered.html:9
+msgid ""
+"Recuerda agregar el contacto <strong>no-repy@daiech.com</strong> para que "
+"los correos de <strong>Actarium</strong> lleguen a tu bandeja de entrada."
+msgstr ""
+
+#: templates/account/registered.html:10
+msgid "Regresar al inicio"
+msgstr ""
 
 #~ msgid "Registrarse"
 #~ msgstr "Sign in"

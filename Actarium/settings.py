@@ -60,6 +60,8 @@ USE_L10N = True
 USE_TZ = True
 
 LOCALE_PATHS = tuple([os.sep.join([BASE_DIR,APP.replace('.',os.sep),'locale']) for APP in APPS])
+LOCALE_PATHS += tuple([os.path.join(BASE_DIR, 'templates', 'locale')])
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
