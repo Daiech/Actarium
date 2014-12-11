@@ -8,7 +8,12 @@ CHOICE_TYPE_NOTIFICATION = (
     ),
     (_(u'Actas'),(
             ('NEW_MINUTES',_(u'Nueva acta creada')),
-            ('APPROVAL_NEED',_(u'Esta acta necesita tu aprobacion'))
+            ('APPROVAL_OF_MINUTES',_(u'Esta acta necesita tu aprobacion'))
         )
     )
 )
+
+GLYPHICON_CHOICES = {
+	"NEW_TASK" : "glyphicon-edit",
+	"APPROVAL_OF_MINUTES" : "glyphicon-ok-sign"
+}

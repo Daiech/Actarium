@@ -21,6 +21,7 @@ from .utils import send_email_full_signed, getEmailListByGroup
 from actarium_apps.minutes.utils import get_minutes_roles
 from apps.actions_log.views import saveActionLog, saveViewsLog
 from apps.emailmodule.views import sendEmailHtml
+from apps.actions_log.utils import create_notification
 from actarium_apps.organizations.models import rel_user_group
 
 
@@ -308,12 +309,14 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editin
             rols = rol_user_minutes.objects.filter(id_group=group, is_active=False)
 
         email_list = list()
+        notifications_list = list()
         befores = rel_user_minutes_signed.objects.filter(id_minutes=_minute)
         befores.delete()
         for r in rols:
             if r.is_approver:
                 email_list.append(r.id_user.email)
                 setRelUserMinutesSigned(r.id_user, _minute, 0)
+                notifications_list.append(r.id_user)
 
         rols.update(is_active=True, id_minutes=_minute)
     except Exception, e:
@@ -334,6 +337,21 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editin
         sendEmailHtml(13, email_ctx, email_list)
     # else:
     #     sendEmailHtml(3, email_ctx, getEmailListByGroup(group))
+
+
+    # Notifications 
+
+    create_notification(
+        "APPROVAL_OF_MINUTES",
+        request.user,
+        showgravatar(request.user.email, 50),
+        url_new_minute,
+        "<strong>"+request.user.username + "</strong>"+ _(u" Ha creado el acta ") + "<strong>"+ _minute.code+"</strong>" + _(u" del grupo ") + "<strong>"+ _minute.id_group.name+ "</strong> que debes aprobar",
+        notifications_list
+    )
+
+
+
     return url_new_minute
 
 

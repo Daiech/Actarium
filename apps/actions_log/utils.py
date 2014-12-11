@@ -29,8 +29,8 @@ def connect_to_actarium_db():
         return False
     
 def create_notification(type_notification, user_generator, image, url, message, recipients):
-    print type_notification,user_generator, image, url, message, recipients
-    personalnotification = PersonalNotification.objects.create(image=image,message=message,url=url,user_generator=user_generator)
+    # print type_notification,user_generator, image, url, message, recipients
+    personalnotification = PersonalNotification.objects.create(type_notification=type_notification, image=image,message=message,url=url,user_generator=user_generator)
     for user in recipients:
         usernotification = UserNotification.objects.create(user=user,personalnotification=personalnotification)
     return True

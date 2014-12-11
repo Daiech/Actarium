@@ -111,3 +111,17 @@ class TasksManager(GenericManager):
     def get_tasks_by_group(self):
         pass
 
+
+
+class UserTasksManager(GenericManager):
+
+    def get_pending_tasks_by_user(self,user):
+
+        usertasks = self.filter(user=user, role__code="RES").order_by('-created')
+        tasks_excluded = []
+        for usertask in usertasks:
+            if usertask.task.status_code == 'TER':
+                tasks_excluded.append(usertask.id)
+        usertasks = usertasks.exclude(id__in=tasks_excluded)
+
+        return usertasks

@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from .choices import CHOICE_TYPE_NOTIFICATION
+from .choices import CHOICE_TYPE_NOTIFICATION, GLYPHICON_CHOICES
 
 
 class actions(models.Model):
@@ -40,6 +40,8 @@ class PersonalNotification(models.Model):
     def __unicode__(self):
         return "%s [%s] %s "%(self.id, self.type_notification, self.message)
 
+    def glyphicon(self):
+        return GLYPHICON_CHOICES[self.type_notification]
 
 
 class UserNotification(models.Model):
