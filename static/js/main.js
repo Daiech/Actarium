@@ -278,6 +278,23 @@ function sendNewAjax(url, params, myCallback, args){
 //--------------------------//
 
 
+//------------- topbar--search ----------//
+$('#topBarSearch').on({
+    "shown.bs.dropdown": function() { this.closable = false; },
+    "click":             function() { this.closable = false; },
+    "hide.bs.dropdown":  function() { return this.closable; }
+});
+
+$('#topBarSearch .close').on('click',function(e){
+    $('#topBarSearch').removeClass('open');
+})
+
+
+//------------- // ----------//
+
+
+
+
 /*Dropdown Actarium*/
 function restartMenus(){
     $(".second-menu").slideUp(200);

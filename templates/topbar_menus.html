@@ -62,7 +62,7 @@
                         <div class="notification-summary-glyphicon pull-left">
                             <span class="{{ item.glyphicon }}"></span>
                         </div>
-                        <div class="notification-block-message notification-sumary-block-message pull-left">
+                        <div class="notification-block-message notification-summary-block-message pull-left">
                             <strong>{{ item.title }}</strong>
                         </div>
                         <div class="pull-left">
@@ -107,19 +107,35 @@
             <li  class="dropdown-header notification-footer"><p><a href="{% url 'list_notifications'%}" class="btn btn-small">Ver todas</a></p></li>
         </ul>
     </div>
+    <div id="topBarSearch" class="dropdown btn-group pull-right notifications search-field ">
+        <div id="" class="topbar-btn dropdown-toggle text-center" data-toggle="dropdown" >
+            <span class="glyphicon glyphicon-search"></span>  
+        </div>
+        <ul class="dropdown-menu">
+            <li role="presentation" class="dropdown-header"><span class=" close close-popover glyphicon glyphicon-remove"></span><strong>Buscar</strong></li>
+            <li >
+                <div class ="notification-block ">
+                    <div class="notification-block-message  pull-left">
+                        <div class="prelative">
+                            <div class="input-group">
+                                <form method="POST" action="{% url 'core:search_minutes' %}">
+                                    {% csrf_token %}
+                                    <input name="search_text" type="text" placeholder="Buscar en actas" class="form-control" autofocus>
+                                        <div class="input-group-addon" id="button-search">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </li>
+            <li  class="dropdown-header notification-footer"></li>
+        </ul>
+    </div>
 </div>
 
 <style>
-.notification-summary-glyphicon{
-    width: 30px;
-}
-
-.notification-summary a {
-    height: 33px;
-}
-
-.notification-sumary-block-message{
-    height: 20px;
-}
 
 </style>

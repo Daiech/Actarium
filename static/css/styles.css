@@ -164,7 +164,20 @@ float: right;height: 32px;min-width: 80px; padding: 10px 10px 0 8px;width: auto;
 .all-notifications .notification-block-message{    width: 500px;}
 .all-notifications .notification-block-message p{    width: 500px;    height: 23px;}
 
+/* notificacion de resumen */
+.notification-summary-glyphicon{    width: 30px;}
+.notification-summary a {    height: 33px;}
+.notification-summary-block-message{    height: 20px;}
+
 /* ------------------------------termina notificaciones ---------------------*/
+/* ------------------------------  topbar search  ------------------------ */
+
+.search-field .notification-block-message {    height: 38px;}
+.search-field .input-group { padding-top: 4px; }
+.search-field input { width: 267px !important; }
+.search-field .input-group-addon { height: 34px; }
+/* ------------------------------ / topbar search  ------------------------ */
+
 
 /* **************************************************************************** 
 Termina barra superior Daiech
