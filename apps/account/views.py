@@ -238,6 +238,13 @@ def list_pending_tasks(request):
     usertasks = UserTasks.objects.get_pending_tasks_by_user(request.user)
     return render(request,'tasks/pending_tasks.html',locals())
 
+@login_required(login_url='/account/login')
+def list_pending_approval_of_minutes(request):
+    from apps.groups_app.models import rel_user_minutes_signed
+    rel_user_minutes = rel_user_minutes_signed.objects.filter(id_user = request.user, is_signed_approved=0).order_by('-date_joined')
+    return render(request,'minutes/minutes_approval.html',locals())
+
+
 # --------------------  /notifications -----------------------
 
 def setDNIPermissions(request):

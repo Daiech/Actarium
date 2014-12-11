@@ -1,44 +1,35 @@
 {% extends "asettings/settings_menu.html" %}
 {% load i18n %}
-{% block TITLE %}{% trans 'Tareas pendientes' %}{% endblock %}
+{% block TITLE %}{% trans 'Actas pendientes por aprobacion' %}{% endblock %}
 {% block bodysettings %}
 {% load gravatartag i18n orgs_ttag humanize %}
 
-<h3>{% trans 'Tareas pendientes' %}</h3>
+<h3>{% trans 'Actas pendientes por aprobacion' %}</h3>
 <div class="white-box-container">
-	<br />
 	<table class="table">
     <tr>
-        <th ></th>
-        <th> {% trans 'Tarea' %}</th>
         <th> {% trans 'Acta' %}</th>
         <th> {% trans 'Grupo' %}</th>
-        <th> {% trans 'Detalle' %}</th>
+        <th> {% trans 'Fecha de creacion' %} </th>
     </tr>
     
-    {% for usertask in usertasks %}
-        <tr class='clickable-row ' href="{% url 'show_minute' usertask.get_minutes.id_group.slug usertask.get_minutes.code %}#show-tasks">
-                <td class="task_status {% if usertask.task.get_status_code == 'VEN' %} task_due {% endif %}" title="{% if usertask.task.get_status_code == 'VEN' %} {% trans 'Esta tarea vencio en' %} {% else %} {% trans 'Esta tarea vence en' %} {% endif %} {{usertask.task.due}} ">
-
+    {% for rel in rel_user_minutes %}
+        <tr class='clickable-row ' href="{% url 'show_minute' rel.id_minutes.id_group.slug rel.id_minutes.code %}">
+                <td>
+                   {{ rel.id_minutes.code }}
                 </td>
                 <td>
-                   {{ usertask.task }}
+                    {{ rel.id_minutes.id_group.name}}
                 </td>
                 <td>
-                    {{ usertask.get_minutes.code}}
-                </td>
-                <td>
-                    {{ usertask.get_minutes.id_group.name}}
-                </td>
-                <td>
-                    {{ usertask.task.description }}
+                    {{ rel.id_minutes.date_created }}
                 </td>
             
         </tr>
     {% empty %}
         <tr >
             <td colspan="5" >            
-            {% trans 'No tienes tareas pendientes' %}
+            {% trans 'No tienes actas pendientes por aprobacion' %}
             </td>
         </tr>
         
@@ -50,6 +41,7 @@
 {% endblock %}
 
 {% block settings_style %}
+
 <style>
 
 .task_status{
@@ -67,15 +59,13 @@
     cursor: pointer;
 }
 
-
-
-
 </style>
+
 {% endblock %}
 {% block settings_js %}
 <script >
 $(document).ready( function() {
-        $("#settings-tasks").addClass("active");
+        $("#settings-approval-of-minutes").addClass("active");
 });
 jQuery(document).ready(function($) {
       $(".clickable-row").click(function() {

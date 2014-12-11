@@ -83,6 +83,11 @@ function setApprove(e){
 	$(this).attr({"disabled": "disabled"});
 	var minutes_id = $(this).attr("data-minutes");
 	var is_approved = parseInt($(this).attr("data-approve"));
+	console.log('se esta ejecutando setApprove de scripts.js')
+	var badge_quantity = parseInt($('#list_pending_approval_of_minutes .badge').html())
+	$('#list_pending_approval_of_minutes .badge').html(badge_quantity-1)
+	var summary_quantity = parseInt($('#notification-summary-dropdown .notification-summary-badge').html())
+	$('#notification-summary-dropdown .notification-summary-badge').html(summary_quantity-1)
 	sendNewAjax(
 		"{% url 'approve_minutes' %}",
 		{"m_id":minutes_id, "approve": is_approved},
