@@ -9,7 +9,7 @@ def task_as_json(task_obj):
                 "title":task_obj.name,
                 "short_title":task_obj.name[0:title_max_length]+"..." if len(task_obj.name) >= title_max_length else task_obj.name,
                 "description":task_obj.description,
-                "short_description":task_obj.description[0:description_max_length]+"..." if len(task_obj.description) >= description_max_length else task_obj.description,
+                "short_description":task_obj.description[0:description_max_length]+"..." if task_obj.description and len(task_obj.description) >= description_max_length else task_obj.description,
                 "responsible_img":showgravatar(task_obj.responsible.email,25), 
                 "responsible":task_obj.responsible.first_name, 
                 "responsible_id":task_obj.responsible.id, 
