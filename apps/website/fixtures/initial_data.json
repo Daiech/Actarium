@@ -48,5 +48,25 @@
       "description": "Numero de meses minimos para hacer una compra",
       "date_created": "2013-12-20T23:37:01Z"
     }
+  },
+  {
+    "pk": 6,
+    "model": "website.globalvars",
+    "fields": {
+      "url": "S019",
+      "date_created": "2014-10-22T23:34:23.178Z",
+      "name": "FREE_SERVICE",
+      "description": "Servicio gratuito por 24 meses"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "website.globalvars",
+    "fields": {
+      "url": "5",
+      "date_created": "2014-12-06T06:10:33.137Z",
+      "name": "FREE_PACKAGE_ID",
+      "description": "Paquete con id 5"
+    }
   }
 ]
