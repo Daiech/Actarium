@@ -34,7 +34,7 @@ class Status(models.Model):
 
 class Tasks(models.Model):
     name = models.CharField(max_length=300, verbose_name=_("Nombre"))
-    description = models.TextField(blank=True, null=True, verbose_name=_(u"Descripción"))
+    description = models.TextField(blank=True, verbose_name=_(u"Descripción"))
     due = models.DateTimeField(null=True, blank=True)
 
     is_active = models.BooleanField(default=True)

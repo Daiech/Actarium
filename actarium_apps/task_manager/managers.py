@@ -29,6 +29,8 @@ class TasksManager(GenericManager):
         from actarium_apps.core.models import LastMinutesTasks
         from django.contrib.auth.models import User
 
+        if description is None:
+            description = ""
         # validate database configuration - fixtures
         status_obj = Status.objects.get_or_none(code="ASI")
         creator_role_obj = Roles.objects.get_or_none(code="CRE")
@@ -60,7 +62,9 @@ class TasksManager(GenericManager):
             return None, __( u"Esta tarea ya no se puede modificar" )
 
         task_obj.name = name
-        task_obj.description = description
+        print "Actualizando ",description
+        if task_obj.description != description:
+            task_obj.description = description
         
         usertask_obj =  task_obj.usertasks_task.get(role__code="RES")
         usertask_obj.user= responsible_obj

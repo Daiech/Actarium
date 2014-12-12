@@ -105,7 +105,11 @@ def create_task(request):
 
 
     # form validations
-    form = createTaskForm({"name":name,"description":description, "responsible":responsible, "due":due})
+    # form = createTaskForm({"name":name,"description":description, "responsible":responsible, "due":due})
+    try:
+        form = createTaskForm(request.POST)
+    except Exception, e:
+        raise e
     if not form.is_valid():
         print "Formulario invalido", dict(form.errors.items())
         message = {'form_errors':  dict(form.errors.items()) }

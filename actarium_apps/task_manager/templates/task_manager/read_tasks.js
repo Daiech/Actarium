@@ -168,6 +168,7 @@ function editTask(e){
 		        else {
 		        	
 		        	task = data.task[0];
+		        	console.log(task);
 		        	$("#nameTaskForm").val(task.title);
 		        	$("#descriptionTaskForm").val(task.description);
 		        	$("#responsibleSelector option[value="+task.responsible_id+"]").attr("selected","selected")
