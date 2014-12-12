@@ -176,6 +176,8 @@ class Actions(models.Model):
         return u"%s - %s - %s" % (self.task.name,self.user.username,self.status.name)
 
 
+
+
 class UserTasks(models.Model):
     user = models.ForeignKey(User, related_name='%(class)s_user', verbose_name=_("Usuario"))
     role = models.ForeignKey(Roles, related_name='%(class)s_role', verbose_name=_("Rol"))
@@ -185,7 +187,10 @@ class UserTasks(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     
-    objects = GenericManager()
+    objects = UserTasksManager()
 
     def __unicode__(self):
         return u"%s - %s - %s" % (self.task.name,self.user.username,self.role.name)
+
+    def get_minutes(self):
+        return self.task.lastminutestasks_task.last().minutes

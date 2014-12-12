@@ -1,6 +1,7 @@
 from django.conf import settings
 import datetime
 from pymongo import MongoClient
+from .models import PersonalNotification, UserNotification
 
 def saveErrorLog(errordata):
     try:
@@ -27,5 +28,13 @@ def connect_to_actarium_db():
         saveErrorLog(error)
         return False
     
+def create_notification(type_notification, user_generator, image, url, message, recipients):
+    # print type_notification,user_generator, image, url, message, recipients
+    personalnotification = PersonalNotification.objects.create(type_notification=type_notification, image=image,message=message,url=url,user_generator=user_generator)
+    for user in recipients:
+        usernotification = UserNotification.objects.create(user=user,personalnotification=personalnotification)
+    return True
+
+
 
     

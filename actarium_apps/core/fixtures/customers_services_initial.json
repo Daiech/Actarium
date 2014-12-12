@@ -71,109 +71,304 @@
 "description":"La orden se activara cuando se registre la consignacion"
 }
 },
-{
-"pk":1,
-"model":"customers_services.services",
-"fields":{
-"code":"S001",
-"name":"Miembro economico",
-"created":"2013-07-25T09:50:10Z",
-"is_active":true,
-"period":2,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":1,
-"price_per_period":5865.0,
-"description":"Precio si se paga mas de 35 miembros para una organizacion"
-}
-},
-{
-"pk":2,
-"model":"customers_services.services",
-"fields":{
-"code":"S002",
-"name":"Miembro regular",
-"created":"2013-07-25T09:50:10Z",
-"is_active":true,
-"period":2,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":1,
-"price_per_period":6210.0,
-"description":"Precio si se paga entre 21 y 35 miembros para una organizacion"
-}
-},
-{
-"pk":3,
-"model":"customers_services.services",
-"fields":{
-"code":"S003",
-"name":"Miembro costoso",
-"created":"2013-07-25T09:50:10Z",
-"is_active":true,
-"period":2,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":1,
-"price_per_period":6555.0,
-"description":"Precio si se paga entre 11 y 20 miembros para una organizacion"
-}
-},
-{
-"pk":4,
-"model":"customers_services.services",
-"fields":{
-"code":"S004",
-"name":"Miembro muy costoso",
-"created":"2013-07-25T09:50:10Z",
-"is_active":true,
-"period":2,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":1,
-"price_per_period":6900.0,
-"description":"Precio si se paga entre 5 y 10 miembros para una organizacion"
-}
-},
-{
-"pk":5,
-"model":"customers_services.services",
-"fields":{
-"code":"S005",
-"name":"Personalizacion economica",
-"created":"2013-07-25T09:50:10Z",
-"is_active":false,
-"period":1,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":4,
-"price_per_period":20000.0,
-"description":"Incluye eliminacion del logo de la plataforma y permite el uso del logo propio de una organizacion"
-}
-},
-{
-"pk":6,
-"model":"customers_services.services",
-"fields":{
-"code":"S006",
-"name":"Personalizacion costosa",
-"created":"2013-07-25T09:50:10Z",
-"is_active":false,
-"period":1,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":4,
-"price_per_period":50000.0,
-"description":"Incluye lo de la personalizacion economica mas la posibilidad de personalizar colores de la plataforam"
-}
-},
-{
-"pk":7,
-"model":"customers_services.services",
-"fields":{
-"code":"S000",
-"name":"Version Trial",
-"created":"2013-07-25T09:50:10Z",
-"is_active":true,
-"period":2,
-"modified":"2013-07-25T09:50:10Z",
-"service_category":1,
-"price_per_period":0,
-"description":"Version de prueba de Actarium por 3 meses con 5 miembros"
-}
-}
+  {
+    "pk": 1,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S001",
+      "name": "Miembro economico",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 1,
+      "price_per_period": 5865,
+      "description": "Precio si se paga mas de 35 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S002",
+      "name": "Miembro regular",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 1,
+      "price_per_period": 6210,
+      "description": "Precio si se paga entre 21 y 35 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S003",
+      "name": "Miembro costoso",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 1,
+      "price_per_period": 6555,
+      "description": "Precio si se paga entre 11 y 20 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S004",
+      "name": "Miembro muy costoso",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 1,
+      "price_per_period": 6900,
+      "description": "Precio si se paga entre 5 y 10 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S005",
+      "name": "Personalizacion economica",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": false,
+      "period": 1,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 4,
+      "price_per_period": 20000,
+      "description": "Incluye eliminacion del logo de la plataforma y permite el uso del logo propio de una organizacion"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S006",
+      "name": "Personalizacion costosa",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": false,
+      "period": 1,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 4,
+      "price_per_period": 50000,
+      "description": "Incluye lo de la personalizacion economica mas la posibilidad de personalizar colores de la plataforam"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S000",
+      "name": "Version Trial",
+      "created": "2013-07-25T09:50:10Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2013-07-25T09:50:10Z",
+      "service_category": 1,
+      "price_per_period": 0,
+      "description": "Version de prueba de Actarium por 3 meses con 5 miembros"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S007",
+      "name": "Miembro economico",
+      "created": "2014-07-16T23:18:57.922Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-08-01T18:19:24.963Z",
+      "service_category": 1,
+      "price_per_period": 4200,
+      "description": "Precio si se paga mas de 35 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S008",
+      "name": "Miembro regular",
+      "created": "2014-07-16T23:20:18.971Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-08-01T18:17:32.519Z",
+      "service_category": 1,
+      "price_per_period": 4800,
+      "description": "Precio si se paga entre 21 y 35 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S009",
+      "name": "Miembro costoso",
+      "created": "2014-07-16T23:21:17.392Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-08-01T18:15:54.198Z",
+      "service_category": 1,
+      "price_per_period": 5400,
+      "description": "Precio si se paga entre 11 y 20 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "s0010",
+      "name": "Miembro muy costoso",
+      "created": "2014-07-16T23:21:53.452Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-08-01T18:12:54.875Z",
+      "service_category": 1,
+      "price_per_period": 6000,
+      "description": "Precio si se paga entre 5 y 10 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "s0011",
+      "name": "Miembro muy costoso",
+      "created": "2014-08-01T18:12:47.222Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-10-23T00:20:14.089Z",
+      "service_category": 1,
+      "price_per_period": 6900,
+      "description": "Precio si se paga entre 5 y 10 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S0012",
+      "name": "Miembro costoso",
+      "created": "2014-08-01T18:15:47.241Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-10-23T00:20:27.904Z",
+      "service_category": 1,
+      "price_per_period": 6555,
+      "description": "Precio si se paga entre 11 y 20 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S0013",
+      "name": "Miembro regular",
+      "created": "2014-08-01T18:17:27.459Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-10-23T00:20:45.959Z",
+      "service_category": 1,
+      "price_per_period": 6210,
+      "description": "Precio si se paga entre 21 y 35 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S0014",
+      "name": "Miembro economico",
+      "created": "2014-08-01T18:19:21.188Z",
+      "is_active": false,
+      "period": 2,
+      "modified": "2014-10-23T00:20:55.997Z",
+      "service_category": 1,
+      "price_per_period": 5865,
+      "description": "Precio si se paga mas de 35 miembros para una organizacion"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S015",
+      "name": "Paquete x 10 Miembros",
+      "created": "2014-10-22T23:28:53.511Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2014-10-23T00:21:32.530Z",
+      "service_category": 1,
+      "price_per_period": 2000,
+      "description": "Paquete por 10 miembros"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S016",
+      "name": "Paquete x 50 Miembros",
+      "created": "2014-10-22T23:29:43.887Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2014-10-23T00:21:24.401Z",
+      "service_category": 1,
+      "price_per_period": 1500,
+      "description": "Paquete por 50 miembros"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S017",
+      "name": "Paquete x 100 Miembros",
+      "created": "2014-10-22T23:30:49.736Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2014-10-23T00:21:17.677Z",
+      "service_category": 1,
+      "price_per_period": 1200,
+      "description": "Paquete por 100 miembros"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S018",
+      "name": "Paquete x 500 Miembros",
+      "created": "2014-10-22T23:31:34.447Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2014-10-23T00:21:11.933Z",
+      "service_category": 1,
+      "price_per_period": 600,
+      "description": "Paquete por 500 miembros"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "customers_services.services",
+    "fields": {
+      "code": "S019",
+      "name": "5 Miembros (Gratis!)",
+      "created": "2014-10-22T23:32:15.288Z",
+      "is_active": true,
+      "period": 2,
+      "modified": "2014-11-22T00:44:33.889Z",
+      "service_category": 1,
+      "price_per_period": 0,
+      "description": "Paquete gratuito por 5 miembros durante 24 meses"
+    }
+  }
 ]

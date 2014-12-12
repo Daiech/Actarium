@@ -141,6 +141,13 @@ $(document).ready(function(){
     });
     //----------------</feedback>-------------------/
 
+    
+
+
+
+
+
+
     //terms cheched
     $("#term_privacy").on("change", function(){
         if($(this).is(':checked')){
@@ -246,6 +253,47 @@ function sendNewAjax(url, params, myCallback, args){
         });
     }
 }
+
+//------------- update notification ----------//
+     
+
+    function notificationViewed(data){
+            // console.log("viewed",data)
+        }
+
+    $(".update-view").on("click", function(e){
+        // console.log("hola mundo ", $(this))
+        notification_id = $(this).attr("data-notification-id");
+        url_notification = $(this).attr("data-url")
+        // console.log(notification_id,url_notification)
+        $(this).parent().removeClass('notification-active')
+        count = $("#notificationNotViewed").html()
+        count = parseInt(count)-1
+        $("#notificationNotViewed").html(count)
+        sendNewAjax(url_notification,
+            {"notification_id":notification_id},
+            notificationViewed,
+            {"method":"post"})
+    });
+//--------------------------//
+
+
+//------------- topbar--search ----------//
+$('#topBarSearch').on({
+    "shown.bs.dropdown": function() { this.closable = false; },
+    "click":             function() { this.closable = false; },
+    "hide.bs.dropdown":  function() { return this.closable; }
+});
+
+$('#topBarSearch .close').on('click',function(e){
+    $('#topBarSearch').removeClass('open');
+})
+
+
+//------------- // ----------//
+
+
+
 
 /*Dropdown Actarium*/
 function restartMenus(){

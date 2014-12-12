@@ -8,34 +8,39 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'actions'
-        db.create_table(u'actions_log_actions', (
+        # Adding model 'UserNotification'
+        db.create_table(u'actions_log_usernotification', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=150)),
-            ('code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=150)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='usernotification_user_generator', to=orm['auth.User'])),
+            ('personalnotification', self.gf('django.db.models.fields.related.ForeignKey')(related_name='usernotification_personalnotification', to=orm['actions_log.PersonalNotification'])),
+            ('viewed', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
-        db.send_create_signal(u'actions_log', ['actions'])
+        db.send_create_signal(u'actions_log', ['UserNotification'])
 
-        # Adding model 'rel_user_action'
-        db.create_table(u'actions_log_rel_user_action', (
+        # Adding model 'PersonalNotification'
+        db.create_table(u'actions_log_personalnotification', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('id_user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='rel_user_action_id_user', to=orm['auth.User'])),
-            ('id_action', self.gf('django.db.models.fields.related.ForeignKey')(related_name='rel_user_action_id_action', to=orm['actions_log.actions'])),
-            ('extra', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('date_done', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('ip_address', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('image', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('message', self.gf('django.db.models.fields.CharField')(max_length=400)),
+            ('url', self.gf('django.db.models.fields.CharField')(max_length=400)),
+            ('user_generator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='personalnotification_user_generator', to=orm['auth.User'])),
+            ('type_notification', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
-        db.send_create_signal(u'actions_log', ['rel_user_action'])
+        db.send_create_signal(u'actions_log', ['PersonalNotification'])
 
 
     def backwards(self, orm):
-        # Deleting model 'actions'
-        db.delete_table(u'actions_log_actions')
+        # Deleting model 'UserNotification'
+        db.delete_table(u'actions_log_usernotification')
 
-        # Deleting model 'rel_user_action'
-        db.delete_table(u'actions_log_rel_user_action')
+        # Deleting model 'PersonalNotification'
+        db.delete_table(u'actions_log_personalnotification')
 
 
     models = {
@@ -47,6 +52,18 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'})
         },
+        u'actions_log.personalnotification': {
+            'Meta': {'object_name': 'PersonalNotification'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'message': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'type_notification': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'url': ('django.db.models.fields.CharField', [], {'max_length': '400'}),
+            'user_generator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'personalnotification_user_generator'", 'to': u"orm['auth.User']"})
+        },
         u'actions_log.rel_user_action': {
             'Meta': {'object_name': 'rel_user_action'},
             'date_done': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
@@ -55,6 +72,16 @@ class Migration(SchemaMigration):
             'id_action': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rel_user_action_id_action'", 'to': u"orm['actions_log.actions']"}),
             'id_user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rel_user_action_id_user'", 'to': u"orm['auth.User']"}),
             'ip_address': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        u'actions_log.usernotification': {
+            'Meta': {'object_name': 'UserNotification'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'personalnotification': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'usernotification_personalnotification'", 'to': u"orm['actions_log.PersonalNotification']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'usernotification_user_generator'", 'to': u"orm['auth.User']"}),
+            'viewed': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
