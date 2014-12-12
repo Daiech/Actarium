@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-06 00:38-0500\n"
+"POT-Creation-Date: 2014-12-12 03:09-0500\n"
 "PO-Revision-Date: 2014-08-11 16:48-0500\n"
 "Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -271,7 +271,8 @@ msgstr ""
 msgid "Solicitante"
 msgstr "Applicant"
 
-#: templates/account/dni.html:41
+#: templates/account/dni.html:41 templates/minutes/minutes_approval.html:12
+#: templates/tasks/pending_tasks.html:15
 msgid "Grupo"
 msgstr "Group"
 
@@ -523,8 +524,9 @@ msgid "Error recuperando contraseña"
 msgstr "Error retrieving password"
 
 #: templates/account/password_reset_confirm.html:28
+#, fuzzy
 msgid ""
-"La direccion para recuperar la contraseña no es valida, posiblemente sea "
+"La dirección para recuperar la contraseña no es valida, posiblemente sea "
 "porque ésta ya ha sido usada, por favor solicita la recuperación de nuevo."
 msgstr ""
 "The direction to recover the password is invalid, possibly because it has "
@@ -751,6 +753,57 @@ msgstr ""
 
 #: templates/account/registered.html:10
 msgid "Regresar al inicio"
+msgstr ""
+
+#: templates/minutes/minutes_approval.html:3
+#: templates/minutes/minutes_approval.html:7
+msgid "Actas pendientes por aprobación"
+msgstr ""
+
+#: templates/minutes/minutes_approval.html:11
+#: templates/tasks/pending_tasks.html:14
+msgid "Acta"
+msgstr ""
+
+#: templates/minutes/minutes_approval.html:13
+msgid "Fecha de creación"
+msgstr ""
+
+#: templates/minutes/minutes_approval.html:32
+msgid "No tienes actas pendientes por aprobación"
+msgstr ""
+
+#: templates/notifications/notifications.html:3
+#: templates/notifications/notifications.html:6
+msgid "Notificaciones"
+msgstr ""
+
+#: templates/notifications/notifications.html:32
+msgid "No hay notificaciones"
+msgstr ""
+
+#: templates/tasks/pending_tasks.html:3 templates/tasks/pending_tasks.html:7
+msgid "Tareas pendientes"
+msgstr ""
+
+#: templates/tasks/pending_tasks.html:13
+msgid "Tarea"
+msgstr ""
+
+#: templates/tasks/pending_tasks.html:16
+msgid "Detalle"
+msgstr ""
+
+#: templates/tasks/pending_tasks.html:21
+msgid "Esta tarea vencio en"
+msgstr ""
+
+#: templates/tasks/pending_tasks.html:21
+msgid "Esta tarea vence en"
+msgstr ""
+
+#: templates/tasks/pending_tasks.html:41
+msgid "No tienes tareas pendientes"
 msgstr ""
 
 #~ msgid "Registrarse"

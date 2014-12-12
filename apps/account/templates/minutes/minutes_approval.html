@@ -1,16 +1,16 @@
 {% extends "asettings/settings_menu.html" %}
 {% load i18n %}
-{% block TITLE %}{% trans 'Actas pendientes por aprobacion' %}{% endblock %}
+{% block TITLE %}{% trans 'Actas pendientes por aprobación' %}{% endblock %}
 {% block bodysettings %}
 {% load gravatartag i18n orgs_ttag humanize %}
 
-<h3>{% trans 'Actas pendientes por aprobacion' %}</h3>
+<h3>{% trans 'Actas pendientes por aprobación' %}</h3>
 <div class="white-box-container">
 	<table class="table">
     <tr>
         <th> {% trans 'Acta' %}</th>
         <th> {% trans 'Grupo' %}</th>
-        <th> {% trans 'Fecha de creacion' %} </th>
+        <th> {% trans 'Fecha de creación' %} </th>
     </tr>
     
     {% for rel in rel_user_minutes %}
@@ -29,7 +29,7 @@
     {% empty %}
         <tr >
             <td colspan="5" >            
-            {% trans 'No tienes actas pendientes por aprobacion' %}
+            {% trans 'No tienes actas pendientes por aprobación' %}
             </td>
         </tr>
         
@@ -45,7 +45,7 @@
 <style>
 
 .task_status{
-    width: 5px;
+    width: 3px;
     background-color: #f0f0f0;
 }
 

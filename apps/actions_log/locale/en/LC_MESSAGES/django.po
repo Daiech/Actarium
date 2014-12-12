@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-12 03:09-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ajax.py:21
+msgid "No es posible realizar esta acción"
+msgstr ""
+
+#: ajax.py:28
+msgid "No es valido el id de notificación"
+msgstr ""
+
+#: ajax.py:37
+msgid "La notificación no existe"
+msgstr ""
+
+#: ajax.py:42
+msgid "Notificación actualizada"
+msgstr ""
+
+#: choices.py:5
+msgid "Tareas"
+msgstr ""
+
+#: choices.py:6
+msgid "Nueva tarea"
+msgstr ""
+
+#: choices.py:9
+msgid "Actas"
+msgstr ""
+
+#: choices.py:10
+msgid "Nueva acta creada"
+msgstr ""
+
+#: choices.py:11
+msgid "Ésta acta necesita tu aprobación"
+msgstr ""
+
+#: context_processors.py:18
+msgid "Tareas pendientes"
+msgstr ""
+
+#: context_processors.py:29
+msgid "Actas por aprobar"
+msgstr ""
+
+#: models.py:29
+msgid "Imagen"
+msgstr ""
+
+#: models.py:30
+msgid "Mensaje"
+msgstr ""
+
+#: models.py:31
+msgid "Url"
+msgstr ""
+
+#: models.py:33
+msgid "Tipo"
+msgstr ""

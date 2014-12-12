@@ -43,7 +43,7 @@ def assignTemplateAjax(request):
                 _rel_user_private_templates = rel_user_private_templates.objects.get(id_user=request.user, id_template=templates.objects.get(pk=id_template))
                 _group = rel_user_group.objects.get(id_user=request.user, id_group=Groups.objects.get(pk=id_group), is_admin=True)
             except:
-                response = _(u"Error: No se ha podido guardar la asignacion.")
+                response = _(u"Error: No se ha podido guardar la asignación.")
                 return HttpResponse(json.dumps(response), mimetype="application/json")
             try:
                 private_templates(id_template=_rel_user_private_templates.id_template, id_group=_group.id_group, id_user=request.user).save()
