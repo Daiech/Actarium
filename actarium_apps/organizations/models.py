@@ -136,12 +136,15 @@ class Organizations(models.Model):
 
     def is_expired(self):
         from datetime import date
-        org = self.organizationservices_organization.all()[0]
-        date_expiration = org.service.date_expiration
-        days_apart_delta = date_expiration - date.today()
-        days_apart = days_apart_delta.days
-        if days_apart < 0:
-            return True
+        org = self.organizationservices_organization.first()
+        if org:
+            date_expiration = org.service.date_expiration
+            days_apart_delta = date_expiration - date.today()
+            days_apart = days_apart_delta.days
+            if days_apart < 0:
+                return True
+            else:
+                return False
         else:
             return False
 
