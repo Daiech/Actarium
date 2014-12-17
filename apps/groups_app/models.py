@@ -150,7 +150,7 @@ class minutes(models.Model):
             return None
 
     def save(self):
-        self.code = str(self.code).replace(" ","-")
+        self.code = self.code.replace(" ","-")
         super(minutes, self).save()
     
 
