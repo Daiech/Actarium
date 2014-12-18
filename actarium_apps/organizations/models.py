@@ -188,7 +188,7 @@ class Groups(models.Model):
         return self.minutes_id_group.count()
     
     def __unicode__(self):
-        return "%s (%s)" % (self.name, self.organization)
+        return u"%s (%s)" % (self.name, self.organization)
     
     @models.permalink
     def get_absolute_url(self):
@@ -254,7 +254,7 @@ class rel_user_group(models.Model):
     objects = RelUserGroupManager()
 
     def __unicode__(self):
-        return "%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
+        return u"%s, %s is_admin: %s " % (self.id_group.name, self.id_user, self.is_admin)
 
 
 class OrganizationsRoles(models.Model):
@@ -267,7 +267,7 @@ class OrganizationsRoles(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s" % (self.name)
+        return u"%s" % (self.name)
     
     objects = GenericManager()
 
@@ -309,7 +309,7 @@ class OrganizationsUser(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "@%s %s in %s" % (self.user, self.role.code, self.organization)
+        return u"@%s %s in %s" % (self.user, self.role.code, self.organization)
 
     class Meta:
         unique_together = ('user', 'role', 'organization')

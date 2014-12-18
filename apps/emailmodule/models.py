@@ -9,7 +9,7 @@ class email_admin_type(models.Model):
     date_added = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "tipo de admin: %s " % (self.name)
+        return u"tipo de admin: %s " % (self.name)
 
 
 class email(models.Model):
@@ -20,7 +20,7 @@ class email(models.Model):
     date_added = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "tipo de correo: %s " % (self.name)
+        return u"tipo de correo: %s " % (self.name)
 
 
 class email_group_permissions(models.Model):
