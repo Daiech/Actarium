@@ -48,7 +48,7 @@ class minutes_type_1(models.Model):
     type_reunion = models.CharField(max_length=150, blank=True)
 
     def __unicode__(self):
-        return "%s en %s" % (self.date_start, self.location)
+        return u"%s en %s" % (self.date_start, self.location)
 
 
 class minutes_type(models.Model):
@@ -60,7 +60,7 @@ class minutes_type(models.Model):
     is_customized = models.BooleanField()
 
     def __unicode__(self):
-        return "minutes_type name: %s " % (self.name)
+        return u"minutes_type name: %s " % (self.name)
 
 
 class templates(models.Model):
@@ -73,7 +73,7 @@ class templates(models.Model):
     slug = models.SlugField(max_length=150, unique=True)
 
     def __unicode__(self):
-        return "Plantilla: %s " % (self.name)
+        return u"Plantilla: %s " % (self.name)
 
     def save(self, *args, **kwargs):
         self.slug = "reemplazame"
@@ -95,7 +95,7 @@ class private_templates(models.Model):
     date_joined = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s => %s: by %s" % (self.id_group.name, self.id_template.name, self.id_user.username)
+        return u"%s => %s: by %s" % (self.id_group.name, self.id_template.name, self.id_user.username)
 
     class Meta:
         unique_together = ('id_template', 'id_group')
@@ -155,7 +155,7 @@ class minutes(models.Model):
     
 
     def __unicode__(self):
-        return "Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
+        return u"Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
 
     class Meta:
         unique_together = ('id_group', 'code')
@@ -219,7 +219,7 @@ class reunions(models.Model):
             return False
 
     def __unicode__(self):
-        return "'%s' del '%s'" % (self.date_reunion, self.id_group.name)
+        return u"'%s' del '%s'" % (self.date_reunion, self.id_group.name)
 
 
 class rel_reunion_minutes(models.Model):
@@ -245,7 +245,7 @@ class rel_user_minutes_assistance(models.Model):
     objects = AssistanceManager()
 
     def __unicode__(self):
-        return "%s: assistance %s in %s" % (self.id_user.username, self.assistance, self.id_minutes.code)
+        return u"%s: assistance %s in %s" % (self.id_user.username, self.assistance, self.id_minutes.code)
 
 
 class rel_user_minutes_signed(models.Model):
@@ -256,7 +256,7 @@ class rel_user_minutes_signed(models.Model):
     objects = CommissionManager()
 
     def __unicode__(self):
-        return "%s signed %s in minutes: %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
+        return u"%s signed %s in minutes: %s" % (self.id_user.username, self.is_signed_approved, self.id_minutes.code)
 
 
 class last_minutes(models.Model):
@@ -265,7 +265,7 @@ class last_minutes(models.Model):
     name_file = models.CharField(max_length=350, verbose_name="name_file")
 
     def __unicode__(self):
-        return "Minutes: %s" % (self.name_file)
+        return u"Minutes: %s" % (self.name_file)
 
 
 class rol_user_minutes(models.Model):
@@ -318,7 +318,7 @@ class rol_user_minutes(models.Model):
             return None
     
     def __unicode__(self):
-        return "user: %s is_active: %s" % (self.id_user, self.is_active)
+        return u"user: %s is_active: %s" % (self.id_user, self.is_active)
 
 
 class annotations(models.Model):
