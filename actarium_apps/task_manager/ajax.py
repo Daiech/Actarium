@@ -129,10 +129,10 @@ def create_task(request):
                 request.user,
                 showgravatar(request.user.email, 50),
                 reverse("show_minute", args=(minutes_obj.id_group.slug,minutes_obj.code,))+"#show-tasks",
-                "<strong>"+request.user.username + "</strong>"+ _(u" Te ha asignado una tarea en el acta ") + "<strong>"+ minutes_obj.code+"</strong>" + _(u" del grupo ") + "<strong>"+ minutes_obj.id_group.name+ "</strong>",
+                u"<strong>{} @{}</strong> te ha asignado una tarea en el Acta <strong>{}</strong> del grupo <strong>{}</strong>".format(request.user.first_name, request.user.username, minutes_obj.code, minutes_obj.id_group.name),
                 [responsible_obj]
                 )
-            message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response} 
+            message = {'successful': "true", "new_task": [task_as_json(task_obj)], "message": response}
     else:
         # Update task
         task_obj, response = Tasks.objects.update_task(name, description, responsible_obj, due, minutes_obj, request.user,task_id)
@@ -145,7 +145,7 @@ def create_task(request):
                 request.user,
                 showgravatar(request.user.email, 50),
                 reverse("show_minute", args=(minutes_obj.id_group.slug,minutes_obj.code,))+"#show-tasks",
-                "<strong>"+request.user.username + "</strong>"+ _(u" Te ha asignado una tarea en el acta ") + "<strong>"+ minutes_obj.code+"</strong>" + _(u" del grupo ") + "<strong>"+ minutes_obj.id_group.name+ "</strong>",
+                u"<strong>{} @{}</strong> te ha asignado una tarea en el Acta <strong>{}</strong> del grupo <strong>{}</strong>".format(request.user.first_name, request.user.username, minutes_obj.code, minutes_obj.id_group.name),
                 [responsible_obj]
             )
             message = {'successful': _( "true" ), "new_task": [task_as_json(task_obj)], "message": response, "task_updated": True} 
