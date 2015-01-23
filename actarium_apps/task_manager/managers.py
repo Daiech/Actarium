@@ -121,7 +121,7 @@ class UserTasksManager(GenericManager):
 
     def get_pending_tasks_by_user(self,user):
 
-        usertasks = self.filter(user=user, role__code="RES").order_by('-created')
+        usertasks = self.filter(user=user, role__code="RES", task__is_active=True, is_active=True).order_by('-created')
         tasks_excluded = []
         for usertask in usertasks:
             if usertask.task.status_code == 'TER':
