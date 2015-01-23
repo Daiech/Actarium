@@ -1,5 +1,5 @@
 {% load i18n gravatartag %}
-
+var me = {{ request.user.id }};
 function loadTasksPanel(e) {
 	e.preventDefault();
 	var ctx = {
