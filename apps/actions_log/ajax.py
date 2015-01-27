@@ -25,7 +25,7 @@ def update_notification(request):
     print "Entro al is_ajax",notification_id
 
     if notification_id == "0" or notification_id == None:
-        message = {'error': _( u"No es valido el id de notificacion" )}
+        message = {'error': _( u"No es valido el id de notificación" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")
 
     try:
@@ -34,11 +34,11 @@ def update_notification(request):
         usernotification = None
 
     if not usernotification:
-        message = {'error': _( u"La notificacion no existe" )}
+        message = {'error': _( u"La notificación no existe" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")
     else:
         usernotification.viewed = True
         usernotification.save()
-        message = {'error': _( u"Notificacion actualizada" )}
+        message = {'error': _( u"Notificación actualizada" )}
 
     return HttpResponse(json.dumps(message), mimetype="application/json")

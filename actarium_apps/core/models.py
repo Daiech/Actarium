@@ -26,7 +26,7 @@ class ActariumCustomers(models.Model):
 
 
 class OrganizationServices(models.Model):
-    organization = models.ForeignKey(Organizations, related_name='%(class)s_organization', verbose_name=_("Organizacion"))
+    organization = models.ForeignKey(Organizations, related_name='%(class)s_organization', verbose_name=_(u"Organización"))
     service = models.ForeignKey(CustomersServices, related_name='%(class)s_service', verbose_name=_("Servicio"))
     
     is_active = models.BooleanField(default=True)

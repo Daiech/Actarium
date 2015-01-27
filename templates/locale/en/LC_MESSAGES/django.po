@@ -2,34 +2,37 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-06 00:45-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-12-09 13:00-0500\n"
+"Last-Translator: Lina Aguirre <laguirre@daiech.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: 404.html:3
 msgid "Error 404 Página no encontrada"
-msgstr ""
+msgstr "Error 404 Page not found"
 
 #: 404.html:5
 msgid "Error 404. P&aacute;gina no encontrada"
-msgstr ""
+msgstr "Error 404 Page not found"
 
 #: 404.html:6
 msgid ""
 "Estás seguro que ésta es la página que buscabas? Al parecer no existe o hay "
 "algo malo en la url, por favor revisa e intenta otra vez ;)"
 msgstr ""
+"Are you sure this is the page you were looking for? Apparently not exist or "
+"there is something wrong with the url, please check and try again ;)"
 
 #: 404.html:7 500.html:7
 msgid ""
@@ -48,79 +51,81 @@ msgid ""
 "Ops! algo salió mal :( Ocurrió un error en nuestros servidores, pero no te "
 "preocupes, ya estamos buscándolo para sacarlo de nuestro sistema."
 msgstr ""
+"Ops! something went wrong :( An error occurred on our servers, but do not "
+"worry, we are working to resolve"
 
 #: feedback_modal.html:11
 msgid "Contacto"
-msgstr ""
+msgstr "Contact"
 
 #: feedback_modal.html:15
 msgid "Escríbanos"
-msgstr ""
+msgstr "Email us"
 
 #: feedback_modal.html:17
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: feedback_modal.html:18
 msgid "Sugerencia"
-msgstr ""
+msgstr "Suggestion"
 
 #: feedback_modal.html:19
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: feedback_modal.html:20
 msgid "Pregunta"
-msgstr ""
+msgstr "Question"
 
 #: feedback_modal.html:32
 msgid "Cancelar"
-msgstr ""
+msgstr "Cancel"
 
 #: feedback_modal.html:33
 msgid "Enviar"
-msgstr ""
+msgstr "Send"
 
 #: topbar_menus.html:5
 msgid "Configuración de cuenta"
-msgstr ""
+msgstr "Account settings "
 
 #: topbar_menus.html:8
 msgid "Iniciar Sesión"
-msgstr ""
+msgstr "Log in"
 
 #: topbar_menus.html:18
 msgid "Editar configuración"
-msgstr ""
+msgstr "Edit settings"
 
 #: topbar_menus.html:22
 msgid "Privacidad"
-msgstr ""
+msgstr "Privacy"
 
 #: topbar_menus.html:23
 msgid "Comentarios"
-msgstr ""
+msgstr "Comments"
 
 #: topbar_menus.html:25
 msgid "Cerrar sesión"
-msgstr ""
+msgstr "Log out"
 
 #: topbar_menus.html:30 topbar_menus.html.py:31
 msgid "Grupos"
-msgstr ""
+msgstr "Groups"
 
 #: topbar_menus.html:41
 msgid "0 grupos"
-msgstr ""
+msgstr "0 groups"
 
 #: topbar_menus.html:43
 msgid "Ver organización"
-msgstr ""
+msgstr "See organization"
 
 #: topbar_menus.html:47
 msgid "Ver todas mis organizaciones"
-msgstr ""
+msgstr "See all my organizations"
 
 #: topbar_menus.html:48
 msgid "Crear organización"
-msgstr ""
+msgstr "Create organization"

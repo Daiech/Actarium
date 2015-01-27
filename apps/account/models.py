@@ -37,4 +37,4 @@ class activation_keys(models.Model):
     objects = ActivationManager()
 
     def __unicode__(self):
-        return "%s: %s %s" % (self.email, self.activation_key, self.is_expired)
+        return u"%s: %s %s" % (self.email, self.activation_key, self.is_expired)

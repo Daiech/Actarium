@@ -74,15 +74,15 @@
 								<span class="glyphicon glyphicon-ok-sign"></span>
 							</a>
 						{% else %}
-							
-							
-							<a class="set_task_done_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como terminada' %}" {% verbatim %}>
-								<span class="glyphicon glyphicon-ok-circle"></span>
-							</a>
-							
-							<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Eliminar tarea' %}" {% verbatim %}>
-								<span class="glyphicon glyphicon-trash"></span>
-							</a>
+							{% if task.responsible_id == me %}
+								<a class="set_task_done_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como terminada' %}" {% verbatim %}>
+									<span class="glyphicon glyphicon-ok-circle"></span>
+								</a>
+								
+								<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Eliminar tarea' %}" {% verbatim %}>
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+							{% endif %}
 						{% endif %}
 					</div>
 					<div class="task_due pull-right" {% if task.status_code == 'VEN' %}style="background-color: #FFC7C7"{% endif %}>

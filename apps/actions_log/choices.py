@@ -8,7 +8,7 @@ CHOICE_TYPE_NOTIFICATION = (
     ),
     (_(u'Actas'),(
             ('NEW_MINUTES',_(u'Nueva acta creada')),
-            ('APPROVAL_OF_MINUTES',_(u'Esta acta necesita tu aprobacion'))
+            ('APPROVAL_OF_MINUTES',_(u'Ésta acta necesita tu aprobación'))
         )
     )
 )

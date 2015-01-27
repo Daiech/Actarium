@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext as _
 from actarium_apps.customers_services.models import Customers, CustomersServices, Services,  OrderStatus, CustomerOrders, OrderItems, Addresses, PaymentMethods
 from actarium_apps.organizations.models import Organizations
 from .models import *
@@ -16,7 +17,7 @@ def create_default_service(user,org):
         address = Addresses.objects.create(country="",province="",city="")
         payment_method = PaymentMethods.objects.get_or_none(code="P001")
         if payment_method == None:
-            return False, "No se encontro el metodo de pago"
+            return False, _(u"No se encontro el metodo de pago")
         customer = Customers.objects.create(name=user.get_full_name(),email=user.email,address=address)
         customer.payment_methods.add(payment_method)
         ActariumCustomers.objects.create(user=user,customer=customer)
@@ -24,13 +25,13 @@ def create_default_service(user,org):
     
     order_status = OrderStatus.objects.get_or_none(code="002", is_active=True)
     if order_status == None:
-        return False, "No existe estado de orden con el codigo 002"
+        return False, _(u"No existe estado de orden con el codigo 002")
     
     # Default Service
     FREE_SERVICE = getGlobalVar("FREE_SERVICE")
     service = Services.objects.get_or_none(code=FREE_SERVICE)
     if service == None:
-        return False, "No existe un servicio con el codigo proporcionado"
+        return False, _(u"No existe un servicio con el codigo proporcionado")
     customer_order = CustomerOrders.objects.create(customer=customer,status=order_status)
         
     import datetime
@@ -51,9 +52,9 @@ def create_default_service(user,org):
     try:
         OrganizationServices(organization=org,service=customer_service).save()
     except:
-        return False, "Error al intentar relacionar una organizacion con un servicio"
+        return False, _(u"Error al intentar relacionar una organizacion con un servicio")
     
-    return True, "Se ha creado el servicio por defecto correctamente"
+    return True, _(u"Se ha creado el servicio por defecto correctamente")
 
 
 

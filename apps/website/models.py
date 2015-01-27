@@ -14,7 +14,7 @@ class feedBack(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "[%s] %s: %s " % (self.type_feed, self.email, self.comment)
+        return u"[%s] %s: %s " % (self.type_feed, self.email, self.comment)
 
 
 class faq(models.Model):
@@ -24,7 +24,7 @@ class faq(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "%s is_active: %s" % (self.question, self.is_active)
+        return u"%s is_active: %s" % (self.question, self.is_active)
 
 
 class conditions(models.Model):
@@ -35,7 +35,7 @@ class conditions(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "%s. is_active: %s" % (self.title, self.is_active)
+        return u"%s. is_active: %s" % (self.title, self.is_active)
 
 
 class privacy(models.Model):
@@ -46,7 +46,7 @@ class privacy(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "%s. is_active: %s" % (self.title, self.is_active)
+        return u"%s. is_active: %s" % (self.title, self.is_active)
 
 
 class globalVars(models.Model):
@@ -56,7 +56,7 @@ class globalVars(models.Model):
     date_created = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s : %s " % (self.name, self.url)
+        return u"%s : %s " % (self.name, self.url)
 
 
 class OrderedTemplates(models.Model):
@@ -72,4 +72,4 @@ class OrderedTemplates(models.Model):
         return os.path.basename(self.address_file.name)
 
     def __unicode__(self):
-        return ""
+        return u""

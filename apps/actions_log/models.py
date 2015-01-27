@@ -12,7 +12,7 @@ class actions(models.Model):
     date_created = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
-        return "%s - %s " % (self.code,self.name)
+        return u"%s - %s " % (self.code,self.name)
 
 
 class rel_user_action(models.Model):
@@ -38,7 +38,7 @@ class PersonalNotification(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s [%s] %s "%(self.id, self.type_notification, self.message)
+        return u"%us [%s]"%(self.id, self.type_notification)
 
     def glyphicon(self):
         return GLYPHICON_CHOICES[self.type_notification]
@@ -54,4 +54,4 @@ class UserNotification(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return "%s [%s] %s - %s"%(self.id, self.user, self.viewed, self.personalnotification)    
+        return u"%s [%s] %s - %s"%(self.id, self.user, self.viewed, self.personalnotification)    

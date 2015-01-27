@@ -48,7 +48,9 @@ except:
 ALLOWED_HOSTS = [
     ".actarium.com",
     ".actarium.com.",
-    "162.243.207.189"
+    "162.243.207.189",
+    ".daiech.com",
+    ".daiech.com."
 ]
 
 TIME_ZONE = 'America/Bogota'

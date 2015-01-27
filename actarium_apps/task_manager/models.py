@@ -193,4 +193,38 @@ class UserTasks(models.Model):
         return u"%s - %s - %s" % (self.task.name,self.user.username,self.role.name)
 
     def get_minutes(self):
-        return self.task.lastminutestasks_task.last().minutes
+        r = self.task.lastminutestasks_task.first()
+        if r:
+            return r.minutes
+        else:
+            return None
+
+    def get_org_name(self):
+        m = self.get_minutes()
+        if m:
+            return m.id_group.organization.name
+        else:
+            return "Sin Slug"
+
+    def get_group_slug(self):
+        mc = self.get_minutes()
+        if mc:
+            return mc.id_group.slug
+        else:
+            return "SIn Slug"
+
+    def get_group_name(self):
+        mc = self.get_minutes()
+        if mc:
+            return mc.id_group.name
+        else:
+            return "No hay Nombre de grupo"
+
+
+    def get_minutes_code(self):
+        mc = self.get_minutes()
+        if mc:
+            return mc.code
+        else:
+            print "No hay un LastMinutesTask", self
+            return 123

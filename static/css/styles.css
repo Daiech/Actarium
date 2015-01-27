@@ -148,7 +148,7 @@ float: right;height: 32px;min-width: 80px; padding: 10px 10px 0 8px;width: auto;
 
 /* dropdown notification */
 .notification-block {border-top: solid 1px #CACACA;}
-.notification-block a {padding: 7px 27px 7px 8px;    display: block;    width: 430px;    height: 64px;        color: #766E6E;}
+.notification-block a {padding: 7px 7px 7px 8px;    display: block;    width: 430px;    height: 64px;        color: #766E6E;}
 .notification-block a:hover{    background-color: #F7F7F7;}
 .notification-block-img, .notification-block-img img{    width: 50px;    height: 50px;}
 .notification-block-message{    width: 330px;    height: 50px;    padding-left: 4px;    overflow: hidden;}
@@ -159,10 +159,10 @@ float: right;height: 32px;min-width: 80px; padding: 10px 10px 0 8px;width: auto;
 .notification-datetime{    font-size: 11px; line-height: 16px; }
 
 /* acount list notification*/
-.all-notifications .notification-block{  width: 600px;  height: 63px;}
-.all-notifications .notification-block a{    width: 100%;}
-.all-notifications .notification-block-message{    width: 500px;}
-.all-notifications .notification-block-message p{    width: 500px;    height: 23px;}
+.all-notifications .notification-block{/*min-width: 600px;*/height: 63px;}
+.all-notifications .notification-block a{width: 100%;}
+.all-notifications .notification-block-message{width: 500px;width: calc(100% - 50px);}
+.all-notifications .notification-block-message p{/*width: 500px;*/height: 23px;}
 
 /* notificacion de resumen */
 .notification-summary-glyphicon{    width: 30px;}

@@ -346,12 +346,9 @@ def updateRolUserMinutes(request, group, _minute, for_approvers=False, id_editin
         request.user,
         showgravatar(request.user.email, 50),
         url_new_minute,
-        "<strong>"+request.user.username + "</strong>"+ _(u" Ha creado el acta ") + "<strong>"+ _minute.code+"</strong>" + _(u" del grupo ") + "<strong>"+ _minute.id_group.name+ "</strong> que debes aprobar",
+        u"<strong>{} @{}</strong> ha creado el Acta <strong>{}</strong> del grupo <strong>{}</strong> y debes aprobarla.".format(request.user.first_name, request.user.username, _minute.code, _minute.id_group.name),
         notifications_list
     )
-
-
-
     return url_new_minute
 
 

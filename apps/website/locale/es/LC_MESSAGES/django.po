@@ -2,178 +2,172 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-26 17:06-0500\n"
-"PO-Revision-Date: 2014-12-06 01:02-0500\n"
-"Last-Translator: Jose Mauricio Aizaga Galeano <maizaga@daiech.com>\n"
+"POT-Creation-Date: 2014-11-26 17:01-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
-"X-Translated-Using: django-rosetta 0.7.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: models.py:64
 msgid "Tu archivo de ejemplo"
-msgstr "Your example file"
+msgstr ""
 
 #: models.py:65 templates/website/i_want_a_template.html:26
 msgid "Descripción"
-msgstr "Description"
+msgstr ""
 
 #: views.py:84
 msgid "General"
-msgstr "General"
+msgstr ""
 
 #: views.py:86
 msgid "Sugerencia"
-msgstr "Suggestion"
+msgstr ""
 
 #: views.py:88
 msgid "Error"
-msgstr "Error"
+msgstr ""
 
 #: views.py:90
 msgid "Pregunta"
-msgstr "Question"
+msgstr ""
 
 #: views.py:92
 msgid "No definido"
-msgstr "Not defined"
+msgstr ""
 
 #: views.py:101
 msgid "Correo invalido"
-msgstr "Email sent"
+msgstr ""
 
 #: views.py:169
 msgid "Políticas de privacidad"
-msgstr "Privacy Policy"
+msgstr ""
 
 #: views.py:180
 msgid "Términos y condiciones"
-msgstr "Terms and conditions"
+msgstr ""
 
 #: views.py:241
 #, python-format
 msgid ""
 "Su información ha sido guardada, le responderemos lo más pronto posible a %s"
 msgstr ""
-"Your information has been saved, we will respond as soon as possible to %s"
 
 #: templates/contact_form/contact_form.html:3
 #: templates/contact_form/contact_form_sent.html:3
 #: templates/website/landing/index.html:3
 msgid ""
-"Actarium - El espacio más cómodo para registrar el resultado de tus "
-"reuniones"
+"Actarium - El espacio más cómodo para registrar el resultado de tus reuniones"
 msgstr ""
-"Actarium - The most convenient place to record the results of your meetings"
 
 #: templates/contact_form/contact_form.html:7
 #: templates/contact_form/contact_form_sent.html:7
 #: templates/website/feedback.html:5 templates/website/public_top_bar.html:58
 msgid "Contacto"
-msgstr "Contact"
+msgstr ""
 
 #: templates/contact_form/contact_form.html:9
 msgid ""
-"Tiene alguna duda? desea una presentación comercial? Escríbanos y nos "
+"Tiene alguna duda? desea una presentación comercial? Escríabanos y nos "
 "pondremos en contacto con usted."
 msgstr ""
-"Have a question? Want a sales presentation? Write to us and we will contact "
-"you."
 
 #: templates/contact_form/contact_form.html:11
-#: templates/contact_form/contact_form_sent.html:11
 msgid "Síganos en nuestras redes sociales"
-msgstr "Follow us on our social networks"
+msgstr ""
 
 #: templates/contact_form/contact_form.html:25
 #: templates/website/i_want_a_template.html:18
 msgid "Enviar"
-msgstr "Send"
+msgstr ""
 
 #: templates/contact_form/contact_form_sent.html:10
 msgid ""
 "Muchas gracias por contactarnos, le responderemos inmediatamente leamos su "
 "mensaje."
 msgstr ""
-"Thank you very much for contacting us, we will respond immediately read your"
-" message."
+
+#: templates/contact_form/contact_form_sent.html:11
+msgid "Siganos en nuestras redes sociales"
+msgstr ""
 
 #: templates/website/blog.html:3
 msgid "Blog"
-msgstr "Blog"
+msgstr ""
 
 #: templates/website/footer.html:6 templates/website/public_footer.html:6
 msgid "Acerca de"
-msgstr "About"
+msgstr ""
 
 #: templates/website/footer.html:7 templates/website/public_footer.html:7
 #: templates/website/public_top_bar.html:57
 msgid "Cómo funciona"
-msgstr "How does it work?"
+msgstr ""
 
 #: templates/website/footer.html:8 templates/website/public_footer.html:8
 msgid "FAQ's"
-msgstr "FAQ's"
+msgstr ""
 
 #: templates/website/footer.html:9 templates/website/pricing.html:3
 #: templates/website/public_footer.html:9
 #: templates/website/topBar_landing.html:23
 msgid "Precios"
-msgstr "Pricing"
+msgstr ""
 
 #: templates/website/footer.html:10
 msgid "Facebook"
-msgstr "Facebook"
+msgstr ""
 
 #: templates/website/footer.html:11
 msgid "Twitter"
-msgstr "Twitter"
+msgstr ""
 
 #: templates/website/footer.html:18 templates/website/layout_landing.html:86
 #: templates/website/public_footer.html:45
 msgid "Todos los derechos reservados"
-msgstr "All rights reserved"
+msgstr ""
 
 #: templates/website/footer.html:24
 #, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
-"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
+"\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
-"src=\"%(STATIC_URL)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/help.html:3
 msgid "Ayuda"
-msgstr "Help"
+msgstr ""
 
 #: templates/website/help.html:10
 msgid "Servicio de Ayuda"
-msgstr "Help system"
+msgstr ""
 
 #: templates/website/help.html:17
 msgid "Preguntas frecuentes"
-msgstr "I have an account"
+msgstr ""
 
 #: templates/website/help.html:28
 msgid "Preguntas y respuestas"
-msgstr "Questions and Answers"
+msgstr ""
 
 #: templates/website/i_want_a_template.html:3
 msgid "Quiero la plantilla de mi empresa"
-msgstr "I want my business template"
+msgstr ""
 
 #: templates/website/i_want_a_template.html:8
 msgid "Podemos crear la plantilla que necesitas"
-msgstr "We can create the template you need"
+msgstr ""
 
 #: templates/website/i_want_a_template.html:10
 msgid ""
@@ -181,9 +175,6 @@ msgid ""
 "cuéntanos qué formato requieres para cumplir con los estándares y ser más "
 "competitivo."
 msgstr ""
-"Actarium is more interesting with our own formats and templates, tell us "
-"what you require to comply with the standards and become more competitive "
-"format."
 
 #: templates/website/i_want_a_template.html:11
 msgid ""
@@ -191,208 +182,196 @@ msgid ""
 "lo analizaremos y te diremos qué debes hacer para poder estandarizarlo con "
 "Actarium."
 msgstr ""
-"Send us an example of the format you'd like to handle in Actarium, we will "
-"analyze it and we tell you what you must do to standardize it with Actarium."
 
 #: templates/website/i_want_a_template.html:24
 msgid "Tus formatos enviados:"
-msgstr "Your formats sent:"
+msgstr ""
 
 #: templates/website/i_want_a_template.html:26
 msgid "Fecha"
-msgstr "Date"
+msgstr ""
 
 #: templates/website/i_want_a_template.html:26
 msgid "Archivo"
-msgstr "File"
+msgstr ""
 
 #: templates/website/i_want_a_template.html:47
 msgid "Listo!"
-msgstr "Ready!"
+msgstr ""
 
 #: templates/website/layout_landing.html:12
 #: templates/website/landing/landing_base.html:11
 msgid "El espacio más cómodo para registrar el resultado de sus reuniones"
-msgstr "The most convenient place to record the results of your meetings"
+msgstr ""
 
 #: templates/website/num_users.html:3
 msgid "Usuarios"
-msgstr "Users"
+msgstr ""
 
 #: templates/website/num_users.html:13
 msgid "Total de usuarios"
-msgstr "Total of users"
+msgstr ""
 
 #: templates/website/num_users.html:23
 msgid "Usuarios activos"
-msgstr "Active users"
+msgstr ""
 
 #: templates/website/num_users.html:33
 msgid "Usuarios inactivos"
-msgstr "Inactive users"
+msgstr ""
 
 #: templates/website/num_users.html:49
 msgid "Cupos pagados"
-msgstr "Quotas paid"
+msgstr ""
 
 #: templates/website/pricing.html:8
 msgid "Paquetes de miembros en una organización"
-msgstr "Packages of member in an organization"
+msgstr ""
 
 #: templates/website/pricing.html:8
 msgid "PRECIOS"
-msgstr "PRICING"
+msgstr ""
 
 #: templates/website/pricing.html:11 templates/website/pricing.html.py:120
 msgid "Mensual"
-msgstr "Monthly"
+msgstr ""
 
 #: templates/website/pricing.html:16
 #, python-format
 msgid "Anual (-5%%)"
-msgstr "Yearly (-5%%)"
+msgstr ""
 
 #: templates/website/pricing.html:112
 msgid "Miembros"
-msgstr "Members"
+msgstr ""
 
 #: templates/website/pricing.html:113
 msgid "Adquirir"
-msgstr "Acquire"
+msgstr ""
 
 #: templates/website/pricing.html:117
 msgid "Anual"
-msgstr "Yearly"
+msgstr ""
 
 #: templates/website/public_footer.html:46
 #, python-format
 msgid ""
-"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
-"src=\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
+"Un producto <a href=\"http://www.daiech.com\" target=\"_blank\"><img src="
+"\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a>"
 msgstr ""
-"A <a href=\"http://www.daiech.com\" target=\"_blank\"><img "
-"src=\"%(STATIC_PREFIX)simg/daiech.png\" style=\"width: 80px;\"></a> product"
 
 #: templates/website/public_top_bar.html:55
 msgid "Inicio"
-msgstr "Home"
+msgstr ""
 
 #: templates/website/public_top_bar.html:56
 msgid "Acerca"
-msgstr "About"
+msgstr ""
 
 #: templates/website/topBar_landing.html:30
 msgid "Iniciar Sesi&oacute;n"
-msgstr "Login"
+msgstr ""
 
 #: templates/website/topBar_landing.html:40
 msgid "Editar configuraci&oacute;n"
-msgstr "Edit configuration"
+msgstr ""
 
 #: templates/website/topBar_landing.html:44
 msgid "Privacidad"
-msgstr "Privacy"
+msgstr ""
 
 #: templates/website/topBar_landing.html:45
 msgid "Comentarios"
-msgstr "Comments"
+msgstr ""
 
 #: templates/website/topBar_landing.html:47
 msgid "Cerrar sesi&oacute;n"
-msgstr "Logout"
+msgstr ""
 
 #: templates/website/topBar_landing.html:52
 #: templates/website/topBar_landing.html:54
 msgid "Grupos"
-msgstr "Groups"
+msgstr ""
 
 #: templates/website/topBar_landing.html:68
 msgid "Ver todos"
-msgstr "See all"
+msgstr ""
 
 #: templates/website/topBar_landing.html:69
 msgid "Crear grupo"
-msgstr "Create group"
+msgstr ""
 
 #: templates/website/landing/index.html:16
 msgid "Ideal para la gestión de actas y reuniones!"
-msgstr "The ideal platform for managing Minutes and Meeting"
+msgstr ""
 
 #: templates/website/landing/index.html:17
 msgid ""
 "Invita a tu equipo de trabajo, programa tus reuniones y registra su "
 "resultado en actas digitales."
 msgstr ""
-"Invite your team, plan your meetings and register the result in digital "
-"files."
 
 #: templates/website/landing/index.html:18
 msgid "¡Pruébalo Gratis!"
-msgstr "Try it now Free!"
+msgstr ""
 
 #: templates/website/landing/index.html:37
 msgid "Tu información está siempre segura"
-msgstr "Your information is always Safe"
+msgstr ""
 
 #: templates/website/landing/index.html:38
 msgid "Acceso desde cualquier dispositivo"
-msgstr "Access from any device!"
+msgstr ""
 
 #: templates/website/landing/index.html:39
 msgid "Aprueba tus actas en equipo"
-msgstr "Aprueba tus decisiones con tu equipo"
+msgstr ""
 
 #: templates/website/landing/index.html:40
 msgid "Sistema de tareas"
-msgstr "Task system"
+msgstr ""
 
 #: templates/website/landing/index.html:54
 msgid ""
-"Con Actarium ahorra tiempo, dinero y protege el medio ambiente reduciendo el"
-" consumo de papel"
+"Con Actarium ahorra tiempo, dinero y protege el medio ambiente reduciendo el "
+"consumo de papel"
 msgstr ""
-"With Actarium saves time, money and protect the environment by reducing "
-"paper consumption"
 
 #: templates/website/landing/index.html:57
 msgid "Comienza ahora"
-msgstr "Start Now"
+msgstr ""
 
 #: templates/website/landing/index.html:58
 msgid "Conozca más"
-msgstr "Kwom more"
+msgstr ""
 
 #: templates/website/landing/index.html:67
 msgid "¿Beneficios? mucho más..."
-msgstr "Benefits? much more..."
+msgstr ""
 
 #: templates/website/landing/index.html:76
 msgid "Bolsa de plantillas"
-msgstr "Bag Templates"
+msgstr ""
 
 #: templates/website/landing/index.html:77
 msgid ""
 "Seleccione plantillas de actas para agilizar sus procesos y ahorrar tiempo, "
 "además cree sus propias plantillas!"
 msgstr ""
-"Choose minutes templates to accelerate your processes and save time, also "
-"create your own templates!"
 
 #: templates/website/landing/index.html:85
 msgid "Aprobación inmediata de actas"
-msgstr "Instant approval of minutes"
+msgstr ""
 
 #: templates/website/landing/index.html:86
 msgid ""
-"Después de redactar un acta, inmediatamente la puede compartir con su equipo"
-" de trabajo para ser aprobada o corregida."
+"Después de redactar un acta, inmediatamente la puede compartir con su equipo "
+"de trabajo para ser aprobada o corregida."
 msgstr ""
-"After writing the minutes, immediately can share with your team to be "
-"approved or corrected."
 
 #: templates/website/landing/index.html:94
 msgid "Acceda desde cualquier dispositivo!"
-msgstr "Access from any device!"
+msgstr ""
 
 #: templates/website/landing/index.html:95
 msgid ""
@@ -400,223 +379,79 @@ msgid ""
 "informales, reuniones imprevistas que se presentan en cualquier sitio puede "
 "crear actas desde móviles, tabletas, computadores..."
 msgstr ""
-"Anytime you need to record your decisions for informal meetings, impromptu "
-"meetings that occur at any site can create minutes from phones, tablets, "
-"computers."
 
 #: templates/website/landing/index.html:105
 msgid "Integración con Google (muy pronto)"
-msgstr "Google integrations (coming soon)"
+msgstr ""
 
 #: templates/website/landing/index.html:106
 msgid ""
 "Conéctate con los servicios de gestión empresarial. (Calendar, Drive, Gmail "
 "o simplemente inicia sesión con tu cuenta de Google)"
 msgstr ""
-"Connect with business management services. (Calendar, Drive, Gmail or simply"
-" sign in with your Google Account)"
 
 #: templates/website/landing/index.html:114
 msgid "Grabación de actas (muy pronto)"
-msgstr "Recording of minutes (coming soon)"
+msgstr ""
 
 #: templates/website/landing/index.html:115
 msgid ""
 "Grabe audio de sus reuniones para tener un mejor soporte de los acuerdos "
 "tomados, además adjunte las grabaciones si lo desea en las actas."
 msgstr ""
-"Record audio of your meetings to have a better support the decisions taken, "
-"as well attach if desired recordings in the minutes."
 
 #: templates/website/landing/index.html:123
 msgid "Local storage (muy pronto)"
-msgstr "Local storage (coming soon)"
+msgstr ""
 
 #: templates/website/landing/index.html:124
 msgid "Almacena datos en el navegador sin necesidad de internet."
-msgstr "Stores data in the browser without internet."
+msgstr ""
 
 #: templates/website/landing/index.html:129
 msgid "Pruébalo ahora"
-msgstr "Try it now!"
+msgstr ""
 
 #: templates/website/landing/index.html:130
 msgid "Conozca cómo funciona"
-msgstr "Know how does it work"
+msgstr ""
 
 #: templates/website/landing/index.html:138
 msgid "Nuestros clientes"
-msgstr "They trust us"
+msgstr ""
 
 #: templates/website/landing/index.html:147
 msgid "Únete ahora Gratis!"
-msgstr "Join Now Free!"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:6
 msgid "¡Únete a Actarium!"
-msgstr "Join to Actarium!"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:9
 msgid "Nombre de usuario"
-msgstr "Username"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:13
 msgid "Correo electrónico"
-msgstr "Email"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:17
 msgid "Contraseña"
-msgstr "Password"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:21
 msgid "Repite Contraseña"
-msgstr "Repeat password"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:25
 msgid "Crear cuenta"
-msgstr "Create account"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:28
 msgid "o"
-msgstr "or"
+msgstr ""
 
 #: templates/website/landing/signup_form.html:31
 msgid "o inicia con Google"
-msgstr "or Sign up with Google"
-
-#~ msgid "Correo ó Nombre de usuario"
-#~ msgstr "Email or Username"
-
-#~ msgid "&iquest;Olvidaste la contraseña?"
-#~ msgstr "Forgot your password?"
-
-#~ msgid "Iniciar sesión"
-#~ msgstr "Login"
-
-#~ msgid "Calcula el precio adecuado para ti"
-#~ msgstr "Calculate the right price for you"
-
-#~ msgid "Pruébalo por 30 días"
-#~ msgstr "Try it for 30 days"
-
-#~ msgid "¡GRATIS!"
-#~ msgstr "¡FREE!"
-
-#~ msgid "El trial incluye %(members)s miembros por %(months)s mes%(s)s "
-#~ msgstr "The Trial includes  %(members)s members for %(months)s month%(s)s"
-
-#~ msgid "Cuando finalice tu trial podrás elegir el plan que quieras."
-#~ msgstr "When your trial ends you can choose the plan you want."
-
-#~ msgid "¡Pruébalo ahora!"
-#~ msgstr "Try it now!"
-
-#~ msgid "Calcula el costo correcto para tu organización"
-#~ msgstr "Calculate the correct cost for your organization"
-
-#~ msgid ""
-#~ "Los precios varían dependiendo del número de miembros de tu equipo, calcula "
-#~ "el precio exacto antes de comprar"
-#~ msgstr ""
-#~ "Prices vary depending on number of your team members, calculates the exact "
-#~ "price before buying"
-
-#~ msgid "Miembros del quipo"
-#~ msgstr "Members team"
-
-#~ msgid "Costo mensual (COP)"
-#~ msgstr "Monthly cost (COP)"
-
-#~ msgid "El tiempo mínimo de compra es de %(MIN_MONTHLY_PAYMENT)s meses"
-#~ msgstr "The minimum purchase is %(MIN_MONTHLY_PAYMENT)s months "
-
-#~ msgid " Comprar <span id=\"num\"></span> cupos de miembros para tu organización "
-#~ msgstr "Buy <span id=\"num\"></span> seats of members for your organization"
-
-#~ msgid "mes/miembro"
-#~ msgstr "month/member"
-
-#~ msgid "a"
-#~ msgstr "to"
-
-#~ msgid "Suscribirse"
-#~ msgstr "Subscribe"
-
-#~ msgid "Servicios"
-#~ msgstr "Services"
-
-#~ msgid "Comienza ahora con Actarium"
-#~ msgstr "Start now with Actarium"
-
-#~ msgid "Ver precios"
-#~ msgstr "Pricing"
-
-#~ msgid "El espacio más cómodo para registrar el resultado de tus reuniones"
-#~ msgstr "The most convenient place to record the results of your meetings"
-
-#~ msgid ""
-#~ "Invita a tu equipo de trabajo y todos podr&aacute;n programar reuniones y "
-#~ "crear sus actas de forma r&aacute;pida y sencilla, as&iacute; ahorran "
-#~ "tiempo, dinero y protegen el medio ambiente al reducir el consumo de papel."
-#~ msgstr ""
-#~ "Invite your team, everyone can schedule meetings and create your Minutes "
-#~ "quickly and effectively as well; Save time, money and protect the "
-#~ "environment by reducing paper consumption."
-
-#~ msgid "Reg&iacute;strate gratis"
-#~ msgstr "Sign up Free"
-
-#~ msgid "Contrase&ntilde;a (Confirmaci&oacute;n)"
-#~ msgstr "Password (Confirmation)"
-
-#~ msgid ""
-#~ "Acepto los <a href=\"%(URL_TERMS)s\" target=\"_blank\">T&eacute;rminos de "
-#~ "uso</a><br> y las <a href=\"%(URL_PRIVACY)s\" "
-#~ "target=\"_blank\">Pol&iacute;ticas de privacidad</a>"
-#~ msgstr ""
-#~ "I agree to the <a href=\"%(URL_TERMS)s\" target=\"_blank\">Terms of "
-#~ "Use</a><br> and <a href=\"%(URL_PRIVACY)s\" target=\"_blank\">Privacy "
-#~ "Policy</a>"
-
-#~ msgid "Registrarme"
-#~ msgstr "Sign Up"
-
-#~ msgid "¿Ya tienes cuenta?"
-#~ msgstr "I don't have an account"
-
-#~ msgid "Iniciar sesi&oacute;n"
-#~ msgstr "Login"
-
-#~ msgid "¿Eres nuevo?"
-#~ msgstr "Your first time?"
-
-#~ msgid "tus actas en un solo lugar"
-#~ msgstr "Your Minutes only in a place"
-
-#~ msgid "Aliados"
-#~ msgstr "Partners"
-
-#~ msgid "Idioma no soportado"
-#~ msgstr "Language not supported"
-
-#~ msgid ""
-#~ "Actarium no está traducido a este idioma :(<br>Suscribete a nuestro canal "
-#~ "para recibir actualizaciones de nuestra plataforma"
-#~ msgstr ""
-#~ "Actarium is not translated to this language: (<br> Subscribe to our channel "
-#~ "to receive updates from our platform"
-
-#~ msgid "Registrate gratis"
-#~ msgstr "Sign Up"
-
-#~ msgid "Formulario de Inicio"
-#~ msgstr "Login Form"
-
-#~ msgid "Formulario de registro"
-#~ msgstr "Sign Up Form"
-
-#~ msgid "Powered By"
-#~ msgstr "Powered By"
-
-#~ msgid "Entrar"
-#~ msgstr "Enter"
+msgstr ""

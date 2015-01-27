@@ -54,7 +54,7 @@
             <span class="notification-summary-badge badge" >{{ SUMMARY_QUANTITY }}</span>
         </div>
         <ul class="dropdown-menu">
-            <li role="presentation" class="dropdown-header"><strong>Resumen</strong></li>
+            <li role="presentation" class="dropdown-header"><strong>{% trans 'Resumen' %}</strong></li>
             {% for item in SUMMARY_LIST %}
             <li >
                 <div class ="notification-block notification-summary">
@@ -81,7 +81,7 @@
             <span id="notificationNotViewed" class="badge " >{{ NOTIFICATIONS_NOT_VIEWED}}</span>
         </div>
         <ul class="dropdown-menu">
-            <li role="presentation" class="dropdown-header"><strong>Notificaciones</strong></li>
+            <li role="presentation" class="dropdown-header"><strong>{% trans 'Notificaciones' %}</strong></li>
             {% for notification in NOTIFICATIONS %}
             <li>
                 <div class ="notification-block {% if not notification.viewed %} notification-active {% endif %}">
@@ -104,7 +104,7 @@
                 </div>
             </li>
             {% endfor %}
-            <li  class="dropdown-header notification-footer"><p><a href="{% url 'list_notifications'%}" class="btn btn-small">Ver todas</a></p></li>
+            <li  class="dropdown-header notification-footer"><p><a href="{% url 'list_notifications'%}" class="btn btn-small">{% trans 'Ver todas' %}</a></p></li>
         </ul>
     </div>
     <div id="topBarSearch" class="dropdown btn-group pull-right notifications search-field ">
@@ -112,7 +112,7 @@
             <span class="glyphicon glyphicon-search"></span>  
         </div>
         <ul class="dropdown-menu">
-            <li role="presentation" class="dropdown-header"><span class=" close close-popover glyphicon glyphicon-remove"></span><strong>Buscar</strong></li>
+            <li role="presentation" class="dropdown-header"><span class=" close close-popover glyphicon glyphicon-remove"></span><strong>{% trans 'Buscar' %}</strong></li>
             <li >
                 <div class ="notification-block ">
                     <div class="notification-block-message  pull-left">
@@ -120,7 +120,7 @@
                             <div class="input-group">
                                 <form method="POST" action="{% url 'core:search_minutes' %}">
                                     {% csrf_token %}
-                                    <input name="search_text" type="text" placeholder="Buscar en actas" class="form-control" autofocus>
+                                    <input name="search_text" type="text" placeholder="{% trans 'Buscar en actas' %}" class="form-control" autofocus required>
                                         <div class="input-group-addon" id="button-search">
                                             <i class="glyphicon glyphicon-search"></i>
                                         </div>

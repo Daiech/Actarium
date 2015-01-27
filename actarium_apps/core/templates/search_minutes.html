@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block TITLE %}{% trans 'Busqueda' %}{% endblock %}
+{% block TITLE %}{% trans 'Búsqueda' %}{% endblock %}
 {% load gravatartag i18n orgs_ttag humanize %}
 
 {% block body %}
@@ -8,14 +8,14 @@
     {% if search_text %}
     <h3>{% trans 'Restultados para ' %} <strong>{{ search_text }}</strong></h3>
     {% else %}
-    <h3>{% trans 'Debes ingresar un texto en el campo de busqueda' %}</h3>
+    <h3>{% trans 'Debes ingresar un texto en el campo de búsqueda' %}</h3>
     {% endif %}
     <div class="white-box-container">
     	<table class="table">
         <tr>
             <th> {% trans 'Acta' %}</th>
             <th> {% trans 'Grupo' %}</th>
-            <th> {% trans 'Fecha de creacion' %} </th>
+            <th> {% trans 'Fecha de creación' %} </th>
         </tr>
         
         {% for minutes in minutes_list %}
