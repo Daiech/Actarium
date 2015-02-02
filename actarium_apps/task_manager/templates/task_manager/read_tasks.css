@@ -92,18 +92,38 @@
 
 
 .set_task_done_btn .glyphicon-ok-circle{
-	color: #97C02C;
+	color: #848D80;
 	font-size:25px;
+}
+
+.set_task_done_btn .glyphicon-ok-circle:hover{
+	color: #97C02C;
 }
 
 .delete_task_btn .glyphicon-trash{
 	font-size:23px;
+	color: #848D80;
+}
+
+.delete_task_btn .glyphicon-trash:hover{
 	color: #ff8c8c;
 }
 
-.set_task_assigned_btn .glyphicon-ok-sign{
-	color: #97C02C;
+.edit_task_btn .glyphicon-pencil{
+	font-size:23px;
+	color: #848D80;
+}
+
+.edit_task_btn .glyphicon-pencil:hover{
+	color: #F6B43E;
+}
+.set_task_assigned_btn .glyphicon-remove-circle{
+	color: #848D80;
 	font-size:25px;
+}
+
+.set_task_assigned_btn .glyphicon-remove-circle:hover{
+	color: #97C02C;
 }
 
 .task_due{
@@ -112,4 +132,13 @@
 	-webkit-border-radius: 5px 5px;  /* Safari  */
   	-moz-border-radius: 5px 5px;     /* Firefox */
   	padding:2px;
+}
+
+.task_extra_input{
+	width: 100%;
+}
+
+.task_button_group{
+	width: 100%;
+	padding-top: 10px;
 }
