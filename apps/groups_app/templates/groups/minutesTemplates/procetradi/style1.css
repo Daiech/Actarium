@@ -16,11 +16,16 @@ table tr td input[type=password], table tr td input[type=text]{width: auto;paddi
 #footerContent p{line-height: 1;}
 #minutesContent .mb {margin-bottom: -30px;}
 #minutesContent .table-invisible {display: none;visibility: hidden;}
-
+/*
 .col-30{width: 30% !important;}
 .col-33{width: 33.3% !important;}
 .col-40{width: 40% !important;}
-.col-50{width: 50% !important;}
+.col-50{width: 50% !important;}*/
 
 .b{border:solid thin #ddd;}
 .br{border-right:solid thin #ddd;}
+
+.input-box input{margin-bottom: 4px;}
+
+input[type="date"], input.date{padding: 0;padding-left: 4px; width: 140px;height: 22px;}
+input[type="number"], input.number{width: 60px;display: inline-block;padding: 3px;padding-left: 4px; }
