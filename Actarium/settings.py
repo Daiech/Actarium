@@ -213,6 +213,9 @@ SOCIAL_AUTH_PIPELINE = (
 ORG_IMAGE_SIZE = ((50,50), (100,100))
 ORG_IMAGE_DEFAULT = "icons/org_default.jpg"
 
+CLIENT_LOGO_SIZE = ((110,40), (130,45), (200,70))
+CLIENT_LOGO_DEFAULT = "client_logos/default/actarium-beta.png"
+
 GROUP_IMAGE_SIZE = ((50,50), (100,100))
 GROUP_IMAGE_DEFAULT = "icons/group_default.jpg"
 

@@ -34,6 +34,5 @@
 	
 	// console.log("this is a form")
 {% else %}
-	$(".date_mirror").html(""+$("#minutes-container #first_date").text())
-	// console.log("this is Not a form");
+	$(".date_mirror").html(""+$("#minutes-container #first_date").text());
 {% endifequal %}

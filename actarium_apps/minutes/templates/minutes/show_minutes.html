@@ -34,6 +34,10 @@
 			if(hasHash("#show-tasks")){
 				$("#tasksPanel").click();
 			}
+
+			if(hasHash("#error-al-generar-pdf")){
+				setAlertError("{% trans 'Error con PDF' %}", "{% trans 'No se pudo generar el PDF, por favor intente de nuevo. Si el error continúa, escríbanos un mesaje' %} <a href='/contact'>aquí</a>");
+			}
 			
 			{% if minutes.is_minute_full_signed %}
 			if(/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())){
@@ -61,7 +65,7 @@
 				}
 			});
 			{% endcomment %}
-			$('#minutes-html-data').val($('#minutes').html());
+			// $('#minutes-html-data').val($('#minutes').html());
 
 			// $("#history").on("click", function (e) {
 			// 	e.preventDefault();
@@ -77,7 +81,7 @@
 			{% endif %}
 			
 		});
-		{% include minutesTemplateJs %}
+		{% include minutes.id_template.address_js %}
 	</script>
 {% endblock %}
 
@@ -98,18 +102,13 @@
 		.important{z-index: 2001}
 		#minutes-version{width: 815px;margin: auto;}
 
+		
+
 		@media (max-width: 979px) {
 			.minutes-bar-static{top: 0px;}
 		}
-
-		ins {
-    background-color: #c6ffc6;
-    text-decoration: none;
-}
-
-del {
-    background-color: #ffc6c6;
-}
-
+		ins {background-color: #c6ffc6;text-decoration: none;}
+		del {background-color: #ffc6c6;}
+		{% include minutes.id_template.address_css %}
 	</style>
 {% endblock %}

@@ -17,8 +17,9 @@ function showCommission (e) {
 	}
 	loadPanel(ctx);
 }
-function editMinutesRoles (e) {
+function editMinutesRoles (e) { {% comment %}Se ejecuta cuando se edita un acta, o solo la comision{% endcomment %}
 	e.preventDefault();
+	var is_edit = "{{ is_edit }}";
 	var ctx = {
 		"id": $(this).attr("id"),
 		"title": "{% trans 'Roles de acta' %}",
@@ -26,16 +27,18 @@ function editMinutesRoles (e) {
 		"callback":  function () {
 			sendNewAjax("{% url 'minutes:get_approving_commission' group.slug minutes.id %}",{}, function (data){
 				ctx = {
-					members: {% if is_edit %}{{ members_list|safe }}{% else %}data.members{% endif %},
+					// members: {% if is_edit %}{{ members_list|safe }}{% else %}data.members{% endif %},
+					members: data.members,
 				}
 				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
 				$(".popover-element").popover({trigger: 'hover'});
+				console.log(ctx);
 			});
 		}
 	}
 	loadPanel(ctx);
 }
-function editCommission (e) {
+function editCommission (e) { {% comment %}se ejecuta cuando solo se edita la comision (no el acta){% endcomment %}
 	e.preventDefault();
 	var ctx = {
 		"id": $(this).attr("id"),

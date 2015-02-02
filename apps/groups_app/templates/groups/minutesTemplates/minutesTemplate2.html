@@ -1,76 +1,9 @@
 {% load gravatartag %}
 <section class="row-fluid">
     <article id="minutes" class="minutes hoja">
-        <style type="text/css">
-                body{font-family:Helvetica;color: #555;}
-                .minutes{
-                        border: solid thin #ddd;
-                        background-color: #fff;
-                        box-shadow: 8px 8px 6px -6px gray;
-                        border-radius: 3px;
-                        padding-top: 40px;
-                        width: 99%;
-                        margin: 0 auto;
-                }
-                .minutes header{
-                        width: auto;
-                        margin:30px 0;
-                        margin-top: 40px;
-                        margin-left: 0;
-                        padding: 0 80px;
-                }
-                .minutes header img{
-                        margin-top: 0;
-                }
-                .minutes header h3{
-                        margin: 0;
-                }
-                #footerContent{
-                        margin: 0;
-                        padding: 0;
-                        width: 100%;
-                }
-                ul.errorList, ul.errorList li{display: inline;}
-                #minutes ul{list-style-type: none;}
-                #headerContent{margin: 0;height: 40px;}
-                #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
-                .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
-                #minutesContent{line-height: 1.8;margin: 0}
-                #firmas td{padding-top: 60px;width: 100%;}
-                #firmas table{width: 100%}
-                #table-list-members{margin-bottom: 20px;width: 100%;}
-                #footerContent img { zoom: 100%; }
-                @page {
-                    margin: 2.5cm;
-                    margin-top: 3cm;
-                    margin-bottom: 2.5cm;
-                    font-size: 26px;
-                    colordisplay:#555;
-                    @frame header {
-                        -pdf-frame-content: headerContent;
-                        top: 1cm;
-                        margin-left: 2.1cm;
-                        margin-right: 1cm;
-                        height: 2.5cm;
-                    }
-                    @frame footer {
-                        -pdf-frame-content: footerContent;
-                        bottom: 0.5cm;
-                        margin-left: 0.5cm;
-                        margin-right: 0.5cm;
-                        margin-top: 1.5cm;
-                        height: 3cm;
-                    }
-                }
-        </style>
-        <div id="headerContent">
-        </div>
-        <div id="minutesContent">
-            <div style="text-align:center; padding:0 0 15px 0">
-                <div class="hidden">
-                    <input id="id_date_end" type="hidden" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
-                </div>
-                <strong>
+        <div id="headerContent" class="text-center" >
+            <p class="strong">
+                <span>
                     ACTA No. 
                     <span id="id_code_title" >
                         {{ newMinutesForm.code }}
@@ -81,8 +14,15 @@
                     <span style="display:inline-block;">{{ newMinutesForm.type_reunion }}</span>
                     <br /> 
                     PARQUESOFT PEREIRA
-                </strong>
-                <br /><br />
+                </span>
+            </p>
+            <br><br>
+        </div>
+        <div id="minutesContent">
+            <div style="text-align:center; padding:0 0 15px 0">
+                <div class="hidden">
+                    <input id="id_date_end" type="hidden" class="date-pick" name="date_end" value="2000-01-01 03:00 am" />
+                </div>
             </div>
             <p style="text-align : justify;">
                 En {{ newMinutesForm.location }}<span style="display:inline-block; float:right"><span style="width:160px">{{ newMinutesForm.location.errors }}</span></span>, el d&iacute;a <span id="first_date">
@@ -176,7 +116,7 @@
             <br /><br />
         </div>
         <div id="footerContent">
-            <img src="{{URL_BASE}}/media/orgs_img/parquesoft/footer.jpg" width="100%">
+            <img src="{{ URL_BASE }}/media/orgs_img/parquesoft/footer.jpg" width="100%" alt="Footer">
         </div>
     </article>
 </section>

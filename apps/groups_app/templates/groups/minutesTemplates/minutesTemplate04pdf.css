@@ -1,0 +1,60 @@
+@page {
+  size: a4 portrait;
+  colordisplay: #555;  
+  @frame header_frame {
+    -pdf-frame-content: headerContent;
+    top: 1.3cm;
+    margin-left: 1.5cm;
+    margin-right: 1.5cm;
+    height: 2.7cm;
+    /*-pdf-frame-border: 1;*/
+  }
+  @frame content_frame {          
+    left: 1.5cm; top: 4.2cm; right:1.5cm; height: 590pt;
+    /*-pdf-frame-border: 1;*/
+  }
+  @frame footer_frame {
+    -pdf-frame-content: footerContent;
+    /*-pdf-frame-border: 1;*/
+    bottom: 0.5cm;
+    margin-left: 1.5cm;
+    margin-right: 1.5cm;
+    margin-top: 1.5cm;
+    height: 3.5cm;
+  }
+}
+#minutes th{font-weight: bold;}
+#minutes .table-bordered th, #minutes .table-bordered td{display: block;border:solid 1px #555;padding: 5px;}
+#firmas .table-no-bordered th, #firmas .table-no-bordered td{display: block;border: solid 1px white;}
+.no-bordered{border: 1px none;}
+
+#minutes .strong{font-weight:bold;color: #444;}
+#minutes .text-center{text-align: center;}
+#table-container{display: block;}
+#minutesContent *{font-size: 16px;text-align: justify;line-height: 1.3;}
+#minutesContent .caja{/*border:solid thin #555;*/display: block;padding: 5px;}
+#minutesContent .mb{display: block; margin-bottom: 20px;}
+#minutesContent .caja-con-titulo{display: block;border:solid thin #555;}
+#minutesContent .caja-titulo{padding-top: 10px;display: block;}
+#minutesContent .caja-contenido{display: block;padding: 5px;}
+#minutesContent .caja-contenido ul{list-style-type: circle;display: block;padding: 5px;-pdf-outline: true;border:none;}
+#minutesContent .table-header p{margin: 0;display: block;line-height: 1;}
+#headerContent .logo{display: block;text-align: center; vertical-align: middle;margin: 0;height: 45px;width: 131px;}
+
+#minutesContent .table-invisible {display: none;visibility: hidden;border:none;}
+
+#footerContent p{display: block;color: #888;line-height:1;}
+
+
+.hidden{display: none;visibility: hidden;}
+.col-40{width: 40%;}
+
+.table-container{display: block;background-color: green;}
+ol {display: block;list-style-type: decimal;margin-left: 1.5em;}
+ul {display: block;margin-left: 1.5em;list-style-type: disc;}
+ul ul {display: block;list-style-type: circle;}
+ul ul ul {display: block;list-style-type: square;}
+li{display: block;line-height: 1;padding: 0;margin-left: 40px;}
+ul.list-unstyled{display: block;list-style-type: none;}
+
+

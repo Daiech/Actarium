@@ -58,7 +58,7 @@
 
 {% block menu_content_style %}
     <style>
-        .form-horizontal table{margin: auto;width: auto;}
+        /*.form-horizontal table{margin: auto;width: auto;}*/
         table td .btn{margin-top:10px;}
         .member-list{padding: 10px 0;}
         .member-list ul li{padding: 5px;}
@@ -107,6 +107,8 @@
     	.pager{margin: 5px auto;padding: 0;position: relative;top: 0;}
     	.minutes-form-btn{display:inline;}
         section{margin-top: 0px;padding-top: 0 !important}
+        {% include template.address_css %}
+        #minutesContent .caja-con-titulo .caja-contenido{padding: 0;}
     </style>
     <link rel="stylesheet" media="all" type="text/css" href="{{ STATIC_PREFIX }}libs/bootstrap-dtp/css/bootstrap-datetimepicker.min.css" />
 {%endblock%}

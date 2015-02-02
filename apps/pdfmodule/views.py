@@ -3,8 +3,9 @@
 from apps.groups_app.models import minutes
 # from django.contrib.auth.models import User
 # from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 # from django.template import RequestContext
+from django.template.loader import render_to_string
 # from django.core.mail import EmailMessage
 import random
 from Actarium.settings import MEDIA_ROOT
@@ -18,9 +19,9 @@ from reportlab.lib.styles import getSampleStyleSheet
 # from reportlab.lib.pagesizes import A4
 # from reportlab.lib.units import inch
 from reportlab.platypus import Frame
-from xhtml2pdf.pisa import CreatePDF, startViewer
+from xhtml2pdf.pisa import CreatePDF, startViewer, showLogging
 from apps.actions_log.views import saveActionLog, saveViewsLog
-
+# from weasyprint import HTML, CSS
 
 def minutesToPdf(request, id_minutes):
     saveViewsLog(request, "pdfmodule.views.minutesToPdf")
@@ -164,24 +165,41 @@ def minutesToPdfTest(request, id_minutes):
         return HttpResponseRedirect('/')
 
 
-def minutesHtmlToPdf(html_string, name_pdf):
+def minutesHtmlToPdf(html_string, name_pdf, css_string):
     pdf_address = "/pdf/%s_Actarium%s.pdf" % (
         name_pdf, int(random.random() * 100000))
     file_dir = "%s%s" % (MEDIA_ROOT, pdf_address)
-    file_dir = file(file_dir, "wb")
-    pdf = CreatePDF(html_string, file_dir)
-                    #, default_css="#minute{margin:200px}")
-    if not pdf.err:
-        startViewer(name_pdf)
+    file_dir = open(file_dir, "w+b")
+    try:
+        showLogging() 
+        pdf = CreatePDF(html_string, file_dir, default_css=css_string)
+        if not pdf.err:
+            startViewer(name_pdf)
+    except Exception, e:
+        print e
+        return False
+    # HTML(string=html_string).write_pdf(file_dir, stylesheets=[CSS(string=css_string)])
+    file_dir.seek(0)
+    pdf = file_dir.read()
     file_dir.close()
-    return '/media%s' % (pdf_address)
+    # return '/media%s' % (pdf_address)
+    return pdf
 
 def generate_pdf_from_html(request, slug_group):
     pdf_address = 'false'
-    if request.method == 'POST':
-        html_data = request.POST.get('minutes-html-data')
-        pdf_address = minutesHtmlToPdf(html_data, slug_group)
-        return HttpResponseRedirect(pdf_address)
-    else:
+    if not request.method == 'POST':
         raise Http404
+    else:
+        minutes_id = request.POST.get('minutes_id')
+        if minutes_id:
+            minutes_obj = minutes.objects.get_minute(id=minutes_id)
+            html_data = minutes_obj.render_as_string()
+            css_string = minutes_obj.get_css4pdf()
+            pdf_address = minutesHtmlToPdf(html_data, slug_group, css_string)
+            if pdf_address:
+                return HttpResponse(pdf_address, content_type="application/pdf")
+            else:
+                return HttpResponseRedirect("{}#error-al-generar-pdf".format(minutes_obj.get_absolute_url()))
+        else:
+            return HttpResponseRedirect("/groups/{}/folder#no-hay-id".format(slug_group))
     

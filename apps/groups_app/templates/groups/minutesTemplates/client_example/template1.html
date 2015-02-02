@@ -1,0 +1,15 @@
+{% load i18n %}
+<section class="row-fluid">
+    <article id="minutes" class="minutes hoja">
+        <style>{% include "groups/minutesTemplates/CLEINTE/style1.css" %}</style>
+        <div id="headerContent">
+                <img src="{{ template.logo.url_110x40 }}" alt="{{ template.name }}">
+        </div>
+        <div id="minutesContent">
+            {{ newMinutesForm.as_p }}
+        </div>
+        <div id="footerContent">
+            footer
+        </div>
+    </article>
+</section>

@@ -10,7 +10,9 @@
 				<a role="menuitem" tabindex="-1" href="#" id="btn-generate-pdf"  title="{%if not minutes.is_minute_full_signed%}{% trans 'Únicamente las actas aprobadas pueden descargase en PDF' %}{%endif%}">
 			    	<form id="pdf-form" method="post" action="{% url 'generate_pdf' group.slug  %}">
 						{% csrf_token %}
-						<div class="hidden"><textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
+						<div class="hidden">
+							<input type="hidden" name="minutes_id" value="{{ minutes.id }}">
+							<textarea id="minutes-html-data" name="minutes-html-data"></textarea></div>
 							<span class="glyphicon glyphicon-file"></span> {% trans 'Descargar PDF' %}
 					</form>
 				</a>

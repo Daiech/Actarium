@@ -1,115 +1,53 @@
 {% load i18n %}
 <section class="row-fluid">
     <article id="minutes" class="minutes hoja">
-        <style type="text/css">
-            body{font-family:Helvetica;color: #555;}
-            .minutes{
-                border: solid thin #ddd;
-                background-color: #fff;
-                box-shadow: 8px 8px 6px -6px gray;
-                border-radius: 3px;
-                padding-top: 40px;
-                width: 99%;
-                margin: 0 auto;
-            }
-            .minutes header{
-                width: auto;
-                margin:30px 0;
-                margin-top: 40px;
-                margin-left: 0;
-                padding: 0 80px;
-            }
-            .minutes header img{
-                margin-top: 0;
-            }
-            .minutes header h3{
-                margin: 0;
-            }
-            #footerContent{
-                margin: 20px 0;
-                margin-top: 45px;
-            }
-            .list-of-members{margin:0;}
-            .box{overflow: hidden;}
-            .box > div{float: left;width: 50%}
-            #headerContent{margin: 0;margin-top: 50px;}
-            #headerContent table th, #minutesContent table th{text-align: left;vertical-align: center;}
-            #headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
-            .div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
-            #minutesContent{line-height: 1.8;margin: 0}
-            #firmas td{padding-top: 60px;width: 100%;}
-            #firmas table{width: 100%}
-            #table-list-members{margin-bottom: 20px;width: 100%;}
-            .tinymce-textareas{padding: 5px;}
-            @page {
-              margin: 2.5cm;
-              margin-top: 3cm;
-              margin-bottom: 2.5cm;
-              font-size: 26px;
-              colordisplay:#555;
-              @frame header {
-                -pdf-frame-content: headerContent;
-                top: 1cm;
-                margin-left: 2.1cm;
-                margin-right: 1cm;
-                height: 2.5cm;
-              }
-              @frame footer {
-                -pdf-frame-content: footerContent;
-                bottom: 1cm;
-                margin-left: 2.5cm;
-                margin-right: 1cm;
-                margin-top: 1.5cm;
-                height: 2cm;
-              }
-            }
-        </style>
         <div id="headerContent">
-            <table border="1" style="width:100%; margin-bottom:40px; text-align: center">
+            <table class="table table-bordered table-header">
                 <tr>
-                    <td style="padding:5px"><img style="height:38px" src="{{ URL_BASE }}/static/img/actarium-beta.png" title="Logo" alt="" /></td>
-                    <td style="padding:5px"><strong>{% trans 'ACTA' %} {{ group.name|upper }}</strong></td>
-                    <td style="padding:5px"><strong>{% trans 'ACTA No.' %} <span id="id_code_title" >{{ newMinutesForm.code }}</span></strong> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>
+                    <td><div class="logo text-center"><img  src="{{ URL_BASE }}{{ template.logo.url_200x70 }}" title="Logo" alt="" /></div></td>
+                    <td class="text-center text-middel"><p class="strong">{% trans 'ACTA' %} {{ group.name|upper }}<br></p></td>
+                    <td class="text-center text-middel"><p class="strong">{% trans 'ACTA No.' %} <span id="id_code_title" >{{ newMinutesForm.code }}</span><br></p> <span class="error-container">{{ newMinutesForm.code.errors }}</span>
                     </td>
                 </tr>
             </table>
         </div>
     	<div id="minutesContent">
+            
             <div class="hidden" style="display:none">{{ newMinutesForm.type_reunion }}</div>
             <div class="hidden">
                 <input type="text" placeholder="Lugar" name="location" id="id_location" value="&nbsp;" />
             </div>
             
-            <table border="1" style="width:100%; margin-bottom:10px">
+            <table class="table table-bordered ">
                 <tr>
-                    <td style="padding:5px;width:30%;"><strong>{% trans 'FECHA / HORA' %}</strong></td>
-                    <td style="padding:5px">
+                    <td class="text-middel col-40"><p class="strong">{% trans 'FECHA / HORA' %}</p></td>
+                    <td>
                         {% if is_form %}
-                        <span style="display:block; float:right">{{ newMinutesForm.date_start.errors }}</span>
-                        <div class="">
+                        <div>
+                            <span class="error-container">{{ newMinutesForm.date_start.errors }}</span>
                             {% if is_edit %}
-                                <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="width: 150px; z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+                                {% trans 'Inicio' %}: <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
                             {% else %}
-                                {{ newMinutesForm.date_start|safe }}
+                                {% trans 'Inicio' %}: {{ newMinutesForm.date_start|safe }}
                             {% endif %}
                         </div>
-                        <span style="display:block; float:right">{{ newMinutesForm.date_end.errors }}</span>
-                        <div class="">
+                        <div>
+                            <span class="error-container">{{ newMinutesForm.date_end.errors }}</span>
                             {% if is_edit %}
-                                <input id="id_date_end" type="text" class="date-pick" style="width: 150px; z-index: 1034;"  name="date_end" value="{{newMinutesForm.date_end.value|date:'Y-m-d g:i A'}}" placeholder="{{newMinutesForm.date_end.label}}" />
+                                {% trans 'Final' %}: <input id="id_date_end" type="text" class="date-pick" name="date_end" value="{{newMinutesForm.date_end.value|date:'Y-m-d g:i A'}}" placeholder="{{newMinutesForm.date_end.label}}" />
                             {% else %}
-                                {{ newMinutesForm.date_end|safe }}
+                                {% trans 'Final' %}: {{ newMinutesForm.date_end|safe }}
                             {% endif %}
                         </div>
                         {%else%}
-                        <div>{% trans 'Inicio' %}: {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}</div>
-                        <div>{% trans 'Final' %}: {{ newMinutesForm.date_end|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}</div>
+                        <p>{% trans 'Inicio' %}: {{ newMinutesForm.date_start|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}</p>
+                        <p>{% trans 'Final' %}: {{ newMinutesForm.date_end|date:"l d \d\e F \d\e Y \a \l\a\s g:i a"}}</p>
                         {% endif%}
                     </td>
-    			</tr>
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'ASISTENTES' %}</strong></td>
-    				<td style="padding:5px">
+                </tr>
+                <tr>
+                    <td class="text-middel" ><p class="strong">{% trans 'ASISTENTES' %}</p></td>
+                    <td >
                         <ul class="list-unstyled members-list">
                         {% for member in members_selected%}
                            <li class="member-{{ member.id_user.id }}">
@@ -122,71 +60,72 @@
                         {% endfor%}
                         </ul>
                    </td>
-    			</tr>
-    		</table>
-    		<table border="1" style="width:100%; margin-bottom:10px">
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'ORDEN DEL DÍA' %}</strong>
-                        <span style="display:block; float:right">{{ newMinutesForm.agenda.errors }}</span> 
+                </tr>
+            </table>
+            <table class="table table-bordered ">
+                <tr>
+                    <td ><span class="strong">{% trans 'ORDEN DEL DÍA' %}</span>
+                        <span class="error-container">{{ newMinutesForm.agenda.errors }}</span> 
                     </td>
                 </tr>
                 <tr>
                     <td class="tinymce-textareas">
                         {{ newMinutesForm.agenda|safe }}
                     </td>
-    			</tr>
-    			<tr>
-    				<td style="padding:5px"><strong>{% trans 'DESARROLLO ORDEN DEL DÍA' %}</strong>
-                        <span style="display:block; float:right">{{ newMinutesForm.agreement.errors }}</span>
+                </tr>
+                <tr>
+                    <td ><span class="strong">{% trans 'DESARROLLO ORDEN DEL DÍA' %}</span>
+                        <span class="error-container">{{ newMinutesForm.agreement.errors }}</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="tinymce-textareas">
                         {{ newMinutesForm.agreement|safe }}
                     </td>
-    			</tr>
-    		</table>
-    		<br /><br />
+                </tr>
+            </table>
+            <br><br>
             <div id="firmas">
-                <table >
+                <table class="table-no-border">
                     <tr>
-                    {% if president.user %}
-                        <td style="padding-left:10px;padding-top:60px;">
-                            _______________________________ <br />
-                            {{president.user.id_user.first_name|upper}} {{president.user.id_user.last_name|upper}}<br />
+                        {% if president.user %}
+                        <td class="no-bordered">
+                            _______________________________ <br>
+                            {{president.user.id_user.first_name|upper}} {{president.user.id_user.last_name|upper}}<br>
                             {% trans 'Presidente' %}
                             {% if show_dni %}
-                                </br>{{ president.dni_type }} {{ president.dni }}
+                                <br>{{ president.dni_type }} {{ president.dni }}
                             {% endif %}
                         </td>
-                    {% endif %}
-                    {% if secretary.user %}
-                        <td style="padding-left:10px;padding-top:60px;">
-                            _______________________________ <br />
-                            {{secretary.user.id_user.first_name|upper}} {{secretary.user.id_user.last_name|upper}}<br />
+                        {% endif %}
+                        {% if secretary.user %}
+                        <td class="no-bordered">
+                            _______________________________ <br>
+                            {{secretary.user.id_user.first_name|upper}} {{secretary.user.id_user.last_name|upper}}<br>
                             {% trans 'Secretario' %}
                             {% if show_dni %}
-                                </br>{{ secretary.dni_type }} {{ secretary.dni }}
+                                <br>{{ secretary.dni_type }} {{ secretary.dni }}
                             {% endif %}
                         </td>
-                    {% endif %}
+                        {% endif %}
                     </tr>
-                    {% for members in members_signers%}
-                        <tr>
-                            {% for m in members %}
-                            <td style="padding-left:10px;padding-top:20px;">
-                                    _______________________________ <br />
-                                    {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper  }}
-                                    {% if show_dni %}
-                                    </br>{{ m.dni_type }} {{ m.dni }}
-                                    {% endif %}
-                            </td>
-                            {% endfor %}
-                       </tr>
-                    {% endfor%}
+                        {% for members in members_signers%}
+                    <tr>
+                        {% for m in members %}
+                        <td class="no-bordered">
+                                _______________________________ <br>
+                                {{m.signer.id_user.first_name|upper}} {{m.signer.id_user.last_name|upper  }}
+                                {% if show_dni %}
+                                <br>{{ m.dni_type }} {{ m.dni }}
+                                {% endif %}
+                        </td>
+                        {% endfor %}
+                   </tr>
+                        {% endfor%}
                 </table>
             </div>
-            <br /><br /><br /><br />
+            <br><br><br><br>
+            <!-- <table class="table-invisible"><tr><td></td></tr></table> -->
     	</div>
         <div id="footerContent">
         </div>

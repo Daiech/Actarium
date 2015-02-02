@@ -728,7 +728,6 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 .w42{width: 42px;margin: auto}
 .w48{width: 48px;margin: auto}
 
-
 .icons-page{margin-right: 5px;}
 #message-box{/*margin: 10px auto;*/width: 70%}
 .message-box{width: 50%}
@@ -743,6 +742,12 @@ i.icon-pencil{background-image: url("/static/img/icon-writter.png"); background-
 /*
 Show Minutes 
 */
+#headerContent, #minutesContent, #footerContent{padding: 0 70px;}
+.minutes{font-family:Helvetica;color: #555;border: solid thin #ddd;background-color: #fff;box-shadow: 8px 8px 6px -6px gray;border-radius: 3px;width: 99%;margin: 0 auto;padding: 60px 0 20px;position: relative;}
+
+#minutesContent .mb{margin-bottom: 15px;}
+#minutesContent{margin-bottom: 20px;/*min-height: 645pt;*/}
+#footerContent{min-height: 60px;color:#777;font-size: 14px;margin-top: 30px;}
 #minutes-container{max-width: 815px;margin: auto;}
 
 .hoja{/*width: 70%;*/margin:auto;}
@@ -800,7 +805,7 @@ Show Minutes
 /*
 cierra Show Minutes 
 */
-
+.strong{font-weight:bold;}
 
 
 

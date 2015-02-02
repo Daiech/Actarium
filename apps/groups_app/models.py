@@ -5,10 +5,30 @@ from django.template import defaultfilters
 from django.conf import settings
 from django.http import Http404
 from django.db.models.signals import post_save
+from django.template.loader import render_to_string
 from django.db.models import Sum
+from django.utils.translation import ugettext_lazy as _
 
+from uuslug import uuslug
 from actarium_apps.organizations.models import Groups
 from libs.generic_managers import GenericManager
+from libs.thumbs import ImageWithThumbsField
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules(
+    [
+        (
+            (ImageWithThumbsField, ),
+            [],
+            {
+                "verbose_name": ["verbose_name", {"default": None}],
+                "name":         ["name",         {"default": None}],
+                "width_field":  ["width_field",  {"default": None}],
+                "height_field": ["height_field", {"default": None}],
+                "sizes":        ["sizes",        {"default": None}],
+            },
+        ),
+    ],
+    ["^libs\.thumbs\.ImageWithThumbsField",])
 
 
 class MinutesManager(GenericManager):
@@ -64,28 +84,42 @@ class minutes_type(models.Model):
 
 
 class templates(models.Model):
-    name = models.CharField(max_length=150, verbose_name="name")
-    address_template = models.CharField(max_length=150, verbose_name="address_template")
-    address_js = models.CharField(max_length=150, verbose_name="address_js")
-    id_type = models.ForeignKey(minutes_type,  null=False, related_name='id_minutes_type')
-    is_public = models.BooleanField(default=True)
+    name = models.CharField(max_length=150, verbose_name=_("Nombre"))
+    logo = ImageWithThumbsField(upload_to="client_logos", sizes=settings.CLIENT_LOGO_SIZE, verbose_name=_(u"Logo"), null=True, blank=True, default=settings.CLIENT_LOGO_DEFAULT, help_text=_(u"La imagen debe ser superior a 200x70 px"))
+    address_template = models.CharField(max_length=150, verbose_name=_(u"Dirección del HTML"))
+    address_js = models.CharField(max_length=150, verbose_name=_(u"Dirección del JS"))
+    address_css = models.CharField(max_length=150, default="groups/minutesTemplates/empty_style.css", verbose_name=_(u"Dirección del CSS"))
+    address_css4pdf = models.CharField(max_length=150, default="pdfmodule/default_css4pdf.css", verbose_name=_(u"Dirección del CSS para exportar a PDF"))
+    id_type = models.ForeignKey(minutes_type,  null=False, related_name='id_minutes_type', verbose_name=_("Tipo de plantilla"))
+    is_public = models.BooleanField(default=True, verbose_name=_(u"Es pública?"), help_text=_(u"Las plantillas públicas las puede usar cualquier usuario"))
     date_joined = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(max_length=150, unique=True)
+    slug = models.SlugField(max_length=150, unique=True, help_text=_(u"Se le agregará un identificador único después de guardado."))
+
+    def show_logo(self):
+        return u'<img src="{}" alt="{}" >'.format(self.logo.url_110x40, self.name)
+    show_logo.allow_tags = True
 
     def __unicode__(self):
         return u"Plantilla: %s " % (self.name)
 
+    class Meta:
+        verbose_name = "Templates: Plantilla"
+        verbose_name_plural = "Templates: Plantillas"
+
     def save(self, *args, **kwargs):
-        self.slug = "reemplazame"
-        super(templates, self).save(*args, **kwargs)
-        self.slug = defaultfilters.slugify(self.name) + "-" + defaultfilters.slugify(self.pk)
+        if not self.id:
+            self.slug = uuslug(self.name, instance=self)
         super(templates, self).save(*args, **kwargs)
 
 
 class rel_user_private_templates(models.Model):
-    id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user')
-    id_template = models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates')
+    id_user = models.ForeignKey(User, null=False, related_name='%(class)s_id_user', verbose_name=_(u"Usuario"))
+    id_template = models.ForeignKey(templates, null=False, related_name='%(class)s_id_templates', verbose_name=_(u"Plantilla"))
     date_joined = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Templates: Relación Usuario-plantilla_privada"
+        verbose_name_plural = "Templates: Relación Usuario-plantilla_privada"
 
 
 class private_templates(models.Model):
@@ -98,6 +132,8 @@ class private_templates(models.Model):
         return u"%s => %s: by %s" % (self.id_group.name, self.id_template.name, self.id_user.username)
 
     class Meta:
+        verbose_name = "Templates: Relación Grupo-plantilla_privada"
+        verbose_name_plural = "Templates: Relación Grupo-plantilla_privada"
         unique_together = ('id_template', 'id_group')
 
 
@@ -112,6 +148,34 @@ class minutes(models.Model):
     code = models.CharField(max_length=150, verbose_name="code")
 
     objects = MinutesManager()
+
+    def get_data_as_json(self):
+        """Retorna los datos de un Acta. Busca que tipo de acta es para retornar los datos correctos."""
+        id_minutes_type = self.id_template.id_type.pk
+        if id_minutes_type == 1: #reinion
+            try:
+                data = minutes_type_1.objects.get(id=self.id_extra_minutes)
+                minutes_data = {
+                    "date_start": data.date_start,
+                    "date_end": data.date_end,
+                    "location": data.location,
+                    "agreement": data.agreement,
+                    "agenda": data.agenda,
+                    "type_reunion": data.type_reunion,
+                    "code": self.code}
+            except minutes_type_1.DoesNotExist:
+                minutes_data = None
+        elif id_minutes_type == 2:  # para actas antiguas
+            try:
+                data = last_minutes.objects.get(id=self.id_extra_minutes)
+                minutes_data = {
+                    "address_file": MEDIA_URL + "lastMinutes/" + str(data.address_file).split("/")[len(str(data.address_file).split("/")) - 1],
+                    "name_file": data.name_file}
+            except last_minutes.DoesNotExist:
+                minutes_data = None
+        elif id_minutes_type == 3:
+            print "NO hay tres tipos de actas todavia"
+        return minutes_data
 
     def minutesIsValid(self):
         return self.is_valid
@@ -149,11 +213,80 @@ class minutes(models.Model):
         except:
             return None
 
+    def show_dni(self):
+        try:
+            rgd = rel_minutes_dni.objects.get(id_minutes=self)
+            return rgd.show_dni
+        except:
+            return False
+
+    def get_president_and_secretary(self):
+        from apps.groups_app.minutes import getPresidentAndSecretary
+        member_president, member_secretary = getPresidentAndSecretary(self.id_group, self)
+        try:
+            _dni_president = DNI.objects.get(id_user=member_president.id_user)
+            president = {"user": member_president, "dni": _dni_president.dni_value, "dni_type": _dni_president.dni_type.short_name}
+        except:
+            president = {"user": member_president, "dni": "", "dni_type": ""}
+        try:
+            _dni_secretary = DNI.objects.get(id_user=member_secretary.id_user)
+            secretary = {"user": member_secretary, "dni": _dni_secretary.dni_value, "dni_type": _dni_secretary.dni_type.short_name}
+        except:
+            secretary = {"user": member_secretary, "dni": "", "dni_type": ""}
+        return president, secretary
+
+    def get_list_signers(self):
+        from apps.groups_app.minutes import getMembersSigners
+        m_signers = getMembersSigners(self.id_group, self)
+        list_ms = []
+        list_temp = []
+        i = 0
+        for m in m_signers:
+            try:
+                _dni = DNI.objects.get(id_user=m.id_user)
+                list_temp.append({"signer": m, "dni": _dni.dni_value, "dni_type": _dni.dni_type.short_name})
+            except:
+                list_temp.append({"signer": m, "dni": "", "dni_type": ""})
+            if i >= 1:
+                i = 0
+                list_ms.append(list_temp)
+                list_temp = []
+            else:
+                i = i + 1
+        if i == 1:
+            list_ms.append(list_temp)
+        return list_ms
+
+    def render_as_string(self):
+        from apps.groups_app.minutes import getMembersAssistance
+        m_assistance, m_no_assistance = getMembersAssistance(self.id_group, self)
+        president, secretary = self.get_president_and_secretary()
+        ctx = {
+                "URL_BASE": settings.URL_BASE,
+                "newMinutesForm": self.get_data_as_json(),
+                "group": self.id_group,
+                "members_selected": m_assistance,
+                "members_no_selected": m_no_assistance,
+                "members_signers": self.get_list_signers(),
+                "url_logo": self.id_template.logo.url,
+                "president": president,
+                "secretary": secretary,
+                "show_dni": self.show_dni(),
+                "template": self.id_template
+            }
+        return render_to_string(self.id_template.address_template, ctx)
+
+    def get_css4pdf(self):
+        return render_to_string(self.id_template.address_css4pdf)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('show_minute', (), {'slug_group': self.id_group.slug, 'minutes_code': self.code})
+
     def save(self):
         self.code = self.code.replace(" ","-")
         super(minutes, self).save()
     
-
     def __unicode__(self):
         return u"Code: %s, Extra Minutes: %s" % (self.code, self.id_extra_minutes)
 
@@ -311,6 +444,7 @@ class rol_user_minutes(models.Model):
         try:
             signed = self.id_minutes.rel_user_minutes_signed_id_minutes.get(id_user=self.id_user)
         except Exception, e:
+            print e
             signed = None
         if signed:
             return signed.is_signed_approved

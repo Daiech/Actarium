@@ -1,75 +1,8 @@
-{% load gravatartag %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Acta {{minutes.code}}</title>
-    <style type="text/css">
-    	body{font-family:Helvetica;color: #555;}
-        .minute{
-        border: solid thin #ddd;
-        background-color: #fff;
-        box-shadow: 8px 8px 6px -6px gray;
-        border-radius: 3px;
-        padding-top: 40px;
-        width: 915px;
-        margin: 0 auto;
-        }
-        .minute header{
-            width: auto;
-            margin:30px 0;
-            margin-top: 40px;
-            margin-left: 0;
-            /*padding: 40px;*/
-            padding: 0 80px;
-        }
-        .minute header img{
-            margin-top: 0;
-        }
-        .minute header h3{
-            margin: 0;
-        }
-        .minute > div{
-            padding: 0 80px;
-            /*border: solid thin gray;*/
-        }
-        .minute footer{
-            border: none;
-            bottom: 0;
-            font-size: 14px;
-            left: 0;
-            margin:0;
-            padding: 20px 40px;
-            width: auto;
-        }
-        .box{overflow: hidden;}
-        .box > div{float: left;width: 50%}
-        ul{list-style-type: none;}
-        .div-header{height:50px;max-width:100px;display:inline-block;}
-        #footerContent{margin: 20px 0}
-        #firmas td{padding-top: 60px;}
-        @page {
-          margin: 2.5cm;
-          margin-top: 3cm;
-          margin-bottom: 2.5cm;
-          font-size: 16px;
-          colordisplay:#555;
-          @frame header {
-            -pdf-frame-content: headerContent;
-            top: 1cm;
-            margin-left: 2.1cm;
-            margin-right: 1cm;
-            height: 2cm;
-          }
-          @frame footer {
-            -pdf-frame-content: footerContent;
-            bottom: 1cm;
-            margin-left: 2.5cm;
-            margin-right: 1cm;
-            margin-top: 1.5cm;
-            height: 2cm;
-          }
-        }
-    </style>
+    <style>{% include "groups/minutesTemplates/procetradi/style1.css" %}</style>
 </head>
 <body>
 {{minute_template}}

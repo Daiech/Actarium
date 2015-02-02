@@ -1,0 +1,5 @@
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{border-top: none;}
+.text-middel{vertical-align: middle !important;}
+#headerContent .logo{display: block;text-align: center; vertical-align: middle;/*margin: auto;*/height: 45px;width: 131px;}
+#minutes .strong{font-weight:bold;color: #444;}
+.error-container{float: right;display: inline-block;}

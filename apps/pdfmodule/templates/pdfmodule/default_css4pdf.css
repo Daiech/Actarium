@@ -1,0 +1,56 @@
+@page {
+  size: a4 portrait;
+  colordisplay: #555;  
+  @frame header_frame {
+    -pdf-frame-content: headerContent;
+    top: 1.3cm;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    height: 4.7cm;
+    /*-pdf-frame-border: 1;*/
+  }
+  @frame content_frame {          
+    left: 2cm; top: 6.2cm; right:2cm; height: 590pt;
+  }
+  @frame footer_frame {
+    -pdf-frame-content: footerContent;
+    bottom: 0.5cm;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    margin-top: 1.5cm;
+    height: 3.5cm;
+  }
+}
+body{font-family:Helvetica;color: #555;margin: 0;padding: 0}
+p.small{font-size: 12px !important;}
+#minutes th{font-weight: bold;}
+#minutes th,
+#minutes td
+{display: block;border:solid 1px #555;padding: 5px;}
+
+#minutes .strong{font-weight:bold;color: #444;}
+.text-center{text-align: center;}
+#minutesContent *{font-size: 16px;text-align: justify;line-height: 1.3;}
+#minutesContent .mb{display: block; margin-bottom: 20px;}
+#minutesContent .caja-con-titulo{display: block;padding-top: 10px;}
+#minutesContent .caja-titulo{padding: 10px;display: block;border:solid 1px #555;}
+.caja-contenido{display: block;margin-top: 10px;}
+.caja-contenido p{display: block;line-height: 1.3;}
+
+ol {display: block;list-style-type: decimal;margin-left: 1.5em;}
+ul {display: block;margin-left: 1.5em;list-style-type: disc;}
+ul ul {display: block;list-style-type: circle;}
+ul ul ul {display: block;list-style-type: square;}
+li{display: block;line-height: 1;padding: 0;margin-left: 40px;}
+
+
+
+#minutesContent .table-header p{margin: 0;display: block;line-height: 1;}
+#headerContent .logo{display: block;text-align: center; vertical-align: middle;margin: 13px;height: 50px;width: 200px;}
+
+#minutesContent .table-invisible {display: none;visibility: hidden;border:none;}
+
+#footerContent p{display: block;color: #888;line-height:1;}
+
+
+.hidden-pdf{display: none;visibility: hidden;}

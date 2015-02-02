@@ -1,0 +1,104 @@
+{% load i18n %}
+{{ newMinutesForm.errors }}
+<section class="row-fluid">
+    <article id="minutes" class="minutes hoja">
+    	<div id="headerContent">
+    		<table class="table table-bordered">
+    			<tr>
+    				<th class="col-md-4 col-33">
+    					<div class="logo"><img src="{{ URL_BASE }}{{ template.logo.url_200x70 }}" alt="{{ template.name }}"><br></div>
+    				</th>
+    				<th class="col-md-4 col-33 text-center"><p>ACTA DE ACUERDOS<br></p></th>
+    				<th class="col-md-4 col-33">
+    					<span>ADM/RRHH/COM<br>
+    					Revisión: 00<br>
+    					Fecha: 30 de enero de 2014<br>
+    					<p class="hidden">pag <pdf:pagenumber> de <pdf:pagecount></p>
+    					</span>
+    				</th>
+    			</tr>
+    			<tr>
+    				<th><p class="text-center">GESTI&Oacute;N DE SERVICIOS</p></th>
+    				<th><p class="text-center">HOJA DE TRABAJO<br>SOLO USO INTERNO</p></th>
+    				<th class="text-left">
+    					<p>Revisado por: JQ/MT/KC/WM<br>
+    					Aprobado: WM</p>
+    				</th>
+    			</tr>
+    		</table>
+    	</div>
+    	<div id="minutesContent">
+    		<div class="table-container" id="table-container">
+	    		<table  class="table table-bordered table-no-mb table-header">
+	    			<tr class="">
+	    				<td class="col-md-4 col-40">
+	    					<p class="strong">Carpeta de trabajo:</p>
+	    					<p><input type="text"></p>
+	    				</td>
+	    				<td class="col-md-4 col-30">
+	    					<p class="strong">Asunto:</p>
+	    					<p><input type="text"></p>
+	    				</td>
+	    				<td class="col-md-4 col-30 ">
+	    					<p class="strong">D&iacute;a:</p>
+	    					<p><input type="text"></p>
+	    				</td>
+	    			</tr>
+	    		</table>
+	    		<table class="table table-bordered table-header mb bb">
+	    			<tr>
+	    				<td class="col-md-6 col-50">
+	    					<p class="strong">Hora Inicio y Fin:</p>
+	    					<p>
+	    					De 
+	    					{% if is_edit %}
+                                <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+                            {% else %}
+                                {{ newMinutesForm.date_start }}
+                            {% endif %}
+	    					a {% if is_edit %}
+                                <input id="id_date_end" type="text" class="date-pick" style="z-index: 1034;"  name="date_end" value="{{newMinutesForm.date_end.value|date:'Y-m-d g:i A'}}" placeholder="{{newMinutesForm.date_end.label}}" />
+                            {% else %}
+                                {{ newMinutesForm.date_end }}
+                            {% endif %}
+	    					</p>
+	    				</td>
+	    				<td class="col-md-6 col-50">
+	    					<p class="strong">Número Acta / CC:</p>
+	    					<p>{{ newMinutesForm.code }}</p>
+	    				</td>
+	    			</tr>
+	    			<tr>
+	    				<td class="col-md-6 col-50">
+	    					<p class="strong">Ubicación:</p>
+	    					<p>{{ newMinutesForm.location|safe }}<br></p>
+	    				</td>
+	    				<td class="col-md-6 col-50">
+	    					<p class="strong">Glosario:</p>
+	    					<p class="small">R= Es Responsable; A=Aprueba; C=Es Consultado; I=Es informado</p>
+	    				</td>
+	    			</tr>
+	    		</table>
+	    		<div class="caja-con-titulo">
+		    		<p class="caja-titulo strong">Alcances / Objetivos:</p>
+	    			<div class="caja-contenido">
+		    			{{ newMinutesForm.agenda|safe }}
+					</div>
+    			</div>
+	    		<div class="caja-con-titulo">
+		    		<p class="caja-titulo strong">Resumen de la reunión:</p>
+	    			<div class="caja-contenido">
+		    			{{ newMinutesForm.agreement|safe }}
+					</div>
+    			</div>
+    			<table class="table-invisible"><tr><td></td></tr></table>
+    		</div>
+		</div>
+		<div id="footerContent">
+			<p>Procetradi SAC</p>
+			<p>Av. Benavides 1850 of. 301 Miraflores t + 511 445 1862 t + 511 445 2115 t 511 445 7660</p>
+			<p>www.procetradi.com</p>
+		</div>
+		<div class="hidden-pdf hidden">{{ newMinutesForm.type_reunion }}</div>
+    </article>
+</section>

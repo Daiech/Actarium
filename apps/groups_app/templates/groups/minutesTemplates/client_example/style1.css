@@ -1,0 +1,61 @@
+body{font-family:Helvetica;color: #555;}
+.minutes{
+    border: solid thin #ddd;
+    background-color: #fff;
+    box-shadow: 8px 8px 6px -6px gray;
+    border-radius: 3px;
+    /*padding-top: 40px;*/
+    width: 99%;
+    margin: 0 auto;
+}
+.minutes header{
+    width: auto;
+    margin:30px 0;
+    margin-top: 40px;
+    margin-left: 0;
+    padding: 0 80px;
+}
+.minutes header img{
+    margin-top: 0;
+}
+.minutes header h3{
+    margin: 0;
+}
+#footerContent{
+    margin: 20px 0;
+    margin-top: 45px;
+}
+.list-of-members{margin:0;}
+.box{overflow: hidden;}
+.box > div{float: left;width: 50%}
+#headerContent{margin: 0;margin-top: 50px;}
+#headerContent table th, #minutesContent table th{text-align: left;vertical-align: center;}
+#headerContent > div > img{height:50px;width:100px;margin:0;margin-top:0;}
+.div-header{height:50px;max-width:100px;display:inline-block;margin:0;}
+#minutesContent{line-height: 1.8;margin: 0}
+#firmas td{padding-top: 60px;width: 100%;}
+#firmas table{width: 100%}
+#table-list-members{margin-bottom: 20px;width: 100%;}
+.tinymce-textareas{padding: 5px;}
+@page {
+  margin: 2.5cm;
+  margin-top: 3cm;
+  margin-bottom: 2.5cm;
+  font-size: 26px;
+  colordisplay:#555;
+  @frame header {
+    -pdf-frame-content: headerContent;
+    top: 1cm;
+    margin-left: 2.1cm;
+    margin-right: 1cm;
+    height: 2.5cm;
+  }
+  @frame footer {
+    -pdf-frame-content: footerContent;
+    bottom: 1cm;
+    margin-left: 2.5cm;
+    margin-right: 1cm;
+    margin-top: 1.5cm;
+    height: 2cm;
+  }
+}
