@@ -41,7 +41,7 @@ ul {display: block;margin-left: 1.5em;list-style-type: disc;}
 ul ul {display: block;list-style-type: circle;}
 ul ul ul {display: block;list-style-type: square;}
 li{display: block;line-height: 1;padding: 0;margin-left: 40px;}
-
+.president{display: block;padding: 15px;}
 
 
 #minutesContent .table-header p{margin: 0;display: block;line-height: 1;}

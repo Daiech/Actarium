@@ -11,9 +11,9 @@
     				<th class="col-md-4 col-33 text-center"><p>ACTA DE ACUERDOS<br></p></th>
     				<th class="col-md-4 col-33 text-left input-box">
     					<span>
-    						{% if is_form %}<input type="text" placeholder="Areas. ej: ADM/RRHH/COM" name="areas-encargadas" id="areas-encargadas">{% else %}ADM/RRHH/COM{% endif %}<br>
-    						Revisión: {% if is_form %}<input type="number" placeholder="0" name="" id="" class="number" min="0">{% else %}00{% endif %}<br>
-    						Fecha: {% if is_form %}<input class="date date-picks" id="" name="" placeholder="Fecha" type="date">{% else %}Febrero 02 de 2015{% endif %}<br>
+    						ADM/RRHH/COM<br>
+    						Revisión: 00<br>
+    						Fecha: Enero 16 de 2015<br>
     						<p class="hidden">pag <pdf:pagenumber> de <pdf:pagecount></p>
     					</span>
     				</th>
@@ -23,7 +23,7 @@
     				<th><p class="text-center">HOJA DE TRABAJO<br>SOLO USO INTERNO</p></th>
     				<th class="text-left">
     					<p>Revisado por: JQ/MT/KC/WM<br>
-    					Aprobado: {% if is_form %}<input type="text" placeholder="WM" name="aprobador" id="aprobador" class="number">{% else %}WM{% endif %}</p>
+    					Aprobado: WM</p>
     				</th>
     			</tr>
     		</table>
@@ -32,17 +32,13 @@
     		<div class="table-container" id="table-container">
 	    		<table  class="table table-bordered table-no-mb table-header">
 	    			<tr class="">
-	    				<td class="col-md-4 col-40">
+	    				<td class="col-md-6 col-50">
 	    					<p class="strong">Carpeta de trabajo:</p>
 	    					<p>{% if is_form %}<input type="text" placeholder="Ubicación virtual" name="carpeta-de-trabajo" id="carpeta-de-trabajo">{% else %}Ubicación en el servidor{% endif %}</p>
 	    				</td>
-	    				<td class="col-md-4 col-30">
+	    				<td class="col-md-6 col-5	0">
 	    					<p class="strong">Asunto:</p>
 	    					<p>{% if is_form %}<input type="text" placeholder="Asunto del acta" name="asunto" id="asunto">{% else %}Reunión semanal{% endif %}</p>
-	    				</td>
-	    				<td class="col-md-4 col-30 ">
-	    					<p class="strong">D&iacute;a:</p>
-	    					<p>{% if is_form %}<input type="text" placeholder="Día" name="dia" id="dia">{% else %}Lunes{% endif %}</p>
 	    				</td>
 	    			</tr>
 	    		</table>
@@ -70,13 +66,9 @@
 	    				</td>
 	    			</tr>
 	    			<tr>
-	    				<td class="col-md-6 col-50">
+	    				<td class="col-md-12 col-100" colspan="2">
 	    					<p class="strong">Ubicación:</p>
 	    					<p>{{ newMinutesForm.location|safe }}<br></p>
-	    				</td>
-	    				<td class="col-md-6 col-50">
-	    					<p class="strong">Glosario:</p>
-	    					<p class="small">R= Es Responsable; A=Aprueba; C=Es Consultado; I=Es informado</p>
 	    				</td>
 	    			</tr>
 	    		</table>
@@ -91,6 +83,32 @@
 	    			<div class="caja-contenido">
 		    			{{ newMinutesForm.agreement|safe }}
 					</div>
+    			</div>
+    			<div class="caja-con-titulo">
+		    		<p class="caja-titulo strong">Asistentes/CC/Firma:</p>
+	    			<div class="caja-contenido">
+	    				<div class="listado-firmas">
+	                        <ul class="list-unstyleds members-list">
+	                        {% for member in members_selected%}
+	                           <li class="member-{{ member.id_user.id }}">
+	                           {{ member.id_user.first_name }} {{ member.id_user.last_name }} 
+	                           <span class="hidden">_______________________________</span> 
+	                           </li>
+	                        {% empty %}
+	                            <li class="empty-list">
+	                                <i>{% trans 'Selecciona los asistentes en el panel: "Roles de acta", a la derecha de la ventana' %}</i>
+	                            </li>
+	                        {% endfor%}
+	                        </ul>
+	    					<div class="president">
+	    						{% if president.user %}
+	    						<p>Aprobado / Firmado por:</p>
+	    						<span class="hidden">_______________________________ <br></span>
+                            	<span class="strong">{{ president.user.id_user.first_name|upper }} {{president.user.id_user.last_name|upper}}</span>
+                        		{% endif %}
+	    					</div>
+    					</div>
+		    		</div>
     			</div>
     			<table class="table-invisible"><tr><td></td></tr></table>
     		</div>
