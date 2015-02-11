@@ -21,7 +21,7 @@ table tr td input[type=password], table tr td input[type=text]{width: auto;paddi
 .col-33{width: 33.3% !important;}
 .col-40{width: 40% !important;}
 .col-50{width: 50% !important;}*/
-
+.error-right{padding-top: 10px;}
 .listado-firmas{padding: 10px;}
 /*.members-list li{border-bottom: solid thin #aaa;margin-bottom: 15px;}*/
 #id_location{width: 100%;}

@@ -1,5 +1,5 @@
 {% load i18n %}
-{{ newMinutesForm.errors }}
+<!-- {{ newMinutesForm.errors }} -->
 <section class="row-fluid">
     <article id="minutes" class="minutes hoja">
     	<div id="headerContent">
@@ -36,7 +36,7 @@
 	    					<p class="strong">Carpeta de trabajo:</p>
 	    					<p>{% if is_form %}<input type="text" placeholder="Ubicación virtual" name="carpeta-de-trabajo" id="carpeta-de-trabajo">{% else %}Ubicación en el servidor{% endif %}</p>
 	    				</td>
-	    				<td class="col-md-6 col-5	0">
+	    				<td class="col-md-6 col-50">
 	    					<p class="strong">Asunto:</p>
 	    					<p>{% if is_form %}<input type="text" placeholder="Asunto del acta" name="asunto" id="asunto">{% else %}Reunión semanal{% endif %}</p>
 	    				</td>
@@ -50,35 +50,42 @@
 	    					De 
 	    					{% if is_edit %}
                                 <input class="date-pick" id="id_date_start" name="date_start" placeholder="{{newMinutesForm.date_start.label}}" type="text" style="z-index: 1034;" value="{{newMinutesForm.date_start.value|date:'Y-m-d g:i A'}}">
+                                <span class="error-container">{{ newMinutesForm.date_start.errors }}</span>
                             {% else %}
                                 {{ newMinutesForm.date_start }}
+                                <span class="error-container">{{ newMinutesForm.date_start.errors }}</span>
                             {% endif %}<br>
 	    					a {% if is_edit %}
                                 <input id="id_date_end" type="text" class="date-pick" style="z-index: 1034;"  name="date_end" value="{{newMinutesForm.date_end.value|date:'Y-m-d g:i A'}}" placeholder="{{newMinutesForm.date_end.label}}" />
+                                <span class="error-container">{{ newMinutesForm.date_end.errors }}</span>
                             {% else %}
                                 {{ newMinutesForm.date_end }}
+                                <span class="error-container">{{ newMinutesForm.date_end.errors }}</span>
                             {% endif %}
 	    					</p>
 	    				</td>
 	    				<td class="col-md-6 col-50">
 	    					<p class="strong">Número Acta / CC:</p>
 	    					<p>{{ newMinutesForm.code }}</p>
+	    					<span class="error-container">{{ newMinutesForm.code.errors }}</span>
 	    				</td>
 	    			</tr>
 	    			<tr>
 	    				<td class="col-md-12 col-100" colspan="2">
 	    					<p class="strong">Ubicación:</p>
-	    					<p>{{ newMinutesForm.location|safe }}<br></p>
+	    					<p>{{ newMinutesForm.location|safe }} <span class="error-container">{{ newMinutesForm.location.errors }}</span><br></p>
 	    				</td>
 	    			</tr>
 	    		</table>
 	    		<div class="caja-con-titulo">
+	    			<span class="error-container pull-right error-right">{{ newMinutesForm.agenda.errors }}</span>
 		    		<p class="caja-titulo strong">Alcances / Objetivos:</p>
 	    			<div class="caja-contenido">
 		    			{{ newMinutesForm.agenda|safe }}
 					</div>
     			</div>
 	    		<div class="caja-con-titulo">
+	    			<span class="error-container pull-right error-right">{{ newMinutesForm.agreement.errors }}</span>
 		    		<p class="caja-titulo strong">Resumen de la reunión:</p>
 	    			<div class="caja-contenido">
 		    			{{ newMinutesForm.agreement|safe }}
