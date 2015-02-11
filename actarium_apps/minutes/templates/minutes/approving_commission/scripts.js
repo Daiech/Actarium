@@ -32,7 +32,7 @@ function editMinutesRoles (e) { {% comment %}Se ejecuta cuando se edita un acta,
 				}
 				loadPanelContent(swig.render($("#editApprovingCommissionTpl").html(),{locals: ctx }));
 				$(".popover-element").popover({trigger: 'hover'});
-				console.log(ctx);
+				// console.log(ctx);
 			});
 		}
 	}
@@ -117,8 +117,8 @@ function is_one_selected (e, elem) {
 }
 
 function addMemberToList (user) {
-	$("#minutes .empty-list").empty();
-	$("#minutes .members-list").append("<li>"+ user.full_name + "</li>")
+	$("#minutes .empty-list").empty().remove();
+	$("#minutes .members-list").append("<li class='member-"+ user.id +"'>"+ user.full_name + "</li>")
 }
 function removeMemberToList (user) {
 	$("#minutes .members-list").find(".member-" + user.id).remove();
@@ -137,7 +137,7 @@ function callbackSetRole(data) {
 			addMemberToList({"id": data.uid, "username": data.username, "first_name": data.u, "full_name": data.full_name});
 		}
 		else{
-			// console.log("es", data.role_name);
+			console.log("es", data.role_name);
 		}
     }
     else{
