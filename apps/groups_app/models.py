@@ -67,6 +67,10 @@ class minutes_type_1(models.Model):
     agenda = models.TextField(blank=True)
     type_reunion = models.CharField(max_length=150, blank=True)
 
+    extra1 = models.TextField(blank=True, null=True)
+    extra2 = models.TextField(blank=True, null=True)
+    extra3 = models.TextField(blank=True, null=True)
+
     def __unicode__(self):
         return u"%s en %s" % (self.date_start, self.location)
 
@@ -162,7 +166,11 @@ class minutes(models.Model):
                     "agreement": data.agreement,
                     "agenda": data.agenda,
                     "type_reunion": data.type_reunion,
-                    "code": self.code}
+                    "code": self.code,
+                    "extra1": data.extra1,
+                    "extra2": data.extra2,
+                    "extra3": data.extra3,
+                }
             except minutes_type_1.DoesNotExist:
                 minutes_data = None
         elif id_minutes_type == 2:  # para actas antiguas

@@ -29,6 +29,9 @@ class newMinutesForm(forms.Form):
     agreement = forms.CharField(label=_(u"Acuerdos"), widget=forms.Textarea(attrs={'placeholder': _(u'Acuerdos')}))
     type_reunion = forms.ChoiceField(widget=forms.Select(), choices=TYPES)
 
+    extra1 = forms.CharField(initial=" ")
+    extra2 = forms.CharField(initial=" ")
+    extra3 = forms.CharField(initial=" ")
     
 
 

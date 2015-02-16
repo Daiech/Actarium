@@ -78,6 +78,9 @@
                 {%if reunion%}
                 <input type="hidden" name="reunion_id" value="{{reunion.id}}" >
                 {%endif%}
+                {{ newMinutesForm.extra1 }}
+                {{ newMinutesForm.extra2 }}
+                {{ newMinutesForm.extra3 }}
             </div>
             <p>
                 <strong>Acta No. </strong><span id="id_code_title" >{{ newMinutesForm.code }}</span> <span style="display:block; float:right">{{ newMinutesForm.code.errors }}</span>

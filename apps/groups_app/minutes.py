@@ -1105,7 +1105,10 @@ def editMinutes(request, slug_group, slug_template, minutes_code):
                             "location": _extra_minutes.location,
                             "agreement": _extra_minutes.agreement,
                             "agenda": _extra_minutes.agenda,
-                            "type_reunion": _extra_minutes.type_reunion
+                            "type_reunion": _extra_minutes.type_reunion,
+                            "extra1": _extra_minutes.extra1,
+                            "extra2": _extra_minutes.extra2,
+                            "extra3": _extra_minutes.extra3,
                             }
                             )
                         members_list = get_minutes_roles(_minute)
@@ -1165,6 +1168,9 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
             'agenda': form.cleaned_data['agenda'],
             'agreement': form.cleaned_data['agreement'],
             'type_reunion': form.cleaned_data['type_reunion'],
+            'extra1': form.cleaned_data['extra1'],
+            'extra2': form.cleaned_data['extra2'],
+            'extra3': form.cleaned_data['extra3'],
         }
         if id_minutes_update:
             _minu = getMinutesById(id_minutes_update)
@@ -1179,6 +1185,9 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
                 _extra_minutes.agreement = df['agreement']
                 _extra_minutes.agenda = df['agenda']
                 _extra_minutes.type_reunion = df['type_reunion']
+                _extra_minutes.extra1 = df['extra1']
+                _extra_minutes.extra2 = df['extra2']
+                _extra_minutes.extra3 = df['extra3']
 
                 _minu.save()
                 _extra_minutes.save()
@@ -1192,7 +1201,10 @@ def saveMinute(request, group, form, _template, id_minutes_update=None):
                 location=df['location'],
                 agenda=df['agenda'],
                 agreement=df['agreement'],
-                type_reunion=df['type_reunion']
+                type_reunion=df['type_reunion'],
+                extra1=df['extra1'],
+                extra2=df['extra2'],
+                extra3=df['extra3']
             )
             myNewMinutes_type_1.save()
             myNewMinutes = minutes(
