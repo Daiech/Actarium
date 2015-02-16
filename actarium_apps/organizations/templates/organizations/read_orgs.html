@@ -19,6 +19,7 @@
                 </h3>
             </span>
             <span class="pull-right" title="{% blocktrans with num=org.get_num_members name=org.name %}{{ name }} tiene {{ num }} miembros{% endblocktrans%}">{{ org.get_num_members }}/{{ org.organizationservices_organization.get_max_num_members }} {% trans 'miembros' %}</span>
+            <span class="label label-default ml10">{% trans 'Organización vencida' %}</span>
           </div>
           <div class="panel-body">
             <div class="">
