@@ -19,16 +19,6 @@
 						<form id="taskForm" method="POST">
 							<input name="name" id="nameTaskForm" type="text"  placeholder="{% trans 'Título' %}" class="form-control task_input"/>
 							<textarea id="descriptionTaskForm" name="description" placeholder = "{% trans 'descripcion' %}" class="form-control task_input"></textarea>
-							<div id="responsibleTaskForm" class="input-group task_input">
-								<span class="input-group-addon" >
-									<i class="glyphicon glyphicon-user" ></i>
-								</span>
-								<select id="responsibleSelector" name="responsible" class="form-control">
-									{% for rel in group.rel_user_group_set.get_all_members_active %}
-									<option  value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
-									{% endfor %}
-								</select>
-							</div>
 							<div id="dueTaskForm" class="input-group task_input">
 								<span class="input-group-addon" >
 									<i class="glyphicon glyphicon-calendar" ></i>
@@ -38,6 +28,16 @@
 							<input type="hidden" name="minutes"   value="{{minutes.id}}" />
 							<input type="hidden" name="task_id" id="taskId"  value="0" />
 
+							<div id="responsibleTaskForm" class="input-group task_input">
+								<span >
+									Responsable
+								</span>
+								<select id="responsibleSelector" name="responsible" class="form-control">
+									{% for rel in group.rel_user_group_set.get_all_members_active %}
+									<option  value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
+									{% endfor %}
+								</select>
+							</div>
 							<div id="accountableTaskForm" class="input-group task_input task_extra_input">
 								<span>
 									Aprobador de tarea 
@@ -52,7 +52,7 @@
 
 							<div id="consultedTaskForm" class="input-group task_input task_extra_input">
 								<span>
-									Consulta
+									Consultados
 								</span>
 								<select id="consultedSelector" name="consulted" class="form-control" multiple="multiple">
 									{% for rel in group.rel_user_group_set.get_all_members_active %}
@@ -63,7 +63,7 @@
 
 							<div id="informedTaskForm" class="input-group task_input task_extra_input">
 								<span>
-									Informe 
+									Informados
 								</span>
 								<select id="informedSelector" name="informed" class="form-control" multiple="multiple">
 									{% for rel in group.rel_user_group_set.get_all_members_active %}
