@@ -2,6 +2,8 @@
 #minutes .strong{font-weight:bold;}
 
 #headerContent{font-size: 13px;}
+#headerContent td, #headerContent td{vertical-align:middle;}
+#headerContent p{margin:0}
 #minutesContent{}
 #footerContent{}
 table tr td input[type=password], table tr td input[type=text]{width: auto;padding: 2px;}
