@@ -2,7 +2,7 @@
 #minutes .strong{font-weight:bold;}
 
 #headerContent{font-size: 13px;}
-#headerContent td, #headerContent td{vertical-align:middle;}
+#headerContent td, #headerContent th{vertical-align:middle;}
 #headerContent p{margin:0}
 #minutesContent{}
 #footerContent{}
