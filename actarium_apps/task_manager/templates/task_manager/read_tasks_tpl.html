@@ -138,7 +138,7 @@
 						{% verbatim %}
 						
 					</div>
-					<div class="task_due pull-right" {% if task.status_code == 'VEN' %}style="background-color: #FFC7C7"{% endif %}>
+					<div class="task_due pull-right" {% if task.status_code == 'VEN' %}style="background-color: #FFC7C7"  {% endverbatim %} title="{% trans 'Esta tarea esta vencida' %}" {% verbatim %}{% endif %}>
 						{{ task.due| }}
 					</div>
 				</div>
