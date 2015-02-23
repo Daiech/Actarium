@@ -185,7 +185,7 @@ Termina barra superior Daiech
 
 .ml10{margin-left: 10px;}
 .mt20{margin-top: 20px;}
-.mt40{margin-top: 40px;}
+.mt40{margin-top: 40px !important;}
 .mt50{margin-top: 50px;}
 .mb10{margin-bottom: 10px;}
 .mb20{margin-bottom: 20px;}
