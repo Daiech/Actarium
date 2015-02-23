@@ -11,7 +11,7 @@ table tr td input[type=password], table tr td input[type=text]{width: auto;paddi
 .table-no-mb.table-bordered>tbody>tr>th, .table-no-mb.table-bordered>tbody>tr>td{border-bottom: none;}
 
 #minutesContent .border{border-top: 4px solid blue;border-bottom-color: #ddd;border-bottom-width: 1px;border-bottom-style: solid; }
-#minutesContent .caja-con-titulo{display: block;margin-top: 40px;}
+#minutesContent .caja-con-titulo{display: block;margin-top: 10px;}
 #minutesContent .caja-con-titulo .caja-titulo{font-weight: bold;padding: 5px;border-right: solid thin #ddd;border-top: solid thin #ddd;border-left: solid thin #ddd;margin: 0;}
 #minutesContent .caja-con-titulo .caja-contenido{border: solid thin #ddd;padding: 5px 7px;}
 #minutesContent .table-header p{margin: 0;}
