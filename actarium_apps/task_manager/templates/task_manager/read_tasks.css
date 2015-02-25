@@ -1,115 +1,30 @@
-#tasksList{
-	border-bottom: 1px solid #f7f7f7;
-}
-
-.one_task{
-	margin: 2px 0px;
-	padding:0px;
-	height:90px;
-	border-top: 1px solid #f7f7f7;
-}
-
-.one_task:hover{
-	background-color: #FFFFd6;
-	border-top: 1px solid #BBBBBB;
-	border-bottom: 1px solid #BBBBBB;
-	cursor:pointer;
-}
-
-.task_status{
-	width:6px;
-	height:86px;
-}
-
-.task_info{
-	width:218px;
-	height:59px;
-	padding:3px 3px 3px 5px;
-}
-
-.task_functions{
-	width:100px;
-	margin-left: 7px;
-}
-
-.task_user_img{
-	width:26px;
-	margin-top:7px;
-}
-
-.task_content{
-	padding-left:5px;
-	width:230px;
-}
-
-.task_add{
-	height: 43px;
-	padding-top: 6px;
-
-}
-
-.task_responsible{
-
-}
-
-.task_name{
-	width: 193px;
-	line-height: 16px;
-}
-
-.task_form_content{
-	width: 248px;
-}
-
-.task_input{
-	margin-top: 8px;
-}
-
-.task_action{
-	margin-left: 3px;
-}
-
-.error-form-task{
-	color: #a94442;
-}
-
-.task_empty{
-	padding: 10px;
-}
-
-#taskAddBtnImg{
-	height:23px;
-}
-
-#miniNameTaskForm{
-	width:206px;
-}
-
-#taskDropdown{
-	position: fixed;
-
-}
-
-
-.set_task_done_btn .glyphicon-ok-circle{
-	color: #97C02C;
-	font-size:25px;
-}
-
-.delete_task_btn .glyphicon-trash{
-	font-size:23px;
-	color: #ff8c8c;
-}
-
-.set_task_assigned_btn .glyphicon-ok-sign{
-	color: #97C02C;
-	font-size:25px;
-}
-
-.task_due{
-	margin-right:8px;
-	font-size:12px;
-	-webkit-border-radius: 5px 5px;  /* Safari  */
-  	-moz-border-radius: 5px 5px;     /* Firefox */
-  	padding:2px;
-}
+#tasksList{	border-bottom: 1px solid #f7f7f7; }
+.one_task{	margin: 2px 0px;	padding:0px;	height:90px;	border-top: 1px solid #f7f7f7;}
+.one_task:hover{	background-color: #FFFFd6;	border-top: 1px solid #BBBBBB;	border-bottom: 1px solid #BBBBBB;	cursor:pointer;}
+.task_status{	width:6px;	height:86px;}
+.task_info{	width:218px;	height:59px;	padding:3px 3px 3px 5px;}
+.task_functions{	width:100px;	margin-left: 7px;}
+.task_user_img{	width:26px;	margin-top:7px;}
+.task_content{	padding-left:5px;	width:230px;}
+.task_add{	height: 43px;	padding-top: 6px;}
+.task_responsible{}
+.task_name{	width: 193px;	line-height: 16px;}
+.task_form_content{	width: 248px;}
+.task_input{	margin-top: 8px; font-size: 14px !important; }
+.task_action{	margin-left: 3px;}
+.error-form-task{	color: #a94442;}
+.task_empty{	padding: 10px;}
+#taskAddBtnImg{	height:23px;}
+#miniNameTaskForm{	width:206px;}
+#taskDropdown{	position: fixed;}
+.set_task_done_btn .glyphicon-ok-circle{	color: #848D80;	font-size:25px;}
+.set_task_done_btn .glyphicon-ok-circle:hover{	color: #97C02C;}
+.delete_task_btn .glyphicon-trash{	font-size:23px;	color: #848D80;}
+.delete_task_btn .glyphicon-trash:hover{	color: #ff8c8c;}
+.edit_task_btn .glyphicon-pencil{	font-size:23px;	color: #848D80;}
+.edit_task_btn .glyphicon-pencil:hover{	color: #F6B43E;}
+.set_task_assigned_btn .glyphicon-remove-circle{	color: #848D80;	font-size:25px;}
+.set_task_assigned_btn .glyphicon-remove-circle:hover{	color: #97C02C;}
+.task_due{	margin-right:8px;	font-size:12px;	-webkit-border-radius: 5px 5px;  /* Safari  */  	-moz-border-radius: 5px 5px;     /* Firefox */  	padding:2px;}
+.task_extra_input{	width: 100%;}
+.task_button_group{	width: 100%;	padding-top: 10px;}

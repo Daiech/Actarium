@@ -19,16 +19,6 @@
 						<form id="taskForm" method="POST">
 							<input name="name" id="nameTaskForm" type="text"  placeholder="{% trans 'Título' %}" class="form-control task_input"/>
 							<textarea id="descriptionTaskForm" name="description" placeholder = "{% trans 'descripcion' %}" class="form-control task_input"></textarea>
-							<div id="responsibleTaskForm" class="input-group task_input">
-								<span class="input-group-addon" >
-									<i class="glyphicon glyphicon-user" ></i>
-								</span>
-								<select id="responsibleSelector" name="responsible" class="form-control">
-									{% for rel in group.rel_user_group_set.get_all_members_active %}
-									<option  value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
-									{% endfor %}
-								</select>
-							</div>
 							<div id="dueTaskForm" class="input-group task_input">
 								<span class="input-group-addon" >
 									<i class="glyphicon glyphicon-calendar" ></i>
@@ -37,8 +27,55 @@
 							</div>
 							<input type="hidden" name="minutes"   value="{{minutes.id}}" />
 							<input type="hidden" name="task_id" id="taskId"  value="0" />
-							<button id="newTaskBtn" class="btn task_input" type="submit" >{% trans 'Guardar' %}</button>
-							<button id="cancelBtn" class="btn task_input" >{% trans 'Cancelar' %}</button>
+
+							<div id="responsibleTaskForm" class="input-group task_input">
+								<span >
+									Responsable
+								</span>
+								<select id="responsibleSelector" name="responsible" class="form-control">
+									{% for rel in group.rel_user_group_set.get_all_members_active %}
+									<option  value="{{ rel.id_user.id}}" {% if rel.id_user.id == user.id %}selected{% endif %}>{{ rel.id_user.username}}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div id="accountableTaskForm" class="input-group task_input task_extra_input">
+								<span>
+									Aprobador de tarea 
+								</span>
+								<select id="accountableSelector" name="accountable" class="form-control">
+									<option value="" > --------- </option>
+									{% for rel in group.rel_user_group_set.get_all_members_active %}
+									<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
+									{% endfor %}
+								</select>
+							</div>
+
+							<div id="consultedTaskForm" class="input-group task_input task_extra_input">
+								<span>
+									Consultados
+								</span>
+								<select id="consultedSelector" name="consulted" class="form-control" multiple="multiple">
+									{% for rel in group.rel_user_group_set.get_all_members_active %}
+									<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
+									{% endfor %}
+								</select>
+							</div>
+
+							<div id="informedTaskForm" class="input-group task_input task_extra_input">
+								<span>
+									Informados
+								</span>
+								<select id="informedSelector" name="informed" class="form-control" multiple="multiple">
+									{% for rel in group.rel_user_group_set.get_all_members_active %}
+									<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
+									{% endfor %}
+								</select>
+							</div>
+
+							<div class="task_button_group">
+								<button id="newTaskBtn" class="btn task_input" type="submit" >{% trans 'Guardar' %}</button>
+								<button id="cancelBtn" class="btn task_input" >{% trans 'Cancelar' %}</button>
+							</div>
 						</form>
 					</div>		
 				</div>
@@ -69,23 +106,39 @@
 						<img title="{{task.responsible}}" alt="{{task.responsible}} " style="width:25px" src="{{task.responsible_img}}" class="img-circle">
 					</div>
 					<div class="task_functions pull-left" >
-						{% if task.status_code == "TER" %}
-							<a class="set_task_assigned_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como asignada' %}" {% verbatim %}>
-								<span class="glyphicon glyphicon-ok-sign"></span>
-							</a>
-						{% else %}
-							{% if task.responsible_id == me %}
+
+
+						{% if task.responsible_id == me %}
+							{% if task.status_code == "TER" %}
+								<a class="set_task_assigned_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como no terminada' %}" {% verbatim %}>
+									<span class="glyphicon glyphicon-remove-circle"></span>
+								</a>
+							{% else %}
+							
 								<a class="set_task_done_btn task_action" href="#" {% endverbatim %} title="{% trans 'Marcar como terminada' %}" {% verbatim %}>
 									<span class="glyphicon glyphicon-ok-circle"></span>
 								</a>
-								
-								<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Eliminar tarea' %}" {% verbatim %}>
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
 							{% endif %}
 						{% endif %}
+
+						{% endverbatim %}
+						{% if is_secretary %}
+							{% verbatim %}
+								{% if task.status_code != "TER" %}
+									<a  class="edit_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Editar tarea' %}" 
+										{% verbatim %}>
+											<span class="glyphicon glyphicon-pencil"></span>
+									</a>
+									<a  class="delete_task_btn task_action" href="#" data-task-id="{{task.id}}" {% endverbatim %} title="{% trans 'Eliminar tarea' %}" {% verbatim %}>
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+								{% endif %}
+							{% endverbatim %}
+						{% endif %}
+						{% verbatim %}
+						
 					</div>
-					<div class="task_due pull-right" {% if task.status_code == 'VEN' %}style="background-color: #FFC7C7"{% endif %}>
+					<div class="task_due pull-right" {% if task.status_code == 'VEN' %}style="background-color: #FFC7C7"  {% endverbatim %} title="{% trans 'Esta tarea esta vencida' %}" {% verbatim %}{% endif %}>
 						{{ task.due| }}
 					</div>
 				</div>
@@ -113,6 +166,7 @@
 							{{task.description}}
 						</div>
 						<br><br>
+
 						<strong>{% endverbatim %} {% trans 'Responsable:' %} {% verbatim %}</strong>
 						<br><br>
 						<div class="">
@@ -120,6 +174,45 @@
 							{{task.responsible}}
 						</div>
 						<br><br>
+
+						{% if task.accountable %}
+							<strong>{% endverbatim %} {% trans 'Aprobador de la tarea:' %} {% verbatim %}</strong>
+							<br><br>
+							<div class="">
+								<img title="{{task.accountable.name}}" alt="{{task.accountable.name}}" style="width:25px" src="{{task.accountable.img}}" class="img-circle">
+								{{task.accountable.name}}
+							</div>
+							<br><br>
+						{% endif %}
+
+						{% if task.consulted.length %}
+							<strong>{% endverbatim %} {% trans 'Consultado:' %} {% verbatim %}</strong>
+							<br><br>
+							{% for consulted in task.consulted %}
+								<div class="">
+									<img title="{{consulted.name}}" alt="{{consulted.name}}" style="width:25px" src="{{consulted.img}}" class="img-circle">
+									{{consulted.name}}
+								</div>
+								<br>
+							{% endfor %}
+							<br><br>
+						{% endif %}
+
+
+						{% if task.informed.length %}
+							<strong>{% endverbatim %} {% trans 'Informado:' %} {% verbatim %}</strong>
+							<br><br>
+							{% for informed in task.informed %}
+								<div class="">
+									<img title="{{informed.name}}" alt="{{informed.name}}" style="width:25px" src="{{informed.img}}" class="img-circle">
+									{{informed.name}}
+								</div>
+								<br>
+							{% endfor %}
+							<br><br>
+						{% endif %}
+
+
 						<strong>{% endverbatim %} {% trans 'Estado:' %} {% verbatim %}</strong>
 						<br><br>
 						<div >
