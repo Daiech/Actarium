@@ -231,24 +231,23 @@ class UserTasks(models.Model):
             return "Sin Slug"
 
     def get_group_slug(self):
-        mc = self.get_minutes()
-        if mc:
+        try:
+            mc = self.get_minutes()
             return mc.id_group.slug
-        else:
-            return "SIn Slug"
+        except:
+            return "no_slug"
 
     def get_group_name(self):
-        mc = self.get_minutes()
-        if mc:
+        try:
+            mc = self.get_minutes()
             return mc.id_group.name
-        else:
-            return "No hay Nombre de grupo"
+        except:
+            return "no_group_name"
 
 
     def get_minutes_code(self):
-        mc = self.get_minutes()
-        if mc:
+        try:
+            mc = self.get_minutes()
             return mc.code
-        else:
-            print "No hay un LastMinutesTask", self
-            return 123
+        except:
+            return 0

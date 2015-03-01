@@ -127,7 +127,7 @@ def create_task(request):
     except Exception, e:
         raise e
     if not form.is_valid():
-        print "Formulario invalido", dict(form.errors.items())
+        # print "Formulario invalido", dict(form.errors.items())
         message = {'form_errors':  dict(form.errors.items()) }
         return HttpResponse(json.dumps(message), mimetype="application/json")
     

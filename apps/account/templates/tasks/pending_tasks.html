@@ -17,7 +17,7 @@
     </tr>
     
     {% for usertask in usertasks %}
-        <tr class='clickable-row ' href="{% url 'show_minute' usertask.get_group_slug usertask.get_minutes_code %}#show-tasks">
+        <tr {% if usertask.get_minutes_code  %} class='clickable-row ' href="{% url 'show_minute' usertask.get_group_slug usertask.get_minutes_code %}#show-tasks" {% endif %}>
                 <td class="task_status {% if usertask.task.get_status_code == 'VEN' %} task_due {% endif %}" title="{% if usertask.task.get_status_code == 'VEN' %} {% trans 'Esta tarea vencio en' %} {% else %} {% trans 'Esta tarea vence en' %} {% endif %} {{usertask.task.due}} ">
 
                 </td>
@@ -25,10 +25,19 @@
                    {{ usertask.task }}
                 </td>
                 <td>
-                    {{ usertask.get_minutes_code}}
+                    {% if usertask.get_minutes_code %}
+                        {{ usertask.get_minutes_code}}
+                    {% else %}
+                        {% trans '---' %}
+                    {% endif %}
                 </td>
                 <td>
-                    {{ usertask.get_group_name}}
+                    {% if usertask.get_minutes_code %}
+                        {{ usertask.get_group_name}}
+                    {% else %}
+                        {% trans '---' %}
+                    {% endif %}
+                    
                 </td>
                 <td>
                     {{ usertask.task.description }}

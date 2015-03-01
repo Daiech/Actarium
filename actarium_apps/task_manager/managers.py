@@ -77,7 +77,7 @@ class TasksManager(GenericManager):
             return None, __( u"Esta tarea ya no se puede modificar" )
 
         task_obj.name = name
-        print "Actualizando ",description
+
         if task_obj.description != description:
             task_obj.description = description
         
