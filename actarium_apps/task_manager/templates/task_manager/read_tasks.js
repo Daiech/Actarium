@@ -30,6 +30,7 @@ function loadTasksPanel(e) {
 					else{
 						loadPanelContent($("#taskEmptyTpl").html());
 					}
+					$("#taskDropdown").css({'overflow-y':"scroll"}).find(".dropdown-body").height($(window).height()-200)
 				});
 		}
 	}
@@ -262,6 +263,22 @@ function deleteTask(e){
         } 
 }
 
+function showMoreFields(e){
+	e.preventDefault();
+  	e.stopPropagation();
+	$(function(){
+		if ($("#hiddenFields").hasClass('hide')) {
+	  		$("#hiddenFields").removeClass('hide');
+	  		$("#taskShowMoreIcon").removeClass('glyphicon-chevron-down')
+	  		$("#taskShowMoreIcon").addClass('glyphicon-chevron-up')
+		}	
+		else{
+			$("#hiddenFields").addClass('hide');
+			$("#taskShowMoreIcon").removeClass('glyphicon-chevron-up')
+	  		$("#taskShowMoreIcon").addClass('glyphicon-chevron-down')
+		}
+	});
+}
 
 $(document).on("submit","#taskForm", createTask)
 $(document).on("focus","#miniNameTaskForm",hideDropDown)
@@ -273,3 +290,4 @@ $(document).on("click",".edit_task_btn", editTask)
 $(document).on("click",".one_task", showTask)
 $(document).on("click","#taskAddBtn",showDropDown)
 $(document).on("click","#cancelBtn", hideDropDown)
+$(document).on("click","#taskShowMore",showMoreFields)

@@ -38,38 +38,48 @@
 									{% endfor %}
 								</select>
 							</div>
-							<div id="accountableTaskForm" class="input-group task_input task_extra_input">
-								<span>
-									Aprobador de tarea 
-								</span>
-								<select id="accountableSelector" name="accountable" class="form-control">
-									<option value="" > --------- </option>
-									{% for rel in group.rel_user_group_set.get_all_members_active %}
-									<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
-									{% endfor %}
-								</select>
-							</div>
 
-							<div id="consultedTaskForm" class="input-group task_input task_extra_input">
-								<span>
-									Consultados
-								</span>
-								<select id="consultedSelector" name="consulted" class="form-control" multiple="multiple">
-									{% for rel in group.rel_user_group_set.get_all_members_active %}
-									<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
-									{% endfor %}
-								</select>
-							</div>
+							<button id="taskShowMore" class="btn " >
+									{% trans 'Mas opciones' %}
+									<span id="taskShowMoreIcon" class="glyphicon glyphicon-chevron-down" </span>
+							</button>
 
-							<div id="informedTaskForm" class="input-group task_input task_extra_input">
-								<span>
-									Informados
-								</span>
-								<select id="informedSelector" name="informed" class="form-control" multiple="multiple">
-									{% for rel in group.rel_user_group_set.get_all_members_active %}
-									<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
-									{% endfor %}
-								</select>
+							<div id="hiddenFields" class="hide">
+								<div id="accountableTaskForm" class="input-group task_input task_extra_input">
+									<span>
+										Aprobador de tarea 
+									</span>
+									<select id="accountableSelector" name="accountable" class="form-control">
+										<option value="" > --------- </option>
+										{% for rel in group.rel_user_group_set.get_all_members_active %}
+										<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
+										{% endfor %}
+									</select>
+								</div>
+
+
+								<div id="consultedTaskForm" class="input-group task_input task_extra_input">
+									<span>
+										Consultados
+									</span>
+									<select id="consultedSelector" name="consulted" class="form-control" multiple="multiple">
+										{% for rel in group.rel_user_group_set.get_all_members_active %}
+										<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
+										{% endfor %}
+									</select>
+								</div>
+							
+								<div id="informedTaskForm" class="input-group task_input task_extra_input">
+									<span>
+										Informados
+									</span>
+									<select id="informedSelector" name="informed" class="form-control" multiple="multiple">
+										{% for rel in group.rel_user_group_set.get_all_members_active %}
+										<option  value="{{ rel.id_user.id}}" >{{ rel.id_user.username}}</option>
+										{% endfor %}
+									</select>
+								</div>
+
 							</div>
 
 							<div class="task_button_group">
@@ -228,3 +238,4 @@
 		  	</div>
 		{% endverbatim %}
 	</script>
+

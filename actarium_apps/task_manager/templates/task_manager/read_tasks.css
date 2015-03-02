@@ -28,3 +28,4 @@
 .task_due{	margin-right:8px;	font-size:12px;	-webkit-border-radius: 5px 5px;  /* Safari  */  	-moz-border-radius: 5px 5px;     /* Firefox */  	padding:2px;}
 .task_extra_input{	width: 100%;}
 .task_button_group{	width: 100%;	padding-top: 10px;}
+#taskShowMore{margin-top: 16px; width: 100%;}
