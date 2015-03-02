@@ -6,7 +6,7 @@
     		<table class="table table-bordered">
     			<tr>
     				<th class="col-md-4 col-33">
-    					<div class="logo"><img src="{{ URL_BASE }}{{ template.logo.url_200x70 }}" alt="{{ template.name }}"><br></div>
+    					<div class="logo"><img src="{{ URL_BASE }}{{ template.logo.url_200x70 }}" alt="{{ template.name }}" class="img-responsive"><br></div>
     				</th>
     				<th class="col-md-4 col-33 text-center"><p>ACTA DE ACUERDOS<br></p></th>
     				<th class="col-md-4 col-33 text-left input-box">
@@ -94,6 +94,7 @@
 		    			{{ newMinutesForm.agenda|safe }}
 					</div>
     			</div>
+    			<div class="pdf-mt hidden">&nbsp;</div>
 	    		<div class="caja-con-titulo">
 	    			<span class="error-container pull-right error-right">{{ newMinutesForm.agreement.errors }}</span>
 		    		<p class="caja-titulo strong">Resumen de la reunión:</p>
@@ -101,10 +102,12 @@
 		    			{{ newMinutesForm.agreement|safe }}
 					</div>
     			</div>
+    			<div class="pdf-mt hidden">&nbsp;</div>
     			<div class="caja-con-titulo">
 		    		<p class="caja-titulo strong">Asistentes/CC/Firma:</p>
 	    			<div class="caja-contenido">
 	    				<div class="listado-firmas">
+    						<div class="pdf-mt hidden">&nbsp;</div>
 	                        <ul class="list-unstyleds members-list">
 	                        {% for member in members_selected%}
 	                           <li class="member-{{ member.id_user.id }}">
