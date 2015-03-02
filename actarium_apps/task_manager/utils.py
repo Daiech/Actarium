@@ -4,6 +4,31 @@ from apps.account.templatetags.gravatartag import showgravatar
 def task_as_json(task_obj):
     title_max_length = 25
     description_max_length = 52
+    consulted=[]
+    informed=[]
+
+    accountable = None
+    if task_obj.accountable:
+        accountable = {
+        "img":showgravatar(task_obj.accountable.email,25), 
+        "name":task_obj.accountable.first_name, 
+        "id":task_obj.accountable.id, 
+    }
+
+    for user in task_obj.consulted:
+        consulted.append({
+            "img":showgravatar(user.email,25),
+            "name":user.first_name,
+            "id":user.id
+            })
+
+    for user in task_obj.informed:
+        informed.append({
+            "img":showgravatar(user.email,25),
+            "name":user.first_name,
+            "id":user.id
+            })
+
     new_task = {
                 "id":task_obj.id,
                 "title":task_obj.name,
@@ -13,6 +38,9 @@ def task_as_json(task_obj):
                 "responsible_img":showgravatar(task_obj.responsible.email,25), 
                 "responsible":task_obj.responsible.first_name, 
                 "responsible_id":task_obj.responsible.id, 
+                "accountable": accountable,
+                "consulted":consulted,
+                "informed":informed,
                 "creator":task_obj.creator.first_name, 
                 "creator_img":showgravatar(task_obj.creator.email,25),
                 "color":task_obj.color,

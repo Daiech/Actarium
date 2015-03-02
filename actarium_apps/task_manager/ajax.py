@@ -68,6 +68,9 @@ def create_task(request):
     name = request.POST.get("name")
     description = request.POST.get("description")
     responsible  = request.POST.get("responsible")
+    accountable  = request.POST.get("accountable")
+    consulted  = request.POST.getlist("consulted")
+    informed  = request.POST.getlist("informed")
     due_str = str(request.POST.get("due"))
     due = None if due_str=="" else datetime.datetime.strptime(due_str, "%Y-%m-%d").replace(tzinfo=utc)
     minutes = request.POST.get("minutes")
@@ -99,10 +102,23 @@ def create_task(request):
         message = {'error': _( u"No tienes permiso para realizar esta acción" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")
     _responsible_rel = getRelUserGroup(responsible_obj, minutes_obj.id_group.id)
+
     if not (_responsible_rel and _responsible_rel.is_member and _responsible_rel.is_active):
         message = {'error': _( u"Debes asignar la tarea a un usuario que pertenezca a este grupo" )}
         return HttpResponse(json.dumps(message), mimetype="application/json")
 
+
+    # extra input data for tasks
+    print "accountable",accountable
+    try:
+        accountable = int(accountable)
+        accountable_obj = User.objects.get_or_none(id=accountable)
+    except Exception, e:
+        accountable_obj = None 
+
+    
+    consulted_list = User.objects.filter(id__in=consulted, is_active=True) # set validation
+    informed_list = User.objects.filter(id__in=informed, is_active=True) # set validation
 
     # form validations
     # form = createTaskForm({"name":name,"description":description, "responsible":responsible, "due":due})
@@ -111,15 +127,25 @@ def create_task(request):
     except Exception, e:
         raise e
     if not form.is_valid():
-        print "Formulario invalido", dict(form.errors.items())
+        # print "Formulario invalido", dict(form.errors.items())
         message = {'form_errors':  dict(form.errors.items()) }
         return HttpResponse(json.dumps(message), mimetype="application/json")
     
 
-    
+
     if task_id == "0":
         # create task
-        task_obj, response = Tasks.objects.create_task(name, description, responsible_obj, due, minutes_obj, request.user)
+        task_obj, response = Tasks.objects.create_task(
+            name, 
+            description, 
+            responsible_obj, 
+            due, 
+            minutes_obj, 
+            request.user,
+            accountable_obj,
+            consulted_list,
+            informed_list
+        )
         if not task_obj:
             message = {'error': response} 
         else:
@@ -135,7 +161,17 @@ def create_task(request):
             message = {'successful': "true", "new_task": [task_as_json(task_obj)], "message": response}
     else:
         # Update task
-        task_obj, response = Tasks.objects.update_task(name, description, responsible_obj, due, minutes_obj, request.user,task_id)
+        task_obj, response = Tasks.objects.update_task(
+            name, 
+            description, 
+            responsible_obj, 
+            due, 
+            minutes_obj, 
+            request.user,task_id,
+            accountable_obj,
+            consulted_list,
+            informed_list   
+        )
         
         if not task_obj:
             message = {'error': response} 

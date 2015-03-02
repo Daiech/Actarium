@@ -20,6 +20,36 @@
 		}
 	},
 	{
+		"pk":3,
+		"model":"task_manager.roles",
+		"fields":{
+			"code":"ACC",
+			"is_active":true,
+			"name":"Aprobador de tarea",
+			"description":"Persona que se encarga de aprobar una tarea realizada por un responsable."
+		}
+	},
+	{
+		"pk":4,
+		"model":"task_manager.roles",
+		"fields":{
+			"code":"CON",
+			"is_active":true,
+			"name":"Consultado",
+			"description":"Persona que posee informacion para realizar una tarea."
+		}
+	},
+	{
+		"pk":5,
+		"model":"task_manager.roles",
+		"fields":{
+			"code":"INF",
+			"is_active":true,
+			"name":"Informado",
+			"description":"Persona a quien se debe informar cuando una tarea este realizada."
+		}
+	},
+	{
 		"pk":1,
 		"model":"task_manager.status",
 		"fields":{

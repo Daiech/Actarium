@@ -30,6 +30,7 @@ function loadTasksPanel(e) {
 					else{
 						loadPanelContent($("#taskEmptyTpl").html());
 					}
+					$("#taskDropdown").css({'overflow-y':"scroll"}).find(".dropdown-body").height($(window).height()-200)
 				});
 		}
 	}
@@ -39,6 +40,7 @@ function loadTasksPanel(e) {
 function createTask(e) {
   	e.preventDefault();
   	e.stopPropagation();
+  	console.log($(this),$(this).serialize())
   	$('.error-form-task').remove();
   	sendNewAjax(
         "{% url 'tasks:create_task' %}",
@@ -86,6 +88,9 @@ function createTask(e) {
 function miniCreateTask(e){
 	e.preventDefault();
   	e.stopPropagation();
+  	cleanForm("#taskForm");
+  	$("#accountableSelector option[value='']").attr("selected",true)
+  	$("#responsibleSelector option[value="+me+"]").attr("selected","selected")
   	$("#nameTaskForm").val($("#miniNameTaskForm").val());
   	$("#newTaskBtn").click();
 }
@@ -149,7 +154,7 @@ function setTaskAssigned(e){
 	);
 }
 
-function editTask(e){
+function showTask(e){
 	task_id = $(this).attr("data-task-id");
   	sendNewAjax(
 		"{% url 'tasks:get_task'%}",
@@ -159,23 +164,62 @@ function editTask(e){
 				setAlertError("{% trans 'Error' %}", data.error);
 			}
 			else if (data.successful){
-				if (data.task[0].status_code == "TER"){
-					task = data.task[0]
-	        		task_html = swig.render($("#taskModal").html(),{locals: task })
-	        		$("#minutesModal").html(task_html);
-	        		$("#minutesModal").modal();
-		        }
-		        else {
-		        	
+				task = data.task[0]
+        		task_html = swig.render($("#taskModal").html(),{locals: task })
+        		console.log('con',task.consulted)
+        		$("#minutesModal").html(task_html);
+        		$("#minutesModal").modal();
+			}
+		}
+	);
+}
+
+function editTask(e){
+	e.preventDefault();
+  	e.stopPropagation();
+	task_id = $(this).attr("data-task-id");
+	console.log('tarea id',task_id)
+  	sendNewAjax(
+		"{% url 'tasks:get_task'%}",
+		{"task_id":task_id},
+		function (data) {
+			if (data.error){
+				setAlertError("{% trans 'Error' %}", data.error);
+			}
+			else if (data.successful){
+				if (data.task[0].status_code != "TER"){
+					cleanForm("#taskForm");
 		        	task = data.task[0];
 		        	console.log(task);
+		        	//data of fields
 		        	$("#nameTaskForm").val(task.title);
 		        	$("#descriptionTaskForm").val(task.description);
 		        	$("#responsibleSelector option[value="+task.responsible_id+"]").attr("selected","selected")
+		        	
+		        	if (task.accountable) {
+		        		$("#accountableSelector option[value="+task.accountable.id+"]").attr("selected","selected")
+		        	}
+		        	else{
+		        		$("#accountableSelector option[value='']").attr("selected",true)	
+		        	}
 		        	$("#dueTaskForm input").val(task.due)
+		        	$.each(task.consulted, function(i,e){
+					    $("#consultedSelector option[value='" + e.id + "']").prop("selected", true);
+					});
+		        	$.each(task.informed, function(i,e){
+					    $("#informedSelector option[value='" + e.id + "']").prop("selected", true);
+					});
+
 		        	$("#taskId").val(task.id)
 		        	$("#taskDropdown").css("display","block");
 		        }
+		        else{
+		        	console.log('No TER')
+		        }
+			}
+			else
+			{
+				console.log('Error desconocido',data)
 			}
 		}
 	);
@@ -183,6 +227,8 @@ function editTask(e){
 
 function showDropDown(e){
 	cleanForm("#taskForm");
+	$("#responsibleSelector option[value="+me+"]").attr("selected","selected")
+	$("#accountableSelector option[value='']").attr("selected",true)
 	$("#taskId").val(0);
 	$("#nameTaskForm").val($("#miniNameTaskForm").val());
 }
@@ -217,6 +263,22 @@ function deleteTask(e){
         } 
 }
 
+function showMoreFields(e){
+	e.preventDefault();
+  	e.stopPropagation();
+	$(function(){
+		if ($("#hiddenFields").hasClass('hide')) {
+	  		$("#hiddenFields").removeClass('hide');
+	  		$("#taskShowMoreIcon").removeClass('glyphicon-chevron-down')
+	  		$("#taskShowMoreIcon").addClass('glyphicon-chevron-up')
+		}	
+		else{
+			$("#hiddenFields").addClass('hide');
+			$("#taskShowMoreIcon").removeClass('glyphicon-chevron-up')
+	  		$("#taskShowMoreIcon").addClass('glyphicon-chevron-down')
+		}
+	});
+}
 
 $(document).on("submit","#taskForm", createTask)
 $(document).on("focus","#miniNameTaskForm",hideDropDown)
@@ -224,6 +286,8 @@ $(document).on("submit","#miniTaskForm",miniCreateTask)
 $(document).on("click",".set_task_done_btn", setTaskDone)
 $(document).on("click",".set_task_assigned_btn", setTaskAssigned)
 $(document).on("click",".delete_task_btn", deleteTask)
-$(document).on("click",".one_task", editTask)
+$(document).on("click",".edit_task_btn", editTask)
+$(document).on("click",".one_task", showTask)
 $(document).on("click","#taskAddBtn",showDropDown)
 $(document).on("click","#cancelBtn", hideDropDown)
+$(document).on("click","#taskShowMore",showMoreFields)

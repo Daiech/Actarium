@@ -24,7 +24,7 @@ class GenericManager(models.Manager):
 
 class TasksManager(GenericManager):
     
-    def create_task(self, name, description, responsible_obj, due, minutes_obj, user_obj):
+    def create_task(self, name, description, responsible_obj, due, minutes_obj, user_obj, accountable_obj, consulted_list,informed_list):
         from .models import UserTasks, Actions, Status, Roles
         from actarium_apps.core.models import LastMinutesTasks
         from django.contrib.auth.models import User
@@ -35,40 +35,84 @@ class TasksManager(GenericManager):
         status_obj = Status.objects.get_or_none(code="ASI")
         creator_role_obj = Roles.objects.get_or_none(code="CRE")
         responsible_role_obj = Roles.objects.get_or_none(code="RES")
-        if not (status_obj and creator_role_obj and responsible_role_obj):
+        accountable_role_obj = Roles.objects.get_or_none(code="ACC")
+        consulted_role_obj = Roles.objects.get_or_none(code="CON")
+        informed_role_obj = Roles.objects.get_or_none(code="INF")
+        if not (status_obj and creator_role_obj and responsible_role_obj and accountable_role_obj and consulted_role_obj and informed_role_obj):
             return None , _(u"Existe un problema al intentar aplicar los roles")
 
         task_obj = self.create(name=name,description=description,due=due)
-        UserTasks.objects.create(user=user_obj,role=creator_role_obj,task=task_obj)
         
-
+        
+        # set roles
+        UserTasks.objects.create(user=user_obj,role=creator_role_obj,task=task_obj)
         UserTasks.objects.create(user=responsible_obj,role=responsible_role_obj,task=task_obj)
+        if accountable_obj != None:
+            UserTasks.objects.create(user=accountable_obj,role=accountable_role_obj,task=task_obj)
+        for consulted_obj in consulted_list:
+            UserTasks.objects.create(user=consulted_obj,role=consulted_role_obj,task=task_obj)
+        for informed_obj in informed_list:
+            UserTasks.objects.create(user=informed_obj,role=informed_role_obj,task=task_obj)
+
+        # set actions
         Actions.objects.create(user=responsible_obj, status=status_obj,task=task_obj)
+
+        # add task to minutes
         LastMinutesTasks.objects.create(minutes= minutes_obj,task=task_obj)
 
 
         return task_obj, __(u"Tarea creada correctamente en el acta: ")+minutes_obj.code
 
-    def update_task(self, name, description, responsible_obj, due, minutes_obj, user_obj, task_id):
+    def update_task(self, name, description, responsible_obj, due, minutes_obj, user_obj, task_id, accountable_obj, consulted_list,informed_list):
+        from .models import  Roles, UserTasks
         task_obj = self.get_or_none(id=task_id)
         if task_obj == None:
             return None,  __(u"La tarea que desea modificar no existe")
 
-        if not (task_obj.creator == user_obj):
-            return None, __( u"No puedes modificar una tarea creada por otro usuario" )
+        # if not (task_obj.creator == user_obj):
+        #     return None, __( u"No puedes modificar una tarea creada por otro usuario" )
             
 
         if task_obj.status_code in ("TER", "CAN", "NAS"):
             return None, __( u"Esta tarea ya no se puede modificar" )
 
         task_obj.name = name
-        print "Actualizando ",description
+
         if task_obj.description != description:
             task_obj.description = description
         
+        # responsible
         usertask_obj =  task_obj.usertasks_task.get(role__code="RES")
         usertask_obj.user= responsible_obj
         usertask_obj.save()
+
+        #accountable
+        usertask_obj =  task_obj.usertasks_task.get_or_none(role__code="ACC")
+        if usertask_obj:
+            if accountable_obj == None:
+                usertask_obj.delete()
+            else:
+                usertask_obj.user= accountable_obj
+                usertask_obj.save()
+        elif accountable_obj != None :
+            accountable_role_obj = Roles.objects.get_or_none(code="ACC")
+            UserTasks.objects.create(user=accountable_obj,role=accountable_role_obj,task=task_obj)
+
+        # consulted 
+        usertask_obj =  task_obj.usertasks_task.filter(role__code="CON")
+        usertask_obj.delete()
+        consulted_role_obj = Roles.objects.get_or_none(code="CON")
+        for consulted_obj in consulted_list:
+            UserTasks.objects.create(user=consulted_obj,role=consulted_role_obj,task=task_obj)
+
+        # informed
+        usertask_obj =  task_obj.usertasks_task.filter(role__code="INF")
+        usertask_obj.delete()
+        informed_role_obj = Roles.objects.get_or_none(code="INF")
+        for informed_obj in informed_list:
+            UserTasks.objects.create(user=informed_obj,role=informed_role_obj,task=task_obj)
+
+        # due
         task_obj.due = due
 
         task_obj.save()
@@ -84,8 +128,8 @@ class TasksManager(GenericManager):
             
 
         # owner verification
-        if not (task_obj.creator == user_obj):
-            return None, __( u"No puedes eliminar una tarea creada por otro usuario" )
+        # if not (task_obj.creator == user_obj):
+        #     return None, __( u"No puedes eliminar una tarea creada por otro usuario" )
             
         if task_obj.status_code in ("TER", "CAN", "NAS"):
             return None, __( u"Esta tarea ya no se puede eliminar" )

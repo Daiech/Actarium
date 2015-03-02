@@ -105,6 +105,27 @@ class Tasks(models.Model):
     def get_responsible(self):
         return self.usertasks_task.get(role__code="RES").user
 
+    def get_accountable(self):
+        try:
+            response =  self.usertasks_task.get(role__code="ACC").user
+        except:
+            response = None
+        return response
+
+    def get_consulted(self):
+        user_id_list = []
+        for usertask_obj in self.usertasks_task.filter(role__code="CON"):
+            user_id_list.append(usertask_obj.user.id)
+        user_list = User.objects.filter(id__in=user_id_list, is_active=True)
+        return user_list
+
+    def get_informed(self):
+        user_id_list = []
+        for usertask_obj in self.usertasks_task.filter(role__code="INF"):
+            user_id_list.append(usertask_obj.user.id)
+        user_list = User.objects.filter(id__in=user_id_list, is_active=True)
+        return user_list
+
     def get_creator(self):
         return self.usertasks_task.get(role__code="CRE").user
 
@@ -150,6 +171,9 @@ class Tasks(models.Model):
         return self.get_status()[2]
 
     responsible = property(get_responsible)
+    accountable = property(get_accountable)
+    consulted = property(get_consulted)
+    informed = property(get_informed)
     creator = property(get_creator)
     status = property(get_status_message)
     color = property(get_status_color)
@@ -207,24 +231,23 @@ class UserTasks(models.Model):
             return "Sin Slug"
 
     def get_group_slug(self):
-        mc = self.get_minutes()
-        if mc:
+        try:
+            mc = self.get_minutes()
             return mc.id_group.slug
-        else:
-            return "SIn Slug"
+        except:
+            return "no_slug"
 
     def get_group_name(self):
-        mc = self.get_minutes()
-        if mc:
+        try:
+            mc = self.get_minutes()
             return mc.id_group.name
-        else:
-            return "No hay Nombre de grupo"
+        except:
+            return "no_group_name"
 
 
     def get_minutes_code(self):
-        mc = self.get_minutes()
-        if mc:
+        try:
+            mc = self.get_minutes()
             return mc.code
-        else:
-            print "No hay un LastMinutesTask", self
-            return 123
+        except:
+            return 0
