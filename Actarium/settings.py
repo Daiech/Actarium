@@ -50,7 +50,8 @@ ALLOWED_HOSTS = [
     ".actarium.com.",
     "162.243.207.189",
     ".daiech.com",
-    ".daiech.com."
+    ".daiech.com.",
+    "actarium.mauricioaizaga.com"
 ]
 
 TIME_ZONE = 'America/Bogota'

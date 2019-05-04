@@ -1,5 +1,5 @@
 django==1.6.8
-python-social-auth>=0.1.26
+python-social-auth==0.1.26
 python-slugify
 django-uuslug
 pillow
@@ -12,9 +12,9 @@ django-rosetta
 django-contact-form
 
 Werkzeug>=0.9.4
-django-extensions>=1.2.5
+django-extensions==1.2.5
 djangorestframework==2.3.13
 
 pyPdf==1.13
 pycrypto==2.6.1
-MySQL-python=1.2.5
+MySQL-python==1.2.5
