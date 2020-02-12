@@ -2,7 +2,7 @@ backports.shutil-get-terminal-size==1.0.0
 certifi==2019.3.9
 chardet==3.0.4
 decorator==4.4.0
-Django==1.6.8
+Django==1.11.28
 django-contact-form==1.0
 django-extensions==1.2.5
 django-rosetta==0.7.3
