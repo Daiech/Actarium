@@ -7,7 +7,7 @@ django-contact-form==1.0
 django-extensions==1.2.5
 django-rosetta==0.7.3
 django-uuslug==1.1.8
-djangorestframework==2.3.13
+djangorestframework==3.11.2
 enum34==1.1.6
 html5lib==1.0.1
 idna==2.8
