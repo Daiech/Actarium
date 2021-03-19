@@ -13,7 +13,7 @@ django-contact-form
 
 Werkzeug>=0.9.4
 django-extensions==1.2.5
-djangorestframework==2.3.13
+djangorestframework==3.11.2
 
 pyPdf==1.13
 pycrypto==2.6.1
