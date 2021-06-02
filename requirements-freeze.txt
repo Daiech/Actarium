@@ -40,7 +40,7 @@ six==1.12.0
 South==1.0.2
 text-unidecode==1.2
 traitlets==4.3.2
-urllib3==1.24.3
+urllib3==1.26.5
 uWSGI==2.0.18
 wcwidth==0.1.7
 webencodings==0.5.1
