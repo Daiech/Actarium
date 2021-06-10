@@ -1,4 +1,4 @@
-django==1.6.8
+django==2.2.24
 python-social-auth==0.1.26
 python-slugify
 django-uuslug
