@@ -6,7 +6,7 @@ pillow
 pymongo
 south
 psycopg2
-reportlab==2.6
+reportlab==3.5.55
 xhtml2pdf
 django-rosetta
 django-contact-form
